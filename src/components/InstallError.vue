@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <v-row class="text-center">
-      <h3>This is HelloWorld</h3>
+      <v-col cols="6">
+        <v-card height="200"></v-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -10,7 +12,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "HelloWorld",
+  name: "MainDashboard",
 
   data: () => ({})
 });
