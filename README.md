@@ -1,4 +1,5 @@
-# demeter-web
+# Demeter Web 
+Web interface for the CAST Imaging Demeter extension
 
 ## Project setup
 ```
