@@ -24,6 +24,9 @@ export class ApplicationController {
     return appNames;
   }
 
+  /**
+   * Get a sorted list of Application by the number of objects
+   */
   public static async getSortedApplications(): Promise<ApplicationRecord[]> {
     const request =
       "MATCH (n:Application) with n.Name as appName MATCH (o:Object) WHERE appName in LABELS(o) RETURN appName as name, COUNT(o) as numObj ORDER BY numObj DESC";

@@ -20,9 +20,9 @@ export class StatisticsController {
     applicationName: string
   ): Promise<StatisticResult[]> {
     const request = `CALL demeter.statistics.getAsList('${configuration}', '${applicationName}')`;
-
+    console.log("Request statstics : " +request);
     const results: QueryResult = await this.neo4jal.execute(request);
-
+    
     const appNames: StatisticResult[] = [];
     for (let i = 0; i < results.records.length; i++) {
       const singleRecord = results.records[i];

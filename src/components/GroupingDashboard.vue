@@ -5,11 +5,40 @@
     </v-row>
     <v-row ma-0 pa-0>
       <v-col v-for="n in groupList" :key="n.application">
-        <GroupTile
-          :application="n.application"
-          :groupName="groupToHtml(n.tags)"
-          :count="n.countTag"
-        ></GroupTile>
+        <v-card class="mx-auto" max-width="344">
+          <v-card-text>
+            <div>Candidate application</div>
+            <p class="display-1 text--primary">
+              {{ n.application }}
+            </p>
+            <p>Objects to group : {{ n.countTag | 0 }}</p>
+            <p v-if="n.countTag!=0">Will create groups :</p>
+            <v-row v-if="n.tags" class="text--primary">
+              <v-chip
+                v-for="group in groupToList(n.tags)"
+                :key="group"
+                class="ma-2"
+                color="secondary"
+              >
+                {{ group }}
+              </v-chip>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-row align="center" justify="space-around">
+              <v-btn
+                tile
+                color="success"
+                v-on:click="groupApplication(n.application)"
+              >
+                <v-icon left>
+                  mdi-adjust
+                </v-icon>
+                Group communities
+              </v-btn>
+            </v-row>
+          </v-card-actions>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -26,15 +55,16 @@ import GroupTile from "./tags/GroupTile.vue";
 export default Vue.extend({
   name: "GroupingDashboard",
 
-  components: {
-    GroupTile
-  },
+  components: {},
 
-  created() {
+  mounted() {
     this.getGroups();
+    this.groupWatchdog();
   },
 
   data: () => ({
+    refreshGroupInterval: 0,
+    intervalCheck: 50000 as number,
     groupList: [] as GroupRecord[]
   }),
 
@@ -47,21 +77,32 @@ export default Vue.extend({
       });
     },
 
-    groupToHtml(groups: string[]) {
+    groupToList(groups: string[]) {
       const uniqueNames = [] as string[];
-      groups.forEach(x => {
-        if (uniqueNames.indexOf(x) == -1) uniqueNames.push(x);
-      });
 
-      let htmlBalise = "";
-      uniqueNames.forEach(x => {
+      groups.forEach(x => {
         const groupName: string = x.substring(6);
-        htmlBalise +=
-          "<v-chip class='ma-2' color='secondary'> " +
-          groupName +
-          " </v-chip> ";
+        if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
-      return htmlBalise;
+      return uniqueNames;
+    },
+
+    groupApplication(appName: string) {
+      GroupingController.executeGrouping(appName).then((res: string) => {
+        console.log(`Application ${appName} was sucessfully grouped !`);
+        this.getGroups(); // Refresh the view
+      });
+    },
+
+    groupWatchdog() {
+      this.refreshGroupInterval = setInterval(() => {
+        console.log("Check group");
+        this.getGroups();
+      }, this.intervalCheck || 2000);
+    },
+
+    beforeDestroy() {
+      clearInterval(this.refreshGroupInterval);
     }
   }
 });

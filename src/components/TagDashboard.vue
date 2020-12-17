@@ -2,20 +2,8 @@
   <v-container>
     <v-row no-gutters>
       <v-toolbar dense>
-        <v-toolbar-title>Generate tag for : </v-toolbar-title>
-
+        <v-toolbar-title>Generate tag for : {{value}} </v-toolbar-title>
         <v-spacer></v-spacer>
-
-        <v-autocomplete
-          :loading="loadingApplication"
-          :items="applicationList"
-          :search-input.sync="applicationName"
-          @change="getTagResults()"
-          item-text="name"
-          hide-no-data
-          hide-details
-          label="Pick an application"
-        ></v-autocomplete>
       </v-toolbar>
     </v-row>
 
@@ -106,6 +94,8 @@ import ErrorDialog from "./error/ErrorDialog.vue";
 export default Vue.extend({
   name: "TagDashboard",
 
+  props: ["value"],
+
   components: {
     ErrorDialog
   },
@@ -137,36 +127,21 @@ export default Vue.extend({
   }),
 
   created() {
-    this.getApplicationList();
+    this.getTagResults();
   },
 
   methods: {
-    getApplicationList() {
-      ApplicationController.getSortedApplications().then(
-        (res: ApplicationRecord[]) => {
-          this.numberOfApplication = res.length;
-          this.applicationList = res;
-          if (res.length != 0) {
-            this.applicationName = res[0].name;
-          } else {
-            this.applicationName = "No Application found";
-          }
-
-          this.loadingApplication = false;
-        }
-      );
-    },
     getTagResults() {
       this.loading = true;
-      console.log("Now launching req for app : " + this.applicationName);
-      TagController.getTagResults("Configuration_1", this.applicationName)
+      console.log("Now launching req for app : " + this.value);
+      TagController.getTagResults("Configuration_1", this.value)
         .then((res: TagResult[]) => {
           this.tagResultList = res.sort(this.sortByNumMAtch);
 
           this.loading = false;
           console.log(res);
           console.log(
-            `${res.length} tags were loaded for application ${this.applicationName}`
+            `${res.length} tags were loaded for application ${this.value}`
           );
         })
         .catch(err => {
@@ -180,7 +155,7 @@ export default Vue.extend({
 
     executeTag(idTag: number) {
       this.onGoingQueries.push(idTag);
-      TagController.executeTag(this.applicationName, idTag)
+      TagController.executeTag(this.value, idTag)
         .then((res: TagResult) => {
           console.log(res);
         })

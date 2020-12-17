@@ -4,7 +4,7 @@ import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export interface TagResult {
   id: number;
-  tag: string;
+  name: string;
   description: string;
   numMatch: number;
   categories: string;
@@ -41,7 +41,7 @@ export class TagController {
 
       appNames.push({
         id: id,
-        tag: tag,
+        name: tag,
         description: description,
         numMatch: numMatch,
         categories: categories,
