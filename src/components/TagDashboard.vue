@@ -2,7 +2,7 @@
   <v-container>
     <v-row no-gutters>
       <v-toolbar dense>
-        <v-toolbar-title>Generate tag for : {{value}} </v-toolbar-title>
+        <v-toolbar-title>Generate tag for : {{ value }} </v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
     </v-row>

@@ -3,6 +3,7 @@ import { int } from "neo4j-driver";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export interface TagResult {
+  type: "tag";
   id: number;
   name: string;
   description: string;
@@ -50,6 +51,14 @@ export class TagController {
     }
 
     return appNames;
+  }
+
+  /**
+   * Execute a specific tag
+   * @param tag Tag to create 
+   */
+  public static async createTag(tag:TagResult, configurationName: string) {
+      return;
   }
 
   /**

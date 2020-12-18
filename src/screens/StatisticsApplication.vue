@@ -1,19 +1,19 @@
 <template>
   <v-container width="100%" class="ml-5">
     <v-row width="100%" no-gutters>
-      <h2 class="text-h4 mx-4">Generating report for application {{ value }}</h2>
+      <h2 class="text-h4 mx-4">
+        Generating report for application {{ value }}
+      </h2>
       <v-spacer></v-spacer>
       <v-btn
-      class="ma-2"
-      :loading="loading"
-      :disabled="loading"
-      color="secondary"
-      v-on:click="launchGenerate">
+        class="ma-2"
+        :loading="loading"
+        :disabled="loading"
+        color="secondary"
+        v-on:click="launchGenerate"
+      >
         Generate
-        <v-icon
-          right
-          dark
-        >
+        <v-icon right dark>
           mdi-chart-box
         </v-icon>
       </v-btn>
@@ -22,24 +22,27 @@
         :disabled="!generated"
         color="blue-grey"
         class="ma-2 white--text"
-        @click="loader = 'loading3'">
+        @click="loader = 'loading3'"
+      >
         Download
-        <v-icon
-          right
-          dark
-        >
+        <v-icon right dark>
           mdi-archive-arrow-down
         </v-icon>
       </v-btn>
     </v-row>
-    <v-row min-width="80%" class="d-flex flex-column text-center mx-auto my-10" fill-height v-if="loading">
+    <v-row
+      min-width="80%"
+      class="d-flex flex-column text-center mx-auto my-10"
+      fill-height
+      v-if="loading"
+    >
       <v-progress-circular
         class="mx-auto"
         :size="70"
         color="primary"
         indeterminate
       ></v-progress-circular>
-      <p class="my-5">Loading application ...</p>
+      <p class="my-5">Loading report for application ...</p>
     </v-row>
     <v-row
       fluid
@@ -102,12 +105,12 @@ import {
   StatisticResult,
   StatisticsController
 } from "@/api/applications/StatisticsController";
-import ErrorDialog from "./error/ErrorDialog.vue";
-import StatisticTile from "./tags/StatisticTile.vue";
+import ErrorDialog from "../components/error/ErrorDialog.vue";
+import StatisticTile from "../components/tags/StatisticTile.vue";
 
 export default Vue.extend({
-  name: "StatisticsDashboard",
-  props : ["value"],
+  name: "StatisticsApplication",
+  props: ["value"],
 
   components: {
     ErrorDialog,
@@ -124,13 +127,12 @@ export default Vue.extend({
     rightStats: [] as StatisticResult[],
     errorState: null as unknown
   }),
-  
-  methods: {
 
+  methods: {
     getReportResult() {
       this.loading = true;
       console.log(`Loading statistics for application with name ${this.value}`);
-      
+
       StatisticsController.getStatisticResults("Configuration_1", this.value)
         .then((res: StatisticResult[]) => {
           this.loading = false;
@@ -154,8 +156,8 @@ export default Vue.extend({
         });
     },
 
-    launchGenerate : function(event:Event) {
-        this.getReportResult();
+    launchGenerate: function(event: Event) {
+      this.getReportResult();
     }
   }
 });

@@ -8,7 +8,7 @@ export interface UseCaseResult {
   parentName: string;
   active: boolean;
   id: number;
-  children: (UseCaseResult|TagResult)[];
+  children: (UseCaseResult | TagResult)[];
 }
 
 export class UseCaseController {
@@ -21,9 +21,9 @@ export class UseCaseController {
    */
   public static async getUseCases(): Promise<UseCaseResult[]> {
     const request = `CALL demeter.useCases.list()`;
-    
+
     const results: QueryResult = await this.neo4jal.execute(request);
-    
+
     const useCases: UseCaseResult[] = [];
     for (let i = 0; i < results.records.length; i++) {
       const singleRecord = results.records[i];
@@ -33,49 +33,56 @@ export class UseCaseController {
       const active = singleRecord.get("active");
       const id = int(singleRecord.get("id")).toNumber();
 
-
-      useCases.push({ name, parentName, active, id , children:[] });
+      useCases.push({ name, parentName, active, id, children: [] });
     }
 
     return useCases;
   }
 
-  private static recTree(useCase:UseCaseResult, candidates:UseCaseResult[], tags:TagResult[]):UseCaseResult {
+  private static recTree(
+    useCase: UseCaseResult,
+    candidates: UseCaseResult[],
+    tags: TagResult[]
+  ): UseCaseResult {
     const index = candidates.indexOf(useCase);
-    if(index != -1) {
-        candidates.splice(index, 1);
+    if (index != -1) {
+      candidates.splice(index, 1);
     }
 
-    for(let i = 0; i < candidates.length; i++) {
-        for(let y=0; y < tags.length; y++) {
-            if(useCase.name == tags[y].useCase) {
-                const toAdd = tags[y];
-                useCase.children.push(toAdd);
-                tags.splice(y, 1);
-            }
+    for (let i = 0; i < candidates.length; i++) {
+      for (let y = 0; y < tags.length; y++) {
+        if (useCase.name == tags[y].useCase) {
+          const toAdd = tags[y];
+          useCase.children.push(toAdd);
+          tags.splice(y, 1);
         }
+      }
 
-        if(useCase.name == candidates[i].parentName) {
-            const toAdd = this.recTree(candidates[i], candidates, tags);
-            useCase.children.push(toAdd);
-        }
+      if (useCase.name == candidates[i].parentName) {
+        const toAdd = this.recTree(candidates[i], candidates, tags);
+        useCase.children.push(toAdd);
+      }
     }
 
     return useCase;
   }
 
-  public static async getUseCaseAsTree(appName:string) {
-    const useCases:UseCaseResult[] = await UseCaseController.getUseCases();
-    let returnList:UseCaseResult[] = [];
+  public static async getUseCaseAsTree(appName: string) {
+    const useCases: UseCaseResult[] = await UseCaseController.getUseCases();
+    let returnList: UseCaseResult[] = [];
 
+    const tags: TagResult[] = await TagController.getTagResults(
+      "Configuration_1",
+      appName
+    );
 
-    const tags:TagResult[]  = await TagController.getTagResults("Configuration_1",appName);
-
-    // Get root elements and add them to return list    
+    // Get root elements and add them to return list
     // From root implement
-    returnList = useCases.filter(x=>x.parentName=="ROOT").map(x=> UseCaseController.recTree(x, useCases, tags))
-    console.log("Tree detected", returnList)
-    
+    returnList = useCases
+      .filter(x => x.parentName == "ROOT")
+      .map(x => UseCaseController.recTree(x, useCases, tags));
+    console.log("Tree detected", returnList);
+
     return returnList;
   }
 }

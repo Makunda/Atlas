@@ -12,7 +12,7 @@
               {{ n.application }}
             </p>
             <p>Objects to group : {{ n.countTag | 0 }}</p>
-            <p v-if="n.countTag!=0">Will create groups :</p>
+            <p v-if="n.countTag != 0">Will create groups :</p>
             <v-row v-if="n.tags" class="text--primary">
               <v-chip
                 v-for="group in groupToList(n.tags)"

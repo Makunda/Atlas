@@ -6,8 +6,15 @@
         {{ application }}
       </p>
       <p>Objects to group : {{ count }}</p>
-      <p v-if="count==0">No Demeter tags were found in your application <br>See  how to create tags on the <a href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki">Demeter Wiki</a> </p>
-      <p v-if="count!=0">Will create groups :</p>
+      <p v-if="count == 0">
+        No Demeter tags were found in your application <br />See how to create
+        tags on the
+        <a
+          href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
+          >Demeter Wiki</a
+        >
+      </p>
+      <p v-if="count != 0">Will create groups :</p>
       <v-row class="text--primary">
         <v-chip
           v-for="group in groupToList(groupName)"
@@ -21,7 +28,12 @@
     </v-card-text>
     <v-card-actions>
       <v-row align="center" justify="space-around">
-        <v-btn tile color="success" v-on:click="groupApplication(application)" :disabled="count==0">
+        <v-btn
+          tile
+          color="success"
+          v-on:click="groupApplication(application)"
+          :disabled="count == 0"
+        >
           <v-icon left>
             mdi-adjust
           </v-icon>
@@ -40,7 +52,8 @@ export default Vue.component("GroupTile", {
   props: {
     application: String,
     groupName: String,
-    count: Number
+    count: Number,
+    loading: Boolean
   },
 
   data: () => ({
@@ -51,7 +64,7 @@ export default Vue.component("GroupTile", {
     },
 
     groupToList(groups: string[]) {
-      if(groups == null) return "";
+      if (groups == null) return "";
 
       const uniqueNames = [] as string[];
       groups.forEach(x => {

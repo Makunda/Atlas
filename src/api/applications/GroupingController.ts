@@ -37,7 +37,9 @@ export class GroupingController {
     return appNames;
   }
 
-  public static async getApplicationGroup(application: string): Promise<GroupRecord|null> {
+  public static async getApplicationGroup(
+    application: string
+  ): Promise<GroupRecord | null> {
     const request =
       `MATCH (app:Application) WHERE app.Name='${application}' ` +
       `WITH [app.Name] as appName ` +
@@ -45,9 +47,9 @@ export class GroupingController {
       `RETURN DISTINCT [ x IN LABELS(o) WHERE x IN appName][0] as application , [x IN o.Tags WHERE x CONTAINS '${GroupingController.tagPrefix}'] as tags,  COUNT(o) as numTags`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
-    
-    if(results.records.length == 0) {
-      console.log("No result for application with name : " + application)
+
+    if (results.records.length == 0) {
+      console.log("No result for application with name : " + application);
       return null;
     }
 

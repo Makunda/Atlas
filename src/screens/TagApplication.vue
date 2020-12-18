@@ -1,15 +1,25 @@
 <template>
-  <v-card class="ml-8" width="100%">
-    <v-toolbar
-      color="primary"
-      dark
-      flat
-    >
+  <v-card class="ml-8" min-width="100%" flui>
+    <v-toolbar color="indigo" dark flat>
       <v-toolbar-title>Applicable tags</v-toolbar-title>
     </v-toolbar>
 
-    <v-row>
-      <v-col>
+    <v-sheet class="pa-4 primary lighten-2">
+      <v-text-field
+        v-model="search"
+        label="Search for Tags"
+        dark
+        flat
+        solo-inverted
+        hide-details
+        clearable
+        clear-icon="mdi-close-circle-outline"
+      ></v-text-field>
+    </v-sheet>
+
+
+    <v-row no-gutters>
+      <v-col max-width="400px">
         <v-card-text>
           <v-treeview
             v-model="tree"
@@ -23,16 +33,40 @@
             off-icon="mdi-bookmark-outline"
             indeterminate-icon="mdi-bookmark-minus"
           >
+            <template slot="label" slot-scope="{ item }">
+              <p v-if="item.children" >{{ item.name }}</p>
+              <a v-if="!item.children  && item.numMatch!=0" v-on:click="openDescription(item)">{{ item.name }}</a>
+              <a v-if="!item.children && item.numMatch==0" class="text--secondary" v-on:click="openDescription(item)">{{ item.name }}</a>
+          </template>
           </v-treeview>
         </v-card-text>
       </v-col>
 
       <v-divider vertical></v-divider>
 
-      <v-col
-        cols="12"
-        md="6"
-      >
+      <v-col >
+        <v-card-text>
+          <h5 class="text-h5"> Focused tag </h5>
+          <h6 v-if="focusedTag == null" class="text-subtitle-1"> No tag selected </h6>
+          <span v-if="focusedTag != null">
+            <h6  class="text-subtitle-1 text-decoration-underline"> Name: </h6>
+            <h6  class="text-body-1"> {{ focusedTag.name }} </h6>
+            <h6  class="text-subtitle-1 text-decoration-underline"> Description: </h6>
+            <h6  class="text-body-1"> {{ focusedTag.description }} </h6>
+            <h6  class="text-subtitle-1 text-decoration-underline"> Number of objects concerned: </h6>
+            <h6  class="text-body-1"> {{ focusedTag.numMatch }} </h6>
+            <h6  class="text-subtitle-1 text-decoration-underline"> Categories: </h6>
+            <v-row>
+              <v-chip v-for="b in splitCategories(focusedTag.categories)" v-bind:key="b" class="ma-2" color="primary">{{b}}</v-chip>
+            </v-row>
+          </span>
+        </v-card-text>
+      </v-col>
+
+
+      <v-divider vertical></v-divider>
+
+      <v-col >
         <v-card-text>
           <div
             v-if="tree.length === 0"
@@ -42,10 +76,7 @@
             Select the tags you want to apply
           </div>
 
-          <v-scroll-x-transition
-            group
-            hide-on-leave
-          >
+          <v-scroll-x-transition group hide-on-leave>
             <v-chip
               v-for="(selection, i) in tree"
               :key="i"
@@ -54,10 +85,7 @@
               small
               class="ma-1"
             >
-              <v-icon
-                left
-                small
-              >
+              <v-icon left small>
                 mdi-label
               </v-icon>
               {{ selection.name }}
@@ -70,21 +98,14 @@
     <v-divider></v-divider>
 
     <v-card-actions>
-      <v-btn
-        text
-        @click="tree = []"
-      >
+      <v-btn text @click="tree = []">
         Reset
       </v-btn>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        class="white--text"
-        color="green darken-1"
-        depressed
-      >
-        Execute
+      <v-btn class="white--text" color="green darken-1" depressed>
+        Execute {{ tree.length }}
         <v-icon right>
           mdi-animation-play
         </v-icon>
@@ -92,7 +113,6 @@
     </v-card-actions>
   </v-card>
 </template>
-
 
 <script lang="ts">
 import Vue from "vue";
@@ -111,12 +131,11 @@ export default Vue.extend({
 
   props: ["value"],
 
-  components: {
-  },
+  components: {},
 
   data: () => ({
     tree: [],
-    usecases: [] as UseCaseResult[],
+    usecases: [] as (UseCaseResult|TagResult)[],
     singleSelect: false,
     selected: [],
     onGoingQueries: [] as number[],
@@ -127,19 +146,18 @@ export default Vue.extend({
     applicationList: [] as ApplicationRecord[],
     tagResultList: [] as TagResult[],
     errorState: null as unknown,
-    headers: [
-      {
-        text: "Tag",
-        align: "left",
-        sortable: true,
-        value: "tag"
-      },
-      { text: "Description", value: "description" },
-      { text: "Number of Match", value: "numMatch" },
-      { text: "Categories", value: "categories" },
-      { text: "Use Case", value: "useCase" }
-    ],
-    search: ""
+    search: "",
+    focusedTag: null,
+
+    openDescription(item: TagResult) {
+      console.log("focus on : ", item);
+      this.focusedTag=item
+    },
+
+    splitCategories(cat:string):string[] {
+      return cat.split(":");
+    }
+
   }),
 
   created() {
@@ -149,11 +167,11 @@ export default Vue.extend({
 
   methods: {
     getTreeview() {
-        UseCaseController.getUseCaseAsTree(this.value).then((useCases) => {
-            this.usecases = useCases;
-        });
+      UseCaseController.getUseCaseAsTree(this.value).then(useCases => {
+        this.usecases = useCases;
+      });
     },
-    
+
     getTagResults() {
       this.loading = true;
       TagController.getTagResults("Configuration_1", this.value)

@@ -1,5 +1,12 @@
 // import { Configuration } from "../Configuration";
-import neo4j, { Driver, QueryResult, Result, ServerInfo, session, Session } from "neo4j-driver";
+import neo4j, {
+  Driver,
+  QueryResult,
+  Result,
+  ServerInfo,
+  session,
+  Session
+} from "neo4j-driver";
 
 export class Neo4JAccessLayer {
   private uri: string;
@@ -45,8 +52,8 @@ export class Neo4JAccessLayer {
   /**
    * Check the Avaibility of the neo4j server
    */
-  public async testConnection():Promise<ServerInfo> {
-    return this.driver.verifyConnectivity()
+  public async testConnection(): Promise<ServerInfo> {
+    return this.driver.verifyConnectivity();
   }
 
   /**
