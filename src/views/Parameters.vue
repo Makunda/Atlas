@@ -1,12 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col
-      cols="12"
-      sm="10"
-      md="8"
-      lg="6"
-      class="mt-5"
-    >
+    <v-col cols="12" sm="10" md="8" lg="6" class="mt-5">
       <v-card ref="form">
         <v-card-text>
           <v-card-title>Demeter configuration</v-card-title>
@@ -43,6 +37,7 @@
             v-model="neo4jUri"
             label="URI of the Neo4j bolt interface"
             placeholder="http://localhost:7687/"
+            value="http://localhost:7687/"
             required
           ></v-text-field>
           <v-text-field
@@ -62,7 +57,6 @@
             counter
             @click:append="show1 = !show1"
           ></v-text-field>
-          
         </v-card-text>
         <v-divider class="mt-12"></v-divider>
         <v-card-actions>
@@ -71,10 +65,7 @@
           </v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>
-            <v-tooltip
-              v-if="formHasErrors"
-              left
-            >
+            <v-tooltip v-if="formHasErrors" left>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   icon
@@ -89,12 +80,8 @@
               <span>Refresh form</span>
             </v-tooltip>
           </v-slide-x-reverse-transition>
-          <v-btn
-            color="primary"
-            text
-            @click="submit"
-          >
-            Submit
+          <v-btn color="primary" text @click="submit">
+            Save parameters
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -105,33 +92,46 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
-export default Vue.extend({ 
-    name: "Parameters",
+export default Vue.extend({
+  name: "Parameters",
 
-    data: () => ({
-      show1: false,
-      configurationName: "" as string,
-      refreshRate: 500 as number,
+  data: () => ({
+    show1: false,
+    // Form parameters
+    configurationName: "" as string,
+    refreshRate: 500 as number,
+    neo4jUri: "" as string,
+    neo4jUser: "" as string,
+    neo4jPassword: "" as string
+  }),
 
-      
-    }),
+  methods: {
+    rules() {
+      const rulesTable = [];
 
-    methods: {
-      rules () {
-        const rulesTable = []
+      const maxRule = (v: any) =>
+        (v || "").length <= 30 || `A maximum of ${30} characters is allowed`;
+      rulesTable.push(maxRule);
 
-        const maxRule = (v:any) => (v || '').length <= 30 || `A maximum of ${30} characters is allowed`
-        rulesTable.push(maxRule)
-        
-        const spaceRule = (v:any) => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
-        rulesTable.push(spaceRule)
+      const spaceRule = (v: any) =>
+        (v || "").indexOf(" ") < 0 || "No spaces are allowed";
+      rulesTable.push(spaceRule);
 
-        const forbidden =  /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
-        const specialChar = (v:any) => !forbidden.test((v || ''))|| 'No special caracters are allowed'
-        rulesTable.push(specialChar)
+      const forbidden = /[!@#$%^&*()\-=[\]{};':"\\|,.<>/?]+/;
+      const specialChar = (v: any) =>
+        !forbidden.test(v || "") || "No special caracters are allowed";
+      rulesTable.push(specialChar);
 
-        return rulesTable
-      }
+      return rulesTable;
+    },
+
+    saveForm(): boolean {
+      // TODO : complete this section
+
+      // Store preference cookies
+
+      return true;
     }
+  }
 });
 </script>

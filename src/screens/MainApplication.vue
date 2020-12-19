@@ -62,7 +62,7 @@ export default Vue.extend({
   },
 
   watch: {
-    value: function (val) {
+    value: function(val) {
       this.getApplicationGroup(val);
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <v-container width="100%" class="ml-5">
+  <v-container class="ml-5">
     <v-row width="100%" no-gutters>
       <h2 class="text-h4 mx-4">
         Generating report for application {{ value }}

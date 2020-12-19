@@ -31,13 +31,18 @@
           <v-divider></v-divider>
 
           <v-list nav dense>
-            <v-list-item v-for="v in views" v-bind:key="v.view" link @click="actualView = v.view">
+            <v-list-item
+              v-for="v in views"
+              v-bind:key="v.view"
+              link
+              @click="actualView = v.view"
+            >
               <v-list-item-icon>
                 <v-icon>{{ v.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ v.name }}</v-list-item-title>
             </v-list-item>
-           
+
             <v-list-item link justify-end v-on:click="checkDatabase()">
               <v-list-item-icon>
                 <v-icon color="green darken-2" v-if="dbAvailable"
@@ -58,10 +63,8 @@
         </v-navigation-drawer>
       </v-card>
 
-      <v-main  class="ml-15">
-        <component
-              :is="actualView"
-        ></component>
+      <v-main class="pl-15">
+        <component :is="actualView"></component>
       </v-main>
 
       <v-snackbar v-model="snackbar" :multi-line="multiLine">
@@ -80,18 +83,56 @@
         </v-alert>
       </v-snackbar>
     </v-row>
+
+    <!-- Error popup Demeter -->
+    <v-dialog
+      v-model="demeterErrorDialog"
+      width="500"
+    >
+      <v-card>
+        <v-card-title class="headline grey lighten-2">
+          Demeter not detected
+        </v-card-title>
+
+        <v-card-text class="my-3">
+        Demeter is not installed on <i><b>http://localhost:port</b></i>.<br> Please make sure the extension
+          is correclty installed and authorized in Neo4j configuration ( more documentation on how to install demeter
+          <a
+            href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
+            >here</a
+          >)
+
+          <br> 
+          Without the Demeter extension installed you'll not be able to use most of the functionnalities present in Olympus.
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="demeterErrorDialog = false"
+          >
+            I understand
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue, { Component } from "vue";
-import VueCookies from 'vue-cookies'
+import VueCookies from "vue-cookies";
 
-import Applications from '@/views/Applications.vue'
-import TagStudio from '@/views/TagStudio.vue'
-import Parameters from '@/views/Parameters.vue'
-import Configuration from '@/views/Configuration.vue'
+import Applications from "@/views/Applications.vue";
+import TagStudio from "@/views/TagStudio.vue";
+import Parameters from "@/views/Parameters.vue";
+import Configuration from "@/views/Configuration.vue";
 
+import { UtilsController } from "./api/applications/UtilsController";
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
 import { ServerInfo } from "neo4j-driver";
 
@@ -103,30 +144,47 @@ export default Vue.extend({
   components: {
     Applications,
     TagStudio,
+    Configuration,
     Parameters
   },
 
   mounted() {
+    this.checkDemeter();
     this.checkDatabase();
   },
 
   data: () => ({
     neo4jAccessLayer: Neo4JAccessLayer.getInstance() as Neo4JAccessLayer,
-    actualView: "Applications" as string,
+
+    // Connection test 
     dbAvailable: false,
+    demeterAvaible: true,
+    demeterVersion: "No version",
+
+    // Popups
+    demeterErrorDialog: false,
+    
+    // Navigation
+    actualView: "Applications" as string,
     columnWidth: "70px",
-    views:  [
-        { name: "Applications", view: "Applications" , icon : "mdi-view-dashboard"},
-        { name: "Tag Studio", view: "TagStudio", icon: "mdi-tag-multiple" },
-        { name: "My Configurations", view: "Configuration", icon: "mdi-folder" },
-        { name: "Parameters", view: "Parameters", icon: "mdi-wrench" }
+    views: [
+      {
+        name: "Applications",
+        view: "Applications",
+        icon: "mdi-view-dashboard"
+      },
+      { name: "Tag Studio", view: "TagStudio", icon: "mdi-tag-multiple" },
+      { name: "My Configurations", view: "Configuration", icon: "mdi-folder" },
+      { name: "Parameters", view: "Parameters", icon: "mdi-wrench" }
     ],
     multiLine: true,
     snackbar: false
   }),
 
   methods: {
-
+    /**
+     * Check the connectivity of the database
+     */
     checkDatabase: function() {
       this.neo4jAccessLayer
         .testConnection()
@@ -136,6 +194,23 @@ export default Vue.extend({
         .catch(err => {
           this.dbAvailable = false;
         });
+    },
+
+    /**
+     * Check the installation of the demeter extension
+     */
+    checkDemeter: function() {
+      UtilsController.getDemeterVersion().then((version:string|null) => {
+        if(version == null) { 
+          this.demeterAvaible = false; 
+          this.demeterErrorDialog = true;
+        }
+        else {
+          console.log(`Version detected : ${version}`)
+          this.demeterVersion = version || "hey";
+          this.demeterAvaible = true;
+        }
+      });
     }
   }
 });

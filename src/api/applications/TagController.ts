@@ -55,10 +55,10 @@ export class TagController {
 
   /**
    * Execute a specific tag
-   * @param tag Tag to create 
+   * @param tag Tag to create
    */
-  public static async createTag(tag:TagResult, configurationName: string) {
-      return;
+  public static async createTag(tag: TagResult, configurationName: string) {
+    return;
   }
 
   /**

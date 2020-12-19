@@ -1,117 +1,166 @@
 <template>
-  <v-card class="ml-8" min-width="100%" flui>
-    <v-toolbar color="indigo" dark flat>
-      <v-toolbar-title>Applicable tags</v-toolbar-title>
-    </v-toolbar>
-
-    <v-sheet class="pa-4 primary lighten-2">
-      <v-text-field
-        v-model="search"
-        label="Search for Tags"
-        dark
-        flat
-        solo-inverted
-        hide-details
-        clearable
-        clear-icon="mdi-close-circle-outline"
-      ></v-text-field>
-    </v-sheet>
-
-
-    <v-row no-gutters>
-      <v-col max-width="400px">
-        <v-card-text>
-          <v-treeview
-            v-model="tree"
-            :items="usecases"
-            selected-color="indigo"
-            open-on-click
-            selectable
-            return-object
-            expand-icon="mdi-chevron-down"
-            on-icon="mdi-bookmark"
-            off-icon="mdi-bookmark-outline"
-            indeterminate-icon="mdi-bookmark-minus"
-          >
-            <template slot="label" slot-scope="{ item }">
-              <p v-if="item.children" >{{ item.name }}</p>
-              <a v-if="!item.children  && item.numMatch!=0" v-on:click="openDescription(item)">{{ item.name }}</a>
-              <a v-if="!item.children && item.numMatch==0" class="text--secondary" v-on:click="openDescription(item)">{{ item.name }}</a>
-          </template>
-          </v-treeview>
-        </v-card-text>
-      </v-col>
-
-      <v-divider vertical></v-divider>
-
-      <v-col >
-        <v-card-text>
-          <h5 class="text-h5"> Focused tag </h5>
-          <h6 v-if="focusedTag == null" class="text-subtitle-1"> No tag selected </h6>
-          <span v-if="focusedTag != null">
-            <h6  class="text-subtitle-1 text-decoration-underline"> Name: </h6>
-            <h6  class="text-body-1"> {{ focusedTag.name }} </h6>
-            <h6  class="text-subtitle-1 text-decoration-underline"> Description: </h6>
-            <h6  class="text-body-1"> {{ focusedTag.description }} </h6>
-            <h6  class="text-subtitle-1 text-decoration-underline"> Number of objects concerned: </h6>
-            <h6  class="text-body-1"> {{ focusedTag.numMatch }} </h6>
-            <h6  class="text-subtitle-1 text-decoration-underline"> Categories: </h6>
-            <v-row>
-              <v-chip v-for="b in splitCategories(focusedTag.categories)" v-bind:key="b" class="ma-2" color="primary">{{b}}</v-chip>
-            </v-row>
-          </span>
-        </v-card-text>
-      </v-col>
-
-
-      <v-divider vertical></v-divider>
-
-      <v-col >
-        <v-card-text>
-          <div
-            v-if="tree.length === 0"
-            key="title"
-            class="title font-weight-light grey--text pa-4 text-center"
-          >
-            Select the tags you want to apply
-          </div>
-
-          <v-scroll-x-transition group hide-on-leave>
-            <v-chip
-              v-for="(selection, i) in tree"
-              :key="i"
-              color="grey"
-              dark
-              small
-              class="ma-1"
-            >
-              <v-icon left small>
-                mdi-label
-              </v-icon>
-              {{ selection.name }}
-            </v-chip>
-          </v-scroll-x-transition>
-        </v-card-text>
-      </v-col>
+  <v-row>
+    <v-row class="ml-8 my-6 d-flex flex-column">
+      <h2 class="text-h2 my-6 ml-2">
+        Discover and apply tags
+      </h2>
+      <p class="ml-2 text-body-1">
+        The discovery section is here to help you putting tags on interst points
+        in your applicationx. It matches some predefined patterns, to give you
+        quick ideas of what can be done in the application.<br />
+        You can enrich this configuration manually, and create custom generics
+        tags in the Tag creator studio.
+        <br />
+        For more informations on tags and documents, please refer to the
+        official <a href="#">CAST Imaging documentation</a>. <br /><br />
+        To excecute a tag, you can navigate to the "use case tree" on the left
+        column, expand the different use cases, and select the items you wan to
+        execute. The selected items, that will be exeucted, appear on the right
+        panel. <br />
+        If you want more information about a recommendation, you can click on
+        it, to display more details and see the description associated with the
+        tag.<br /><br />
+        NB: A recommendation displayed in blue means this recommendation will
+        have a good effect on the application you currently selected.
+      </p>
     </v-row>
 
-    <v-divider></v-divider>
+    <v-card class="ml-8" min-width="100%" flui>
+      <v-toolbar color="blue-grey" dark flat>
+        <v-toolbar-title>Applicable tags</v-toolbar-title>
+      </v-toolbar>
 
-    <v-card-actions>
-      <v-btn text @click="tree = []">
-        Reset
-      </v-btn>
+      <v-sheet class="pa-4 primary lighten-2">
+        <v-text-field
+          v-model="search"
+          label="Search for Recommendations"
+          dark
+          flat
+          solo-inverted
+          hide-details
+          clearable
+          clear-icon="mdi-close-circle-outline"
+        ></v-text-field>
+      </v-sheet>
 
-      <v-spacer></v-spacer>
+      <v-row no-gutters>
+        <v-col max-width="400px">
+          <v-card-text>
+            <v-treeview
+              v-model="tree"
+              :items="usecases"
+              :search="search"
+              selected-color="indigo"
+              open-on-click
+              selectable
+              return-object
+              expand-icon="mdi-chevron-down"
+              on-icon="mdi-bookmark"
+              off-icon="mdi-bookmark-outline"
+              indeterminate-icon="mdi-bookmark-minus"
+            >
+              <template slot="label" slot-scope="{ item }">
+                <p v-if="item.children">{{ item.name }}</p>
+                <a
+                  v-if="!item.children && item.numMatch != 0"
+                  v-on:click="openDescription(item)"
+                  >{{ item.name }}</a
+                >
+                <a
+                  v-if="!item.children && item.numMatch == 0"
+                  class="text--secondary"
+                  v-on:click="openDescription(item)"
+                  >{{ item.name }}</a
+                >
+              </template>
+            </v-treeview>
+          </v-card-text>
+        </v-col>
 
-      <v-btn class="white--text" color="green darken-1" depressed>
-        Execute {{ tree.length }}
-        <v-icon right>
-          mdi-animation-play
-        </v-icon>
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+        <v-divider vertical></v-divider>
+
+        <v-col>
+          <v-card-text>
+            <h5 class="text-h5">Focused tag</h5>
+            <h6 v-if="focusedTag == null" class="text-subtitle-1">
+              No tag selected
+            </h6>
+            <span v-if="focusedTag != null">
+              <h6 class="text-subtitle-1 text-decoration-underline">Name:</h6>
+              <h6 class="text-body-1">{{ focusedTag.name }}</h6>
+              <h6 class="text-subtitle-1 text-decoration-underline">
+                Description:
+              </h6>
+              <h6 class="text-body-1">{{ focusedTag.description }}</h6>
+              <h6 class="text-subtitle-1 text-decoration-underline">
+                Number of objects concerned:
+              </h6>
+              <h6 class="text-body-1">{{ focusedTag.numMatch }}</h6>
+              <h6 class="text-subtitle-1 text-decoration-underline">
+                Categories:
+              </h6>
+              <v-row>
+                <v-chip
+                  v-for="b in splitCategories(focusedTag.categories)"
+                  v-bind:key="b"
+                  class="ma-2"
+                  color="primary"
+                  >{{ b }}</v-chip
+                >
+              </v-row>
+            </span>
+          </v-card-text>
+        </v-col>
+
+        <v-divider vertical></v-divider>
+
+        <v-col>
+          <v-card-text>
+            <div
+              v-if="tree.length === 0"
+              key="title"
+              class="title font-weight-light grey--text pa-4 text-center"
+            >
+              Select the tags you want to apply
+            </div>
+
+            <v-scroll-x-transition group hide-on-leave>
+              <v-chip
+                v-for="(selection, i) in tree"
+                :key="i"
+                color="grey"
+                dark
+                small
+                class="ma-1"
+              >
+                <v-icon left small>
+                  mdi-label
+                </v-icon>
+                {{ selection.name }}
+              </v-chip>
+            </v-scroll-x-transition>
+          </v-card-text>
+        </v-col>
+      </v-row>
+
+      <v-divider></v-divider>
+
+      <v-card-actions>
+        <v-btn text @click="tree = []">
+          Reset
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+        <v-btn class="white--text" color="green darken-1" depressed>
+          Execute {{ tree.length }}
+          <v-icon right>
+            mdi-animation-play
+          </v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -135,7 +184,7 @@ export default Vue.extend({
 
   data: () => ({
     tree: [],
-    usecases: [] as (UseCaseResult|TagResult)[],
+    usecases: [] as (UseCaseResult | TagResult)[],
     singleSelect: false,
     selected: [],
     onGoingQueries: [] as number[],
@@ -151,13 +200,12 @@ export default Vue.extend({
 
     openDescription(item: TagResult) {
       console.log("focus on : ", item);
-      this.focusedTag=item
+      this.focusedTag = item;
     },
 
-    splitCategories(cat:string):string[] {
+    splitCategories(cat: string): string[] {
       return cat.split(":");
     }
-
   }),
 
   created() {
