@@ -92,4 +92,8 @@ export class TagController {
       useCase: useCase
     };
   }
+
+  public static async checkValidity(request:string) {
+    console.log("Non Empty")
+  }
 }

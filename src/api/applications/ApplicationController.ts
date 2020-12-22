@@ -44,4 +44,5 @@ export class ApplicationController {
 
     return appNames;
   }
+
 }

@@ -45,7 +45,17 @@
 
       <v-row no-gutters>
         <v-col max-width="400px">
-          <v-card-text>
+
+          <v-card-text class="d-flex justify-center" v-if="!usecases || usecases.length == 0">
+            <v-progress-circular
+              class="mx-auto my-8"
+              :size="50"
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </v-card-text>
+
+          <v-card-text v-if="usecases && usecases.length != 0">
             <v-treeview
               v-model="tree"
               :items="usecases"
@@ -196,7 +206,7 @@ export default Vue.extend({
     tagResultList: [] as TagResult[],
     errorState: null as unknown,
     search: "",
-    focusedTag: null,
+    focusedTag: null as TagResult|null,
 
     openDescription(item: TagResult) {
       console.log("focus on : ", item);
@@ -215,7 +225,7 @@ export default Vue.extend({
 
   methods: {
     getTreeview() {
-      UseCaseController.getUseCaseAsTree(this.value).then(useCases => {
+      UseCaseController.getUseCaseAndTagsAsTree(this.value).then(useCases => {
         this.usecases = useCases;
       });
     },

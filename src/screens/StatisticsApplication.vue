@@ -1,7 +1,7 @@
 <template>
   <v-container class="ml-5">
-    <v-row width="100%" no-gutters>
-      <h2 class="text-h4 mx-4">
+    <v-row width="100%">
+      <h2 class="text-h2 mx-4">
         Generating report for application {{ value }}
       </h2>
       <v-spacer></v-spacer>

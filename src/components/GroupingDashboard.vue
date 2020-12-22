@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="text-center">
-      <h1 class="display-1">Candidate for grouping</h1>
+      <h1 class="display-1 ml-4">Candidate for grouping</h1>
     </v-row>
     <v-row ma-0 pa-0>
       <v-col v-for="n in groupList" :key="n.application">

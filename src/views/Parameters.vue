@@ -3,7 +3,11 @@
     <v-col cols="12" sm="10" md="8" lg="6" class="mt-5">
       <v-card ref="form">
         <v-card-text>
-          <v-card-title>Demeter configuration</v-card-title>
+          <v-card-title>
+            <h2>
+              Demeter configuration
+            </h2>
+          </v-card-title>
 
           <v-text-field
             ref="refreshRate"

@@ -39,6 +39,12 @@ export class UseCaseController {
     return useCases;
   }
 
+  /**
+   * Regroup use cases under a tree
+   * @param useCase List of use cases 
+   * @param candidates List of Nodes to be inserted
+   * @param tags List of tag nodes to be inserted in the tree
+   */
   private static recTree(
     useCase: UseCaseResult,
     candidates: UseCaseResult[],
@@ -50,6 +56,7 @@ export class UseCaseController {
     }
 
     for (let i = 0; i < candidates.length; i++) {
+      // Match chidren tags 
       for (let y = 0; y < tags.length; y++) {
         if (useCase.name == tags[y].useCase) {
           const toAdd = tags[y];
@@ -67,7 +74,25 @@ export class UseCaseController {
     return useCase;
   }
 
-  public static async getUseCaseAsTree(appName: string) {
+  /**
+   * Get use cases as a tree
+   */
+  public static async getUseCaseTree():Promise<UseCaseResult[]>  {
+    const useCases: UseCaseResult[] = await UseCaseController.getUseCases();
+    let returnList: UseCaseResult[] = [];
+
+    returnList = useCases
+      .filter(x => x.parentName == "ROOT")
+      .map(x => UseCaseController.recTree(x, useCases, []));
+
+    return returnList;
+  }
+
+  /**
+   * Get Use cases and tags grouped as a tree 
+   * @param appName 
+   */
+  public static async getUseCaseAndTagsAsTree(appName: string) {
     const useCases: UseCaseResult[] = await UseCaseController.getUseCases();
     let returnList: UseCaseResult[] = [];
 
@@ -81,7 +106,6 @@ export class UseCaseController {
     returnList = useCases
       .filter(x => x.parentName == "ROOT")
       .map(x => UseCaseController.recTree(x, useCases, tags));
-    console.log("Tree detected", returnList);
 
     return returnList;
   }
