@@ -41,6 +41,7 @@ export class TagController {
       const useCase = singleRecord.get("useCase");
 
       appNames.push({
+        type: "tag",
         id: id,
         name: tag,
         description: description,
@@ -66,7 +67,10 @@ export class TagController {
    * @param applicationName Name of the application
    * @param tagId Id of the tag to execute
    */
-  public static async executeTag(applicationName: string, tagId: number) {
+  public static async executeTag(
+    applicationName: string,
+    tagId: number
+  ): Promise<TagResult> {
     const request = "CALL demeter.tag.execute( $id, $applicationName)";
 
     const results: QueryResult = await this.neo4jal.executeWithParameters(
@@ -84,8 +88,9 @@ export class TagController {
     const useCase = singleRecord.get("useCase");
 
     return {
+      type: "tag",
       id: id,
-      tag: tag,
+      name: tag,
       description: description,
       numMatch: numMatch,
       categories: categories,
@@ -93,7 +98,8 @@ export class TagController {
     };
   }
 
-  public static async checkValidity(request:string) {
-    console.log("Non Empty")
+  public static async checkValidity(request: string) {
+    // Todo Fill this section
+    console.log("Non Empty");
   }
 }

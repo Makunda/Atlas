@@ -1,14 +1,24 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="5" v-if="groupRecord">
-        <GroupTile
+      <v-col class="px-8" cols="3" v-if="groupRecord">
+        <GroupingCandidateTile
+          min-height="330px"
           :application="groupRecord.application"
           :groupName="groupRecord.tags"
           :count="groupRecord.countTag"
           :loading="loading"
         >
-        </GroupTile>
+        </GroupingCandidateTile>
+      </v-col>
+      <v-col class="px-8" cols="6" v-if="groupRecord">
+        <DemeterGroupTile min-height="330px" v-model="value">
+        </DemeterGroupTile>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="4" v-if="groupRecord">
+        <TagCandidateTile v-model="value"> </TagCandidateTile>
       </v-col>
     </v-row>
   </v-container>
@@ -19,7 +29,9 @@ import {
   GroupingController,
   GroupRecord
 } from "@/api/applications/GroupingController";
-import GroupTile from "@/components/tags/GroupTile.vue";
+import GroupingCandidateTile from "@/components/tiles/GroupingCandidateTile.vue";
+import TagCandidateTile from "@/components/tiles/TagCandidateTile.vue";
+import DemeterGroupTile from "@/components/tiles/DemeterGroupTile.vue";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -27,7 +39,9 @@ export default Vue.extend({
   props: ["value"],
 
   components: {
-    GroupTile
+    GroupingCandidateTile,
+    TagCandidateTile,
+    DemeterGroupTile
   },
 
   data: () => ({
@@ -36,13 +50,14 @@ export default Vue.extend({
   }),
 
   mounted() {
-    this.getApplicationGroup(this.value);
+    this.getApplicationGroupingCandidates(this.value);
   },
 
   methods: {
-    getApplicationGroup(appName: string) {
+    // Get the name of the Demeter grouping candidates present in the application
+    getApplicationGroupingCandidates(appName: string) {
       this.loading = true;
-      GroupingController.getApplicationGroup(appName)
+      GroupingController.getApplicationGroupingCandidates(appName)
         .then((res: GroupRecord | null) => {
           this.loading = false;
           if (res == null) {
@@ -63,7 +78,7 @@ export default Vue.extend({
 
   watch: {
     value: function(val) {
-      this.getApplicationGroup(val);
+      this.getApplicationGroupingCandidates(val);
     }
   }
 });

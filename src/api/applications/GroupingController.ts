@@ -1,4 +1,4 @@
-import { Node, QueryResult } from "neo4j-driver";
+import { int, Node, QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export interface GroupRecord {
@@ -7,20 +7,29 @@ export interface GroupRecord {
   countTag: number;
 }
 
+export interface DemeterGroup {
+  id: number;
+  name: string;
+  application: string;
+  numObjects: number;
+}
+
+/**
+ * Controller managing the Demeter Groups in the database
+ */
 export class GroupingController {
   private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
   private static tagPrefix = "Dm_gl_";
 
-  public static async getGroups(): Promise<GroupRecord[]> {
-    const request =
-      "MATCH (app:Application) " +
-      "WITH [app.Name] as appName " +
-      "MATCH (o:Object) WHERE EXISTS(o.Tags) AND any( x IN o.Tags WHERE x CONTAINS '" +
-      GroupingController.tagPrefix +
-      "' ) AND any( x IN LABELS(o) WHERE x IN appName) " +
-      "RETURN DISTINCT [ x IN LABELS(o) WHERE x IN appName][0] as application , [x IN o.Tags WHERE x CONTAINS '" +
-      GroupingController.tagPrefix +
-      "'] as tags,  COUNT(o) as numTags";
+  /**
+   * Get Demeter Groups in every application present in the Database
+   */
+  public static async getGroupingCandidates(): Promise<GroupRecord[]> {
+    const request = `MATCH (app:Application) 
+      WITH [app.Name] as appName 
+      MATCH (o:Object) WHERE EXISTS(o.Tags) AND any( x IN o.Tags WHERE x CONTAINS '${GroupingController.tagPrefix}' ) 
+      AND any( x IN LABELS(o) WHERE x IN appName) 
+      RETURN DISTINCT [ x IN LABELS(o) WHERE x IN appName][0] as application , [x IN o.Tags WHERE x CONTAINS '${GroupingController.tagPrefix}'] as tags,  COUNT(o) as numTags`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
 
@@ -37,14 +46,17 @@ export class GroupingController {
     return appNames;
   }
 
-  public static async getApplicationGroup(
+  /**
+   * Return the Demeter groups detected for a specific application
+   * @param application Name of the application
+   */
+  public static async getApplicationGroupingCandidates(
     application: string
   ): Promise<GroupRecord | null> {
-    const request =
-      `MATCH (app:Application) WHERE app.Name='${application}' ` +
-      `WITH [app.Name] as appName ` +
-      `MATCH (o:Object) WHERE EXISTS(o.Tags) AND any( x IN o.Tags WHERE x CONTAINS '${GroupingController.tagPrefix}' ) AND any( x IN LABELS(o) WHERE x IN appName) ` +
-      `RETURN DISTINCT [ x IN LABELS(o) WHERE x IN appName][0] as application , [x IN o.Tags WHERE x CONTAINS '${GroupingController.tagPrefix}'] as tags,  COUNT(o) as numTags`;
+    const request = `MATCH (app:Application) WHERE app.Name='${application}' 
+      WITH [app.Name] as appName 
+      MATCH (o:Object) WHERE EXISTS(o.Tags) AND any( x IN o.Tags WHERE x CONTAINS '${GroupingController.tagPrefix}' ) AND any( x IN LABELS(o) WHERE x IN appName) 
+      RETURN DISTINCT [ x IN LABELS(o) WHERE x IN appName][0] as application , [x IN o.Tags WHERE x CONTAINS '${GroupingController.tagPrefix}'] as tags,  COUNT(o) as numTags`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
 
@@ -73,11 +85,60 @@ export class GroupingController {
 
     const levels: Node[] = [];
     for (let i = 0; i < results.records.length; i++) {
-      const singleRecord: Node = results.records[i];
+      const singleRecord: any = results.records[i];
       console.log("Received node ", singleRecord);
       levels.push(singleRecord);
     }
 
     return "ok";
+  }
+
+  /**
+   * Get Demeter Groups in every application present in the Database
+   */
+  public static async getDemeterGroupedLevel5(
+    applicationName: string
+  ): Promise<DemeterGroup[]> {
+    const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
+      WITH [app.Name] as appName  
+      MATCH (l:Level5)-[:Aggregates]->(o:Object) WHERE l.FullName=~'(.*)##Dml_(.*)' AND '${applicationName}' IN LABELS(l)
+      RETURN ID(l) as id, l.Name as groupName, COUNT(o) as numObjects ;`;
+
+    const results: QueryResult = await this.neo4jal.execute(request);
+
+    const appNames: DemeterGroup[] = [];
+    for (let i = 0; i < results.records.length; i++) {
+      const singleRecord = results.records[i];
+
+      const id = int(singleRecord.get("id")).toNumber();
+      const groupName = singleRecord.get("groupName");
+      const numObjects = singleRecord.get("numObjects");
+
+      appNames.push({
+        id: id,
+        name: groupName,
+        application: applicationName,
+        numObjects: numObjects
+      });
+    }
+
+    return appNames;
+  }
+
+  /**
+   * Undo the grouping of a specific level in an application
+   * @param applicationName Name of the application targeted by the undo
+   * @param groupName Name of the group
+   */
+  public static async undoGroupedLevel5(
+    applicationName: string,
+    groupName: string
+  ): Promise<string> {
+    const request = `CALL demeter.undo.oneLevel('${applicationName}', '${groupName}');`;
+
+    const results: QueryResult = await this.neo4jal.execute(request);
+    const retMsg: string = results.records[0].get(0);
+
+    return retMsg;
   }
 }

@@ -6,6 +6,6 @@
 import { Component, Vue } from "vue-property-decorator";
 
 export default Vue.extend({
-  name: "Configuration"
+  name: "ConfigurationVue"
 });
 </script>

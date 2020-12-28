@@ -16,6 +16,11 @@
       </p>
     </v-row>
 
+    <!-- Tag assistant -->
+    <v-row>
+      HERE IS THE ASSISTANT
+    </v-row>
+
     <!-- Creation assistant section -->
     <v-row class="mx-8">
       <v-col>
@@ -27,12 +32,15 @@
             </p>
             <div class="text--primary">
               Select a use case related to the recommendation you want to
-              create.<br>The tag will be created under the selected use case.
-              {{tree}}
+              create.<br />The tag will be created under the selected use case.
+              {{ tree }}
             </div>
           </v-card-text>
 
-          <v-card-text class="d-flex justify-center" v-if="!usecases || usecases.length == 0">
+          <v-card-text
+            class="d-flex justify-center"
+            v-if="!usecases || usecases.length == 0"
+          >
             <v-progress-circular
               class="mx-auto my-8"
               :size="50"
@@ -54,9 +62,16 @@
               off-icon="mdi-bookmark-outline"
               indeterminate-icon="mdi-bookmark-minus"
             >
-              <template slot="label" slot-scope="{ item }" >
-                <p v-if="item.id == selectedUseCaseId" color="blue darken-2">{{ item.name }}</p>
-                <p v-if="item.id != selectedUseCaseId" :click="updateSelectedItem(item.id)">{{ item.name }}</p>
+              <template slot="label" slot-scope="{ item }">
+                <p v-if="item.id == selectedUseCaseId" color="blue darken-2">
+                  {{ item.name }}
+                </p>
+                <p
+                  v-if="item.id != selectedUseCaseId"
+                  :click="updateSelectedItem(item.id)"
+                >
+                  {{ item.name }}
+                </p>
               </template>
             </v-treeview>
           </v-card-text>
@@ -84,11 +99,7 @@
 
             <!-- Forms -->
             <!-- Tag Form -->
-            <v-form
-              v-if="recoType == 'Tag'"
-              ref="form"
-              lazy-validation
-            >
+            <v-form v-if="recoType == 'Tag'" ref="form" lazy-validation>
               <v-text-field
                 outlined
                 v-model="tagName"
@@ -112,6 +123,13 @@
                 :rules="[v => !!v || 'Associated request is required']"
                 placeholder="Type here your neo4j Cypher request..."
               ></v-textarea>
+              <v-btn
+                class="ma-2 float"
+                color="info"
+                @click="showAssistant = !showAssistant"
+              >
+                Open assitant
+              </v-btn>
               <v-checkbox
                 v-model="associatedActivation"
                 label="Set tag as active"
@@ -156,7 +174,10 @@
 </template>
 
 <script lang="ts">
-import { UseCaseController, UseCaseResult } from "@/api/applications/UseCaseController";
+import {
+  UseCaseController,
+  UseCaseResult
+} from "@/api/applications/UseCaseController";
 import { Component, Vue } from "vue-property-decorator";
 import { use } from "vue/types/umd";
 
@@ -168,9 +189,12 @@ export default Vue.extend({
   },
 
   data: () => ({
-    // Use case Tree 
+    // Use case Tree
     usecases: [] as UseCaseResult[],
     tree: [],
+
+    // Assistant
+    showAssistant: false,
 
     // Loaders
     loadingValidity: false,
@@ -190,16 +214,17 @@ export default Vue.extend({
   }),
 
   methods: {
-
     loadUseCase() {
-      UseCaseController.getUseCaseTree().then((useCases:UseCaseResult[]) => {
-        this.usecases = useCases;
-      }).catch((err) => {
-        console.error("Error trying to retrieve use cases tree:", err);
-      });
+      UseCaseController.getUseCaseTree()
+        .then((useCases: UseCaseResult[]) => {
+          this.usecases = useCases;
+        })
+        .catch(err => {
+          console.error("Error trying to retrieve use cases tree:", err);
+        });
     },
 
-    updateSelectedItem(val:number) {
+    updateSelectedItem(val: number) {
       this.selectedUseCaseId = val;
     },
 

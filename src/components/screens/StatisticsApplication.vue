@@ -42,7 +42,10 @@
         color="primary"
         indeterminate
       ></v-progress-circular>
-      <p class="my-5">Loading report for application ...</p>
+      <p class="my-5">
+        Loading report for application ...<br />This can take a while on large
+        application
+      </p>
     </v-row>
     <v-row
       fluid
@@ -105,8 +108,8 @@ import {
   StatisticResult,
   StatisticsController
 } from "@/api/applications/StatisticsController";
-import ErrorDialog from "../components/error/ErrorDialog.vue";
-import StatisticTile from "../components/tags/StatisticTile.vue";
+import ErrorDialog from "@/components/error/ErrorDialog.vue";
+import StatisticTile from "@/components/tiles/StatisticTile.vue";
 
 export default Vue.extend({
   name: "StatisticsApplication",

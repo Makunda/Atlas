@@ -1,5 +1,7 @@
-// import { Configuration } from "../Configuration";
+import { Configuration, Credentials, Properties } from "../Configuration";
+
 import neo4j, {
+  AuthToken,
   Driver,
   QueryResult,
   Result,
@@ -10,8 +12,6 @@ import neo4j, {
 
 export class Neo4JAccessLayer {
   private uri: string;
-  private user: string;
-  private password: string;
   private driver: Driver;
 
   private static INSTANCE: Neo4JAccessLayer;
@@ -63,19 +63,60 @@ export class Neo4JAccessLayer {
     if (Neo4JAccessLayer.INSTANCE == null) {
       Neo4JAccessLayer.INSTANCE = new Neo4JAccessLayer();
     }
-
     return Neo4JAccessLayer.INSTANCE;
   }
 
-  private constructor() {
-    this.uri = "neo4j://localhost:7687"; // Configuration.getProperty("neo4j.connection.bolt_url");
-    this.user = "neo4j"; // Configuration.getProperty("neo4j.connection.user");
-    this.password = "imaging"; // Configuration.getProperty("neo4j.connection.password");
+  /**
+   * Connect to the Neo4j instance
+   */
+  public static connect(): boolean {
     try {
-      this.driver = neo4j.driver(
-        this.uri,
-        neo4j.auth.basic(this.user, this.password)
-      );
+      const properties: Properties = Configuration.getProperties();
+
+      if (properties.token == undefined) {
+        console.log("You must log with credentials");
+        throw new Error(
+          "No credentials were provided for the connection. Aborting..."
+        );
+      }
+
+      Neo4JAccessLayer.INSTANCE = new Neo4JAccessLayer();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Connect to Neo4j instance using specific credentials
+   * @param credentials Neo4j credentials
+   */
+  public static connectWithCredentials(credentials: Credentials): boolean {
+    try {
+      const properties: Properties = Configuration.getProperties();
+      const token = neo4j.auth.basic(credentials.user, credentials.password);
+      properties.token = token;
+
+      Configuration.saveProperties(properties);
+      console.log("New token is ", properties);
+
+      // Save token for future usage
+      Neo4JAccessLayer.INSTANCE = new Neo4JAccessLayer();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  private constructor() {
+    const properties: Properties = Configuration.getProperties();
+    this.uri = properties.neo4jUri;
+    const token = properties.token;
+
+    console.log("Using token ", token);
+
+    try {
+      this.driver = neo4j.driver(this.uri, token);
     } catch (error) {
       throw new Error(
         `Cannot connect to the remote Neo4j database o ${this.uri}`

@@ -4,7 +4,7 @@ import Vue from "vue/types/umd";
   <v-main>
     <v-row>
       <v-toolbar class="ml-8 text--white" dark color="grey darken-2">
-        <v-toolbar-title class="ml-8">Application</v-toolbar-title>
+        <v-toolbar-title class="ml-8">Application insights</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
           v-model="applicationName"
@@ -49,10 +49,10 @@ import {
 } from "@/api/applications/ApplicationController";
 
 import HelloWorld from "@/components/HelloWorld.vue";
-import MainApplication from "@/screens/MainApplication.vue";
-import TagApplication from "@/screens/TagApplication.vue";
+import MainApplication from "@/components/screens/MainApplication.vue";
+import TagApplication from "@/components/screens/TagApplication.vue";
 import TagDashboard from "@/components/TagDashboard.vue";
-import StatisticsApplication from "@/screens/StatisticsApplication.vue";
+import StatisticsApplication from "@/components/screens/StatisticsApplication.vue";
 
 export default Vue.extend({
   name: "Applications",

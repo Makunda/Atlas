@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="344">
+  <v-card class="mx-auto">
     <v-card-text>
       <div>Candidate application</div>
       <p class="display-1 text--primary">
@@ -48,7 +48,7 @@
 import { GroupingController } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
-export default Vue.component("GroupTile", {
+export default Vue.component("GroupingCandidateTile", {
   props: {
     application: String,
     groupName: String,

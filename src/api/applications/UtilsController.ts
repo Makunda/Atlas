@@ -16,7 +16,9 @@ export class UtilsController {
       // Get the version
       return results.records[0].get(0);
     } catch (error) {
-      console.log("Unable to call the demeter extension. Make it's installed.");
+      console.log(
+        "Unable to call the demeter extension. Make sure it's installed."
+      );
       return null;
     }
   }

@@ -9,9 +9,13 @@
             </h2>
           </v-card-title>
 
+          <div class="my-4 subtitle-1">
+            Daemon grouping
+          </div>
+
           <v-text-field
             ref="refreshRate"
-            v-model="refreshRate"
+            v-model="properties.refreshRate"
             label="Refresh rate of the daemon ( in Miliseconds ) "
             placeholder="Configuration_1"
             required
@@ -23,7 +27,7 @@
 
           <v-text-field
             ref="configurationName"
-            v-model="configurationName"
+            v-model="properties.configurationName"
             :rules="rules()"
             label="Name of the configuration"
             placeholder="Configuration_1"
@@ -38,7 +42,7 @@
 
           <v-text-field
             ref="neo4jUri"
-            v-model="neo4jUri"
+            v-model="properties.neo4jUri"
             label="URI of the Neo4j bolt interface"
             placeholder="http://localhost:7687/"
             value="http://localhost:7687/"
@@ -46,13 +50,13 @@
           ></v-text-field>
           <v-text-field
             ref="neo4jUser"
-            v-model="neo4jUser"
+            v-model="credentials.user"
             label="Database user"
             placeholder="Neo4j user"
             required
           ></v-text-field>
           <v-text-field
-            v-model="neo4jPassword"
+            v-model="credentials.password"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[rules.required, rules.min]"
             :type="show1 ? 'text' : 'password'"
@@ -64,27 +68,12 @@
         </v-card-text>
         <v-divider class="mt-12"></v-divider>
         <v-card-actions>
-          <v-btn text>
+          <v-btn text @click="cancel">
             Cancel
           </v-btn>
           <v-spacer></v-spacer>
-          <v-slide-x-reverse-transition>
-            <v-tooltip v-if="formHasErrors" left>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  class="my-0"
-                  v-bind="attrs"
-                  @click="resetForm"
-                  v-on="on"
-                >
-                  <v-icon>mdi-refresh</v-icon>
-                </v-btn>
-              </template>
-              <span>Refresh form</span>
-            </v-tooltip>
-          </v-slide-x-reverse-transition>
-          <v-btn color="primary" text @click="submit">
+
+          <v-btn color="primary" text @click="saveForm">
             Save parameters
           </v-btn>
         </v-card-actions>
@@ -95,18 +84,23 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Properties, Credentials, Configuration } from "@/Configuration";
+import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
 
 export default Vue.extend({
   name: "Parameters",
 
+  computed: {
+    formHasErrors(): boolean {
+      return false;
+    }
+  },
+
   data: () => ({
     show1: false,
     // Form parameters
-    configurationName: "" as string,
-    refreshRate: 500 as number,
-    neo4jUri: "" as string,
-    neo4jUser: "" as string,
-    neo4jPassword: "" as string
+    properties: Configuration.getProperties() as Properties,
+    credentials: {} as Credentials
   }),
 
   methods: {
@@ -130,11 +124,24 @@ export default Vue.extend({
     },
 
     saveForm(): boolean {
-      // TODO : complete this section
+      // save properties
+      Configuration.saveProperties(this.properties);
+
+      // if credentials changed, reset Neo4J connection and save new token
+      if (
+        this.credentials.user.length != 0 &&
+        this.credentials.password.length != 0
+      ) {
+        Neo4JAccessLayer.connectWithCredentials(this.credentials);
+      }
 
       // Store preference cookies
-
+      window.location.reload();
       return true;
+    },
+
+    cancel() {
+      this.properties = Configuration.getProperties();
     }
   }
 });

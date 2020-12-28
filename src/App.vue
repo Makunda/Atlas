@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="main-application">
     <v-row>
       <v-card>
         <v-navigation-drawer
@@ -66,55 +66,37 @@
       <v-main class="pl-15">
         <component :is="actualView"></component>
       </v-main>
-
-      <v-snackbar v-model="snackbar" :multi-line="multiLine">
-        <v-alert dense elevation="7" type="error">
-          Demeter is not installed on localhost. Please make sure the extension
-          was insall ( more documentation on how to install demeter
-          <a
-            href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
-            >here</a
-          >)
-          <template v-slot:action="{ attrs }">
-            <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
-              Close
-            </v-btn>
-          </template>
-        </v-alert>
-      </v-snackbar>
     </v-row>
 
-    <!-- Error popup Demeter -->
-    <v-dialog
-      v-model="demeterErrorDialog"
-      width="500"
-    >
+    <!-- Error not installed Demeter modal -->
+    <v-dialog v-model="demeterErrorDialog" width="500">
       <v-card>
         <v-card-title class="headline grey lighten-2">
           Demeter not detected
         </v-card-title>
 
         <v-card-text class="my-3">
-        Demeter is not installed on <i><b>http://localhost:port</b></i>.<br> Please make sure the extension
-          is correclty installed and authorized in Neo4j configuration ( more documentation on how to install demeter
+          Demeter is not installed on
+          <i
+            ><b>{{ properties.neo4jUri }}</b></i
+          >.<br />
+          Please make sure the extension is correclty installed and authorized
+          in Neo4j configuration ( more documentation on how to install demeter
           <a
             href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
             >here</a
           >)
 
-          <br> 
-          Without the Demeter extension installed you'll not be able to use most of the functionnalities present in Olympus.
+          <br />
+          Without the Demeter extension installed you'll not be able to use most
+          of the functionnalities present in Olympus.
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="demeterErrorDialog = false"
-          >
+          <v-btn color="primary" text @click="demeterErrorDialog = false">
             I understand
           </v-btn>
         </v-card-actions>
@@ -130,11 +112,12 @@ import VueCookies from "vue-cookies";
 import Applications from "@/views/Applications.vue";
 import TagStudio from "@/views/TagStudio.vue";
 import Parameters from "@/views/Parameters.vue";
-import Configuration from "@/views/Configuration.vue";
+import ConfigurationVue from "@/views/Configuration.vue";
 
 import { UtilsController } from "./api/applications/UtilsController";
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
 import { ServerInfo } from "neo4j-driver";
+import { Configuration, Properties } from "./Configuration";
 
 Vue.use(VueCookies);
 
@@ -144,26 +127,27 @@ export default Vue.extend({
   components: {
     Applications,
     TagStudio,
-    Configuration,
+    ConfigurationVue,
     Parameters
   },
 
   mounted() {
     this.checkDemeter();
     this.checkDatabase();
+    this.getProperties();
   },
 
   data: () => ({
     neo4jAccessLayer: Neo4JAccessLayer.getInstance() as Neo4JAccessLayer,
-
-    // Connection test 
+    properties: {} as Properties,
+    // Connection test
     dbAvailable: false,
     demeterAvaible: true,
     demeterVersion: "No version",
 
     // Popups
     demeterErrorDialog: false,
-    
+
     // Navigation
     actualView: "Applications" as string,
     columnWidth: "70px",
@@ -174,7 +158,11 @@ export default Vue.extend({
         icon: "mdi-view-dashboard"
       },
       { name: "Tag Studio", view: "TagStudio", icon: "mdi-tag-multiple" },
-      { name: "My Configurations", view: "Configuration", icon: "mdi-folder" },
+      {
+        name: "My Configurations",
+        view: "ConfigurationVue",
+        icon: "mdi-folder"
+      },
       { name: "Parameters", view: "Parameters", icon: "mdi-wrench" }
     ],
     multiLine: true,
@@ -182,6 +170,13 @@ export default Vue.extend({
   }),
 
   methods: {
+    /**
+     * Get pr
+     */
+    getProperties: function() {
+      this.properties = Configuration.getProperties();
+    },
+
     /**
      * Check the connectivity of the database
      */
@@ -200,13 +195,12 @@ export default Vue.extend({
      * Check the installation of the demeter extension
      */
     checkDemeter: function() {
-      UtilsController.getDemeterVersion().then((version:string|null) => {
-        if(version == null) { 
-          this.demeterAvaible = false; 
+      UtilsController.getDemeterVersion().then((version: string | null) => {
+        if (version == null) {
+          this.demeterAvaible = false;
           this.demeterErrorDialog = true;
-        }
-        else {
-          console.log(`Version detected : ${version}`)
+        } else {
+          console.log(`Version detected : ${version}`);
           this.demeterVersion = version || "hey";
           this.demeterAvaible = true;
         }
@@ -225,5 +219,9 @@ export default Vue.extend({
 
 .custom-container {
   min-width: 100% !important;
+}
+
+.main-application {
+  position: relative;
 }
 </style>
