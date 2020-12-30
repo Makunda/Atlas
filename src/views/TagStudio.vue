@@ -1,7 +1,7 @@
 <template>
-  <v-row class="ml-15">
+  <v-container class="ml-15">
     <!-- Introduction Section -->
-    <v-row class="d-flex flex-column">
+    <v-row class="d-flex flex-column px-4">
       <h2 class="text-h2 my-6">
         Tag creator studio
       </h2>
@@ -17,8 +17,53 @@
     </v-row>
 
     <!-- Tag assistant -->
-    <v-row>
-      HERE IS THE ASSISTANT
+    <v-row v-if="showAssistant" transition="scroll-y-transition">
+      <v-card class="mx-14" width="100%">
+        <v-card-title>
+          Tag creator assistant
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <!-- Tag template title list -->
+            <v-row>
+              <v-col cols="3">
+                <v-list dense>
+                  <v-subheader>Models</v-subheader>
+                  <v-list-item-group
+                    v-model="selectedTagAssist"
+                    color="primary"
+                  >
+                    <v-list-item v-for="(item, i) in tagAssistsItems" :key="i">
+                      <v-list-item-content>
+                        <v-list-item-title
+                          v-text="item.title"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-col>
+              <!-- Tag template description -->
+              <v-col cols="9">
+                <v-textarea
+                  class="pa-2"
+                  height="200px"
+                  label="Template"
+                  :value="tagAssistsItems[selectedTagAssist].template"
+                  outlined
+                ></v-textarea>
+                <v-row
+                  class="px-4"
+                  v-if="tagAssistsItems[selectedTagAssist].explanation"
+                >
+                  <p>How this request works :</p>
+                  <i>{{ tagAssistsItems[selectedTagAssist].explanation }} </i>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
     </v-row>
 
     <!-- Creation assistant section -->
@@ -32,8 +77,8 @@
             </p>
             <div class="text--primary">
               Select a use case related to the recommendation you want to
-              create.<br />The tag will be created under the selected use case.
-              {{ tree }}
+              create.<br />The tag will be created under the selected use case. <br />
+              <h4 v-if="activeItems && activeItems.length > 0"> Selected use case : {{ activeItems[0].name }}</h4>
             </div>
           </v-card-text>
 
@@ -50,29 +95,19 @@
           </v-card-text>
 
           <v-card-text v-if="usecases && usecases.length != 0">
+
             <v-treeview
               v-model="tree"
+              :active.sync="activeItems"
               selection-type="independent"
               :multiple-active="false"
               :items="usecases"
               selected-color="indigo"
               return-object
-              expand-icon="mdi-chevron-down"
-              on-icon="mdi-bookmark"
-              off-icon="mdi-bookmark-outline"
-              indeterminate-icon="mdi-bookmark-minus"
+              activatable
+              item-key="name"
             >
-              <template slot="label" slot-scope="{ item }">
-                <p v-if="item.id == selectedUseCaseId" color="blue darken-2">
-                  {{ item.name }}
-                </p>
-                <p
-                  v-if="item.id != selectedUseCaseId"
-                  :click="updateSelectedItem(item.id)"
-                >
-                  {{ item.name }}
-                </p>
-              </template>
+              
             </v-treeview>
           </v-card-text>
 
@@ -102,7 +137,7 @@
             <v-form v-if="recoType == 'Tag'" ref="form" lazy-validation>
               <v-text-field
                 outlined
-                v-model="tagName"
+                v-model="tag.tagName"
                 counter="25"
                 :rules="[v => !!v || 'Tag name is required']"
                 label="Tag to apply"
@@ -111,17 +146,18 @@
               <v-textarea
                 outlined
                 name="associatedDescription"
-                v-model="associatedDescription"
+                v-model="tag.description"
                 label="Associated description"
                 placeholder="Type here the descirption assoicated to your tag..."
               ></v-textarea>
               <v-textarea
                 outlined
                 name="associatedRequest"
-                v-model="associatedRequest"
+                v-model="tag.associatedRequest"
                 label="Associated Request"
                 :rules="[v => !!v || 'Associated request is required']"
                 placeholder="Type here your neo4j Cypher request..."
+                @change="validRequest = false"
               ></v-textarea>
               <v-btn
                 class="ma-2 float"
@@ -131,12 +167,31 @@
                 Open assitant
               </v-btn>
               <v-checkbox
-                v-model="associatedActivation"
+                v-model="tag.activation"
                 label="Set tag as active"
               ></v-checkbox>
             </v-form>
 
-            <!-- Document Form -->
+            <!-- Request validity -->
+            <v-row class="pa-5" v-if="validityError && validityError.length != 0">
+              <p class="red--text">
+                {{ validityError }}
+              </p>
+            </v-row>
+
+            <!-- Creation Error -->
+            <v-row class="pa-5" v-if="creationError && creationError.length != 0"> 
+              <v-alert
+                :value="creationError.length != 0"
+                color="pink"
+                dark
+                border="top"
+                type="error"
+                transition="scale-transition"
+              >
+                {{ creationError }}
+              </v-alert>
+            </v-row>
           </v-card-text>
 
           <v-card-actions>
@@ -145,7 +200,7 @@
               :loading="loadingValidity"
               :disabled="loadingValidity"
               color="success"
-              @click="loader = 'loading2'"
+              @click="checkValidity()"
             >
               Test validity
               <template v-slot:loader>
@@ -170,16 +225,16 @@
         </v-card>
       </v-col>
     </v-row>
-  </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
+import { Tag, TagController } from "@/api/applications/TagController";
 import {
   UseCaseController,
   UseCaseResult
 } from "@/api/applications/UseCaseController";
-import { Component, Vue } from "vue-property-decorator";
-import { use } from "vue/types/umd";
+import { Vue } from "vue-property-decorator";
 
 export default Vue.extend({
   name: "TagStudio",
@@ -192,9 +247,32 @@ export default Vue.extend({
     // Use case Tree
     usecases: [] as UseCaseResult[],
     tree: [],
+    activeItems: [],
 
     // Assistant
     showAssistant: false,
+    selectedTagAssist: 0,
+    tagAssistsItems: [
+      {
+        title: "Group by Type",
+        template:
+          "MATCH (n:Object:%%CONTEXT_LABEL%%) WHERE n.Type CONTAINS 'JPA'  %%SET_TAG(n)%% %%RETURN_AS_NODES(n)%%",
+        explanation:
+          "The request will match all the objects where the type contains the string 'JPA'. By doing such a request, we'll apply a demeter tag to all the JPA objects, and identify them. The type of objects can be displayed  "
+      },
+      {
+        title: "Group by Name",
+        template:
+          "MATCH (n:Object:%%CONTEXT_LABEL%%) WHERE n.FullName CONTAINS 'javax.persistence'  %%SET_TAG(n)%% %%RETURN_AS_NODES(n)%%",
+        explanation: ""
+      },
+      {
+        title: "Group by Relationship and Type ",
+        template:
+          "MATCH (n:Object:%%CONTEXT_LABEL%%) WHERE n.InternalType='SQLScriptProcedure' AND NOT (n)-[:USE]->(:Object { InternalType : 'SQLScriptTable'}) AND NOT (n)-[:CALL]->(:Object { InternalType : 'SQLScriptProcedure'}) %%SET_TAG(n)%% %%RETURN_AS_NODES(n)%%",
+        explanation: ""
+      }
+    ],
 
     // Loaders
     loadingValidity: false,
@@ -206,14 +284,17 @@ export default Vue.extend({
 
     // Form properties
     recoType: "Tag" as string,
-    tagName: "" as string,
-    associatedDescription: "" as string,
-    associatedRequest: "" as string,
-    associatedActivation: false as boolean,
-    recoForm: {}
+    tag: {} as Tag,
+    recoForm: {},
+
+    // Validation
+    validRequest: true,
+    validityError: "",
+    creationError: ""
   }),
 
   methods: {
+
     loadUseCase() {
       UseCaseController.getUseCaseTree()
         .then((useCases: UseCaseResult[]) => {
@@ -228,12 +309,78 @@ export default Vue.extend({
       this.selectedUseCaseId = val;
     },
 
+    /**
+     * Push the recommendation to the actual configuration
+     */
     createRecommendation() {
       this.loadingCreation = true;
     },
 
+    /**
+     * Check the validty of the request in the form
+     */
     checkValidity() {
+      if (!this.tag.associatedRequest || this.tag.associatedRequest.length == 0) {
+        this.validRequest = false;
+        this.validityError = "The request cannot be empty.";
+        return;
+      }
+
+      if(!this.activeItems || this.activeItems.length < 0 ) {
+        this.validRequest = false;
+        this.validityError = "You must select a use case.";
+        return;
+      }
+
       this.loadingValidity = true;
+
+      TagController.checkValidity(this.tag.associatedRequest)
+        .then((valid: boolean) => {
+          this.validRequest = valid;
+
+          if (valid) {
+            console.log("The request is valid");
+          } else {
+            this.validityError = "ERROR : The request is malformed.";
+          }
+        })
+        .catch(err => {
+          this.validRequest = false;
+          console.warn("The request produced an error", err);
+        })
+        .finally(() => {
+          this.loadingValidity = false;
+        });
+    },
+
+    /**
+     * Create a Tag
+     */
+    createTag() {
+      this.loadingCreation = true;
+      this.tag.categories = "custom";
+      this.tag.parentUseCasId = this.selectedUseCaseId;
+
+      TagController.createTag(this.tag)
+        .then(() => {
+          console.log("Tag successfuly created");
+        })
+        .catch(err => {
+          console.error("The creation of the tag failed", err);
+        })
+        .finally(() => {
+          this.loadingCreation = false;
+        });
+    },
+
+    /**
+     * Launch an alert
+     */
+    launchAlert(text: string) {
+      this.creationError = text;
+      setTimeout(() => {
+        this.creationError = "";
+      }, 5000);
     }
   }
 });

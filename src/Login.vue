@@ -56,9 +56,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Vue } from "vue-property-decorator";
 import { Configuration, Credentials } from "@/Configuration";
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
+import { ServerInfo } from "neo4j-driver";
 
 export default Vue.extend({
   name: "Login",
@@ -86,7 +87,7 @@ export default Vue.extend({
 
       neo4jAl
         .testConnection()
-        .then((res: any) => {
+        .then((res: ServerInfo) => {
           // Successful connection , redirect to main
           console.log("Connection successful.");
           this.$router.replace("/main");

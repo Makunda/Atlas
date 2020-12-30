@@ -98,7 +98,6 @@ export class Neo4JAccessLayer {
       properties.token = token;
 
       Configuration.saveProperties(properties);
-      console.log("New token is ", properties);
 
       // Save token for future usage
       Neo4JAccessLayer.INSTANCE = new Neo4JAccessLayer();
@@ -112,9 +111,6 @@ export class Neo4JAccessLayer {
     const properties: Properties = Configuration.getProperties();
     this.uri = properties.neo4jUri;
     const token = properties.token;
-
-    console.log("Using token ", token);
-
     try {
       this.driver = neo4j.driver(this.uri, token);
     } catch (error) {

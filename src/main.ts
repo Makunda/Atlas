@@ -7,6 +7,7 @@ import vuetify from "./plugins/vuetify";
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
 import { Component } from "vue-router/types/router";
 import { DaemonController } from "./api/applications/DaemonController";
+import { ServerInfo } from "neo4j-driver";
 
 Vue.config.productionTip = false;
 
@@ -21,7 +22,7 @@ let el: Component;
 
 neo4jAl
   .testConnection()
-  .then((res: any) => {
+  .then((res: ServerInfo) => {
     // Successful connection
     router.replace("/main");
     el = App;

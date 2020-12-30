@@ -84,10 +84,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {
-  ApplicationController,
-  ApplicationRecord
-} from "@/api/applications/ApplicationController";
+import { ApplicationRecord } from "@/api/applications/ApplicationController";
 import { TagController, TagResult } from "@/api/applications/TagController";
 import ErrorDialog from "./error/ErrorDialog.vue";
 

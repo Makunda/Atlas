@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Vue } from "vue-property-decorator";
 import { Properties, Credentials, Configuration } from "@/Configuration";
 import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
 

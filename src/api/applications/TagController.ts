@@ -12,6 +12,15 @@ export interface TagResult {
   useCase: string;
 }
 
+export interface Tag {
+  tagName: string;
+  associatedRequest: string;
+  activation: boolean;
+  description: string;
+  categories: string;
+  parentUseCasId: number;
+}
+
 export class TagController {
   private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
@@ -55,14 +64,6 @@ export class TagController {
   }
 
   /**
-   * Execute a specific tag
-   * @param tag Tag to create
-   */
-  public static async createTag(tag: TagResult, configurationName: string) {
-    return;
-  }
-
-  /**
    * Execute a specific tag on an Application
    * @param applicationName Name of the application
    * @param tagId Id of the tag to execute
@@ -98,8 +99,37 @@ export class TagController {
     };
   }
 
-  public static async checkValidity(request: string) {
-    // Todo Fill this section
-    console.log("Non Empty");
+  /**
+   * Check if a request is compliant with the Demeter extension
+   * @param request Request to check
+   */
+  public static async checkValidity(request: string): Promise<boolean> {
+    const forgedRequest = `CALL demeter.tag.validateQuery("${request}");`;
+    const results: QueryResult = await this.neo4jal.execute(forgedRequest);
+
+    if (results.records.length == 0) {
+      return false;
+    }
+
+    return results.records[0].get(0) == "True";
+  }
+
+  /**
+   * Create a tag Node in the configuration
+   * @param tag Tag to create
+   */
+  public static async createTag(tag: Tag): Promise<void> {
+    const forgedRequest =
+      "CALL demeter.tag.add($tag, $request, $activation, $description, $categories, $parentId);";
+    const params = {
+      tag: tag.tagName,
+      request: tag.associatedRequest,
+      activation: tag.activation,
+      description: tag.description,
+      categories: tag.categories,
+      parentId: tag.parentUseCasId
+    };
+
+    await this.neo4jal.executeWithParameters(forgedRequest, params);
   }
 }

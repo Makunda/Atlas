@@ -121,7 +121,8 @@ export default Vue.component("DemeterGroupTile", {
         })
         .catch(err => {
           console.error(
-            `Failed to undo group with name ${groupName} on application ${appName}.`
+            `Failed to undo group with name ${groupName} on application ${appName}.`,
+            err
           );
         })
         .finally(() => {

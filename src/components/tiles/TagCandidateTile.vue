@@ -57,7 +57,6 @@
 </template>
 
 <script lang="ts">
-import { GroupingController } from "@/api/applications/GroupingController";
 import { TagController, TagResult } from "@/api/applications/TagController";
 import Vue from "vue";
 
@@ -118,7 +117,7 @@ export default Vue.component("TagCandidateTile", {
   },
 
   watch: {
-    value: function(val) {
+    value: function() {
       this.getTagResults();
     }
   }

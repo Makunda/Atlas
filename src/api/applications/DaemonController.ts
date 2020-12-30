@@ -31,7 +31,7 @@ export class DaemonController {
 
     // Merge groups in application
     let groupRequest: string;
-    for( const index in appNames) {
+    for (const index in appNames) {
       try {
         groupRequest = `CALL demeter.group.levels('${appNames[index]}');`;
         await this.neo4jal.execute(groupRequest);
@@ -42,7 +42,6 @@ export class DaemonController {
         );
       }
     }
-    
   }
 
   /**
