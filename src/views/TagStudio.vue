@@ -77,8 +77,11 @@
             </p>
             <div class="text--primary">
               Select a use case related to the recommendation you want to
-              create.<br />The tag will be created under the selected use case. <br />
-              <h4 v-if="activeItems && activeItems.length > 0"> Selected use case : {{ activeItems[0].name }}</h4>
+              create.<br />The tag will be created under the selected use case.
+              <br />
+              <h4 v-if="activeItems && activeItems.length > 0">
+                Selected use case : {{ activeItems[0].name }}
+              </h4>
             </div>
           </v-card-text>
 
@@ -95,7 +98,6 @@
           </v-card-text>
 
           <v-card-text v-if="usecases && usecases.length != 0">
-
             <v-treeview
               v-model="tree"
               :active.sync="activeItems"
@@ -107,7 +109,6 @@
               activatable
               item-key="name"
             >
-              
             </v-treeview>
           </v-card-text>
 
@@ -162,7 +163,7 @@
               <v-btn
                 class="ma-2 float"
                 color="info"
-                @click="showAssistant = !showAssistant"
+                @click="showAssistant = showAssistant ? false : true"
               >
                 Open assitant
               </v-btn>
@@ -173,14 +174,20 @@
             </v-form>
 
             <!-- Request validity -->
-            <v-row class="pa-5" v-if="validityError && validityError.length != 0">
+            <v-row
+              class="pa-5"
+              v-if="validityError && validityError.length != 0"
+            >
               <p class="red--text">
                 {{ validityError }}
               </p>
             </v-row>
 
             <!-- Creation Error -->
-            <v-row class="pa-5" v-if="creationError && creationError.length != 0"> 
+            <v-row
+              class="pa-5"
+              v-if="creationError && creationError.length != 0"
+            >
               <v-alert
                 :value="creationError.length != 0"
                 color="pink"
@@ -294,7 +301,6 @@ export default Vue.extend({
   }),
 
   methods: {
-
     loadUseCase() {
       UseCaseController.getUseCaseTree()
         .then((useCases: UseCaseResult[]) => {
@@ -320,13 +326,16 @@ export default Vue.extend({
      * Check the validty of the request in the form
      */
     checkValidity() {
-      if (!this.tag.associatedRequest || this.tag.associatedRequest.length == 0) {
+      if (
+        !this.tag.associatedRequest ||
+        this.tag.associatedRequest.length == 0
+      ) {
         this.validRequest = false;
         this.validityError = "The request cannot be empty.";
         return;
       }
 
-      if(!this.activeItems || this.activeItems.length < 0 ) {
+      if (!this.activeItems || this.activeItems.length < 0) {
         this.validRequest = false;
         this.validityError = "You must select a use case.";
         return;

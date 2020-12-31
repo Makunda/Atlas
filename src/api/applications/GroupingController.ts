@@ -7,11 +7,12 @@ export interface GroupRecord {
   countTag: number;
 }
 
-export interface DemeterGroup {
+export interface Level5Group {
   id: number;
   name: string;
   application: string;
   numObjects: number;
+  demeterGroup: boolean;
 }
 
 /**
@@ -78,7 +79,7 @@ export class GroupingController {
    * Group Obejct in a specific application
    * @param application
    */
-  public static async executeGrouping(application: string): Promise<string> {
+  public static async executeGrouping(application: string): Promise<void> {
     const request = `CALL demeter.group.levels("${application}")`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
@@ -89,8 +90,6 @@ export class GroupingController {
       console.log("Received node ", singleRecord);
       levels.push(singleRecord);
     }
-
-    return "ok";
   }
 
   /**
@@ -98,15 +97,15 @@ export class GroupingController {
    */
   public static async getDemeterGroupedLevel5(
     applicationName: string
-  ): Promise<DemeterGroup[]> {
+  ): Promise<Level5Group[]> {
     const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
       WITH [app.Name] as appName  
-      MATCH (l:Level5)-[:Aggregates]->(o:Object) WHERE l.FullName=~'(.*)##Dml_(.*)' AND '${applicationName}' IN LABELS(l)
+      MATCH (l:Level5)-[:Aggregates]->(o:Object) WHERE l.FullName=~'.*##Dml_(.*)' AND appName IN LABELS(l)
       RETURN ID(l) as id, l.Name as groupName, COUNT(o) as numObjects ;`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
 
-    const appNames: DemeterGroup[] = [];
+    const appNames: Level5Group[] = [];
     for (let i = 0; i < results.records.length; i++) {
       const singleRecord = results.records[i];
 
@@ -118,7 +117,45 @@ export class GroupingController {
         id: id,
         name: groupName,
         application: applicationName,
-        numObjects: numObjects
+        numObjects: numObjects,
+        demeterGroup: true
+      });
+    }
+
+    return appNames;
+  }
+
+  /**
+   * Retrieve of the level 5 specific to one application
+   * @param applicationName Name of the application
+   */
+  public static async getAllLevels(
+    applicationName: string
+  ): Promise<Level5Group[]> {
+    const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
+      WITH [app.Name] as appName  
+      MATCH (l:Level5)-[:Aggregates]->(o:Object) WHERE appName IN LABELS(l)
+      RETURN ID(l) as id, l.Name as groupName, l.FullName as fullName, COUNT(o) as numObjects ;`;
+
+    const results: QueryResult = await this.neo4jal.execute(request);
+
+    const appNames: Level5Group[] = [];
+    for (let i = 0; i < results.records.length; i++) {
+      const singleRecord = results.records[i];
+
+      const id = int(singleRecord.get("id")).toNumber();
+      const groupName = singleRecord.get("groupName");
+      const numObjects = singleRecord.get("numObjects");
+      const fullName:string = singleRecord.get("fullName");
+
+      const isDemeterGroup = fullName.includes("##Dml_");
+
+      appNames.push({
+        id: id,
+        name: groupName,
+        application: applicationName,
+        numObjects: numObjects,
+        demeterGroup: isDemeterGroup
       });
     }
 

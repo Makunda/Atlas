@@ -4,7 +4,7 @@ import Vue from "vue/types/umd";
   <v-main>
     <v-row>
       <v-toolbar class="ml-8 text--white" dark color="grey darken-2">
-        <v-toolbar-title class="ml-8">Application insights</v-toolbar-title>
+        <v-toolbar-title class="ml-8">Application insights </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
           v-model="applicationName"
@@ -49,10 +49,10 @@ import {
 } from "@/api/applications/ApplicationController";
 
 import HelloWorld from "@/components/HelloWorld.vue";
-import MainApplication from "@/components/screens/MainApplication.vue";
-import TagApplication from "@/components/screens/TagApplication.vue";
-import TagDashboard from "@/components/TagDashboard.vue";
-import StatisticsApplication from "@/components/screens/StatisticsApplication.vue";
+import MainApplication from "@/components/screens/main/MainApplication.vue";
+import TagApplication from "@/components/screens/tags/TagApplication.vue";
+import StatisticsApplication from "@/components/screens/statistics/StatisticsApplication.vue";
+import GroupingApplication from "@/components/screens/grouping/GroupingApplication.vue";
 
 export default Vue.extend({
   name: "Applications",
@@ -61,8 +61,8 @@ export default Vue.extend({
     MainApplication,
     HelloWorld,
     TagApplication,
-    TagDashboard,
-    StatisticsApplication
+    StatisticsApplication,
+    GroupingApplication
   },
 
   mounted() {
@@ -76,7 +76,7 @@ export default Vue.extend({
       { name: "Statistics", screen: "StatisticsApplication" },
       { name: "Discovery", screen: "TagApplication" },
       { name: "Architecture", screen: "HelloWorld" },
-      { name: "Grouping", screen: "HelloWorld" }
+      { name: "Grouping", screen: "GroupingApplication" }
     ],
 
     loadingApplication: true as boolean,
@@ -85,13 +85,22 @@ export default Vue.extend({
   }),
 
   methods: {
+    /** Change the state of the application **/
+    changeApplication(application:string) {
+      this.applicationName = application;
+      // Update store properties 
+      this.$store.state.applicationName = application;
+      console.log("New sate of store ", this.$store.state);
+      
+    },
+
     getApplicationList() {
       this.loadingApplication = true;
       ApplicationController.getSortedApplications().then(
         (res: ApplicationRecord[]) => {
           this.applicationList = res;
           if (res.length != 0) {
-            this.applicationName = res[0].name;
+            this.changeApplication(res[0].name)
           } else {
             this.applicationName = "No Application found";
           }
@@ -100,6 +109,13 @@ export default Vue.extend({
         }
       );
     }
+  },
+
+  watch: {
+    applicationName : function() {
+      this.changeApplication(this.applicationName);
+    }
   }
+  
 });
 </script>

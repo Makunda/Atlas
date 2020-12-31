@@ -1,6 +1,6 @@
 <template>
-  <v-container class="ml-5">
-    <v-row width="100%">
+  <v-container fluid>
+    <v-row class="ml-8 my-6">
       <h2 class="text-h2 mx-4">
         Generating report for application {{ value }}
       </h2>
@@ -109,7 +109,7 @@ import {
   StatisticsController
 } from "@/api/applications/StatisticsController";
 import ErrorDialog from "@/components/error/ErrorDialog.vue";
-import StatisticTile from "@/components/tiles/StatisticTile.vue";
+import StatisticTile from "@/components/screens/statistics/tiles/StatisticTile.vue";
 
 export default Vue.extend({
   name: "StatisticsApplication",
@@ -132,6 +132,9 @@ export default Vue.extend({
   }),
 
   methods: {
+    /**
+     * Get the results for a specific application
+     */
     getReportResult() {
       this.loading = true;
       console.log(`Loading statistics for application with name ${this.value}`);

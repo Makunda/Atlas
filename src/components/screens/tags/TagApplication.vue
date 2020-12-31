@@ -1,15 +1,15 @@
 <template>
-  <v-row>
+  <v-container fluid>
     <v-row class="ml-8 my-6 d-flex flex-column">
-      <h2 class="text-h2 my-6 ml-2">
-        Discover and apply tags
+      <h2 class="text-h2  mx-4">
+        Discover and apply tags on {{ application }}
       </h2>
-      <p class="ml-2 text-body-1">
+      <p class="ml-6 my-6 text-body-1">
         The discovery section is here to help you putting tags on interst points
-        in your applicationx. It matches some predefined patterns, to give you
+        in your application. It matches some predefined patterns, to give you
         quick ideas of what can be done in the application.<br />
         You can enrich this configuration manually, and create custom generics
-        tags in the Tag creator studio.
+        tags in the <i>Tag creator studio</i>.
         <br />
         For more informations on tags and documents, please refer to the
         official <a href="#">CAST Imaging documentation</a>. <br /><br />
@@ -163,8 +163,17 @@
         </v-btn>
 
         <v-spacer></v-spacer>
-
-        <v-btn class="white--text" color="green darken-1" depressed>
+        <i class="px-4" v-if="onGoingQueries.length > 0">
+          Executing {{ onGoingQueries.length }}
+          {{ onGoingQueries.length == 1 ? "query" : "queries" }}</i
+        >
+        <v-btn
+          class="white--text"
+          color="green darken-1"
+          :loading="loadingQueries"
+          depressed
+          @click="executeSelectedTags()"
+        >
           Execute {{ tree.length }}
           <v-icon right>
             mdi-animation-play
@@ -172,7 +181,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-  </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -190,18 +199,23 @@ import { TagController, TagResult } from "@/api/applications/TagController";
 export default Vue.extend({
   name: "TagApplication",
 
-  props: ["value"],
-
   components: {},
 
+  computed: {
+    getApplicationName () {
+      return this.$store.state.applicationName 
+    }
+  },
+
   data: () => ({
-    tree: [],
+    application: "" as  string,
+
+    tree: [] as (UseCaseResult | TagResult)[],
     usecases: [] as (UseCaseResult | TagResult)[],
     singleSelect: false,
     selected: [],
     onGoingQueries: [] as number[],
-    loadingApplication: true as boolean,
-    loading: true as boolean,
+
     applicationName: "No application selected" as string,
     numberOfApplication: 0 as number,
     applicationList: [] as ApplicationRecord[],
@@ -209,6 +223,11 @@ export default Vue.extend({
     errorState: null as unknown,
     search: "",
     focusedTag: null as TagResult | null,
+
+    // Loadings
+    loadingApplication: true as boolean,
+    loading: true as boolean,
+    loadingQueries: false as boolean,
 
     openDescription(item: TagResult) {
       console.log("focus on : ", item);
@@ -220,28 +239,33 @@ export default Vue.extend({
     }
   }),
 
+  mounted() {
+    this.application = this.$store.state.applicationName;
+  },
+
   created() {
     this.getTagResults();
     this.getTreeview();
   },
 
+
   methods: {
     getTreeview() {
-      UseCaseController.getUseCaseAndTagsAsTree(this.value).then(useCases => {
+      UseCaseController.getUseCaseAndTagsAsTree(this.application).then(useCases => {
         this.usecases = useCases;
       });
     },
 
     getTagResults() {
       this.loading = true;
-      TagController.getTagResults("Configuration_1", this.value)
+      TagController.getTagResults("Configuration_1", this.application)
         .then((res: TagResult[]) => {
           this.tagResultList = res.sort(this.sortByNumMAtch);
 
           this.loading = false;
           console.log(res);
           console.log(
-            `${res.length} tags were loaded for application ${this.value}`
+            `${res.length} tags were loaded for application ${this.application}`
           );
         })
         .catch(err => {
@@ -253,9 +277,28 @@ export default Vue.extend({
       return this.onGoingQueries.indexOf(idTag) != -1;
     },
 
+    async executeSelectedTags() {
+      this.loadingQueries = true;
+
+      // Get selection, and filter tags
+      const toExecute: TagResult[] = this.tree.filter(x => {
+        return x && x.type && x.type == "tag";
+      });
+
+      console.log(
+        `About to execute ${toExecute.length} tags on the application.`
+      );
+
+      for (const x in toExecute) {
+        await this.executeTag(toExecute[x].id);
+      }
+
+      this.loadingQueries = false;
+    },
+
     executeTag(idTag: number) {
       this.onGoingQueries.push(idTag);
-      TagController.executeTag(this.value, idTag)
+      TagController.executeTag(this.application, idTag)
         .then((res: TagResult) => {
           console.log(res);
         })
@@ -281,6 +324,12 @@ export default Vue.extend({
     sortByNumMAtch(a: TagResult, b: TagResult) {
       return b.numMatch - a.numMatch;
     }
-  }
+  },
+
+  watch: {
+    getApplicationName (newApp, oldApp) {
+      this.application = newApp;
+    }
+  },
 });
 </script>

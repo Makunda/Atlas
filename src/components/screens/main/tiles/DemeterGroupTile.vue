@@ -74,7 +74,7 @@
 <script lang="ts">
 import {
   GroupingController,
-  DemeterGroup
+  Level5Group
 } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
@@ -88,7 +88,7 @@ export default Vue.component("DemeterGroupTile", {
   data: () => ({
     loadingGroups: false,
     loadingUndoGroup: false,
-    demeterGroups: [] as DemeterGroup[],
+    demeterGroups: [] as Level5Group[],
     selectedGroupId: null,
 
     /**
@@ -97,7 +97,7 @@ export default Vue.component("DemeterGroupTile", {
     getDemeterGroups(appName: string) {
       this.loadingGroups = false;
       GroupingController.getDemeterGroupedLevel5(appName)
-        .then((res: DemeterGroup[]) => {
+        .then((res: Level5Group[]) => {
           this.loadingGroups = true;
           this.demeterGroups = res;
         })

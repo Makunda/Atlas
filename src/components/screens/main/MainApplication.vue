@@ -12,13 +12,13 @@
         </GroupingCandidateTile>
       </v-col>
       <v-col class="px-8" cols="6" v-if="groupRecord">
-        <DemeterGroupTile min-height="330px" v-model="value">
+        <DemeterGroupTile min-height="330px" v-model="applicationName">
         </DemeterGroupTile>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="4" v-if="groupRecord">
-        <TagCandidateTile v-model="value"> </TagCandidateTile>
+        <TagCandidateTile v-model="applicationName"> </TagCandidateTile>
       </v-col>
     </v-row>
   </v-container>
@@ -29,14 +29,13 @@ import {
   GroupingController,
   GroupRecord
 } from "@/api/applications/GroupingController";
-import GroupingCandidateTile from "@/components/tiles/GroupingCandidateTile.vue";
-import TagCandidateTile from "@/components/tiles/TagCandidateTile.vue";
-import DemeterGroupTile from "@/components/tiles/DemeterGroupTile.vue";
+import GroupingCandidateTile from "@/components/screens/main/tiles/GroupingCandidateTile.vue";
+import TagCandidateTile from "@/components/screens/main/tiles/TagCandidateTile.vue";
+import DemeterGroupTile from "@/components/screens/main/tiles/DemeterGroupTile.vue";
 import Vue from "vue";
 
 export default Vue.extend({
   name: "MainApplication",
-  props: ["value"],
 
   components: {
     GroupingCandidateTile,
@@ -44,13 +43,21 @@ export default Vue.extend({
     DemeterGroupTile
   },
 
+  computed: {
+    getApplicationName () {
+      return this.$store.state.applicationName 
+    }
+  },
+
   data: () => ({
     loading: true,
-    groupRecord: undefined as unknown
+    groupRecord: undefined as unknown,
+    applicationName: "" as string
   }),
 
   mounted() {
-    this.getApplicationGroupingCandidates(this.value);
+    this.getApplicationGroupingCandidates(this.applicationName);
+    this.applicationName = this.$store.state.applicationName;
   },
 
   methods: {
@@ -77,8 +84,9 @@ export default Vue.extend({
   },
 
   watch: {
-    value: function(val) {
-      this.getApplicationGroupingCandidates(val);
+    getApplicationName (newApp, oldApp) {
+      this.getApplicationGroupingCandidates(newApp);
+      this.applicationName = newApp;
     }
   }
 });

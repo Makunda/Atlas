@@ -1,8 +1,11 @@
 import Vue from "vue";
+import Vuex from "vuex";
+
 import App from "./App.vue";
 import Login from "./Login.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
+import store from "./store";
 
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
 import { Component } from "vue-router/types/router";
@@ -10,6 +13,7 @@ import { DaemonController } from "./api/applications/DaemonController";
 import { ServerInfo } from "neo4j-driver";
 
 Vue.config.productionTip = false;
+Vue.use(Vuex);
 
 console.log("Launching Olympus");
 
@@ -18,6 +22,7 @@ console.log("Launching Olympus");
 Neo4JAccessLayer.connect();
 const neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
+// Declare application
 let el: Component;
 
 neo4jAl
@@ -37,6 +42,7 @@ neo4jAl
     new Vue({
       router: router,
       vuetify,
+      store,
       render: h => h(el)
     }).$mount("#app");
   });
