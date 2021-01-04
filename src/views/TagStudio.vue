@@ -79,8 +79,8 @@
               Select a use case related to the recommendation you want to
               create.<br />The tag will be created under the selected use case.
               <br />
-              <h4 v-if="activeItems && activeItems.length > 0">
-                Selected use case : {{ activeItems[0].name }}
+              <h4 class="my-3" v-if="activeItems && activeItems.length > 0">
+                The tag will be created under the use case : {{ activeItems[0].name }}
               </h4>
             </div>
           </v-card-text>

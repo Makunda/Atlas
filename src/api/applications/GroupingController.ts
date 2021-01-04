@@ -100,7 +100,7 @@ export class GroupingController {
   ): Promise<Level5Group[]> {
     const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
       WITH [app.Name] as appName  
-      MATCH (l:Level5)-[:Aggregates]->(o:Object) WHERE l.FullName=~'.*##Dml_(.*)' AND appName IN LABELS(l)
+      MATCH (l:Level5:${applicationName})-[:Aggregates]->(o:Object) WHERE l.FullName=~'.*##Dml_(.*)'
       RETURN ID(l) as id, l.Name as groupName, COUNT(o) as numObjects ;`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
@@ -134,7 +134,7 @@ export class GroupingController {
   ): Promise<Level5Group[]> {
     const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
       WITH [app.Name] as appName  
-      MATCH (l:Level5)-[:Aggregates]->(o:Object) WHERE appName IN LABELS(l)
+      MATCH (l:Level5:${applicationName})-[:Aggregates]->(o:Object) 
       RETURN ID(l) as id, l.Name as groupName, l.FullName as fullName, COUNT(o) as numObjects ;`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
@@ -145,7 +145,7 @@ export class GroupingController {
 
       const id = int(singleRecord.get("id")).toNumber();
       const groupName = singleRecord.get("groupName");
-      const numObjects = singleRecord.get("numObjects");
+      const numObjects = int(singleRecord.get("numObjects")).toNumber();
       const fullName:string = singleRecord.get("fullName");
 
       const isDemeterGroup = fullName.includes("##Dml_");

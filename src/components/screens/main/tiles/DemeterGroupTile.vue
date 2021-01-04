@@ -2,7 +2,7 @@
   <v-card class="mx-auto">
     <v-card-text>
       <div>Demeter groups detected</div>
-      <p class="display-1 text--primary">Groups detected in {{ value }}</p>
+      <p class="display-1 text--primary">Groups detected in {{ appName }}</p>
       <!-- Slide group if groups were detected -->
       <v-row v-if="demeterGroups.lenght != 0">
         <template>
@@ -55,9 +55,16 @@
               :loading="loadingUndoGroup"
               :disabled="loadingUndoGroup"
               color="warning"
-              @click="undoGroup(value, getGroupByIndex(selectedGroupId).name)"
+              @click="undoGroup(appName, getGroupByIndex(selectedGroupId).name)"
             >
               Undo group
+            </v-btn>
+            <v-btn
+              disabled
+              color="warning"
+              class="mx-4"
+            >
+              Rename
             </v-btn>
           </v-row>
         </v-container>
@@ -79,27 +86,61 @@ import {
 import Vue from "vue";
 
 export default Vue.component("DemeterGroupTile", {
-  props: ["value"],
+
+  computed: {
+    getApplicationName () {
+      return this.$store.state.applicationName 
+    }
+  },
 
   mounted() {
-    this.getDemeterGroups(this.value);
+    this.appName = this.$store.state.applicationName;
+    this.getDemeterGroups();
   },
 
   data: () => ({
+    appName : "",
     loadingGroups: false,
     loadingUndoGroup: false,
     demeterGroups: [] as Level5Group[],
     selectedGroupId: null,
 
+    
+
+    /**
+     * Split the groups in a list of string
+     */
+    groupToList(groups: string[]) {
+      if (groups == null) return "";
+
+      const uniqueNames = [] as string[];
+      groups.forEach(x => {
+        const groupName: string = x.substring(6); // Remove demeter prefix
+        if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
+      });
+      return uniqueNames;
+    },
+
+    getGroupByIndex(id: number) {
+      return this.demeterGroups[id];
+    },
+
+    isUndoLoading(): boolean {
+      return this.loadingUndoGroup;
+    }
+  }),
+
+  methods: {
     /**
      * Get the Demeter groups present in one application
      */
-    getDemeterGroups(appName: string) {
+    getDemeterGroups() {
       this.loadingGroups = false;
-      GroupingController.getDemeterGroupedLevel5(appName)
+      GroupingController.getDemeterGroupedLevel5(this.appName)
         .then((res: Level5Group[]) => {
           this.loadingGroups = true;
           this.demeterGroups = res;
+          console.log(`${res.length} groups found in application ${this.appName}.`); 
         })
         .catch(err => {
           this.loadingGroups = false;
@@ -117,7 +158,7 @@ export default Vue.component("DemeterGroupTile", {
           console.log(
             `Grouping undone for level ${groupName} on application ${appName} `
           );
-          this.getDemeterGroups(appName);
+          this.getDemeterGroups();
         })
         .catch(err => {
           console.error(
@@ -128,34 +169,13 @@ export default Vue.component("DemeterGroupTile", {
         .finally(() => {
           this.loadingUndoGroup = false;
         });
-    },
-
-    /**
-     * Split the groups in a list of string
-     */
-    groupToList(groups: string[]) {
-      if (groups == null) return "";
-
-      const uniqueNames = [] as string[];
-      groups.forEach(x => {
-        const groupName: string = x.substring(6);
-        if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
-      });
-      return uniqueNames;
-    },
-
-    getGroupByIndex(id: number) {
-      return this.demeterGroups[id];
-    },
-
-    isUndoLoading(): boolean {
-      return this.loadingUndoGroup;
     }
-  }),
+  },
 
   watch: {
-    value: function() {
-      this.getDemeterGroups(this.value);
+    getApplicationName (newApp, oldApp) {
+      this.appName = newApp;
+      this.getDemeterGroups();
     }
   }
 });

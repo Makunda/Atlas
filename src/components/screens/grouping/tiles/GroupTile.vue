@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="mx-5"
-    :color=" group.demeterGroup ? '#D9C60F' : '#8C033E' "
+    :color=" demeterGroup ? '#D9C60F' : '#8C033E' "
     dark
     max-width="400"
   >
@@ -12,23 +12,36 @@
       >
         mdi-cog
       </v-icon>
-      <span class="title font-weight-light">{{ group.name }}</span>
+      <span class="title font-weight-light">{{ name }}</span>
     </v-card-title>
 
     <v-card-text class="headline font-weight-bold">
-      "{{ groupAction.numObjects }} Objects in the group"
+      "{{ numObjects }} Objects in the group"
     </v-card-text>
 
     <v-card-actions fluid>
       <v-list-item class="grow d-flex flex-row-reverse" width="100%">
         <v-btn
-            @click="execute()"
+            v-if="demeterGroup"
             :loading="loading"
             rounded
             color="#85D8EB"
+            class="float-right mx-3"
+            >
+            Undo
+            <v-icon
+                right
+                dark
+            > 
+                mdi-play
+            </v-icon>
+        </v-btn>
+        <v-btn
+            rounded
+            :color=" demeterGroup ? '#E6A205' : '#B00704' "
             class="float-right"
             >
-            Launch
+            Launch actions
             <v-icon
                 right
                 dark
@@ -47,18 +60,17 @@ import { GroupAction, GroupActionController } from "@/api/applications/GroupActi
 export default {
   name: "GroupTile",
   props: {
-      group: Object
+      id: Number,
+      name: String,
+      application:String,
+      numObjects: Number,
+      demeterGroup: Boolean
   },
 
   data: () => ({
     loading : false as boolean,
   }),
 
-  methods : {
-      execute() {
-          GroupActionController.executeAction(this.group);
-      }
-  }
 };
 </script>
 

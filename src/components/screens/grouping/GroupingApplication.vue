@@ -73,7 +73,8 @@ export default Vue.extend({
   name: "GroupingApplication",
 
   components: {
-    GroupOperationsTile
+    GroupOperationsTile,
+    LevelViewer
   },
 
   data: () => ({

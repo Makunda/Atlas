@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mx-auto" height="100%">
     <v-card-text>
       <div>Candidate application</div>
       <p class="display-1 text--primary">

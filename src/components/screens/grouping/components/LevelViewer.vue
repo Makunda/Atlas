@@ -19,6 +19,22 @@
         ></v-autocomplete>
       </v-toolbar>
     </v-row>
+    <v-row>
+          <v-col cols="4" lg="3" md ="4"
+            v-for="(n, index) in levels"
+            :key="index"
+          >
+            <GroupTile
+              :id="n.id"
+              :name="n.name"
+              :application="n.application"
+              :numObjects="n.numObjects"
+              :demeterGroup="n.demeterGroup"
+            >
+            </GroupTile>
+           
+          </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -27,12 +43,18 @@ import {
   GroupingController,
   Level5Group,
 } from "@/api/applications/GroupingController";
+import GroupTile from '@/components/screens/grouping/tiles/GroupTile.vue'
 import Vue from "vue";
 
 export default Vue.component("LevelViewer", {
 
+  components : {
+    GroupTile
+  },
+
   mounted() {
     this.applicationName = this.$store.state.applicationName;
+    this.getLevelGroups();
   },
 
   computed: {
@@ -68,6 +90,7 @@ export default Vue.component("LevelViewer", {
             .then((res: Level5Group[]) => {
             this.loadingGroups = true;
             this.levels = res;
+            console.log(`${this.levels.length} levels were loaded in application ${this.applicationName}.`)
             })
             .catch((err) => {
             this.loadingGroups = false;

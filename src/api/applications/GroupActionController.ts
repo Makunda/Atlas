@@ -29,6 +29,11 @@ export class GroupActionController {
           request: "MATCH (l:Level5:%%CONTEXT_LABEL%%)-[:Aggregates]->(obj:Object:%%CONTEXT_LABEL%%) WHERE obj.External=true SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_External '+l.Name] ELSE obj.Tags + 'Dm_gl_External '+l.Name END"
         },
         { 
+          title: "Group in external / internal",
+          description: "Regroup ALL the object in your application in 2 categories : externals and internal. (Configuration checker)",
+          request: "MATCH (l:Level5:%%CONTEXT_LABEL%%)-[:Aggregates]->(obj:Object:%%CONTEXT_LABEL%%) WHERE obj.External=true SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_External '+l.Name] ELSE obj.Tags + 'Dm_gl_External '+l.Name END"
+        },
+        { 
           title: "Split not in transaction",
           description: "Split all the objects not in transactions and regroup them under they own Level5 nodes",
           request: `MATCH (n:ObjectProperty) 

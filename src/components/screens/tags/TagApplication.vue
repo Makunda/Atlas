@@ -56,6 +56,12 @@
               indeterminate
             ></v-progress-circular>
           </v-card-text>
+          <v-card-text
+            class="d-flex justify-center"
+            v-if="!application || application.length == 0"
+          >
+            <v-btn color="info" @click="refreshtree()">Load tags</v-btn>
+          </v-card-text>
 
           <v-card-text v-if="usecases && usecases.length != 0">
             <v-treeview
@@ -241,18 +247,28 @@ export default Vue.extend({
 
   mounted() {
     this.application = this.$store.state.applicationName;
+    this.getTreeview();
   },
 
   created() {
-    this.getTagResults();
-    this.getTreeview();
+    this.application = this.$store.state.applicationName;
+    if(this.application.length != 0) {
+      //this.getTagResults();
+      this.getTreeview();
+    }
   },
 
 
   methods: {
     getTreeview() {
+      this.loading = true;
       UseCaseController.getUseCaseAndTagsAsTree(this.application).then(useCases => {
+        this.loading = false;
         this.usecases = useCases;
+      }).catch(err => {
+          console.error("An error occurred while retrieving tags.", err);  
+      }).finally(() => {
+        this.loading = false;
       });
     },
 
@@ -271,6 +287,11 @@ export default Vue.extend({
         .catch(err => {
           console.error("An error occurred while retrieving tags.", err);
         });
+    },
+
+    refreshtree() {
+      this.getTagResults();
+      this.getTreeview();
     },
 
     checkOnGoing(idTag: number) {

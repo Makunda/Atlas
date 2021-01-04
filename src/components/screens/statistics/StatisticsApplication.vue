@@ -53,7 +53,7 @@
       pa-0
       fill-height
       v-if="!loading"
-      class="hidden-sm-and-down"
+      class="px-6"
     >
       <v-col cols="6">
         <v-row>

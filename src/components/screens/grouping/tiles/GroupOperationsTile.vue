@@ -12,7 +12,7 @@
       >
         mdi-cog
       </v-icon>
-      <span class="title font-weight-light">{{ groupAction.title | 'Operation' }}</span>
+      <span class="title font-weight-light">{{ groupAction.title }}</span>
     </v-card-title>
 
     <v-card-text class="headline font-weight-bold">
