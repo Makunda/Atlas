@@ -49,7 +49,7 @@
           <v-icon left>
             mdi-image-auto-adjust
           </v-icon>
-           Daemon {{ daemonState ? "active" : "stopped" }}
+          Daemon {{ daemonState ? "active" : "stopped" }}
         </v-btn>
       </v-row>
     </v-card-actions>
@@ -57,25 +57,26 @@
 </template>
 
 <script lang="ts">
-import { GroupingController, GroupRecord } from "@/api/applications/GroupingController";
+import {
+  GroupingController,
+  GroupRecord
+} from "@/api/applications/GroupingController";
 import Vue from "vue";
 
 export default Vue.component("GroupingTile", {
-
   computed: {
-    getApplicationName () {
-      return this.$store.state.applicationName 
+    getApplicationName() {
+      return this.$store.state.applicationName;
     }
   },
 
   mounted() {
     this.application = this.$store.state.applicationName;
     this.daemonState = this.$store.state.daemonState;
-    this.getApplicationGroupingCandidates()
+    this.getApplicationGroupingCandidates();
   },
 
   data: () => ({
-
     application: "",
     tags: [] as string[],
     count: 0,
@@ -85,8 +86,9 @@ export default Vue.component("GroupingTile", {
 
   methods: {
     toggleDaemon() {
-      this.daemonState = this.$store.state.daemonState = !this.$store.state.daemonState;
-      console.log("New Daemon state is ", this.$store.state.daemonState)
+      this.daemonState = this.$store.state.daemonState = !this.$store.state
+        .daemonState;
+      console.log("New Daemon state is ", this.$store.state.daemonState);
     },
 
     groupApplication(appName: string) {
@@ -113,28 +115,25 @@ export default Vue.component("GroupingTile", {
         .then((res: GroupRecord | null) => {
           this.loading = false;
           if (res == null) {
-            this.tags = [],
-            this.count = 0
-            
+            (this.tags = []), (this.count = 0);
           } else {
-            this.tags = res.tags,
-            this.count = res.countTag
+            (this.tags = res.tags), (this.count = res.countTag);
           }
         })
         .catch(err => {
           console.error("An error occured trying to retrieve groups.", err);
-        }).finally(() => {
-          this.loading = false;
         })
+        .finally(() => {
+          this.loading = false;
+        });
     }
   },
-  
-  watch: {
-      getApplicationName (newApp, oldApp) {
-        this.application = newApp;
-        this.getApplicationGroupingCandidates()
-      }
-    }
 
+  watch: {
+    getApplicationName(newApp, oldApp) {
+      this.application = newApp;
+      this.getApplicationGroupingCandidates();
+    }
+  }
 });
 </script>

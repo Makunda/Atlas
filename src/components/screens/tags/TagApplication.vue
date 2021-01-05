@@ -25,7 +25,7 @@
       </p>
     </v-row>
 
-    <v-card min-width="85%" flui>
+    <v-card min-width="100%" fluid>
       <v-toolbar color="charcoal" dark flat>
         <v-toolbar-title>Applicable tags</v-toolbar-title>
       </v-toolbar>
@@ -208,13 +208,13 @@ export default Vue.extend({
   components: {},
 
   computed: {
-    getApplicationName () {
-      return this.$store.state.applicationName 
+    getApplicationName() {
+      return this.$store.state.applicationName;
     }
   },
 
   data: () => ({
-    application: "" as  string,
+    application: "" as string,
 
     tree: [] as (UseCaseResult | TagResult)[],
     usecases: [] as (UseCaseResult | TagResult)[],
@@ -247,7 +247,7 @@ export default Vue.extend({
 
   mounted() {
     this.application = this.$store.state.applicationName;
-    if(this.application && this.application.length != 0) {
+    if (this.application && this.application.length != 0) {
       this.getTreeview();
     }
   },
@@ -255,14 +255,17 @@ export default Vue.extend({
   methods: {
     getTreeview() {
       this.loading = true;
-      UseCaseController.getUseCaseAndTagsAsTree(this.application).then(useCases => {
-        this.loading = false;
-        this.usecases = useCases;
-      }).catch(err => {
-          console.error("An error occurred while retrieving tags.", err);  
-      }).finally(() => {
-        this.loading = false;
-      });
+      UseCaseController.getUseCaseAndTagsAsTree(this.application)
+        .then(useCases => {
+          this.loading = false;
+          this.usecases = useCases;
+        })
+        .catch(err => {
+          console.error("An error occurred while retrieving tags.", err);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
 
     getTagResults() {
@@ -341,12 +344,12 @@ export default Vue.extend({
   },
 
   watch: {
-    getApplicationName (newApp, oldApp) {
+    getApplicationName(newApp, oldApp) {
       this.application = newApp;
-      if(this.application && this.application.length != 0) {
+      if (this.application && this.application.length != 0) {
         this.getTreeview();
       }
     }
-  },
+  }
 });
 </script>

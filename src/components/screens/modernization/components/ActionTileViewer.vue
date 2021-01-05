@@ -1,19 +1,16 @@
 <template>
-  <v-container class="pl-6 " fluid>
-    <v-row class="ml-4 my-6 d-flex flex-column">
-      <h2 class="text-h2  mx-4">Groups operations on {{ application }}</h2>
-      <p class="ml-6 my-6 text-body-1">
+  <v-container fluid>
+    <v-row class="d-flex flex-column">
+      <p class="text-body-1">
         The grouping section is here to help you putting tags on interst points
         in your application. It matches some predefined patterns, to give you
         quick ideas of what can be done in the application.<br />
         You can enrich this configuration manually, and create custom generics
         tags in the <i>Tag creator studio</i>.
         <br />
-
-        <!-- TO DO REWRITE THIS SECTION -->
       </p>
     </v-row>
-    <v-row class="mx-10 my-8">
+    <v-row >
       <v-toolbar dark color="#1D5D6B">
         <v-toolbar-title>Popular grouping operations</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -29,7 +26,7 @@
         ></v-autocomplete>
       </v-toolbar>
     </v-row>
-    <v-row class="mx-10">
+    <v-row>
       <v-slide-group class="pa-4" active-class="success" show-arrows>
         <v-slide-item
           v-for="(n, index) in filteredPopularOperations"
@@ -40,27 +37,22 @@
       </v-slide-group>
     </v-row>
 
-    <v-row class="mx-10 my-8">
-      <LevelViewer> </LevelViewer>
-    </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import GroupOperationsTile from "@/components/screens/grouping/tiles/GroupOperationsTile.vue";
-import LevelViewer from "@/components/screens/grouping/components/LevelViewer.vue";
 import {
   GroupAction,
   GroupActionController
 } from "@/api/applications/GroupActionController";
 
 export default Vue.extend({
-  name: "GroupingApplication",
+  name: "ActionTileViewer",
 
   components: {
-    GroupOperationsTile,
-    LevelViewer
+    GroupOperationsTile
   },
 
   data: () => ({

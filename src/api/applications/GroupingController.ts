@@ -146,7 +146,7 @@ export class GroupingController {
       const id = int(singleRecord.get("id")).toNumber();
       const groupName = singleRecord.get("groupName");
       const numObjects = int(singleRecord.get("numObjects")).toNumber();
-      const fullName:string = singleRecord.get("fullName");
+      const fullName: string = singleRecord.get("fullName");
 
       const isDemeterGroup = fullName.includes("##Dml_");
 

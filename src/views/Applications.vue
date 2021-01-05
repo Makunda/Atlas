@@ -68,13 +68,23 @@ export default Vue.extend({
     this.getApplicationList();
   },
 
+  computed: {
+    getCurrentView() {
+      return this.$store.state.currentView;
+    }
+  },
+
   data: () => ({
     tab: 0,
     items: [
-      { name: "Enhancement", screen: "MainApplication", icon: "mdi-book-open-variant" },
+      {
+        name: "Enhancement",
+        screen: "MainApplication",
+        icon: "mdi-book-open-variant"
+      },
       { name: "Grouping", screen: "GroupingApplication", icon: "mdi-ungroup" },
       { name: "Administration", screen: "Administration", icon: "mdi-cog" },
-      { name: "Modernization", screen: "Modernization", icon: "mdi-pickaxe" },
+      { name: "Modernization", screen: "Modernization", icon: "mdi-pickaxe" }
     ],
 
     loadingApplication: true as boolean,
@@ -84,12 +94,11 @@ export default Vue.extend({
 
   methods: {
     /** Change the state of the application **/
-    changeApplication(application:string) {
+    changeApplication(application: string) {
       this.applicationName = application;
-      // Update store properties 
+      // Update store properties
       this.$store.state.applicationName = application;
       console.log("New sate of store ", this.$store.state);
-      
     },
 
     getApplicationList() {
@@ -98,7 +107,7 @@ export default Vue.extend({
         (res: ApplicationRecord[]) => {
           this.applicationList = res;
           if (res.length != 0) {
-            this.changeApplication(res[0].name)
+            this.changeApplication(res[0].name);
           } else {
             this.applicationName = "No Application found";
           }
@@ -110,10 +119,25 @@ export default Vue.extend({
   },
 
   watch: {
-    applicationName : function() {
+    applicationName: function() {
       this.changeApplication(this.applicationName);
+    },
+
+    tab: function() {
+      this.$store.state.currentView = this.items[this.tab].name;
+    },
+
+    getCurrentView(newView, oldView) {
+      console.log("New view is ", newView);
+      for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i].name === newView) {
+          // Found a view with a matching name
+          this.tab = i;
+        }
+      }
+
+      // Do nothing it the view wasn't found
     }
   }
-  
 });
 </script>

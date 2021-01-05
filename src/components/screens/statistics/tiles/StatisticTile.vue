@@ -26,9 +26,7 @@ export default {
   name: "StatisticTile",
   props: ["title", "description", "results"],
 
-  data: () => ({
-   
-  })
+  data: () => ({})
 };
 </script>
 

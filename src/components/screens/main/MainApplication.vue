@@ -1,19 +1,16 @@
 <template>
   <v-container fluid>
     <v-row style="min-height=300px">
-      <v-col class="px-8" cols="4" >
-        <GroupingTile
-          min-height="330px"
-        >
-        </GroupingTile>
+      <v-col class="px-8" cols="4">
+        <GroupingTile min-height="330px"> </GroupingTile>
       </v-col>
       <v-col class="px-8" cols="8">
         <DemeterGroupTile min-height="330px" v-model="applicationName">
         </DemeterGroupTile>
       </v-col>
     </v-row>
-     <v-row class="px-8">
-      <v-card>
+    <v-row class="px-8">
+      <v-card style="width: 100%;">
         <TagApplication></TagApplication>
       </v-card>
     </v-row>
@@ -40,8 +37,8 @@ export default Vue.extend({
   },
 
   computed: {
-    getApplicationName () {
-      return this.$store.state.applicationName 
+    getApplicationName() {
+      return this.$store.state.applicationName;
     }
   },
 
@@ -55,12 +52,10 @@ export default Vue.extend({
     this.applicationName = this.$store.state.applicationName;
   },
 
-  methods: {
-    
-  },
+  methods: {},
 
   watch: {
-    getApplicationName (newApp, oldApp) {
+    getApplicationName(newApp, oldApp) {
       this.applicationName = newApp;
     }
   }

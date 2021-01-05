@@ -2,7 +2,9 @@
   <v-card class="mx-auto">
     <v-card-text>
       <div>Demeter</div>
-      <p class="display-1 text--primary">Demeter groups detected in {{ appName }}</p>
+      <p class="display-1 text--primary">
+        Demeter groups detected in {{ appName }}
+      </p>
       <!-- Slide group if groups were detected -->
       <v-row v-if="demeterGroups.lenght != 0">
         <template>
@@ -56,8 +58,8 @@
       </v-row>
     </v-card-text>
     <v-card-actions>
-      <v-btn text color="persianGrey">
-        Go to grouping Dashboard
+      <v-btn text color="persianGrey" @click="switchToAdminPanel()">
+        Modify the groups in the administration panel
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -71,10 +73,9 @@ import {
 import Vue from "vue";
 
 export default Vue.component("DemeterGroupTile", {
-
   computed: {
-    getApplicationName () {
-      return this.$store.state.applicationName 
+    getApplicationName() {
+      return this.$store.state.applicationName;
     }
   },
 
@@ -84,13 +85,11 @@ export default Vue.component("DemeterGroupTile", {
   },
 
   data: () => ({
-    appName : "",
+    appName: "",
     loadingGroups: false,
     loadingUndoGroup: false,
     demeterGroups: [] as Level5Group[],
     selectedGroupId: null,
-
-    
 
     /**
      * Split the groups in a list of string
@@ -116,6 +115,9 @@ export default Vue.component("DemeterGroupTile", {
   }),
 
   methods: {
+    switchToAdminPanel() {
+      this.$store.state.currentView = "Administration";
+    },
     /**
      * Get the Demeter groups present in one application
      */
@@ -125,7 +127,9 @@ export default Vue.component("DemeterGroupTile", {
         .then((res: Level5Group[]) => {
           this.loadingGroups = true;
           this.demeterGroups = res;
-          console.log(`${res.length} groups found in application ${this.appName}.`); 
+          console.log(
+            `${res.length} groups found in application ${this.appName}.`
+          );
         })
         .catch(err => {
           this.loadingGroups = false;
@@ -158,7 +162,7 @@ export default Vue.component("DemeterGroupTile", {
   },
 
   watch: {
-    getApplicationName (newApp, oldApp) {
+    getApplicationName(newApp, oldApp) {
       this.appName = newApp;
       this.getDemeterGroups();
     }

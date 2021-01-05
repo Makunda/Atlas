@@ -59,11 +59,7 @@
             >
               Undo group
             </v-btn>
-            <v-btn
-              disabled
-              color="warning"
-              class="mx-4"
-            >
+            <v-btn disabled color="warning" class="mx-4">
               Rename
             </v-btn>
           </v-row>
@@ -86,10 +82,9 @@ import {
 import Vue from "vue";
 
 export default Vue.component("DemeterGroupTile", {
-
   computed: {
-    getApplicationName () {
-      return this.$store.state.applicationName 
+    getApplicationName() {
+      return this.$store.state.applicationName;
     }
   },
 
@@ -99,13 +94,11 @@ export default Vue.component("DemeterGroupTile", {
   },
 
   data: () => ({
-    appName : "",
+    appName: "",
     loadingGroups: false,
     loadingUndoGroup: false,
     demeterGroups: [] as Level5Group[],
     selectedGroupId: null,
-
-    
 
     /**
      * Split the groups in a list of string
@@ -140,7 +133,9 @@ export default Vue.component("DemeterGroupTile", {
         .then((res: Level5Group[]) => {
           this.loadingGroups = true;
           this.demeterGroups = res;
-          console.log(`${res.length} groups found in application ${this.appName}.`); 
+          console.log(
+            `${res.length} groups found in application ${this.appName}.`
+          );
         })
         .catch(err => {
           this.loadingGroups = false;
@@ -173,7 +168,7 @@ export default Vue.component("DemeterGroupTile", {
   },
 
   watch: {
-    getApplicationName (newApp, oldApp) {
+    getApplicationName(newApp, oldApp) {
       this.appName = newApp;
       this.getDemeterGroups();
     }

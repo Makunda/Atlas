@@ -47,14 +47,7 @@
         application
       </p>
     </v-row>
-    <v-row
-      fluid
-      ma-0
-      pa-0
-      fill-height
-      v-if="!loading"
-      class="px-6"
-    >
+    <v-row fluid ma-0 pa-0 fill-height v-if="!loading" class="px-6">
       <v-col cols="6">
         <v-row>
           <StatisticTile

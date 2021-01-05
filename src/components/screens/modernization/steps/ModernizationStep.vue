@@ -1,11 +1,9 @@
 <template>
   <v-container>
     <v-row class="text-center pa-5">
-      <h4 class="text-h4">Start modernize {{application}}</h4>
+      <h4 class="text-h4">Start modernize {{ application }}</h4>
     </v-row>
-    <v-row>
-        
-    </v-row>
+    <v-row> </v-row>
   </v-container>
 </template>
 
@@ -15,7 +13,7 @@ import Vue from "vue";
 export default Vue.extend({
   name: "ModernizationStep",
 
-   mounted() {
+  mounted() {
     this.application = this.$store.state.applicationName;
   },
 
@@ -23,17 +21,14 @@ export default Vue.extend({
     this.application = this.$store.state.applicationName;
   },
 
-
   data: () => ({
-      application: ""
+    application: ""
   }),
 
-  methods: {
-
-  },
+  methods: {},
 
   watch: {
-    getApplicationName (newApp, oldApp) {
+    getApplicationName(newApp, oldApp) {
       this.application = newApp;
     }
   }

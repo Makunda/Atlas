@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="mx-5"
-    color="#25B8D9"
+    color="persianGrey"
     dark
     max-width="400"
   >
@@ -12,20 +12,18 @@
       >
         mdi-cog
       </v-icon>
-      <span class="title font-weight-light">{{ groupAction.title }}</span>
+      <span class="title font-weight-light">{{ groupAction.title | 'Operation' }}</span>
     </v-card-title>
+    <v-card-subtitle class="text-body-1 mt-2" style="height: 100px" v-text="groupAction.description"></v-card-subtitle>
 
-    <v-card-text class="headline font-weight-bold">
-      "{{ groupAction.description }}"
-    </v-card-text>
 
-    <v-card-actions fluid>
+    <v-card-actions>
       <v-list-item class="grow d-flex flex-row-reverse" width="100%">
         <v-btn
             @click="execute()"
             :loading="loading"
             rounded
-            color="#85D8EB"
+            color="charcoal"
             class="float-right"
             >
             Launch
@@ -38,6 +36,7 @@
         </v-btn>
       </v-list-item>
     </v-card-actions>
+    
   </v-card>
 </template>
 
