@@ -17,7 +17,7 @@
       <p v-if="count != 0">Will create groups :</p>
       <v-row class="text--primary">
         <v-chip
-          v-for="group in groupToList(groupName)"
+          v-for="group in groupToList(tags)"
           :key="group"
           class="ma-2"
           color="secondary"
@@ -45,20 +45,33 @@
 </template>
 
 <script lang="ts">
-import { GroupingController } from "@/api/applications/GroupingController";
+import { GroupingController, GroupRecord } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
 export default Vue.component("GroupingCandidateTile", {
-  props: {
-    application: String,
-    groupName: String,
-    count: Number,
-    loading: Boolean
+
+  computed: {
+    getApplicationName () {
+      return this.$store.state.applicationName 
+    }
+  },
+
+  mounted() {
+    this.application = this.$store.state.applicationName;
+    this.getApplicationGroupingCandidates()
   },
 
   data: () => ({
+
+    application: "",
+    tags: [] as string[],
+    count: 0,
+    loading: false
+  }),
+
+  methods: {
     groupApplication(appName: string) {
-      GroupingController.executeGrouping(appName).then((res: string) => {
+      GroupingController.executeGrouping(appName).then(() => {
         console.log(`Application ${appName} was sucessfully grouped !`);
       });
     },
@@ -72,7 +85,37 @@ export default Vue.component("GroupingCandidateTile", {
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
       return uniqueNames;
+    },
+
+    // Get the name of the Demeter grouping candidates present in the application
+    getApplicationGroupingCandidates() {
+      this.loading = true;
+      GroupingController.getApplicationGroupingCandidates(this.application)
+        .then((res: GroupRecord | null) => {
+          this.loading = false;
+          if (res == null) {
+            this.tags = [],
+            this.count = 0
+            
+          } else {
+            this.tags = res.tags,
+            this.count = res.countTag
+          }
+        })
+        .catch(err => {
+          console.error("An error occured trying to retrieve groups.", err);
+        }).finally(() => {
+          this.loading = false;
+        })
     }
-  })
+  },
+  
+  watch: {
+      getApplicationName (newApp, oldApp) {
+        this.application = newApp;
+        this.getApplicationGroupingCandidates()
+      }
+    }
+
 });
 </script>

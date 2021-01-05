@@ -3,7 +3,7 @@ import Vue from "vue/types/umd";
 <template>
   <v-main>
     <v-row>
-      <v-toolbar class="ml-8 text--white" dark color="grey darken-2">
+      <v-toolbar class="ml-8 text--white" dark color="charcoal">
         <v-toolbar-title class="ml-8">Application insights </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
@@ -23,6 +23,7 @@ import Vue from "vue/types/umd";
         <template v-slot:extension>
           <v-tabs v-model="tab" align-with-title>
             <v-tab v-for="item in items" :key="item.name">
+              <v-icon class="mr-2" v-if="item.icon">{{ item.icon }}</v-icon>
               {{ item.name }}
             </v-tab>
           </v-tabs>
@@ -48,10 +49,9 @@ import {
   ApplicationRecord
 } from "@/api/applications/ApplicationController";
 
-import HelloWorld from "@/components/HelloWorld.vue";
+import Administration from "@/components/screens/administration/Administration.vue";
 import MainApplication from "@/components/screens/main/MainApplication.vue";
-import TagApplication from "@/components/screens/tags/TagApplication.vue";
-import StatisticsApplication from "@/components/screens/statistics/StatisticsApplication.vue";
+import Modernization from "@/components/screens/modernization/Modernization.vue";
 import GroupingApplication from "@/components/screens/grouping/GroupingApplication.vue";
 
 export default Vue.extend({
@@ -59,9 +59,8 @@ export default Vue.extend({
 
   components: {
     MainApplication,
-    HelloWorld,
-    TagApplication,
-    StatisticsApplication,
+    Administration,
+    Modernization,
     GroupingApplication
   },
 
@@ -72,11 +71,10 @@ export default Vue.extend({
   data: () => ({
     tab: 0,
     items: [
-      { name: "Main", screen: "MainApplication" },
-      { name: "Statistics", screen: "StatisticsApplication" },
-      { name: "Discovery", screen: "TagApplication" },
-      { name: "Architecture", screen: "HelloWorld" },
-      { name: "Grouping", screen: "GroupingApplication" }
+      { name: "Enhancement", screen: "MainApplication", icon: "mdi-book-open-variant" },
+      { name: "Grouping", screen: "GroupingApplication", icon: "mdi-ungroup" },
+      { name: "Administration", screen: "Administration", icon: "mdi-cog" },
+      { name: "Modernization", screen: "Modernization", icon: "mdi-pickaxe" },
     ],
 
     loadingApplication: true as boolean,

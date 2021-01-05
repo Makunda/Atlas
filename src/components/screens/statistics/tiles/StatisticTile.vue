@@ -4,7 +4,7 @@
     min-width="97%"
     max-width="97%"
     class="ma-2 px-1 white--text"
-    :color="getRandomColor()"
+    color="persianGrey"
   >
     <v-card-title>
       <span class="title font-weight-light text-h5">{{ title }}</span>
@@ -27,20 +27,7 @@ export default {
   props: ["title", "description", "results"],
 
   data: () => ({
-    getRandomColor() {
-      const colors: string[] = [
-        "#3C3744",
-        "#343789",
-        "#3066BE",
-        "#B4C5E4",
-        "#3067BE",
-        "#789FDC",
-        "#507FCB",
-        "#0F4FB5",
-        "#0B3A84"
-      ];
-      return colors[Math.floor(Math.random() * colors.length)];
-    }
+   
   })
 };
 </script>
