@@ -1,8 +1,8 @@
 <template>
   <v-card class="mx-auto">
     <v-card-text>
-      <div>Demeter</div>
-      <p class="display-1 text--primary">Demeter groups detected in {{ appName }}</p>
+      <div>Demeter groups detected</div>
+      <p class="display-1 text--primary">Groups detected in {{ appName }}</p>
       <!-- Slide group if groups were detected -->
       <v-row v-if="demeterGroups.lenght != 0">
         <template>
@@ -48,15 +48,30 @@
               {{ getGroupByIndex(selectedGroupId).name }}<br />
               <b>Number of objects in the group :</b>
               {{ getGroupByIndex(selectedGroupId).numObjects }}<br />
-              <b>Technology present in this group :</b>
-              <i>Not implemented yet</i><br />
             </p>
+          </v-row>
+          <v-row>
+            <v-btn
+              :loading="loadingUndoGroup"
+              :disabled="loadingUndoGroup"
+              color="warning"
+              @click="undoGroup(appName, getGroupByIndex(selectedGroupId).name)"
+            >
+              Undo group
+            </v-btn>
+            <v-btn
+              disabled
+              color="warning"
+              class="mx-4"
+            >
+              Rename
+            </v-btn>
           </v-row>
         </v-container>
       </v-row>
     </v-card-text>
     <v-card-actions>
-      <v-btn text color="persianGrey">
+      <v-btn text color="orange accent-4">
         Go to grouping Dashboard
       </v-btn>
     </v-card-actions>

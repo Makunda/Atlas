@@ -27,8 +27,9 @@
       </v-row>
     </v-card-text>
     <v-card-actions>
-      <v-row align="center" justify="space-around">
+      <v-row align="center" justify="end">
         <v-btn
+          class="mx-2"
           tile
           color="success"
           v-on:click="groupApplication(application)"
@@ -39,6 +40,17 @@
           </v-icon>
           Group communities
         </v-btn>
+        <v-btn
+          tile
+          class="ml-2 mr-8 white--text"
+          :color="daemonState ? '#2a9d8f' : '#f4a261'"
+          v-on:click="toggleDaemon()"
+        >
+          <v-icon left>
+            mdi-image-auto-adjust
+          </v-icon>
+           Daemon {{ daemonState ? "active" : "stopped" }}
+        </v-btn>
       </v-row>
     </v-card-actions>
   </v-card>
@@ -48,7 +60,7 @@
 import { GroupingController, GroupRecord } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
-export default Vue.component("GroupingCandidateTile", {
+export default Vue.component("GroupingTile", {
 
   computed: {
     getApplicationName () {
@@ -58,6 +70,7 @@ export default Vue.component("GroupingCandidateTile", {
 
   mounted() {
     this.application = this.$store.state.applicationName;
+    this.daemonState = this.$store.state.daemonState;
     this.getApplicationGroupingCandidates()
   },
 
@@ -66,10 +79,16 @@ export default Vue.component("GroupingCandidateTile", {
     application: "",
     tags: [] as string[],
     count: 0,
-    loading: false
+    loading: false,
+    daemonState: true
   }),
 
   methods: {
+    toggleDaemon() {
+      this.daemonState = this.$store.state.daemonState = !this.$store.state.daemonState;
+      console.log("New Daemon state is ", this.$store.state.daemonState)
+    },
+
     groupApplication(appName: string) {
       GroupingController.executeGrouping(appName).then(() => {
         console.log(`Application ${appName} was sucessfully grouped !`);

@@ -2,21 +2,21 @@
   <v-container fluid>
     <v-row style="min-height=300px">
       <v-col class="px-8" cols="4" >
-        <GroupingCandidateTile
+        <GroupingTile
           min-height="330px"
         >
-        </GroupingCandidateTile>
+        </GroupingTile>
       </v-col>
-      <v-col class="px-8" cols="6">
+      <v-col class="px-8" cols="8">
         <DemeterGroupTile min-height="330px" v-model="applicationName">
         </DemeterGroupTile>
       </v-col>
     </v-row>
-    <!-- <v-row>
-      <v-col cols="4" v-if="groupRecord">
-        <TagCandidateTile v-model="applicationName"> </TagCandidateTile>
-      </v-col>
-    </v-row> -->
+     <v-row class="px-8">
+      <v-card>
+        <TagApplication></TagApplication>
+      </v-card>
+    </v-row>
   </v-container>
 </template>
 
@@ -25,16 +25,18 @@ import {
   GroupingController,
   GroupRecord
 } from "@/api/applications/GroupingController";
-import GroupingCandidateTile from "@/components/screens/main/tiles/GroupingCandidateTile.vue";
+import GroupingTile from "@/components/screens/main/tiles/GroupingTile.vue";
 import DemeterGroupTile from "@/components/screens/main/tiles/DemeterGroupTile.vue";
+import TagApplication from "@/components/screens/tags/TagApplication.vue";
 import Vue from "vue";
 
 export default Vue.extend({
   name: "MainApplication",
 
   components: {
-    GroupingCandidateTile,
-    DemeterGroupTile
+    GroupingTile,
+    DemeterGroupTile,
+    TagApplication
   },
 
   computed: {

@@ -31,7 +31,7 @@ import Vue from "vue/types/umd";
       </v-toolbar>
     </v-row>
     <v-row no-gutters>
-      <v-container class="mx-0 pr-16 custom-container" max-width="100%">
+      <v-container class="mx-0 pl-10 custom-container" max-width="100%">
         <component
           :is="items[tab].screen"
           v-model="applicationName"

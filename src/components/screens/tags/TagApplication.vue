@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid>
-    <v-row class="ml-8 my-6 d-flex flex-column">
+  <v-container fluid width="100%">
+    <v-row class="my-6 d-flex flex-column">
       <h2 class="text-h2  mx-4">
         Discover and apply tags on {{ application }}
       </h2>
-      <p class="ml-6 my-6 text-body-1">
+      <p class="ml-6 py-6 pr-10 text-body-1">
         The discovery section is here to help you putting tags on interst points
         in your application. It matches some predefined patterns, to give you
         quick ideas of what can be done in the application.<br />
@@ -25,12 +25,12 @@
       </p>
     </v-row>
 
-    <v-card class="ml-8" min-width="100%" flui>
-      <v-toolbar color="blue-grey" dark flat>
+    <v-card min-width="85%" flui>
+      <v-toolbar color="charcoal" dark flat>
         <v-toolbar-title>Applicable tags</v-toolbar-title>
       </v-toolbar>
 
-      <v-sheet class="pa-4 primary lighten-2">
+      <v-sheet class="pa-4 persianGrey">
         <v-text-field
           v-model="search"
           label="Search for Recommendations"
@@ -247,17 +247,10 @@ export default Vue.extend({
 
   mounted() {
     this.application = this.$store.state.applicationName;
-    this.getTreeview();
-  },
-
-  created() {
-    this.application = this.$store.state.applicationName;
-    if(this.application.length != 0) {
-      //this.getTagResults();
+    if(this.application && this.application.length != 0) {
       this.getTreeview();
     }
   },
-
 
   methods: {
     getTreeview() {
@@ -350,6 +343,9 @@ export default Vue.extend({
   watch: {
     getApplicationName (newApp, oldApp) {
       this.application = newApp;
+      if(this.application && this.application.length != 0) {
+        this.getTreeview();
+      }
     }
   },
 });

@@ -1,6 +1,7 @@
 import { Configuration } from "@/Configuration";
 import { QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
+import Store from "@/store"
 
 const DEMETER_GROUP_PREFIX = "Dm_gl_";
 
@@ -61,16 +62,24 @@ export class DaemonController {
   }
 
   /**
-   * Start the Daemon
+   * Start the Daemon, check if grouping is allowed
    */
   public run() {
-    this.checkGrouping().finally(() => {
-      if (this.running) {
-        setTimeout(() => {
-          this.run();
-        }, this.refreshRate);
-      }
-    });
+    // If the Daemon is active 
+    if(Store.state.daemonState) {
+      this.checkGrouping().finally(() => {
+        if (this.running) {
+          setTimeout(() => {
+            this.run();
+          }, this.refreshRate);
+        }
+      });
+    } else {
+      setTimeout(() => {
+        this.run();
+      }, 2000);
+    }
+    
   }
 
   /**
