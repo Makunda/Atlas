@@ -1,10 +1,66 @@
 import Vue from "vue/types/umd";
 
 <template>
-  <v-main>
+  <v-app class="main-application">
     <v-row>
-      <v-toolbar class="ml-8 text--white" dark color="charcoal">
-        <v-toolbar-title class="ml-8">Application insights </v-toolbar-title>
+      <v-navigation-drawer
+        shaped
+        class="side-bar"
+        :mini-variant-width="columnWidth"
+        permanent
+        dark
+        expand-on-hover
+        fixed
+      >
+        <v-list>
+          <v-list-item class="ml-1" link>
+            
+              <v-list-item-content class="mx-auto">
+                <v-list-item-title class="title">
+                  <v-icon color="green" class="mr-2">mdi-leaf</v-icon>
+                  Demeter Web
+                </v-list-item-title>
+                <v-list-item-subtitle
+                  >Intelligence for CAST Imaging</v-list-item-subtitle
+                >
+              </v-list-item-content>
+            
+          </v-list-item>
+        </v-list>
+
+        <v-divider></v-divider>
+
+        <v-list nav dense>
+          <v-list-item-group
+              v-model="tab"
+              mandatory
+              active-class="activeNavigationElement"
+            >
+          <v-list-item
+            v-for="(v, i) in items"
+            v-bind:key="i"
+            link
+          >
+            <v-list-item-icon>
+              <v-icon class="pl-1" :color="tab == i ? '#ffffff' : '#a5a4a4'">{{
+                v.icon
+              }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title :color="tab == i ? '#ffffff' : '#a5a4a4'" class="text-uppercase">{{
+              v.name
+            }}</v-list-item-title>
+          </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-navigation-drawer>
+
+      <v-toolbar
+        class="ml-15 text--white"
+        dark
+        color="charcoal"
+        min-width="50px"
+      >
+        <v-toolbar-title class="ml-8">{{ items[tab].name }} </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
           v-model="applicationName"
@@ -20,25 +76,16 @@ import Vue from "vue/types/umd";
           solo-inverted
         ></v-autocomplete>
 
-        <template v-slot:extension>
-          <v-tabs v-model="tab" align-with-title>
-            <v-tab v-for="item in items" :key="item.name">
-              <v-icon class="mr-2" v-if="item.icon">{{ item.icon }}</v-icon>
-              {{ item.name }}
-            </v-tab>
-          </v-tabs>
-        </template>
+        
       </v-toolbar>
     </v-row>
     <v-row no-gutters>
-      <v-container class="mx-0 pl-10 custom-container" max-width="100%">
-        <component
+        <component class="custom-container"
           :is="items[tab].screen"
           v-model="applicationName"
         ></component>
-      </v-container>
     </v-row>
-  </v-main>
+  </v-app>
 </template>
 
 <script lang="ts">
@@ -46,22 +93,20 @@ import Vue from "vue";
 
 import {
   ApplicationController,
-  ApplicationRecord
+  ApplicationRecord,
 } from "@/api/applications/ApplicationController";
 
 import Administration from "@/components/screens/administration/Administration.vue";
 import MainApplication from "@/components/screens/main/MainApplication.vue";
-import Modernization from "@/components/screens/modernization/Modernization.vue";
-import GroupingApplication from "@/components/screens/grouping/GroupingApplication.vue";
+import Recommendation from "@/components/screens/recommendation/Recommendation.vue";
 
 export default Vue.extend({
-  name: "Applications",
+  name: "Application",
 
   components: {
     MainApplication,
     Administration,
-    Modernization,
-    GroupingApplication
+    Recommendation,
   },
 
   mounted() {
@@ -71,7 +116,7 @@ export default Vue.extend({
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    }
+    },
   },
 
   data: () => ({
@@ -80,16 +125,15 @@ export default Vue.extend({
       {
         name: "Enrichment",
         screen: "MainApplication",
-        icon: "mdi-book-open-variant"
+        icon: "mdi-book-open-variant",
       },
-      { name: "Grouping", screen: "GroupingApplication", icon: "mdi-ungroup" },
-      { name: "Recommendations", screen: "Modernization", icon: "mdi-pickaxe" },
-      { name: "Administration", screen: "Administration", icon: "mdi-cog" }
+      { name: "Recommendations", screen: "Recommendation", icon: "mdi-pickaxe" },
+      { name: "Administration", screen: "Administration", icon: "mdi-cog" },
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
-    applicationList: [] as ApplicationRecord[]
+    applicationList: [] as ApplicationRecord[],
   }),
 
   methods: {
@@ -115,7 +159,7 @@ export default Vue.extend({
           this.loadingApplication = false;
         }
       );
-    }
+    },
   },
 
   watch: {
@@ -137,7 +181,34 @@ export default Vue.extend({
       }
 
       // Do nothing it the view wasn't found
-    }
-  }
+    },
+  },
 });
 </script>
+
+<style>
+.floating-application {
+  position: absolute;
+  bottom: 10px;
+  right: 40px;
+}
+
+.side-bar {
+  min-width: 64px;
+}
+
+.custom-container {
+  min-width: 100% !important;
+  padding: 0px !important;
+  padding-left: 75px !important;
+  max-width: 100% !important;
+}
+
+.main-application {
+  position: relative;
+}
+
+.activeNavigationElement {
+  border-left: 3px solid white;
+}
+</style>

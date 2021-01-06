@@ -2,9 +2,9 @@
   <v-card class="mx-auto" height="100%" width="100%">
     <v-card-text>
       <v-row class="d-flex flex-column">
-        <p class="ml-3 display-1 text--primary">
+        <h3 class="text-h3 black--text mx-4">
           Assistants
-        </p>
+        </h3>
         <p class="ml-3">Industrialize the grouping of tags. When actives, the assistants will automatically merge the objects in CAST Imaging.</p>
       </v-row>
       <v-row>

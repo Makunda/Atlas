@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import App from "./App.vue";
+import Application from "@/Application.vue";
 import Login from "./Login.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
@@ -30,7 +30,7 @@ neo4jAl
   .then((res: ServerInfo) => {
     // Successful connection
     router.replace("/main");
-    el = App;
+    el = Application;
   })
   .catch(err => {
     // Cannot connect to the Neo4j instance

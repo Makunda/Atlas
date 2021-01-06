@@ -6,6 +6,7 @@ export default new Vuex.Store({
   state: {
     applicationName: "" as string,
     currentView: {} as Component,
-    daemonState: true as boolean
+    daemonLevelState: true as boolean,
+    daemonModuleState: true as boolean,
   }
 });

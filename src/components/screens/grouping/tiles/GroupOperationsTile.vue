@@ -26,7 +26,7 @@
             color="charcoal"
             class="float-right"
             >
-            Launch
+            Launch grouping
             <v-icon
                 right
                 dark

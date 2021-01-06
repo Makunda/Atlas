@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-10 statistic-tile" :color="indicatorColor" dark >
+  <v-card class="ma-5 statistic-tile" :color="indicatorColor" dark >
     <v-card-title>
       {{ title }}
     </v-card-title>

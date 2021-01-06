@@ -1,25 +1,24 @@
 <template>
   <v-container fluid>
-    <v-row class="px-8 my-8" style="min-height=300px">
-       <GroupingTile min-height="330px"> </GroupingTile>
-      
-      <!-- <v-col class="px-8" cols="8">
-        <DemeterGroupTile min-height="330px" v-model="applicationName">
-        </DemeterGroupTile>
-      </v-col> -->
-    </v-row>
-    <v-row class="px-8 my-8">
-      <v-card style="width: 100%;">
-        <TagApplication></TagApplication>
-      </v-card>
-    </v-row>
+    <v-card class="ma-4">
+      <v-card-text>
+        <v-row class="px-8 mb-8 my-4" style="min-height=300px">
+          <GroupingTile min-height="330px"> </GroupingTile>
+        </v-row>
+        <v-row class="px-8 my-8">
+          <v-card class="pa-2" style="width: 100%;">
+            <TagApplication></TagApplication>
+          </v-card>
+        </v-row>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
 <script lang="ts">
 import {
   GroupingController,
-  GroupRecord
+  GroupRecord,
 } from "@/api/applications/GroupingController";
 import GroupingTile from "@/components/screens/main/tiles/GroupingTile.vue";
 // import DemeterGroupTile from "@/components/screens/main/tiles/DemeterGroupTile.vue";
@@ -32,19 +31,19 @@ export default Vue.extend({
   components: {
     GroupingTile,
     // DemeterGroupTile,
-    TagApplication
+    TagApplication,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
     loading: true,
     groupRecord: undefined as unknown,
-    applicationName: "" as string
+    applicationName: "" as string,
   }),
 
   mounted() {
@@ -56,7 +55,7 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp, oldApp) {
       this.applicationName = newApp;
-    }
-  }
+    },
+  },
 });
 </script>

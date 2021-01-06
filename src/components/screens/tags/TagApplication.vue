@@ -1,9 +1,9 @@
 <template>
   <v-container fluid width="100%">
     <v-row class="my-6 d-flex flex-column">
-      <h2 class="text-h2  mx-4">
+      <h3 class="text-h3  mx-4">
         Discover and apply tags on {{ application }}
-      </h2>
+      </h3>
       <p class="ml-6 py-6 pr-10 text-body-1">
         The discovery section is here to help you putting tags on interst points
         in your application. It matches some predefined patterns, to give you

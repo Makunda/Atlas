@@ -68,40 +68,7 @@
       </v-main>
     </v-row>
 
-    <!-- Error not installed Demeter modal -->
-    <v-dialog v-model="demeterErrorDialog" width="500">
-      <v-card>
-        <v-card-title class="headline grey lighten-2">
-          Demeter not detected
-        </v-card-title>
-
-        <v-card-text class="my-3">
-          Demeter is not installed on
-          <i
-            ><b>{{ properties.neo4jUri }}</b></i
-          >.<br />
-          Please make sure the extension is correclty installed and authorized
-          in Neo4j configuration ( more documentation on how to install demeter
-          <a
-            href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
-            >here</a
-          >)
-
-          <br />
-          Without the Demeter extension installed you'll not be able to use most
-          of the functionnalities present in Olympus.
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="demeterErrorDialog = false">
-            I understand
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+   
   </v-app>
 </template>
 
@@ -109,9 +76,7 @@
 import Vue, { Component } from "vue";
 import VueCookies from "vue-cookies";
 
-import Applications from "@/views/Applications.vue";
 import TagStudio from "@/views/TagStudio.vue";
-import Parameters from "@/views/Parameters.vue";
 import ConfigurationVue from "@/views/Configuration.vue";
 
 import { UtilsController } from "./api/applications/UtilsController";
@@ -125,10 +90,8 @@ export default Vue.extend({
   name: "App",
 
   components: {
-    Applications,
     TagStudio,
-    ConfigurationVue,
-    Parameters
+    ConfigurationVue
   },
 
   mounted() {
