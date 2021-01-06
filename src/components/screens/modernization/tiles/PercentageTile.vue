@@ -5,9 +5,9 @@
     </v-card-title>
     <v-card-text class="fill-height mt-5">
       <p style="height: 50px">{{ description }} </p>
-      <v-progress-linear color="blue-grey" height="25" :value="percentage*100">
+      <v-progress-linear color="white" height="25" :value="percentage*100">
         <template>
-          <strong>{{ Math.ceil(percentage*100) }}%</strong>
+          <strong style="color: #264653;">{{ Math.ceil(percentage*100) }}%</strong>
         </template>
       </v-progress-linear>
     </v-card-text>

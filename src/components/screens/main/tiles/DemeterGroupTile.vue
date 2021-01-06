@@ -123,7 +123,7 @@ export default Vue.component("DemeterGroupTile", {
      */
     getDemeterGroups() {
       this.loadingGroups = false;
-      GroupingController.getDemeterGroupedLevel5(this.appName)
+      GroupingController.getDemeterGroupedLevels5(this.appName)
         .then((res: Level5Group[]) => {
           this.loadingGroups = true;
           this.demeterGroups = res;

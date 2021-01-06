@@ -15,6 +15,15 @@ export interface Level5Group {
   demeterGroup: boolean;
 }
 
+
+export interface ModuleGroup {
+  id: number;
+  name: string;
+  application: string;
+  numObjects: number;
+  demeterGroup: boolean;
+}
+
 /**
  * Controller managing the Demeter Groups in the database
  */
@@ -93,9 +102,9 @@ export class GroupingController {
   }
 
   /**
-   * Get Demeter Groups in every application present in the Database
+   * Get Demeter Groups in a specific application present in the Database
    */
-  public static async getDemeterGroupedLevel5(
+  public static async getDemeterGroupedLevels5(
     applicationName: string
   ): Promise<Level5Group[]> {
     const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
@@ -123,6 +132,39 @@ export class GroupingController {
     }
 
     return appNames;
+  }
+
+  /**
+   * Get Demeter Module in a specific application present in the Database
+   */
+  public static async getDemeterModules(
+    applicationName: string
+  ): Promise<ModuleGroup[]> {
+    const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
+      WITH [app.Name] as appName  
+      MATCH (l:Module:${applicationName}) WHERE l.AipId=-1
+      RETURN ID(l) as id, l.Name as groupName, l.Count as numObjects ;`;
+
+    const results: QueryResult = await this.neo4jal.execute(request);
+
+    const modules: ModuleGroup[] = [];
+    for (let i = 0; i < results.records.length; i++) {
+      const singleRecord = results.records[i];
+
+      const id = int(singleRecord.get("id")).toNumber();
+      const groupName = singleRecord.get("groupName");
+      const numObjects = singleRecord.get("numObjects");
+
+      modules.push({
+        id: id,
+        name: groupName,
+        application: applicationName,
+        numObjects: numObjects,
+        demeterGroup: true
+      });
+    }
+
+    return modules;
   }
 
   /**
@@ -175,6 +217,25 @@ export class GroupingController {
 
     const results: QueryResult = await this.neo4jal.execute(request);
     const retMsg: string = results.records[0].get(0);
+
+    return retMsg;
+  }
+
+  /**
+   * Rename 
+   * @param applicationName Name of the application
+   * @param groupName Old name of the group
+   * @param newName New name of the module
+   */
+  public static async renameLevel(
+    applicationName: string,
+    groupName: string,
+    newName: string
+  ): Promise<boolean> {
+    const request = `CALL demeter.rename.level('${applicationName}', '${groupName}', '${newName}');`;
+
+    const results: QueryResult = await this.neo4jal.execute(request);
+    const retMsg: boolean = results.records[0].get(0);
 
     return retMsg;
   }

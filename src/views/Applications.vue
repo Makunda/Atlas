@@ -78,13 +78,13 @@ export default Vue.extend({
     tab: 0,
     items: [
       {
-        name: "Enhancement",
+        name: "Enrichment",
         screen: "MainApplication",
         icon: "mdi-book-open-variant"
       },
       { name: "Grouping", screen: "GroupingApplication", icon: "mdi-ungroup" },
-      { name: "Administration", screen: "Administration", icon: "mdi-cog" },
-      { name: "Modernization", screen: "Modernization", icon: "mdi-pickaxe" }
+      { name: "Recommendations", screen: "Modernization", icon: "mdi-pickaxe" },
+      { name: "Administration", screen: "Administration", icon: "mdi-cog" }
     ],
 
     loadingApplication: true as boolean,

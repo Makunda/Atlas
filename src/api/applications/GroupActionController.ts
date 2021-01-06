@@ -61,4 +61,29 @@ export class GroupActionController {
     this.neo4jal.execute(action.request);
     return 0;
   }
+
+
+  public static async replicateModuleView(applicationName: string):Promise<void> {
+    const cleanModules = `
+    MATCH (m:Module:${applicationName})-[]->(obj:Object)
+    SET obj.Module =""
+    DETACH DELETE m;`;
+
+    const createModules = `
+    MATCH(l:Level5:${applicationName})-[]->(obj:Object)
+    WITH l.Name as levelName, COLLECT(obj) as objectList, COUNT(obj) as numObj
+    MERGE (m:${applicationName}:Module{ AipId:-1, Color:'rgb(34, 199, 214)', Type:'module', Name:levelName, Count: numObj})
+    WITH m as module, objectList
+    UNWIND objectList as obj 
+    MERGE (module)-[:Contains]->(obj)
+    SET obj.Module=module.Name;`;
+
+    const linkModules = `
+    MATCH (n:Module:${applicationName})-[:Contains]->(:Object)-->(:Object)<-[:Contains]-(l:Module) WHERE n.Name<>l.Name 
+    MERGE (n)-[:References]->(l);`
+
+    await this.neo4jal.execute(cleanModules);
+    await this.neo4jal.execute(createModules);
+    await this.neo4jal.execute(linkModules);
+  }
 }

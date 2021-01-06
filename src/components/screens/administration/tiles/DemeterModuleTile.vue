@@ -1,25 +1,25 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mb-6" height="350px">
     <v-card-text>
-      <div>Demeter groups detected</div>
-      <p class="display-1 text--primary">Groups detected in {{ appName }}</p>
+      <p class="display-1 text--primary">Demeter modules detected in {{ appName }}</p>
       <!-- Slide group if groups were detected -->
-      <v-row v-if="demeterGroups.lenght != 0">
+      <v-row v-if="demeterModule.lenght != 0">
         <template>
           <v-sheet class="mx-auto text--black" min-width="95%">
             <v-slide-group v-model="selectedGroupId" center-active show-arrows>
               <v-slide-item
-                v-for="n in demeterGroups"
+                v-for="n in demeterModule"
                 :key="n.id"
                 v-slot="{ active, toggle }"
               >
                 <v-btn
                   class="mx-2"
                   :input-value="active"
-                  active-class="orange white--text"
+                  active-class="brown white--text"
                   depressed
                   rounded
                   @click="toggle"
+                  @change="editDGroup = false"
                 >
                   {{ n.name }}
                 </v-btn>
@@ -34,71 +34,80 @@
       <!-- Display message if no group is selected -->
       <v-row class="px-6 pt-4" v-if="selectedGroupId == null">
         <v-container class="d-flex flex-column" fill-height>
-          <p class="text-body-1">
-            <b>Select a group to display informations</b>
+          <p class="text-body-1" v-if="demeterModule.lenght != 0">
+            <b>Select a module to display informations</b>
+          </p>
+          <p class="text-body-1" v-if="demeterModule.lenght == 0">
+            <b>No Demeter module were detected in {{appName}}.</b>
           </p>
         </v-container>
       </v-row>
       <!-- Display a specific group -->
       <v-row class="px-6 pt-4" v-else>
         <v-container>
-          <v-row>
-            <p class="text-body-1">
-              <b>Name of the group :</b>
-              {{ getGroupByIndex(selectedGroupId).name }}<br />
-              <b>Number of objects in the group :</b>
+          <v-row class="d-flex flex-column">
+            <h4 class="text-h5">
+              Module : {{ getGroupByIndex(selectedGroupId).name }}
+            </h4>
+            <p class="text-body-1 pt-4">
+              <b>Number of objects in the group:</b>
               {{ getGroupByIndex(selectedGroupId).numObjects }}<br />
+            </p>
+            <p class="text-body-1">
+              <b>Technologies presents in this level:</b>
+              <i>(Coming soon)</i><br />
             </p>
           </v-row>
           <v-row>
+
             <v-btn
-              :loading="loadingUndoGroup"
-              :disabled="loadingUndoGroup"
+              disabled
               color="warning"
-              @click="undoGroup(appName, getGroupByIndex(selectedGroupId).name)"
             >
-              Undo group
-            </v-btn>
-            <v-btn disabled color="warning" class="mx-4">
               Rename
             </v-btn>
+
           </v-row>
         </v-container>
       </v-row>
     </v-card-text>
-    <v-card-actions>
-      <v-btn text color="orange accent-4">
-        Go to grouping Dashboard
-      </v-btn>
-    </v-card-actions>
+
   </v-card>
 </template>
 
 <script lang="ts">
 import {
   GroupingController,
-  Level5Group
+  Level5Group,
+  ModuleGroup,
 } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
-export default Vue.component("DemeterGroupTile", {
+export default Vue.component("DemeterModuleTile", {
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
     this.appName = this.$store.state.applicationName;
-    this.getDemeterGroups();
+    if(this.appName.length != 0) {
+      this.getDemeterModules();
+    }
   },
 
   data: () => ({
     appName: "",
-    loadingGroups: false,
+    loadingModule: false,
     loadingUndoGroup: false,
-    demeterGroups: [] as Level5Group[],
+    demeterModule: [] as Level5Group[],
     selectedGroupId: null,
+
+    /* D Groups */
+    editDGroup: false,
+    newGroupName: "",
+    loadingRename: false,
 
     /**
      * Split the groups in a list of string
@@ -107,7 +116,7 @@ export default Vue.component("DemeterGroupTile", {
       if (groups == null) return "";
 
       const uniqueNames = [] as string[];
-      groups.forEach(x => {
+      groups.forEach((x) => {
         const groupName: string = x.substring(6); // Remove demeter prefix
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
@@ -115,63 +124,62 @@ export default Vue.component("DemeterGroupTile", {
     },
 
     getGroupByIndex(id: number) {
-      return this.demeterGroups[id];
+      return this.demeterModule[id];
     },
 
     isUndoLoading(): boolean {
       return this.loadingUndoGroup;
-    }
+    },
   }),
 
   methods: {
     /**
      * Get the Demeter groups present in one application
      */
-    getDemeterGroups() {
-      this.loadingGroups = false;
-      GroupingController.getDemeterGroupedLevel5(this.appName)
-        .then((res: Level5Group[]) => {
-          this.loadingGroups = true;
-          this.demeterGroups = res;
+    getDemeterModules() {
+      this.loadingModule = false;
+      GroupingController.getDemeterModules(this.appName)
+        .then((res: ModuleGroup[]) => {
+          this.loadingModule = true;
+          this.demeterModule = res;
           console.log(
             `${res.length} groups found in application ${this.appName}.`
           );
         })
-        .catch(err => {
-          this.loadingGroups = false;
+        .catch((err) => {
+          this.loadingModule = false;
           console.error("An error happened while querying Demeter groups", err);
         });
     },
 
     /**
-     * Undo a specific demeter group
+     * Rename one specific level
      */
-    undoGroup(appName: string, groupName: string) {
-      this.loadingUndoGroup = true;
-      GroupingController.undoGroupedLevel5(appName, groupName)
-        .then((res: string) => {
-          console.log(
-            `Grouping undone for level ${groupName} on application ${appName} `
-          );
-          this.getDemeterGroups();
-        })
-        .catch(err => {
-          console.error(
-            `Failed to undo group with name ${groupName} on application ${appName}.`,
-            err
-          );
-        })
-        .finally(() => {
-          this.loadingUndoGroup = false;
-        });
-    }
+    rename(groupName: string, newName: string) {
+      this.loadingRename = true;
+      if (groupName != newName) {
+        GroupingController.renameLevel(this.appName, groupName, newName)
+          .then((res: boolean) => {
+            console.log("Successfuly renamed the level");
+            this.getDemeterModules();
+          })
+          .catch((err) => {
+            console.log(`Failed to rename level ${groupName}.`, newName);
+          })
+          .finally(() => {
+            this.loadingRename = false;
+            this.editDGroup = false;
+            this.newGroupName = "";
+          });
+      }
+    },
   },
 
   watch: {
     getApplicationName(newApp, oldApp) {
       this.appName = newApp;
-      this.getDemeterGroups();
-    }
-  }
+      this.getDemeterModules();
+    },
+  },
 });
 </script>

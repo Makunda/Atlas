@@ -4,6 +4,7 @@ import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 import Store from "@/store";
 
 const DEMETER_GROUP_PREFIX = "Dm_gl_";
+const DEMETER_MODULE_PREFIX = "Dm_gm_";
 
 export class DaemonController {
   private static INSTANCE = new DaemonController();
@@ -28,19 +29,50 @@ export class DaemonController {
 
     if (appNames.length > 0) {
       console.log(`${appNames.length} applications to group.`, appNames);
+      // Merge groups in application
+      let groupRequest: string;
+      for (const index in appNames) {
+        try {
+          groupRequest = `CALL demeter.group.levels('${appNames[index]}');`;
+          await this.neo4jal.execute(groupRequest);
+        } catch (error) {
+          console.error(
+            `Daemon :: Grouping Levels failed for applicaiton with name : ${name}`,
+            error
+          );
+        }
+      }
+    }
+  }
+
+  /**
+   * Check if demeter groups are present in the database, and merge them
+   */
+  private async checkModules() {
+    const forgedRequest = `MATCH (o:Object) WHERE EXISTS(o.Tags) AND any( x IN o.Tags WHERE x CONTAINS '${DEMETER_MODULE_PREFIX}' ) RETURN DISTINCT [ x IN LABELS(o) WHERE NOT (x='Object' OR x='SubObject')] as application;`;
+    const results: QueryResult = await this.neo4jal.execute(forgedRequest);
+
+    const appNames: string[] = [];
+    for (let i = 0; i < results.records.length; i++) {
+      const singleRecord = results.records[i];
+      const appName = singleRecord.get("application");
+      appNames.push(appName);
     }
 
-    // Merge groups in application
-    let groupRequest: string;
-    for (const index in appNames) {
-      try {
-        groupRequest = `CALL demeter.group.levels('${appNames[index]}');`;
-        await this.neo4jal.execute(groupRequest);
-      } catch (error) {
-        console.error(
-          `Daemon :: Grouping failed for applicaiton with name : ${name}`,
-          error
-        );
+    if (appNames.length > 0) {
+      console.log(`${appNames.length} applications to group.`, appNames);
+      // Merge groups in application
+      let groupRequest: string;
+      for (const index in appNames) {
+        try {
+          groupRequest = `CALL demeter.group.modules('${appNames[index]}');`;
+          await this.neo4jal.execute(groupRequest);
+        } catch (error) {
+          console.error(
+            `Daemon :: Grouping Modules failed for applicaiton with name : ${name}`,
+            error
+          );
+        }
       }
     }
   }
@@ -64,21 +96,26 @@ export class DaemonController {
   /**
    * Start the Daemon, check if grouping is allowed
    */
-  public run() {
+  public async run() {
     // If the Daemon is active
-    if (Store.state.daemonState) {
-      this.checkGrouping().finally(() => {
-        if (this.running) {
-          setTimeout(() => {
-            this.run();
-          }, this.refreshRate);
-        }
-      });
-    } else {
-      setTimeout(() => {
-        this.run();
-      }, 2000);
+    if (Store.state.daemonLevelState) {
+      await this.checkGrouping();
     }
+
+    if (Store.state.daemonModuleState) {
+      await this.checkModules();
+    }
+
+    let timeout =  this.refreshRate;
+    if(!Store.state.daemonLevelState && !Store.state.daemonModuleState) {
+      timeout = 1500;
+    }
+
+    // Timeout and relaunch the daemon's actions
+    setTimeout(() => {
+      this.run();
+    }, timeout);
+
   }
 
   /**
