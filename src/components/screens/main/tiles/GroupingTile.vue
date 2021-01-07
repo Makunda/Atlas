@@ -181,7 +181,6 @@ export default Vue.component("GroupingTile", {
     this.application = this.$store.state.applicationName;
     this.daemonLevelState = this.$store.state.daemonLevelState;
     this.daemonModuleState = this.$store.state.daemonModuleState;
-    this.getApplicationGroupingCandidates();
   },
 
   data: () => ({
@@ -238,31 +237,11 @@ export default Vue.component("GroupingTile", {
       return uniqueNames;
     },
 
-    // Get the name of the Demeter grouping candidates present in the application
-    getApplicationGroupingCandidates() {
-      this.loading = true;
-      GroupingController.getApplicationGroupingCandidates(this.application)
-        .then((res: GroupRecord | null) => {
-          this.loading = false;
-          if (res == null) {
-            (this.tags = []), (this.count = 0);
-          } else {
-            (this.tags = res.tags), (this.count = res.countTag);
-          }
-        })
-        .catch(err => {
-          console.error("An error occured trying to retrieve groups.", err);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
-    }
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-      this.getApplicationGroupingCandidates();
     }
   }
 });

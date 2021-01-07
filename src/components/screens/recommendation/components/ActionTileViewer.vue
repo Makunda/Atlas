@@ -68,24 +68,18 @@ export default Vue.extend({
 
     application: "" as string,
     popularOperations: [] as GroupAction[],
-    filteredPopularOperations: [] as GroupAction[]
-  }),
+    filteredPopularOperations: [] as GroupAction[],
 
-  mounted() {
-    this.application = this.$store.state.applicationName;
-    this.getActionList();
-  },
-
-  methods: {
     getActionList() {
       this.popularOperations = GroupActionController.getActions(
         this.application
       );
     },
+  }),
 
-    getLevelList() {
-      console.log("Not empty.");
-    }
+  mounted() {
+    this.application = this.$store.state.applicationName;
+    this.getActionList();
   },
 
   computed: {

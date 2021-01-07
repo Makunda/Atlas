@@ -44,11 +44,6 @@ export default Vue.component("LevelViewer", {
     GroupTile
   },
 
-  mounted() {
-    this.applicationName = this.$store.state.applicationName;
-    this.getLevelGroups();
-  },
-
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
@@ -129,6 +124,11 @@ export default Vue.component("LevelViewer", {
       });
       return uniqueNames;
     }
+  },
+
+  mounted() {
+    this.applicationName = this.$store.state.applicationName;
+    this.getLevelGroups();
   },
 
   watch: {

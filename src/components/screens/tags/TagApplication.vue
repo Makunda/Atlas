@@ -298,8 +298,8 @@ export default Vue.extend({
 
       // Get selection, and filter tags
       const toExecute: TagResult[] = this.tree.filter(x => {
-        return x && x.type && x.type == "tag";
-      });
+        return x && (x as TagResult).type !== undefined;
+      }) as TagResult[];
 
       console.log(
         `About to execute ${toExecute.length} tags on the application.`
