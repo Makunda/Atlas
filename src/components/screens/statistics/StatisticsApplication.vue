@@ -94,7 +94,6 @@
 <script lang="ts">
 import Vue from "vue";
 import {
-  ApplicationController,
   ApplicationRecord
 } from "@/api/applications/ApplicationController";
 import {
@@ -155,7 +154,7 @@ export default Vue.extend({
         });
     },
 
-    launchGenerate: function(event: Event) {
+    launchGenerate: function() {
       this.getReportResult();
     }
   }

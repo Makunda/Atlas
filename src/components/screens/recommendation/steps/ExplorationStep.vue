@@ -126,7 +126,7 @@ export default Vue.extend({
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
@@ -138,16 +138,16 @@ export default Vue.extend({
     artemisOnlineOption: true,
     artemisRepositoryOption: true,
     atemisInteractionOption: false,
-    runningArtemis: false,
+    runningArtemis: false
   }),
 
   methods: {},
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.application = newApp;
-    },
-  },
+    }
+  }
 });
 </script>
 

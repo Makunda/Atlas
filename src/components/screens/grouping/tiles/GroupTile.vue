@@ -46,10 +46,6 @@
 </template>
 
 <script lang="ts">
-import {
-  GroupAction,
-  GroupActionController
-} from "@/api/applications/GroupActionController";
 
 export default {
   name: "GroupTile",

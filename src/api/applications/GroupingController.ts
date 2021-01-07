@@ -15,7 +15,6 @@ export interface Level5Group {
   demeterGroup: boolean;
 }
 
-
 export interface ModuleGroup {
   id: number;
   name: string;
@@ -93,11 +92,8 @@ export class GroupingController {
 
     const results: QueryResult = await this.neo4jal.execute(request);
 
-    const levels: Node[] = [];
     for (let i = 0; i < results.records.length; i++) {
-      const singleRecord: any = results.records[i];
-      console.log("Received node ", singleRecord);
-      levels.push(singleRecord);
+      console.log("Received node ", results.records[i]);
     }
   }
 
@@ -222,7 +218,7 @@ export class GroupingController {
   }
 
   /**
-   * Rename 
+   * Rename
    * @param applicationName Name of the application
    * @param groupName Old name of the group
    * @param newName New name of the module

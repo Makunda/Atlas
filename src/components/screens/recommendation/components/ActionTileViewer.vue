@@ -49,14 +49,14 @@ import Vue from "vue";
 import GroupOperationsTile from "@/components/screens/grouping/tiles/GroupOperationsTile.vue";
 import {
   GroupAction,
-  GroupActionController,
+  GroupActionController
 } from "@/api/applications/GroupActionController";
 
 export default Vue.extend({
   name: "ActionTileViewer",
 
   components: {
-    GroupOperationsTile,
+    GroupOperationsTile
   },
 
   data: () => ({
@@ -68,7 +68,7 @@ export default Vue.extend({
 
     application: "" as string,
     popularOperations: [] as GroupAction[],
-    filteredPopularOperations: [] as GroupAction[],
+    filteredPopularOperations: [] as GroupAction[]
   }),
 
   mounted() {
@@ -85,17 +85,17 @@ export default Vue.extend({
 
     getLevelList() {
       console.log("Not empty.");
-    },
+    }
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.application = newApp;
       this.getActionList();
     },
@@ -106,14 +106,14 @@ export default Vue.extend({
       } else {
         // Filter the array  of application
         val = val.toLowerCase();
-        this.filteredPopularOperations = this.popularOperations.filter((x) => {
+        this.filteredPopularOperations = this.popularOperations.filter(x => {
           return (
             x.title.toLowerCase().includes(val) ||
             x.description.toLowerCase().includes(val)
           );
         });
       }
-    },
-  },
+    }
+  }
 });
 </script>

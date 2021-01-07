@@ -16,7 +16,11 @@
     </v-row>
     <v-row>
       <v-card class="mx-8 mt-4">
-        <v-card-title><h4 class="text-h4 ml-3">{{ items[tab].title + application }}</h4></v-card-title>
+        <v-card-title
+          ><h4 class="text-h4 ml-3">
+            {{ items[tab].title + application }}
+          </h4></v-card-title
+        >
         <v-card-text class="px-4 pb-2">
           <component :is="items[tab].view"></component>
         </v-card-text>
@@ -37,13 +41,13 @@ export default Vue.extend({
   components: {
     ModernizationStep,
     ConfigurationStep,
-    ExplorationStep,
+    ExplorationStep
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
@@ -52,34 +56,34 @@ export default Vue.extend({
 
   data: () => ({
     application: "",
-    
+
     step: 1,
     tab: 0,
 
-    items: [ 
+    items: [
       {
         view: "ConfigurationStep",
         name: "Configuration",
-        title: "Review the configuration of the application ",
+        title: "Review the configuration of the application "
       },
       {
         view: "ExplorationStep",
         name: "Exploration",
-        title: "Explore the application ",
+        title: "Explore the application "
       },
       {
         view: "ModernizationStep",
         name: "Modernization",
-        title : "Start modernize the application "
-      },
-    ],
+        title: "Start modernize the application "
+      }
+    ]
   }),
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.application = newApp;
-    },
-  },
+    }
+  }
 });
 </script>
 

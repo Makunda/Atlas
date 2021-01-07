@@ -89,7 +89,7 @@ export default Vue.extend({
         .testConnection()
         .then((res: ServerInfo) => {
           // Successful connection , redirect to main
-          console.log("Connection successful.");
+          console.log("Connection successful.", res);
           this.$router.replace("/main");
           window.location.reload();
         })

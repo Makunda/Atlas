@@ -193,7 +193,6 @@
 <script lang="ts">
 import Vue from "vue";
 import {
-  ApplicationController,
   ApplicationRecord
 } from "@/api/applications/ApplicationController";
 import {
@@ -344,7 +343,7 @@ export default Vue.extend({
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.application = newApp;
       if (this.application && this.application.length != 0) {
         this.getTreeview();

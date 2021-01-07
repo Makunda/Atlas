@@ -60,7 +60,7 @@ export class StatisticsController {
         description: "Percentage of internal objects in the application",
         request: `MATCH (o:Object:${applicationName}) WITH COUNT(o) as totObj MATCH (obj:Object:${applicationName}) WHERE obj.External=false
         WITH  COUNT(obj) as internal, totObj RETURN toFloat(internal) / totObj as percentage;`,
-        inverseResult : false
+        inverseResult: false
       },
       {
         title: "In Transaction",
@@ -68,7 +68,7 @@ export class StatisticsController {
         request: `MATCH (o:Object:${applicationName}) WITH COUNT(o) as totObj
         MATCH (obj:Object:${applicationName}) WHERE NOT (:Transaction:${applicationName})-[:Contains]->(obj) WITH  COUNT(DISTINCT obj) as notInTransaction, totObj 
         RETURN toFloat(notInTransaction) / totObj as percentage;`,
-        inverseResult : false
+        inverseResult: false
       },
       {
         title: "Isolated Levels",
@@ -76,8 +76,8 @@ export class StatisticsController {
         request: `MATCH (l:Level5:${applicationName}) WITH COUNT(l) as totLevels
         MATCH (obj:Level5:${applicationName}) WHERE NOT (obj)-[]-(:Level5) WITH  COUNT(obj) as isolated, totLevels 
         RETURN toFloat(isolated) / totLevels as percentage;`,
-        inverseResult : true
-      },
+        inverseResult: true
+      }
     ];
 
     const returnList: StatisticPercentageResult[] = [];
@@ -96,7 +96,7 @@ export class StatisticsController {
         title: requests[i].title,
         description: requests[i].description,
         percentage: percentage,
-        inverseResult : requests[i].inverseResult
+        inverseResult: requests[i].inverseResult
       });
     }
 

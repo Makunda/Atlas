@@ -16,10 +16,7 @@
 </template>
 
 <script lang="ts">
-import {
-  GroupingController,
-  GroupRecord,
-} from "@/api/applications/GroupingController";
+
 import GroupingTile from "@/components/screens/main/tiles/GroupingTile.vue";
 // import DemeterGroupTile from "@/components/screens/main/tiles/DemeterGroupTile.vue";
 import TagApplication from "@/components/screens/tags/TagApplication.vue";
@@ -31,19 +28,19 @@ export default Vue.extend({
   components: {
     GroupingTile,
     // DemeterGroupTile,
-    TagApplication,
+    TagApplication
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   data: () => ({
     loading: true,
     groupRecord: undefined as unknown,
-    applicationName: "" as string,
+    applicationName: "" as string
   }),
 
   mounted() {
@@ -53,9 +50,9 @@ export default Vue.extend({
   methods: {},
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.applicationName = newApp;
-    },
-  },
+    }
+  }
 });
 </script>

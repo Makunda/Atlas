@@ -46,7 +46,7 @@
 <script lang="ts">
 import {
   StatisticPercentageResult,
-  StatisticsController,
+  StatisticsController
 } from "@/api/applications/StatisticsController";
 import Vue from "vue";
 import PercentageTile from "@/components/screens/recommendation/tiles/PercentageTile.vue";
@@ -57,13 +57,13 @@ export default Vue.extend({
 
   components: {
     PercentageTile,
-    ActionTileViewer,
+    ActionTileViewer
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
@@ -74,7 +74,7 @@ export default Vue.extend({
   data: () => ({
     application: "",
     statistics: [] as StatisticPercentageResult[],
-    loadingStatistics: false,
+    loadingStatistics: false
   }),
 
   methods: {
@@ -85,7 +85,7 @@ export default Vue.extend({
         .then((res: StatisticPercentageResult[]) => {
           this.statistics = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "An error occured while retrieving configuration statistics...",
             err
@@ -94,14 +94,14 @@ export default Vue.extend({
         .finally(() => {
           this.loadingStatistics = false;
         });
-    },
+    }
   },
 
   watch: {
     getApplicationName(newApp, oldApp) {
       this.application = newApp;
       this.getConfigurationStatistics();
-    },
-  },
+    }
+  }
 });
 </script>

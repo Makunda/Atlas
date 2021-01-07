@@ -1,5 +1,4 @@
 import { int, QueryResult } from "neo4j-driver";
-import { use } from "vue/types/umd";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 import { TagController, TagResult } from "./TagController";
 

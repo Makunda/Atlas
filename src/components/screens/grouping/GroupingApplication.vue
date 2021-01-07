@@ -99,7 +99,7 @@ export default Vue.extend({
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.application = newApp;
       this.getActionList();
     },

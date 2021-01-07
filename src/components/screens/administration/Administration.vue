@@ -18,7 +18,7 @@
     <v-card class="ma-4 pa-2">
       <v-card-text>
         <!-- Grouping operations -->
-        <v-row v-if="tab==0">
+        <v-row v-if="tab == 0">
           <v-col cols="7">
             <DemeterLevelsTile></DemeterLevelsTile>
             <DemeterModuleTile></DemeterModuleTile>
@@ -29,10 +29,9 @@
         </v-row>
 
         <!-- Parameters -->
-        <v-row v-if="tab==1">
+        <v-row v-if="tab == 1">
           <Parameters></Parameters>
         </v-row>
-
       </v-card-text>
     </v-card>
   </v-container>
@@ -58,7 +57,7 @@ export default Vue.extend({
   data: () => ({
     tab: 0,
 
-    items: [ 
+    items: [
       {
         view: "GroupingStep",
         name: "Grouping"
@@ -66,8 +65,8 @@ export default Vue.extend({
       {
         view: "ParametersStep",
         name: "Parameters"
-      },
-    ],
-  }),
+      }
+    ]
+  })
 });
 </script>

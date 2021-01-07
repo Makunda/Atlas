@@ -107,16 +107,16 @@ export default Vue.extend({
     rules() {
       const rulesTable = [];
 
-      const maxRule = (v: any) =>
+      const maxRule = (v: string) =>
         (v || "").length <= 30 || `A maximum of ${30} characters is allowed`;
       rulesTable.push(maxRule);
 
-      const spaceRule = (v: any) =>
+      const spaceRule = (v: string) =>
         (v || "").indexOf(" ") < 0 || "No spaces are allowed";
       rulesTable.push(spaceRule);
 
       const forbidden = /[!@#$%^&*()\-=[\]{};':"\\|,.<>/?]+/;
-      const specialChar = (v: any) =>
+      const specialChar = (v: string) =>
         !forbidden.test(v || "") || "No special caracters are allowed";
       rulesTable.push(specialChar);
 

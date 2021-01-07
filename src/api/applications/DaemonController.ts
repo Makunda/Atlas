@@ -106,8 +106,8 @@ export class DaemonController {
       await this.checkModules();
     }
 
-    let timeout =  this.refreshRate;
-    if(!Store.state.daemonLevelState && !Store.state.daemonModuleState) {
+    let timeout = this.refreshRate;
+    if (!Store.state.daemonLevelState && !Store.state.daemonModuleState) {
       timeout = 1500;
     }
 
@@ -115,7 +115,6 @@ export class DaemonController {
     setTimeout(() => {
       this.run();
     }, timeout);
-
   }
 
   /**

@@ -101,7 +101,7 @@ export default Vue.component("LevelViewer", {
       GroupingController.undoGroupedLevel5(appName, group.name)
         .then((res: string) => {
           console.log(
-            `Grouping undone for level ${group} on application ${appName} `
+            `Grouping undone for level ${group} on application ${appName}.`, res
           );
           this.getLevelGroups();
         })
@@ -132,7 +132,7 @@ export default Vue.component("LevelViewer", {
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.applicationName = newApp;
       this.getLevelGroups();
     }

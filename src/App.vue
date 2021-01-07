@@ -67,13 +67,11 @@
         <component :is="actualView"></component>
       </v-main>
     </v-row>
-
-   
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue, { Component } from "vue";
+import Vue from "vue";
 import VueCookies from "vue-cookies";
 
 import TagStudio from "@/views/TagStudio.vue";
@@ -146,7 +144,7 @@ export default Vue.extend({
     checkDatabase: function() {
       this.neo4jAccessLayer
         .testConnection()
-        .then((info: ServerInfo) => {
+        .then(() => {
           this.dbAvailable = true;
         })
         .catch(err => {

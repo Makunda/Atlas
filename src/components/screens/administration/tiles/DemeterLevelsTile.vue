@@ -1,7 +1,9 @@
 <template>
-  <v-card  height="350px" class="mb-6">
+  <v-card height="350px" class="mb-6">
     <v-card-text>
-      <p class="display-1 text--primary">Demeter levels 5 detected in {{ appName }}</p>
+      <p class="display-1 text--primary">
+        Demeter levels 5 detected in {{ appName }}
+      </p>
       <!-- Slide group if groups were detected -->
       <v-row v-if="demeterGroups.lenght != 0">
         <template>
@@ -122,14 +124,13 @@
         </v-container>
       </v-row>
     </v-card-text>
-
   </v-card>
 </template>
 
 <script lang="ts">
 import {
   GroupingController,
-  Level5Group,
+  Level5Group
 } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
@@ -137,12 +138,12 @@ export default Vue.component("DemeterLevelsTile", {
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
     this.appName = this.$store.state.applicationName;
-    if(this.appName.length != 0) {
+    if (this.appName.length != 0) {
       this.getDemeterGroups();
     }
   },
@@ -166,7 +167,7 @@ export default Vue.component("DemeterLevelsTile", {
       if (groups == null) return "";
 
       const uniqueNames = [] as string[];
-      groups.forEach((x) => {
+      groups.forEach(x => {
         const groupName: string = x.substring(6); // Remove demeter prefix
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
@@ -179,7 +180,7 @@ export default Vue.component("DemeterLevelsTile", {
 
     isUndoLoading(): boolean {
       return this.loadingUndoGroup;
-    },
+    }
   }),
 
   methods: {
@@ -196,7 +197,7 @@ export default Vue.component("DemeterLevelsTile", {
             `${res.length} groups found in application ${this.appName}.`
           );
         })
-        .catch((err) => {
+        .catch(err => {
           this.loadingGroups = false;
           console.error("An error happened while querying Demeter groups", err);
         });
@@ -210,11 +211,11 @@ export default Vue.component("DemeterLevelsTile", {
       GroupingController.undoGroupedLevel5(this.appName, groupName)
         .then((res: string) => {
           console.log(
-            `Grouping undone for level ${groupName} on application ${this.appName} `
+            `Grouping undone for level ${groupName} on application ${this.appName}.`, res
           );
           this.getDemeterGroups();
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             `Failed to undo group with name ${groupName} on application ${this.appName}.`,
             err
@@ -233,11 +234,11 @@ export default Vue.component("DemeterLevelsTile", {
       if (groupName != newName) {
         GroupingController.renameLevel(this.appName, groupName, newName)
           .then((res: boolean) => {
-            console.log("Successfuly renamed the level");
+            console.log("Successfuly renamed the level.", res);
             this.getDemeterGroups();
           })
-          .catch((err) => {
-            console.log(`Failed to rename level ${groupName}.`, newName);
+          .catch(err => {
+            console.error(`Failed to rename level ${groupName}.`, err);
           })
           .finally(() => {
             this.loadingRename = false;
@@ -245,14 +246,14 @@ export default Vue.component("DemeterLevelsTile", {
             this.newGroupName = "";
           });
       }
-    },
+    }
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.appName = newApp;
       this.getDemeterGroups();
-    },
-  },
+    }
+  }
 });
 </script>

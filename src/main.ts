@@ -27,7 +27,7 @@ let el: Component;
 
 neo4jAl
   .testConnection()
-  .then((res: ServerInfo) => {
+  .then(() => {
     // Successful connection
     router.replace("/main");
     el = Application;

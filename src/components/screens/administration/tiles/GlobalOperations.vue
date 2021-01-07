@@ -7,8 +7,9 @@
       <v-row class="px-4 my-4"
         >You can find here a list of different operations that will affect yout
         entire application.<br />Be careful, even is these operations can
-        undone, make sure you'll not override your previous work.<br>
-        Based on the current machine resources the following operations can take a while on large applications.</v-row
+        undone, make sure you'll not override your previous work.<br />
+        Based on the current machine resources the following operations can take
+        a while on large applications.</v-row
       >
 
       <v-divider></v-divider>
@@ -17,8 +18,7 @@
         <h3 class="charcoal--text my-2">Actions</h3>
         <v-card style="border: 2px solid charcoal; border-radius: 20px; ">
           <v-card-text>
-            <v-row>
-            </v-row>
+            <v-row> </v-row>
           </v-card-text>
         </v-card>
       </v-row>
@@ -28,10 +28,18 @@
           <v-card-text>
             <v-row>
               <v-col cols="8">
-                Replicate all the level view in the module module view.<br /><i>This operation will erase the current modules view</i>
+                Replicate all the level view in the module module view.<br /><i
+                  >This operation will erase the current modules view</i
+                >
               </v-col>
               <v-col cols="4" fill-height>
-                <v-btn depressed color="orange" class="ma-auto" :loading="loadReplication" @click="replicateModuleView()">
+                <v-btn
+                  depressed
+                  color="orange"
+                  class="ma-auto"
+                  :loading="loadReplication"
+                  @click="replicateModuleView()"
+                >
                   Replicate Levels
                 </v-btn>
               </v-col>
@@ -83,7 +91,7 @@ export default Vue.extend({
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
@@ -94,7 +102,7 @@ export default Vue.extend({
     // Loadings
     loadReplication: false,
 
-    appName: "",
+    appName: ""
   }),
 
   methods: {
@@ -102,18 +110,21 @@ export default Vue.extend({
       this.loadReplication = true;
       GroupActionController.replicateModuleView(this.appName)
         .catch(err => {
-          console.error("Failed to replicate the level view in module view.", err);
+          console.error(
+            "Failed to replicate the level view in module view.",
+            err
+          );
         })
         .finally(() => {
           this.loadReplication = false;
         });
-    },
+    }
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.appName = newApp;
-    },
-  },
+    }
+  }
 });
 </script>

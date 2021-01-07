@@ -1,7 +1,9 @@
 <template>
   <v-card class="mb-6" height="350px">
     <v-card-text>
-      <p class="display-1 text--primary">Demeter modules detected in {{ appName }}</p>
+      <p class="display-1 text--primary">
+        Demeter modules detected in {{ appName }}
+      </p>
       <!-- Slide group if groups were detected -->
       <v-row v-if="demeterModule.lenght != 0">
         <template>
@@ -38,7 +40,7 @@
             <b>Select a module to display informations</b>
           </p>
           <p class="text-body-1" v-if="demeterModule.lenght == 0">
-            <b>No Demeter module were detected in {{appName}}.</b>
+            <b>No Demeter module were detected in {{ appName }}.</b>
           </p>
         </v-container>
       </v-row>
@@ -59,19 +61,13 @@
             </p>
           </v-row>
           <v-row>
-
-            <v-btn
-              disabled
-              color="warning"
-            >
+            <v-btn disabled color="warning">
               Rename
             </v-btn>
-
           </v-row>
         </v-container>
       </v-row>
     </v-card-text>
-
   </v-card>
 </template>
 
@@ -79,7 +75,7 @@
 import {
   GroupingController,
   Level5Group,
-  ModuleGroup,
+  ModuleGroup
 } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
@@ -87,12 +83,12 @@ export default Vue.component("DemeterModuleTile", {
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
     this.appName = this.$store.state.applicationName;
-    if(this.appName.length != 0) {
+    if (this.appName.length != 0) {
       this.getDemeterModules();
     }
   },
@@ -116,7 +112,7 @@ export default Vue.component("DemeterModuleTile", {
       if (groups == null) return "";
 
       const uniqueNames = [] as string[];
-      groups.forEach((x) => {
+      groups.forEach(x => {
         const groupName: string = x.substring(6); // Remove demeter prefix
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
@@ -129,7 +125,7 @@ export default Vue.component("DemeterModuleTile", {
 
     isUndoLoading(): boolean {
       return this.loadingUndoGroup;
-    },
+    }
   }),
 
   methods: {
@@ -146,7 +142,7 @@ export default Vue.component("DemeterModuleTile", {
             `${res.length} groups found in application ${this.appName}.`
           );
         })
-        .catch((err) => {
+        .catch(err => {
           this.loadingModule = false;
           console.error("An error happened while querying Demeter groups", err);
         });
@@ -160,11 +156,11 @@ export default Vue.component("DemeterModuleTile", {
       if (groupName != newName) {
         GroupingController.renameLevel(this.appName, groupName, newName)
           .then((res: boolean) => {
-            console.log("Successfuly renamed the level");
+            console.log("Successfuly renamed the level.", res);
             this.getDemeterModules();
           })
-          .catch((err) => {
-            console.log(`Failed to rename level ${groupName}.`, newName);
+          .catch(err => {
+            console.error(`Failed to rename level ${groupName}.`, err);
           })
           .finally(() => {
             this.loadingRename = false;
@@ -172,14 +168,14 @@ export default Vue.component("DemeterModuleTile", {
             this.newGroupName = "";
           });
       }
-    },
+    }
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.appName = newApp;
       this.getDemeterModules();
-    },
-  },
+    }
+  }
 });
 </script>

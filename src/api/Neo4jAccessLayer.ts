@@ -1,12 +1,9 @@
 import { Configuration, Credentials, Properties } from "../Configuration";
 
 import neo4j, {
-  AuthToken,
   Driver,
   QueryResult,
-  Result,
   ServerInfo,
-  session,
   Session
 } from "neo4j-driver";
 
@@ -38,7 +35,7 @@ export class Neo4JAccessLayer {
    */
   public async executeWithParameters(
     request: string,
-    params: Record<string, any>
+    params: Parameters<any>
   ): Promise<QueryResult> {
     const session: Session = this.driver.session();
     try {

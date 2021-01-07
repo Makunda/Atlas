@@ -14,17 +14,15 @@ import Vue from "vue/types/umd";
       >
         <v-list>
           <v-list-item class="ml-1" link>
-            
-              <v-list-item-content class="mx-auto">
-                <v-list-item-title class="title">
-                  <v-icon color="green" class="mr-2">mdi-leaf</v-icon>
-                  Demeter Web
-                </v-list-item-title>
-                <v-list-item-subtitle
-                  >Intelligence for CAST Imaging</v-list-item-subtitle
-                >
-              </v-list-item-content>
-            
+            <v-list-item-content class="mx-auto">
+              <v-list-item-title class="title">
+                <v-icon color="green" class="mr-2">mdi-leaf</v-icon>
+                Demeter Web
+              </v-list-item-title>
+              <v-list-item-subtitle
+                >Intelligence for CAST Imaging</v-list-item-subtitle
+              >
+            </v-list-item-content>
           </v-list-item>
         </v-list>
 
@@ -32,24 +30,24 @@ import Vue from "vue/types/umd";
 
         <v-list nav dense>
           <v-list-item-group
-              v-model="tab"
-              mandatory
-              active-class="activeNavigationElement"
-            >
-          <v-list-item
-            v-for="(v, i) in items"
-            v-bind:key="i"
-            link
+            v-model="tab"
+            mandatory
+            active-class="activeNavigationElement"
           >
-            <v-list-item-icon>
-              <v-icon class="pl-1" :color="tab == i ? '#ffffff' : '#a5a4a4'">{{
-                v.icon
-              }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title :color="tab == i ? '#ffffff' : '#a5a4a4'" class="text-uppercase">{{
-              v.name
-            }}</v-list-item-title>
-          </v-list-item>
+            <v-list-item v-for="(v, i) in items" v-bind:key="i" link>
+              <v-list-item-icon>
+                <v-icon
+                  class="pl-1"
+                  :color="tab == i ? '#ffffff' : '#a5a4a4'"
+                  >{{ v.icon }}</v-icon
+                >
+              </v-list-item-icon>
+              <v-list-item-title
+                :color="tab == i ? '#ffffff' : '#a5a4a4'"
+                class="text-uppercase"
+                >{{ v.name }}</v-list-item-title
+              >
+            </v-list-item>
           </v-list-item-group>
         </v-list>
       </v-navigation-drawer>
@@ -75,15 +73,14 @@ import Vue from "vue/types/umd";
           label="Pick an application"
           solo-inverted
         ></v-autocomplete>
-
-        
       </v-toolbar>
     </v-row>
     <v-row no-gutters>
-        <component class="custom-container"
-          :is="items[tab].screen"
-          v-model="applicationName"
-        ></component>
+      <component
+        class="custom-container"
+        :is="items[tab].screen"
+        v-model="applicationName"
+      ></component>
     </v-row>
   </v-app>
 </template>
@@ -93,7 +90,7 @@ import Vue from "vue";
 
 import {
   ApplicationController,
-  ApplicationRecord,
+  ApplicationRecord
 } from "@/api/applications/ApplicationController";
 
 import Administration from "@/components/screens/administration/Administration.vue";
@@ -106,7 +103,7 @@ export default Vue.extend({
   components: {
     MainApplication,
     Administration,
-    Recommendation,
+    Recommendation
   },
 
   mounted() {
@@ -116,7 +113,7 @@ export default Vue.extend({
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    },
+    }
   },
 
   data: () => ({
@@ -125,15 +122,19 @@ export default Vue.extend({
       {
         name: "Enrichment",
         screen: "MainApplication",
-        icon: "mdi-book-open-variant",
+        icon: "mdi-book-open-variant"
       },
-      { name: "Recommendations", screen: "Recommendation", icon: "mdi-pickaxe" },
-      { name: "Administration", screen: "Administration", icon: "mdi-cog" },
+      {
+        name: "Recommendations",
+        screen: "Recommendation",
+        icon: "mdi-pickaxe"
+      },
+      { name: "Administration", screen: "Administration", icon: "mdi-cog" }
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
-    applicationList: [] as ApplicationRecord[],
+    applicationList: [] as ApplicationRecord[]
   }),
 
   methods: {
@@ -159,7 +160,7 @@ export default Vue.extend({
           this.loadingApplication = false;
         }
       );
-    },
+    }
   },
 
   watch: {
@@ -171,8 +172,7 @@ export default Vue.extend({
       this.$store.state.currentView = this.items[this.tab].name;
     },
 
-    getCurrentView(newView, oldView) {
-      console.log("New view is ", newView);
+    getCurrentView(newView) {
       for (let i = 0; i < this.items.length; i++) {
         if (this.items[i].name === newView) {
           // Found a view with a matching name
@@ -181,8 +181,8 @@ export default Vue.extend({
       }
 
       // Do nothing it the view wasn't found
-    },
-  },
+    }
+  }
 });
 </script>
 

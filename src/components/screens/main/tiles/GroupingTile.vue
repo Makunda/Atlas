@@ -5,7 +5,10 @@
         <h3 class="text-h3 black--text mx-4">
           Assistants
         </h3>
-        <p class="ml-3">Industrialize the grouping of tags. When actives, the assistants will automatically merge the objects in CAST Imaging.</p>
+        <p class="ml-3">
+          Industrialize the grouping of tags. When actives, the assistants will
+          automatically merge the objects in CAST Imaging.
+        </p>
       </v-row>
       <v-row>
         <!-- Level 5 assistant col -->
@@ -13,10 +16,10 @@
           <v-card height="100%">
             <v-card-title> Level 5 Assistant</v-card-title>
             <v-card-text>
-             <p>{{ countLevels }} Levels 5 to group </p>
+              <p>{{ countLevels }} Levels 5 to group</p>
               <p v-if="countLevels == 0">
-                No Level tags were found in your application <br />See how to create
-                tags on the
+                No Level tags were found in your application <br />See how to
+                create tags on the
                 <a
                   href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
                   >Demeter Wiki</a
@@ -68,10 +71,10 @@
           <v-card height="100%">
             <v-card-title> Module Assistant</v-card-title>
             <v-card-text>
-             <p>{{ countModule }} Modules to group </p>
+              <p>{{ countModule }} Modules to group</p>
               <p v-if="countModule == 0">
-                No Module tags were found in your application <br />See how to create
-                tags on the
+                No Module tags were found in your application <br />See how to
+                create tags on the
                 <a
                   href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
                   >Demeter Wiki</a
@@ -122,26 +125,19 @@
           <v-card disabled>
             <v-card-title> Architecture Assistant ( Coming soon )</v-card-title>
             <v-card-text>
-             <p>0 view to group</p>
+              <p>0 view to group</p>
               <p>
-                No architecture tags were found in your application <br />See how to create
-                tags on the
+                No architecture tags were found in your application <br />See
+                how to create tags on the
                 <a
                   href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
                   >Demeter Wiki</a
                 >
               </p>
-              
-
             </v-card-text>
             <v-card-actions>
               <v-row align="center" justify="end">
-                <v-btn
-                  class="mx-2"
-                  tile
-                  color="success"
-                  disabled
-                >
+                <v-btn class="mx-2" tile color="success" disabled>
                   <v-icon left>
                     mdi-adjust
                   </v-icon>
@@ -163,8 +159,7 @@
           </v-card>
         </v-col>
       </v-row>
-
-      </v-card-text>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -205,19 +200,25 @@ export default Vue.component("GroupingTile", {
 
   methods: {
     toggleLevelDaemon() {
-      this.daemonLevelState = this.$store.state.daemonLevelState = !this.$store.state
-        .daemonLevelState;
-      console.log("New Level Daemon state is ", this.$store.state.daemonLevelState);
+      this.daemonLevelState = this.$store.state.daemonLevelState = !this.$store
+        .state.daemonLevelState;
+      console.log(
+        "New Level Daemon state is ",
+        this.$store.state.daemonLevelState
+      );
     },
 
     toggleModuleDaemon() {
-      this.daemonModuleState = this.$store.state.daemonModuleState = !this.$store.state
-        .daemonModuleState;
-      console.log("New Module Daemon state is ", this.$store.state.daemonModuleState);
+      this.daemonModuleState = this.$store.state.daemonModuleState = !this
+        .$store.state.daemonModuleState;
+      console.log(
+        "New Module Daemon state is ",
+        this.$store.state.daemonModuleState
+      );
     },
 
     toggleViewDaemon() {
-      console.log("Not implemented yet !")
+      console.log("Not implemented yet !");
     },
 
     groupApplication(appName: string) {
@@ -259,7 +260,7 @@ export default Vue.component("GroupingTile", {
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.application = newApp;
       this.getApplicationGroupingCandidates();
     }
