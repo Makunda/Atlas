@@ -62,10 +62,8 @@ export default Vue.component("LevelViewer", {
     applicationName: "" as string,
 
     levels: [] as Level5Group[],
-    selectedGroupId: null
-  }),
+    selectedGroupId: null,
 
-  methods: {
     /**
      * Get the Demeter groups present in one application
      */
@@ -84,6 +82,10 @@ export default Vue.component("LevelViewer", {
           console.error("An error happened while querying Demeter groups", err);
         });
     },
+  }),
+
+  methods: {
+    
 
     /**
      * Undo a specific demeter group

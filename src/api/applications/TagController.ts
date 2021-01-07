@@ -72,11 +72,10 @@ export class TagController {
     applicationName: string,
     tagId: number
   ): Promise<TagResult> {
-    const request = "CALL demeter.tag.execute( $id, $applicationName)";
+    const request = `CALL demeter.tag.execute( ${tagId}, "${applicationName}");`;
 
-    const results: QueryResult = await this.neo4jal.executeWithParameters(
-      request,
-      { applicationName: applicationName, id: tagId }
+    const results: QueryResult = await this.neo4jal.execute(
+      request
     );
 
     const singleRecord = results.records[0];

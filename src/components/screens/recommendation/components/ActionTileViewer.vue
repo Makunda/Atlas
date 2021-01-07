@@ -70,12 +70,16 @@ export default Vue.extend({
     popularOperations: [] as GroupAction[],
     filteredPopularOperations: [] as GroupAction[],
 
+    
+  }),
+
+  methods : {
     getActionList() {
       this.popularOperations = GroupActionController.getActions(
         this.application
       );
-    },
-  }),
+    }
+  },
 
   mounted() {
     this.application = this.$store.state.applicationName;
@@ -100,7 +104,7 @@ export default Vue.extend({
       } else {
         // Filter the array  of application
         val = val.toLowerCase();
-        this.filteredPopularOperations = this.popularOperations.filter(x => {
+        this.filteredPopularOperations = this.popularOperations.filter((x:GroupAction) => {
           return (
             x.title.toLowerCase().includes(val) ||
             x.description.toLowerCase().includes(val)

@@ -35,7 +35,7 @@ export class Neo4JAccessLayer {
    */
   public async executeWithParameters(
     request: string,
-    params: Parameters<any>
+    params: Object
   ): Promise<QueryResult> {
     const session: Session = this.driver.session();
     try {
