@@ -88,4 +88,9 @@ export default Vue.extend({
 .modernization-stepper {
   width: 100%;
 }
+
+.v-tabs-slider-wrapper {
+  border-bottom: 6px solid #2a9d8f;
+}
+
 </style>

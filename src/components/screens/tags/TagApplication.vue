@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-2" style="width: 100%;">
+  <v-card class="pa-2" >
     <v-row class="my-6 d-flex flex-column">
       <h3 class="text-h4  ml-6">
         Discover and apply tags on {{ application }}

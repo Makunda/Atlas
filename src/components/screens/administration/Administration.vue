@@ -31,6 +31,12 @@
       <v-row v-if="tab == 1">
         <Parameters></Parameters>
       </v-row>
+
+      <!-- Tag Creator Studio -->
+      <v-row v-if="tab == 2">
+        <TagStudio></TagStudio>
+      </v-row>
+
       </v-container>
     </v-row>
   </v-container>
@@ -41,7 +47,8 @@ import Vue from "vue";
 import DemeterLevelsTile from "@/components/screens/administration/tiles/DemeterLevelsTile.vue";
 import DemeterModuleTile from "@/components/screens/administration/tiles/DemeterModuleTile.vue";
 import GlobalOperations from "@/components/screens/administration/tiles/GlobalOperations.vue";
-import Parameters from "@/components/screens/administration/Parameters.vue";
+import Parameters from "@/components/screens/administration/steps/Parameters.vue";
+import TagStudio from "@/components/screens/administration/steps/TagStudio.vue";
 
 export default Vue.extend({
   name: "Administration",
@@ -51,6 +58,7 @@ export default Vue.extend({
     GlobalOperations,
     DemeterModuleTile,
     Parameters,
+    TagStudio
   },
 
   data: () => ({
@@ -64,6 +72,10 @@ export default Vue.extend({
       {
         view: "ParametersStep",
         name: "Parameters",
+      },
+      {
+        view: "TagStudio",
+        name: "Tag creator studio",
       },
     ],
   }),

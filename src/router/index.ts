@@ -1,18 +1,18 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import App from "../App.vue";
+import Application from "../Application.vue";
 import Login from "../Login.vue";
 
 Vue.use(VueRouter);
 
 Vue.component("Login", Login);
-Vue.component("Application", App);
+Vue.component("Application", Application);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/main",
     name: "Main",
-    component: App
+    component: Application
   },
   {
     path: "/login",

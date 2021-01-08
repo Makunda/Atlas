@@ -67,7 +67,7 @@
     </v-row>
 
     <!-- Creation assistant section -->
-    <v-row class="mx-8">
+    <v-row>
       <v-col>
         <!-- Use case selection -->
         <v-card class="mx-auto">

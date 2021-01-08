@@ -1,15 +1,18 @@
 <template>
-  <v-card class="mx-auto" height="100%" width="100%">
-    <v-card-text>
+  <v-card min-height="300px">
+    <v-card-title>
       <v-row class="d-flex flex-column">
-        <h3 class="text-h4 black--text mx-4">
+        <h3 class="text-h4 black--text mx-4 mb-4">
           Assistants
         </h3>
-        <p class="ml-3">
+        <p class="ml-4 text-body-1">
           Industrialize the grouping of tags. When actives, the assistants will
           automatically merge the objects in CAST Imaging.
         </p>
       </v-row>
+    </v-card-title>
+    <v-card-text>
+      
       <v-row>
         <!-- Level 5 assistant col -->
         <v-col cols="4">
@@ -125,10 +128,10 @@
           <v-card disabled>
             <v-card-title> Architecture Assistant ( Coming soon )</v-card-title>
             <v-card-text>
-              <p>0 view to group</p>
+              <p>0 views to group</p>
               <p>
                 No architecture tags were found in your application <br />See
-                how to create tags on the
+                how to create views on the
                 <a
                   href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
                   >Demeter Wiki</a
