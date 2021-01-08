@@ -5,7 +5,7 @@
         mdi-cog
       </v-icon>
       <span class="title font-weight-light">{{
-        groupAction.title | 'Operation'
+        groupAction.title
       }}</span>
     </v-card-title>
     <v-card-subtitle

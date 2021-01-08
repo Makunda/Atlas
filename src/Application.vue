@@ -180,7 +180,7 @@ export default Vue.extend({
         }
       }
 
-      // Do nothing it the view wasn't found
+      // Do nothing if the view wasn't found
     }
   }
 });
