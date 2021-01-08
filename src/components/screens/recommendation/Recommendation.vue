@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
       <v-tabs
         v-model="tab"
@@ -15,16 +15,13 @@
       </v-tabs>
     </v-row>
     <v-row>
-      <v-card class="mx-8 mt-4">
-        <v-card-title
-          ><h4 class="text-h4 ml-3">
-            {{ items[tab].title + application }}
-          </h4></v-card-title
-        >
-        <v-card-text class="px-4 pb-2">
-          <component :is="items[tab].view"></component>
-        </v-card-text>
-      </v-card>
+      <v-container class="mx-auto mt-10">
+        <h4 class="text-h4 ml-3 my-5">
+            {{ items[tab].title + application + " application" }}
+        </h4>
+
+        <component :is="items[tab].view"></component>
+      </v-container>
     </v-row>
   </v-container>
 </template>
@@ -64,17 +61,17 @@ export default Vue.extend({
       {
         view: "ConfigurationStep",
         name: "Configuration",
-        title: "Review the configuration of the application "
+        title: "Review the configuration of the "
       },
       {
         view: "ExplorationStep",
         name: "Exploration",
-        title: "Explore the application "
+        title: "Explore the "
       },
       {
         view: "ModernizationStep",
         name: "Modernization",
-        title: "Start modernize the application "
+        title: "Start modernize the "
       }
     ]
   }),

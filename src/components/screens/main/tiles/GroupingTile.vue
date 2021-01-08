@@ -2,7 +2,7 @@
   <v-card class="mx-auto" height="100%" width="100%">
     <v-card-text>
       <v-row class="d-flex flex-column">
-        <h3 class="text-h3 black--text mx-4">
+        <h3 class="text-h4 black--text mx-4">
           Assistants
         </h3>
         <p class="ml-3">

@@ -2,8 +2,7 @@ import Vue from "vue/types/umd";
 
 <template>
   <v-app class="main-application">
-    <v-row>
-      <v-navigation-drawer
+    <v-navigation-drawer
         shaped
         class="side-bar"
         :mini-variant-width="columnWidth"
@@ -51,22 +50,24 @@ import Vue from "vue/types/umd";
           </v-list-item-group>
         </v-list>
       </v-navigation-drawer>
-
+    <v-row style="max-height: 80px">
       <v-toolbar
-        class="ml-15 text--white"
+        class="ml-15 text--white top-toolbar"
         dark
         color="charcoal"
         min-width="50px"
+        height="80px"
       >
-        <v-toolbar-title class="ml-8">{{ items[tab].name }} </v-toolbar-title>
+        <v-toolbar-title class="ml-8 screen-title">{{ items[tab].name }} </v-toolbar-title>
         <v-spacer></v-spacer>
+        <v-toolbar-title class="mt-2">Application selection :</v-toolbar-title>
         <v-autocomplete
           v-model="applicationName"
           :loading="loadingApplication"
           :items="applicationList"
           item-text="name"
           cache-items
-          class="mx-4"
+          class="mx-4 mt-2"
           flat
           hide-no-data
           hide-details
@@ -187,6 +188,13 @@ export default Vue.extend({
 </script>
 
 <style>
+
+.screen-title {
+  font-size: 40px;
+  margin-top: 6px;
+  font-weight: 400;
+}
+
 .floating-application {
   position: absolute;
   bottom: 10px;
@@ -198,6 +206,7 @@ export default Vue.extend({
 }
 
 .custom-container {
+  margin-top: 10px;
   min-width: 100% !important;
   padding: 0px !important;
   padding-left: 75px !important;
@@ -206,6 +215,10 @@ export default Vue.extend({
 
 .main-application {
   position: relative;
+}
+
+.top-toolbar {
+  min-height: 64px;
 }
 
 .activeNavigationElement {

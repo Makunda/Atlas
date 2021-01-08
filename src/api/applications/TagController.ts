@@ -119,7 +119,7 @@ export class TagController {
    */
   public static async createTag(tag: Tag): Promise<void> {
     const forgedRequest =
-      "CALL demeter.tag.add($tag, $request, $activation, $description, $categories, $parentId);";
+      `CALL demeter.tag.add($tag, $request, $activation, $description, $categories, $parentId);`;
     const params = {
       tag: tag.tagName,
       request: tag.associatedRequest,

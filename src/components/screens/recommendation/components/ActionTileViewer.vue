@@ -14,7 +14,7 @@
       </v-row>
 
       <v-divider></v-divider>
-      <v-row class="px-4">
+      <v-row class="px-4 my-5">
         <v-toolbar dark color="#1D5D6B">
           <v-toolbar-title>Popular grouping operations</v-toolbar-title>
           <v-spacer></v-spacer>

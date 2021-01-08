@@ -12,13 +12,13 @@
 
         <v-divider></v-divider>
 
-        <v-row class="my-5">
+        <v-row class="my-5" style="min-height: 300px">
           <v-progress-circular
             v-if="loadingStatistics"
             :size="60"
             :width="7"
             color="persianGrey"
-            class="mx-auto"
+            class="ma-auto"
             indeterminate
           ></v-progress-circular>
 
@@ -34,7 +34,7 @@
       </v-card-text>
     </v-card>
     <v-divider></v-divider>
-    <v-card>
+    <v-card class="mx-3">
       <v-row class="mt-5">
         <ActionTileViewer> </ActionTileViewer>
       </v-row>

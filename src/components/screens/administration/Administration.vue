@@ -14,26 +14,25 @@
         </v-tab>
       </v-tabs>
     </v-row>
-
-    <v-card class="ma-4 pa-2">
-      <v-card-text>
+    <v-row >
+      <v-container class="my-10">
         <!-- Grouping operations -->
-        <v-row v-if="tab == 0">
-          <v-col cols="7">
-            <DemeterLevelsTile></DemeterLevelsTile>
-            <DemeterModuleTile></DemeterModuleTile>
-          </v-col>
-          <v-col col="5">
-            <GlobalOperations></GlobalOperations>
-          </v-col>
-        </v-row>
+      <v-row v-if="tab == 0">
+        <v-col cols="7">
+          <DemeterLevelsTile></DemeterLevelsTile>
+          <DemeterModuleTile></DemeterModuleTile>
+        </v-col>
+        <v-col col="5">
+          <GlobalOperations></GlobalOperations>
+        </v-col>
+      </v-row>
 
-        <!-- Parameters -->
-        <v-row v-if="tab == 1">
-          <Parameters></Parameters>
-        </v-row>
-      </v-card-text>
-    </v-card>
+      <!-- Parameters -->
+      <v-row v-if="tab == 1">
+        <Parameters></Parameters>
+      </v-row>
+      </v-container>
+    </v-row>
   </v-container>
 </template>
 
@@ -51,7 +50,7 @@ export default Vue.extend({
     DemeterLevelsTile,
     GlobalOperations,
     DemeterModuleTile,
-    Parameters
+    Parameters,
   },
 
   data: () => ({
@@ -60,13 +59,13 @@ export default Vue.extend({
     items: [
       {
         view: "GroupingStep",
-        name: "Grouping"
+        name: "Grouping",
       },
       {
         view: "ParametersStep",
-        name: "Parameters"
-      }
-    ]
-  })
+        name: "Parameters",
+      },
+    ],
+  }),
 });
 </script>

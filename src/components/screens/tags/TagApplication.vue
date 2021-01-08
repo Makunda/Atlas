@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid width="100%">
+  <v-card class="pa-2" style="width: 100%;">
     <v-row class="my-6 d-flex flex-column">
-      <h3 class="text-h3  mx-4">
+      <h3 class="text-h4  ml-6">
         Discover and apply tags on {{ application }}
       </h3>
       <p class="ml-6 py-6 pr-10 text-body-1">
@@ -25,7 +25,7 @@
       </p>
     </v-row>
 
-    <v-card min-width="100%" fluid>
+    <v-card class="mx-4" min-width="90%" fluid>
       <v-toolbar color="charcoal" dark flat>
         <v-toolbar-title>Applicable tags</v-toolbar-title>
       </v-toolbar>
@@ -187,7 +187,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-  </v-container>
+  </v-card>
 </template>
 
 <script lang="ts">
