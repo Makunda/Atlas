@@ -145,7 +145,8 @@ export default Vue.component("DemeterGroupTile", {
       GroupingController.undoGroupedLevel5(appName, groupName)
         .then((res: string) => {
           console.log(
-            `Grouping undone for level ${groupName} on application ${appName}.`, res
+            `Grouping undone for level ${groupName} on application ${appName}.`,
+            res
           );
           this.getDemeterGroups();
         })

@@ -131,7 +131,7 @@
 import Vue from "vue";
 import {
   ArtemisController,
-  ArtemisFrameworkResult,
+  ArtemisFrameworkResult
 } from "@/api/applications/ArtemisController";
 
 export default Vue.extend({
@@ -144,10 +144,10 @@ export default Vue.extend({
         text: "Framework",
         align: "start",
         sortable: true,
-        value: "name",
+        value: "name"
       },
       { text: "Description", value: "description" },
-      { text: "Detected as ", value: "detectedAs" },
+      { text: "Detected as ", value: "detectedAs" }
     ],
     showOnlyFrameworks: true as boolean,
 
@@ -172,7 +172,7 @@ export default Vue.extend({
 
     onlineMode: true as boolean,
     repositoryMode: true as boolean,
-    workspacePath: "" as string,
+    workspacePath: "" as string
   }),
 
   methods: {
@@ -201,7 +201,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
           this.errorOnlineMode = true;
           console.error(
             "Failed to change online mode of Artemis Framework detector.",
@@ -222,7 +222,11 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.repositoryMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
+          console.error(
+            "Failed to change the repository setting of Artemis.",
+            err
+          );
           this.errorRepositoryMode = true;
         })
         .then(() => {
@@ -244,9 +248,15 @@ export default Vue.extend({
           console.log(
             `${res.length} frameworks were detected during the operation.`
           );
-          this.resultDetection = res.map(x => { return { name: x.name, description: x.description, detectedAs: x.detectedAs }})
+          this.resultDetection = res.map(x => {
+            return {
+              name: x.name,
+              description: x.description,
+              detectedAs: x.detectedAs
+            };
+          });
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             `The analysis of the application ${this.application} failed.`,
             err
@@ -258,7 +268,7 @@ export default Vue.extend({
           this.onGoingDetections.slice(index, 1);
           this.runningArtemis = false;
         });
-    },
+    }
   },
 
   mounted() {
@@ -269,13 +279,13 @@ export default Vue.extend({
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    },
-  },
+    }
+  }
 });
 </script>

@@ -15,29 +15,28 @@
         </v-tab>
       </v-tabs>
     </v-row>
-    <v-row >
+    <v-row>
       <v-container class="my-10">
         <!-- Grouping operations -->
-      <v-row v-if="tab == 0">
-        <v-col cols="7" md="7" sm="12">
-          <DemeterLevelsTile></DemeterLevelsTile>
-          <DemeterModuleTile></DemeterModuleTile>
-        </v-col>
-        <v-col col="5" md="5" sm="12">
-          <GlobalOperations></GlobalOperations>
-        </v-col>
-      </v-row>
+        <v-row v-if="tab == 0">
+          <v-col cols="7" md="7" sm="12">
+            <DemeterLevelsTile></DemeterLevelsTile>
+            <DemeterModuleTile></DemeterModuleTile>
+          </v-col>
+          <v-col col="5" md="5" sm="12">
+            <GlobalOperations></GlobalOperations>
+          </v-col>
+        </v-row>
 
-      <!-- Parameters -->
-      <v-row v-if="tab == 1">
-        <Parameters></Parameters>
-      </v-row>
+        <!-- Parameters -->
+        <v-row v-if="tab == 1">
+          <Parameters></Parameters>
+        </v-row>
 
-      <!-- Tag Creator Studio -->
-      <v-row v-if="tab == 2">
-        <TagStudio></TagStudio>
-      </v-row>
-
+        <!-- Tag Creator Studio -->
+        <v-row v-if="tab == 2">
+          <TagStudio></TagStudio>
+        </v-row>
       </v-container>
     </v-row>
   </v-container>
@@ -80,8 +79,8 @@ export default Vue.extend({
         view: "TagStudio",
         name: "Tag creator studio",
         icon: "mdi-android-studio"
-      },
-    ],
-  }),
+      }
+    ]
+  })
 });
 </script>

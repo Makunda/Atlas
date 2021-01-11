@@ -1,4 +1,4 @@
-import { int, Node, QueryResult } from "neo4j-driver";
+import { int, QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export interface GroupRecord {

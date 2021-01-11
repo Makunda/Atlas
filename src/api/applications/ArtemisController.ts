@@ -1,6 +1,5 @@
-import { int, QueryResult } from "neo4j-driver";
+import { QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
-import { GroupingController } from "./GroupingController";
 
 export class ArtemisFrameworkResult {
   name: string;
@@ -16,7 +15,7 @@ export class ArtemisController {
    * TO DO : Bind this list to Artemis
    */
   public static getSupportedLanguages(): string[] {
-      return ["Java", "Cobol"];
+    return ["Java", "Cobol"];
   }
 
   /**
@@ -178,12 +177,16 @@ export class ArtemisController {
     const results: QueryResult = await this.neo4jal.execute(request);
 
     for (let i = 0; i < results.records.length; i++) {
-        const name = results.records[i].get("name");
-        const description = results.records[i].get("description");
-        const detectedAs =  results.records[i].get("detectedAs");
-        resultList.push({name : name, description: description, detectedAs: detectedAs});
+      const name = results.records[i].get("name");
+      const description = results.records[i].get("description");
+      const detectedAs = results.records[i].get("detectedAs");
+      resultList.push({
+        name: name,
+        description: description,
+        detectedAs: detectedAs
+      });
     }
 
-    return resultList
+    return resultList;
   }
 }

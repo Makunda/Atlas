@@ -60,4 +60,12 @@ export class Configuration {
     console.log("Properties Saved");
     sessionStorage.setItem(COOKIE_NAME, JSON.stringify(properties));
   }
+
+  /**
+   * Delete the parameters
+   * @param properties New parameters
+   */
+  public static deleteProperties() {
+    sessionStorage.clear();
+  }
 }

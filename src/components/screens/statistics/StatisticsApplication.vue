@@ -93,9 +93,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {
-  ApplicationRecord
-} from "@/api/applications/ApplicationController";
+import { ApplicationRecord } from "@/api/applications/ApplicationController";
 import {
   StatisticResult,
   StatisticsController

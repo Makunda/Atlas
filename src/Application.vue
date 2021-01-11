@@ -3,52 +3,75 @@ import Vue from "vue/types/umd";
 <template>
   <v-app class="main-application">
     <v-navigation-drawer
-        shaped
-        class="side-bar"
-        permanent
-        dark
-        expand-on-hover
-        fixed
-      >
-        <v-list>
-          <v-list-item class="ml-1" link>
-            <v-list-item-content class="mx-auto">
-              <v-list-item-title class="title">
-                <v-icon color="green" class="mr-2">mdi-leaf</v-icon>
-                Demeter Web
-              </v-list-item-title>
-              <v-list-item-subtitle
-                >Intelligence for CAST Imaging</v-list-item-subtitle
-              >
-            </v-list-item-content>
+      shaped
+      class="side-bar"
+      permanent
+      dark
+      expand-on-hover
+      fixed
+    >
+      <v-list>
+        <v-list-item class="ml-1" link>
+          <v-list-item-content class="mx-auto">
+            <v-list-item-title class="title">
+              <v-icon color="green" class="mr-2">mdi-leaf</v-icon>
+              Demeter Web
+            </v-list-item-title>
+            <v-list-item-subtitle
+              >Intelligence for CAST Imaging</v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <v-divider></v-divider>
+
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="tab"
+          mandatory
+          active-class="activeNavigationElement"
+        >
+          <v-list-item v-for="(v, i) in items" v-bind:key="i" link>
+            <v-list-item-icon>
+              <v-icon class="pl-1" :color="tab == i ? '#ffffff' : '#a5a4a4'">{{
+                v.icon
+              }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title
+              :color="tab == i ? '#ffffff' : '#a5a4a4'"
+              class="text-uppercase"
+              >{{ v.name }}</v-list-item-title
+            >
           </v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-
-        <v-list nav dense>
-          <v-list-item-group
-            v-model="tab"
-            mandatory
-            active-class="activeNavigationElement"
-          >
-            <v-list-item v-for="(v, i) in items" v-bind:key="i" link>
+        </v-list-item-group>
+      </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-list>
+            <v-list-item link href="https://github.com/Makunda/Demeter/wiki">
               <v-list-item-icon>
-                <v-icon
-                  class="pl-1"
-                  :color="tab == i ? '#ffffff' : '#a5a4a4'"
-                  >{{ v.icon }}</v-icon
-                >
+                <v-icon>mdi-information-outline</v-icon>
               </v-list-item-icon>
-              <v-list-item-title
-                :color="tab == i ? '#ffffff' : '#a5a4a4'"
-                class="text-uppercase"
-                >{{ v.name }}</v-list-item-title
-              >
+
+              <v-list-item-content>
+                <v-list-item-title>Documentation</v-list-item-title>
+              </v-list-item-content>
             </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-navigation-drawer>
+
+            <v-list-item link @click="logout()">
+              <v-list-item-icon>
+                <v-icon>mdi-exit-to-app</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title>Logout</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </div>
+      </template>
+    </v-navigation-drawer>
     <v-row style="max-height: 80px">
       <v-toolbar
         class="ml-15 text--white top-toolbar"
@@ -57,7 +80,9 @@ import Vue from "vue/types/umd";
         min-width="50px"
         height="80px"
       >
-        <v-toolbar-title class="ml-8 screen-title">{{ items[tab].name }} </v-toolbar-title>
+        <v-toolbar-title class="ml-8 screen-title"
+          >{{ items[tab].name }}
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-title class="mt-2">Application selection :</v-toolbar-title>
         <v-autocomplete
@@ -90,20 +115,21 @@ import Vue from "vue";
 
 import {
   ApplicationController,
-  ApplicationRecord
+  ApplicationRecord,
 } from "@/api/applications/ApplicationController";
 
 import Administration from "@/components/screens/administration/Administration.vue";
-import MainApplication from "@/components/screens/main/MainApplication.vue";
+import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
 import Recommendation from "@/components/screens/recommendation/Recommendation.vue";
+import { Configuration } from "./Configuration";
 
 export default Vue.extend({
   name: "Application",
 
   components: {
-    MainApplication,
+    Enrichment,
     Administration,
-    Recommendation
+    Recommendation,
   },
 
   mounted() {
@@ -113,7 +139,7 @@ export default Vue.extend({
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    }
+    },
   },
 
   data: () => ({
@@ -121,20 +147,20 @@ export default Vue.extend({
     items: [
       {
         name: "Enrichment",
-        screen: "MainApplication",
-        icon: "mdi-book-open-variant"
+        screen: "Enrichment",
+        icon: "mdi-hexagon-multiple",
       },
       {
         name: "Recommendations",
         screen: "Recommendation",
-        icon: "mdi-file-cad"
+        icon: "mdi-file-cad",
       },
-      { name: "Administration", screen: "Administration", icon: "mdi-cog" }
+      { name: "Administration", screen: "Administration", icon: "mdi-cog" },
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
-    applicationList: [] as ApplicationRecord[]
+    applicationList: [] as ApplicationRecord[],
   }),
 
   methods: {
@@ -160,6 +186,11 @@ export default Vue.extend({
           this.loadingApplication = false;
         }
       );
+    },
+
+    logout() {
+      Configuration.deleteProperties();
+      document.location.reload();
     }
   },
 
@@ -181,13 +212,12 @@ export default Vue.extend({
       }
 
       // Do nothing if the view wasn't found
-    }
-  }
+    },
+  },
 });
 </script>
 
 <style>
-
 .screen-title {
   font-size: 40px;
   margin-top: 6px;

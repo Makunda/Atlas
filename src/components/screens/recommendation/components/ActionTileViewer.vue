@@ -2,11 +2,11 @@
   <v-card>
     <v-card-text>
       <v-row class="mx-4  mt-2 d-flex flex-column">
-        <h5 class="text-h5 black--text">Grouping action on configuration</h5>
-        <p class="text-body-1">
-          The grouping section is here to help you visualizing tags on interst
-          points in your application. It matches some predefined patterns, to
-          give you quick ideas of what can be done in the application.<br />
+        <h5 class="text-h5 black--text">Grouping actions on configuration</h5>
+        <p class="text-body-1 my-4">
+          The grouping section is here to help you visualizing interst points in
+          your application. It matches some predefined patterns, to give you
+          quick ideas of what can be investigated in the application.<br />
           You can enrich this configuration manually, and create custom generics
           tags in the <i>Tag creator studio</i>.
           <br />
@@ -16,7 +16,9 @@
       <v-divider></v-divider>
       <v-row class="px-4 my-5">
         <v-toolbar dark color="#1D5D6B">
-          <v-toolbar-title>Grouping operations: Check the configuration</v-toolbar-title>
+          <v-toolbar-title
+            >Grouping operations: Check the configuration</v-toolbar-title
+          >
           <v-spacer></v-spacer>
           <v-autocomplete
             :search-input.sync="searchActions"
@@ -68,12 +70,10 @@ export default Vue.extend({
 
     application: "" as string,
     popularOperations: [] as GroupAction[],
-    filteredPopularOperations: [] as GroupAction[],
-
-    
+    filteredPopularOperations: [] as GroupAction[]
   }),
 
-  methods : {
+  methods: {
     getActionList() {
       this.popularOperations = GroupActionController.getActions(
         this.application
@@ -104,12 +104,14 @@ export default Vue.extend({
       } else {
         // Filter the array  of application
         val = val.toLowerCase();
-        this.filteredPopularOperations = this.popularOperations.filter((x:GroupAction) => {
-          return (
-            x.title.toLowerCase().includes(val) ||
-            x.description.toLowerCase().includes(val)
-          );
-        });
+        this.filteredPopularOperations = this.popularOperations.filter(
+          (x: GroupAction) => {
+            return (
+              x.title.toLowerCase().includes(val) ||
+              x.description.toLowerCase().includes(val)
+            );
+          }
+        );
       }
     }
   }

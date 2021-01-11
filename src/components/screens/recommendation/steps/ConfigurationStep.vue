@@ -8,16 +8,29 @@
             Quickly discover if the configuration of the application's analysis
             is correct with some statistiscs on it
           </p>
-          <h3>Color Schema : </h3>
-            <p>The statistical tiles below change color according to the score they measure. A green tile is a sign that the statistics have a "high percentage" of compliance.<br>
-            They they follow the following color schema : </p>
+          <h3>Color Schema :</h3>
+          <p>
+            The statistical tiles below change color according to the score they
+            measure. A green tile is a sign that the statistics have a "high
+            percentage" of compliance.<br />
+            They they follow the following color schema :
+          </p>
           <div class="color-ruler mb-6">
             <div class="round">0</div>
             <div class="round">33</div>
             <div class="round">66</div>
             <div class="round">100</div>
           </div>
-          <p><i>Disclaimer : It can happens that even with the perfect configuration, the statistics display bad scores. Further investigation is necessary to understand where these scores. That can done with the action tiles, below this section, to investigate direclty in CAST Imaging.</i></p>
+          <p>
+            <i
+              >Disclaimer : It can happens that even with the perfect
+              configuration, the statistics display bad scores. Further
+              investigation is necessary to understand where these scores come
+              from.<br />
+              That can done with the action tiles, below this section, to
+              investigate direclty in CAST Imaging.</i
+            >
+          </p>
         </v-row>
 
         <v-divider></v-divider>
@@ -108,7 +121,7 @@ export default Vue.extend({
   },
 
   watch: {
-    getApplicationName(newApp, oldApp) {
+    getApplicationName(newApp) {
       this.application = newApp;
       this.getConfigurationStatistics();
     }
@@ -129,11 +142,17 @@ export default Vue.extend({
 
   height: 30px;
   width: 300px;
-  background: rgb(231,111,81);
-  background: linear-gradient(90deg, rgba(231,111,81,1) 0%, rgba(244,162,97,1) 33%, rgba(233,196,106,1) 66%, rgba(42,157,143,1) 100%);
+  background: rgb(231, 111, 81);
+  background: linear-gradient(
+    90deg,
+    rgba(231, 111, 81, 1) 0%,
+    rgba(244, 162, 97, 1) 33%,
+    rgba(233, 196, 106, 1) 66%,
+    rgba(42, 157, 143, 1) 100%
+  );
 }
 
-.color-ruler .round{
+.color-ruler .round {
   content: "";
   display: table-cell;
   vertical-align: middle;

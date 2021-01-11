@@ -78,12 +78,10 @@ export default Vue.extend({
       this.popularOperations = GroupActionController.getActions(
         this.application
       );
-    },
+    }
   }),
 
   methods: {
-    
-
     getLevelList() {
       console.log("Not empty.");
     }

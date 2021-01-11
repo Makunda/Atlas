@@ -4,9 +4,7 @@
       <v-icon large left>
         mdi-cog
       </v-icon>
-      <span class="title font-weight-light">{{
-        groupAction.title
-      }}</span>
+      <span class="title font-weight-light">{{ groupAction.title }}</span>
     </v-card-title>
     <v-card-subtitle
       class="text-body-1 mt-2"
@@ -34,10 +32,7 @@
 </template>
 
 <script lang="ts">
-import {
-  GroupAction,
-  GroupActionController
-} from "@/api/applications/GroupActionController";
+import { GroupActionController } from "@/api/applications/GroupActionController";
 
 export default {
   name: "GroupOperationsTile",

@@ -1,11 +1,6 @@
 import { Configuration, Credentials, Properties } from "../Configuration";
 
-import neo4j, {
-  Driver,
-  QueryResult,
-  ServerInfo,
-  Session
-} from "neo4j-driver";
+import neo4j, { Driver, QueryResult, ServerInfo, Session } from "neo4j-driver";
 
 export class Neo4JAccessLayer {
   private uri: string;

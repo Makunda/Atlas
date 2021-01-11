@@ -74,9 +74,7 @@ export class TagController {
   ): Promise<TagResult> {
     const request = `CALL demeter.tag.execute( ${tagId}, "${applicationName}");`;
 
-    const results: QueryResult = await this.neo4jal.execute(
-      request
-    );
+    const results: QueryResult = await this.neo4jal.execute(request);
 
     const singleRecord = results.records[0];
 
@@ -118,8 +116,7 @@ export class TagController {
    * @param tag Tag to create
    */
   public static async createTag(tag: Tag): Promise<void> {
-    const forgedRequest =
-      `CALL demeter.tag.add($tag, $request, $activation, $description, $categories, $parentId);`;
+    const forgedRequest = `CALL demeter.tag.add($tag, $request, $activation, $description, $categories, $parentId);`;
     const params = {
       tag: tag.tagName,
       request: tag.associatedRequest,

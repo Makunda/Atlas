@@ -1,8 +1,8 @@
 <template>
-  <v-card min-height="300px">
-    <v-card-title>
+  <v-card min-height="300px" class="pa-3">
+    <v-card-title >
       <v-row class="d-flex flex-column">
-        <h3 class="text-h4 black--text mx-4 mb-4">
+        <h3 class="text-h4 black--text mx-4 mb-4 my-3">
           Assistants
         </h3>
         <p class="ml-4 text-body-1">
@@ -155,17 +155,14 @@
 </template>
 
 <script lang="ts">
-import {
-  GroupingController,
-  GroupRecord,
-} from "@/api/applications/GroupingController";
+import { GroupingController } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
 export default Vue.component("GroupingTile", {
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
@@ -185,7 +182,7 @@ export default Vue.component("GroupingTile", {
     loading: false,
 
     daemonLevelState: true,
-    daemonModuleState: true,
+    daemonModuleState: true
   }),
 
   methods: {
@@ -221,18 +218,18 @@ export default Vue.component("GroupingTile", {
       if (groups == null) return "";
 
       const uniqueNames = [] as string[];
-      groups.forEach((x) => {
+      groups.forEach(x => {
         const groupName: string = x.substring(6);
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
       return uniqueNames;
-    },
+    }
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    },
-  },
+    }
+  }
 });
 </script>

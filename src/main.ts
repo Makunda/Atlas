@@ -10,7 +10,6 @@ import store from "./store";
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
 import { Component } from "vue-router/types/router";
 import { DaemonController } from "./api/applications/DaemonController";
-import { ServerInfo } from "neo4j-driver";
 
 Vue.config.productionTip = false;
 Vue.use(Vuex);

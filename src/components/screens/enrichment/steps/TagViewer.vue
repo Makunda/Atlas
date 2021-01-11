@@ -1,10 +1,10 @@
 <template>
-  <v-card class="pa-2" >
+  <v-card class="pa-2">
     <v-row class="my-6 d-flex flex-column">
-      <h3 class="text-h4  ml-6">
+      <h3 class="text-h4 ml-8">
         Discover and apply tags on {{ application }}
       </h3>
-      <p class="ml-6 py-6 pr-10 text-body-1">
+      <p class="ml-8 py-6 pr-10 text-body-1">
         The discovery section is here to help you putting tags on interst points
         in your application. It matches some predefined patterns, to give you
         quick ideas of what can be done in the application.<br />
@@ -192,9 +192,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {
-  ApplicationRecord
-} from "@/api/applications/ApplicationController";
+import { ApplicationRecord } from "@/api/applications/ApplicationController";
 import {
   UseCaseController,
   UseCaseResult
@@ -202,7 +200,7 @@ import {
 import { TagController, TagResult } from "@/api/applications/TagController";
 
 export default Vue.extend({
-  name: "TagApplication",
+  name: "TagViewer",
 
   components: {},
 

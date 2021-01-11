@@ -2,7 +2,7 @@
   <v-container class="ml-15">
     <!-- Introduction Section -->
     <v-row class="d-flex flex-column px-4">
-      <h2 class="text-h2 my-6">
+      <h2 class="text-h4 my-6">
         Tag creator studio
       </h2>
       <p class="text-body-1">

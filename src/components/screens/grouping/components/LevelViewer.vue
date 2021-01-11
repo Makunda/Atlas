@@ -81,12 +81,10 @@ export default Vue.component("LevelViewer", {
           this.loadingGroups = false;
           console.error("An error happened while querying Demeter groups", err);
         });
-    },
+    }
   }),
 
   methods: {
-    
-
     /**
      * Undo a specific demeter group
      */
@@ -98,7 +96,8 @@ export default Vue.component("LevelViewer", {
       GroupingController.undoGroupedLevel5(appName, group.name)
         .then((res: string) => {
           console.log(
-            `Grouping undone for level ${group} on application ${appName}.`, res
+            `Grouping undone for level ${group} on application ${appName}.`,
+            res
           );
           this.getLevelGroups();
         })

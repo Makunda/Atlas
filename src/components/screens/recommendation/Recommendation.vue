@@ -18,7 +18,7 @@
     <v-row>
       <v-container class="mx-auto mt-10">
         <h4 class="text-h4 ml-3 my-5">
-            {{ items[tab].title + application + " application" }}
+          {{ items[tab].title + application + " application" }}
         </h4>
 
         <component :is="items[tab].view"></component>
@@ -100,5 +100,4 @@ export default Vue.extend({
 .v-tabs-slider-wrapper {
   border-bottom: 6px solid #2a9d8f;
 }
-
 </style>
