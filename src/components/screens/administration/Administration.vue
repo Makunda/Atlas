@@ -18,11 +18,11 @@
       <v-container class="my-10">
         <!-- Grouping operations -->
       <v-row v-if="tab == 0">
-        <v-col cols="7">
+        <v-col cols="7" sm="12">
           <DemeterLevelsTile></DemeterLevelsTile>
           <DemeterModuleTile></DemeterModuleTile>
         </v-col>
-        <v-col col="5">
+        <v-col col="5" sm="12">
           <GlobalOperations></GlobalOperations>
         </v-col>
       </v-row>

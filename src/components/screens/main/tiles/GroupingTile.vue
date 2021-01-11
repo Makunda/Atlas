@@ -12,10 +12,9 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      
       <v-row>
         <!-- Level 5 assistant col -->
-        <v-col cols="4">
+        <v-col cols="4" md="4" sm="12">
           <v-card height="100%">
             <v-card-title> Level 5 Assistant</v-card-title>
             <v-card-text>
@@ -41,7 +40,6 @@
               </v-row>
             </v-card-text>
             <v-card-actions>
-              <v-row align="center" justify="end">
                 <v-btn
                   class="mx-2"
                   tile
@@ -65,12 +63,11 @@
                   </v-icon>
                   Assistant {{ daemonLevelState ? "active" : "stopped" }}
                 </v-btn>
-              </v-row>
             </v-card-actions>
           </v-card>
         </v-col>
         <!-- Module assistant col -->
-        <v-col cols="4">
+        <v-col cols="4" md="4" sm="12">
           <v-card height="100%">
             <v-card-title> Module Assistant</v-card-title>
             <v-card-text>
@@ -96,7 +93,6 @@
               </v-row>
             </v-card-text>
             <v-card-actions>
-              <v-row align="center" justify="end">
                 <v-btn
                   class="mx-2"
                   tile
@@ -120,11 +116,10 @@
                   </v-icon>
                   Assistant {{ daemonModuleState ? "active" : "stopped" }}
                 </v-btn>
-              </v-row>
             </v-card-actions>
           </v-card>
         </v-col>
-        <v-col cols="4">
+        <v-col cols="4" md="4" sm="12">
           <v-card disabled>
             <v-card-title> Architecture Assistant ( Coming soon )</v-card-title>
             <v-card-text>
@@ -138,26 +133,25 @@
                 >
               </p>
             </v-card-text>
-            <v-card-actions>
-              <v-row align="center" justify="end">
-                <v-btn class="mx-2" tile color="success" disabled>
-                  <v-icon left>
-                    mdi-adjust
-                  </v-icon>
-                  Create views
-                </v-btn>
-                <v-btn
-                  tile
-                  class="ml-2 mr-8 white--text"
-                  color="#f4a261"
-                  disabled
-                >
-                  <v-icon left>
-                    mdi-image-auto-adjust
-                  </v-icon>
-                  Daemon stopped
-                </v-btn>
-              </v-row>
+            <v-card-actions >
+              <v-btn class="mx-2" tile color="success" disabled>
+                    <v-icon left>
+                      mdi-adjust
+                    </v-icon>
+                    Create views
+                  </v-btn>
+                  <v-btn
+                    tile
+                    class=" white--text"
+                    color="#f4a261"
+                    disabled
+                  >
+                    <v-icon left>
+                      mdi-image-auto-adjust
+                    </v-icon>
+                    Daemon stopped
+                  </v-btn>
+              
             </v-card-actions>
           </v-card>
         </v-col>
@@ -169,7 +163,7 @@
 <script lang="ts">
 import {
   GroupingController,
-  GroupRecord
+  GroupRecord,
 } from "@/api/applications/GroupingController";
 import Vue from "vue";
 
@@ -177,7 +171,7 @@ export default Vue.component("GroupingTile", {
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -197,7 +191,7 @@ export default Vue.component("GroupingTile", {
     loading: false,
 
     daemonLevelState: true,
-    daemonModuleState: true
+    daemonModuleState: true,
   }),
 
   methods: {
@@ -233,19 +227,18 @@ export default Vue.component("GroupingTile", {
       if (groups == null) return "";
 
       const uniqueNames = [] as string[];
-      groups.forEach(x => {
+      groups.forEach((x) => {
         const groupName: string = x.substring(6);
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
       return uniqueNames;
     },
-
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>

@@ -1,18 +1,16 @@
 <template>
-  <v-row>
-    <v-container fluid>
-    <v-row class="px-8 mb-8 my-4" >
-      <v-col class="mx-auto" sm="12" xl="8">
+  <v-container fluid>
+    <v-row class="px-8 mb-8 my-4">
+      <v-col class="mx-auto" sm="12" lg="12" >
         <GroupingTile class="mx-auto"> </GroupingTile>
       </v-col>
     </v-row>
     <v-row class="px-8 my-8">
-      <v-col class="mx-auto" sm="12" xl="8">
-        <TagApplication  class="mx-auto"></TagApplication>
+      <v-col class="mx-auto" sm="12" lg="12">
+        <TagApplication class="mx-auto"></TagApplication>
       </v-col>
     </v-row>
   </v-container>
-  </v-row>
 </template>
 
 <script lang="ts">

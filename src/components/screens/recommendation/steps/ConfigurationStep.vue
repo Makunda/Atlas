@@ -8,6 +8,14 @@
             Quickly discover if the configuration of the application's analysis
             is correct with some statistiscs on it
           </p>
+          <p>
+          </p>
+          <div class="color-ruler">
+            <div class="round">0</div>
+            <div class="round">33</div>
+            <div class="round">66</div>
+            <div class="round">100</div>
+          </div>
         </v-row>
 
         <v-divider></v-divider>
@@ -105,3 +113,40 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style>
+.color-ruler {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  border-radius: 15px;
+  border-top: 2px solid #545454;
+  border-bottom: 1px solid #545454;
+  padding: -1px;
+
+  height: 30px;
+  width: 300px;
+  background: rgb(231,111,81);
+  background: linear-gradient(90deg, rgba(231,111,81,1) 0%, rgba(244,162,97,1) 33%, rgba(233,196,106,1) 66%, rgba(42,157,143,1) 100%);
+}
+
+.color-ruler .round{
+  content: "";
+  display: table-cell;
+  vertical-align: middle;
+
+  transform: translateY(-2px);
+  line-height: 28px;
+  font-size: 12px;
+
+  border-radius: 20px;
+  border: 2px solid #545454;
+  text-align: center;
+  vertical-align: middle;
+
+  height: 30px;
+  width: 30px;
+  background-color: white;
+}
+</style>
