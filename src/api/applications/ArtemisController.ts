@@ -172,7 +172,7 @@ export class ArtemisController {
     applicationName: string,
     language: string
   ): Promise<ArtemisFrameworkResult[]> {
-    const request = `CALL artemis.launch.detection(${applicationName}, ${language}, true);`;
+    const request = `CALL artemis.launch.detection("${applicationName}", "${language}", true);`;
 
     const resultList: ArtemisFrameworkResult[] = [];
     const results: QueryResult = await this.neo4jal.execute(request);

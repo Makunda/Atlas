@@ -1,5 +1,5 @@
 <template>
-  <v-card class="px-5 mb-5">
+  <v-card class="px-5 mb-5 pt-4">
     <v-card-text>
       <v-row>
         <h5 class="text-h5 black--text">
@@ -8,13 +8,14 @@
       </v-row>
       <v-row class="my-5">
         <p>
-          The <i>Artemis :  automatic framewok detector </i> your application and
+          The <i>Artemis : automatic framewok detector </i> your application and
           finds objects belonging to open-source components. It analyzes the
           most popular online repositories and Google, and thanks to its
           built-in automatic learning algorithm, it finds the best matches.
           <br />
           You can choose to activate or not these options. If no option is
-          activated, the <i>Artemis :  automatic framewok detector </i> will rely on it's own database to discover frameworks.
+          activated, the <i>Artemis : automatic framewok detector </i> will rely
+          on it's own database to discover frameworks.
         </p>
       </v-row>
       <v-row class="mt-5">
@@ -49,23 +50,47 @@
           disabled
         ></v-switch>
         <v-checkbox
-         class="mx-5"
+          class="mx-5"
           label="Send the results of this detection by mail. (Configure mails addresses in the admistration panel) (Coming soon)"
           disabled
         ></v-checkbox>
+        <v-row align="center">
+          <v-col cols="2">
+            <v-subheader>
+              <h3>Pick a language for discovery :</h3>
+            </v-subheader>
+          </v-col>
+
+          <v-col cols="2">
+            <v-select
+              v-model="selectedLanguage"
+              :items="availableLanguages"
+              label="Language"
+              persistent-hint
+              return-object
+              single-line
+            ></v-select>
+          </v-col>
+        </v-row>
       </v-row>
       <v-row class="mt-3">
-        <p class="ml-5"><b ><i><v-icon color="persianGrey">mdi-information</v-icon> The current workspace of the framework detector is located under :  </i></b>{{ workspacePath }}
-        <br>
-        You can change the workspace in the Administration section
+        <p class="ml-5">
+          <b
+            ><i
+              ><v-icon color="persianGrey">mdi-information</v-icon> The current
+              workspace of the framework detector is located under :
+            </i></b
+          >{{ workspacePath }}
+          <br />
+          You can change the workspace in the Administration section
         </p>
       </v-row>
-      <v-row class="mt-5">
+      <v-row class="my-5">
         <v-btn
           :loading="runningArtemis"
           color="charcoal"
           class="ma-2 white--text"
-          @click="loader = 'loading3'"
+          @click="launchDetection()"
         >
           Launch detection
           <v-icon right dark>
@@ -76,7 +101,6 @@
           :disabled="!runningArtemis"
           color="brown"
           class="ma-2 white--text"
-          @click="loader = 'loading3'"
         >
           Stop detection
           <v-icon right dark>
@@ -84,22 +108,49 @@
           </v-icon>
         </v-btn>
       </v-row>
+      <v-divider></v-divider>
       <v-row class="my-5">
-        <h3>Results:</h3>
+        <h3>Result of the detection:</h3>
       </v-row>
-      <v-row class="mb-10" id="artemis-viewer"> </v-row>
+      <v-row class="mb-10">
+        <v-data-table
+          :loading="runningArtemis"
+          :headers="headers"
+          :items="resultDetection"
+          :items-per-page="10"
+          item-key="nema"
+          class="elevation-3"
+          style="width: 100%"
+        ></v-data-table>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { ArtemisController, ArtemisFrameworkResult } from "@/api/applications/ArtemisController";
+import {
+  ArtemisController,
+  ArtemisFrameworkResult,
+} from "@/api/applications/ArtemisController";
 
 export default Vue.extend({
   name: "ActionTileViewer",
 
   data: () => ({
+    // Result table
+    headers: [
+      {
+        text: "Framework",
+        align: "start",
+        sortable: true,
+        value: "name",
+      },
+      { text: "Description", value: "description" },
+      { text: "Detected as ", value: "detectedAs" },
+    ],
+    showOnlyFrameworks: true as boolean,
+
     // Loadings
     loadingConfiguration: false as boolean,
     loadingOnlineMode: false as boolean,
@@ -113,10 +164,9 @@ export default Vue.extend({
 
     // Detection
     onGoingDetections: [] as string[],
-    resultDetection: [],
+    resultDetection: [] as ArtemisFrameworkResult[],
     selectedLanguage: "",
     availableLanguages: [] as string[],
-    
 
     application: "" as string,
 
@@ -137,6 +187,7 @@ export default Vue.extend({
       this.workspacePath = await ArtemisController.getWorkspace();
 
       this.availableLanguages = ArtemisController.getSupportedLanguages();
+      this.selectedLanguage = this.availableLanguages[0];
 
       this.loadingConfiguration = false;
     },
@@ -145,49 +196,69 @@ export default Vue.extend({
      *  Set a new mode for the online parameter
      */
     setOnlineMode() {
-        this.loadingOnlineMode = true;
-        ArtemisController.setOnlineMode(this.onlineMode).then((res:boolean) => {
-            this.onlineMode = res;
-        }).catch(err => {
-            this.errorOnlineMode = true;
-            console.error("Failed to change online mode of Artemis Framework detector.", err)
-        }).then(() => {
-            this.loadingOnlineMode = false;
+      this.loadingOnlineMode = true;
+      ArtemisController.setOnlineMode(this.onlineMode)
+        .then((res: boolean) => {
+          this.onlineMode = res;
         })
+        .catch((err) => {
+          this.errorOnlineMode = true;
+          console.error(
+            "Failed to change online mode of Artemis Framework detector.",
+            err
+          );
+        })
+        .then(() => {
+          this.loadingOnlineMode = false;
+        });
     },
 
-    /** 
-     * Change the mode of the repository 
-    */
+    /**
+     * Change the mode of the repository
+     */
     setRepositoryMode() {
-        this.loadingOnlineMode = true;
-        ArtemisController.setRepositoryMode(this.repositoryMode).then((res:boolean) => {
-            this.repositoryMode = res;
-        }).catch(err => {
-            this.errorRepositoryMode = true;
-        }).then(() => {
-            this.loadingOnlineMode = false;
+      this.loadingOnlineMode = true;
+      ArtemisController.setRepositoryMode(this.repositoryMode)
+        .then((res: boolean) => {
+          this.repositoryMode = res;
         })
+        .catch((err) => {
+          this.errorRepositoryMode = true;
+        })
+        .then(() => {
+          this.loadingOnlineMode = false;
+        });
     },
 
     launchDetection() {
-        // If the detection was previously launched, do nothing
-        if( this.onGoingDetections.indexOf(this.application) != -1 ) return;
-        this.onGoingDetections.push(this.application);
+      // If the detection was previously launched, do nothing
+      if (this.onGoingDetections.indexOf(this.application) != -1) return;
+      this.onGoingDetections.push(this.application);
 
-        ArtemisController.launchDetection(this.application, this.selectedLanguage).then((res:ArtemisFrameworkResult[]) => {
-            console.log(`${res.length} frameworks were detected during the operation.`)
-        }).catch(err => {
-            console.error(`The analysis of the application ${this.application} failed.`, err);
-            this.errorDetection = err;
-        }).finally(() => {
-            const index = this.onGoingDetections.indexOf(this.application);
-            this.onGoingDetections.slice(index, 1);
+      this.runningArtemis = true;
+
+      console.log("Artemis launched");
+
+      ArtemisController.launchDetection(this.application, this.selectedLanguage)
+        .then((res: ArtemisFrameworkResult[]) => {
+          console.log(
+            `${res.length} frameworks were detected during the operation.`
+          );
+          this.resultDetection = res.map(x => { return { name: x.name, description: x.description, detectedAs: x.detectedAs }})
         })
-
-    }
-
-
+        .catch((err) => {
+          console.error(
+            `The analysis of the application ${this.application} failed.`,
+            err
+          );
+          this.errorDetection = err;
+        })
+        .finally(() => {
+          const index = this.onGoingDetections.indexOf(this.application);
+          this.onGoingDetections.slice(index, 1);
+          this.runningArtemis = false;
+        });
+    },
   },
 
   mounted() {
@@ -204,7 +275,6 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-      this.getActionList();
     },
   },
 });
