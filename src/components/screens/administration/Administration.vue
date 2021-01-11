@@ -2,6 +2,7 @@
   <v-container>
     <v-row>
       <v-tabs
+        class="pt-3"
         v-model="tab"
         align-with-title
         fixed-tabs
@@ -9,7 +10,7 @@
         dark
       >
         <v-tab v-for="item in items" :key="item.name">
-          <v-icon class="mr-2" v-if="item.icon">{{ item.icon }}</v-icon>
+          <v-icon class="mr-3" v-if="item.icon">{{ item.icon }}</v-icon>
           {{ item.name }}
         </v-tab>
       </v-tabs>
@@ -18,11 +19,11 @@
       <v-container class="my-10">
         <!-- Grouping operations -->
       <v-row v-if="tab == 0">
-        <v-col cols="7" sm="12">
+        <v-col cols="7" md="7" sm="12">
           <DemeterLevelsTile></DemeterLevelsTile>
           <DemeterModuleTile></DemeterModuleTile>
         </v-col>
-        <v-col col="5" sm="12">
+        <v-col col="5" md="5" sm="12">
           <GlobalOperations></GlobalOperations>
         </v-col>
       </v-row>
@@ -68,14 +69,17 @@ export default Vue.extend({
       {
         view: "GroupingStep",
         name: "Grouping",
+        icon: "mdi-group"
       },
       {
         view: "ParametersStep",
         name: "Parameters",
+        icon: "mdi-cogs"
       },
       {
         view: "TagStudio",
         name: "Tag creator studio",
+        icon: "mdi-android-studio"
       },
     ],
   }),

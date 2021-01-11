@@ -8,47 +8,57 @@
       </v-row>
       <v-row class="my-5">
         <p>
-          The Artemis framework automatic detector analyzes your application and
+          The <i>Artemis :  automatic framewok detector </i> your application and
           finds objects belonging to open-source components. It analyzes the
           most popular online repositories and Google, and thanks to its
           built-in automatic learning algorithm, it finds the best matches.
           <br />
           You can choose to activate or not these options. If no option is
-          activated, the artemis framework will rely on it's own database.
+          activated, the <i>Artemis :  automatic framewok detector </i> will rely on it's own database to discover frameworks.
         </p>
       </v-row>
       <v-row class="mt-5">
         <h3>Actions:</h3>
       </v-row>
-      <v-row>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-switch
-            class="mx-5"
-            v-model="artemisOnlineOption"
-            label="Online search"
-            color="persianGrey"
-            v-on="on"
-            v-bind="attrs"
-            hide-details
-            ></v-switch>
-          <span>Activate the crawling of Google to discover frameworks</span>
-        </v-tooltip>
-        
+      <v-row class="d-flex flex-column">
         <v-switch
           class="mx-5"
-          v-model="artemisRepositoryOption"
-          label="Repository search"
+          v-model="onlineMode"
+          label="Online search : The framewok detection will parse Google, to discover frameworks. The frameworks detected are added to the configuration for future usage."
           color="persianGrey"
+          :loading="loadingConfiguration || loadingOnlineMode"
+          :disabled="loadingOnlineMode"
+          @click="setOnlineMode()"
           hide-details
         ></v-switch>
         <v-switch
           class="mx-5"
-          v-model="atemisInteractionOption"
-          label="Interaction detection"
+          v-model="repositoryMode"
+          label="Repository search : Parse most populars repositories as Github, Maven, etc.. "
           color="persianGrey"
+          :loading="loadingConfiguration || loadingRepositoryMode"
+          :disabled="loadingRepositoryMode"
+          @click="setRepositoryMode()"
           hide-details
         ></v-switch>
+        <v-switch
+          class="mx-5"
+          label="Interaction detection : Discover your own internals frameworks by detecting the pieces of code used by multiple applications. (Coming soon)"
+          color="persianGrey"
+          hide-details
+          disabled
+        ></v-switch>
+        <v-checkbox
+         class="mx-5"
+          label="Send the results of this detection by mail. (Configure mails addresses in the admistration panel) (Coming soon)"
+          disabled
+        ></v-checkbox>
+      </v-row>
+      <v-row class="mt-3">
+        <p class="ml-5"><b ><i><v-icon color="persianGrey">mdi-information</v-icon> The current workspace of the framework detector is located under :  </i></b>{{ workspacePath }}
+        <br>
+        You can change the workspace in the Administration section
+        </p>
       </v-row>
       <v-row class="mt-5">
         <v-btn
@@ -84,14 +94,29 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ArtemisController } from "@/api/applications/ArtemisController";
+import { ArtemisController, ArtemisFrameworkResult } from "@/api/applications/ArtemisController";
 
 export default Vue.extend({
   name: "ActionTileViewer",
 
   data: () => ({
     // Loadings
-    loadingConfiguration: true as boolean,
+    loadingConfiguration: false as boolean,
+    loadingOnlineMode: false as boolean,
+    loadingRepositoryMode: false as boolean,
+    runningArtemis: false as boolean,
+
+    // Errors
+    errorOnlineMode: false as boolean,
+    errorRepositoryMode: false as boolean,
+    errorDetection: "",
+
+    // Detection
+    onGoingDetections: [] as string[],
+    resultDetection: [],
+    selectedLanguage: "",
+    availableLanguages: [] as string[],
+    
 
     application: "" as string,
 
@@ -111,8 +136,58 @@ export default Vue.extend({
       this.repositoryMode = await ArtemisController.getRepositoryMode();
       this.workspacePath = await ArtemisController.getWorkspace();
 
+      this.availableLanguages = ArtemisController.getSupportedLanguages();
+
       this.loadingConfiguration = false;
     },
+
+    /**
+     *  Set a new mode for the online parameter
+     */
+    setOnlineMode() {
+        this.loadingOnlineMode = true;
+        ArtemisController.setOnlineMode(this.onlineMode).then((res:boolean) => {
+            this.onlineMode = res;
+        }).catch(err => {
+            this.errorOnlineMode = true;
+            console.error("Failed to change online mode of Artemis Framework detector.", err)
+        }).then(() => {
+            this.loadingOnlineMode = false;
+        })
+    },
+
+    /** 
+     * Change the mode of the repository 
+    */
+    setRepositoryMode() {
+        this.loadingOnlineMode = true;
+        ArtemisController.setRepositoryMode(this.repositoryMode).then((res:boolean) => {
+            this.repositoryMode = res;
+        }).catch(err => {
+            this.errorRepositoryMode = true;
+        }).then(() => {
+            this.loadingOnlineMode = false;
+        })
+    },
+
+    launchDetection() {
+        // If the detection was previously launched, do nothing
+        if( this.onGoingDetections.indexOf(this.application) != -1 ) return;
+        this.onGoingDetections.push(this.application);
+
+        ArtemisController.launchDetection(this.application, this.selectedLanguage).then((res:ArtemisFrameworkResult[]) => {
+            console.log(`${res.length} frameworks were detected during the operation.`)
+        }).catch(err => {
+            console.error(`The analysis of the application ${this.application} failed.`, err);
+            this.errorDetection = err;
+        }).finally(() => {
+            const index = this.onGoingDetections.indexOf(this.application);
+            this.onGoingDetections.slice(index, 1);
+        })
+
+    }
+
+
   },
 
   mounted() {

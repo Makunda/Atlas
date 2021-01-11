@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-row class="mx-4 d-flex flex-column">
+      <v-row class="mx-4  mt-2 d-flex flex-column">
         <h5 class="text-h5 black--text">Grouping action on configuration</h5>
         <p class="text-body-1">
           The grouping section is here to help you visualizing tags on interst
@@ -16,7 +16,7 @@
       <v-divider></v-divider>
       <v-row class="px-4 my-5">
         <v-toolbar dark color="#1D5D6B">
-          <v-toolbar-title>Popular grouping operations</v-toolbar-title>
+          <v-toolbar-title>Grouping operations: Check the configuration</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-autocomplete
             :search-input.sync="searchActions"
@@ -25,7 +25,7 @@
             flat
             hide-no-data
             hide-details
-            label="Filter the operations.."
+            label="Lookup for specific operations"
             solo-inverted
           ></v-autocomplete>
         </v-toolbar>

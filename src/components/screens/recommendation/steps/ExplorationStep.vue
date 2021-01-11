@@ -1,80 +1,7 @@
 <template>
   <v-container>
-    <v-card class="px-5 mb-5">
-      <v-card-text>
-        <v-row>
-          <h5 class="text-h5 black--text">
-            Automatic framework discovery
-          </h5>
-        </v-row>
-        <v-row class="my-5">
-          <p>
-            The Artemis framework automatic detector analyzes your application
-            and finds objects belonging to open-source components. It analyzes
-            the most popular online repositories and Google, and thanks to its
-            built-in automatic learning algorithm, it finds the best matches.
-            <br />
-            You can choose to activate or not these options. If no option is
-            activated, the artemis framework will rely on it's own database.
-          </p>
-        </v-row>
-        <v-row class="mt-5">
-          <h3>Actions:</h3>
-        </v-row>
-        <v-row>
-          <v-switch
-            class="mx-5"
-            v-model="artemisOnlineOption"
-            label="Online search"
-            color="persianGrey"
-            hide-details
-          ></v-switch>
-          <v-switch
-            class="mx-5"
-            v-model="artemisRepositoryOption"
-            label="Repository search"
-            color="persianGrey"
-            hide-details
-          ></v-switch>
-          <v-switch
-            class="mx-5"
-            v-model="atemisInteractionOption"
-            label="Interaction detection"
-            color="persianGrey"
-            hide-details
-          ></v-switch>
-        </v-row>
-        <v-row class="mt-5">
-          <v-btn
-            :loading="runningArtemis"
-            color="charcoal"
-            class="ma-2 white--text"
-            @click="loader = 'loading3'"
-          >
-            Launch detection
-            <v-icon right dark>
-              mdi-play
-            </v-icon>
-          </v-btn>
-          <v-btn
-            :disabled="!runningArtemis"
-            color="brown"
-            class="ma-2 white--text"
-            @click="loader = 'loading3'"
-          >
-            Stop detection
-            <v-icon right dark>
-              mdi-stop
-            </v-icon>
-          </v-btn>
-        </v-row>
-        <v-row class="my-5">
-          <h3>Results:</h3>
-        </v-row>
-        <v-row class="mb-10" id="artemis-viewer"> </v-row>
-      </v-card-text>
-    </v-card>
-
+    
+    <ActionTileViewer></ActionTileViewer>
     <v-divider></v-divider>
 
     <v-card class="pa-5 mb-3">
@@ -119,9 +46,14 @@
 
 <script lang="ts">
 import Vue from "vue";
+import ActionTileViewer from "@/components/screens/recommendation/components/ArtemisViewer.vue";
 
 export default Vue.extend({
   name: "ExplorationStep",
+
+  components: {
+    ActionTileViewer
+  },
 
   computed: {
     getApplicationName() {
@@ -134,11 +66,7 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
-    artemisOnlineOption: true,
-    artemisRepositoryOption: true,
-    atemisInteractionOption: false,
-    runningArtemis: false
+    application: ""
   }),
 
   methods: {},

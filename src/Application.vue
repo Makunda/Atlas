@@ -5,7 +5,6 @@ import Vue from "vue/types/umd";
     <v-navigation-drawer
         shaped
         class="side-bar"
-        :mini-variant-width="columnWidth"
         permanent
         dark
         expand-on-hover
@@ -128,7 +127,7 @@ export default Vue.extend({
       {
         name: "Recommendations",
         screen: "Recommendation",
-        icon: "mdi-pickaxe"
+        icon: "mdi-file-cad"
       },
       { name: "Administration", screen: "Administration", icon: "mdi-cog" }
     ],

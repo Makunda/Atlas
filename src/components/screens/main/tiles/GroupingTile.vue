@@ -17,7 +17,7 @@
         <v-col cols="4" md="4" sm="12">
           <v-card height="100%">
             <v-card-title> Level 5 Assistant</v-card-title>
-            <v-card-text>
+            <v-card-text class="mb-6">
               <p>{{ countLevels }} Levels 5 to group</p>
               <p v-if="countLevels == 0">
                 No Level tags were found in your application <br />See how to
@@ -40,29 +40,29 @@
               </v-row>
             </v-card-text>
             <v-card-actions>
-                <v-btn
-                  class="mx-2"
-                  tile
-                  color="success"
-                  v-on:click="groupApplication(application)"
-                  :disabled="countLevels == 0"
-                >
-                  <v-icon left>
-                    mdi-adjust
-                  </v-icon>
-                  Group Levels
-                </v-btn>
-                <v-btn
-                  tile
-                  class="ml-2 mr-8 white--text"
-                  :color="daemonLevelState ? '#2a9d8f' : '#f4a261'"
-                  v-on:click="toggleLevelDaemon()"
-                >
-                  <v-icon left>
-                    mdi-image-auto-adjust
-                  </v-icon>
-                  Assistant {{ daemonLevelState ? "active" : "stopped" }}
-                </v-btn>
+              <v-btn
+                class="mx-2"
+                tile
+                color="success"
+                v-on:click="groupApplication(application)"
+                :disabled="countLevels == 0"
+              >
+                <v-icon left>
+                  mdi-adjust
+                </v-icon>
+                Group Levels
+              </v-btn>
+              <v-btn
+                tile
+                class="ml-2 mr-8 white--text"
+                :color="daemonLevelState ? '#2a9d8f' : '#f4a261'"
+                v-on:click="toggleLevelDaemon()"
+              >
+                <v-icon left>
+                  mdi-image-auto-adjust
+                </v-icon>
+                Assistant {{ daemonLevelState ? "active" : "stopped" }}
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -70,7 +70,7 @@
         <v-col cols="4" md="4" sm="12">
           <v-card height="100%">
             <v-card-title> Module Assistant</v-card-title>
-            <v-card-text>
+            <v-card-text class="mb-6">
               <p>{{ countModule }} Modules to group</p>
               <p v-if="countModule == 0">
                 No Module tags were found in your application <br />See how to
@@ -93,29 +93,29 @@
               </v-row>
             </v-card-text>
             <v-card-actions>
-                <v-btn
-                  class="mx-2"
-                  tile
-                  color="success"
-                  v-on:click="groupApplication(application)"
-                  :disabled="countModule == 0"
-                >
-                  <v-icon left>
-                    mdi-adjust
-                  </v-icon>
-                  Group Modules
-                </v-btn>
-                <v-btn
-                  tile
-                  class="ml-2 mr-8 white--text"
-                  :color="daemonModuleState ? '#2a9d8f' : '#f4a261'"
-                  v-on:click="toggleModuleDaemon()"
-                >
-                  <v-icon left>
-                    mdi-image-auto-adjust
-                  </v-icon>
-                  Assistant {{ daemonModuleState ? "active" : "stopped" }}
-                </v-btn>
+              <v-btn
+                class="mx-2"
+                tile
+                color="success"
+                v-on:click="groupApplication(application)"
+                :disabled="countModule == 0"
+              >
+                <v-icon left>
+                  mdi-adjust
+                </v-icon>
+                Group Modules
+              </v-btn>
+              <v-btn
+                tile
+                class="ml-2 mr-8 white--text"
+                :color="daemonModuleState ? '#2a9d8f' : '#f4a261'"
+                v-on:click="toggleModuleDaemon()"
+              >
+                <v-icon left>
+                  mdi-image-auto-adjust
+                </v-icon>
+                Assistant {{ daemonModuleState ? "active" : "stopped" }}
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -133,25 +133,19 @@
                 >
               </p>
             </v-card-text>
-            <v-card-actions >
+            <v-card-actions>
               <v-btn class="mx-2" tile color="success" disabled>
-                    <v-icon left>
-                      mdi-adjust
-                    </v-icon>
-                    Create views
-                  </v-btn>
-                  <v-btn
-                    tile
-                    class=" white--text"
-                    color="#f4a261"
-                    disabled
-                  >
-                    <v-icon left>
-                      mdi-image-auto-adjust
-                    </v-icon>
-                    Daemon stopped
-                  </v-btn>
-              
+                <v-icon left>
+                  mdi-adjust
+                </v-icon>
+                Create views
+              </v-btn>
+              <v-btn tile class="white--text" color="#f4a261" disabled>
+                <v-icon left>
+                  mdi-image-auto-adjust
+                </v-icon>
+                Daemon stopped
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>

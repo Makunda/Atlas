@@ -2,20 +2,22 @@
   <v-container>
     <v-card>
       <v-card-text>
-        <v-row class="mx-2 d-flex flex-column">
+        <v-row class="mx-2 mt-2 d-flex flex-column">
           <h5 class="text-h5 black--text">Statistics on the application</h5>
           <p>
             Quickly discover if the configuration of the application's analysis
             is correct with some statistiscs on it
           </p>
-          <p>
-          </p>
-          <div class="color-ruler">
+          <h3>Color Schema : </h3>
+            <p>The statistical tiles below change color according to the score they measure. A green tile is a sign that the statistics have a "high percentage" of compliance.<br>
+            They they follow the following color schema : </p>
+          <div class="color-ruler mb-6">
             <div class="round">0</div>
             <div class="round">33</div>
             <div class="round">66</div>
             <div class="round">100</div>
           </div>
+          <p><i>Disclaimer : It can happens that even with the perfect configuration, the statistics display bad scores. Further investigation is necessary to understand where these scores. That can done with the action tiles, below this section, to investigate direclty in CAST Imaging.</i></p>
         </v-row>
 
         <v-divider></v-divider>
@@ -120,10 +122,10 @@ export default Vue.extend({
   flex-direction: row;
   justify-content: space-between;
 
-  border-radius: 15px;
-  border-top: 2px solid #545454;
-  border-bottom: 1px solid #545454;
-  padding: -1px;
+  border-radius: 29px;
+  border: 2px solid #545454;
+  border-right: 1px solid #545454;
+  border-left: 1px ins #545454;
 
   height: 30px;
   width: 300px;
@@ -141,12 +143,12 @@ export default Vue.extend({
   font-size: 12px;
 
   border-radius: 20px;
-  border: 2px solid #545454;
+  /* border: 2px solid #545454; */
   text-align: center;
   vertical-align: middle;
 
-  height: 30px;
-  width: 30px;
+  height: 29px;
+  width: 29px;
   background-color: white;
 }
 </style>

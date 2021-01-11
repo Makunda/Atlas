@@ -2,6 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-tabs
+        class="pt-3"
         v-model="tab"
         align-with-title
         fixed-tabs
@@ -61,17 +62,20 @@ export default Vue.extend({
       {
         view: "ConfigurationStep",
         name: "Configuration",
-        title: "Review the configuration of the "
+        title: "Review the configuration of the ",
+        icon: "mdi-folder-cog"
       },
       {
         view: "ExplorationStep",
         name: "Exploration",
-        title: "Explore the "
+        title: "Explore the ",
+        icon: "mdi-apple-safari"
       },
       {
         view: "ModernizationStep",
         name: "Modernization",
-        title: "Start modernize the "
+        title: "Start modernize the ",
+        icon: "mdi-pickaxe"
       }
     ]
   }),
@@ -87,6 +91,10 @@ export default Vue.extend({
 <style>
 .modernization-stepper {
   width: 100%;
+}
+
+.v-tab--active {
+  background-color: #5a727ca6;
 }
 
 .v-tabs-slider-wrapper {

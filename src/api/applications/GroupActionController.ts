@@ -22,21 +22,21 @@ export class GroupActionController {
         request: "CALL demeter.group.levels('%%CONTEXT_LABEL%%');"
       },
       {
-        title: "Split external",
+        title: "Split external objects",
         description:
           "Split all the external objects in the application and regroup them under they own Level5 nodes",
         request:
           "MATCH (l:Level5:%%CONTEXT_LABEL%%)-[:Aggregates]->(obj:Object:%%CONTEXT_LABEL%%) WHERE obj.External=true SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_External '+l.Name] ELSE obj.Tags + 'Dm_gl_External '+l.Name END"
       },
       {
-        title: "Group in external / internal",
+        title: "Group in external / internal objects",
         description:
           "Regroup ALL the object in your application in 2 categories : externals and internal. (Configuration checker)",
         request:
           "MATCH (l:Level5:%%CONTEXT_LABEL%%)-[:Aggregates]->(obj:Object:%%CONTEXT_LABEL%%) WHERE obj.External=true SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_External '+l.Name] ELSE obj.Tags + 'Dm_gl_External '+l.Name END"
       },
       {
-        title: "Split not in transaction",
+        title: "Split not in transaction objects",
         description:
           "Split all the objects not in transactions and regroup them under they own Level5 nodes",
         request: `MATCH (n:ObjectProperty) 
