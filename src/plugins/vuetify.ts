@@ -7,6 +7,7 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
+        grey: "#363636",
         charcoal: "#264653", // #E53935
         persianGrey: "#2a9d8f", // #2a9d8f
         orange: "#e9c46a", // #3F51B5

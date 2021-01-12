@@ -75,7 +75,7 @@ export default Vue.extend({
 
   methods: {
     getActionList() {
-      this.popularOperations = GroupActionController.getActions(
+      this.popularOperations = GroupActionController.getConfigurationActions(
         this.application
       );
     }
