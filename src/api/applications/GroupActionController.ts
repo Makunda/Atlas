@@ -25,7 +25,7 @@ export class GroupActionController {
         description:
           "Merge to a new level 5 the objects prefixed by 'Dm_gl_' in CAST Imaging",
         request: "CALL demeter.group.levels('%%CONTEXT_LABEL%%');",
-        tag: "",
+        tag: ""
       },
       {
         title: "Split external objects",
@@ -34,7 +34,7 @@ export class GroupActionController {
           "Split all the external objects in the application and regroup them under they own Level5 nodes",
         request:
           "MATCH (l:Level5:%%CONTEXT_LABEL%%)-[:Aggregates]->(obj:Object:%%CONTEXT_LABEL%%) WHERE obj.External=true SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_External '+l.Name] ELSE obj.Tags + 'Dm_gl_External '+l.Name END",
-        tag: "",
+        tag: ""
       },
       {
         title: "Group in external / internal objects",
@@ -43,7 +43,7 @@ export class GroupActionController {
           "Regroup ALL the object in your application in 2 categories : externals and internal. (Configuration checker)",
         request:
           "MATCH (l:Level5:%%CONTEXT_LABEL%%)-[:Aggregates]->(obj:Object:%%CONTEXT_LABEL%%) WHERE obj.External=true SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_External '+l.Name] ELSE obj.Tags + 'Dm_gl_External '+l.Name END",
-        tag: "",
+        tag: ""
       },
       {
         title: "Split not in transaction objects",
@@ -58,12 +58,12 @@ export class GroupActionController {
           WITH oc, o, COLLECT(DISTINCT tx.Name) as transactionList 
           WITH oc, o, REDUCE(s = "", n IN transactionList | s + ', ' + n) as stringTransactions 
           MERGE (o)-[:Property { value: RIGHT(stringTransactions,SIZE(stringTransactions)-2) }]->(oc)`,
-        tag: "",
-      },
+        tag: ""
+      }
     ];
 
     // Replace application anchor, by the provided one
-    return tempReqTable.map((x) => {
+    return tempReqTable.map(x => {
       x.request = x.request.replaceAll(this.contextAnchor, applicationName);
       return x;
     });
@@ -80,7 +80,7 @@ export class GroupActionController {
           "Group, under a new level 5 nodes, all the Spring Dao Objects",
         request:
           "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' %%SET_TAG(n)%%",
-        tag: "Dm_gl_Spring Servlets",
+        tag: "Dm_gl_Spring Servlets"
       },
       {
         title: "Spring Controllers",
@@ -88,7 +88,7 @@ export class GroupActionController {
         description: "Group, under a new level 5 nodes,  Spring Controllers",
         request:
           "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Stateless' OPTIONAL MATCH (n)-[]->(o:Object) WHERE NOT (o:Object)-[]->(:Object) WITH DISTINCT (COLLECT(n) + COLLECT(o)) as serviceObj UNWIND serviceObj as obj %%SET_TAG(obj)%%",
-        tag: "Dm_gl_Spring Controllers",
+        tag: "Dm_gl_Spring Controllers"
       },
       {
         title: "Spring Dao Objects",
@@ -96,7 +96,7 @@ export class GroupActionController {
         description: "Group, under a new level 5 nodes,  Spring Dao Objects",
         request:
           "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' %%SET_TAG(n)%%",
-        tag: "Dm_gl_Spring DAO",
+        tag: "Dm_gl_Spring DAO"
       },
       {
         title: "Spring Dao Class",
@@ -105,7 +105,7 @@ export class GroupActionController {
           "Group, under a new level 5 nodes,  all the objects with type JAVA CLASS DAO",
         request:
           "MATCH (o:Object:%%CONTEXT_LABEL%%) WHERE o.Type='Java Class DAO' %%SET_TAG(o)%% ",
-        tag: "Dm_gl_Spring DAO",
+        tag: "Dm_gl_Spring DAO"
       },
       {
         title: "Static Objects : Utilities",
@@ -114,7 +114,7 @@ export class GroupActionController {
           "Group, under a new level 5 nodes, all the objects only having static methods",
         request:
           "MATCH p=(o:Object:wealthcareMonolith)-[:BELONGTO]-(so:SubObject)-[r:Property]-(sp:ObjectProperty) WHERE o.Name CONTAINS 'Util' AND so.Type CONTAINS 'Method' AND sp.Description='Extended Type' WITH o as obj, COLLECT(DISTINCT r) as links WHERE all(x in links WHERE x.value CONTAINS 'static') %%SET_TAG(obj)%%",
-        tag: "Dm_gl_Utils",
+        tag: "Dm_gl_Utils"
       },
       {
         title: "Spring Java Persistence",
@@ -123,7 +123,7 @@ export class GroupActionController {
           "Group, under a new level 5 nodes,  All the objects part of the Java persistence Framework",
         request:
           "MATCH (n:Object:%%CONTEXT_LABEL%%) WHERE n.Type CONTAINS 'JPA' OR n.FullName CONTAINS 'javax.persistence' %%SET_TAG(n)%%",
-        tag: "Dm_gl_JAVA Persistence",
+        tag: "Dm_gl_JAVA Persistence"
       },
       {
         title: "Links to DAO",
@@ -132,7 +132,7 @@ export class GroupActionController {
           "Group, under a new level 5 nodes, all the logic linked to the DAO objects",
         request:
           "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' WITH n as DAOobjects MATCH (o:Object:%%CONTEXT_LABEL%%)-[r]->(DAOobjects) WHERE o.Type='Java Class' WITH DAOobjects,  COLLECT(TYPE(r)) as numRel, o WHERE all(x in numRel WHERE x='MENTION') %%SET_TAG(o)%% ",
-        tag: "Dm_gl_Spring DAO",
+        tag: "Dm_gl_Spring DAO"
       },
       {
         title: "Presentation Layer ",
@@ -141,16 +141,16 @@ export class GroupActionController {
           "Group, under a new level 5 nodes,  all the objects diplaying web informations to the user, as JSP and HTML pages",
         request:
           "MATCH (op:Object:%%CONTEXT_LABEL%%) WHERE op.Type IN ['JSP Pages', 'eFile'] %%SET_TAG(op)%%",
-        tag: "Dm_gl_View Layer",
-      },
+        tag: "Dm_gl_View Layer"
+      }
     ];
 
     // Replace application anchor, by the provided one
-    return tempReqTable.map((x) => {
+    return tempReqTable.map(x => {
       // Replace context
       x.request = x.request.replaceAll(this.contextAnchor, applicationName);
       // Replace the tag anchor
-      const toInsert = `SET @.Tags = CASE WHEN @.Tags IS NULL THEN ['${ x.tag }'] ELSE @.Tags + '${ x.tag }' END`
+      const toInsert = `SET @.Tags = CASE WHEN @.Tags IS NULL THEN ['${x.tag}'] ELSE @.Tags + '${x.tag}' END`;
       x.request = x.request.replace(/%%SET_TAG\(([A-Za-z]*)\)%%/, toInsert);
       // Replace tag
       return x;

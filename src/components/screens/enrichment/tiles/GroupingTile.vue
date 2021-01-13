@@ -1,6 +1,6 @@
 <template>
   <v-card min-height="300px" class="pa-3">
-    <v-card-title >
+    <v-card-title>
       <v-row class="d-flex flex-column">
         <h3 class="text-h4 black--text mx-4 mb-4 my-3">
           Assistants

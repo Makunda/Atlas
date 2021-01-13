@@ -1,9 +1,7 @@
 <template>
   <v-card class="pa-2">
     <v-row class="my-6 d-flex flex-column">
-      <h3 class="text-h4 ml-8">
-        Discover and apply tags on {{ application }}
-      </h3>
+      <h3 class="text-h4 ml-8">Discover and apply tags on {{ application }}</h3>
       <p class="ml-8 py-6 pr-10 text-body-1">
         The discovery section is here to help you putting tags on interst points
         in your application. It matches some predefined patterns, to give you

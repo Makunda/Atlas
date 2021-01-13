@@ -148,7 +148,7 @@
 import Vue from "vue";
 import {
   ArtemisController,
-  ArtemisFrameworkResult,
+  ArtemisFrameworkResult
 } from "@/api/applications/ArtemisController";
 
 export default Vue.extend({
@@ -161,11 +161,11 @@ export default Vue.extend({
         text: "Framework",
         align: "start",
         sortable: true,
-        value: "name",
+        value: "name"
       },
       { text: "Description", value: "description" },
       { text: "Category", value: "category" },
-      { text: "Detected as ", value: "detectedAs" },
+      { text: "Detected as ", value: "detectedAs" }
     ],
     showOnlyFrameworks: true as boolean,
     demoMode: true as boolean,
@@ -193,7 +193,7 @@ export default Vue.extend({
 
     onlineMode: true as boolean,
     repositoryMode: true as boolean,
-    workspacePath: "" as string,
+    workspacePath: "" as string
   }),
 
   methods: {
@@ -222,7 +222,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
           this.errorOnlineMode = true;
           console.error(
             "Failed to change online mode of Artemis Framework detector.",
@@ -243,7 +243,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.repositoryMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to change the repository setting of Artemis.",
             err
@@ -265,19 +265,19 @@ export default Vue.extend({
       console.log("Artemis launched");
 
       if (this.demoMode) {
-        ArtemisController.launchDetectionDemo()
-          .then((res) => {
+        ArtemisController.launchDetectionDemo(this.application)
+          .then(res => {
             console.log(
               `${res.length} frameworks were detected during the operation.`
             );
             this.resultDetection = res
-              .filter((x) => x.detectedAs == "Framework")
-              .map((x) => {
+              .filter(x => x.detectedAs == "Framework")
+              .map(x => {
                 return {
                   name: x.name,
                   description: x.description,
                   detectedAs: x.detectedAs,
-                  category: x.category,
+                  category: x.category
                 };
               });
           })
@@ -294,17 +294,17 @@ export default Vue.extend({
               `${res.length} frameworks were detected during the operation.`
             );
             this.resultDetection = res
-              .filter((x) => x.detectedAs == "Framework")
-              .map((x) => {
+              .filter(x => x.detectedAs == "Framework")
+              .map(x => {
                 return {
                   name: x.name,
                   description: x.description,
                   detectedAs: x.detectedAs,
-                  category: x.category,
+                  category: x.category
                 };
               });
           })
-          .catch((err) => {
+          .catch(err => {
             console.error(
               `The analysis of the application ${this.application} failed.`,
               err
@@ -317,7 +317,7 @@ export default Vue.extend({
             this.runningArtemis = false;
           });
       }
-    },
+    }
   },
 
   mounted() {
@@ -328,13 +328,13 @@ export default Vue.extend({
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    },
-  },
+    }
+  }
 });
 </script>

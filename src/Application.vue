@@ -115,7 +115,7 @@ import Vue from "vue";
 
 import {
   ApplicationController,
-  ApplicationRecord,
+  ApplicationRecord
 } from "@/api/applications/ApplicationController";
 
 import Administration from "@/components/screens/administration/Administration.vue";
@@ -129,7 +129,7 @@ export default Vue.extend({
   components: {
     Enrichment,
     Administration,
-    Recommendation,
+    Recommendation
   },
 
   mounted() {
@@ -139,7 +139,7 @@ export default Vue.extend({
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    },
+    }
   },
 
   data: () => ({
@@ -148,19 +148,19 @@ export default Vue.extend({
       {
         name: "Enrichment",
         screen: "Enrichment",
-        icon: "mdi-hexagon-multiple",
+        icon: "mdi-hexagon-multiple"
       },
       {
         name: "Recommendations",
         screen: "Recommendation",
-        icon: "mdi-file-cad",
+        icon: "mdi-file-cad"
       },
-      { name: "Administration", screen: "Administration", icon: "mdi-cog" },
+      { name: "Administration", screen: "Administration", icon: "mdi-cog" }
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
-    applicationList: [] as ApplicationRecord[],
+    applicationList: [] as ApplicationRecord[]
   }),
 
   methods: {
@@ -212,8 +212,8 @@ export default Vue.extend({
       }
 
       // Do nothing if the view wasn't found
-    },
-  },
+    }
+  }
 });
 </script>
 

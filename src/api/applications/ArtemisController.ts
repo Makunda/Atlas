@@ -197,19 +197,29 @@ export class ArtemisController {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  public static async launchDetectionDemo():  Promise<ArtemisFrameworkResult[]> {
+  public static async launchDetectionDemo(
+    applicationName: string
+  ): Promise<ArtemisFrameworkResult[]> {
     await ArtemisController.sleep(1500);
-    return [{
-      name: "DSNTIAUL",
-      description: "Utility to unload data from Db2 tables into sequential data sets.",
-      category: "IBM Supplied system utility	",
-      detectedAs: "Framework"
-    },
-    {
-      name: "DSNTIAR",
-      description: "Utility to unload data from Db2 tables into sequential data sets.",
-      category: "IBM Supplied system utility	",
-      detectedAs: "Framework"
-    }]
+
+    const req = `MATCH(obj:${applicationName}:Object) WHERE obj.Name CONTAINS "DSNTIAUL" or obj.Name CONTAINS "DSNTIAR" SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_IBM Supplied system utility'] ELSE obj.Tags + 'Dm_gl_IBM Supplied system utility' END`;
+    await this.neo4jal.execute(req);
+
+    return [
+      {
+        name: "DSNTIAUL",
+        description:
+          "Utility to unload data from Db2 tables into sequential data sets.",
+        category: "IBM Supplied system utility",
+        detectedAs: "Framework"
+      },
+      {
+        name: "DSNTIAR",
+        description:
+          "Utility to unload data from Db2 tables into sequential data sets.",
+        category: "IBM Supplied system utility",
+        detectedAs: "Framework"
+      }
+    ];
   }
 }

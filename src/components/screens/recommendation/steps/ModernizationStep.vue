@@ -57,7 +57,7 @@
                 lg="3"
               >
                 <v-card min-height="200px">
-                  <v-card-title class="subheading font-weight-bold" >
+                  <v-card-title class="subheading font-weight-bold">
                     <v-row style="height: 60px">
                       <v-col cols="8">{{ item.title }}</v-col>
                       <v-col cols="4"
@@ -69,19 +69,13 @@
                   </v-card-title>
                   <v-card-subtitle> </v-card-subtitle>
 
-
                   <v-card-text style="height: 70px">
                     {{ item.description }}
                   </v-card-text>
                   <v-divider></v-divider>
                   <v-card-actions>
                     <v-card-actions>
-                      <v-btn
-                        class="ma-2"
-           
-                        color="persianGrey"
-                        dark
-                      >
+                      <v-btn class="ma-2" color="persianGrey" dark>
                         Launch grouping
                       </v-btn>
                     </v-card-actions>
@@ -169,8 +163,8 @@ export default Vue.extend({
       return Math.ceil(this.items.length / this.itemsPerPage);
     },
     filteredKeys() {
-      return this.keys.filter((key) => key !== "Name");
-    },
+      return this.keys.filter(key => key !== "Name");
+    }
   },
 
   methods: {
@@ -182,7 +176,7 @@ export default Vue.extend({
     },
     updateItemsPerPage(number) {
       this.itemsPerPage = number;
-    },
+    }
   },
 
   mounted() {
@@ -203,13 +197,13 @@ export default Vue.extend({
     itemsPerPage: 8,
     sortBy: "name",
     keys: ["title", "category", "description"],
-    items: [{}],
+    items: [{}]
   }),
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    },
-  },
+    }
+  }
 });
 </script>
