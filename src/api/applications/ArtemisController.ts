@@ -4,6 +4,7 @@ import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 export class ArtemisFrameworkResult {
   name: string;
   description: string;
+  category: string;
   detectedAs: string;
 }
 
@@ -15,7 +16,7 @@ export class ArtemisController {
    * TO DO : Bind this list to Artemis
    */
   public static getSupportedLanguages(): string[] {
-    return ["Java", "Cobol"];
+    return ["Cobol", "Java"];
   }
 
   /**
@@ -180,13 +181,35 @@ export class ArtemisController {
       const name = results.records[i].get("name");
       const description = results.records[i].get("description");
       const detectedAs = results.records[i].get("detectedAs");
+      const category = results.records[i].get("category");
       resultList.push({
         name: name,
         description: description,
+        category: category,
         detectedAs: detectedAs
       });
     }
 
     return resultList;
+  }
+
+  private static sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  public static async launchDetectionDemo():  Promise<ArtemisFrameworkResult[]> {
+    await ArtemisController.sleep(1500);
+    return [{
+      name: "DSNTIAUL",
+      description: "Utility to unload data from Db2 tables into sequential data sets.",
+      category: "IBM Supplied system utility	",
+      detectedAs: "Framework"
+    },
+    {
+      name: "DSNTIAR",
+      description: "Utility to unload data from Db2 tables into sequential data sets.",
+      category: "IBM Supplied system utility	",
+      detectedAs: "Framework"
+    }]
   }
 }

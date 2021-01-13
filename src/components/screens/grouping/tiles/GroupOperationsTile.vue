@@ -46,7 +46,12 @@ export default {
 
   methods: {
     execute() {
-      GroupActionController.executeAction(this.groupAction);
+      this.loading = true;
+      GroupActionController.executeAction(this.groupAction).catch(err => {
+        console.error("The query failed to execute.", err)
+      }).finally(() => {
+        this.loading = false;
+      })
     }
   }
 };

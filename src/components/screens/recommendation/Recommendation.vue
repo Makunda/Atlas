@@ -10,7 +10,7 @@
         dark
       >
         <v-tab v-for="item in items" :key="item.name">
-          <v-icon class="mr-2" v-if="item.icon">{{ item.icon }}</v-icon>
+          <v-icon class="mr-3" v-if="item.icon">{{ item.icon }}</v-icon>
           {{ item.name }}
         </v-tab>
       </v-tabs>

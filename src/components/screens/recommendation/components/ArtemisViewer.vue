@@ -120,16 +120,13 @@
             single-line
             hide-details
           ></v-text-field>
-          
         </v-card-title>
         <v-card-subtitle class="d-flex justify-end">
           <v-checkbox
-            v-model="filterValidFramework"
+            v-model="demoMode"
             label="Show only detected as Frameworks"
           ></v-checkbox>
         </v-card-subtitle>
-        
-        
 
         <v-data-table
           :loading="runningArtemis"
@@ -167,9 +164,11 @@ export default Vue.extend({
         value: "name",
       },
       { text: "Description", value: "description" },
+      { text: "Category", value: "category" },
       { text: "Detected as ", value: "detectedAs" },
     ],
     showOnlyFrameworks: true as boolean,
+    demoMode: true as boolean,
 
     // Loadings
     loadingConfiguration: false as boolean,
@@ -265,32 +264,60 @@ export default Vue.extend({
 
       console.log("Artemis launched");
 
-      ArtemisController.launchDetection(this.application, this.selectedLanguage)
-        .then((res: ArtemisFrameworkResult[]) => {
-          console.log(
-            `${res.length} frameworks were detected during the operation.`
-          );
-          this.resultDetection = res.filter(x => x.detectedAs == "Framework").map((x) => {
-            return {
-              name: x.name,
-              description: x.description,
-              detectedAs: x.detectedAs,
-            };
+      if (this.demoMode) {
+        ArtemisController.launchDetectionDemo()
+          .then((res) => {
+            console.log(
+              `${res.length} frameworks were detected during the operation.`
+            );
+            this.resultDetection = res
+              .filter((x) => x.detectedAs == "Framework")
+              .map((x) => {
+                return {
+                  name: x.name,
+                  description: x.description,
+                  detectedAs: x.detectedAs,
+                  category: x.category,
+                };
+              });
+          })
+          .finally(() => {
+            this.runningArtemis = false;
           });
-        })
-        .catch((err) => {
-          console.error(
-            `The analysis of the application ${this.application} failed.`,
-            err
-          );
-          this.errorDetection = err;
-        })
-        .finally(() => {
-          const index = this.onGoingDetections.indexOf(this.application);
-          this.onGoingDetections.slice(index, 1);
-          this.runningArtemis = false;
-        });
-    }
+      } else {
+        ArtemisController.launchDetection(
+          this.application,
+          this.selectedLanguage
+        )
+          .then((res: ArtemisFrameworkResult[]) => {
+            console.log(
+              `${res.length} frameworks were detected during the operation.`
+            );
+            this.resultDetection = res
+              .filter((x) => x.detectedAs == "Framework")
+              .map((x) => {
+                return {
+                  name: x.name,
+                  description: x.description,
+                  detectedAs: x.detectedAs,
+                  category: x.category,
+                };
+              });
+          })
+          .catch((err) => {
+            console.error(
+              `The analysis of the application ${this.application} failed.`,
+              err
+            );
+            this.errorDetection = err;
+          })
+          .finally(() => {
+            const index = this.onGoingDetections.indexOf(this.application);
+            this.onGoingDetections.slice(index, 1);
+            this.runningArtemis = false;
+          });
+      }
+    },
   },
 
   mounted() {

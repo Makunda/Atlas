@@ -147,14 +147,18 @@ export class GroupActionController {
 
     // Replace application anchor, by the provided one
     return tempReqTable.map((x) => {
+      // Replace context
       x.request = x.request.replaceAll(this.contextAnchor, applicationName);
+      // Replace the tag anchor
+      const toInsert = `SET @.Tags = CASE WHEN @.Tags IS NULL THEN ['${ x.tag }'] ELSE @.Tags + '${ x.tag }' END`
+      x.request = x.request.replace(/%%SET_TAG\(([A-Za-z]*)\)%%/, toInsert);
+      // Replace tag
       return x;
     });
   }
 
-  public static executeAction(action: GroupAction): number {
-    this.neo4jal.execute(action.request);
-    return 0;
+  public static async executeAction(action: GroupAction): Promise<void> {
+    await this.neo4jal.execute(action.request);
   }
 
   public static async replicateModuleView(
