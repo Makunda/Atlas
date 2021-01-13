@@ -138,7 +138,7 @@ export class GroupingController {
   ): Promise<ModuleGroup[]> {
     const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
       WITH [app.Name] as appName  
-      MATCH (l:Module:${applicationName}) WHERE l.AipId=-1 OR l.AipId=9999999 
+      MATCH (l:Module:${applicationName}) WHERE l.AipId="-1" OR l.AipId="9999999" 
       RETURN ID(l) as id, l.Name as groupName, l.Count as numObjects ;`;
 
     const results: QueryResult = await this.neo4jal.execute(request);
