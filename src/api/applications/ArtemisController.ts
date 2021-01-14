@@ -219,6 +219,13 @@ export class ArtemisController {
           "Utility to unload data from Db2 tables into sequential data sets.",
         category: "IBM Supplied system utility",
         detectedAs: "Framework"
+      },
+      {
+        name: "CBLTDLI",
+        description:
+          "Utitlity to use the the DL/I language-specific interface.",
+        category: "IBM Supplied system utility",
+        detectedAs: "Framework"
       }
     ];
   }
