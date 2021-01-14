@@ -202,7 +202,7 @@ export class ArtemisController {
   ): Promise<ArtemisFrameworkResult[]> {
     await ArtemisController.sleep(1500);
 
-    const req = `MATCH(obj:${applicationName}:Object) WHERE obj.Name CONTAINS "DSNTIAUL" or obj.Name CONTAINS "DSNTIAR" SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_IBM Supplied System Utility'] ELSE obj.Tags + 'Dm_gl_IBM Supplied System Utility' END`;
+    const req = `MATCH(obj:${applicationName}:Object) WHERE obj.Name CONTAINS "DSNTIAUL" or obj.Name CONTAINS "DSNTIAR" or obj.Name CONTAINS "CBLTDLI" SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['Dm_gl_IBM Supplied System Utility'] ELSE obj.Tags + 'Dm_gl_IBM Supplied System Utility' END`;
     await this.neo4jal.execute(req);
 
     return [
