@@ -1,0 +1,14 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\info\\.1972c8680f5bc612a2d88078b99c2d3b6528c157-audit.json",
+    "files": [
+        {
+            "date": 1611654735548,
+            "name": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\info\\2021-01-26.log",
+            "hash": "bf125ffb3d4d3625f0a59bf505f002ae"
+        }
+    ]
+}
