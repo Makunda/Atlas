@@ -3,18 +3,18 @@ import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 import axios from "axios";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 import { DetectionResultDTO } from "../dto/ApiArtemis.dto";
-import { IDetectionResult } from "../interface/ApiArtemis.interface";
+import { DetectionResult } from "../interface/ApiArtemis.interface";
 
 
 export default class DetectionController {
 
     private static API_BASE_URL = window.location.origin;
 
-    private static PENDING_DETECTIONS:IDetectionResult[] = [];
-    private static SUCCESSFUL_DETECTIONS:IDetectionResult[] = [];
-    private static FAILED_DETECTIONS:IDetectionResult[] = [];
+    private static PENDING_DETECTIONS:DetectionResult[] = [];
+    private static SUCCESSFUL_DETECTIONS:DetectionResult[] = [];
+    private static FAILED_DETECTIONS:DetectionResult[] = [];
 
-    public static async  launchDetection(application:string, language:string) : Promise<boolean> {
+    public static async launchDetection(application:string, language:string) : Promise<boolean> {
         const url = DetectionController.API_BASE_URL+"/api/detection/launch";
 
         const data = {
@@ -41,12 +41,12 @@ export default class DetectionController {
     /**
      * Get pending detection operations
      */
-    private static async getPendingDetections() : Promise<IDetectionResult[]> {
+    private static async getPendingDetections() : Promise<DetectionResult[]> {
         const url = DetectionController.API_BASE_URL+"/api/detection/pending";
 
         try {
             const res = await axios.get(url);
-            let detectionList:IDetectionResult[] = [];
+            let detectionList:DetectionResult[] = [];
 
             if(res.status == 200) {
                 const apiResponse:ApiResponse = res.data;
@@ -65,7 +65,7 @@ export default class DetectionController {
         }  
     }
 
-    public static async getApplicationStatus(application:string): Promise<IDetectionResult> {
+    public static async getApplicationStatus(application:string): Promise<DetectionResult> {
         const url = DetectionController.API_BASE_URL+"/api/detection/status/"+application;
 
         try {

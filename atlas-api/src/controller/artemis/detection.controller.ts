@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { Framework } from '../interfaces/artemis/framework.interface';
-import FrameworksService from '../services/artemis.service';
+import { Framework } from '../../interfaces/artemis/framework.interface';
+import FrameworksService from '../../services/artemis/artemis.service';
 import {logger} from '@shared/Logger';
 import { LaunchDetectionDto } from 'src/dtos/artemis/detection.dto';
 import { DetectionResult, DetectionStatus } from 'src/interfaces/artemis/detectionStatus.interface';
-import DetectionService from 'src/services/detection.service';
+import DetectionService from 'src/services/artemis/detection.service';
 
 class DetectionController {
   public detectionService:DetectionService = new DetectionService();

@@ -41,7 +41,7 @@ jasmine.onComplete((passed: boolean) => {
     if (passed) {
         logger.info('All tests have passed :)');
     } else {
-        logger.err('At least one test has failed :(');
+        logger.error('At least one test has failed :(');
     }
 });
 
@@ -53,7 +53,7 @@ if (options.testFile) {
             jasmine.specFiles = [files[0]];
             jasmine.execute();
         } else {
-            logger.err('Test file not found!');
+            logger.error('Test file not found!');
         }
     });
 } else {

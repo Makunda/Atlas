@@ -1,13 +1,13 @@
 import {
-  IDetectionResult,
-  IDetectionStatus,
-  IFramework,
+  DetectionResult,
+  DetectionStatus,
+  Framework
 } from "../interface/ApiArtemis.interface";
 
-export class DetectionResultDTO implements IDetectionResult {
-  status: IDetectionStatus;
+export class DetectionResultDTO implements DetectionResult {
+  status: DetectionStatus;
   application = "";
-  data?: IFramework[] = [];
+  data?: Framework[] = [];
 
   constructor(obj: Record<string, any>) {
     this.status = obj["status"];

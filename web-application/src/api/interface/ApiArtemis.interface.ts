@@ -1,5 +1,4 @@
-
-export interface IFramework {
+export interface Framework {
   name: string;
   description: string;
   type: string;
@@ -10,18 +9,15 @@ export interface IFramework {
   percentageOfDetection: number;
 }
 
-
-export enum IDetectionStatus {
-    Pending,
-    Success,
-    Failure,
-    Unknown
-  }
-
-
-export interface IDetectionResult {
-    status: IDetectionStatus;
-    application: string;
-    data?: IFramework[];
+export enum DetectionStatus {
+  Pending,
+  Success,
+  Failure,
+  Unknown
 }
-  
+
+export interface DetectionResult {
+  status: DetectionStatus;
+  application: string;
+  data?: Framework[];
+}

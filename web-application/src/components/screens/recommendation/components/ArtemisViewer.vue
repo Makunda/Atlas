@@ -116,6 +116,40 @@
             mdi-stop
           </v-icon>
         </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="brown"
+          class="ma-2 white--text"
+          :disabled="checkingStatus"
+          @click="checkStatus()"
+        >
+          Reload status
+          <v-icon right dark>
+            mdi-reload
+          </v-icon>
+        </v-btn>
+      </v-row>
+      <v-row>
+        <v-alert 
+          class="ma-2" 
+          width="100%"
+          border="left"
+          dense
+          type="info"
+          v-if="ongoingDetection && ongoingDetection!=''"
+        >
+          {{ ongoingDetection }}
+        </v-alert>
+        <v-alert 
+          class="ma-2" 
+          width="100%"
+          border="left"
+          dense
+          type="error"
+          v-if="errorDetection && errorDetection!=''"
+        >
+          {{ errorDetection }}
+        </v-alert>
       </v-row>
       <v-divider></v-divider>
       <v-card class="my-6">
@@ -167,7 +201,9 @@ import {
   ArtemisFrameworkResult,
 } from "@/api/artemis/ArtemisController";
 
+
 import DetectionController from "@/api/artemis/DetectionController";
+import { DetectionStatus, DetectionResult, Framework } from "@/api/interface/ApiArtemis.interface";
 
 export default Vue.extend({
   name: "ActionTileViewer",
@@ -207,10 +243,11 @@ export default Vue.extend({
     // Detection
     filterValidFramework: true,
     search: "",
-    onGoingDetections: [] as string[],
-    resultDetection: [] as ArtemisFrameworkResult[],
+    ongoingDetection: "",
+    resultDetection: [] as Framework[],
     selectedLanguage: "",
     availableLanguages: [] as string[],
+    checkingStatus: false,
 
     application: "" as string,
 
@@ -278,19 +315,55 @@ export default Vue.extend({
         });
     },
 
-    launchDetection() {
-      // If the detection was previously launched, do nothing
-      if (this.onGoingDetections.indexOf(this.application) != -1) return;
-      this.onGoingDetections.push(this.application);
+    /**
+    *  Get the status of the Detection
+    */
+    checkStatus() {
+      this.checkingStatus = true;
+      this.ongoingDetection = "";
+      this.errorDetection = "";
+      DetectionController.getApplicationStatus(this.application)
+      .then((res: DetectionResult) => {
+          // If the detection is successfully launched, set a timeout and wait for the response
+          switch (res.status) {
+            case DetectionStatus.Pending:
+              this.ongoingDetection = `On-going detection for the ${this.application} application.`;
+              console.log(this.ongoingDetection);
+              break;
+            case DetectionStatus.Success:
+              this.resultDetection = res.data;
+              this.runningArtemis = false;
+              break;
+            case DetectionStatus.Failure:
+              this.errorDetection = "An error occured during the detection. Please check the logs";
+              this.runningArtemis = false;
+              break;
 
-    
+            default:
+              break;
+          }
+          
+        })
+        .catch((err) => {
+          console.error(
+            `Failed to retrieve the status of the application ${this.application}.`,
+            err
+          );
+          this.errorDetection = `Failed to retrieve the status of the application ${this.application}.`;
+        }).finally(() => {
+          this.checkingStatus = false;
+        })
+    },
+
+    launchDetection() {
+      this.displayErrorDetection = false;
       DetectionController.launchDetection(this.application, this.selectedLanguage)
       .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
           if(res) {
             this.runningArtemis = true;
           } else {
-            throw new Error("The server refused to launch the detection");
+            throw new Error("The server refused to launch the detection. Check the logs.");
           }
         })
         .catch((err) => {
@@ -312,6 +385,7 @@ export default Vue.extend({
       this.disabledTile = false;
       this.application = this.$store.state.applicationName;
       this.getConfiguration();
+      this.checkStatus();
       
     }).catch((err) => {
       console.error("The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension");

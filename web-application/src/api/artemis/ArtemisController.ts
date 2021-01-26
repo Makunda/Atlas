@@ -177,6 +177,8 @@ export class ArtemisController {
     const resultList: ArtemisFrameworkResult[] = [];
     const results: QueryResult = await this.neo4jal.execute(request);
 
+    
+
     for (let i = 0; i < results.records.length; i++) {
       const name = results.records[i].get("name");
       const description = results.records[i].get("description");

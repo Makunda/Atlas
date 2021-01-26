@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import DetectionController from 'src/controller/detection.controller';
+import DetectionController from 'src/controller/artemis/detection.controller';
 import Route from '../../interfaces/routes.interface';
 
 

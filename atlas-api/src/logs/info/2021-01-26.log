@@ -26,3 +26,13 @@
 2021-01-26 13:33:06 info: Express server started on port: 3000
 2021-01-26 13:48:30 info: Express server started on port: 3000
 2021-01-26 13:57:08 info: Express server started on port: 3000
+2021-01-26 16:15:48 info: Express server started on port: 3000
+2021-01-26 23:07:20 info: Express server started on port: 3000
+2021-01-26 23:07:43 info: Express server started on port: 3000
+2021-01-26 23:08:46 info: Express server started on port: 3000
+2021-01-26 23:09:50 info: Express server started on port: 3000
+2021-01-26 23:10:02 info: Express server started on port: 3000
+2021-01-26 23:11:08 error: neo4j_driver_1.Integer is not a constructor
+2021-01-26 23:13:53 error: neo4j_driver_1.Integer is not a constructor
+2021-01-26 23:13:59 info: Express server started on port: 3000
+2021-01-26 23:14:16 info: Express server started on port: 3000
