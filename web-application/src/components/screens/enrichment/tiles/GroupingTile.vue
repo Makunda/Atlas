@@ -3,10 +3,10 @@
     <v-card-title>
       <v-row class="d-flex flex-column">
         <h3 class="text-h4 black--text mx-4 mb-4 my-3">
-          Assistants
+          Agents
         </h3>
         <p class="ml-4 text-body-1">
-          Industrialize the grouping of tags. When actives, the assistants will
+          Industrialize the grouping of tags. When actives, the agents will
           automatically merge the objects in CAST Imaging.
         </p>
       </v-row>
@@ -16,7 +16,7 @@
         <!-- Level 5 assistant col -->
         <v-col cols="4" md="4" sm="12">
           <v-card height="100%">
-            <v-card-title> Level 5 Assistant</v-card-title>
+            <v-card-title> Level 5 Agent</v-card-title>
             <v-card-text class="mb-6">
               <p>{{ countLevels }} Levels 5 to group</p>
               <p v-if="countLevels == 0">
@@ -69,7 +69,7 @@
         <!-- Module assistant col -->
         <v-col cols="4" md="4" sm="12">
           <v-card height="100%">
-            <v-card-title> Module Assistant</v-card-title>
+            <v-card-title> Module Agent</v-card-title>
             <v-card-text class="mb-6">
               <p>{{ countModule }} Modules to group</p>
               <p v-if="countModule == 0">
@@ -121,7 +121,7 @@
         </v-col>
         <v-col cols="4" md="4" sm="12">
           <v-card disabled>
-            <v-card-title> Architecture Assistant ( Coming soon )</v-card-title>
+            <v-card-title> Architecture Agent ( Coming soon )</v-card-title>
             <v-card-text>
               <p>0 views to group</p>
               <p>
@@ -138,7 +138,37 @@
                 <v-icon left>
                   mdi-adjust
                 </v-icon>
-                Create views
+                Group views
+              </v-btn>
+              <v-btn tile class="white--text" color="#f4a261" disabled>
+                <v-icon left>
+                  mdi-image-auto-adjust
+                </v-icon>
+                Daemon stopped
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col cols="4" md="4" sm="12">
+          <v-card disabled>
+            <v-card-title> View Agent ( Coming soon )</v-card-title>
+            <v-card-text>
+              <p>0 views to group</p>
+              <p>
+                No view tags were found in your application <br />See
+                how to create views on the
+                <a
+                  href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
+                  >Demeter Wiki</a
+                >
+              </p>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn class="mx-2" tile color="success" disabled>
+                <v-icon left>
+                  mdi-adjust
+                </v-icon>
+                Group views
               </v-btn>
               <v-btn tile class="white--text" color="#f4a261" disabled>
                 <v-icon left>

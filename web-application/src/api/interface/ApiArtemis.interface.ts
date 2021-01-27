@@ -17,7 +17,10 @@ export enum DetectionStatus {
 }
 
 export interface DetectionResult {
+  application:string;
+  timestampStart:number;
+  timestampFinish:number;
+  language:string;
   status: DetectionStatus;
-  application: string;
-  data?: Framework[];
+  data: Framework[];
 }

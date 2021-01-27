@@ -18,6 +18,7 @@ class DetectionRoute implements Route {
     this.router.get(`${this.path}/pending`, this.detectionsController.getPendingDetections);
     this.router.get(`${this.path}/failed`, this.detectionsController.getFailedDetections);
     this.router.post(`${this.path}/launch`, this.detectionsController.launchDetection);
+    this.router.post(`${this.path}/stop`, this.detectionsController.stopDetection);
   }
 }
 

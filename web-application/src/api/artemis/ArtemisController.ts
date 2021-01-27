@@ -1,4 +1,6 @@
+import axios from "axios";
 import { QueryResult } from "neo4j-driver";
+import { ApiResponse } from "../interface/ApiResponse.interface";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export class ArtemisFrameworkResult {
@@ -9,14 +11,36 @@ export class ArtemisFrameworkResult {
 }
 
 export class ArtemisController {
+  private static API_BASE_URL = window.location.origin;
   private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   /**
    * Get the list of languages supported by Artemis
-   * TO DO : Bind this list to Artemis
    */
-  public static getSupportedLanguages(): string[] {
-    return ["Cobol", "Java"];
+  public static async getSupportedLanguages(): Promise<string[]> {
+    const url = ArtemisController.API_BASE_URL + "/api/artemis/languages";
+
+    try {
+      const res = await axios.get(url);
+      let languageList: string[] = [];
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          languageList = apiResponse.data;
+        }
+        console.info(`${languageList.length} languages were retrieved. ${languageList}`);
+      } else {
+        console.warn(`Failed to retrieve languages. Status (${res.status})`);
+      }
+
+      return languageList;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve pending operations.`,
+        error
+      );
+    }
   }
 
   /**
@@ -24,16 +48,26 @@ export class ArtemisController {
    * Throw an error if the extension is not installed
    */
   public static async getArtemisVersion(): Promise<string> {
-    const request = "CALL artemis.version()";
-    const results: QueryResult = await this.neo4jal.execute(request);
+    const url = ArtemisController.API_BASE_URL + "/api/artemis/utils/version";
 
-    if (!results.records || results.records.length == 0) {
-      throw new Error(
-        "The artemis extension is not installed or not properly working."
+    try {
+      const res = await axios.get(url);
+      let version: string;
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        version = String(apiResponse.data);
+      } else {
+        console.warn(`Failed to retrieve version. Status (${res.status})`);
+      }
+
+      return version;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
+        error
       );
     }
-
-    return results.records[0].get(0);
   }
 
   /**
@@ -177,8 +211,6 @@ export class ArtemisController {
     const resultList: ArtemisFrameworkResult[] = [];
     const results: QueryResult = await this.neo4jal.execute(request);
 
-    
-
     for (let i = 0; i < results.records.length; i++) {
       const name = results.records[i].get("name");
       const description = results.records[i].get("description");
@@ -188,12 +220,10 @@ export class ArtemisController {
         name: name,
         description: description,
         category: category,
-        detectedAs: detectedAs
+        detectedAs: detectedAs,
       });
     }
 
     return resultList;
   }
-
-
 }

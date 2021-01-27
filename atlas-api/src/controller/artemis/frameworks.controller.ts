@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Framework } from '../../interfaces/artemis/framework.interface';
-import FrameworksService from '../../services/artemis/artemis.service';
-import {logger} from '@shared/Logger';
-import { LaunchDetectionDto } from 'src/dtos/artemis/detection.dto';
-import { DetectionStatus } from 'src/interfaces/artemis/detectionStatus.interface';
+import FrameworksService from '../../services/artemis/framework.service';
 
 class FrameworksController {
   public frameworksService = new FrameworksService();
@@ -33,9 +30,6 @@ class FrameworksController {
       next(error);
     }
   };
-
-
-
 }
 
 export default FrameworksController;

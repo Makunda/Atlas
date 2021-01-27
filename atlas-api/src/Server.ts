@@ -58,5 +58,9 @@ app.get('/atlas/*', (req: Request, res: Response) => {
     res.sendFile('index.html', {root: viewsDir});
 });
 
+app.get('', (req: Request, res: Response) => {
+    res.redirect('/atlas/');
+});
+
 // Export express instance
 export default app;

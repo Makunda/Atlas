@@ -100,6 +100,7 @@
           color="charcoal"
           class="ma-2 white--text"
           @click="launchDetection()"
+          :disabled="ongoingDetection!=''"
         >
           Launch detection
           <v-icon right dark>
@@ -267,8 +268,13 @@ export default Vue.extend({
       this.repositoryMode = await ArtemisController.getRepositoryMode();
       this.workspacePath = await ArtemisController.getWorkspace();
 
-      this.availableLanguages = ArtemisController.getSupportedLanguages();
-      this.selectedLanguage = this.availableLanguages[0];
+      await ArtemisController.getSupportedLanguages().then((res:string[]) => {
+        console.log("Avaible languages are :" + res.join(";"))
+        this.availableLanguages = res;
+        this.selectedLanguage = res[0];
+      }).catch((err) => {
+        console.error("Failed to retrieve languages.", err);
+      });
 
       this.loadingConfiguration = false;
     },
@@ -324,10 +330,14 @@ export default Vue.extend({
       this.errorDetection = "";
       DetectionController.getApplicationStatus(this.application)
       .then((res: DetectionResult) => {
+          // If res is null, the application has no status
+          if(res == null) return;
+
           // If the detection is successfully launched, set a timeout and wait for the response
           switch (res.status) {
             case DetectionStatus.Pending:
               this.ongoingDetection = `On-going detection for the ${this.application} application.`;
+              this.runningArtemis = true;
               console.log(this.ongoingDetection);
               break;
             case DetectionStatus.Success:
@@ -375,17 +385,42 @@ export default Vue.extend({
         })
         
     },
+
+    stopDetection() {
+      this.displayErrorDetection = false;
+      DetectionController.cancelDetection(this.application, this.selectedLanguage)
+      .then((res: boolean) => {
+          // If the detection is successfully launched, set a timeout and wait for the response
+          if(res) {
+            this.runningArtemis = false;
+          } else {
+            throw new Error("The server refused to stopped the detection. Check the logs.");
+          }
+        })
+        .catch((err) => {
+          console.error(
+            `Failed to stop the on-going analysis.`,
+            err
+          );
+          this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`; ;
+        });
+        
+    },
+
+    cancelDetection() {
+      // Todo 
+    }
   },
 
   mounted() {
     this.disabledTile = true;
 
-    ArtemisController.getArtemisVersion().then((version:string) => {
+    ArtemisController.getArtemisVersion().then(async (version:string) => {
       this.version = version;
       this.disabledTile = false;
       this.application = this.$store.state.applicationName;
-      this.getConfiguration();
-      this.checkStatus();
+      await this.getConfiguration();
+      await this.checkStatus();
       
     }).catch((err) => {
       console.error("The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension");
@@ -403,6 +438,7 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
+      this.checkStatus();
     },
   },
 });

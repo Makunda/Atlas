@@ -10,12 +10,13 @@ export default class DetectionController {
 
     private static API_BASE_URL = window.location.origin;
 
-    private static PENDING_DETECTIONS:DetectionResult[] = [];
-    private static SUCCESSFUL_DETECTIONS:DetectionResult[] = [];
-    private static FAILED_DETECTIONS:DetectionResult[] = [];
-
+    /**
+     * Launch the detection for an application
+     * @param application Name of the application
+     * @param language Language for the detection
+     */
     public static async launchDetection(application:string, language:string) : Promise<boolean> {
-        const url = DetectionController.API_BASE_URL+"/api/detection/launch";
+        const url = DetectionController.API_BASE_URL+"/api/artemis/detection/launch";
 
         const data = {
             "application": application,
@@ -34,6 +35,36 @@ export default class DetectionController {
             }
         } catch (error) {
             console.error(`Failed to reach the API : ${url}. The detection was not launched.`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Stop a pending detection for an application
+     * @param application Name of the application
+     * @param language Language of the detection
+     */
+    public static async cancelDetection(application:string, language:string) : Promise<boolean> {
+        const url = DetectionController.API_BASE_URL+"/api/artemis/detection/stop";
+
+        const data = {
+            "application": application,
+            "language": language
+        }
+        try {
+            const res = await axios.post(url, data);
+
+            if(res.status == 200) {
+                const apiResponse:ApiResponse = res.data;
+                return Boolean(apiResponse.data);
+
+            } else {
+                console.warn(`Failed to stop the detection. Status (${res.status})`);
+                return false;
+            }
+        } catch (error) {
+            console.error(`Failed to reach the API : ${url}. The detection was not stopped.`, error);
+            throw error;
         }
         
     }
@@ -41,8 +72,8 @@ export default class DetectionController {
     /**
      * Get pending detection operations
      */
-    private static async getPendingDetections() : Promise<DetectionResult[]> {
-        const url = DetectionController.API_BASE_URL+"/api/detection/pending";
+    public static async getPendingDetections() : Promise<DetectionResult[]> {
+        const url = DetectionController.API_BASE_URL+"/api/artemis/detection/pending";
 
         try {
             const res = await axios.get(url);
@@ -55,25 +86,81 @@ export default class DetectionController {
                 }
                 
             } else {
-                console.warn(`Failed to launch the detection. Status (${res.status})`);
+                console.warn(`Failed to retrieve pending operations. Status (${res.status})`);
             }
 
-            DetectionController.PENDING_DETECTIONS = detectionList;
             return detectionList;
         } catch (error) {
             console.error(`Failed to reach the API : ${url}. Failed to retrieve pending operations.`, error);
+            throw error;
+        }  
+    }
+
+    /**
+     * Get successful detection operations
+     */
+    public static async getSuccessfulDetections() : Promise<DetectionResult[]> {
+        const url = DetectionController.API_BASE_URL+"/api/artemis/detection/successes";
+
+        try {
+            const res = await axios.get(url);
+            let detectionList:DetectionResult[] = [];
+
+            if(res.status == 200) {
+                const apiResponse:ApiResponse = res.data;
+                if(Array.isArray(apiResponse.data)) {
+                    detectionList = apiResponse.data;
+                }
+                
+            } else {
+                console.warn(`Failed to retrieve successful operations. Status (${res.status})`);
+            }
+
+            return detectionList;
+        } catch (error) {
+            console.error(`Failed to reach the API : ${url}. Failed to retrieve successful operations.`, error);
+            throw error;
+        }  
+    }
+
+    /**
+     * Get failed detection operations
+     */
+    public static async getFailedDetections() : Promise<DetectionResult[]> {
+        const url = DetectionController.API_BASE_URL+"/api/artemis/detection/failed";
+
+        try {
+            const res = await axios.get(url);
+            let detectionList:DetectionResult[] = [];
+
+            if(res.status == 200) {
+                const apiResponse:ApiResponse = res.data;
+                if(Array.isArray(apiResponse.data)) {
+                    detectionList = apiResponse.data;
+                }
+                
+            } else {
+                console.warn(`Failed to retrieve failed operations. Status (${res.status})`);
+            }
+
+            return detectionList;
+        } catch (error) {
+            console.error(`Failed to reach the API : ${url}. Failed to retrieve failed operations.`, error);
+            throw error;
         }  
     }
 
     public static async getApplicationStatus(application:string): Promise<DetectionResult> {
-        const url = DetectionController.API_BASE_URL+"/api/detection/status/"+application;
+        const url = DetectionController.API_BASE_URL+"/api/artemis/detection/status/"+application;
 
         try {
             const res = await axios.get(url);
 
             if(res.status == 200) {
                 const apiResponse:ApiResponse = res.data;
-                const appStatus:DetectionResultDTO = new DetectionResultDTO(apiResponse.data);
+                if(apiResponse == null) return null; // No status 
+
+                const appStatus:DetectionResultDTO = DetectionResultDTO.fromRecord(apiResponse.data);
                 return appStatus;
             } else {
                 console.warn(`Failed to launch the detection. Status (${res.status})`);
@@ -81,6 +168,7 @@ export default class DetectionController {
             }
         } catch (error) {
             console.error(`Failed to reach the API : ${url}. Failed to retrieve pending operations.`, error);
+            throw error;
         }  
     }
 

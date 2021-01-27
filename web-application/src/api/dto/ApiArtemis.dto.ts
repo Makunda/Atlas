@@ -5,13 +5,15 @@ import {
 } from "../interface/ApiArtemis.interface";
 
 export class DetectionResultDTO implements DetectionResult {
-  status: DetectionStatus;
-  application = "";
-  data?: Framework[] = [];
+  public application:string;
+  public timestampStart:number;
+  public timestampFinish = 0;
+  public language:string;
+  public status: DetectionStatus;
+  public data: Framework[] = [];
 
-  constructor(obj: Record<string, any>) {
-    this.status = obj["status"];
-    this.application = obj["application"];
-    this.data = obj["data"] != null ? obj["data"] : [];
+  static fromRecord(obj: Record<string, any>) : DetectionResultDTO{
+    return Object.assign(new DetectionResultDTO, obj)
   }
+
 }

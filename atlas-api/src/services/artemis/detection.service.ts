@@ -4,7 +4,8 @@ import config from "config";
 import { QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "src/database/neo4jAccessLayer";
 import {
-  DetectionResult,
+  CancellablePromise,
+  Detection,
   DetectionStatus,
 } from "src/interfaces/artemis/detectionStatus.interface";
 import { Framework } from "src/interfaces/artemis/framework.interface";
@@ -14,9 +15,11 @@ class DetectionService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   // Detections
-  private pendingApplicationDetection: string[] = [];
-  private failedApplicationDetection: string[] = [];
-  private finishedApplicationDetection: Map<string, Framework[]> = new Map();
+  private pendingApplicationDetection: Detection[] = [];
+  private pendingPromiseDetection: CancellablePromise<Framework[]>[] = [];
+
+  private failedApplicationDetection: Detection[] = [];
+  private finishedApplicationDetection: Detection[] = [];
 
   /**
    * Convert a neo4j record to a Framework
@@ -41,77 +44,62 @@ class DetectionService {
    *
    * @param appName Get the result of a pending detection
    */
-  public getDetectionStatus(appName: string): DetectionResult {
-    if (this.pendingApplicationDetection.indexOf(appName) != -1) {
-      return {
-        application: appName,
-        status: DetectionStatus.Pending,
-      };
-    } else if (this.failedApplicationDetection.indexOf(appName) != -1) {
-      return {
-        application: appName,
-        status: DetectionStatus.Failure,
-      };
-    } else if (this.finishedApplicationDetection.has(appName)) {
-      return {
-        application: appName,
-        status: DetectionStatus.Success,
-        data: this.finishedApplicationDetection.get(appName),
-      };
-    } else {
-      return {
-        application: appName,
-        status: DetectionStatus.Unknown,
-      };
-    }
+  public getDetectionStatus(appName: string): Detection {
+    const indexPending = this.pendingApplicationDetection.findIndex(
+      (i) => i.application === appName
+    );
+    if (indexPending != -1)
+      return this.pendingApplicationDetection[indexPending];
+
+    const indexSuccess = this.finishedApplicationDetection.findIndex(
+      (i) => i.application === appName
+    );
+    if (indexSuccess != -1)
+      return this.finishedApplicationDetection[indexSuccess];
+
+    const indexFailure = this.failedApplicationDetection.findIndex(
+      (i) => i.application === appName
+    );
+    if (indexFailure != -1)
+      return this.failedApplicationDetection[indexFailure];
+
+    return null;
   }
 
   /**
    * Get on-going detections
    */
-  public getPendingDetections(): DetectionResult[] {
-    const detectionResults: DetectionResult[] = [];
-    this.pendingApplicationDetection.forEach((element) => {
-      detectionResults.push({
-        application: element,
-        status: DetectionStatus.Pending,
-      });
-    });
-
-    return detectionResults;
+  public getPendingDetections(): Detection[] {
+    return this.pendingApplicationDetection;
   }
 
   /**
    * Get succesful detections
    */
-  public getSuccesfulDetections(): DetectionResult[] {
-    const detectionResults: DetectionResult[] = [];
-    this.finishedApplicationDetection.forEach(
-      (val: Framework[], key: string) => {
-        detectionResults.push({
-          application: key,
-          status: DetectionStatus.Success,
-          data: val,
-        });
-      }
-    );
-
-    return detectionResults;
+  public getSuccesfulDetections(): Detection[] {
+    return this.finishedApplicationDetection;
   }
 
   /**
    * Get failed detections
    */
-  public getFailedDetections(): DetectionResult[] {
-    const detectionResults: DetectionResult[] = [];
-    this.failedApplicationDetection.forEach((element) => {
-      detectionResults.push({
-        application: element,
-        status: DetectionStatus.Failure,
-      });
-    });
+  public getFailedDetections(): Detection[] {
+    return this.failedApplicationDetection;
+  }
 
-    return detectionResults;
+  /**
+   * Remove a detection from the list of pending operations
+   * @param detection Detection to remove
+   */
+  public removeFromPending(detection:Detection) : boolean{
+    const index: number = this.pendingApplicationDetection.findIndex(
+      (i) => { return i.application === detection.application && i.language === detection.language} 
+    );
+
+    if(index < 0) return false;
+    
+    this.pendingApplicationDetection.splice(index, 1);
+    return true;
   }
 
   /**
@@ -124,25 +112,27 @@ class DetectionService {
     const params = { applicationName: appName, language: language };
 
     // If still pending do not launch the detection
-    const indexPending: number = this.pendingApplicationDetection.indexOf(
-      appName
+    const indexPending: number = this.pendingApplicationDetection.findIndex(
+      (i) => i.application === appName
     );
     if (indexPending != -1) {
       return false;
     }
 
-    // Add Pending detection
-    this.pendingApplicationDetection.push(appName);
+    const detection: Detection = new Detection(appName, language);
+    detection.markAsPending();
 
-    this.neo4jAl
+    // Add Pending detection
+    this.pendingApplicationDetection.push(detection);
+
+    const promise: Promise<Framework[]> = this.neo4jAl
       .executeWithParameters(request, params)
       .then((res: QueryResult) => {
-
-        logger.info(`Results of the detection : ${res.records.length}`)
-        logger.info(`1st Results of the detection `, res.records[0])
+        logger.info(`Results of the detection : ${res.records.length}`);
+        logger.info(`1st Results of the detection `, res.records[0]);
         // Remove from failures
-        const indexFailure: number = this.failedApplicationDetection.indexOf(
-          appName
+        const indexFailure: number = this.failedApplicationDetection.findIndex(
+          (i) => i.application === appName
         );
         if (indexFailure != -1) {
           this.failedApplicationDetection.splice(indexFailure, 1);
@@ -157,23 +147,63 @@ class DetectionService {
         }
 
         // Add to sucess
-        this.finishedApplicationDetection.set(appName, resultList);
-
+        detection.markAsSuccess(resultList);
+        this.finishedApplicationDetection.push(detection);
         return resultList;
       })
       .catch((err) => {
+        // Add to failed detections
         console.error("The analysis of the application failed.", err);
-        this.failedApplicationDetection.push(appName);
+        detection.markAsFailed();
+        this.failedApplicationDetection.push(detection);
+        return [];
       })
       .finally(() => {
-        logger.info(`Detection finished for applicaiton ${appName} `)
-        const index: number = this.pendingApplicationDetection.indexOf(appName);
+        logger.info(`Detection finished for applicaiton ${appName} `);
+        const index: number = this.pendingApplicationDetection.findIndex(
+          (i) => i.application === appName
+        );
         if (index != -1) {
           this.pendingApplicationDetection.splice(index, 1);
         }
       });
 
+    // Make the promise above cancellable for the user
+    const cancellablePromise: CancellablePromise<
+      Framework[]
+    > = new CancellablePromise(appName, language, promise);
+    this.pendingPromiseDetection.push(cancellablePromise);
+
     return true;
+  }
+
+  /**
+   * Stop the detection of an application
+   * @param applicationName Name of the application
+   */
+  public cancelDetection(applicationName: string, language:string) : boolean {
+    let canceled = false;
+    // Cancel the promise
+    this.pendingPromiseDetection.forEach(function (item, index, object) {
+      if (item.application === applicationName && item.language === language) {
+        item.cancel(); // Stop the execution of the promise
+        object.splice(index, 1);
+        canceled = true;
+      }
+    });
+
+    // Remove from pending
+    const index: number = this.pendingApplicationDetection.findIndex(
+      (i) => { return i.application === applicationName && i.language === language} 
+    );
+    if (index != -1) {
+      this.pendingApplicationDetection.splice(index, 1);
+      canceled = true;
+    } else {
+      canceled = false;
+    }
+
+    return canceled;
   }
 }
 

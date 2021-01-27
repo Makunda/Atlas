@@ -28,8 +28,8 @@
           <v-card-text>
             <v-row>
               <v-col cols="8">
-                Replicate all the level view in the module module view.<br /><i
-                  >This operation will erase the current modules view</i
+                Replicate all the level view in the module module view.<br /><em
+                  >This operation will erase the current modules view</em
                 >
               </v-col>
               <v-col cols="4" fill-height>
@@ -50,8 +50,8 @@
                 Undo all the Demeter levels in your application. This operations
                 will erase all the changes made on this application levels with
                 the demeter extension. <br />
-                <i
-                  >This operation can ask a lot of time on large applications</i
+                <em
+                  >This operation can ask a lot of time on large applications</em
                 >
               </v-col>
               <v-col cols="4" fill-height>
@@ -66,7 +66,7 @@
                 Undo all the Demeter modules in you application. This operations
                 will erase all the changes made on this application's modules
                 with the demeter extension. <br />
-                <i>( Coming soon )</i>
+                <em>( Coming soon )</em>
               </v-col>
               <v-col cols="4" fill-height>
                 <v-btn class="ma-auto mt-2" depressed color="orange" disabled>
@@ -91,7 +91,7 @@ export default Vue.extend({
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -102,14 +102,14 @@ export default Vue.extend({
     // Loadings
     loadReplication: false,
 
-    appName: ""
+    appName: "",
   }),
 
   methods: {
     replicateModuleView() {
       this.loadReplication = true;
       GroupActionController.replicateModuleView(this.appName)
-        .catch(err => {
+        .catch((err) => {
           console.error(
             "Failed to replicate the level view in module view.",
             err
@@ -118,13 +118,13 @@ export default Vue.extend({
         .finally(() => {
           this.loadReplication = false;
         });
-    }
+    },
   },
 
   watch: {
     getApplicationName(newApp) {
       this.appName = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
