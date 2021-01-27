@@ -1,13 +1,13 @@
 2021-01-26 10:52:15 error: uncaughtException: ⨯ Unable to compile TypeScript:
 [96msrc/services/artemis.service.ts[0m:[93m5[0m:[93m8[0m - [91merror[0m[90m TS2613: [0mModule '"C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' has no default export. Did you mean to use 'import { logger } from "C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' instead?
 
-[7m5[0m import logger from "@shared/Logger";
+[7m5[0m import logger from "@shared/logger";
 [7m [0m [91m       ~~~~~~[0m
 
 TSError: ⨯ Unable to compile TypeScript:
 [96msrc/services/artemis.service.ts[0m:[93m5[0m:[93m8[0m - [91merror[0m[90m TS2613: [0mModule '"C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' has no default export. Did you mean to use 'import { logger } from "C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' instead?
 
-[7m5[0m import logger from "@shared/Logger";
+[7m5[0m import logger from "@shared/logger";
 [7m [0m [91m       ~~~~~~[0m
 
     at createTSError (C:\Users\hjo\Documents\Github\demeter-web\atlas-api\node_modules\ts-node\src\index.ts:513:12)
@@ -23,13 +23,13 @@ TSError: ⨯ Unable to compile TypeScript:
 2021-01-26 10:52:36 error: uncaughtException: ⨯ Unable to compile TypeScript:
 [96msrc/services/artemis.service.ts[0m:[93m5[0m:[93m8[0m - [91merror[0m[90m TS2613: [0mModule '"C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' has no default export. Did you mean to use 'import { logger } from "C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' instead?
 
-[7m5[0m import logger from "@shared/Logger";
+[7m5[0m import logger from "@shared/logger";
 [7m [0m [91m       ~~~~~~[0m
 
 TSError: ⨯ Unable to compile TypeScript:
 [96msrc/services/artemis.service.ts[0m:[93m5[0m:[93m8[0m - [91merror[0m[90m TS2613: [0mModule '"C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' has no default export. Did you mean to use 'import { logger } from "C:/Users/hjo/Documents/Github/demeter-web/atlas-api/src/shared/Logger"' instead?
 
-[7m5[0m import logger from "@shared/Logger";
+[7m5[0m import logger from "@shared/logger";
 [7m [0m [91m       ~~~~~~[0m
 
     at createTSError (C:\Users\hjo\Documents\Github\demeter-web\atlas-api\node_modules\ts-node\src\index.ts:513:12)

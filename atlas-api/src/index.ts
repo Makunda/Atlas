@@ -1,7 +1,7 @@
 import './pre-start'; // Must be the first import
 import app from '@server';
 import config from "config";
-import {logger} from '@shared/Logger';
+import {logger} from '@shared/logger';
 
 
 // Start the server

@@ -1,4 +1,4 @@
-import { logger } from "@shared/Logger";
+import { logger } from "@shared/logger";
 import { Neo4JAccessLayer } from "src/database/neo4jAccessLayer";
 import HttpException from "src/exceptions/HttpException";
 

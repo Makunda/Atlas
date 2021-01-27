@@ -2,7 +2,7 @@ import config from "config";
 import { CreateFrameworkDto } from "../../dtos/artemis/frameworks.dto";
 import HttpException from "../../exceptions/HttpException";
 import { Framework } from "../../interfaces/artemis/framework.interface";
-import { logger } from "@shared/Logger";
+import { logger } from "@shared/logger";
 import { Neo4JAccessLayer } from "../../database/neo4jAccessLayer";
 import { QueryResult } from "neo4j-driver";
 

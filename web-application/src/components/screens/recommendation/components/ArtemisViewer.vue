@@ -425,7 +425,10 @@ export default Vue.extend({
     }).catch((err) => {
       console.error("The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension");
       this.diplayNotInstalled = true;
-    })
+    });
+
+
+    setTimeout(this.checkStatus, 5000);
 
   },
 
@@ -438,6 +441,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
+      this.resultDetection = [];
+      this.runningArtemis = false;
       this.checkStatus();
     },
   },

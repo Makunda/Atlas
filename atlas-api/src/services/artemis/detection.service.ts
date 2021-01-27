@@ -1,5 +1,5 @@
 import app from "@server";
-import { logger } from "@shared/Logger";
+import { logger } from "@shared/logger";
 import config from "config";
 import { QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "src/database/neo4jAccessLayer";

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Framework } from '../../interfaces/artemis/framework.interface';
 import FrameworksService from '../../services/artemis/framework.service';
-import {logger} from '@shared/Logger';
+import {logger} from '@shared/logger';
 import { LaunchDetectionDto } from 'src/dtos/artemis/detection.dto';
 import { Detection, DetectionStatus } from 'src/interfaces/artemis/detectionStatus.interface';
 import DetectionService from 'src/services/artemis/detection.service';
