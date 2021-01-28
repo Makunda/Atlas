@@ -17,8 +17,8 @@ It necessitates the version 4.0 or superior of the Neo4j database
 ### Install Demeter & Artemis
 Make sure you've already installed _Demeter_ and _Artemis_. 
 If you need more information on how to install them, please check these links: 
-- [How to install Demeter](https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki/Install-the-extension)_
-- [How to install Artemis](https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki/Install-the-extension)_
+- [How to install Demeter](https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki/Install-the-extension)
+- [How to install Artemis](https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki/Install-the-extension)
 
 💡 You can find the newer version of these extensions in the `extension/` folder once the zip is extracted.
 
