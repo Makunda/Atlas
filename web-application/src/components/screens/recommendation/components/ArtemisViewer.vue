@@ -89,7 +89,8 @@
         <p class="ml-5">
           <b
             ><i
-              ><v-icon color="persianGrey">mdi-information</v-icon> The current version of Artemis is :
+              ><v-icon color="persianGrey">mdi-information</v-icon> The current
+              version of Artemis is :
             </i></b
           >{{ version }}
         </p>
@@ -100,7 +101,7 @@
           color="charcoal"
           class="ma-2 white--text"
           @click="launchDetection()"
-          :disabled="ongoingDetection!=''"
+          :disabled="ongoingDetection != ''"
         >
           Launch detection
           <v-icon right dark>
@@ -111,6 +112,7 @@
           :disabled="!runningArtemis"
           color="brown"
           class="ma-2 white--text"
+          @click="stopDetection()"
         >
           Stop detection
           <v-icon right dark>
@@ -118,12 +120,7 @@
           </v-icon>
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn
-          color="brown"
-          class="ma-2 white--text"
-          :disabled="checkingStatus"
-          @click="checkStatus()"
-        >
+        <v-btn color="brown" class="ma-2 white--text" @click="checkStatus()">
           Reload status
           <v-icon right dark>
             mdi-reload
@@ -131,23 +128,23 @@
         </v-btn>
       </v-row>
       <v-row>
-        <v-alert 
-          class="ma-2" 
+        <v-alert
+          class="ma-2"
           width="100%"
           border="left"
           dense
           type="info"
-          v-if="ongoingDetection && ongoingDetection!=''"
+          v-if="ongoingDetection && ongoingDetection != ''"
         >
           {{ ongoingDetection }}
         </v-alert>
-        <v-alert 
-          class="ma-2" 
+        <v-alert
+          class="ma-2"
           width="100%"
           border="left"
           dense
           type="error"
-          v-if="errorDetection && errorDetection!=''"
+          v-if="errorDetection && errorDetection != ''"
         >
           {{ errorDetection }}
         </v-alert>
@@ -167,7 +164,7 @@
         </v-card-title>
         <v-card-subtitle class="d-flex justify-end">
           <v-checkbox
-            v-model="demoMode"
+            v-model="showOnlyFrameworks"
             label="Show only detected as Frameworks"
           ></v-checkbox>
         </v-card-subtitle>
@@ -175,8 +172,8 @@
         <v-data-table
           :loading="runningArtemis"
           :headers="headers"
-          :items="resultDetection"
-          :items-per-page="10"
+          :items="filteredFrameworks"
+          :items-per-page="20"
           :search="search"
           item-key="nema"
           class="elevation-3"
@@ -187,10 +184,14 @@
     </v-card-text>
     <div v-if="diplayNotInstalled" id="NotInstalledArtemis">
       <h2 class="ma-auto text--h2" id="Message">
-        The Artemis extension is not installed on this instance.<br>
-        Please install the extension from <a href="https://extend.castsoftware.com/#/extension?id=com.castsoftware.uc.artemis&version=2.0.0"> CAST Extend </a>
+        The Artemis extension is not installed on this instance.<br />
+        Please install the extension from
+        <a
+          href="https://extend.castsoftware.com/#/extension?id=com.castsoftware.uc.artemis&version=2.0.0"
+        >
+          CAST Extend
+        </a>
       </h2>
-
     </div>
   </v-card>
 </template>
@@ -202,12 +203,35 @@ import {
   ArtemisFrameworkResult,
 } from "@/api/artemis/ArtemisController";
 
-
 import DetectionController from "@/api/artemis/DetectionController";
-import { DetectionStatus, DetectionResult, Framework } from "@/api/interface/ApiArtemis.interface";
+import {
+  DetectionStatus,
+  DetectionResult,
+  Framework,
+} from "@/api/interface/ApiArtemis.interface";
 
 export default Vue.extend({
   name: "ActionTileViewer",
+
+  computed: {
+    filteredFrameworks() {
+      console.log("Result size : " + this.resultDetection.filter((d) => {
+          return d.type == "Framework";
+        }).length);
+        
+      if (this.showOnlyFrameworks) {
+        return this.resultDetection.filter((d) => {
+          return d.type == "Framework";
+        });
+      } else {
+        return this.resultDetection;
+      }
+    },
+
+    getApplicationName() {
+      return this.$store.state.applicationName;
+    },
+  },
 
   data: () => ({
     // Result table
@@ -220,15 +244,13 @@ export default Vue.extend({
       },
       { text: "Description", value: "description" },
       { text: "Category", value: "category" },
-      { text: "Detected as ", value: "detectedAs" },
+      { text: "Detected as ", value: "type" },
     ],
     showOnlyFrameworks: true as boolean,
-    demoMode: true as boolean,
 
     disabledTile: false as boolean,
     version: "Unknown" as string,
     diplayNotInstalled: false as boolean,
-
 
     // Loadings
     loadingConfiguration: false as boolean,
@@ -268,13 +290,15 @@ export default Vue.extend({
       this.repositoryMode = await ArtemisController.getRepositoryMode();
       this.workspacePath = await ArtemisController.getWorkspace();
 
-      await ArtemisController.getSupportedLanguages().then((res:string[]) => {
-        console.log("Avaible languages are :" + res.join(";"))
-        this.availableLanguages = res;
-        this.selectedLanguage = res[0];
-      }).catch((err) => {
-        console.error("Failed to retrieve languages.", err);
-      });
+      await ArtemisController.getSupportedLanguages()
+        .then((res: string[]) => {
+          console.log("Avaible languages are :" + res.join(";"));
+          this.availableLanguages = res;
+          this.selectedLanguage = res[0];
+        })
+        .catch((err) => {
+          console.error("Failed to retrieve languages.", err);
+        });
 
       this.loadingConfiguration = false;
     },
@@ -322,37 +346,41 @@ export default Vue.extend({
     },
 
     /**
-    *  Get the status of the Detection
-    */
+     *  Get the status of the Detection
+     */
     checkStatus() {
+      if (this.checkingStatus) return;
+
       this.checkingStatus = true;
-      this.ongoingDetection = "";
-      this.errorDetection = "";
       DetectionController.getApplicationStatus(this.application)
-      .then((res: DetectionResult) => {
+        .then((res: DetectionResult) => {
           // If res is null, the application has no status
-          if(res == null) return;
+          if (res == null) return;
 
           // If the detection is successfully launched, set a timeout and wait for the response
           switch (res.status) {
             case DetectionStatus.Pending:
               this.ongoingDetection = `On-going detection for the ${this.application} application.`;
               this.runningArtemis = true;
+              this.errorDetection = "";
               console.log(this.ongoingDetection);
               break;
             case DetectionStatus.Success:
               this.resultDetection = res.data;
               this.runningArtemis = false;
+              this.errorDetection = "";
+              this.ongoingDetection = "";
               break;
             case DetectionStatus.Failure:
-              this.errorDetection = "An error occured during the detection. Please check the logs";
+              this.errorDetection =
+                "An error occured during the detection. Please check the logs";
+              this.ongoingDetection = "";
               this.runningArtemis = false;
               break;
 
             default:
               break;
           }
-          
         })
         .catch((err) => {
           console.error(
@@ -360,20 +388,26 @@ export default Vue.extend({
             err
           );
           this.errorDetection = `Failed to retrieve the status of the application ${this.application}.`;
-        }).finally(() => {
-          this.checkingStatus = false;
         })
+        .finally(() => {
+          this.checkingStatus = false;
+        });
     },
 
     launchDetection() {
       this.displayErrorDetection = false;
-      DetectionController.launchDetection(this.application, this.selectedLanguage)
-      .then((res: boolean) => {
+      DetectionController.launchDetection(
+        this.application,
+        this.selectedLanguage
+      )
+        .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
-          if(res) {
+          if (res) {
             this.runningArtemis = true;
           } else {
-            throw new Error("The server refused to launch the detection. Check the logs.");
+            throw new Error(
+              "The server refused to launch the detection. Check the logs."
+            );
           }
         })
         .catch((err) => {
@@ -382,60 +416,61 @@ export default Vue.extend({
             err
           );
           this.errorDetection = err;
-        })
-        
+        });
     },
 
     stopDetection() {
       this.displayErrorDetection = false;
-      DetectionController.cancelDetection(this.application, this.selectedLanguage)
-      .then((res: boolean) => {
+      DetectionController.cancelDetection(
+        this.application,
+        this.selectedLanguage
+      )
+        .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
-          if(res) {
+          if (res) {
             this.runningArtemis = false;
           } else {
-            throw new Error("The server refused to stopped the detection. Check the logs.");
+            throw new Error(
+              "The server refused to stopped the detection. Check the logs."
+            );
           }
         })
         .catch((err) => {
-          console.error(
-            `Failed to stop the on-going analysis.`,
-            err
-          );
-          this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`; ;
+          console.error(`Failed to stop the on-going analysis.`, err);
+          this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`;
         });
-        
+    },
+
+    constantStatusCheck() {
+      this.checkStatus();
+      setTimeout(this.constantStatusCheck, 3000);
     },
 
     cancelDetection() {
-      // Todo 
-    }
+      // Todo
+    },
   },
 
   mounted() {
     this.disabledTile = true;
+    this.resultDetection = [];
 
-    ArtemisController.getArtemisVersion().then(async (version:string) => {
-      this.version = version;
-      this.disabledTile = false;
-      this.application = this.$store.state.applicationName;
-      await this.getConfiguration();
-      await this.checkStatus();
-      
-    }).catch((err) => {
-      console.error("The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension");
-      this.diplayNotInstalled = true;
-    });
+    ArtemisController.getArtemisVersion()
+      .then(async (version: string) => {
+        this.version = version;
+        this.disabledTile = false;
+        this.application = this.$store.state.applicationName;
+        await this.getConfiguration();
+        await this.checkStatus();
+      })
+      .catch((err) => {
+        console.error(
+          "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension"
+        );
+        this.diplayNotInstalled = true;
+      });
 
-
-    setTimeout(this.checkStatus, 5000);
-
-  },
-
-  computed: {
-    getApplicationName() {
-      return this.$store.state.applicationName;
-    },
+    this.constantStatusCheck();
   },
 
   watch: {
@@ -450,25 +485,25 @@ export default Vue.extend({
 </script>
 
 <style>
-  #NotInstalledArtemis {
-    min-width: 100%;
-    min-height: 100%;
-    position: absolute;
+#NotInstalledArtemis {
+  min-width: 100%;
+  min-height: 100%;
+  position: absolute;
 
-    top:0;
-    right: 0;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
+  top: 0;
+  right: 0;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
 
-  #NotInstalledArtemis #Message {
-      display: block;
-      color: white;
-      text-align: center;
-      position: absolute;
-      
-      top: 40%;
-      right: 0;
-      width: 100%;
-  }
+#NotInstalledArtemis #Message {
+  display: block;
+  color: white;
+  text-align: center;
+  position: absolute;
+
+  top: 40%;
+  right: 0;
+  width: 100%;
+}
 </style>

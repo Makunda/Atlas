@@ -37,7 +37,7 @@ export class DaemonController {
           await this.neo4jal.execute(groupRequest);
         } catch (error) {
           console.error(
-            `Daemon :: Grouping Levels failed for applicaiton with name : ${name}`,
+            `Daemon :: Grouping Levels failed for application with name : ${name}`,
             error
           );
         }
@@ -69,7 +69,7 @@ export class DaemonController {
           await this.neo4jal.execute(groupRequest);
         } catch (error) {
           console.error(
-            `Daemon :: Grouping Modules failed for applicaiton with name : ${name}`,
+            `Daemon :: Grouping Modules failed for application with name : ${name}`,
             error
           );
         }

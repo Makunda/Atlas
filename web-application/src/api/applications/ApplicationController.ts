@@ -1,4 +1,6 @@
+import axios from "axios";
 import { QueryResult } from "neo4j-driver";
+import { ApiResponse } from "../interface/ApiResponse.interface";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export interface ApplicationRecord {
@@ -7,9 +9,37 @@ export interface ApplicationRecord {
 }
 
 export class ApplicationController {
+  private static API_BASE_URL = window.location.origin;
   private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   public static async getListApplications(): Promise<string[]> {
+    const url =
+      ApplicationController.API_BASE_URL + "/api/imaging/applications";
+
+    try {
+      const res = await axios.get(url);
+      let applications: string[] = [];
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+
+        if (Array.isArray(apiResponse)) {
+          applications = apiResponse;
+        }
+      } else {
+        console.warn(
+          `Failed to retrieve application list. Status (${res.status})`
+        );
+      }
+
+      return applications;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve application list.`,
+        error
+      );
+    }
+
     const request = "MATCH (n:Application) RETURN n.Name as name";
 
     const results: QueryResult = await this.neo4jal.execute(request);

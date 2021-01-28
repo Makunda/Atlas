@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import LanguageController from 'src/controller/artemis/language.controller';
-import Route from '../../interfaces/routes.interface';
+import LanguageController from '@controller/artemis/language.controller';
+import Route from '@interfaces/routes.interface';
 
 
 class LanguageRoute implements Route {

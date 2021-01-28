@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import FrameworksController from '../../controller/artemis/frameworks.controller';
-import Route from '../../interfaces/routes.interface';
+import FrameworksController from '@controller/artemis/frameworks.controller';
+import Route from '@interfaces/routes.interface';
 
 
 class FrameworksRoute implements Route {

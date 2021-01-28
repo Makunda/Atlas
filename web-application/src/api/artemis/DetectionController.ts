@@ -172,7 +172,7 @@ export default class DetectionController {
         }  
     }
 
-    private 
+     
 }
 
 // Launch routines

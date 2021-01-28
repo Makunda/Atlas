@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { CandidateResults } from 'src/interfaces/demeter/candidateResults.interface';
-import { DemeterGroup } from 'src/interfaces/demeter/demeterGroup.interface';
-import GroupingService from 'src/services/demeter/grouping.service';
+import { CandidateResults } from '@interfaces/demeter/candidateResults.interface';
+import { DemeterGroup } from '@interfaces/demeter/demeterGroup.interface';
+import GroupingService from '@services/demeter/grouping.service';
 
 class GroupingController {
   public groupingService = new GroupingService();

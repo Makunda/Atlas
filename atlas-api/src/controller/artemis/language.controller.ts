@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import LanguageService from "src/services/artemis/language.service";
+import LanguageService from "@services/artemis/language.service";
 
 
 class LanguageController {

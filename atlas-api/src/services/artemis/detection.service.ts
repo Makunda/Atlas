@@ -2,13 +2,13 @@ import app from "@server";
 import { logger } from "@shared/logger";
 import config from "config";
 import { QueryResult } from "neo4j-driver";
-import { Neo4JAccessLayer } from "src/database/neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/neo4jAccessLayer";
 import {
   CancellablePromise,
   Detection,
   DetectionStatus,
-} from "src/interfaces/artemis/detectionStatus.interface";
-import { Framework } from "src/interfaces/artemis/framework.interface";
+} from "@interfaces/artemis/detectionStatus.interface";
+import { Framework } from "@interfaces/artemis/framework.interface";
 
 class DetectionService {
   private ARTEMIS_LABEL = config.get("artemis.frameworkNode");
@@ -29,7 +29,7 @@ class DetectionService {
     const framework: Framework = {
       name: res.get("name"),
       description: res.get("description"),
-      type: res.get("type"),
+      type: res.get("type") == "Framework" ? "Framework" : "Not a framework",
       category: res.get("category") || "",
       internalType: res.get("internalType") || "",
       location: res.get("location") || "",
@@ -159,7 +159,7 @@ class DetectionService {
         return [];
       })
       .finally(() => {
-        logger.info(`Detection finished for applicaiton ${appName} `);
+        logger.info(`Detection finished for application ${appName} `);
         const index: number = this.pendingApplicationDetection.findIndex(
           (i) => i.application === appName
         );

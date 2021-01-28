@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import ArtemisService from 'src/services/artemis/artemis.service';
+import ArtemisService from '@services/artemis/artemis.service';
 
 
 class ArtemisController {

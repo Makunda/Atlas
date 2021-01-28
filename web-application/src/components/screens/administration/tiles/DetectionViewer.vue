@@ -63,7 +63,7 @@ export default Vue.component("DetectionViewer", {
         this.detection.timestampFinish - this.detection.timestampStart;
       this.toDisplay =
         elapsed > 0 ? this.milisecondsToDhms(elapsed) : "No information";
-      this.numResults = this.detection.data.lenght > 0 ?  this.detection.data.lenght + " framework detected" : "No framework detected";
+      this.numResults = this.detection.data.length > 0 ?  this.detection.data.filter(x => x=="Framework").length + " framework detected" : "No framework detected";
     }
     
   },

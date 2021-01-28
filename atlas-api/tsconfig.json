@@ -75,6 +75,24 @@
       "@shared/*": [
         "src/shared/*"
       ],
+      "@controller/*": [
+        "src/controller/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@interfaces/*": [
+        "src/interfaces/*"
+      ],
+      "@dtos/*": [
+        "src/dtos/*"
+      ],
+      "@database/*": [
+        "src/database/*"
+      ],
+      "@exceptions/*": [
+        "src/exceptions/*"
+      ],
       "@server": [
         "src/Server"
       ]

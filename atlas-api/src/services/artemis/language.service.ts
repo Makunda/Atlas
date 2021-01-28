@@ -1,6 +1,6 @@
 import { logger } from "@shared/logger";
-import { Neo4JAccessLayer } from "src/database/neo4jAccessLayer";
-import HttpException from "src/exceptions/HttpException";
+import { Neo4JAccessLayer } from "@database/neo4jAccessLayer";
+import HttpException from "@exceptions/HttpException";
 
 class LanguageService {
     private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();

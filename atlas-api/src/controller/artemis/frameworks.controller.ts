@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { Framework } from '../../interfaces/artemis/framework.interface';
-import FrameworksService from '../../services/artemis/framework.service';
+import { Framework } from '@interfaces/artemis/framework.interface';
+import FrameworksService from '@services/artemis/framework.service';
 
 class FrameworksController {
   public frameworksService = new FrameworksService();

@@ -22,7 +22,13 @@
     "@daos": "dist/daos",
     "@entities": "dist/entities",
     "@shared": "dist/shared",
-    "@server": "dist/Server"
+    "@server": "dist/Server",
+    "@controller": "dist/controller",
+    "@services": "dist/services",
+    "@dtos": "dist/dtos",
+    "@database": "dist/database",
+    "@interfaces": "dist/interfaces",
+    "@exceptions" : "dist/exceptions"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -70,11 +76,10 @@
     "http-status-codes": "^2.1.4",
     "jet-logger": "^1.0.4",
     "jsonfile": "^6.1.0",
-    "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "neo4j-driver": "^4.2.2",
-    "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0"
+    "module-alias": "^2.2.2",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/command-line-args": "^5.0.0",
@@ -85,6 +90,7 @@
     "@types/fs-extra": "^9.0.6",
     "@types/jasmine": "^3.6.3",
     "@types/jsonfile": "^6.0.0",
+    "@types/module-alias": "^2.0.0",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.22",
     "@types/supertest": "^2.0.10",
@@ -94,10 +100,12 @@
     "find": "^0.3.0",
     "fs-extra": "^9.1.0",
     "jasmine": "^3.6.4",
+    "module-alias": "^2.2.2",
     "nodemon": "^2.0.7",
     "supertest": "^6.1.2",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "winston-daily-rotate-file": "^4.5.0"
   }
 }

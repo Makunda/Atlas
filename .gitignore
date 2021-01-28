@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
-atlas-api/dist/
-web-application/dist/
+atlas-api/dist/*
+web-application/dist/*
+dist/*
 
 
 # local env files

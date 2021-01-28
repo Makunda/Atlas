@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import GroupingController from 'src/controller/demeter/grouping.controller';
-import Route from '../../interfaces/routes.interface';
+import GroupingController from '@controller/demeter/grouping.controller';
+import Route from '@interfaces/routes.interface';
 
 
 class GroupingRoute implements Route {
