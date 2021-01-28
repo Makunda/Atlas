@@ -14,11 +14,41 @@ It necessitates the version 4.0 or superior of the Neo4j database
 
 ## How to install the extension
 
-Make sure you've already installed _Demeter_ and _Artemis_. If you need more information on how to install them, please check these links: 
+### Install Demeter & Artemis
+Make sure you've already installed _Demeter_ and _Artemis_. 
+If you need more information on how to install them, please check these links: 
 - [How to install Demeter](https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki/Install-the-extension)_
 - [How to install Artemis](https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki/Install-the-extension)_
 
-### Configuration instructions
+💡 You can find the newer version of these extensions in the `extension/` folder once the zip is extracted.
+
+### Install the Atlas platform
+Run Atlas.exe and choose the folder where you want Atlas to be extracted.
+Once the operation is done, navigate to the folder: 
+
+#### What's in my installation package ?
+- The atlas application
+- node-v14.15.4-x64.msi, the official Node.js installer 
+- NSSM.exe The non-sucking service manager
+- This read me file
+- A copy of the GNU LGPL 3 in the license folder/
+- The launch script `run.bat`
+
+#### Install Node.js 
+
+- Install Node.js on your machine, using the node-v14.15.4-x64.msi installer.  
+Follow the different steps of the wizard.
+
+## Launch the Atlas platform
+**Automatic**  
+Open a command prompt in the Atlas directory and run `.\run.bat`
+
+**Manual operations**
+- Open a command prompt ( or Powershell ) in the `server/` folder
+- Execute the two following command :
+  - `npm install -g module-alias`
+  - `npm install`
+- To launch the server, you can now execute in the same console `npm run start`
 
 ## How to use the plateform
 (Coming soon)
@@ -29,8 +59,8 @@ None
 ## Roadmap
 
 ### Future releases
-- Atlas installer & Service deployer
-- Better API Binding 
+- Atlas installer & service deployer
+- Better API binding 
 - Better Artemis integration and functionnalities
 
 ## Release Notes
