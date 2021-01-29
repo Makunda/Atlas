@@ -40,12 +40,14 @@
         </v-row>
       </v-card-text>
     </v-card>
+
+
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import ActionTileViewer from "@/components/screens/recommendation/components/ArtemisViewer.vue";
+import ActionTileViewer from "@/components/artemis/modules/ArtemisViewer.vue";
 
 export default Vue.extend({
   name: "ExplorationStep",

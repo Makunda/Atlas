@@ -76,7 +76,7 @@ import {
   GroupingController,
   Level5Group,
   ModuleGroup
-} from "@/api/demeter/GroupingController";
+} from "@/api/demeter/grouping.controller";
 import Vue from "vue";
 
 export default Vue.component("DemeterModuleTile", {

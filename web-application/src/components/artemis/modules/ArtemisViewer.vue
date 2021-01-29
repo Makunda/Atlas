@@ -198,16 +198,14 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {
-  ArtemisController,
-  ArtemisFrameworkResult,
-} from "@/api/artemis/ArtemisController";
+import { ArtemisController } from "@/api/artemis/artemis.controller";
+import { AtlasController } from "@/api/atlas/atlas.controller";
 
-import DetectionController from "@/api/artemis/DetectionController";
+import DetectionController from "@/api/artemis/detection.controller";
 import {
   DetectionStatus,
   DetectionResult,
-  Framework,
+  Framework
 } from "@/api/interface/ApiArtemis.interface";
 
 export default Vue.extend({
@@ -215,12 +213,15 @@ export default Vue.extend({
 
   computed: {
     filteredFrameworks() {
-      console.log("Result size : " + this.resultDetection.filter((d) => {
-          return d.type == "Framework";
-        }).length);
-        
+      console.log(
+        "Result size : " +
+          this.resultDetection.filter(d => {
+            return d.type == "Framework";
+          }).length
+      );
+
       if (this.showOnlyFrameworks) {
-        return this.resultDetection.filter((d) => {
+        return this.resultDetection.filter(d => {
           return d.type == "Framework";
         });
       } else {
@@ -230,7 +231,7 @@ export default Vue.extend({
 
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   data: () => ({
@@ -240,11 +241,11 @@ export default Vue.extend({
         text: "Framework",
         align: "start",
         sortable: true,
-        value: "name",
+        value: "name"
       },
       { text: "Description", value: "description" },
       { text: "Category", value: "category" },
-      { text: "Detected as ", value: "type" },
+      { text: "Detected as ", value: "type" }
     ],
     showOnlyFrameworks: true as boolean,
 
@@ -276,7 +277,7 @@ export default Vue.extend({
 
     onlineMode: true as boolean,
     repositoryMode: true as boolean,
-    workspacePath: "" as string,
+    workspacePath: "" as string
   }),
 
   methods: {
@@ -296,7 +297,7 @@ export default Vue.extend({
           this.availableLanguages = res;
           this.selectedLanguage = res[0];
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve languages.", err);
         });
 
@@ -312,7 +313,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
           this.errorOnlineMode = true;
           console.error(
             "Failed to change online mode of Artemis Framework detector.",
@@ -333,7 +334,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.repositoryMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to change the repository setting of Artemis.",
             err
@@ -382,7 +383,7 @@ export default Vue.extend({
               break;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             `Failed to retrieve the status of the application ${this.application}.`,
             err
@@ -410,7 +411,7 @@ export default Vue.extend({
             );
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             `The analysis of the application ${this.application} failed to launch.`,
             err
@@ -435,27 +436,28 @@ export default Vue.extend({
             );
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(`Failed to stop the on-going analysis.`, err);
           this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`;
         });
     },
 
     constantStatusCheck() {
+      if (this.diplayNotInstalled) return;
       this.checkStatus();
       setTimeout(this.constantStatusCheck, 3000);
     },
 
     cancelDetection() {
       // Todo
-    },
+    }
   },
 
   mounted() {
     this.disabledTile = true;
     this.resultDetection = [];
 
-    ArtemisController.getArtemisVersion()
+    AtlasController.getArtemisVersion()
       .then(async (version: string) => {
         this.version = version;
         this.disabledTile = false;
@@ -463,9 +465,10 @@ export default Vue.extend({
         await this.getConfiguration();
         await this.checkStatus();
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(
-          "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension"
+          "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
+          err
         );
         this.diplayNotInstalled = true;
       });
@@ -479,8 +482,8 @@ export default Vue.extend({
       this.resultDetection = [];
       this.runningArtemis = false;
       this.checkStatus();
-    },
-  },
+    }
+  }
 });
 </script>
 

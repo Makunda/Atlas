@@ -21,10 +21,11 @@
       </v-container>
     </v-row>
 
-    <div id="notInstalledDemter" v-if="diplayNotInstalled">
+
+    <div id="notInstalledArtemis" v-if="!diplayNotInstalled">
         <h2 class="ma-auto text--h2" id="Message">
-        The Demeter extension is not installed on this server.<br />
-        You must install the Demeter extension to continue on this section.<br />
+        The Artemis extension is not installed on this instance.<br />
+        You must install the Artemis extension to continue on this section.<br/>
         Please install the extension from
         <a
           href="https://extend.castsoftware.com/#/extension?id=com.castsoftware.uc.artemis&version=2.0.0"
@@ -35,22 +36,23 @@
     </div>
 
   </v-container>
+
 </template>
 
 <script lang="ts">
-import GroupingTile from "@/components/screens/enrichment/tiles/GroupingTile.vue";
-// import DemeterGroupTile from "@/components/screens/main/tiles/DemeterGroupTile.vue";
-import TagViewer from "@/components/screens/enrichment/steps/TagViewer.vue";
 import Vue from "vue";
 import { AtlasController } from "@/api/atlas/atlas.controller";
+import ArtemisViewer from "@/components/artemis/modules/ArtemisViewer.vue";
+import DetectionExplorer from "@/components/artemis/modules/DetectionExplorer.vue";
+import FrameworkReviewer from "@/components/artemis/modules/FrameworkReviewer.vue";
 
 export default Vue.extend({
-  name: "Enrichment",
+  name: "Frameworks",
 
   components: {
-    GroupingTile,
-    // DemeterGroupTile,
-    TagViewer
+      ArtemisViewer,
+      DetectionExplorer,
+      FrameworkReviewer
   },
 
   computed: {
@@ -63,42 +65,46 @@ export default Vue.extend({
     loading: true,
     groupRecord: undefined as unknown,
     applicationName: "" as string,
-    diplayNotInstalled: false,
+    diplayNotInstalled: false as boolean,
+    version: "",
 
     // Navigation
     tab: 0,
     items: [
       {
-        view: "GroupingTile",
-        name: "Assistants",
+        view: "ArtemisViewer",
+        name: "Discover",
         icon: "mdi-assistant"
       },
       {
-        view: "TagViewer",
-        name: "Tags",
+        view: "FrameworkReviewer",
+        name: "Review",
         icon: "mdi-tag-multiple"
-      }
+      },
+      {
+        view: "DetectionExplorer",
+        name: "Operations",
+        icon: "mdi-assistant"
+      },
     ]
   }),
 
   mounted() {
     this.applicationName = this.$store.state.applicationName;
 
-    AtlasController.getDemeterVersion()
+    AtlasController.getArtemisVersion()
       .then(async (version: string) => {
         this.version = version;
       })
       .catch(err => {
         console.error(
-          "The Demeter extension wasn't detected. The functionnalities will be limited. Please install the Artemis extension",
+          "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
           err
         );
         this.diplayNotInstalled = true;
       });
-      
   },
 
-  methods: {},
 
   watch: {
     getApplicationName(newApp) {
@@ -109,18 +115,17 @@ export default Vue.extend({
 </script>
 
 <style>
-#notInstalledDemter {
-  min-width: 100%;
-  min-height: 100%;
-  position: absolute;
+#notInstalledArtemis {
+    position: absolute;
+    top: 0;
+    left: 0;
 
-  top: 0;
-  right: 0;
-  border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
-#notInstalledDemter #Message {
+#notInstalledArtemis #Message {
   display: block;
   color: white;
   text-align: center;
@@ -130,4 +135,5 @@ export default Vue.extend({
   right: 0;
   width: 100%;
 }
+
 </style>

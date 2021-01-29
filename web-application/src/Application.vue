@@ -116,11 +116,12 @@ import Vue from "vue";
 import {
   ApplicationController,
   ApplicationRecord
-} from "@/api/applications/ApplicationController";
+} from "@/api/applications/application.controller";
 
 import Administration from "@/components/screens/administration/Administration.vue";
 import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
 import Recommendation from "@/components/screens/recommendation/Recommendation.vue";
+import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
 import { Configuration } from "./Configuration";
 
 export default Vue.extend({
@@ -129,7 +130,8 @@ export default Vue.extend({
   components: {
     Enrichment,
     Administration,
-    Recommendation
+    Recommendation,
+    Frameworks
   },
 
   mounted() {
@@ -154,6 +156,11 @@ export default Vue.extend({
         name: "Recommendations",
         screen: "Recommendation",
         icon: "mdi-file-cad"
+      },
+      {
+        name: "Frameworks",
+        screen: "Frameworks",
+        icon: "mdi-package-variant-closed"
       },
       { name: "Administration", screen: "Administration", icon: "mdi-cog" }
     ],

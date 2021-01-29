@@ -58,7 +58,7 @@ export class GroupingController {
   public static async getApplicationGroupingCandidates(
     application: string
   ): Promise<GroupRecord | null> {
-    const request = "CALL demeter.api.get.candidates.level($appName)"
+    const request = "CALL demeter.api.get.candidates.level($appName)";
     const results: QueryResult = await this.neo4jal.execute(request);
 
     if (results.records.length == 0) {

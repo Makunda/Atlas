@@ -124,6 +124,10 @@ class FrameworksService {
     }
   }
 
+  /**
+   * Framework data to add 
+   * @param frameworkData Data to add
+   */
   public async addFramework(
     frameworkData: CreateFrameworkDto
   ): Promise<Framework> {

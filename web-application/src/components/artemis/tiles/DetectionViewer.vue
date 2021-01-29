@@ -51,21 +51,24 @@ export default Vue.component("DetectionViewer", {
         Date.now() - this.detection.timestampStart
       );
       setTimeout(this.countDownTimer, 1000);
-    },
+    }
   },
 
   mounted() {
     if (this.detection.status == DetectionStatus.Pending) {
       this.countDownTimer();
-      this.numResults = "Pending detection"
+      this.numResults = "Pending detection";
     } else {
       const elapsed =
         this.detection.timestampFinish - this.detection.timestampStart;
       this.toDisplay =
         elapsed > 0 ? this.milisecondsToDhms(elapsed) : "No information";
-      this.numResults = this.detection.data.length > 0 ?  this.detection.data.filter(x => x=="Framework").length + " framework detected" : "No framework detected";
+      this.numResults =
+        this.detection.data.length > 0
+          ? this.detection.data.filter(x => x == "Framework").length +
+            " framework detected"
+          : "No framework detected";
     }
-    
-  },
+  }
 });
 </script>

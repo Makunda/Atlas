@@ -155,8 +155,8 @@
             <v-card-text>
               <p>0 views to group</p>
               <p>
-                No view tags were found in your application <br />See
-                how to create views on the
+                No view tags were found in your application <br />See how to
+                create views on the
                 <a
                   href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
                   >Demeter Wiki</a
@@ -185,7 +185,7 @@
 </template>
 
 <script lang="ts">
-import { GroupingController } from "@/api/demeter/GroupingController";
+import { GroupingController } from "@/api/demeter/grouping.controller";
 import Vue from "vue";
 
 export default Vue.component("GroupingTile", {

@@ -1,6 +1,6 @@
 import { int, QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
-import { TagController, TagResult } from "./TagController";
+import { TagController, TagResult } from "./tag.controller";
 
 export interface UseCaseResult {
   name: string;

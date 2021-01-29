@@ -1,5 +1,6 @@
 import axios from "axios";
 import { QueryResult } from "neo4j-driver";
+import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
@@ -9,7 +10,7 @@ export interface ApplicationRecord {
 }
 
 export class ApplicationController {
-  private static API_BASE_URL = window.location.origin;
+  private static API_BASE_URL = ApiComUtils.getUrl();
   private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   public static async getListApplications(): Promise<string[]> {

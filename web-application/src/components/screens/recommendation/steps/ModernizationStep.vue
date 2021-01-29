@@ -148,7 +148,7 @@
 </template>
 
 <script lang="ts">
-import { GroupActionController } from "@/api/demeter/GroupActionController";
+import { GroupActionController } from "@/api/demeter/groupAction.controller";
 import Vue from "vue";
 
 export default Vue.extend({

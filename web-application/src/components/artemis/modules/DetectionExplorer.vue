@@ -8,17 +8,17 @@
     <v-row class="text-center pa-5">
       <v-spacer></v-spacer>
       <v-btn
-          color="charcoal"
-          class="ma-2 white--text"
-          :disabled="checkingStatus"
-          @click="reload()"
-          dark
-        >
-          Reload
-          <v-icon right dark>
-            mdi-reload
-          </v-icon>
-        </v-btn>
+        color="charcoal"
+        class="ma-2 white--text"
+        :disabled="checkingStatus"
+        @click="reload()"
+        dark
+      >
+        Reload
+        <v-icon right dark>
+          mdi-reload
+        </v-icon>
+      </v-btn>
     </v-row>
     <v-row class="mx-3 my-7">
       <v-card class="pa-3" style="width: 100%">
@@ -102,7 +102,7 @@
                 <v-expansion-panel-header expand-icon="mdi-menu-down">
                   <h3>{{ item.application }}</h3>
                   <v-spacer></v-spacer>
-                  <span style="max-width: 100px"  class="text-body-1"
+                  <span style="max-width: 100px" class="text-body-1"
                     >Status :
                     <v-icon class="mx-1" color="teal"> mdi-check </v-icon></span
                   >
@@ -138,7 +138,7 @@
                 <v-expansion-panel-header expand-icon="mdi-menu-down">
                   <h3>{{ item.application }}</h3>
                   <v-spacer></v-spacer>
-                  <span style="max-width: 100px"  class="text-body-1"
+                  <span style="max-width: 100px" class="text-body-1"
                     >Status :
                     <v-icon color="error">
                       mdi-alert-circle
@@ -147,7 +147,7 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <div class="d-flex flex-column">
-                   <DetectionViewer v-bind:detection="item"> </DetectionViewer>
+                    <DetectionViewer v-bind:detection="item"> </DetectionViewer>
                     <div class="d-flex flex-row">
                       <v-btn
                         style="width: 150px"
@@ -171,15 +171,15 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DetectionController from "@/api/artemis/DetectionController";
+import DetectionController from "@/api/artemis/detection.controller";
 import { DetectionResult } from "@/api/interface/ApiArtemis.interface";
-import DetectionViewer from "@/components/screens/administration/tiles/DetectionViewer.vue";
+import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
 
 export default Vue.extend({
   name: "DetectionExplorer",
 
   components: {
-    DetectionViewer,
+    DetectionViewer
   },
 
   data: () => ({
@@ -189,7 +189,7 @@ export default Vue.extend({
 
     getOperationErrors: "",
 
-    loadingPending: false,
+    loadingPending: false
   }),
 
   methods: {
@@ -198,7 +198,7 @@ export default Vue.extend({
         .then((res: DetectionResult[]) => {
           this.pendingOperations = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve pending operations.", err);
           this.getOperationErrors = `Failed to retrieve pending operations : ${err}`;
         })
@@ -212,7 +212,7 @@ export default Vue.extend({
         .then((res: DetectionResult[]) => {
           this.successOperations = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve successful operations.", err);
           this.getOperationErrors = `Failed to retrieve successful operations : ${err}`;
         })
@@ -226,7 +226,7 @@ export default Vue.extend({
         .then((res: DetectionResult[]) => {
           this.failedOperations = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve failed operations.", err);
           this.getOperationErrors = `Failed to retrieve failed operations : ${err}`;
         })
@@ -237,23 +237,24 @@ export default Vue.extend({
 
     stopDetection(detection: DetectionResult) {
       this.displayErrorDetection = false;
-      DetectionController.cancelDetection(detection.application, detection.language)
-      .then((res: boolean) => {
+      DetectionController.cancelDetection(
+        detection.application,
+        detection.language
+      )
+        .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
-          if(res) {
+          if (res) {
             this.runningArtemis = false;
           } else {
-            throw new Error("The server refused to stopped the detection. Check the logs.");
+            throw new Error(
+              "The server refused to stopped the detection. Check the logs."
+            );
           }
         })
-        .catch((err) => {
-          console.error(
-            `Failed to stop the on-going analysis.`,
-            err
-          );
-          this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`; ;
+        .catch(err => {
+          console.error(`Failed to stop the on-going analysis.`, err);
+          this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`;
         });
-        
     },
 
     reload() {
@@ -261,11 +262,11 @@ export default Vue.extend({
       this.getPendingOperations();
       this.getSuccessfulOperations();
       this.getPendingOperations();
-    },
+    }
   },
 
   mounted() {
     this.reload();
-  },
+  }
 });
 </script>

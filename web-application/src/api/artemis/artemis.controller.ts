@@ -1,5 +1,6 @@
 import axios from "axios";
 import { QueryResult } from "neo4j-driver";
+import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
@@ -11,7 +12,7 @@ export class ArtemisFrameworkResult {
 }
 
 export class ArtemisController {
-  private static API_BASE_URL = window.location.origin;
+  private static API_BASE_URL = ApiComUtils.getUrl();
   private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   /**
@@ -29,7 +30,9 @@ export class ArtemisController {
         if (Array.isArray(apiResponse.data)) {
           languageList = apiResponse.data;
         }
-        console.info(`${languageList.length} languages were retrieved. ${languageList}`);
+        console.info(
+          `${languageList.length} languages were retrieved. ${languageList}`
+        );
       } else {
         console.warn(`Failed to retrieve languages. Status (${res.status})`);
       }
@@ -43,32 +46,7 @@ export class ArtemisController {
     }
   }
 
-  /**
-   * Get the version of the Artemis extension.
-   * Throw an error if the extension is not installed
-   */
-  public static async getArtemisVersion(): Promise<string> {
-    const url = ArtemisController.API_BASE_URL + "/api/artemis/utils/version";
 
-    try {
-      const res = await axios.get(url);
-      let version: string;
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        version = String(apiResponse.data);
-      } else {
-        console.warn(`Failed to retrieve version. Status (${res.status})`);
-      }
-
-      return version;
-    } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error
-      );
-    }
-  }
 
   /**
    * Set the workspace of artemis
@@ -220,7 +198,7 @@ export class ArtemisController {
         name: name,
         description: description,
         category: category,
-        detectedAs: detectedAs,
+        detectedAs: detectedAs
       });
     }
 
