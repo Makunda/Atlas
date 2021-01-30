@@ -332,12 +332,12 @@ import Vue from "vue";
 
 export default Vue.component("FrameworkReviewer", {
   data: () => ({
-    itemsPerPageArray: [4, 8, 12],
+    itemsPerPageArray: [8, 12, 50],
     search: "",
     filter: {},
     sortDesc: false,
     page: 1,
-    itemsPerPage: 4,
+    itemsPerPage: 8,
     sortBy: "name",
     keys: [
       "Name",
@@ -476,6 +476,11 @@ export default Vue.component("FrameworkReviewer", {
 .frameworkListItem {
   cursor: pointer;
 }
+
+.frameworkListItem .v-card__subtitle {
+  padding-bottom: 4px !important;
+}
+
 #frameworkEditorZone {
   position: relative;
 }

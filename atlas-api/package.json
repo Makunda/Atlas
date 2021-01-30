@@ -19,6 +19,7 @@
     "exec": "ts-node -r tsconfig-paths/register ./src"
   },
   "_moduleAliases": {
+    "@agents": "dist/agents",
     "@daos": "dist/daos",
     "@entities": "dist/entities",
     "@shared": "dist/shared",

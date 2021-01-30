@@ -19,6 +19,12 @@
         "frameworkNode" : "ArtemisFramework"
     },
 
+    "agent": {
+        "reload" : {
+            "frameworkAgent" : 2000
+        }
+    },
+
     "authentication": {
         "reloadDelay" : 30000
     }
