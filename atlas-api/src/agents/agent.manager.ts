@@ -38,6 +38,24 @@ export class AgentManager {
         this.getAgent(agent).launch();
     }
 
+    /**
+     * Get the status of a specifc agent
+     * @param agent Name of the agent
+     */
+    public getAgentStatus(agent:Agent) : boolean {
+        return this.getAgent(agent).getStatus();
+    }
+
+    /**
+     * Initialize the different agents
+     */
+    public initialize() {
+        this.frameworkAgent.launch();
+    }
+
+    /**
+     * Get the current instance of the local manager
+     */
     public static getInstance() {
         if(this.INSTANCE == null) {
             this.INSTANCE = new AgentManager();

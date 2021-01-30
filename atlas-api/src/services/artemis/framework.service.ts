@@ -4,7 +4,7 @@ import HttpException from "../../exceptions/HttpException";
 import { Framework } from "@interfaces/artemis/framework.interface";
 import { logger } from "@shared/logger";
 import { Neo4JAccessLayer } from "../../database/neo4jAccessLayer";
-import { QueryResult } from "neo4j-driver";
+import { int, Integer, QueryResult } from "neo4j-driver";
 
 class FrameworksService {
   private ARTEMIS_LABEL = config.get("artemis.frameworkNode");
@@ -174,6 +174,28 @@ class FrameworksService {
       return this.convertRecordToFramework(singleRecord);
     }
   }
+
+
+  public async getNumberFrameworks() : Promise<number> {
+    const req: string = `CALL artemis.api.get.framework.number()`;
+    const results = await this.neo4jAl.execute(req);
+
+    if (!results.records || results.records.length == 0) return 0;
+
+    return int(results.records[0].get(0)).toNumber();
+  }
+
+  public async getNumberFrameworksWithInternalType(internalType: string) : Promise<number> {
+    const req: string = `CALL artemis.api.get.framework.number($internalType)`;
+    const results = await this.neo4jAl.executeWithParameters(req, { internalType : internalType});
+
+    if (!results.records || results.records.length == 0) return 0;
+
+    return int(results.records[0].get(0)).toNumber();
+  }
+
+  // TODO Continue here
+  public async getFrameworksBatch()
 }
 
 export default FrameworksService;
