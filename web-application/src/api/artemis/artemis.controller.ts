@@ -177,31 +177,5 @@ export class ArtemisController {
     return newValue.split(",");
   }
 
-  /**
-   * Launch the detection on a module
-   */
-  public static async launchDetection(
-    applicationName: string,
-    language: string
-  ): Promise<ArtemisFrameworkResult[]> {
-    const request = `CALL artemis.launch.detection("${applicationName}", "${language}", true);`;
 
-    const resultList: ArtemisFrameworkResult[] = [];
-    const results: QueryResult = await this.neo4jal.execute(request);
-
-    for (let i = 0; i < results.records.length; i++) {
-      const name = results.records[i].get("name");
-      const description = results.records[i].get("description");
-      const detectedAs = results.records[i].get("detectedAs");
-      const category = results.records[i].get("category");
-      resultList.push({
-        name: name,
-        description: description,
-        category: category,
-        detectedAs: detectedAs
-      });
-    }
-
-    return resultList;
-  }
 }

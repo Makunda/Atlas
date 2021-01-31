@@ -48,7 +48,8 @@ export default class FrameworkAgent implements IAgent {
       }
     }
 
-    setTimeout(this.run, this.delay);
+    const that = this;
+    setTimeout(function() { that.run() }, this.delay);
   }
 
   public launch() {

@@ -19,8 +19,8 @@ class ExtensionRoute implements Route {
   private initializeRoutes() {
     this.router.get(`${this.path}/demeter/version`, this.demeterController.getVersion);
     this.router.get(`${this.path}/demeter/validity`, this.extensionController.getValidityDemeter);
-    this.router.get(`${this.path}/atlas/version`, this.artemisController.getVersion);
-    this.router.get(`${this.path}/atlas/validity`, this.extensionController.getValidityArtemis);
+    this.router.get(`${this.path}/artemis/version`, this.artemisController.getVersion);
+    this.router.get(`${this.path}/artemis/validity`, this.extensionController.getValidityArtemis);
   }
 }
 

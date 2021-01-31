@@ -109,19 +109,19 @@
                                     <v-spacer></v-spacer>
                                     <v-icon
                                       color="green"
-                                      v-if="item.status == 'validFramework'"
+                                      v-if="item.type == 'Framework' && item.description!='' "
                                     >
                                       mdi-check-circle
                                     </v-icon>
                                     <v-icon
                                       color="orange"
-                                      v-if="item.status == 'toValidFramework'"
+                                      v-if="item.type == 'Framework' && item.description==''"
                                     >
                                       mdi-check-circle
                                     </v-icon>
                                     <v-icon
-                                      color="orange"
-                                      v-if="item.status == 'notFramewok'"
+                                      color="red"
+                                      v-if="item.type != 'Framework'"
                                     >
                                       mdi-checkbox-blank-circle
                                     </v-icon>
@@ -173,7 +173,8 @@
                               class="mr-4
             grey--text"
                             >
-                              Page {{ page }} of {{ numberOfPages }}
+                              Page {{ page }} of
+                              {{ numberOfPages() }}
                             </span>
                             <v-btn
                               fab
@@ -244,7 +245,7 @@
                   </v-card-title>
                   <v-card-text v-if="editFramework != null">
                     <v-container>
-                      <v-row  class="py-1">
+                      <v-row class="py-1">
                         <v-col cols="4">
                           <v-subheader class="text-h6">
                             Framework type :
@@ -257,11 +258,11 @@
                             :items="frameworkTypes"
                             item-text="name"
                             item-value="value"
-                            label="Select"
+                            label="Select type"
+                            hint="Type of the object ( Framework or not Framework )"
                             persistent-hint
                             return-object
                             single-line
-                            
                           ></v-select>
                         </v-col>
                       </v-row>
@@ -291,10 +292,9 @@
                         <v-col cols="8">
                           <v-text-field
                             v-model="editFramework.location"
-                            :rules="rules"
                             counter="25"
                             hint="Location of the framework ( website, repository ...)"
-                            label="Regular"
+                            label="Location"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -328,6 +328,7 @@
 
 <script lang="ts">
 import { Framework } from "@/api/interface/ApiArtemis.interface";
+import { FrameworkController } from "@/api/artemis/framework.controller";
 import Vue from "vue";
 
 export default Vue.component("FrameworkReviewer", {
@@ -350,57 +351,8 @@ export default Vue.component("FrameworkReviewer", {
       "Percentage of detection",
     ],
     items: [
-      {
-        name: "Test Framework 1",
-        description: "string",
-        type: "string",
-        category: "string",
-        internalType: "Cobol",
-        location: "string",
-        discoveryDate: "string",
-        percentageOfDetection: 0.5,
-      },
-      {
-        name: "Test Framework 2",
-        description: "string",
-        type: "string",
-        category: "string",
-        internalType: "Cobol",
-        location: "string",
-        discoveryDate: "string",
-        percentageOfDetection: 0.5,
-      },
-      {
-        name: "Test Framework 3",
-        description: "string",
-        type: "string",
-        category: "string",
-        internalType: "Cobol",
-        location: "string",
-        discoveryDate: "string",
-        percentageOfDetection: 0.5,
-      },
-      {
-        name: "Test Framework 4",
-        description: "string",
-        type: "string",
-        category: "string",
-        internalType: "Cobol",
-        location: "string",
-        discoveryDate: "string",
-        percentageOfDetection: 0.5,
-      },
-      {
-        name: "Test Framework 5",
-        description: "string",
-        type: "string",
-        category: "string",
-        internalType: "Cobol",
-        location: "string",
-        discoveryDate: "string",
-        percentageOfDetection: 0.5,
-      },
     ] as Framework[],
+    numberItems: 0,
 
     currentIndex: 0 as number,
     focusedFramework: null,
@@ -418,17 +370,10 @@ export default Vue.component("FrameworkReviewer", {
       },
     ],
 
-    framewokCategories: [
-      "IBM Utilities",
-      "IBM Frameworks",
-      "IBM Spagetthis"
-    ]
+    framewokCategories: ["IBM Utilities", "IBM Frameworks", "IBM Spagetthis"],
   }),
 
   computed: {
-    numberOfPages() {
-      return Math.ceil(this.items.length / this.itemsPerPage);
-    },
     filteredKeys() {
       return this.keys.filter((key) => key !== "Name");
     },
@@ -456,18 +401,60 @@ export default Vue.component("FrameworkReviewer", {
       console.log("Delete the framework : ", this.focusedFramework);
     },
 
+    // Get number of frameworks
+    getNumberFrameworks() {
+      FrameworkController.getTotalFramework()
+        .then((res: number) => {
+          this.numberItems = res;
+        })
+        .catch((err) => {
+          console.error("Failed to retrieve the list of frameworks.", err);
+        });
+    },
+
+    refreshFramework() {
+      const startIndex = this.page * this.itemsPerPage;
+      const stopIndex = startIndex + this.itemsPerPage;
+      console.log(`Frameworks between ${startIndex} and ${stopIndex}`);
+      
+
+      this.getNumberFrameworks();
+
+      FrameworkController.getFrameworkBatch(startIndex, stopIndex)
+        .then((res: Framework[]) => {
+          console.log(`Found ${res.length} frameworks`);
+          
+          this.items = res;
+        })
+        .catch((err) => {
+          console.error("Failed to retrieve the list of frameworks.", err);
+        });
+    },
+
     nextPage() {
       this.currentIndex = 0;
-      if (this.page + 1 <= this.numberOfPages) this.page += 1;
+      this.refreshFramework();
+      if (this.page + 1 <= this.numberOfPages()) this.page += 1;
     },
+
     formerPage() {
       this.currentIndex = 0;
+      this.refreshFramework();
       if (this.page - 1 >= 1) this.page -= 1;
     },
+
     updateItemsPerPage(number) {
       this.itemsPerPage = number;
     },
 
+    numberOfPages(): number {
+      return Math.ceil(this.numberItems / this.itemsPerPage);
+    },
+  },
+
+  mounted() {
+    this.getNumberFrameworks();
+    this.refreshFramework();
   },
 });
 </script>

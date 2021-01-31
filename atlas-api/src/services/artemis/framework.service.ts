@@ -175,7 +175,9 @@ class FrameworksService {
     }
   }
 
-
+  /**
+   * Get the total number of framework in the database
+   */
   public async getNumberFrameworks() : Promise<number> {
     const req: string = `CALL artemis.api.get.framework.number()`;
     const results = await this.neo4jAl.execute(req);
@@ -185,6 +187,10 @@ class FrameworksService {
     return int(results.records[0].get(0)).toNumber();
   }
 
+  /**
+   * Get the total number of framework of a certain type
+   * @param internalType Internal Type to look for
+   */
   public async getNumberFrameworksWithInternalType(internalType: string) : Promise<number> {
     const req: string = `CALL artemis.api.get.framework.number($internalType)`;
     const results = await this.neo4jAl.executeWithParameters(req, { internalType : internalType});
@@ -194,8 +200,31 @@ class FrameworksService {
     return int(results.records[0].get(0)).toNumber();
   }
 
-  // TODO Continue here
-  public async getFrameworksBatch()
+  /**
+   * Get a part of the frameworks determined by their index
+   * @param start Start index
+   * @param stop Stop index
+   * @param internalType Internal type to search (Optionnal)
+   */
+  public async getFrameworksBatch(start:number, stop:number, internalType?:string): Promise<Framework[]> {
+    let res: QueryResult;
+    if(internalType && internalType!="") {
+      res = await this.neo4jAl.executeWithParameters("CALL artemis.api.get.framework.batch($start, $stop, $internalType);", 
+      { start: start, stop: stop, internalType: internalType });
+    } else {
+      res = await this.neo4jAl.executeWithParameters("CALL artemis.api.get.framework.batch($start, $stop);", 
+      { start: start, stop: stop });
+    }
+
+    let returnList: Framework[] = [];
+    let singleRecord;
+    for (let index = 0; index < res.records.length; index++) {
+      singleRecord = res.records[index];
+      returnList.push(this.convertRecordToFramework(singleRecord));
+    }
+
+    return returnList;
+  }
 }
 
 export default FrameworksService;

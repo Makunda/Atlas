@@ -277,7 +277,10 @@ export default Vue.extend({
 
     onlineMode: true as boolean,
     repositoryMode: true as boolean,
-    workspacePath: "" as string
+    workspacePath: "" as string,
+
+    // On destroy
+    flaggedAsToDestroy : false
   }),
 
   methods: {
@@ -445,6 +448,7 @@ export default Vue.extend({
     constantStatusCheck() {
       if (this.diplayNotInstalled) return;
       this.checkStatus();
+      if(this.flaggedAsToDestroy) return;
       setTimeout(this.constantStatusCheck, 3000);
     },
 
@@ -474,6 +478,10 @@ export default Vue.extend({
       });
 
     this.constantStatusCheck();
+  },
+
+  beforeDestroy() {
+    this.flaggedAsToDestroy = true;
   },
 
   watch: {

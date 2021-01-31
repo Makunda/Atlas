@@ -1,5 +1,6 @@
 export class ApiComUtils {
   public static getUrl(): string {
-    return window.location.origin;
+    return "http://localhost:3000"
+      
   }
 }

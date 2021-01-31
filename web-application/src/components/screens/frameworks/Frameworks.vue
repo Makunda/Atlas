@@ -22,7 +22,7 @@
     </v-row>
 
 
-    <div id="notInstalledArtemis" v-if="!diplayNotInstalled">
+    <div id="notInstalledArtemis" v-if="diplayNotInstalled">
         <h2 class="ma-auto text--h2" id="Message">
         The Artemis extension is not installed on this instance.<br />
         You must install the Artemis extension to continue on this section.<br/>
@@ -91,7 +91,7 @@ export default Vue.extend({
 
   mounted() {
     this.applicationName = this.$store.state.applicationName;
-
+    console.log("Checking if the Artemis extension is installed..")
     AtlasController.getArtemisVersion()
       .then(async (version: string) => {
         this.version = version;

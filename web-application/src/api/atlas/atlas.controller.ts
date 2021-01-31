@@ -40,7 +40,7 @@ export class AtlasController {
    */
   public static async getArtemisVersion(): Promise<string> {
     const url =
-      AtlasController.API_BASE_URL + "api/atlas/extensions/artemis/version";
+      AtlasController.API_BASE_URL + "/api/atlas/extensions/artemis/version";
 
     try {
       const res = await axios.get(url);
