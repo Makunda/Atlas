@@ -11,9 +11,9 @@ class FrameworksService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   // Detections
-  private pendingApplicationDetection:string[] = []
-  private failedApplicationDetection:string[] = []
-  private finishedApplicationDetection:Map<string, Framework[]> = new Map()
+  private pendingApplicationDetection: string[] = [];
+  private failedApplicationDetection: string[] = [];
+  private finishedApplicationDetection: Map<string, Framework[]> = new Map();
 
   /**
    * Convert a neo4j record to a Framework
@@ -54,6 +54,26 @@ class FrameworksService {
       );
       throw new HttpException(500, "Internal error");
     }
+  }
+
+  /**
+   * Get a list of (max 10) frameworks containing the search item
+   * @param name Name to search
+   */
+  public async searchFrameworkByName(name: string): Promise<Framework[]> {
+    let res: QueryResult = await this.neo4jAl.executeWithParameters(
+      "CALL artemis.api.find.framework.name.contains($name, 10);",
+      { name: name }
+    );
+
+    let returnList: Framework[] = [];
+    let singleRecord;
+    for (let index = 0; index < res.records.length; index++) {
+      singleRecord = res.records[index];
+      returnList.push(this.convertRecordToFramework(singleRecord));
+    }
+
+    return returnList;
   }
 
   /**
@@ -125,7 +145,7 @@ class FrameworksService {
   }
 
   /**
-   * Framework data to add 
+   * Framework data to add
    * @param frameworkData Data to add
    */
   public async addFramework(
@@ -178,7 +198,7 @@ class FrameworksService {
   /**
    * Get the total number of framework in the database
    */
-  public async getNumberFrameworks() : Promise<number> {
+  public async getNumberFrameworks(): Promise<number> {
     const req: string = `CALL artemis.api.get.framework.number()`;
     const results = await this.neo4jAl.execute(req);
 
@@ -191,9 +211,13 @@ class FrameworksService {
    * Get the total number of framework of a certain type
    * @param internalType Internal Type to look for
    */
-  public async getNumberFrameworksWithInternalType(internalType: string) : Promise<number> {
+  public async getNumberFrameworksWithInternalType(
+    internalType: string
+  ): Promise<number> {
     const req: string = `CALL artemis.api.get.framework.number($internalType)`;
-    const results = await this.neo4jAl.executeWithParameters(req, { internalType : internalType});
+    const results = await this.neo4jAl.executeWithParameters(req, {
+      internalType: internalType,
+    });
 
     if (!results.records || results.records.length == 0) return 0;
 
@@ -206,14 +230,22 @@ class FrameworksService {
    * @param stop Stop index
    * @param internalType Internal type to search (Optionnal)
    */
-  public async getFrameworksBatch(start:number, stop:number, internalType?:string): Promise<Framework[]> {
+  public async getFrameworksBatch(
+    start: number,
+    stop: number,
+    internalType?: string
+  ): Promise<Framework[]> {
     let res: QueryResult;
-    if(internalType && internalType!="") {
-      res = await this.neo4jAl.executeWithParameters("CALL artemis.api.get.framework.batch($start, $stop, $internalType);", 
-      { start: start, stop: stop, internalType: internalType });
+    if (internalType && internalType != "") {
+      res = await this.neo4jAl.executeWithParameters(
+        "CALL artemis.api.get.framework.batch($start, $stop, $internalType);",
+        { start: start, stop: stop, internalType: internalType }
+      );
     } else {
-      res = await this.neo4jAl.executeWithParameters("CALL artemis.api.get.framework.batch($start, $stop);", 
-      { start: start, stop: stop });
+      res = await this.neo4jAl.executeWithParameters(
+        "CALL artemis.api.get.framework.batch($start, $stop);",
+        { start: start, stop: stop }
+      );
     }
 
     let returnList: Framework[] = [];
@@ -221,6 +253,27 @@ class FrameworksService {
     for (let index = 0; index < res.records.length; index++) {
       singleRecord = res.records[index];
       returnList.push(this.convertRecordToFramework(singleRecord));
+    }
+
+    return returnList;
+  }
+
+  /**
+   * Get the list of internal type
+   */
+  public async getFrameworksInternalTypes(): Promise<string[]> {
+    let res: QueryResult = await this.neo4jAl.execute(
+      "CALL artemis.api.get.framework.internalType()"
+    );
+
+    let returnList: string[] = [];
+    let singleRecord;
+    for (let index = 0; index < res.records.length; index++) {
+      singleRecord = String(res.records[index].get(0));
+      
+      if(singleRecord.length == 0 || singleRecord == "null") continue;
+
+      returnList.push(singleRecord);
     }
 
     return returnList;

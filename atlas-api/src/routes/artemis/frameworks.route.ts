@@ -14,8 +14,11 @@ class FrameworksRoute implements Route {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/find/:name(\\w+)`, this.frameworksController.getFrameworkByName);
+    this.router.get(`${this.path}/search/:name(\\w+)`, this.frameworksController.getFrameworkByName);
     this.router.get(`${this.path}/total`, this.frameworksController.getNumberFrameworks);
     this.router.get(`${this.path}/batch`, this.frameworksController.getFrameworksBatch);
+    this.router.get(`${this.path}/internalTypes`, this.frameworksController.getFrameworksInternalTypes);
+    this.router.post(`${this.path}/update`, this.frameworksController.updateFrameworks);
   }
 }
 

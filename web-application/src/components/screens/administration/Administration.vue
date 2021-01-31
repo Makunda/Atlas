@@ -37,7 +37,6 @@
         <v-row v-if="tab == 2">
           <TagStudio></TagStudio>
         </v-row>
-
       </v-container>
     </v-row>
   </v-container>

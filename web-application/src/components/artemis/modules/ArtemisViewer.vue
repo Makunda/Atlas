@@ -280,7 +280,7 @@ export default Vue.extend({
     workspacePath: "" as string,
 
     // On destroy
-    flaggedAsToDestroy : false
+    flaggedAsToDestroy: false
   }),
 
   methods: {
@@ -448,7 +448,7 @@ export default Vue.extend({
     constantStatusCheck() {
       if (this.diplayNotInstalled) return;
       this.checkStatus();
-      if(this.flaggedAsToDestroy) return;
+      if (this.flaggedAsToDestroy) return;
       setTimeout(this.constantStatusCheck, 3000);
     },
 

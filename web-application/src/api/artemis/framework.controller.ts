@@ -83,6 +83,70 @@ export class FrameworkController {
     }
   }
 
+  /**
+   * Search for a framework where the name contains a specific string
+   * @param toSearch String to search
+   */
+  public static async searchFramework(toSearch: string) {
+    const url =
+      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/search/";
+    try {
+      // Build the URl ( optional type internalType)
+      const res = await axios.get(url + toSearch);
+      let typeList: Framework[] = [];
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          typeList = apiResponse.data;
+        }
+      } else {
+        console.warn(`Failed to search the frameworks. Status (${res.status})`);
+      }
+
+      return typeList;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to search the frameworks.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Get the list of internal type for the frameworks
+   */
+  public static async getInternalTypes() {
+    const url =
+      FrameworkController.API_BASE_URL +
+      "/api/artemis/frameworks/internalTypes";
+    try {
+      // Build the URl ( optional type internalType)
+      const res = await axios.get(url);
+      let typeList: string[] = [];
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          typeList = apiResponse.data;
+        }
+      } else {
+        console.warn(
+          `Failed to retrieve list of internal type. Status (${res.status})`
+        );
+      }
+
+      return typeList;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve list of internal type.`,
+        error
+      );
+      throw error;
+    }
+  }
+
   // Get a batch of framework ( filter by internal type possible )
   public static async getFrameworkBatch(
     start: number,
@@ -110,6 +174,37 @@ export class FrameworkController {
         if (Array.isArray(apiResponse.data)) {
           detectionList = apiResponse.data;
         }
+      } else {
+        console.warn(
+          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`
+        );
+      }
+
+      return detectionList;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve a batch frameworks by internalType.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Update a framework ( the name will be used 
+   * @param framework Framework updated 
+   */
+  public static async updateFrameworks(framework:Framework) : Promise<Framework> {
+    const url =
+      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/update";
+
+    try {
+      const res = await axios.post(url, framework);
+      let detectionList: Framework = null;
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        detectionList = apiResponse.data as Framework;
       } else {
         console.warn(
           `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`

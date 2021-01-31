@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Framework } from '@interfaces/artemis/framework.interface';
 import FrameworksService from '@services/artemis/framework.service';
+import { CreateFrameworkDto } from '@dtos/artemis/frameworks.dto';
 
 class FrameworksController {
   public frameworksService = new FrameworksService();
@@ -25,6 +26,26 @@ class FrameworksController {
         res.status(404).send({ data: null, message: 'Not Found' });
       } else {
         res.status(200).json({ data: findFramework, message: 'findByName' });
+      }
+      
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // Search  for a string in the frameworks names
+  public searchFrameworkByName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+
+      let name = String(req.params.name);
+      name = name.replace("+", " ");
+
+      let resultsSearch: Framework[] = await this.frameworksService.searchFrameworkByName(name);
+       
+      if(resultsSearch.length == 0) {
+        res.status(404).send({ data: null, message: 'Not Found' });
+      } else {
+        res.status(200).json({ data: resultsSearch, message: 'Search' });
       }
       
     } catch (error) {
@@ -71,6 +92,28 @@ class FrameworksController {
       }
        
       res.status(200).send({ data: frameworks, message: 'Batch' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Get internal types
+  public getFrameworksInternalTypes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+    
+      const types:string[] = await this.frameworksService.getFrameworksInternalTypes();
+      res.status(200).send({ data: types, message: 'Internal types' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Update frameworks
+  public updateFrameworks = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const frameworkData : CreateFrameworkDto = Object.assign({}, req.body);
+      await this.frameworksService.updateFramework(frameworkData.name, frameworkData);
+      res.status(200).send({ data: frameworkData, message: 'Updated' });
     } catch (error) {
       next(error);
     }

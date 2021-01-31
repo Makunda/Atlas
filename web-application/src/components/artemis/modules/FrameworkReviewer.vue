@@ -84,6 +84,7 @@
                         :search="search"
                         :sort-by="sortBy.toLowerCase()"
                         :sort-desc="sortDesc"
+                        :loading="loadingTable"
                         hide-default-footer
                       >
                         <!-- Frameworks displayed on the left -->
@@ -109,13 +110,19 @@
                                     <v-spacer></v-spacer>
                                     <v-icon
                                       color="green"
-                                      v-if="item.type == 'Framework' && item.description!='' "
+                                      v-if="
+                                        item.type == 'Framework' &&
+                                          item.description != ''
+                                      "
                                     >
                                       mdi-check-circle
                                     </v-icon>
                                     <v-icon
                                       color="orange"
-                                      v-if="item.type == 'Framework' && item.description==''"
+                                      v-if="
+                                        item.type == 'Framework' &&
+                                          item.description == ''
+                                      "
                                     >
                                       mdi-check-circle
                                     </v-icon>
@@ -282,6 +289,21 @@
                           ></v-combobox>
                         </v-col>
                       </v-row>
+                      <v-row class="py-1">
+                        <v-col cols="4">
+                          <v-subheader class="text-h6">
+                            Internal Type :
+                          </v-subheader>
+                        </v-col>
+
+                        <v-col cols="8">
+                          <v-combobox
+                            v-model="editFramework.internalType"
+                            :items="internalTypes"
+                            label="Select a internal type or create a new one"
+                          ></v-combobox>
+                        </v-col>
+                      </v-row>
                       <v-row class="py-1 pb-5">
                         <v-col cols="4">
                           <v-subheader class="text-h6">
@@ -312,7 +334,7 @@
                   </v-card-text>
                   <v-card-actions v-if="editFramework != null">
                     <v-spacer></v-spacer>
-                    <v-btn class="ma-1" color="green" plain>
+                    <v-btn class="ma-1" color="green" plain @click="updateFramework(editFramework)">
                       Update the Framework
                     </v-btn>
                   </v-card-actions>
@@ -348,10 +370,9 @@ export default Vue.component("FrameworkReviewer", {
       "Internal type",
       "Location",
       "Discovery date",
-      "Percentage of detection",
+      "Percentage of detection"
     ],
-    items: [
-    ] as Framework[],
+    items: [] as Framework[],
     numberItems: 0,
 
     currentIndex: 0 as number,
@@ -362,21 +383,23 @@ export default Vue.component("FrameworkReviewer", {
     frameworkTypes: [
       {
         name: "Framework",
-        value: "Framework",
+        value: "Framework"
       },
       {
         name: "Not a Framework",
-        value: "NotFramework",
-      },
+        value: "NotFramework"
+      }
     ],
 
     framewokCategories: ["IBM Utilities", "IBM Frameworks", "IBM Spagetthis"],
+    internalTypes: ["Cobol", "Cobol Programs"],
+    loadingTable: false
   }),
 
   computed: {
     filteredKeys() {
-      return this.keys.filter((key) => key !== "Name");
-    },
+      return this.keys.filter(key => key !== "Name");
+    }
   },
 
   methods: {
@@ -407,29 +430,52 @@ export default Vue.component("FrameworkReviewer", {
         .then((res: number) => {
           this.numberItems = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
         });
+    },
+
+    getInternalTypes() {
+      FrameworkController.getInternalTypes()
+        .then((res:string[]) => {
+          this.internalTypes = res;
+          console.log("Types found : ", this.internalTypes)
+        }).catch(err => {
+          console.error("Failed to retrieve the list of internal types", err);
+        })
+    },
+
+    updateFramework(item:Framework) {
+      console.log("To update : ", item);
+      FrameworkController.updateFrameworks(item).then((res:Framework) => {
+        console.log("New Framework : ", res);
+      }).catch(err => {
+        console.error("Failed to update the framework.", err);
+      })
     },
 
     refreshFramework() {
       const startIndex = this.page * this.itemsPerPage;
       const stopIndex = startIndex + this.itemsPerPage;
-      console.log(`Frameworks between ${startIndex} and ${stopIndex}`);
-      
-
       this.getNumberFrameworks();
+
+      this.loadingTable = true;
 
       FrameworkController.getFrameworkBatch(startIndex, stopIndex)
         .then((res: Framework[]) => {
           console.log(`Found ${res.length} frameworks`);
-          
+
           this.items = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
+        })
+        .finally(() => {
+          this.loadingTable = false;
         });
     },
+
+  
 
     nextPage() {
       this.currentIndex = 0;
@@ -449,13 +495,14 @@ export default Vue.component("FrameworkReviewer", {
 
     numberOfPages(): number {
       return Math.ceil(this.numberItems / this.itemsPerPage);
-    },
+    }
   },
 
   mounted() {
     this.getNumberFrameworks();
     this.refreshFramework();
-  },
+    this.getInternalTypes();
+  }
 });
 </script>
 

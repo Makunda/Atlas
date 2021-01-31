@@ -46,8 +46,6 @@ export class ArtemisController {
     }
   }
 
-
-
   /**
    * Set the workspace of artemis
    */
@@ -176,6 +174,4 @@ export class ArtemisController {
     const newValue: string = results.records[0].get(0);
     return newValue.split(",");
   }
-
-
 }

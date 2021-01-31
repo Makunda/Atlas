@@ -22,7 +22,7 @@
     </v-row>
 
     <div id="notInstalledDemter" v-if="diplayNotInstalled">
-        <h2 class="ma-auto text--h2" id="Message">
+      <h2 class="ma-auto text--h2" id="Message">
         The Demeter extension is not installed on this server.<br />
         You must install the Demeter extension to continue on this section.<br />
         Please install the extension from
@@ -33,7 +33,6 @@
         </a>
       </h2>
     </div>
-
   </v-container>
 </template>
 
@@ -95,7 +94,6 @@ export default Vue.extend({
         );
         this.diplayNotInstalled = true;
       });
-      
   },
 
   methods: {},

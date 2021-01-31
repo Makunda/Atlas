@@ -21,11 +21,10 @@
       </v-container>
     </v-row>
 
-
     <div id="notInstalledArtemis" v-if="diplayNotInstalled">
-        <h2 class="ma-auto text--h2" id="Message">
+      <h2 class="ma-auto text--h2" id="Message">
         The Artemis extension is not installed on this instance.<br />
-        You must install the Artemis extension to continue on this section.<br/>
+        You must install the Artemis extension to continue on this section.<br />
         Please install the extension from
         <a
           href="https://extend.castsoftware.com/#/extension?id=com.castsoftware.uc.artemis&version=2.0.0"
@@ -34,9 +33,7 @@
         </a>
       </h2>
     </div>
-
   </v-container>
-
 </template>
 
 <script lang="ts">
@@ -50,9 +47,9 @@ export default Vue.extend({
   name: "Frameworks",
 
   components: {
-      ArtemisViewer,
-      DetectionExplorer,
-      FrameworkReviewer
+    ArtemisViewer,
+    DetectionExplorer,
+    FrameworkReviewer
   },
 
   computed: {
@@ -85,13 +82,13 @@ export default Vue.extend({
         view: "DetectionExplorer",
         name: "Operations",
         icon: "mdi-assistant"
-      },
+      }
     ]
   }),
 
   mounted() {
     this.applicationName = this.$store.state.applicationName;
-    console.log("Checking if the Artemis extension is installed..")
+    console.log("Checking if the Artemis extension is installed..");
     AtlasController.getArtemisVersion()
       .then(async (version: string) => {
         this.version = version;
@@ -105,7 +102,6 @@ export default Vue.extend({
       });
   },
 
-
   watch: {
     getApplicationName(newApp) {
       this.applicationName = newApp;
@@ -116,13 +112,13 @@ export default Vue.extend({
 
 <style>
 #notInstalledArtemis {
-    position: absolute;
-    top: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 #notInstalledArtemis #Message {
@@ -135,5 +131,4 @@ export default Vue.extend({
   right: 0;
   width: 100%;
 }
-
 </style>

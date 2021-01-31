@@ -40,8 +40,6 @@
         </v-row>
       </v-card-text>
     </v-card>
-
-
   </v-container>
 </template>
 
