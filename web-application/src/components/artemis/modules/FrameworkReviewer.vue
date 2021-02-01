@@ -2,10 +2,10 @@
   <v-container>
     <v-row class="d-flex flex-column pa-5 ml-4">
       <h3 class="text-h4 black--text mb-4 my-3">
-        Review the framework discovered
+        Review the frameworks discovered
       </h3>
       <p class=" text-body-1">
-        Review the different framework detected.
+        Review the different frameworks detected.
       </p>
       <h4 class="mb-2">Legend :</h4>
       <p>
@@ -19,7 +19,7 @@
           <v-icon color="orange">
             mdi-check-circle
           </v-icon>
-          Detected as a Framework but need a validation
+          Detected as a Framework but needs a validation
         </span>
         <span class="px-3">
           <v-icon color="red">

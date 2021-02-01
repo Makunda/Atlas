@@ -2,7 +2,7 @@
   <v-card min-height="100%">
     <v-card-title> Framework Agent</v-card-title>
     <v-card-text class="mb-6">
-      Automatically extracts the nodes marked by the tag $f_ and creates frameworks nodes. <br /><br />
+      Automatically extracts the nodes marked by the tag <strong>{{ tag }}</strong> <span v-if="tag ==''"><em>Failed to retrieve the Tag</em></span> and creates frameworks nodes. <br /><br />
       For more information please visit the wiki of the extension :
       <a href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
         >Artemis Wiki</a
@@ -40,11 +40,13 @@
 <script lang="ts">
 import Vue from "vue";
 import AgentController from "@/api/agents/agent.controller";
+import PrefixController from "@/api/configuration/prefix.controller";
 
 export default Vue.extend({
   name: "FrameworkAgent",
 
   data: () => ({
+    tag: "",
     nameAgent: "framework",
     daemonLevelState: false,
 
@@ -52,6 +54,16 @@ export default Vue.extend({
   }),
 
   methods: {
+
+    getTag() {
+        PrefixController.getFrameworkTag().then((res:string) => {
+            this.tag = res;
+        }).catch(err => {
+            console.error("Failed to retriece the tag associated to the framework grouping.", err);
+            this.tag = "";
+        })
+    },
+
     getStatus() {
       AgentController.getStatus(this.nameAgent)
         .then((res: boolean) => {
@@ -100,6 +112,7 @@ export default Vue.extend({
 
   mounted() {
     this.getStatus();
+    this.getTag();
   },
 });
 </script>
