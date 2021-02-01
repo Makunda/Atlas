@@ -120,64 +120,13 @@
           </v-card>
         </v-col>
         <v-col cols="4" md="4" sm="12">
-          <v-card disabled>
-            <v-card-title> Architecture Agent ( Coming soon )</v-card-title>
-            <v-card-text>
-              <p>0 views to group</p>
-              <p>
-                No architecture tags were found in your application <br />See
-                how to create views on the
-                <a
-                  href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
-                  >Demeter Wiki</a
-                >
-              </p>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn class="mx-2" tile color="success" disabled>
-                <v-icon left>
-                  mdi-adjust
-                </v-icon>
-                Group views
-              </v-btn>
-              <v-btn tile class="white--text" color="#f4a261" disabled>
-                <v-icon left>
-                  mdi-image-auto-adjust
-                </v-icon>
-                Daemon stopped
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+          <ArchitectureAgent></ArchitectureAgent>
         </v-col>
         <v-col cols="4" md="4" sm="12">
-          <v-card disabled>
-            <v-card-title> View Agent ( Coming soon )</v-card-title>
-            <v-card-text>
-              <p>0 views to group</p>
-              <p>
-                No view tags were found in your application <br />See how to
-                create views on the
-                <a
-                  href="https://github.com/CAST-Extend/com.castsoftware.uc.demeter/wiki"
-                  >Demeter Wiki</a
-                >
-              </p>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn class="mx-2" tile color="success" disabled>
-                <v-icon left>
-                  mdi-adjust
-                </v-icon>
-                Group views
-              </v-btn>
-              <v-btn tile class="white--text" color="#f4a261" disabled>
-                <v-icon left>
-                  mdi-image-auto-adjust
-                </v-icon>
-                Daemon stopped
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+          <ViewAgent></ViewAgent>
+        </v-col>
+        <v-col cols="4" md="4" sm="12">
+          <FrameworkAgent></FrameworkAgent>
         </v-col>
       </v-row>
     </v-card-text>
@@ -186,9 +135,20 @@
 
 <script lang="ts">
 import { GroupingController } from "@/api/demeter/grouping.controller";
+import FrameworkAgent from "@/components/agents/FrameworkAgent.vue";
+import ViewAgent from "@/components/agents/ViewAgent.vue";
+import ArchitectureAgent from "@/components/agents/ArchitectureAgent.vue";
+
 import Vue from "vue";
 
 export default Vue.component("GroupingTile", {
+
+  components: {
+    FrameworkAgent,
+    ViewAgent,
+    ArchitectureAgent
+  },
+
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;

@@ -13,9 +13,11 @@ export class AgentManager {
     private frameworkAgent: FrameworkAgent;
     public static INSTANCE: AgentManager;
 
-    private getAgent(agent: Agent) : IAgent {
+    private getAgent(agent: Agent|string) : IAgent {
         switch(agent) {
-            case Agent.FRAMEWORK_AGENT: 
+            case Agent.FRAMEWORK_AGENT : 
+                return this.frameworkAgent;
+            case "framework": 
                 return this.frameworkAgent;
             default:
                 return null;

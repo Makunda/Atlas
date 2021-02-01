@@ -191,27 +191,36 @@ export class FrameworkController {
   }
 
   /**
-   * Update a framework ( the name will be used 
-   * @param framework Framework updated 
+   * Update a framework ( the name will be used
+   * @param framework Framework updated
    */
-  public static async updateFrameworks(framework:Framework) : Promise<Framework> {
+  public static async updateFrameworks(
+    oldName: string,
+    oldInternalType: string,
+    framework: Framework
+  ): Promise<boolean> {
     const url =
       FrameworkController.API_BASE_URL + "/api/artemis/frameworks/update";
 
     try {
-      const res = await axios.post(url, framework);
-      let detectionList: Framework = null;
+      const body: any = {};
+      body.oldName = oldName;
+      body.oldInternalType = oldInternalType;
+      body.framework = framework;
+
+      const res = await axios.post(url, body);
+      let updateResutls = false;
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        detectionList = apiResponse.data as Framework;
+        updateResutls = Boolean(apiResponse.data);
       } else {
         console.warn(
           `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`
         );
       }
 
-      return detectionList;
+      return updateResutls;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a batch frameworks by internalType.`,

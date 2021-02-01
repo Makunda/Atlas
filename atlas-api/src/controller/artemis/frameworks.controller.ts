@@ -41,7 +41,8 @@ class FrameworksController {
       name = name.replace("+", " ");
 
       let resultsSearch: Framework[] = await this.frameworksService.searchFrameworkByName(name);
-       
+      console.log("Frameworks found :", resultsSearch.length)
+
       if(resultsSearch.length == 0) {
         res.status(404).send({ data: null, message: 'Not Found' });
       } else {
@@ -111,9 +112,16 @@ class FrameworksController {
   // Update frameworks
   public updateFrameworks = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const frameworkData : CreateFrameworkDto = Object.assign({}, req.body);
-      await this.frameworksService.updateFramework(frameworkData.name, frameworkData);
-      res.status(200).send({ data: frameworkData, message: 'Updated' });
+      const oldName: string = String(req.body.oldName);
+      const oldInternalType: string = String(req.body.oldInternalType);
+      const frameworkData : CreateFrameworkDto = Object.assign({}, req.body.framework);
+      
+      const results: boolean = await this.frameworksService.updateFramework(oldName, oldInternalType, frameworkData);
+      if(results) {
+        res.status(200).send({ data: frameworkData, message: 'Updated' });
+      } else {
+        res.status(404).send({ data: null, message: 'Updated' });
+      }
     } catch (error) {
       next(error);
     }

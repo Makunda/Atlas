@@ -38,11 +38,24 @@ class FrameworksService {
    * Find a framework in the database
    * @param name Name of the Framework to find
    */
-  public async findFrameworkbyName(name: string): Promise<Framework> {
-    const req: string = `CALL artemis.api.find.framework($name)`;
-
+  public async findFrameworkbyName(
+    name: string,
+    internalType?: string
+  ): Promise<Framework> {
     try {
-      const val = await this.neo4jAl.executeWithParameters(req, { name: name });
+      let val: QueryResult;
+
+      if (internalType) {
+        const req: string = `CALL artemis.api.find.framework($name, $internalType)`;
+        val = await this.neo4jAl.executeWithParameters(req, {
+          name: name,
+          internalType: internalType,
+        });
+      } else {
+        const req: string = `CALL artemis.api.find.framework($name)`;
+        val = await this.neo4jAl.executeWithParameters(req, { name: name });
+      }
+
       if (!val.records || val.records.length == 0) return null;
 
       const singleRecord = val.records[0];
@@ -97,7 +110,7 @@ class FrameworksService {
       return this.convertRecordToFramework(singleRecord);
     } catch (err) {
       logger.error(
-        "An internal error occurred in FrameworksServices::findFrameworkbyName ",
+        "An internal error occurred in FrameworksServices::findFrameworkbyNameAndType ",
         err
       );
       throw new HttpException(500, "Internal error");
@@ -110,34 +123,39 @@ class FrameworksService {
    * @param frameworkData
    */
   public async updateFramework(
-    name: string,
+    oldName: string,
+    oldInternalType: string,
     frameworkData: CreateFrameworkDto
-  ): Promise<Framework> {
+  ): Promise<boolean> {
     // Check if the Framework already exist. Update it, if it has more properties
     const inBase: Framework = await this.findFrameworkbyName(
       frameworkData.name
     );
 
+    // Assign number of detection
+    let params: any = Object.assign({}, frameworkData);
+    params.numberOfDetection = 0;
+    params.oldName = oldName;
+    params.oldInternalType = oldInternalType;
+
     if (inBase == null)
       throw new HttpException(
         404,
-        `Framework with name ${name} does not exist.`
+        `Framework with name ${frameworkData.name} does not exist.`
       );
-    const req: string = `CALL artemis.api.update.framework($name, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection);`;
+    const req: string = `CALL artemis.api.update.framework($oldName, $oldInternalType, $name, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection);`;
 
+    console.log("Framework data to add : ", params);
     try {
-      const results = await this.neo4jAl.executeWithParameters(
-        req,
-        frameworkData
-      );
-
+      const results = await this.neo4jAl.executeWithParameters(req, params);
+      console.log("Request executed :", results.summary.query)
       if (!results.records || results.records.length == 0) return null;
-      const singleRecord = results.records[0];
+      const singleRecord = Boolean(results.records[0].get(0));
 
-      return this.convertRecordToFramework(singleRecord);
+      return singleRecord;
     } catch (err) {
       logger.error(
-        "An internal error occurred in FrameworksServices::findFrameworkbyName ",
+        "An internal error occurred in FrameworksServices::updateFrameworks",
         err
       );
       throw new HttpException(500, "Internal error");
@@ -150,7 +168,7 @@ class FrameworksService {
    */
   public async addFramework(
     frameworkData: CreateFrameworkDto
-  ): Promise<Framework> {
+  ): Promise<boolean> {
     // Check if the Framework already exist. Update it, if it has more properties
     logger.info(
       `Adding Framework with name ${frameworkData.name}`,
@@ -178,7 +196,11 @@ class FrameworksService {
           ? inBase.category
           : frameworkData.internalType;
 
-      return await this.updateFramework(frameworkData.name, frameworkData);
+      return await this.updateFramework(
+        inBase.name,
+        inBase.internalType,
+        frameworkData
+      );
     } else {
       // Add a new framework
       // API : artemis.api.add.framework(String Name, String DiscoveryDate, String Location, String Description, String Type, String Category, String InternalType)
@@ -188,10 +210,9 @@ class FrameworksService {
         frameworkData
       );
 
-      if (!results.records || results.records.length == 0) return null;
+      if (!results.records || results.records.length == 0) return false;
 
-      const singleRecord = results.records[0];
-      return this.convertRecordToFramework(singleRecord);
+      return true;
     }
   }
 
@@ -270,8 +291,8 @@ class FrameworksService {
     let singleRecord;
     for (let index = 0; index < res.records.length; index++) {
       singleRecord = String(res.records[index].get(0));
-      
-      if(singleRecord.length == 0 || singleRecord == "null") continue;
+
+      if (singleRecord.length == 0 || singleRecord == "null") continue;
 
       returnList.push(singleRecord);
     }
