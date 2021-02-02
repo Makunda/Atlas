@@ -2,7 +2,7 @@
   <v-row class="my-3">
     <v-card width="100%">
       <v-card-title>
-        Profile
+        Profiles
       </v-card-title>
       <v-card-subtitle
         >Select a profile that corresponds to the use you wish to make of the
