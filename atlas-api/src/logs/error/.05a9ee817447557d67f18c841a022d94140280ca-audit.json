@@ -6,29 +6,9 @@
     "auditLog": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\error\\.05a9ee817447557d67f18c841a022d94140280ca-audit.json",
     "files": [
         {
-            "date": 1611654735564,
-            "name": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\error\\2021-01-26.error.log",
-            "hash": "b2f108f194bc796889d45d20de18e139"
-        },
-        {
-            "date": 1611740691239,
-            "name": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\error\\2021-01-27.error.log",
-            "hash": "20523a530a6dc64fe90922d28fb91e17"
-        },
-        {
-            "date": 1611822693395,
-            "name": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\error\\2021-01-28.error.log",
-            "hash": "5bfcbb3b850803850509d8cca92098d7"
-        },
-        {
-            "date": 1612082425845,
-            "name": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\error\\2021-01-31.error.log",
-            "hash": "dc4581c45b245d9e98be49ab4c3c5ecc"
-        },
-        {
-            "date": 1612168996463,
-            "name": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\error\\2021-02-01.error.log",
-            "hash": "b76700df8da8837182af8d8ca46d0374"
+            "date": 1612268894137,
+            "name": "C:\\Users\\hjo\\Documents\\Github\\demeter-web\\atlas-api\\src\\logs\\error\\2021-02-02.error.log",
+            "hash": "b90ec8ccb4c4ab5b8d1eb4b617fb8880"
         }
     ]
 }

@@ -9,6 +9,10 @@
         "demeter" : "2.3.3"
     },
 
+    "workspace" : {
+        "profiles" : "./profiles/"
+    },
+
     "neo4j": {
         "uri":"neo4j://localhost:7687",
         "user":"neo4j",

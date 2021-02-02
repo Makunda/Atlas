@@ -1,5 +1,6 @@
 import IAgent from "@agents/agent.interface";
 import { Neo4JAccessLayer } from "@database/neo4jAccessLayer";
+import { sleep } from "@shared/functions";
 import { logger } from "@shared/logger";
 import config from "config";
 import { QueryResult } from "neo4j-driver";
@@ -45,6 +46,8 @@ export default class FrameworkAgent implements IAgent {
           "The framework agent failed to query the database on the presence of tags.",
           err
         );
+
+        await sleep(this.delay)
       }
     }
 

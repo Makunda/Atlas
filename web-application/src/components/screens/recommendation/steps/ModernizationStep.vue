@@ -75,7 +75,7 @@
                   <v-divider></v-divider>
                   <v-card-actions>
                     <v-card-actions>
-                      <v-btn class="ma-2" color="persianGrey" dark>
+                      <v-btn class="ma-2" color="persianGrey" dark @click="executeTag(item)">
                         Launch grouping
                       </v-btn>
                     </v-card-actions>
@@ -148,7 +148,7 @@
 </template>
 
 <script lang="ts">
-import { GroupActionController } from "@/api/demeter/groupAction.controller";
+import { GroupAction, GroupActionController } from "@/api/demeter/groupAction.controller";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -176,6 +176,10 @@ export default Vue.extend({
     },
     updateItemsPerPage(number) {
       this.itemsPerPage = number;
+    },
+
+    executeTag(item:GroupAction) {
+      GroupActionController.executeAction(item);
     }
   },
 

@@ -6,7 +6,7 @@ export default class PrefixController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   private static async getTag(name: string): Promise<string> {
-    const url = PrefixController.API_BASE_URL + `api/configuration/tags/${name}`;
+    const url = PrefixController.API_BASE_URL + `/api/configuration/tags/${name}`;
 
     try {
       const res = await axios.get(url);

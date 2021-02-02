@@ -33,8 +33,13 @@
           <Parameters></Parameters>
         </v-row>
 
-        <!-- Tag Creator Studio -->
+        <!-- Artemis Configuration -->
         <v-row v-if="tab == 2">
+          <ArtemisParameters></ArtemisParameters>
+        </v-row>
+
+        <!-- Tag Creator Studio -->
+        <v-row v-if="tab == 3">
           <TagStudio></TagStudio>
         </v-row>
       </v-container>
@@ -49,6 +54,7 @@ import DemeterModuleTile from "@/components/screens/administration/tiles/Demeter
 import GlobalOperations from "@/components/screens/administration/tiles/GlobalOperations.vue";
 import Parameters from "@/components/screens/administration/steps/Parameters.vue";
 import TagStudio from "@/components/screens/administration/steps/TagStudio.vue";
+import ArtemisParameters from "@/components/screens/administration/steps/ArtemisParameters.vue";
 
 export default Vue.extend({
   name: "Administration",
@@ -58,7 +64,8 @@ export default Vue.extend({
     GlobalOperations,
     DemeterModuleTile,
     Parameters,
-    TagStudio
+    TagStudio,
+    ArtemisParameters
   },
 
   data: () => ({
@@ -73,6 +80,11 @@ export default Vue.extend({
       {
         view: "ParametersStep",
         name: "Parameters",
+        icon: "mdi-cogs"
+      },
+      {
+        view: "ArtemisParameters",
+        name: "Artemis Parameters",
         icon: "mdi-cogs"
       },
       {

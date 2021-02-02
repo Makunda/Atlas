@@ -1,4 +1,4 @@
-import TagService from "@services/tags/tag.services";
+import TagService from "@services/configuration/tag.services";
 import { NextFunction, Request, Response } from "express";
 
 class TagController {

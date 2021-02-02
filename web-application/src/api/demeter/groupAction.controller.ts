@@ -6,6 +6,7 @@ export interface GroupAction {
   description: string;
   request: string;
   tag: string;
+  returnVal?: string;
 }
 
 export class GroupActionController {
@@ -79,24 +80,27 @@ export class GroupActionController {
         description:
           "Group, under a new level 5 nodes, all the Spring Dao Objects",
         request:
-          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' %%SET_TAG(n)%%",
-        tag: "Dm_gl_Spring Servlets"
+          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:wealthcareMonolith) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' %%SET_TAG(n)%%",
+        tag: "$l_Spring Servlets",
+        returnVal:"n"
       },
       {
         title: "Spring Controllers",
         category: "Spring MVC",
         description: "Group, under a new level 5 nodes,  Spring Controllers",
         request:
-          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Stateless' OPTIONAL MATCH (n)-[]->(o:Object) WHERE NOT (o:Object)-[]->(:Object) WITH DISTINCT (COLLECT(n) + COLLECT(o)) as serviceObj UNWIND serviceObj as obj %%SET_TAG(obj)%%",
-        tag: "Dm_gl_Spring Controllers"
+          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:wealthcareMonolith) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Stateless' OPTIONAL MATCH (n)-[]->(o:Object) WHERE NOT (o:Object)-[]->(:Object) WITH DISTINCT (COLLECT(n) + COLLECT(o)) as serviceObj UNWIND serviceObj as obj %%SET_TAG(obj)%%",
+        tag: "$l_Spring Controllers",
+        returnVal:"obj"
       },
       {
         title: "Spring Dao Objects",
         category: "Spring MVC",
         description: "Group, under a new level 5 nodes,  Spring Dao Objects",
         request:
-          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' %%SET_TAG(n)%%",
-        tag: "Dm_gl_Spring DAO"
+          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:wealthcareMonolith) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' %%SET_TAG(n)%%",
+        tag: "$l_Spring DAO",
+        returnVal:"n"
       },
       {
         title: "Spring Dao Class",
@@ -104,8 +108,9 @@ export class GroupActionController {
         description:
           "Group, under a new level 5 nodes,  all the objects with type JAVA CLASS DAO",
         request:
-          "MATCH (o:Object:%%CONTEXT_LABEL%%) WHERE o.Type='Java Class DAO' %%SET_TAG(o)%% ",
-        tag: "Dm_gl_Spring DAO"
+          "MATCH (o:Object:wealthcareMonolith) WHERE o.Type='Java Class DAO' %%SET_TAG(o)%% ",
+        tag: "$l_Spring DAO",
+        returnVal:"o"
       },
       {
         title: "Static Objects : Utilities",
@@ -114,7 +119,8 @@ export class GroupActionController {
           "Group, under a new level 5 nodes, all the objects only having static methods",
         request:
           "MATCH p=(o:Object:wealthcareMonolith)-[:BELONGTO]-(so:SubObject)-[r:Property]-(sp:ObjectProperty) WHERE o.Name CONTAINS 'Util' AND so.Type CONTAINS 'Method' AND sp.Description='Extended Type' WITH o as obj, COLLECT(DISTINCT r) as links WHERE all(x in links WHERE x.value CONTAINS 'static') %%SET_TAG(obj)%%",
-        tag: "Dm_gl_Utils"
+        tag: "$l_Utils",
+        returnVal:"obj"
       },
       {
         title: "Spring Java Persistence",
@@ -122,8 +128,9 @@ export class GroupActionController {
         description:
           "Group, under a new level 5 nodes,  All the objects part of the Java persistence Framework",
         request:
-          "MATCH (n:Object:%%CONTEXT_LABEL%%) WHERE n.Type CONTAINS 'JPA' OR n.FullName CONTAINS 'javax.persistence' %%SET_TAG(n)%%",
-        tag: "Dm_gl_JAVA Persistence"
+          "MATCH (n:Object:wealthcareMonolith) WHERE n.Type CONTAINS 'JPA' OR n.FullName CONTAINS 'javax.persistence' %%SET_TAG(n)%%",
+        tag: "$l_JAVA Persistence",
+        returnVal:"n"
       },
       {
         title: "Links to DAO",
@@ -131,17 +138,19 @@ export class GroupActionController {
         description:
           "Group, under a new level 5 nodes, all the logic linked to the DAO objects",
         request:
-          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:%%CONTEXT_LABEL%%) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' WITH n as DAOobjects MATCH (o:Object:%%CONTEXT_LABEL%%)-[r]->(DAOobjects) WHERE o.Type='Java Class' WITH DAOobjects,  COLLECT(TYPE(r)) as numRel, o WHERE all(x in numRel WHERE x='MENTION') %%SET_TAG(o)%% ",
-        tag: "Dm_gl_Spring DAO"
+          "MATCH (op:ObjectProperty)-[r:Property]-(n:Object:wealthcareMonolith) WHERE op.Description='Annotation:' AND r.value CONTAINS '@Entity' WITH n as DAOobjects MATCH (o:Object:wealthcareMonolith)-[r]->(DAOobjects) WHERE o.Type='Java Class' WITH DAOobjects,  COLLECT(TYPE(r)) as numRel, o WHERE all(x in numRel WHERE x='MENTION') %%SET_TAG(o)%% ",
+        tag: "$l_Spring DAO",
+        returnVal:"o"
       },
       {
         title: "Presentation Layer ",
         category: "Spring MVC",
         description:
-          "Group, under a new level 5 nodes,  all the objects diplaying web informations to the user, as JSP and HTML pages",
+          "Group, under a new level 5 nodes,  all the objects displaying web information to the user, as JSP and HTML pages",
         request:
-          "MATCH (op:Object:%%CONTEXT_LABEL%%) WHERE op.Type IN ['JSP Pages', 'eFile'] %%SET_TAG(op)%%",
-        tag: "Dm_gl_View Layer"
+          "MATCH (op:Object:wealthcareMonolith) WHERE op.Type IN ['JSP Pages', 'eFile'] %%SET_TAG(op)%%",
+        tag: "$l_View Layer",
+        returnVal:"op"
       }
     ];
 
@@ -150,7 +159,8 @@ export class GroupActionController {
       // Replace context
       x.request = x.request.replaceAll(this.contextAnchor, applicationName);
       // Replace the tag anchor
-      const toInsert = `SET @.Tags = CASE WHEN @.Tags IS NULL THEN ['${x.tag}'] ELSE @.Tags + '${x.tag}' END`;
+      let toInsert = `SET @.Tags = CASE WHEN @.Tags IS NULL THEN ['${x.tag}'] ELSE @.Tags + '${x.tag}' END`;
+      toInsert =  toInsert.replaceAll("@", x.returnVal)
       x.request = x.request.replace(/%%SET_TAG\(([A-Za-z]*)\)%%/, toInsert);
       // Replace tag
       return x;
