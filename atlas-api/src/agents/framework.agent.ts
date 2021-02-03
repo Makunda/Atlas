@@ -11,6 +11,7 @@ import { QueryResult } from "neo4j-driver";
 export default class FrameworkAgent implements IAgent {
   private isRunning = false;
   private stopFlag = false;
+  private numRetry = 0;
   private delay: number = config.get("agent.reload.frameworkAgent");
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
@@ -39,15 +40,24 @@ export default class FrameworkAgent implements IAgent {
         const res: QueryResult = await this.neo4jAl.execute(req);
 
         const isPresent = Boolean(res.records[0].get(0));
-
+        this.numRetry = 0;
         if (isPresent) this.group();
       } catch (err) {
-        logger.error(
-          "The framework agent failed to query the database on the presence of tags.",
-          err
-        );
+        this.numRetry++;
 
-        await sleep(this.delay)
+        if(this.numRetry == 1) {
+          logger.error(
+            "The framework agent failed to query the database on the presence of tags.",
+            err
+          );
+        } else {
+          logger.error(`The framework agent failed to query the database on the presence of tags. Retrying in ${this.numRetry * 5} seconds`)
+        }
+
+        // Max value for retry
+        this.numRetry = this.numRetry > 10 ? 10 : this.numRetry;
+        
+        await sleep(this.delay + this.numRetry * 5000)
       }
     }
 

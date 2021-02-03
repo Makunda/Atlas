@@ -84,6 +84,10 @@ export default Vue.extend({
       }).finally(() => {
         this.updatingWorkspace=false;
       })
+    },
+
+    refresh() {
+      this.getArtemisWorkspace()
     }
   },
 

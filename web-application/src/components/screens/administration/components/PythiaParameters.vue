@@ -43,13 +43,18 @@
           </v-col>
 
           <v-col cols="12" md="4">
-            <v-btn class="mt-3" color="charcoal" dark>
+            <v-btn
+              class="mt-3"
+              color="charcoal"
+              dark
+              :loading="connectionLoading"
+              v-on:click="updateConnection()"
+            >
               Connect to Pythia
             </v-btn>
           </v-col>
         </v-row>
         <v-row>
-          
           <p v-if="connectionPythia">
             <v-icon color="green" class="mr-2"
               >mdi-checkbox-marked-circle-outline</v-icon
@@ -74,7 +79,7 @@
               Last version of Pythia: <em>{{ lastUpdatePythia }}</em>
             </h2>
           </v-col>
-          <v-col  cols="12" md="4" style="min-height: 100%"
+          <v-col cols="12" md="4" style="min-height: 100%"
             ><v-btn color="charcoal" dark class="my-4">
               <span v-if="isDatabaseEven()">Force pull</span>
               <span v-else>Pull {{ framewokToPull }} frameworks</span>
@@ -125,6 +130,9 @@ export default Vue.extend({
 
     connectionPythia: false,
     errorConnectionPythia: "",
+
+    // Connect button
+    connectionLoading: false,
   }),
 
   methods: {
@@ -185,6 +193,64 @@ export default Vue.extend({
 
           this.errorConnectionPythia = err;
         });
+    },
+
+    setTokenPythia() {
+      ConfigurationController.setPythiaToken(this.pythiaToken)
+        .then((res: boolean) => {
+          this.pythiaToken = "******-*******-*******-*****";
+          console.log("Token was successfully changed.");
+          if (res == false) {
+            this.errorConnectionPythia =
+              "No Token was detected in the configuration";
+          } else {
+            this.errorConnectionPythia = "";
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to change the password of Pythia", err);
+
+          this.errorConnectionPythia = err;
+        });
+    },
+
+    async updateConnection() {
+      this.connectionLoading = true;
+
+      await new Promise<void>((resolve, reject) => {
+        ConfigurationController.setPythiaToken(this.pythiaToken)
+          .then((res: boolean) => {
+            this.pythiaToken = "******-*******-*******-*****";
+            console.log("Token was successfully changed.");
+            if (res == false) {
+              this.errorConnectionPythia =
+                "No Token was detected in the configuration";
+            } else {
+              this.errorConnectionPythia = "";
+            }
+            resolve();
+          })
+          .catch((err) => {
+            console.error("Failed to change the password of Pythia", err);
+            this.errorConnectionPythia = err;
+            reject();
+          });
+      });
+
+      await new Promise<void>((resolve, reject) => {
+        ConfigurationController.setPythiaURL(this.pythiaURI)
+          .then((res: string) => {
+            console.log("Pythia URI was changed to ", res);
+            resolve();
+          })
+          .catch((err) => {
+            console.error("Failed to change the URL of pythia. ", err);
+            reject();
+          });
+      });
+
+      this.refresh();
+      this.connectionLoading = false;
     },
 
     refresh() {

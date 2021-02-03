@@ -17,6 +17,24 @@ class ConfigurationController {
     }
   };
 
+  public setPythiaURI = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const url = String(req.body.url);
+      if(!url || url.length == 0) {
+          res.status(400).send({ data: null, message: "The url cannot be empty." })
+      }
+
+      const newUrl: string = await this.configurationService.setPythiaURI(url);
+      res.status(200).json({ data: newUrl, message: "Pythia URI" });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getPythiaTokenPresence = async (
     req: Request,
     res: Response,

@@ -13,7 +13,12 @@ class ConfigurationRoute implements Route {
   
     private initializeRoutes() {
       this.router.get(`${this.path}/pythia/uri`, this.configController.getPythiaURI);
+      this.router.post(`${this.path}/pythia/uri`, this.configController.setPythiaURI);
+
       this.router.get(`${this.path}/pythia/token`, this.configController.getPythiaTokenPresence);
+      this.router.post(`${this.path}/pythia/token`, this.configController.setPythiaURI);
+
+
       this.router.get(`${this.path}/artemis/workspace`, this.configController.getArtemisWorkspace);
       this.router.post(`${this.path}/artemis/workspace`, this.configController.setArtemisWorkspace);
       this.router.get(`${this.path}/demeter/workspace`, this.configController.getDemeterWorkspace);
