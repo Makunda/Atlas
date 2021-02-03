@@ -42,6 +42,8 @@ import { AtlasController } from "@/api/atlas/atlas.controller";
 import ArtemisViewer from "@/components/artemis/modules/ArtemisViewer.vue";
 import DetectionExplorer from "@/components/artemis/modules/DetectionExplorer.vue";
 import FrameworkReviewer from "@/components/artemis/modules/FrameworkReviewer.vue";
+import CategoriesCreator from "@/components/artemis/modules/CategoriesCreator.vue";
+import CustomsCreator from "@/components/artemis/modules/CustomsCreator.vue";
 
 export default Vue.extend({
   name: "Frameworks",
@@ -49,7 +51,9 @@ export default Vue.extend({
   components: {
     ArtemisViewer,
     DetectionExplorer,
-    FrameworkReviewer
+    FrameworkReviewer,
+    CustomsCreator,
+    CategoriesCreator
   },
 
   computed: {
@@ -76,7 +80,17 @@ export default Vue.extend({
       {
         view: "FrameworkReviewer",
         name: "Review",
+        icon: "mdi-magnify"
+      },
+      {
+        view: "CategoriesCreator",
+        name: "Categories",
         icon: "mdi-tag-multiple"
+      },
+      {
+        view: "CustomsCreator",
+        name: "Customs",
+        icon: "mdi-fountain-pen-tip"
       },
       {
         view: "DetectionExplorer",

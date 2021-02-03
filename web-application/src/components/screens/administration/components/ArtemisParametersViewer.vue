@@ -22,7 +22,7 @@
             <h3>Path to the Artemis workspace</h3>
             <p>
               Set the path to the folder containing the files of the Artemis
-              Installation. <br>
+              Installation. <br />
             </p>
             <p v-if="updateSuccess != ''">
               {{ updateSuccess }}
@@ -39,7 +39,13 @@
           </v-col>
 
           <v-col cols="12" md="4">
-            <v-btn class="mt-3" color="charcoal" dark @click="updateWorkspace()" :loading="updatingWorkspace">
+            <v-btn
+              class="mt-3"
+              color="charcoal"
+              dark
+              @click="updateWorkspace()"
+              :loading="updatingWorkspace"
+            >
               Update the workspace
             </v-btn>
           </v-col>
@@ -63,36 +69,44 @@ export default Vue.extend({
   }),
 
   methods: {
-    getArtemisWorkspace(){
+    getArtemisWorkspace() {
       ConfigurationController.getArtemisWorkspace()
         .then((res: string) => {
           this.artemisWorkspace = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to get teh Artemis workspace", err);
         });
     },
 
     updateWorkspace() {
-      this.updatingWorkspace=true;
-      ConfigurationController.setArtemisWorkspace(this.artemisWorkspace).then(async (res:string) => {
+      this.updatingWorkspace = true;
+      ConfigurationController.setArtemisWorkspace(this.artemisWorkspace)
+        .then(async (res: string) => {
           await this.getArtemisWorkspace();
           this.updateSuccess = `Succesfully updated the workspace`;
-          setTimeout(function() { this.updateSuccess = ""}.bind(this), 4000);
-      }).catch(err => {
-        console.error("Failed to update teh Artemis workspace", err);
-      }).finally(() => {
-        this.updatingWorkspace=false;
-      })
+          setTimeout(
+            function() {
+              this.updateSuccess = "";
+            }.bind(this),
+            4000
+          );
+        })
+        .catch(err => {
+          console.error("Failed to update teh Artemis workspace", err);
+        })
+        .finally(() => {
+          this.updatingWorkspace = false;
+        });
     },
 
     refresh() {
-      this.getArtemisWorkspace()
+      this.getArtemisWorkspace();
     }
   },
 
   mounted() {
     this.getArtemisWorkspace();
-  },
+  }
 });
 </script>

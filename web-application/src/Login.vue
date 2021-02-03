@@ -43,9 +43,9 @@
             >
           </div>
           <v-divider></v-divider>
-          
+
           <div>
-            <p class="mt-2 text-subtitle-1">Options : </p>
+            <p class="mt-2 text-subtitle-1">Options :</p>
             <v-switch
               v-model="switchIternalUse"
               label="Internal use ( CAST User )"
@@ -103,13 +103,13 @@ export default Vue.extend({
           this.$router.replace("/atlas/main");
           window.location.reload();
         })
-        .catch((err) => {
+        .catch(err => {
           // Cannot connect to the Neo4j instance
           console.error("Cannot connect to Neo4j", err);
           this.failedLogin = true;
         });
-    },
-  },
+    }
+  }
 });
 </script>
 

@@ -6,14 +6,12 @@
       </v-card-title>
       <v-card-text>
         <v-container>
-
           <v-row class="my-3">
-              <PythiaParameters></PythiaParameters>
-            
+            <PythiaParameters></PythiaParameters>
           </v-row>
           <v-divider></v-divider>
           <v-row class="my-3">
-              <ArtemisParametersViewer></ArtemisParametersViewer>
+            <ArtemisParametersViewer></ArtemisParametersViewer>
           </v-row>
         </v-container>
       </v-card-text>
@@ -23,19 +21,17 @@
 
 <script lang="ts">
 import Vue from "vue";
-import PythiaParameters from "@/components/screens/administration/components/PythiaParameters.vue"
-import ArtemisParametersViewer from "@/components/screens/administration/components/ArtemisParametersViewer.vue"
+import PythiaParameters from "@/components/screens/administration/components/PythiaParameters.vue";
+import ArtemisParametersViewer from "@/components/screens/administration/components/ArtemisParametersViewer.vue";
 
 export default Vue.extend({
   name: "ArtemisParameters",
 
   components: {
-      PythiaParameters,
-      ArtemisParametersViewer
+    PythiaParameters,
+    ArtemisParametersViewer
   },
 
-  data: () => ({
-      
-  }),
+  data: () => ({})
 });
 </script>

@@ -134,7 +134,7 @@
         </v-card-text>
       </v-card>
     </v-row>
-    <v-row class="pt-5"> 
+    <v-row class="pt-5">
       <AssistantsManager></AssistantsManager>
     </v-row>
   </v-container>
@@ -160,7 +160,7 @@ export default Vue.component("GroupingTile", {
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
@@ -180,7 +180,7 @@ export default Vue.component("GroupingTile", {
     loading: false,
 
     daemonLevelState: true,
-    daemonModuleState: true,
+    daemonModuleState: true
   }),
 
   methods: {
@@ -216,18 +216,18 @@ export default Vue.component("GroupingTile", {
       if (groups == null) return "";
 
       const uniqueNames = [] as string[];
-      groups.forEach((x) => {
+      groups.forEach(x => {
         const groupName: string = x.substring(6);
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
       return uniqueNames;
-    },
+    }
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    },
-  },
+    }
+  }
 });
 </script>

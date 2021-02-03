@@ -23,13 +23,13 @@ class ConfigurationController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const url = String(req.body.url);
-      if(!url || url.length == 0) {
-          res.status(400).send({ data: null, message: "The url cannot be empty." })
+      const token = String(req.body.token);
+      if(!token || token.length == 0) {
+          res.status(400).send({ data: null, message: "The token cannot be empty." })
       }
 
-      const newUrl: string = await this.configurationService.setPythiaURI(url);
-      res.status(200).json({ data: newUrl, message: "Pythia URI" });
+      const changed: boolean = await this.configurationService.setPythiaToken(token);
+      res.status(200).json({ data: changed, message: "Pythia URI" });
     } catch (error) {
       next(error);
     }

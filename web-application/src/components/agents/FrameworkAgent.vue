@@ -2,7 +2,10 @@
   <v-card min-height="100%">
     <v-card-title> Framework Agent</v-card-title>
     <v-card-text class="mb-6">
-      Automatically extracts the nodes marked by the tag <strong>{{ tag }}</strong> <span v-if="tag ==''"><em>Failed to retrieve the Tag</em></span> and creates frameworks nodes. <br /><br />
+      Automatically extracts the nodes marked by the tag
+      <strong>{{ tag }}</strong>
+      <span v-if="tag == ''"><em>Failed to retrieve the Tag</em></span> and
+      creates frameworks nodes. <br /><br />
       For more information please visit the wiki of the extension :
       <a href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
         >Artemis Wiki</a
@@ -50,18 +53,22 @@ export default Vue.extend({
     nameAgent: "framework",
     daemonLevelState: false,
 
-    loadingToggle: false,
+    loadingToggle: false
   }),
 
   methods: {
-
     getTag() {
-        PrefixController.getFrameworkTag().then((res:string) => {
-            this.tag = res;
-        }).catch(err => {
-            console.error("Failed to retriece the tag associated to the framework grouping.", err);
-            this.tag = "";
+      PrefixController.getFrameworkTag()
+        .then((res: string) => {
+          this.tag = res;
         })
+        .catch(err => {
+          console.error(
+            "Failed to retriece the tag associated to the framework grouping.",
+            err
+          );
+          this.tag = "";
+        });
     },
 
     getStatus() {
@@ -70,7 +77,7 @@ export default Vue.extend({
           console.log("Status of the Framework agent", res);
           this.daemonLevelState = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to retrieve the status of the Framework agent",
             err
@@ -85,7 +92,7 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = !res;
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to stop the Framework agent", err);
           })
           .finally(() => {
@@ -96,7 +103,7 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = res;
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to start the Framework agent", err);
           })
           .finally(() => {
@@ -107,13 +114,13 @@ export default Vue.extend({
 
     forceAction() {
       console.log("Extract");
-    },
+    }
   },
 
   mounted() {
     this.getStatus();
     this.getTag();
-  },
+  }
 });
 </script>
 

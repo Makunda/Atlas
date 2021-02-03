@@ -343,7 +343,7 @@
                       :loading="updatingFramework"
                       @click="updateFramework(editFramework)"
                     >
-                      Update the Framework 
+                      Update the Framework
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -354,42 +354,26 @@
       </v-card>
     </v-row>
 
-    <v-snackbar
-      v-model="displayUpdateSuccess"
-      :timeout="2000"
-    >
-      Framework  {{ frameworkUpdateSnackBar }} was updated successfully
+    <v-snackbar v-model="displayUpdateSuccess" :timeout="2000">
+      Framework {{ frameworkUpdateSnackBar }} was updated successfully
 
       <template v-slot:action="{ attrs }">
-        <v-btn
-          color="blue"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
+        <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>
     </v-snackbar>
 
-    <v-snackbar
-      v-model="displayUpdateFailure"
-      :timeout="2000"
-    >
-      Something wrong happened during the update of {{ frameworkUpdateSnackBar }}.
+    <v-snackbar v-model="displayUpdateFailure" :timeout="2000">
+      Something wrong happened during the update of
+      {{ frameworkUpdateSnackBar }}.
 
       <template v-slot:action="{ attrs }">
-        <v-btn
-          color="blue"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
+        <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>
     </v-snackbar>
-
   </v-container>
 </template>
 
@@ -415,7 +399,7 @@ export default Vue.component("FrameworkReviewer", {
       "Internal type",
       "Location",
       "Discovery date",
-      "Percentage of detection",
+      "Percentage of detection"
     ],
     items: [] as Framework[],
     numberItems: 0,
@@ -428,15 +412,19 @@ export default Vue.component("FrameworkReviewer", {
     frameworkTypes: [
       {
         name: "Framework",
-        value: "Framework",
+        value: "Framework"
       },
       {
         name: "Not a Framework",
-        value: "NotFramework",
-      },
+        value: "NotFramework"
+      }
     ],
 
-    framewokCategories: ["IBM Utilities", "IBM Frameworks", "IBM Spagetthis"],
+    framewokCategories: [
+      "IBM Utilities",
+      "IBM Frameworks",
+      "IBM Supplied Utilities"
+    ],
     internalTypes: [],
     loadingTable: false,
 
@@ -452,8 +440,8 @@ export default Vue.component("FrameworkReviewer", {
 
   computed: {
     filteredKeys() {
-      return this.keys.filter((key) => key !== "Name");
-    },
+      return this.keys.filter(key => key !== "Name");
+    }
   },
 
   methods: {
@@ -484,7 +472,7 @@ export default Vue.component("FrameworkReviewer", {
         .then((res: number) => {
           this.numberItems = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
         });
     },
@@ -494,7 +482,7 @@ export default Vue.component("FrameworkReviewer", {
         .then((res: string[]) => {
           this.internalTypes = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of internal types", err);
         });
     },
@@ -509,13 +497,10 @@ export default Vue.component("FrameworkReviewer", {
       this.updatingFramework = true;
       FrameworkController.updateFrameworks(oldName, oldType, item)
         .then((res: boolean) => {
-          
           this.displayUpdateSuccess = true;
           this.refreshFramework();
-          
-
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to update the framework.", err);
           this.displayUpdateFailure = true;
         })
@@ -534,11 +519,11 @@ export default Vue.component("FrameworkReviewer", {
       FrameworkController.getFrameworkBatch(startIndex, stopIndex)
         .then((res: Framework[]) => {
           this.items = res;
-          if(this.currentIndex) {
+          if (this.currentIndex) {
             this.setFrameworkFocus(this.currentIndex);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
         })
         .finally(() => {
@@ -546,9 +531,8 @@ export default Vue.component("FrameworkReviewer", {
         });
     },
 
-    searchFrameworks(toSearch:string) {
-
-      if(!toSearch || toSearch.length == 0) {
+    searchFrameworks(toSearch: string) {
+      if (!toSearch || toSearch.length == 0) {
         this.refreshFramework();
         return;
       }
@@ -556,12 +540,13 @@ export default Vue.component("FrameworkReviewer", {
       this.loadintTable = true;
       this.loadingSearch = true;
 
-      FrameworkController.searchFramework(toSearch).then((res: Framework[]) => {
+      FrameworkController.searchFramework(toSearch)
+        .then((res: Framework[]) => {
           this.items = res;
           this.numberItems = res.length;
           this.currentIndex = 0;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to search for frameworks.", err);
         })
         .finally(() => {
@@ -588,14 +573,14 @@ export default Vue.component("FrameworkReviewer", {
 
     numberOfPages(): number {
       return Math.ceil(this.numberItems / this.itemsPerPage);
-    },
+    }
   },
 
   mounted() {
     this.getNumberFrameworks();
     this.refreshFramework();
     this.getInternalTypes();
-  },
+  }
 });
 </script>
 

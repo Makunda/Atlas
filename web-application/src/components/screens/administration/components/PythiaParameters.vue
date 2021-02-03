@@ -128,11 +128,13 @@ export default Vue.extend({
     pythiaToken: "",
     show1: false,
 
+    placeHolderToken: "******-*******-*******-*****",
+
     connectionPythia: false,
     errorConnectionPythia: "",
 
     // Connect button
-    connectionLoading: false,
+    connectionLoading: false
   }),
 
   methods: {
@@ -146,7 +148,7 @@ export default Vue.extend({
           this.lastLocalTimestamp = res;
           this.lastUpdateLocal = new Date(res).toDateString();
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("Failed to retieve the last local update", err);
           this.lastUpdatePythia =
             "Unkown - Make sure you installed the latest version of Artemis ";
@@ -159,7 +161,7 @@ export default Vue.extend({
           this.lastRemoteTimstamp = res;
           this.lastUpdatePythia = new Date(res).toDateString();
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retieve the last local update", err);
           this.lastUpdatePythia =
             "Unkown - Please check the configuraiton of Pythia ";
@@ -171,7 +173,7 @@ export default Vue.extend({
         .then((res: number) => {
           this.framewokToPull = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("Failed to pull fremwork", err);
         });
     },
@@ -188,8 +190,24 @@ export default Vue.extend({
           }
           console.log("Local URI ", res);
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the URI of Pythia", err);
+
+          this.errorConnectionPythia = err;
+        });
+    },
+
+    getTokenPythia() {
+      ConfigurationController.getPythiaTokenPresence()
+        .then((res: boolean) => {
+          if (res == true) {
+            this.pythiaToken = this.placeHolderToken;
+          } else {
+            this.pythiaToken = "";
+          }
+        })
+        .catch(err => {
+          console.error("Failed to retrieve the Tokean of Pythia", err);
 
           this.errorConnectionPythia = err;
         });
@@ -198,7 +216,7 @@ export default Vue.extend({
     setTokenPythia() {
       ConfigurationController.setPythiaToken(this.pythiaToken)
         .then((res: boolean) => {
-          this.pythiaToken = "******-*******-*******-*****";
+          this.pythiaToken = this.placeHolderToken;
           console.log("Token was successfully changed.");
           if (res == false) {
             this.errorConnectionPythia =
@@ -207,7 +225,7 @@ export default Vue.extend({
             this.errorConnectionPythia = "";
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to change the password of Pythia", err);
 
           this.errorConnectionPythia = err;
@@ -217,25 +235,27 @@ export default Vue.extend({
     async updateConnection() {
       this.connectionLoading = true;
 
-      await new Promise<void>((resolve, reject) => {
-        ConfigurationController.setPythiaToken(this.pythiaToken)
-          .then((res: boolean) => {
-            this.pythiaToken = "******-*******-*******-*****";
-            console.log("Token was successfully changed.");
-            if (res == false) {
-              this.errorConnectionPythia =
-                "No Token was detected in the configuration";
-            } else {
-              this.errorConnectionPythia = "";
-            }
-            resolve();
-          })
-          .catch((err) => {
-            console.error("Failed to change the password of Pythia", err);
-            this.errorConnectionPythia = err;
-            reject();
-          });
-      });
+      if (this.pythiaToken != this.placeHolderToken) {
+        await new Promise<void>((resolve, reject) => {
+          ConfigurationController.setPythiaToken(this.pythiaToken)
+            .then((res: boolean) => {
+              this.pythiaToken = this.placeHolderToken;
+              console.log("Token was successfully changed.");
+              if (res == false) {
+                this.errorConnectionPythia =
+                  "No Token was detected in the configuration";
+              } else {
+                this.errorConnectionPythia = "";
+              }
+              resolve();
+            })
+            .catch(err => {
+              console.error("Failed to change the password of Pythia", err);
+              this.errorConnectionPythia = err;
+              reject();
+            });
+        });
+      }
 
       await new Promise<void>((resolve, reject) => {
         ConfigurationController.setPythiaURL(this.pythiaURI)
@@ -243,7 +263,7 @@ export default Vue.extend({
             console.log("Pythia URI was changed to ", res);
             resolve();
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to change the URL of pythia. ", err);
             reject();
           });
@@ -257,11 +277,13 @@ export default Vue.extend({
       this.getLastLocalUpdate();
       this.getRemoteLastUpdate();
       this.getURIPythia();
-    },
+      this.getTokenPythia();
+      this.getNumPull();
+    }
   },
 
   mounted() {
     this.refresh();
-  },
+  }
 });
 </script>

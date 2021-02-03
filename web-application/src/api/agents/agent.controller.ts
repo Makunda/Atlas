@@ -9,11 +9,11 @@ export default class AgentController {
    * Get the status of the agent (Running or stopped)
    * @param agent Name of the agent
    */
-  public static async getStatus(agent: string) : Promise<boolean> {
+  public static async getStatus(agent: string): Promise<boolean> {
     const url =
-    AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/status`;
+      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/status`;
     try {
-        console.log("Url to request : " + url)
+      console.log("Url to request : " + url);
       // Build the URl ( optional type internalType)
       const res = await axios.get(url);
       let status = false;
@@ -41,7 +41,7 @@ export default class AgentController {
    */
   public static async stopAgent(agent: string) {
     const url =
-    AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/stop`;
+      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/stop`;
     try {
       // Build the URl ( optional type internalType)
       const res = await axios.get(url);
@@ -70,7 +70,7 @@ export default class AgentController {
    */
   public static async startAgent(agent: string) {
     const url =
-    AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/start`;
+      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/start`;
     try {
       // Build the URl ( optional type internalType)
       const res = await axios.get(url);

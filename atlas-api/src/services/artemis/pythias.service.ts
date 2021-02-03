@@ -70,12 +70,12 @@ class PythiaService {
      * Get the list of supported languages 
      */
     public async getPullForecast(): Promise<number> {
-      const lastUpdate = await this.getLastUpdateBase();
-        const req: string = `CALL artemis.api.get.framework.youngerThan.forecast($lastUpdate)`;
+      const req: string = `CALL artemis.api.pythia.pull.frameworks.forecast()`;
     
         try {
-          const val = await this.neo4jAl.executeWithParameters(req, { lastUpdate : lastUpdate });
+          const val = await this.neo4jAl.execute(req);
           if (!val.records || val.records.length == 0) return 0;
+          console.log("Forecast pull : " + req);
 
           return Number(val.records[0].get(0));
         } catch (err) {

@@ -61,19 +61,23 @@ export default class PythiaController {
    */
   public static async getPullForecast(): Promise<number> {
     const url =
-      PythiaController.API_BASE_URL + `/api/pythia/artemis/remote/forecast/pull`;
+      PythiaController.API_BASE_URL +
+      `/api/pythia/artemis/remote/forecast/pull`;
 
     try {
       const res = await axios.get(url);
       if (res.status == 200) {
+        console.log("Response of pull forecast :", res.data);
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
       } else {
-        throw new Error(`Failed to retrieve version. Status (${res.status})`);
+        throw new Error(
+          `Failed to retrieve the last pull forecast. Status (${res.status})`
+        );
       }
     } catch (error) {
       console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
+        `Failed to reach the API : ${url}. Failed to last pull forecast.`,
         error
       );
       throw error;

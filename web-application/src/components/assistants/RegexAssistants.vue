@@ -19,6 +19,6 @@ import Vue from "vue";
 export default Vue.extend({
   name: "RegexAssistants",
 
-  data: () => ({}),
+  data: () => ({})
 });
 </script>
