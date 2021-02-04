@@ -2,7 +2,7 @@
   <v-card class="px-5 mb-5 pt-4" :disabled="disabledTile">
     <v-card-text>
       <v-row>
-        <h5 class="text-h5 black--text">
+        <h5 class="text-h4 black--text">
           Automatic framework discovery
         </h5>
       </v-row>

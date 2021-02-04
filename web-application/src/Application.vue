@@ -49,6 +49,36 @@ import Vue from "vue/types/umd";
       <template v-slot:append>
         <div class="pa-2">
           <v-list>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-list-item
+                  link
+                  @click="simpleHealthCheck()"
+                  v-bind="attrs"
+                  v-on="on && !onlineDatabase"
+                >
+                  <v-list-item-icon>
+                    <v-icon v-if="onlineDatabase" color="green"
+                      >mdi-database-check</v-icon
+                    >
+                    <v-icon v-if="!onlineDatabase" color="red"
+                      >mdi-database-remove</v-icon
+                    >
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-list-item-title
+                      >Database
+                      {{
+                        onlineDatabase ? "online" : "offline"
+                      }}</v-list-item-title
+                    >
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+              <span>Lost connection to the database</span>
+            </v-tooltip>
+
             <v-list-item link href="https://github.com/Makunda/Demeter/wiki">
               <v-list-item-icon>
                 <v-icon>mdi-information-outline</v-icon>
@@ -115,7 +145,7 @@ import Vue from "vue";
 
 import {
   ApplicationController,
-  ApplicationRecord
+  ApplicationRecord,
 } from "@/api/applications/application.controller";
 
 import Administration from "@/components/screens/administration/Administration.vue";
@@ -123,6 +153,7 @@ import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
 import Recommendation from "@/components/screens/recommendation/Recommendation.vue";
 import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
 import { Configuration } from "./Configuration";
+import { UtilsController } from "./api/utils/utils.controller";
 
 export default Vue.extend({
   name: "Application",
@@ -131,17 +162,18 @@ export default Vue.extend({
     Enrichment,
     Administration,
     Recommendation,
-    Frameworks
+    Frameworks,
   },
 
   mounted() {
     this.getApplicationList();
+    this.healthcheck();
   },
 
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    }
+    },
   },
 
   data: () => ({
@@ -150,24 +182,26 @@ export default Vue.extend({
       {
         name: "Enrichment",
         screen: "Enrichment",
-        icon: "mdi-hexagon-multiple"
+        icon: "mdi-hexagon-multiple",
       },
       {
         name: "Recommendations",
         screen: "Recommendation",
-        icon: "mdi-file-cad"
+        icon: "mdi-file-cad",
       },
       {
         name: "Frameworks",
         screen: "Frameworks",
-        icon: "mdi-package-variant-closed"
+        icon: "mdi-package-variant-closed",
       },
-      { name: "Administration", screen: "Administration", icon: "mdi-cog" }
+      { name: "Administration", screen: "Administration", icon: "mdi-cog" },
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
-    applicationList: [] as ApplicationRecord[]
+    applicationList: [] as ApplicationRecord[],
+
+    onlineDatabase: false,
   }),
 
   methods: {
@@ -195,10 +229,38 @@ export default Vue.extend({
       );
     },
 
+    simpleHealthCheck() {
+      UtilsController.healthCheck()
+        .then((res: boolean) => {
+          this.onlineDatabase = res;
+        })
+        .catch((err) => {
+          this.onlineDatabase = false;
+        });
+    },
+
+    healthcheck() {
+      UtilsController.healthCheck()
+        .then((res: boolean) => {
+          this.onlineDatabase = res;
+        })
+        .catch((err) => {
+          this.onlineDatabase = false;
+        })
+        .finally(() => {
+          setTimeout(
+            function() {
+              this.healthcheck();
+            }.bind(this),
+            5000
+          );
+        });
+    },
+
     logout() {
       Configuration.deleteProperties();
       document.location.reload();
-    }
+    },
   },
 
   watch: {
@@ -219,8 +281,8 @@ export default Vue.extend({
       }
 
       // Do nothing if the view wasn't found
-    }
-  }
+    },
+  },
 });
 </script>
 

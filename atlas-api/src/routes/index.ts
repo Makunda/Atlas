@@ -7,6 +7,7 @@ import ImagingRouter from "./imaging/imagingIndex.route";
 import AtlasRouter from "./atlas/atlasIndex.route";
 import ConfigurationRouter from "./configuration/configurationIndex.route";
 import Pythiarouter from "./pythia/pythiaIndex.route";
+import UtilsRoute from './utils/utilsIndex.route';
 
 // Init router and path
 const router = Router();
@@ -20,6 +21,7 @@ router.use('/imaging', ImagingRouter);
 router.use('/atlas', AtlasRouter);
 router.use('/configuration', ConfigurationRouter);
 router.use('/pythia', Pythiarouter);
+router.use('/utils', UtilsRoute);
 
 
 // Export the base-router

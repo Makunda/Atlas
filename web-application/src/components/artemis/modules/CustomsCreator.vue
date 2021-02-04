@@ -1,7 +1,7 @@
 <template>
   <v-card width="100%">
-    <v-card-title class="text-h">
-      Custom categories creator
+    <v-card-title class="text-h4">
+      Custom Regex rules creator
       <v-spacer></v-spacer>
       <v-btn icon color="green" @click="refresh()">
         <v-icon>mdi-cached</v-icon>
@@ -21,50 +21,104 @@
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
-          <v-spacer></v-spacer>
-          <h4 class="text-h5">Append a new category </h4>
+            <v-container>
+              <v-row class="mb-6">
+                <v-btn
+                  width="100%"
+                  color="primary"
+                  dark
+                  large
+                  @click="addRegexTemplate()"
+                >
+                  Append a new Regex rule
+                  <v-icon dark right>
+                    mdi-plus-box
+                  </v-icon>
+                </v-btn>
+              </v-row>
+              <v-row v-if="items.length == 0">
+                <h4 class="text-h5">
+                  No regex rules detected, start adding new rules
+                </h4>
+              </v-row>
+              <v-row>
+                <v-treeview
+                  style="width: 100%"
+                  v-model="tree"
+                  :items="items"
+                  activatable
+                  return-object
+                  open-on-click
+                  item-key="id"
+                >
+                  <template v-slot:prepend="{ item, open }">
+                    <v-icon large v-if="!item.file">
+                      {{ open ? "mdi-folder-open" : "mdi-folder" }}
+                    </v-icon>
+                    <v-icon large v-else>
+                      {{ files[item.file] }}
+                    </v-icon>
+                  </template>
+                  <template slot="label" slot-scope="{ item }">
+                    <v-container>
+                      <v-row>
+                        <v-col cols="8"
+                          ><h4 class="text-h5 mx-2">{{ item.name }}</h4></v-col
+                        >
+                        <v-col cols="4" class="mt-3">
+                          <v-icon class="mr-3" color="primary"  dark @click="focusItem(item)">
+                            mdi-eye
+                          </v-icon>
+                          <v-icon color="red"  dark @click="askForDeletion(item)">
+                            mdi-trash-can-outline
+                          </v-icon>
+                        </v-col>
+                      </v-row>
+                      <v-row class="pl-6 mb-1">
+                        <em>{{ item.regexes }}</em>
+                      </v-row>
+                      <v-row class="pl-5"
+                        ><v-chip-group column>
+                          <v-chip
+                            v-for="tag in item.internalTypes"
+                            :key="tag"
+                            small
+                          >
+                            {{ tag }}
+                          </v-chip>
+                        </v-chip-group></v-row
+                      >
+                    </v-container>
+                  </template>
+                </v-treeview>
+              </v-row>
+            </v-container>
           </v-col>
-        </v-row>
-        <v-row>
           <v-col cols="12" md="6">
-            <v-treeview
-              v-model="tree"
-              :items="items"
-              activatable
-              return-object	
-              item-key="id"
-            >
-              <template v-slot:prepend="{ item, open }">
-                <v-icon large v-if="!item.file">
-                  {{ open ? "mdi-folder-open" : "mdi-folder" }}
-                </v-icon>
-                <v-icon large v-else>
-                  {{ files[item.file] }}
-                </v-icon>
-              </template>
-              <template slot="label" slot-scope="{ item }">
-                  <div class="d-flex flex-row">
-                    <h4 class="text-h5 mx-4">{{ item.name }} </h4>  
-                  <v-icon color="primary" dark @click="focusedRegexNode = Object.assign({}, item)">
-          mdi-wrench
-        </v-icon>
-                  </div>
-                </template>
-            </v-treeview>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-card>
+            <v-card min-height="400px">
               <v-card-title class="text-h4">
-                Review the Regex Rules
+                <span v-if="!addMode">Review the Regex Rules</span>
+                <span v-if="addMode">Add a Regex Rules</span>
+                <span v-if="!editMode" class="pl-2 text-h6 text--red"
+                  >(Read Only)</span
+                >
+                <span v-if="editMode" class="pl-2 text-h6">(Edit mode)</span>
                 <v-spacer></v-spacer>
-                <v-btn icon :color="!editMode ? 'green' : 'red'" @click="editMode = !editMode">
-        <v-icon>mdi-lead-pencil</v-icon>
-      </v-btn>
+                <v-btn
+                  icon
+                  :color="!editMode ? 'green' : 'red'"
+                  @click="editMode = !editMode"
+                >
+                  <v-icon>mdi-lead-pencil</v-icon>
+                </v-btn>
               </v-card-title>
-              <v-card-text>
+              <v-card-text v-if="!isFocused()"
+                >Select a Regex node to start</v-card-text
+              >
+              <v-card-text v-if="isFocused()">
                 <v-container class="pl-2">
                   <v-row class="mx-1 mb-5"
-                    ><h4 class="text-h6">Name of the Category</h4></v-row
+                    ><h4 class="text-h6">Name of the Rule</h4></v-row
                   >
                   <v-row class="mx-1">
                     <v-text-field
@@ -77,7 +131,7 @@
                   <v-row class="mx-1 mb-5"
                     ><h4 class="text-h6">Name of the framework</h4></v-row
                   >
-                  <v-row  class="mx-1">
+                  <v-row class="mx-1">
                     <v-text-field
                       v-model="focusedRegexNode.framework"
                       label="Framework"
@@ -89,9 +143,7 @@
                   <v-row class="mx-1 mb-5"
                     ><h4 class="text-h6">List of Regexes</h4></v-row
                   >
-                  <v-row class="mb-1 ml-2"
-                    ><h4 >Add a new regex rule</h4></v-row
-                  >
+                  <v-row class="mb-1 ml-2"><h4>Add a new regex rule</h4></v-row>
                   <v-row>
                     <v-col cols="10"
                       ><v-text-field
@@ -103,65 +155,92 @@
                     ></v-col>
                     <v-col class="d-flex flex-row" cols="2">
                       <v-btn
-                      width="100%"
+                        width="100%"
                         color="primary"
                         dark
                         large
                         @click="appendToRegexList(focusedRegexNode)"
                       >
-                        ADD 
-                        <v-icon
-                          dark
-                          right
-                        >
+                        ADD
+                        <v-icon dark right>
                           mdi-plus-box
                         </v-icon>
                       </v-btn>
-
                     </v-col>
                   </v-row>
-                  <v-row v-if="focusedRegexNode.regexes.length != 0" class='pl-3 d-flex flex-column ' >
+                  <v-row v-if="isFocused()" class="pl-3 d-flex flex-column ">
                     <v-text-field
-                    v-for="(regex, i) in focusedRegexNode.regexes" v-bind:key="i"
+                      v-for="(regex, i) in focusedRegexNode.regexes"
+                      v-bind:key="i"
                       :value="regex"
                       solo
                       label="Append"
                       readonly
-    
+                      :disabled="!editMode"
                       append-outer-icon="mdi-close"
-                      @click:append-outer="removeFromList(focusedRegexNode, regex)"
+                      @click:append-outer="
+                        removeFromList(focusedRegexNode, regex)
+                      "
                     ></v-text-field>
                   </v-row>
                   <v-row class="mx-1 mb-5"
                     ><h4 class="text-h6">List of Internal types</h4></v-row
                   >
                   <v-row class="mx-1">
-                    <v-combobox
+                    <v-autocomplete
                       v-model="focusedRegexNode.internalTypes"
                       :items="internalTypes"
-                      label="Iternal types"
+                      label="Internal types"
+                      :readonly="!editMode"
                       multiple
                       chips
-                    ></v-combobox>
+                    ></v-autocomplete>
                   </v-row>
                   <v-row class="mx-1 mb-5"
                     ><h4 class="text-h6">Category</h4></v-row
                   >
                   <v-row class="mx-1">
-                    <v-select
+                    <v-autocomplete
                       v-model="focusedRegexNode.category"
                       :items="categories"
-                      label="Iternal types"
+                      :readonly="!editMode"
+                      label="Category"
                       chips
+                    ></v-autocomplete>
+                  </v-row>
+                  <v-divider class="my-5"></v-divider>
+                  <v-row class="mx-1 mb-5"
+                    ><h4 class="text-h6">Parent category</h4></v-row
+                  >
+                  <v-row class="mx-1">
+                    <v-select
+                      v-model="focusedRegexNode.parentId"
+                      :items="parentIdList"
+                      :readonly="!editMode"
+                      item-text="name"
+                      item-value="id"
+                      label="Parent ID"
                     ></v-select>
                   </v-row>
                   <v-divider class="my-5"></v-divider>
                   <v-row>
                     <v-spacer></v-spacer>
-                    <v-btn class="mx-3" color="primary" disabled >
+                    <v-btn class="mx-3" color="primary" :disabled="addMode" @click="testRegexNode(focusedRegexNode)">
                       Test the Regex Rule
                     </v-btn>
-                    <v-btn color="primary" >
+                    <v-btn
+                      v-if="addMode"
+                      color="primary"
+                      @click="addRegex(focusedRegexNode)"
+                    >
+                      Add the Regex Rule
+                    </v-btn>
+                    <v-btn
+                      v-if="!addMode"
+                      color="primary"
+                      :disabled="!editMode"
+                      @click="updateRegex(focusedRegexNode)"
+                    >
                       Update the Regex Rule
                     </v-btn>
                   </v-row>
@@ -172,6 +251,59 @@
         </v-row>
       </v-container>
     </v-card-text>
+    <!-- Snack bar for test -->
+    <v-snackbar
+      v-model="snackbarTestResults"
+      :timeout="10000"
+    >
+      {{ testRegexResults }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbarTestResults = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- Modal to validate the suppresion of a rule -->
+    <v-dialog
+      v-model="dialogDeleteNode"
+      persistent
+      max-width="290"
+    >
+
+      <v-card>
+        <v-card-title class="headline">
+          Are you sure to delete this rule ?
+        </v-card-title>
+        <v-card-text>
+          You're about to delete the rule {{ toDelete.name }}. <br>
+          The rule currenlty affect : {{ dialogDeleteNodeNumAffected }} objects
+          </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialogDeleteNode = false"
+          >
+            Disagree
+          </v-btn>
+          <v-btn
+            color="red darken-1"
+            text
+            @click="removeRegexNode(toDelete.id)"
+            :loading="deletingNode"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -179,90 +311,145 @@
 import Vue from "vue";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { FrameworkController } from "@/api/artemis/framework.controller";
+import { RegexNodeController } from "@/api/artemis/regexNode.controller";
 
 export default Vue.extend({
   name: "CustomsCreator",
 
   data: () => ({
-    initiallyOpen: ["public"],
+    initiallyOpen: [],
 
     // Regegex node
-    focusedRegexNode: {
-      regexes: ["test 1", "Test 3"]
+    focusedRegexNode: {} as ApiRegexNode,
+    defaultRegexNode: {
+      name: "",
+      regexes: [],
+      internalTypes: [],
+      framework: "",
+      category: "",
+      parentId: -1,
     } as ApiRegexNode,
+
     currentRegexInput: "",
     editMode: false,
+    addMode: false,
 
-    internalTypes : [],
+    testRegexResults: "",
+    snackbarTestResults: false,
+
+    internalTypes: [],
     categories: [],
 
     tree: [],
-    items: [
-      {
-        id: 1,
-        name: ".git",
-        regexes: ["test?", "test"],
-        internalTypes: ["Cobol utilities", "Caramba"],
-        framework: "Spring",
-        category: "Java spring",
-        parentId: -1,
-      },
-      {
-        id: 2,
-        name: ".git",
-        regexes: ["test?", "test"],
-        internalTypes: ["Cobol utilities", "Caramba"],
-        framework: "Spring",
-        category: "Java spring 1",
-        parentId: -1,
-      },
-      {
-        id: 3,
-        name: ".git",
-        regexes: ["test?", "test"],
-        internalTypes: ["Cobol utilities", "Caramba"],
-        framework: "Spring",
-        category: "Java spring 2",
-        parentId: -1,
-        children: [
-          {
-            id: 4,
-            name: ".git",
-            regexes: ["test?", "test"],
-            internalTypes: ["Cobol utilities", "Caramba"],
-            framework: "Spring",
-            category: "Java spring",
-            parentId: -1,
-          },
-          {
-            id: 5,
-            name: ".git",
-            regexes: ["test?", "test"],
-            internalTypes: ["Cobol utilities", "Caramba"],
-            framework: "Spring",
-            category: "Java spring",
-            parentId: -1,
-          },
-        ],
-      },
-    ] as ApiRegexNode[],
+
+    parentIdList: [],
+
+    items: [] as ApiRegexNode[],
+
+    // Deletion
+    dialogDeleteNode: false,
+    dialogDeleteNodeNumAffected: "",
+    toDelete:  {} as ApiRegexNode,
+    deletingNode: false
   }),
 
   methods: {
-    appendToRegexList(regexNode:ApiRegexNode) {
-      if (this.currentRegexInput != "" ) {
+    focusItem(regexNode: ApiRegexNode) {
+      this.testRegexResults="";
+      this.addMode = false;
+      this.focusedRegexNode = Object.assign({}, regexNode);
+    },
+
+    isFocused() {
+      return !(
+        Object.keys(this.focusedRegexNode).length == 0 &&
+        this.focusedRegexNode.constructor === Object
+      );
+    },
+
+    addRegexTemplate() {
+      this.focusedRegexNode = Object.assign({}, this.defaultRegexNode);
+      this.addMode = true;
+      this.editMode = true;
+    },
+    
+
+    addRegex(item: ApiRegexNode) {
+      RegexNodeController.addRegexNode(item)
+        .then((res: ApiRegexNode) => {
+          this.focusedRegexNode = Object.assign({}, this.defaultRegexNode);
+          this.addMode = false;
+          this.editMode = false;
+          this.refresh();
+        })
+        .catch((err) => {
+          console.error("Failed to add the Framework", err);
+        });
+    },
+
+    updateRegex(item: ApiRegexNode) {
+      RegexNodeController.addRegexNode(item)
+        .then((res: ApiRegexNode) => {
+          this.addMode = false;
+          this.editMode = false;
+          this.refresh();
+        })
+        .catch((err) => {
+          console.error("Failed to update the framework");
+        });
+    },
+
+    appendToRegexList(regexNode: ApiRegexNode) {
+      if (this.currentRegexInput != "") {
         regexNode.regexes.push(this.currentRegexInput);
       }
       this.currentRegexInput == "";
-
       this.focusedRegexNode = regexNode;
     },
 
-    removeFromList(regexNode:ApiRegexNode, item: string) {
+    removeRegexNode(item: ApiRegexNode) {
+      this.deletingNode=true;
+      RegexNodeController.deleteRegexNode(this.toDelete.id).then((res: boolean) => {
+        if(res) {
+          this.refresh();
+        } else {
+          // Do something with the err
+           console.error("Failed to delete the node.", item);
+        }
+      }).catch(err => {
+        console.error("Failed to delete the node.", item);
+      }).finally(() => {
+        this.dialogDeleteNode = false;
+        this.deletingNode = false;
+      })
+    },
+    
+    askForDeletion(item: ApiRegexNode) {
+      // open the modal
+      this.dialogDeleteNode = true;
+      this.toDelete = item;
+      RegexNodeController.testRegex(this.toDelete.id).then((res:number) => {
+        this.dialogDeleteNodeNumAffected = res;
+      }).catch(err => {
+        this.dialogDeleteNodeNumAffected = err;
+      });
+
+    },
+
+    testRegexNode(item: ApiRegexNode) {
+      RegexNodeController.testRegex(item.id).then((res:number) => {
+          this.testRegexResults = `${res} objects matched this rule`;
+          this.snackbarTestResults= true;
+
+      }).catch(err => {
+          this.testRegexResults=err;
+      });
+    },
+
+    removeFromList(regexNode: ApiRegexNode, item: string) {
       const index = regexNode.regexes.indexOf(item);
       if (index != -1) {
         regexNode.regexes.splice(index, 1);
-        console.log("List of regex ", regexNode.regexes)
       }
       this.focusedRegexNode = regexNode;
     },
@@ -272,19 +459,52 @@ export default Vue.extend({
         .then((res: string[]) => {
           this.internalTypes = res;
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("Failed to retrieve the list of internal types", err);
         });
     },
 
     getCategories() {
-      this.categories = ["IBM Utilities", "IBM Internal"]
-    }
+      this.categories = ["IBM Utilities", "IBM Internal"];
+    },
+
+    getAllNodesAsTree() {
+      RegexNodeController.getAllNodesAsTree()
+        .then((res: ApiRegexNode[]) => {
+          this.items = res;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
+    getNodeList() {
+      RegexNodeController.getAllNode()
+        .then((res: ApiRegexNode[]) => {
+          this.parentIdList = [];
+          for (let i = 0; i < res.length; i++) {
+            const toPush = { id: res[i].id, name: res[i].name };
+            if (this.parentIdList.indexOf(toPush) === -1) {
+              this.parentIdList.push(toPush);
+            }
+          }
+          this.parentIdList.push({ id: -1, name: "No parent" });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
+    refresh() {
+      this.getInternalTypes();
+      this.getCategories();
+      this.getNodeList();
+      this.getAllNodesAsTree();
+    },
   },
 
   mounted() {
-    this.getInternalTypes();
-    this.getCategories();
-  }
+    this.refresh();
+  },
 });
 </script>
