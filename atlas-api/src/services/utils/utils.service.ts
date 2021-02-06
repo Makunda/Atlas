@@ -14,6 +14,7 @@ class UtilsService {
             const request: string = "Match () Return 1 Limit 1";
 
             const results: QueryResult = await this.neo4jAl.execute(request);
+            if(!results.records[0]) return false;
             return true;
         } catch (err) {
           return false;

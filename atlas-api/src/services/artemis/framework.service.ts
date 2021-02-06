@@ -280,6 +280,26 @@ class FrameworksService {
   }
 
   /**
+   * Get the list of Framework necessitating a validation
+   */
+  public async getToValidateFrameworks(): Promise<Framework[]> {
+    let res: QueryResult = await this.neo4jAl.execute(
+        "CALL artemis.api.get.framework.to.validate();"
+      );
+    
+
+    let returnList: Framework[] = [];
+    let singleRecord;
+    for (let index = 0; index < res.records.length; index++) {
+      singleRecord = res.records[index];
+      returnList.push(this.convertRecordToFramework(singleRecord));
+    }
+
+    return returnList;
+  }
+  
+
+  /**
    * Get the list of internal type
    */
   public async getFrameworksInternalTypes(): Promise<string[]> {

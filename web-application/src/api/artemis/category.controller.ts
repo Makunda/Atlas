@@ -30,6 +30,61 @@ export class CategoryController {
     }
   }
 
+
+  /**
+   * 
+   * @param item Node to update
+   */
+  public static async updateNode(item: Category): Promise<Category> {
+    const url = CategoryController.API_BASE_URL + "/api/artemis/category";
+
+    try {
+      const res = await axios.put(url, item);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as Category;
+      } else {
+        throw new Error(
+          `Failed to update a Category Node. Status (${res.status}) : Error : ${res.data}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to update a Category Node..`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a Category
+   * @param item Item to delete
+   */
+  public static async deleteNode(item: Category): Promise<boolean> {
+    const url = CategoryController.API_BASE_URL + `/api/artemis/category/${item.id}`;
+
+    try {
+      const res = await axios.delete(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Boolean(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to delete a Category Node. Status (${res.status}) : Error : ${res.data}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to delete a Category Node..`,
+        error
+      );
+      throw error;
+    }
+  }
+
   /**
    * Get the category node
    */

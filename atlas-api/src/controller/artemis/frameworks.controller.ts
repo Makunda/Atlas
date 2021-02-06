@@ -98,6 +98,16 @@ class FrameworksController {
     }
   }
 
+  // To validate frameworks
+  public getFrameworksToValidate= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const frameworks: Framework[] = await this.frameworksService.getToValidateFrameworks();
+      res.status(200).send({ data: frameworks, message: 'To validate' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // Get internal types
   public getFrameworksInternalTypes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

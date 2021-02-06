@@ -18,6 +18,7 @@ class RegexNodeRoute implements Route {
     this.router.put(`${this.path}/update`, this.regexController.updateNode);
     this.router.delete(`${this.path}/:id`, this.regexController.deleteNode);
     this.router.get(`${this.path}/:id/test`, this.regexController.testNode);
+    this.router.get(`${this.path}/:id/request`, this.regexController.getRegexRequest);
   }
 }
 

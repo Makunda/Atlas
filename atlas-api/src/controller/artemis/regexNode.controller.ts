@@ -76,6 +76,21 @@ class RegexNodeController {
       next(error);
     }
   };
+
+  public getRegexRequest = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const id = Number(req.params.id);
+      const result: string = await this.regexNodeService.getRegexRequest(id);
+      res.status(200).json({ data: result, message: "Regex request" });
+    } catch (error) {
+      next(error);
+    }
+  };
+  
 }
 
 export default RegexNodeController;

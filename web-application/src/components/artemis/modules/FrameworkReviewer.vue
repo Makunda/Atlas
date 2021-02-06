@@ -1,8 +1,12 @@
 <template>
   <v-container>
     <v-row class="d-flex flex-column pa-5 ml-4">
-      <h3 class="text-h4 black--text mb-4 my-3">
+      <h3 class="text-h4 black--text mb-4 my-3" style="width: 100%">
         Review the frameworks discovered
+        <v-spacer></v-spacer>
+        <v-btn icon color="green" @click="refresh()">
+        <v-icon>mdi-cached</v-icon>
+      </v-btn>
       </h3>
       <p class=" text-body-1">
         Review the different frameworks detected.
@@ -28,6 +32,15 @@
           Detected as not a Framework
         </span>
       </p>
+      <p>Filters : </p>
+      <p><v-checkbox
+          v-model="showOnlyToValidate"
+          value="0"
+          label="Filter frameworks to validate"
+          type="checkbox"
+          @change="refresh()"
+          required
+        ></v-checkbox></p>
     </v-row>
     <v-row class="pa-5 ">
       <v-card min-height="600px" min-width="100%">
@@ -94,7 +107,7 @@
                           <v-row>
                             <v-col
                               v-for="(item, i) in props.items"
-                              :key="item.name"
+                              :key="i"
                               cols="12"
                             >
                               <v-hover v-slot="{ hover }">
@@ -103,7 +116,7 @@
                                     hover || i == currentIndex ? 8 : 2
                                   "
                                   class="frameworkListItem"
-                                  @click="setFrameworkFocus(i)"
+                                  @click="setFrameworkFocus(item, i)"
                                 >
                                   <v-card-title
                                     class="subheading font-weight-bold py-2"
@@ -286,7 +299,11 @@
                           <v-combobox
                             v-model="editFramework.category"
                             :items="framewokCategories"
-                            label="Select a category or create a new one"
+                            item-text="name"
+                            item-value="name"
+                            label="Select a category"
+                            :return-object="false"
+
                           ></v-combobox>
                         </v-col>
                       </v-row>
@@ -301,7 +318,7 @@
                           <v-combobox
                             v-model="editFramework.internalType"
                             :items="internalTypes"
-                            label="Select a internal type or create a new one"
+                            label="Select a internal type"
                           ></v-combobox>
                         </v-col>
                       </v-row>
@@ -381,6 +398,8 @@
 import { Framework } from "@/api/interface/ApiArtemis.interface";
 import { FrameworkController } from "@/api/artemis/framework.controller";
 import Vue from "vue";
+import { CategoryController } from "@/api/artemis/category.controller";
+import { Category } from "@/api/interface/ApiCategory.interface";
 
 export default Vue.component("FrameworkReviewer", {
   data: () => ({
@@ -404,6 +423,9 @@ export default Vue.component("FrameworkReviewer", {
     items: [] as Framework[],
     numberItems: 0,
 
+    // Check Box
+    showOnlyToValidate: false,
+
     currentIndex: 0 as number,
     focusedFramework: null as Framework,
     editFramework: null as Framework,
@@ -420,11 +442,7 @@ export default Vue.component("FrameworkReviewer", {
       }
     ],
 
-    framewokCategories: [
-      "IBM Utilities",
-      "IBM Frameworks",
-      "IBM Supplied Utilities"
-    ],
+    framewokCategories: [] as Category[],
     internalTypes: [],
     loadingTable: false,
 
@@ -445,11 +463,21 @@ export default Vue.component("FrameworkReviewer", {
   },
 
   methods: {
-    setFrameworkFocus(itemIndex: number) {
-      console.log("Focus on : " + itemIndex);
+
+    getListCategories() {
+      CategoryController.getAllNode()
+        .then((res: Category[]) => {
+          this.framewokCategories = res;
+        })
+        .catch((err) => {
+          console.log("Failed to retrieve the list of categories", err);
+        });
+    },
+
+    setFrameworkFocus(item: Framework, itemIndex: number) {
       this.currentIndex = itemIndex;
       this.focusedFramework = this.items[this.currentIndex];
-      this.editFramework = Object.assign({}, this.focusedFramework);
+      this.editFramework = Object.assign({}, item);
     },
 
     getFocusedFramework(): Framework {
@@ -457,9 +485,7 @@ export default Vue.component("FrameworkReviewer", {
     },
 
     undoModification() {
-      console.log("Undo the modifications : ", this.editFramework);
       this.editFramework = this.focusedFramework;
-      console.log("Undone ! ", this.editFramework);
     },
 
     deleteFramework() {
@@ -509,7 +535,7 @@ export default Vue.component("FrameworkReviewer", {
         });
     },
 
-    refreshFramework() {
+    getBatchFramework() {
       const startIndex = this.page * this.itemsPerPage;
       const stopIndex = startIndex + this.itemsPerPage;
       this.getNumberFrameworks();
@@ -529,6 +555,28 @@ export default Vue.component("FrameworkReviewer", {
         .finally(() => {
           this.loadingTable = false;
         });
+    },
+
+    getToValidateFramework() {
+      this.loadingTable = true;
+      FrameworkController.getToValidateFrameworks().then((res:Framework[]) => {
+        this.items = res;
+        this.currentIndex = 0;
+        this.numberItems = res.length;
+      }).catch(err => {
+         console.error("Failed to retrieve the list of frameworks.", err);
+      }).finally(() => {
+        this.loadingTable = false;
+      })
+    },
+
+    refreshFramework() {
+      if(this.showOnlyToValidate) {
+        this.getToValidateFramework();
+      } else {
+        this.getBatchFramework();
+      }
+      
     },
 
     searchFrameworks(toSearch: string) {
@@ -557,13 +605,13 @@ export default Vue.component("FrameworkReviewer", {
 
     nextPage() {
       this.currentIndex = 0;
-      this.refreshFramework();
+      if(!this.showOnlyToValidate) this.refreshFramework();
       if (this.page + 1 <= this.numberOfPages()) this.page += 1;
     },
 
     formerPage() {
       this.currentIndex = 0;
-      this.refreshFramework();
+      if(!this.showOnlyToValidate) this.refreshFramework();
       if (this.page - 1 >= 1) this.page -= 1;
     },
 
@@ -573,13 +621,18 @@ export default Vue.component("FrameworkReviewer", {
 
     numberOfPages(): number {
       return Math.ceil(this.numberItems / this.itemsPerPage);
+    },
+
+    refresh() {
+      this.getNumberFrameworks();
+      this.refreshFramework();
     }
   },
 
   mounted() {
-    this.getNumberFrameworks();
-    this.refreshFramework();
+    this.refresh();
     this.getInternalTypes();
+    this.getListCategories();
   }
 });
 </script>

@@ -18,7 +18,7 @@
     </v-card-subtitle>
     <v-card-text>
       <v-container>
-        <v-data-table :items="items" sort-by="calories" class="elevation-1">
+        <v-data-table :headers="headers" :items="items" sort-by="calories" class="elevation-1">
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title>Category manager</v-toolbar-title>
@@ -112,6 +112,16 @@
         </v-data-table>
       </v-container>
     </v-card-text>
+    <!-- Snack Bar information -->
+    <v-snackbar v-model="snackbarInfo" :timeout="5000">
+      {{ textSnackBar }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="snackbarInfo = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -127,17 +137,24 @@ export default Vue.extend({
     dialog: false,
     dialogDelete: false,
 
-    headers: [ {
-            text: 'Name of the category',
-            align: 'start',
-            sortable: false,
-            value: 'name',
-          },
-          {
-            text: 'Icon URL',
-            value: 'iconURL'
-          }
-          ],
+    // Snack bar
+    snackbarInfo: false,
+    textSnackBar: "",
+
+    // Table
+    headers: [
+      {
+        text: "Name of the category",
+        align: "start",
+        sortable: true,
+        value: "name",
+      },
+      {
+        text: "Icon URL",
+        value: "iconURL",
+      },
+      { text: 'Actions', value: 'actions', sortable: false },
+    ],
 
     items: [],
     editedIndex: -1,
@@ -194,7 +211,17 @@ export default Vue.extend({
     },
 
     deleteItemConfirm() {
-      this.items.splice(this.editedIndex, 1);
+      CategoryController.deleteNode(this.editedItem)
+        .then((res: boolean) => {
+          this.textSnackBar = "Successfully deleted the category.";
+          this.snackbarInfo = true;
+          this.initialize();
+        })
+        .catch((err) => {
+          this.textSnackBar = `Failed to delete the Category. Error: ${err}`;
+          this.snackbarInfo = true;
+        });
+
       this.closeDelete();
     },
 
@@ -216,10 +243,27 @@ export default Vue.extend({
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
+        CategoryController.updateNode(this.editedItem)
+          .then((res: Category) => {
+            this.textSnackBar = "Successfully updated the category.";
+            this.snackbarInfo = true;
+            this.initialize();
+          })
+          .catch((err) => {
+            this.textSnackBar = `Failed to udpdate the Category. Error: ${err}`;
+            this.snackbarInfo = true;
+          });
       } else {
-        this.items.push(this.editedItem);
-        console.log("Items", this.items)
+        CategoryController.addNode(this.editedItem)
+          .then((res: Category) => {
+            this.textSnackBar = "Successfully added the category.";
+            this.snackbarInfo = true;
+            this.initialize();
+          })
+          .catch((err) => {
+            this.textSnackBar = `Failed to add the Category. Error: ${err}`;
+            this.snackbarInfo = true;
+          });
       }
       this.close();
     },

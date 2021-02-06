@@ -80,7 +80,7 @@ class RegexNodesService {
        * @param node Updated node
        */
       public async updateRegexNode(node: CreateRegexNodeDto) : Promise<RegexNode> {
-        
+        console.log("Updating with parent : ", node)
         const req: string = `CALL artemis.api.regex.update.node($id, $name, $regexes, $internalTypes, $framework, $category, $parentId)`;
     
         try {
@@ -120,7 +120,7 @@ class RegexNodesService {
         try {
           const val = await this.neo4jAl.executeWithParameters(req, {idNode: idNode});
           if (!val.records || val.records.length == 0) return 0;
-          return  Number(val.records[0]);
+          return  int(val.records[0].get(0)).toNumber();
 
         } catch (err) {
           logger.error(
@@ -130,6 +130,22 @@ class RegexNodesService {
           throw new HttpException(500, "Internal error");
         }
     }
+
+    public async getRegexRequest(idNode : number) : Promise<string> {
+      const req: string = `CALL artemis.api.regex.get.request($idNode)`;
+      try {
+        const val = await this.neo4jAl.executeWithParameters(req, {idNode: idNode});
+        if (!val.records || val.records.length == 0) return "";
+        return  String(val.records[0].get(0));
+
+      } catch (err) {
+        logger.error(
+          "An internal error occurred in RegexNodeService::getRegexRequest ",
+          err
+        );
+        throw new HttpException(500, "Internal error");
+      }
+  }
 
       //artemis.api.regex.test
 }

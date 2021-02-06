@@ -66,10 +66,19 @@
                           ><h4 class="text-h5 mx-2">{{ item.name }}</h4></v-col
                         >
                         <v-col cols="4" class="mt-3">
-                          <v-icon class="mr-3" color="primary"  dark @click="focusItem(item)">
+                          <v-icon
+                            class="mr-3"
+                            color="primary"
+                            dark
+                            @click="focusItem(item)"
+                          >
                             mdi-eye
                           </v-icon>
-                          <v-icon color="red"  dark @click="askForDeletion(item)">
+                          <v-icon
+                            color="red"
+                            dark
+                            @click="askForDeletion(item)"
+                          >
                             mdi-trash-can-outline
                           </v-icon>
                         </v-col>
@@ -105,11 +114,12 @@
                 <span v-if="editMode" class="pl-2 text-h6">(Edit mode)</span>
                 <v-spacer></v-spacer>
                 <v-btn
-                  icon
+                  outlined
                   :color="!editMode ? 'green' : 'red'"
                   @click="editMode = !editMode"
                 >
-                  <v-icon>mdi-lead-pencil</v-icon>
+                  Edit
+                  <v-icon class="ml-2">mdi-lead-pencil</v-icon>
                 </v-btn>
               </v-card-title>
               <v-card-text v-if="!isFocused()"
@@ -203,6 +213,8 @@
                     <v-autocomplete
                       v-model="focusedRegexNode.category"
                       :items="categories"
+                      item-text="name"
+                      item-value="name"
                       :readonly="!editMode"
                       label="Category"
                       chips
@@ -225,7 +237,12 @@
                   <v-divider class="my-5"></v-divider>
                   <v-row>
                     <v-spacer></v-spacer>
-                    <v-btn class="mx-3" color="primary" :disabled="addMode" @click="testRegexNode(focusedRegexNode)">
+                    <v-btn
+                      class="mx-3"
+                      color="primary"
+                      :disabled="addMode"
+                      @click="testRegexNode(focusedRegexNode)"
+                    >
                       Test the Regex Rule
                     </v-btn>
                     <v-btn
@@ -249,13 +266,71 @@
             </v-card>
           </v-col>
         </v-row>
+        <!-- Export to cypher .file -->
+
+        <v-row class="mx-1 my-4">
+          <v-card width="100%">
+            <v-card-title>
+              Advanced options:
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                @click="
+                  expandOptions = expandOptions != 'export' ? 'export' : ''
+                "
+              >
+                Export options
+              </v-btn>
+            </v-card-title>
+            <v-expand-transition>
+              <v-card-text
+                v-show="expandOptions == 'export'"
+                class="mx-auto secondary white--text"
+              >
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-row>
+                        <h3 class="text-h5 mt-3">
+                          Export the rules to a cypher file
+                        </h3>
+                      </v-row>
+                      <v-row>
+                        <h3 class="my-3">Select the rules to export:</h3>
+                        <v-treeview
+                          color="white"
+                          class="white--text"
+                          selectable
+                          v-model="treeExport"
+                          :items="items"
+                          selection-type="all"
+                          return-object
+                        ></v-treeview>
+                        <v-btn
+                        @click="buildRequestTree()">
+                          Update
+                        </v-btn>
+                      </v-row>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-card
+                        style="background-color: #606060; min-height: 100%; color: #ffdc16"
+                        class="ma-3 pa-4"
+                      >
+                        <p v-html="fullExportRequest"></p>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-expand-transition>
+          </v-card>
+        </v-row>
       </v-container>
     </v-card-text>
+
     <!-- Snack bar for test -->
-    <v-snackbar
-      v-model="snackbarTestResults"
-      :timeout="10000"
-    >
+    <v-snackbar v-model="snackbarTestResults" :timeout="10000">
       {{ testRegexResults }}
 
       <template v-slot:action="{ attrs }">
@@ -270,28 +345,19 @@
       </template>
     </v-snackbar>
     <!-- Modal to validate the suppresion of a rule -->
-    <v-dialog
-      v-model="dialogDeleteNode"
-      persistent
-      max-width="290"
-    >
-
+    <v-dialog v-model="dialogDeleteNode" persistent max-width="290">
       <v-card>
         <v-card-title class="headline">
           Are you sure to delete this rule ?
         </v-card-title>
         <v-card-text>
-          You're about to delete the rule {{ toDelete.name }}. <br>
+          You're about to delete the rule {{ toDelete.name }}. <br />
           The rule currenlty affect : {{ dialogDeleteNodeNumAffected }} objects
-          </v-card-text>
+        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialogDeleteNode = false"
-          >
-            Disagree
+          <v-btn color="green darken-1" text @click="dialogDeleteNode = false">
+            Cancel
           </v-btn>
           <v-btn
             color="red darken-1"
@@ -304,6 +370,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- Snack Bar information -->
   </v-card>
 </template>
 
@@ -312,6 +379,8 @@ import Vue from "vue";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { FrameworkController } from "@/api/artemis/framework.controller";
 import { RegexNodeController } from "@/api/artemis/regexNode.controller";
+import { CategoryController } from "@/api/artemis/category.controller";
+import { Category } from "@/api/interface/ApiCategory.interface";
 
 export default Vue.extend({
   name: "CustomsCreator",
@@ -334,13 +403,22 @@ export default Vue.extend({
     editMode: false,
     addMode: false,
 
+    // Options
+    expandOptions: "",
+
+    // Snackbars
     testRegexResults: "",
     snackbarTestResults: false,
+
+    snackbarInfo: false,
+    textSnackBar: "",
 
     internalTypes: [],
     categories: [],
 
     tree: [],
+    treeExport: [] as ApiRegexNode[],
+    fullExportRequest: "",
 
     parentIdList: [],
 
@@ -349,15 +427,19 @@ export default Vue.extend({
     // Deletion
     dialogDeleteNode: false,
     dialogDeleteNodeNumAffected: "",
-    toDelete:  {} as ApiRegexNode,
-    deletingNode: false
+    toDelete: {} as ApiRegexNode,
+    deletingNode: false,
   }),
 
   methods: {
     focusItem(regexNode: ApiRegexNode) {
-      this.testRegexResults="";
+      this.testRegexResults = "";
       this.addMode = false;
       this.focusedRegexNode = Object.assign({}, regexNode);
+    },
+
+    initFocusView() {
+      this.focusedRegexNode = {};
     },
 
     isFocused() {
@@ -372,7 +454,6 @@ export default Vue.extend({
       this.addMode = true;
       this.editMode = true;
     },
-    
 
     addRegex(item: ApiRegexNode) {
       RegexNodeController.addRegexNode(item)
@@ -380,22 +461,31 @@ export default Vue.extend({
           this.focusedRegexNode = Object.assign({}, this.defaultRegexNode);
           this.addMode = false;
           this.editMode = false;
+          this.displayInfoSnackbar("Successfully added the rule.");
           this.refresh();
         })
         .catch((err) => {
-          console.error("Failed to add the Framework", err);
+          console.error("Failed to add the rule", err);
+          this.displayInfoSnackbar(`Failed to add the rule. Error: ${err}`);
         });
     },
 
+    displayInfoSnackbar(toDisplay: string) {
+      this.textSnackBar = toDisplay;
+      this.snackbarInfo = true;
+    },
+
     updateRegex(item: ApiRegexNode) {
-      RegexNodeController.addRegexNode(item)
+      RegexNodeController.updateRegexNode(item)
         .then((res: ApiRegexNode) => {
           this.addMode = false;
           this.editMode = false;
+          this.displayInfoSnackbar("Successfully updated the rule.");
           this.refresh();
         })
         .catch((err) => {
-          console.error("Failed to update the framework");
+          console.error("Failed to update the rule");
+          this.displayInfoSnackbar(`Failed to update the rule. Error: ${err}`);
         });
     },
 
@@ -408,42 +498,50 @@ export default Vue.extend({
     },
 
     removeRegexNode(item: ApiRegexNode) {
-      this.deletingNode=true;
-      RegexNodeController.deleteRegexNode(this.toDelete.id).then((res: boolean) => {
-        if(res) {
-          this.refresh();
-        } else {
-          // Do something with the err
-           console.error("Failed to delete the node.", item);
-        }
-      }).catch(err => {
-        console.error("Failed to delete the node.", item);
-      }).finally(() => {
-        this.dialogDeleteNode = false;
-        this.deletingNode = false;
-      })
+      this.deletingNode = true;
+      RegexNodeController.deleteRegexNode(this.toDelete.id)
+        .then((res: boolean) => {
+          if (res) {
+            this.displayInfoSnackbar("Successfully deleted the rule.");
+            this.refresh();
+          } else {
+            // Do something with the err
+            console.error("Failed to delete the node.", item);
+            this.displayInfoSnackbar("Failed to update the rule. Bad Request.");
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to delete the node.", item);
+          this.displayInfoSnackbar(`Failed to delete the rule. Error: ${err}`);
+        })
+        .finally(() => {
+          this.dialogDeleteNode = false;
+          this.deletingNode = false;
+        });
     },
-    
+
     askForDeletion(item: ApiRegexNode) {
       // open the modal
       this.dialogDeleteNode = true;
       this.toDelete = item;
-      RegexNodeController.testRegex(this.toDelete.id).then((res:number) => {
-        this.dialogDeleteNodeNumAffected = res;
-      }).catch(err => {
-        this.dialogDeleteNodeNumAffected = err;
-      });
-
+      RegexNodeController.testRegex(this.toDelete.id)
+        .then((res: number) => {
+          this.dialogDeleteNodeNumAffected = res;
+        })
+        .catch((err) => {
+          this.dialogDeleteNodeNumAffected = err;
+        });
     },
 
     testRegexNode(item: ApiRegexNode) {
-      RegexNodeController.testRegex(item.id).then((res:number) => {
+      RegexNodeController.testRegex(item.id)
+        .then((res: number) => {
           this.testRegexResults = `${res} objects matched this rule`;
-          this.snackbarTestResults= true;
-
-      }).catch(err => {
-          this.testRegexResults=err;
-      });
+          this.snackbarTestResults = true;
+        })
+        .catch((err) => {
+          this.testRegexResults = err;
+        });
     },
 
     removeFromList(regexNode: ApiRegexNode, item: string) {
@@ -465,7 +563,13 @@ export default Vue.extend({
     },
 
     getCategories() {
-      this.categories = ["IBM Utilities", "IBM Internal"];
+      CategoryController.getAllNode()
+        .then((res: Category[]) => {
+          this.categories = res;
+        })
+        .catch((err) => {
+          console.log("Failed to retrieve the list of categories");
+        });
     },
 
     getAllNodesAsTree() {
@@ -495,11 +599,39 @@ export default Vue.extend({
         });
     },
 
+    // Build the list this.treeExport
+    async getRequests(tree: ApiRegexNode[]) {
+      if(tree.length == 0) return;
+      let fullResults = "";
+
+      console.log(tree)
+
+      try {
+        for(const item in tree) {
+          fullResults += "<span style='color: #66B245'>// "+ tree[item].name +"</span><br />"          
+          fullResults += await RegexNodeController.getRegexRequest(tree[item].id) + ";<br /><br />";
+
+          if(tree[item].children) {
+            fullResults += await this.getRequests(tree[item].id);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to get the request", err);
+      }
+
+      return fullResults;
+    },
+
+    async buildRequestTree() {
+      this.fullExportRequest = await this.getRequests(this.treeExport);
+    },
+
     refresh() {
       this.getInternalTypes();
       this.getCategories();
       this.getNodeList();
       this.getAllNodesAsTree();
+      this.initFocusView();
     },
   },
 
