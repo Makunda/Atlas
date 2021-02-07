@@ -274,6 +274,7 @@
               Advanced options:
               <v-spacer></v-spacer>
               <v-btn
+                class="mr-2"
                 color="primary"
                 @click="
                   expandOptions = expandOptions != 'export' ? 'export' : ''
@@ -281,7 +282,16 @@
               >
                 Export options
               </v-btn>
+              <v-btn
+                color="primary"
+                @click="
+                  expandOptions = expandOptions != 'generate' ? 'generate' : ''
+                "
+              >
+                Generate
+              </v-btn>
             </v-card-title>
+            <!-- Export options  -->
             <v-expand-transition>
               <v-card-text
                 v-show="expandOptions == 'export'"
@@ -306,8 +316,48 @@
                           selection-type="all"
                           return-object
                         ></v-treeview>
-                        <v-btn
-                        @click="buildRequestTree()">
+                        <v-btn @click="getArtifactTree()">
+                          Get artifacts
+                        </v-btn>
+                      </v-row>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-card
+                        style="background-color: #606060; min-height: 100%; color: #ffdc16"
+                        class="ma-3 pa-4"
+                      >
+                        <p v-html="fullExportRequest"></p>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-expand-transition>
+            <!-- Generate Options -->
+            <v-expand-transition>
+              <v-card-text
+                v-show="expandOptions == 'generate'"
+                class="mx-auto secondary white--text"
+              >
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-row>
+                        <h3 class="text-h5 mt-3">
+                          Generate rules from the breakdown of the application
+                        </h3>
+                      </v-row>
+                      <v-row>
+                        <h3 class="my-3">Select the rules to export:</h3>
+                        <v-treeview
+                          color="white"
+                          class="white--text"
+                          selectable
+                          v-model="artifactTree"
+                          :items="artifactItems"
+                          return-object
+                        ></v-treeview>
+                        <v-btn @click="buildRequestTree()">
                           Update
                         </v-btn>
                       </v-row>
@@ -380,7 +430,9 @@ import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { FrameworkController } from "@/api/artemis/framework.controller";
 import { RegexNodeController } from "@/api/artemis/regexNode.controller";
 import { CategoryController } from "@/api/artemis/category.controller";
+import { ArtifactController } from "@/api/artemis/artifact.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
+import { Artifact } from "@/api/interface/ApiArtifact.interface";
 
 export default Vue.extend({
   name: "CustomsCreator",
@@ -419,6 +471,10 @@ export default Vue.extend({
     tree: [],
     treeExport: [] as ApiRegexNode[],
     fullExportRequest: "",
+
+    // Artifacts
+    artifactItems: [],
+    artifactTree: [],
 
     parentIdList: [],
 
@@ -599,19 +655,33 @@ export default Vue.extend({
         });
     },
 
+    getArtifactTree() {
+      console.log("Get Artifact Tree");
+      ArtifactController.getArtifactAsTree("OLT", "Java")
+        .then((res: Artifact[]) => {
+          console.log("Get Artifact Tree", res);
+          this.artifactItems = res;
+        })
+        .catch((err) => {
+          console.error("Error trying to retrieve the breakdown of OLT", err);
+        });
+    },
+
     // Build the list this.treeExport
     async getRequests(tree: ApiRegexNode[]) {
-      if(tree.length == 0) return;
+      if (tree.length == 0) return;
       let fullResults = "";
-
-      console.log(tree)
-
       try {
-        for(const item in tree) {
-          fullResults += "<span style='color: #66B245'>// "+ tree[item].name +"</span><br />"          
-          fullResults += await RegexNodeController.getRegexRequest(tree[item].id) + ";<br /><br />";
+        for (const item in tree) {
+          fullResults +=
+            "<span style='color: #66B245'>// " +
+            tree[item].name +
+            "</span><br />";
+          fullResults +=
+            (await RegexNodeController.getRegexRequest(tree[item].id)) +
+            ";<br /><br />";
 
-          if(tree[item].children) {
+          if (tree[item].children) {
             fullResults += await this.getRequests(tree[item].id);
           }
         }
@@ -637,6 +707,7 @@ export default Vue.extend({
 
   mounted() {
     this.refresh();
+    this.getArtifactTree();
   },
 });
 </script>
