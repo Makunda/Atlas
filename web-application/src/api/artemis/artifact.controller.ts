@@ -2,6 +2,7 @@ import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { Artifact } from "../interface/ApiArtifact.interface";
 import { ApiResponse } from "../interface/ApiResponse.interface";
+import { ArtemisController } from "./artemis.controller";
 
 export class ArtifactController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -21,8 +22,8 @@ export class ArtifactController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse)) {
-          return apiResponse;
+        if (Array.isArray(apiResponse.data)) {
+          return apiResponse.data;
         }
       } else {
         throw new Error(
@@ -70,5 +71,58 @@ export class ArtifactController {
     }
   }
 
+  
+  /**
+   * Build the query
+   * @param application Name of the application
+   * @param framework Framework to extract
+   */
+  public static buildQuery(application: string, frameworkName : string, regex: string) : string {
+    const tag: string = "$l_" + frameworkName;
+    return  "MATCH (obj:Object:`"+ application +"`) WHERE any( x IN ['"+ regex +"'] WHERE o.FullName=~x ) SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['"+ tag +"'] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS '$l_' ] + '" + tag + "' END  RETURN COUNT(DISTINCT obj) as count";
+
+  }
+
+  public static getFullNameRec(item: Artifact, listArtifact :  Artifact[]) : string {
+    let fullName = item.name + item.delimiter; 
+    let prev = item.parentId;
+    while(prev > 0) {
+      // find in list the parent 
+      const newItem = listArtifact.find(x => x.id == prev);
+      if(newItem) {
+        fullName = newItem.name + newItem.delimiter + fullName;
+        prev = newItem.parentId;
+      } else {
+        break;
+      }
+    }    
+    return fullName;
+    
+  }
+
+  /**
+   * Tree i
+   * @param tree Tree selected
+   */
+  public static async buildQuerySet(tree: Artifact[]) : Promise<string> {
+    const listArtifact: Artifact[] = await this.getArtifactList("OLT", "Java");
+
+    const req : string[] = [];
+    console.log("Tree : ", tree)
+    for (const key in tree) {
+        const element = ArtifactController.getFullNameRec(tree[key], listArtifact);
+        req.push(element);
+    }
+
+    let setRequest = "";
+    for (const key in req) {
+      const elem = req[key];
+      setRequest += "<span style='color: #66B245'>// " + req[key] +"</span><br />";
+      setRequest += this.buildQuery("OLT", elem, elem + "*");
+      setRequest += "<br /><br />";
+    }
+
+    return setRequest;
+  }
 
 }

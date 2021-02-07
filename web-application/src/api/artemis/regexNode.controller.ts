@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
+import { DemeterController } from "../demeter/demeter.controller";
 import { ApiRegexNode } from "../interface/ApiRegexNode.interface";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 
@@ -186,5 +187,20 @@ export class RegexNodeController {
     }
 
     return resultTree;
+  }
+
+  /**
+   * Build the query
+   * @param application Name of the application
+   * @param framework Framework to extract
+   */
+  public static async buildQuery(application: string, framework: string) {
+    const regex : string = framework + ".*";
+    const tag: string = "$l_" + framework;
+    const elem : string = `MATCH (obj:Object:\`${application}\`) WHERE any( x IN ['${regex}'] WHERE o.FullName=~x ) ` +
+    `SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['${tag}'] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS '$l_' ] + '${tag}' END ` +
+    `RETURN COUNT(DISTINCT obj) as count`;
+
+    return elem;
   }
 }

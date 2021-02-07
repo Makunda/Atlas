@@ -13,7 +13,6 @@ export default class AgentController {
     const url =
       AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/status`;
     try {
-      console.log("Url to request : " + url);
       // Build the URl ( optional type internalType)
       const res = await axios.get(url);
       let status = false;

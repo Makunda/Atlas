@@ -269,7 +269,7 @@
         <!-- Export to cypher .file -->
 
         <v-row class="mx-1 my-4">
-          <v-card width="100%">
+          <v-card width="100%" >
             <v-card-title>
               Advanced options:
               <v-spacer></v-spacer>
@@ -316,7 +316,10 @@
                           selection-type="all"
                           return-object
                         ></v-treeview>
-                        <v-btn @click="getArtifactTree()">
+                      </v-row>
+                      <v-row>
+                         <v-spacer></v-spacer>
+                         <v-btn @click="getArtifactTree()">
                           Get artifacts
                         </v-btn>
                       </v-row>
@@ -355,10 +358,15 @@
                           selectable
                           v-model="artifactTree"
                           :items="artifactItems"
+                          selection-type="independent"
                           return-object
                         ></v-treeview>
-                        <v-btn @click="buildRequestTree()">
-                          Update
+                        
+                      </v-row>
+                      <v-row>
+                        <v-spacer></v-spacer>
+                        <v-btn @click="createQuerySet()">
+                          Gerate the queries
                         </v-btn>
                       </v-row>
                     </v-col>
@@ -367,7 +375,7 @@
                         style="background-color: #606060; min-height: 100%; color: #ffdc16"
                         class="ma-3 pa-4"
                       >
-                        <p v-html="fullExportRequest"></p>
+                        <p v-html="fullQuerySet"></p>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -471,6 +479,7 @@ export default Vue.extend({
     tree: [],
     treeExport: [] as ApiRegexNode[],
     fullExportRequest: "",
+    fullQuerySet: "",
 
     // Artifacts
     artifactItems: [],
@@ -631,11 +640,24 @@ export default Vue.extend({
     getAllNodesAsTree() {
       RegexNodeController.getAllNodesAsTree()
         .then((res: ApiRegexNode[]) => {
-          this.items = res;
+          if(res[0].name.length == 0) {
+            this.items = res[0].children;
+          } else {
+            this.items = res;
+          }
+          
         })
         .catch((err) => {
           console.error(err);
         });
+    },
+
+    createQuerySet() {
+      ArtifactController.buildQuerySet(this.artifactTree).then((res:string) => {
+        this.fullQuerySet = res;
+      }).catch((err) => {
+        this.fullQuerySet = err;
+      });
     },
 
     getNodeList() {
