@@ -79,7 +79,7 @@ export class ArtifactController {
    */
   public static buildQuery(application: string, frameworkName : string, regex: string) : string {
     const tag: string = "$l_" + frameworkName;
-    return  "MATCH (obj:Object:`"+ application +"`) WHERE any( x IN ['"+ regex +"'] WHERE o.FullName=~x ) SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['"+ tag +"'] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS '$l_' ] + '" + tag + "' END  RETURN COUNT(DISTINCT obj) as count";
+    return  "MATCH (obj:Object:`"+ application +"`) WHERE any( x IN ['"+ regex +"'] WHERE obj.FullName=~x ) SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN ['"+ tag +"'] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS '$l_' ] + '" + tag + "' END  RETURN COUNT(DISTINCT obj) as count;";
 
   }
 
@@ -104,8 +104,8 @@ export class ArtifactController {
    * Tree i
    * @param tree Tree selected
    */
-  public static async buildQuerySet(tree: Artifact[]) : Promise<string> {
-    const listArtifact: Artifact[] = await this.getArtifactList("OLT", "Java");
+  public static async buildQuerySet(tree: Artifact[], application: string, language:string) : Promise<string> {
+    const listArtifact: Artifact[] = await this.getArtifactList(application, language);
 
     const req : string[] = [];
     console.log("Tree : ", tree)
@@ -117,8 +117,8 @@ export class ArtifactController {
     let setRequest = "";
     for (const key in req) {
       const elem = req[key];
-      setRequest += "<span style='color: #66B245'>// " + req[key] +"</span><br />";
-      setRequest += this.buildQuery("OLT", elem, elem + "*");
+      setRequest += `<span style='color: #66B245'>// Application : ${application}  :   ${req[key]} </span><br />`;
+      setRequest += this.buildQuery(application, elem, elem + "*");
       setRequest += "<br /><br />";
     }
 

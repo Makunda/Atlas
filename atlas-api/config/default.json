@@ -25,7 +25,10 @@
 
     "agent": {
         "reload" : {
-            "frameworkAgent" : 2000
+            "frameworkAgent" : 2000,
+            "levelAgent" : 2000,
+            "moduleAgent" : 2000,
+            "architectureAgent" : 2000
         }
     },
 

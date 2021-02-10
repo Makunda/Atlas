@@ -269,7 +269,7 @@
         <!-- Export to cypher .file -->
 
         <v-row class="mx-1 my-4">
-          <v-card width="100%" >
+          <v-card width="100%">
             <v-card-title>
               Advanced options:
               <v-spacer></v-spacer>
@@ -318,8 +318,8 @@
                         ></v-treeview>
                       </v-row>
                       <v-row>
-                         <v-spacer></v-spacer>
-                         <v-btn @click="getArtifactTree()">
+                        <v-spacer></v-spacer>
+                        <v-btn @click="getArtifactTree()">
                           Get artifacts
                         </v-btn>
                       </v-row>
@@ -350,7 +350,7 @@
                           Generate rules from the breakdown of the application
                         </h3>
                       </v-row>
-                      <v-row>
+                      <v-row class="mt-2 mb-4">
                         <h3 class="my-3">Select the rules to export:</h3>
                         <v-treeview
                           color="white"
@@ -361,13 +361,37 @@
                           selection-type="independent"
                           return-object
                         ></v-treeview>
-                        
                       </v-row>
                       <v-row>
-                        <v-spacer></v-spacer>
-                        <v-btn @click="createQuerySet()">
-                          Gerate the queries
-                        </v-btn>
+                        <v-col cols="12" md="4">
+                          <v-select
+                            class="mx-2"
+                            v-model="defaultApplication"
+                            :items="applicationItems"
+                            label="Applications"
+                            @change="getArtifactTree()"
+                            outlined
+                            dark
+                          ></v-select>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                          <v-select
+                            class="mx-2"
+                            v-model="defaultLanguage"
+                            :items="languageItems"
+                            label="Language"
+                            @change="getArtifactTree()"
+                            outlined
+                            dark
+                          ></v-select>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                          <v-btn large @click="createQuerySet()">
+                            Generate the queries
+                          </v-btn>
+                        </v-col>
                       </v-row>
                     </v-col>
                     <v-col cols="12" md="6">
@@ -441,6 +465,8 @@ import { CategoryController } from "@/api/artemis/category.controller";
 import { ArtifactController } from "@/api/artemis/artifact.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
 import { Artifact } from "@/api/interface/ApiArtifact.interface";
+import { ApplicationController } from "@/api/applications/application.controller";
+import { ArtemisController } from "@/api/artemis/artemis.controller";
 
 export default Vue.extend({
   name: "CustomsCreator",
@@ -484,6 +510,10 @@ export default Vue.extend({
     // Artifacts
     artifactItems: [],
     artifactTree: [],
+    applicationItems: [] as string[],
+    languageItems: [] as string[],
+    defaultApplication: "", 
+    defaultLanguage: "" ,
 
     parentIdList: [],
 
@@ -520,6 +550,9 @@ export default Vue.extend({
       this.editMode = true;
     },
 
+    /**
+     * Add a regex Rule
+     */
     addRegex(item: ApiRegexNode) {
       RegexNodeController.addRegexNode(item)
         .then((res: ApiRegexNode) => {
@@ -540,6 +573,9 @@ export default Vue.extend({
       this.snackbarInfo = true;
     },
 
+    /**
+     *  Update the regex
+     */
     updateRegex(item: ApiRegexNode) {
       RegexNodeController.updateRegexNode(item)
         .then((res: ApiRegexNode) => {
@@ -554,6 +590,9 @@ export default Vue.extend({
         });
     },
 
+    /**
+     * Add the regex string to the regex rule
+     */
     appendToRegexList(regexNode: ApiRegexNode) {
       if (this.currentRegexInput != "") {
         regexNode.regexes.push(this.currentRegexInput);
@@ -585,6 +624,9 @@ export default Vue.extend({
         });
     },
 
+    /**
+     *  Ask for a confirmation before the deletion
+     */
     askForDeletion(item: ApiRegexNode) {
       // open the modal
       this.dialogDeleteNode = true;
@@ -640,12 +682,11 @@ export default Vue.extend({
     getAllNodesAsTree() {
       RegexNodeController.getAllNodesAsTree()
         .then((res: ApiRegexNode[]) => {
-          if(res[0].name.length == 0) {
+          if (res[0].name.length == 0) {
             this.items = res[0].children;
           } else {
             this.items = res;
           }
-          
         })
         .catch((err) => {
           console.error(err);
@@ -653,11 +694,13 @@ export default Vue.extend({
     },
 
     createQuerySet() {
-      ArtifactController.buildQuerySet(this.artifactTree).then((res:string) => {
-        this.fullQuerySet = res;
-      }).catch((err) => {
-        this.fullQuerySet = err;
-      });
+      ArtifactController.buildQuerySet(this.artifactTree, this.defaultApplication, this.defaultLanguage)
+        .then((res: string) => {
+          this.fullQuerySet = res;
+        })
+        .catch((err) => {
+          this.fullQuerySet = err;
+        });
     },
 
     getNodeList() {
@@ -677,16 +720,41 @@ export default Vue.extend({
         });
     },
 
+    getApplicationAndLanguages() {
+      ApplicationController.getListApplications()
+        .then((res: string[]) => {
+          console.log("Application list", res);
+          this.applicationItems = res;
+          this.defaultApplication = res[0];
+        })
+        .catch((err) => {
+          console.error("Failed to get the list of the application");
+        });
+
+      ArtemisController.getSupportedLanguages()
+        .then((res: string[]) => {
+          this.languageItems = res;
+          this.defaultLanguage = res[0];
+        })
+        .catch((err) => {
+          console.error("Failed to retrieve languages.", err);
+        });
+    },
+
     getArtifactTree() {
-      console.log("Get Artifact Tree");
-      ArtifactController.getArtifactAsTree("OLT", "Java")
+      console.log("Get Artifact Tree data");
+      // Get the tree
+      ArtifactController.getArtifactAsTree(this.defaultApplication, this.defaultLanguage)
         .then((res: Artifact[]) => {
           console.log("Get Artifact Tree", res);
           this.artifactItems = res;
         })
         .catch((err) => {
-          console.error("Error trying to retrieve the breakdown of OLT", err);
+          console.error(`Error trying to retrieve the breakdown of ${this.defaultApplication}`, err);
         });
+      // Get the list of application
+
+      
     },
 
     // Build the list this.treeExport
@@ -724,6 +792,7 @@ export default Vue.extend({
       this.getNodeList();
       this.getAllNodesAsTree();
       this.initFocusView();
+      this.getApplicationAndLanguages();
     },
   },
 

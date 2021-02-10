@@ -10,6 +10,12 @@ class AgentController {
         switch(agent) {
             case "framework":
                 return Agent.FRAMEWORK_AGENT;
+            case "level":
+                return Agent.LEVEL_AGENT;
+            case "module":
+                return Agent.MODULE_AGENT;
+            case "architecture":
+                return Agent.ARCHITECTURE_AGENT;
             default:
                 logger.info("The agent requested does not exist")
                 throw new HttpException(500, "Internal error");

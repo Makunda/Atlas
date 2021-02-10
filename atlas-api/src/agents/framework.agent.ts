@@ -1,4 +1,4 @@
-import IAgent from "@agents/agent.interface";
+import AAgent from "@agents/agent.abstract";
 import { Neo4JAccessLayer } from "@database/neo4jAccessLayer";
 import { sleep } from "@shared/functions";
 import { logger } from "@shared/logger";
@@ -6,76 +6,39 @@ import config from "config";
 import { QueryResult } from "neo4j-driver";
 
 /**
- * Agent in charge of the autoatic adding of user's frameworks
+ * Agent in charge of the automatic adding of user's frameworks
  */
-export default class FrameworkAgent implements IAgent {
-  private isRunning = false;
-  private stopFlag = false;
-  private numRetry = 0;
-  private delay: number = config.get("agent.reload.frameworkAgent");
-  private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+export default class FrameworkAgent extends AAgent {
 
-  private async group() {
+  getAgentName(): string {
+    return "Framework"
+  }
+  getDelay(): number {
+    return config.get("agent.reload.frameworkAgent")
+  }
+
+  async group() : Promise<void> {
     try {
-      const req = "CALL artemis.launch.custom.framework.discovery()";
-      const res: QueryResult = await this.neo4jAl.execute(req);
+      const reqPresence = "CALL artemis.get.framework.tags.presence()";
+      const resPresence: QueryResult = await this.neo4jAl.execute(reqPresence);
 
-      logger.info(
-        `${res.records.length} frameworks were discovered and added.`
-      );
+      const isPresent = Boolean(resPresence.records[0].get(0));
+
+      if (isPresent) {
+        const req = "CALL artemis.launch.custom.framework.discovery()";
+        const res: QueryResult = await this.neo4jAl.execute(req);
+  
+        logger.info(
+          `${res.records.length} frameworks were discovered and added.`
+        );
+      }
+
     } catch (err) {
       logger.error(
-        "The framework agent failed to compute custom frameworks.",
+        "The framework agent failed to retrieve custom frameworks.",
         err
       );
     }
   }
 
-  private async run() {
-    this.isRunning = true;
-
-    if (!this.stopFlag) {
-      try {
-        const req = "CALL artemis.get.framework.tags.presence()";
-        const res: QueryResult = await this.neo4jAl.execute(req);
-
-        const isPresent = Boolean(res.records[0].get(0));
-        this.numRetry = 0;
-        if (isPresent) this.group();
-      } catch (err) {
-        this.numRetry++;
-
-        if(this.numRetry == 1) {
-          logger.error(
-            "The framework agent failed to query the database on the presence of tags.",
-            err
-          );
-        } else {
-          logger.error(`The framework agent failed to query the database on the presence of tags. Retrying in ${this.numRetry * 5} seconds`)
-        }
-
-        // Max value for retry
-        this.numRetry = this.numRetry > 10 ? 10 : this.numRetry;
-        
-        await sleep(this.delay + this.numRetry * 5000)
-      }
-    }
-
-    const that = this;
-    setTimeout(function() { that.run() }, this.delay);
-  }
-
-  public launch() {
-    if (!this.isRunning) this.run();
-    this.stopFlag = false;
-  }
-
-  public getStatus(): boolean {
-    return this.stopFlag;
-  }
-
-  public stop(): boolean {
-    this.stopFlag = true;
-    return this.stopFlag;
-  }
 }

@@ -1,8 +1,15 @@
-import IAgent from "./agent.interface";
+import { Module } from "module";
+import AAgent from "./agent.abstract";
+import ArchitectureAgent from "./architecture.agent";
 import FrameworkAgent from "./framework.agent";
+import LevelAgent from "./level.agent";
+import ModuleAgent from "./module.agent";
 
 export enum Agent {
-    FRAMEWORK_AGENT
+    FRAMEWORK_AGENT,
+    LEVEL_AGENT,
+    MODULE_AGENT,
+    ARCHITECTURE_AGENT
 }
 
 /**
@@ -11,14 +18,30 @@ export enum Agent {
 export class AgentManager {
 
     private frameworkAgent: FrameworkAgent;
+    private levelAgent: LevelAgent;
+    private moduleAgent: ModuleAgent;
+    private architectureAgent: ArchitectureAgent;
+
     public static INSTANCE: AgentManager;
 
-    private getAgent(agent: Agent|string) : IAgent {
+    private getAgent(agent: Agent|string) : AAgent {
         switch(agent) {
             case Agent.FRAMEWORK_AGENT : 
                 return this.frameworkAgent;
             case "framework": 
                 return this.frameworkAgent;
+            case Agent.LEVEL_AGENT : 
+                return this.levelAgent;
+            case "level": 
+                return this.levelAgent;
+            case Agent.MODULE_AGENT : 
+                return this.moduleAgent;
+            case "module": 
+                return this.moduleAgent;
+            case "architecture":
+                return this.architectureAgent;
+            case Agent.ARCHITECTURE_AGENT:
+                return this.architectureAgent;
             default:
                 return null;
         }
@@ -41,7 +64,7 @@ export class AgentManager {
     }
 
     /**
-     * Get the status of a specifc agent
+     * Get the status of a specific agent
      * @param agent Name of the agent
      */
     public getAgentStatus(agent:Agent) : boolean {
@@ -68,6 +91,9 @@ export class AgentManager {
 
     private constructor() {
         this.frameworkAgent = new FrameworkAgent();
+        this.levelAgent = new LevelAgent();
+        this.moduleAgent = new ModuleAgent();
+        this.architectureAgent = new ArchitectureAgent();
     }
 
 }

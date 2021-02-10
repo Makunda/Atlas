@@ -24,8 +24,8 @@ export class ApplicationController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
 
-        if (Array.isArray(apiResponse)) {
-          applications = apiResponse;
+        if (Array.isArray(apiResponse.data)) {
+          applications = apiResponse.data;
         }
       } else {
         console.warn(

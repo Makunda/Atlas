@@ -1,4 +1,5 @@
 import { int, QueryResult } from "neo4j-driver";
+import { ApiComUtils } from "../ApiComUtils";
 import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export interface GroupRecord {
@@ -27,29 +28,10 @@ export interface ModuleGroup {
  * Controller managing the Demeter Groups in the database
  */
 export class GroupingController {
-  private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+  private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance()
+  private static API_BASE_URL = ApiComUtils.getUrl();
+  ;
   private static tagPrefix = "$l_";
-
-  /**
-   * Get Demeter Groups in every application present in the Database
-   */
-  public static async getGroupingCandidates(): Promise<GroupRecord[]> {
-    const request = `CALL demeter.api.get.candidates.level()`;
-
-    const results: QueryResult = await this.neo4jal.execute(request);
-
-    const appNames: GroupRecord[] = [];
-    for (let i = 0; i < results.records.length; i++) {
-      const singleRecord = results.records[i];
-      const appName = singleRecord.get("application");
-      const tags = singleRecord.get("tags");
-      const countTag = singleRecord.get("numTags");
-
-      appNames.push({ application: appName, tags: tags, countTag: countTag });
-    }
-
-    return appNames;
-  }
 
   /**
    * Return the Demeter groups detected for a specific application
@@ -75,19 +57,6 @@ export class GroupingController {
     return { application: appName, tags: tag, countTag: countTag };
   }
 
-  /**
-   * Group Obejct in a specific application
-   * @param application
-   */
-  public static async executeGrouping(application: string): Promise<void> {
-    const request = `CALL demeter.group.levels("${application}")`;
-
-    const results: QueryResult = await this.neo4jal.execute(request);
-
-    for (let i = 0; i < results.records.length; i++) {
-      console.log("Received node ", results.records[i]);
-    }
-  }
 
   /**
    * Get Demeter Groups in a specific application present in the Database
@@ -155,76 +124,5 @@ export class GroupingController {
     return modules;
   }
 
-  /**
-   * Retrieve of the level 5 specific to one application
-   * @param applicationName Name of the application
-   */
-  public static async getAllLevels(
-    applicationName: string
-  ): Promise<Level5Group[]> {
-    const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
-      WITH [app.Name] as appName  
-      MATCH (l:Level5:${applicationName})-[:Aggregates]->(o:Object) 
-      RETURN ID(l) as id, l.Name as groupName, l.FullName as fullName, COUNT(o) as numObjects ;`;
 
-    const results: QueryResult = await this.neo4jal.execute(request);
-
-    const appNames: Level5Group[] = [];
-    for (let i = 0; i < results.records.length; i++) {
-      const singleRecord = results.records[i];
-
-      const id = int(singleRecord.get("id")).toNumber();
-      const groupName = singleRecord.get("groupName");
-      const numObjects = int(singleRecord.get("numObjects")).toNumber();
-      const fullName: string = singleRecord.get("fullName");
-
-      const isDemeterGroup = fullName.includes("##Dml_");
-
-      appNames.push({
-        id: id,
-        name: groupName,
-        application: applicationName,
-        numObjects: numObjects,
-        demeterGroup: isDemeterGroup
-      });
-    }
-
-    return appNames;
-  }
-
-  /**
-   * Undo the grouping of a specific level in an application
-   * @param applicationName Name of the application targeted by the undo
-   * @param groupName Name of the group
-   */
-  public static async undoGroupedLevel5(
-    applicationName: string,
-    groupName: string
-  ): Promise<string> {
-    const request = `CALL demeter.undo.oneLevel('${applicationName}', '${groupName}');`;
-
-    const results: QueryResult = await this.neo4jal.execute(request);
-    const retMsg: string = results.records[0].get(0);
-
-    return retMsg;
-  }
-
-  /**
-   * Rename
-   * @param applicationName Name of the application
-   * @param groupName Old name of the group
-   * @param newName New name of the module
-   */
-  public static async renameLevel(
-    applicationName: string,
-    groupName: string,
-    newName: string
-  ): Promise<boolean> {
-    const request = `CALL demeter.rename.level('${applicationName}', '${groupName}', '${newName}');`;
-
-    const results: QueryResult = await this.neo4jal.execute(request);
-    const retMsg: boolean = results.records[0].get(0);
-
-    return retMsg;
-  }
 }
