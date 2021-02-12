@@ -3,14 +3,17 @@
     <v-card-title> Level Agent</v-card-title>
     <v-card-text class="mb-6">
       <v-container>
-        <v-row>
-          Automatically extract the Nodes where a $tagNameHere is present.
-          <br />
-          For more information please visit the wiki of the extension :
-          <a
-            href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
-            >Demeter Wiki</a
-          >
+        <v-row class="mb-5">
+          <p>
+            Automatically extract the objects in CAST Imaging where a <strong class="mx-2">{{ prefix }}</strong> is present to a new level.
+            <br />
+            <br />
+            For more information please visit the wiki of the extension :
+            <a
+              href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
+              >Demeter Wiki</a
+            >
+          </p>
         </v-row>
         <v-row class="mt-2">
           <v-col cols="12">
@@ -20,12 +23,12 @@
               tile
               color="persianGrey"
               dark
-              v-on:click="forceAction(application)"
+              v-on:click="forceAction()"
             >
               <v-icon left>
                 mdi-adjust
               </v-icon>
-              Extract architectures
+              Extract levels
             </v-btn>
           </v-col>
           <v-col cols="12">
@@ -58,12 +61,27 @@ export default Vue.extend({
 
   data: () => ({
     nameAgent: "level",
+    prefix: "<Failed to retrieve   the tag>",
     daemonLevelState: false,
 
     loadingToggle: false,
+    loadingAction: false,
   }),
 
   methods: {
+    getPrefix() {
+      AgentController.getPrefix(this.nameAgent)
+        .then((res: string) => {
+          this.prefix = res;
+        })
+        .catch((err) => {
+          console.error(
+            "Failed to retrieve the prefix of the Framework agent",
+            err
+          );
+        });
+    },
+
     getStatus() {
       AgentController.getStatus(this.nameAgent)
         .then((res: boolean) => {
@@ -106,11 +124,19 @@ export default Vue.extend({
     },
 
     forceAction() {
-      console.log("Extract");
+      this.loadingAction = true;
+      AgentController.forceAgent(this.nameAgent)
+        .catch((err) => {
+          console.error("Failed to force the action of the agent.", err);
+        })
+        .finally(() => {
+          this.loadingAction = false;
+        });
     },
   },
 
   mounted() {
+    this.getPrefix();
     this.getStatus();
   },
 });

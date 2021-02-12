@@ -5,8 +5,8 @@
         Review the frameworks discovered
         <v-spacer></v-spacer>
         <v-btn icon color="green" @click="refresh()">
-        <v-icon>mdi-cached</v-icon>
-      </v-btn>
+          <v-icon>mdi-cached</v-icon>
+        </v-btn>
       </h3>
       <p class=" text-body-1">
         Review the different frameworks detected.
@@ -32,15 +32,17 @@
           Detected as not a Framework
         </span>
       </p>
-      <p>Filters : </p>
-      <p><v-checkbox
+      <p>Filters :</p>
+      <p>
+        <v-checkbox
           v-model="showOnlyToValidate"
           value="0"
           label="Filter frameworks to validate"
           type="checkbox"
           @change="refresh()"
           required
-        ></v-checkbox></p>
+        ></v-checkbox>
+      </p>
     </v-row>
     <v-row class="pa-5 ">
       <v-card min-height="600px" min-width="100%">
@@ -303,7 +305,6 @@
                             item-value="name"
                             label="Select a category"
                             :return-object="false"
-
                           ></v-combobox>
                         </v-col>
                       </v-row>
@@ -463,13 +464,12 @@ export default Vue.component("FrameworkReviewer", {
   },
 
   methods: {
-
     getListCategories() {
       CategoryController.getAllNode()
         .then((res: Category[]) => {
           this.framewokCategories = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("Failed to retrieve the list of categories", err);
         });
     },
@@ -559,24 +559,26 @@ export default Vue.component("FrameworkReviewer", {
 
     getToValidateFramework() {
       this.loadingTable = true;
-      FrameworkController.getToValidateFrameworks().then((res:Framework[]) => {
-        this.items = res;
-        this.currentIndex = 0;
-        this.numberItems = res.length;
-      }).catch(err => {
-         console.error("Failed to retrieve the list of frameworks.", err);
-      }).finally(() => {
-        this.loadingTable = false;
-      })
+      FrameworkController.getToValidateFrameworks()
+        .then((res: Framework[]) => {
+          this.items = res;
+          this.currentIndex = 0;
+          this.numberItems = res.length;
+        })
+        .catch(err => {
+          console.error("Failed to retrieve the list of frameworks.", err);
+        })
+        .finally(() => {
+          this.loadingTable = false;
+        });
     },
 
     refreshFramework() {
-      if(this.showOnlyToValidate) {
+      if (this.showOnlyToValidate) {
         this.getToValidateFramework();
       } else {
         this.getBatchFramework();
       }
-      
     },
 
     searchFrameworks(toSearch: string) {
@@ -605,13 +607,13 @@ export default Vue.component("FrameworkReviewer", {
 
     nextPage() {
       this.currentIndex = 0;
-      if(!this.showOnlyToValidate) this.refreshFramework();
+      if (!this.showOnlyToValidate) this.refreshFramework();
       if (this.page + 1 <= this.numberOfPages()) this.page += 1;
     },
 
     formerPage() {
       this.currentIndex = 0;
-      if(!this.showOnlyToValidate) this.refreshFramework();
+      if (!this.showOnlyToValidate) this.refreshFramework();
       if (this.page - 1 >= 1) this.page -= 1;
     },
 
