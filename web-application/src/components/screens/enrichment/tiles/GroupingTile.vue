@@ -8,9 +8,14 @@
               Agents
             </h3>
             <p class="ml-4 text-body-1">
-              Industrialize the grouping operations in Imaging. With the demeter extension you'll be able to modify the differents views in CAST Imaging to have a better control over your applications.<br><br> 
-              You can choose to automatize these grouping actions with the assistants. If they are activated, they will wait for their specifc tags ( indicated in the boxes below ) to performs the corresponding actions.<br>
-              For more information, please refer to the documentation. 
+              Industrialize the grouping operations in Imaging. With the demeter
+              extension you'll be able to modify the differents views in CAST
+              Imaging to have a better control over your applications.<br /><br />
+              You can choose to automatize these grouping actions with the
+              assistants. If they are activated, they will wait for their
+              specifc tags ( indicated in the boxes below ) to performs the
+              corresponding actions.<br />
+              For more information, please refer to the documentation.
             </p>
           </v-row>
         </v-card-title>

@@ -77,7 +77,7 @@ export default Vue.extend({
         .then((res: string) => {
           this.prefix = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to retrieve the prefix of the Framework agent",
             err
@@ -90,7 +90,7 @@ export default Vue.extend({
         .then((res: string) => {
           this.tag = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to retriece the tag associated to the framework grouping.",
             err
@@ -105,7 +105,7 @@ export default Vue.extend({
           console.log("Status of the Framework agent", res);
           this.daemonLevelState = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to retrieve the status of the Framework agent",
             err
@@ -120,7 +120,7 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = !res;
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to stop the Framework agent", err);
           })
           .finally(() => {
@@ -131,7 +131,7 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = res;
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to start the Framework agent", err);
           })
           .finally(() => {
@@ -143,20 +143,20 @@ export default Vue.extend({
     forceAction() {
       this.loadingAction = true;
       AgentController.forceAgent(this.nameAgent)
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to force the action of the agent.", err);
         })
         .finally(() => {
           this.loadingAction = false;
         });
-    },
+    }
   },
 
   mounted() {
     this.getStatus();
     this.getTag();
     this.getPrefix();
-  },
+  }
 });
 </script>
 

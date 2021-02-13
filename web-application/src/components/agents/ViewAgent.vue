@@ -1,6 +1,8 @@
 <template>
   <v-card disabled min-height="100%">
-    <v-card-title>View Agent<br>( Coming in Imaging funcrel 2.2.0 )</v-card-title>
+    <v-card-title
+      >View Agent<br />( Coming in Imaging funcrel 2.2.0 )</v-card-title
+    >
     <v-card-text class="mb-6">
       <v-container>
         <v-row>

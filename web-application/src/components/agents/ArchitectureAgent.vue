@@ -5,15 +5,18 @@
       <v-container>
         <v-row>
           <p>
-            Automatically creates architectures views from nodes marked by the tag
-          <strong class="mx-2">{{ prefix }}</strong>.<br />You need to indicate the name of the view and the name of the subset 
-          separated by the "$" sign: Example : <strong class="ml-2">{{ prefix }}My view$My subset</strong><br />
-          <br />
-          For more information please visit the wiki of the extension :
-          <a
-            href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
-            >Demeter Wiki</a
-          >
+            Automatically creates architectures views from nodes marked by the
+            tag
+            <strong class="mx-2">{{ prefix }}</strong
+            >.<br />You need to indicate the name of the view and the name of
+            the subset separated by the "$" sign: Example :
+            <strong class="ml-2">{{ prefix }}My view$My subset</strong><br />
+            <br />
+            For more information please visit the wiki of the extension :
+            <a
+              href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
+              >Demeter Wiki</a
+            >
           </p>
         </v-row>
 
@@ -128,11 +131,13 @@ export default Vue.extend({
 
     forceAction() {
       this.loadingAction = true;
-      AgentController.forceAgent(this.nameAgent).catch(err => {
-        console.error("Failed to force the action of the agent.", err);
-      }).finally(() => {
-        this.loadingAction=false
-      })
+      AgentController.forceAgent(this.nameAgent)
+        .catch(err => {
+          console.error("Failed to force the action of the agent.", err);
+        })
+        .finally(() => {
+          this.loadingAction = false;
+        });
     }
   },
 

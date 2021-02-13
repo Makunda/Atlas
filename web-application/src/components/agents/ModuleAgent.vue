@@ -5,13 +5,14 @@
       <v-container>
         <v-row class="mb-5">
           <p>
-            Automatically extract the objects in CAST Imaging where a <strong class="mx-2">{{ prefix }}</strong> is present. <br />
+            Automatically extract the objects in CAST Imaging where a
+            <strong class="mx-2">{{ prefix }}</strong> is present. <br />
             <br />
-          For more information please visit the wiki of the extension : 
-          <a
-            href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
-            >Demeter Wiki</a
-          >
+            For more information please visit the wiki of the extension :
+            <a
+              href="https://github.com/CAST-Extend/com.castsoftware.uc.artemis/wiki"
+              >Demeter Wiki</a
+            >
           </p>
         </v-row>
         <v-row class="mt-2">
@@ -126,11 +127,13 @@ export default Vue.extend({
 
     forceAction() {
       this.loadingAction = true;
-      AgentController.forceAgent(this.nameAgent).catch(err => {
-        console.error("Failed to force the action of the agent.", err);
-      }).finally(() => {
-        this.loadingAction=false
-      });
+      AgentController.forceAgent(this.nameAgent)
+        .catch(err => {
+          console.error("Failed to force the action of the agent.", err);
+        })
+        .finally(() => {
+          this.loadingAction = false;
+        });
     }
   },
 

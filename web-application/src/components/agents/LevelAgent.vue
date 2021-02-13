@@ -5,7 +5,9 @@
       <v-container>
         <v-row class="mb-5">
           <p>
-            Automatically extract the objects in CAST Imaging where a <strong class="mx-2">{{ prefix }}</strong> is present to a new level.
+            Automatically extract the objects in CAST Imaging where a
+            <strong class="mx-2">{{ prefix }}</strong> is present to a new
+            level.
             <br />
             <br />
             For more information please visit the wiki of the extension :
@@ -65,7 +67,7 @@ export default Vue.extend({
     daemonLevelState: false,
 
     loadingToggle: false,
-    loadingAction: false,
+    loadingAction: false
   }),
 
   methods: {
@@ -74,7 +76,7 @@ export default Vue.extend({
         .then((res: string) => {
           this.prefix = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to retrieve the prefix of the Framework agent",
             err
@@ -88,7 +90,7 @@ export default Vue.extend({
           console.log("Status of the level agent", res);
           this.daemonLevelState = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to retrieve the status of the level agent",
             err
@@ -103,7 +105,7 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = !res;
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to stop the level agent", err);
           })
           .finally(() => {
@@ -114,7 +116,7 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = res;
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to start the level agent", err);
           })
           .finally(() => {
@@ -126,19 +128,19 @@ export default Vue.extend({
     forceAction() {
       this.loadingAction = true;
       AgentController.forceAgent(this.nameAgent)
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to force the action of the agent.", err);
         })
         .finally(() => {
           this.loadingAction = false;
         });
-    },
+    }
   },
 
   mounted() {
     this.getPrefix();
     this.getStatus();
-  },
+  }
 });
 </script>
 
