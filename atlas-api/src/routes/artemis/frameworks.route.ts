@@ -18,7 +18,7 @@ class FrameworksRoute implements Route {
     this.router.get(`${this.path}/total`, this.frameworksController.getNumberFrameworks);
     this.router.get(`${this.path}/batch`, this.frameworksController.getFrameworksBatch);
     this.router.get(`${this.path}/toValidate`, this.frameworksController.getFrameworksToValidate);
-    this.router.get(`${this.path}/internalTypes`, this.frameworksController.getFrameworksInternalTypes);
+    this.router.get(`${this.path}/internalTypes`, this.frameworksController.getFrameworksinternalType);
     this.router.post(`${this.path}/update`, this.frameworksController.updateFrameworks);
   }
 }

@@ -199,6 +199,7 @@ export class FrameworkController {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
           detectionList = apiResponse.data;
+          console.log(detectionList)
         }
       } else {
         console.warn(

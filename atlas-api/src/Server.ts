@@ -24,6 +24,14 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
+// No cache on the Server
+app.use(function (req, res, next) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next()
+});
+
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
     // Cors 

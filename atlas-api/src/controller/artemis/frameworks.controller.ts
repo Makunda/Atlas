@@ -109,10 +109,10 @@ class FrameworksController {
   }
 
   // Get internal types
-  public getFrameworksInternalTypes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getFrameworksinternalType = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
     
-      const types:string[] = await this.frameworksService.getFrameworksInternalTypes();
+      const types:string[] = await this.frameworksService.getFrameworksinternalType();
       res.status(200).send({ data: types, message: 'Internal types' });
     } catch (error) {
       next(error);
@@ -123,7 +123,7 @@ class FrameworksController {
   public updateFrameworks = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const oldName = String(req.body.oldName);
-      const oldInternalType = String(req.body.oldInternalType);
+      const oldInternalType = Array(req.body.oldInternalType);
       const frameworkData : CreateFrameworkDto = Object.assign({}, req.body.framework);
       
       const results: boolean = await this.frameworksService.updateFramework(oldName, oldInternalType, frameworkData);

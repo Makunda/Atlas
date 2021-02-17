@@ -31,7 +31,7 @@ class DetectionService {
       description: res.get("description"),
       type: res.get("type") == "Framework" ? "Framework" : "Not a framework",
       category: res.get("category") || "",
-      internalType: res.get("internalType") || "",
+      internalType: Array(res.get("internalType")) || [""],
       location: res.get("location") || "",
       discoveryDate: res.get("discoveryDate"),
       percentageOfDetection: Number(res.get("percentageOfDetection")) || 0,
@@ -51,6 +51,7 @@ class DetectionService {
     if (indexPending != -1)
       return this.pendingApplicationDetection[indexPending];
 
+    // Successful detection
     const indexSuccess = this.finishedApplicationDetection.findIndex(
       (i) => i.application === appName
     );

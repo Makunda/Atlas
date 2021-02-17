@@ -169,7 +169,7 @@
                                       <v-card-subtitle
                                         class="text-subtitle-1 text--black"
                                       >
-                                        Internal type: {{ item.internalType }}
+                                        Category: {{ item.category }}
                                       </v-card-subtitle>
                                     </v-card>
                                   </v-hover>
@@ -332,16 +332,20 @@
                           <v-row class="py-1">
                             <v-col cols="4">
                               <v-subheader class="text-h6">
-                                Internal Type :
+                                Internal Types :
                               </v-subheader>
                             </v-col>
 
                             <v-col cols="8">
-                              <v-combobox
+                              <v-autocomplete
                                 v-model="editFramework.internalType"
                                 :items="internalTypes"
-                                label="Select a internal type"
-                              ></v-combobox>
+                                label="Select the internal types"
+                                outlined
+                                chips
+                                small-chips
+                                multiple
+                              ></v-autocomplete>
                             </v-col>
                           </v-row>
                           <v-row class="py-1 pb-5">
@@ -649,6 +653,8 @@ export default Vue.component("FrameworkReviewer", {
     },
 
     refresh() {
+      this.page = 1;
+      this.getInternalTypes();
       this.getNumberFrameworks();
       this.refreshFramework();
     }

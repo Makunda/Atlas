@@ -1,4 +1,4 @@
-import { IsDecimal, IsString } from "class-validator";
+import { IsArray, IsDecimal, IsString } from "class-validator";
 
 export class CreateFrameworkDto {
   @IsString()
@@ -13,8 +13,8 @@ export class CreateFrameworkDto {
   @IsString()
   public category: string;
 
-  @IsString()
-  public internalType: string;
+  @IsArray()
+  public internalType: string[];
 
   @IsString()
   public location: string;

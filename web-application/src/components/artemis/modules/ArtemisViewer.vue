@@ -368,7 +368,6 @@ export default Vue.extend({
               this.ongoingDetection = `On-going detection for the ${this.application} application.`;
               this.runningArtemis = true;
               this.errorDetection = "";
-              console.log(this.ongoingDetection);
               break;
             case DetectionStatus.Success:
               this.resultDetection = res.data;
