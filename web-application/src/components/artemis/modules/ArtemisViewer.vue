@@ -25,7 +25,7 @@
         <v-switch
           class="mx-5"
           v-model="onlineMode"
-          label="Online search : The framewok detection will parse Google, to discover frameworks. The frameworks detected are added to the configuration for future usage."
+          label="Online search : The framewok detection will parse Google, to discover frameworks. The frameworks detected are added to the configuration for future usages."
           color="persianGrey"
           :loading="loadingConfiguration || loadingOnlineMode"
           :disabled="loadingOnlineMode"
@@ -136,7 +136,7 @@
           type="info"
           v-if="ongoingDetection && ongoingDetection != ''"
         >
-          {{ ongoingDetection }}
+          <p>{{ ongoingDetection }} <strong class="mx-2">Time Elapsed</strong>{{ toDisplay }}</p>
         </v-alert>
         <v-alert
           class="ma-2"
@@ -273,6 +273,8 @@ export default Vue.extend({
     selectedLanguage: "",
     availableLanguages: [] as string[],
     checkingStatus: false,
+    toDisplay: "",
+    detection: null,
 
     application: "" as string,
 
@@ -350,6 +352,28 @@ export default Vue.extend({
         });
     },
 
+    milisecondsToDhms(miliseconds) {
+      const seconds = Number(miliseconds / 1000);
+      const d = Math.floor(seconds / (3600 * 24));
+      const h = Math.floor((seconds % (3600 * 24)) / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = Math.floor(seconds % 60);
+
+      const dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
+      const hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+      const mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+      const sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+      return dDisplay + hDisplay + mDisplay + sDisplay;
+    },
+
+    countDownTimer() {
+      this.toDisplay = this.milisecondsToDhms(
+        Date.now() - this.detection.timestampStart
+      );
+      setTimeout(this.countDownTimer, 1000);
+    },
+
+
     /**
      *  Get the status of the Detection
      */
@@ -359,8 +383,16 @@ export default Vue.extend({
       this.checkingStatus = true;
       DetectionController.getApplicationStatus(this.application)
         .then((res: DetectionResult) => {
+
+          console.log("Got status", res)
           // If res is null, the application has no status
-          if (res == null) return;
+          if (res == null) {
+            this.ongoingDetection = "";
+            this.errorDetection = "";
+            return;
+          }
+
+          this.detection = res;
 
           // If the detection is successfully launched, set a timeout and wait for the response
           switch (res.status) {
@@ -368,6 +400,7 @@ export default Vue.extend({
               this.ongoingDetection = `On-going detection for the ${this.application} application.`;
               this.runningArtemis = true;
               this.errorDetection = "";
+              this.countDownTimer();
               break;
             case DetectionStatus.Success:
               this.resultDetection = res.data;

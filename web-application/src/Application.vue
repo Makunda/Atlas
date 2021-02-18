@@ -119,7 +119,6 @@ import Vue from "vue/types/umd";
           v-model="applicationName"
           :loading="loadingApplication"
           :items="applicationList"
-          item-text="name"
           cache-items
           class="mx-4 mt-2"
           flat
@@ -199,7 +198,7 @@ export default Vue.extend({
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
-    applicationList: [] as ApplicationRecord[],
+    applicationList: [] as string[],
 
     onlineDatabase: false
   }),
@@ -215,11 +214,11 @@ export default Vue.extend({
 
     getApplicationList() {
       this.loadingApplication = true;
-      ApplicationController.getSortedApplications().then(
-        (res: ApplicationRecord[]) => {
+      ApplicationController.getListApplications().then(
+        (res: string[]) => {
           this.applicationList = res;
           if (res.length != 0) {
-            this.changeApplication(res[0].name);
+            this.changeApplication(res[0]);
           } else {
             this.applicationName = "No Application found";
           }
