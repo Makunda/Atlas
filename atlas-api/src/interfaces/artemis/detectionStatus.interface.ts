@@ -46,11 +46,17 @@ export class CancellablePromise<T> {
   public application: string; 
   public language: string;
   public transaction: Transaction;
+  public isFinished: boolean;
+
+  public isDone() {
+    return this.isFinished;
+  }
 
   constructor(application:string, language:string, transaction: Transaction, wrappedPromise:Promise<T>) {
     this.transaction = transaction;
     this.application = application;
     this.language = language;
+    this.isFinished = false;
     this.promise = new Promise((resolve, reject) => {
         this.cancel = resolve;
         wrappedPromise.then((res:T) => {
@@ -59,6 +65,8 @@ export class CancellablePromise<T> {
         }).catch((err) => {
           this.transaction.rollback();
           reject(err);
+        }).finally(() => {
+          this.isFinished = true;
         })
     });
   }

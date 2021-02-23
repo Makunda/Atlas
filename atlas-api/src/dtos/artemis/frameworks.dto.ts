@@ -1,6 +1,9 @@
-import { IsArray, IsDecimal, IsString } from "class-validator";
+import { IsArray, IsDecimal, IsNumber, IsString } from "class-validator";
 
 export class CreateFrameworkDto {
+  @IsNumber()
+  public id = -1;
+
   @IsString()
   public name: string;
 

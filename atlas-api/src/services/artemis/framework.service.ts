@@ -20,9 +20,10 @@ class FrameworksService {
    * Convert a neo4j record to a Framework
    * @param res Record to convert
    */
-  private convertRecordToFramework(res: any): Framework {
+  public static convertRecordToFramework(res: any): Framework {
     
     const framework: Framework = {
+      id: int(res.get("id")).toNumber() || -1,
       name: res.get("name"),
       description: res.get("description"),
       type: res.get("type"),
@@ -33,8 +34,6 @@ class FrameworksService {
       percentageOfDetection: Number(res.get("percentageOfDetection")) || 0,
     };
     
-    console.log("Received", framework)
-
     return framework;
   }
 
@@ -63,7 +62,7 @@ class FrameworksService {
       if (!val.records || val.records.length == 0) return null;
 
       const singleRecord = val.records[0];
-      return this.convertRecordToFramework(singleRecord);
+      return FrameworksService.convertRecordToFramework(singleRecord);
     } catch (err) {
       logger.error(
         "An internal error occurred in FrameworksServices::findFrameworkbyName ",
@@ -87,7 +86,7 @@ class FrameworksService {
     let singleRecord;
     for (let index = 0; index < res.records.length; index++) {
       singleRecord = res.records[index];
-      returnList.push(this.convertRecordToFramework(singleRecord));
+      returnList.push(FrameworksService.convertRecordToFramework(singleRecord));
     }
 
     return returnList;
@@ -111,7 +110,7 @@ class FrameworksService {
       if (!val.records || val.records.length == 0) return null;
 
       const singleRecord = val.records[0];
-      return this.convertRecordToFramework(singleRecord);
+      return FrameworksService.convertRecordToFramework(singleRecord);
     } catch (err) {
       logger.error(
         "An internal error occurred in FrameworksServices::findFrameworkbyNameAndType ",
@@ -134,7 +133,7 @@ class FrameworksService {
       if (!val.records || val.records.length == 0) return null;
 
       const singleRecord = val.records[0];
-      return this.convertRecordToFramework(singleRecord);
+      return FrameworksService.convertRecordToFramework(singleRecord);
     } catch (err) {
       logger.error(
         "An internal error occurred in FrameworksServices::mergeFramework ",
@@ -187,6 +186,55 @@ class FrameworksService {
       );
       throw new HttpException(500, "Internal error");
     }
+  }
+
+  /**
+   * Update a framework using its ID
+   * @param frameworkData Framework to modify 
+   */
+  public async updateFrameworkById(frameworkData: CreateFrameworkDto) : Promise<boolean> {
+    console.log("Incoming framework", frameworkData)
+    const params: any = Object.assign({}, frameworkData);
+    // Force Id 
+    //params.id = int(frameworkData.id);
+    const req = `CALL artemis.api.update.framework.by.id($id, $name, $discoveryDate, $location, $description, $type, $category, $internalType);`;
+    
+    try {
+      const results = await this.neo4jAl.executeWithParameters(req, params);
+      if (!results.records || results.records.length == 0) return null;
+      return  Boolean(results.records[0].get(0));
+    } catch (err) {
+      logger.error(
+        "An internal error occurred in FrameworksServices::updateFrameworksById",
+        err
+      );
+      throw new HttpException(500, "Internal error");
+    }
+
+  }
+
+  /**
+   * Force the add of a framework ( can ca  use interference with existing frameworks, it's recommended to use the merge option )
+   * @param frameworkData Framework to add
+   */
+  public async forceAddFramework(frameworkData: CreateFrameworkDto) : Promise<boolean> {
+    const params: any = Object.assign({}, frameworkData);
+    // Force Id 
+    //params.id = int(frameworkData.id);
+    const req = `CALL artemis.api.add.framework($id, $name, $discoveryDate, $location, $description, $type, $category, $internalType);`;
+    
+    try {
+      const results = await this.neo4jAl.executeWithParameters(req, params);
+      if (!results.records || results.records.length == 0) return null;
+      return  Boolean(results.records[0].get(0));
+    } catch (err) {
+      logger.error(
+        "An internal error occurred in FrameworksServices::updateFrameworksById",
+        err
+      );
+      throw new HttpException(500, "Internal error");
+    }
+
   }
 
   /**
@@ -267,7 +315,7 @@ class FrameworksService {
     let singleRecord;
     for (let index = 0; index < res.records.length; index++) {
       singleRecord = res.records[index];
-      returnList.push(this.convertRecordToFramework(singleRecord));
+      returnList.push(FrameworksService.convertRecordToFramework(singleRecord));
     }
 
     return returnList;
@@ -286,7 +334,7 @@ class FrameworksService {
     let singleRecord;
     for (let index = 0; index < res.records.length; index++) {
       singleRecord = res.records[index];
-      returnList.push(this.convertRecordToFramework(singleRecord));
+      returnList.push(FrameworksService.convertRecordToFramework(singleRecord));
     }
 
     return returnList;
@@ -312,6 +360,48 @@ class FrameworksService {
     }
 
     return returnList;
+  }
+
+  /**
+   * Delete a framework by its ID 
+   * @param id Id of the framework to delete
+   */
+  public async deleteFrameworkById(id: number): Promise<boolean> {
+    const res = "CALL artemis.api.delete.framework.by.id($id)";
+    const params = { id : id };
+
+    try {
+      const results = await this.neo4jAl.executeWithParameters(res, params);
+      if (!results.records || results.records.length == 0) return null;
+      return  Boolean(results.records[0].get(0));
+    } catch (err) {
+      logger.error(
+        "An internal error occurred in FrameworksServices::deleteFrameworkById",
+        err
+      );
+      throw new HttpException(500, "Internal error");
+    }
+  }
+
+   /**
+   * Delete a framework by its ID 
+   * @param id Id of the framework to delete
+   */
+  public async toggleFrameworkTypeById(id: number): Promise<boolean> {
+    const res = "CALL artemis.api.toggle.validation.framework.by.id($id)";
+    const params = { id : id };
+
+    try {
+      const results = await this.neo4jAl.executeWithParameters(res, params);
+      if (!results.records || results.records.length == 0) return null;
+      return  Boolean(results.records[0].get(0));
+    } catch (err) {
+      logger.error(
+        "An internal error occurred in FrameworksServices::toggleFrameworkTypeById",
+        err
+      );
+      throw new HttpException(500, "Internal error");
+    }
   }
 }
 

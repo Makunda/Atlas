@@ -18,9 +18,9 @@
           on it's own database to discover frameworks.
         </p>
       </v-row>
-  
-      <v-row class="mt-5">
-        <h3>Actions:</h3>
+
+            <v-row class="mt-9">
+        <h3>Configuration:</h3>
       </v-row>
       <v-row class="d-flex flex-column">
         <v-switch
@@ -55,25 +55,20 @@
           label="Send the results of this detection by mail. (Configure mails addresses in the admistration panel) (Coming soon)"
           disabled
         ></v-checkbox>
-        <v-row align="center">
-          <v-col cols="2">
-            <v-subheader>
-              <h3>Pick a language for discovery :</h3>
-            </v-subheader>
-          </v-col>
-
-          <v-col cols="2">
-            <v-select
-              v-model="selectedLanguage"
-              :items="availableLanguages"
-              label="Language"
-              persistent-hint
-              return-object
-              single-line
-            ></v-select>
-          </v-col>
-        </v-row>
       </v-row>
+      
+      <v-row class="mt-3">
+        <p class="ml-5">
+          <b
+            ><i
+              ><v-icon color="persianGrey">mdi-information</v-icon> The current
+              version of Artemis is :
+            </i></b
+          >{{ version }}
+        </p>
+      </v-row>
+
+
       <v-row class="mt-3">
         <p class="ml-5">
           <b
@@ -86,72 +81,109 @@
           You can change the workspace in the Administration section
         </p>
       </v-row>
-      <v-row class="mt-3">
-        <p class="ml-5">
-          <b
-            ><i
-              ><v-icon color="persianGrey">mdi-information</v-icon> The current
-              version of Artemis is :
-            </i></b
-          >{{ version }}
-        </p>
-      </v-row>
+
       <v-row class="my-5">
-        <v-btn
-          :loading="runningArtemis"
-          color="charcoal"
-          class="ma-2 white--text"
-          @click="launchDetection()"
-          :disabled="ongoingDetection != ''"
-        >
-          Launch detection
-          <v-icon right dark>
-            mdi-play
-          </v-icon>
-        </v-btn>
-        <v-btn
-          :disabled="!runningArtemis"
-          color="brown"
-          class="ma-2 white--text"
-          @click="stopDetection()"
-        >
-          Stop detection
-          <v-icon right dark>
-            mdi-stop
-          </v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn color="brown" class="ma-2 white--text" @click="checkStatus()">
-          Reload status
-          <v-icon right dark>
-            mdi-reload
-          </v-icon>
-        </v-btn>
+        <h3>Candidate applications:</h3>
       </v-row>
-      <v-row>
-        <v-alert
-          class="ma-2"
+      <v-row class="mt-5">
+        <v-card
           width="100%"
-          border="left"
-          dense
-          type="info"
-          v-if="ongoingDetection && ongoingDetection != ''"
+          max-height="500px"
+          style="overflow-y: scroll"
+          :loading="loadingCandidates"
         >
-          <p>{{ ongoingDetection }} <strong class="mx-2">Time Elapsed</strong>{{ toDisplay }}</p>
-        </v-alert>
-        <v-alert
-          class="ma-2"
-          width="100%"
-          border="left"
-          dense
-          type="error"
-          v-if="errorDetection && errorDetection != ''"
-        >
-          {{ errorDetection }}
-        </v-alert>
+          <v-card-text>
+            <v-container>
+              <!-- Headers -->
+              <v-row>
+                <v-col cols="4">
+                  Name of the application
+                </v-col>
+                <v-col cols="4">
+                  Select the language of the detection
+                </v-col>
+              </v-row>
+
+              <!-- rows  -->
+              <span v-for="(can, i) in candidates" :key="i">
+                <v-row>
+                  <v-col class="pt-8" cols="4">
+                    <strong>{{ can.application }}</strong>
+                  </v-col>
+                  <v-col
+                    class="mb-2"
+                    v-for="(lang, y) in can.languages"
+                    :key="y"
+                    cols="2"
+                  >
+                    <v-checkbox
+                      v-model="selected[`option-${i}-${y}`]"
+                      :label="lang"
+                      color="indigo"
+                      value="indigo"
+                      hide-details
+                      @click="toPreQueue(can.application, lang, selected[`option-${i}-${y}`])"
+                    ></v-checkbox>
+                  </v-col>
+                </v-row>
+                <v-divider></v-divider>
+              </span>
+            </v-container>
+          </v-card-text>
+        </v-card>
       </v-row>
+
+      <v-row class="mt-10 mb-5">
+        <h3>Send to queue :</h3>
+      </v-row>
+      <v-row class="mt-5">
+        <v-card width="100%">
+          <v-card-text>
+           <v-chip-group
+            active-class="primary--text"
+            column
+          >
+              <v-chip
+              v-for="(tag, i) in preQueue"
+              :key="i"
+            >
+              {{ `${tag.application} ( on ${listToString(tag.languages)})` }}
+            </v-chip>
+
+           </v-chip-group>
+            <v-spacer></v-spacer>
+            <v-btn depressed color="primary" @click="sendtoQueue">
+              Send {{ preQueue.length }} applications to the queue
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-row>
+
+       <v-row class="mt-10 mb-5">
+        <h3>On-going queue:</h3>
+      </v-row>
+      <v-row class="mt-5 mb-8">
+        <v-card width="100%" :loading="loadingOngoingQueue">
+          <v-card-text>
+           <v-chip-group
+            active-class="primary--text"
+            column
+          >
+              <v-chip
+              v-for="(tag, i) in ongoingQueue"
+              :key="i"
+            >
+              {{ `${tag.application} ( on ${listToString(tag.languages)})` }}
+            </v-chip>
+
+           </v-chip-group>
+          </v-card-text>
+        </v-card>
+      </v-row>
+
+
       <v-divider></v-divider>
-      <v-card class="my-6">
+      <!-- <v-card class="my-6">
         <v-card-title>
           Result of the detection:
           <v-spacer></v-spacer>
@@ -181,7 +213,7 @@
           style="width: 100%"
         >
         </v-data-table>
-      </v-card>
+      </v-card> -->
     </v-card-text>
     <div v-if="diplayNotInstalled" id="NotInstalledArtemis">
       <h2 class="ma-auto text--h2" id="Message">
@@ -206,24 +238,26 @@ import DetectionController from "@/api/artemis/detection.controller";
 import {
   DetectionStatus,
   DetectionResult,
-  Framework
+  Framework,
 } from "@/api/interface/ApiArtemis.interface";
 import ConfigurationController from "@/api/configuration/configuration.controller";
+import { DetectionCandidate } from "@/api/interface/artemis/ApiDetectionCandidate.interface";
+import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.interface";
 
 export default Vue.extend({
-  name: "ActionTileViewer",
+  name: "ArtemisConsole",
 
   computed: {
     filteredFrameworks() {
       console.log(
         "Result size : " +
-          this.resultDetection.filter(d => {
+          this.resultDetection.filter((d) => {
             return d.type == "Framework";
           }).length
       );
 
       if (this.showOnlyFrameworks) {
-        return this.resultDetection.filter(d => {
+        return this.resultDetection.filter((d) => {
           return d.type == "Framework";
         });
       } else {
@@ -233,7 +267,7 @@ export default Vue.extend({
 
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
@@ -243,11 +277,11 @@ export default Vue.extend({
         text: "Framework",
         align: "start",
         sortable: true,
-        value: "name"
+        value: "name",
       },
       { text: "Description", value: "description" },
       { text: "Category", value: "category" },
-      { text: "Detected as ", value: "type" }
+      { text: "Detected as ", value: "type" },
     ],
     showOnlyFrameworks: true as boolean,
 
@@ -283,11 +317,58 @@ export default Vue.extend({
     repositoryMode: true as boolean,
     workspacePath: "" as string,
 
+    // Candidate applications
+    loadingCandidates: false,
+    candidates: [] as DetectionCandidate[],
+    selected: [],
+
+    loadingPrequeueUpload: false, 
+    preQueue: [] as DetectionCandidate[],
+
+    loadingOngoingQueue: false,
+    ongoingQueue: [] as DetectionCandidate[],
+
+
     // On destroy
-    flaggedAsToDestroy: false
+    flaggedAsToDestroy: false,
   }),
 
   methods: {
+
+        // functions 
+    listToString(items:string[]) : string {
+      return items.toString();
+    },
+
+    toPreQueue(application:string, language: string, appended:boolean) {
+      if(appended) { // Add to the prequeue
+        for(const i in this.preQueue) {
+          if(this.preQueue[i].application == application && this.preQueue[i].languages.indexOf(language) == -1) {
+                this.preQueue[i].languages.push(language);
+                return;
+          }
+        }
+
+        this.preQueue.push({ application: application, languages: [language]})
+        return;
+
+      } else { // remove from  the prequeue
+        for(const i in this.preQueue) {
+          if(this.preQueue[i].application == application && this.preQueue[i].languages.indexOf(language) != -1) {
+                const index = this.preQueue[i].languages.indexOf(language);
+                this.preQueue[i].languages.splice(index, 1);
+
+                if(this.preQueue[i].languages.length == 0) {
+                  this.preQueue.splice(i, 1);
+                }
+                return;
+          }
+          
+        }
+
+      }
+    },
+
     /**
      * Get the configuration of Artemis
      */
@@ -304,7 +385,7 @@ export default Vue.extend({
           this.availableLanguages = res;
           this.selectedLanguage = res[0];
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("Failed to retrieve languages.", err);
         });
 
@@ -320,7 +401,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineMode = res;
         })
-        .catch(err => {
+        .catch((err) => {
           this.errorOnlineMode = true;
           console.error(
             "Failed to change online mode of Artemis Framework detector.",
@@ -341,7 +422,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.repositoryMode = res;
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
             "Failed to change the repository setting of Artemis.",
             err
@@ -374,7 +455,6 @@ export default Vue.extend({
       setTimeout(this.countDownTimer, 1000);
     },
 
-
     /**
      *  Get the status of the Detection
      */
@@ -384,8 +464,7 @@ export default Vue.extend({
       this.checkingStatus = true;
       DetectionController.getApplicationStatus(this.application)
         .then((res: DetectionResult) => {
-
-          console.log("Got status", res)
+          console.log("Got status", res);
           // If res is null, the application has no status
           if (res == null) {
             this.ongoingDetection = "";
@@ -420,7 +499,7 @@ export default Vue.extend({
               break;
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
             `Failed to retrieve the status of the application ${this.application}.`,
             err
@@ -432,6 +511,46 @@ export default Vue.extend({
         });
     },
 
+    getCandidates() {
+      this.loadingCandidates = true;
+      DetectionController.getDetectionCandidates()
+        .then((res: DetectionCandidate[]) => {
+          this.candidates = res;
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error("Failed to get the candidates for the dection", err);
+        })
+        .finally(() => {
+          this.loadingCandidates = false;
+        });
+    },
+
+    async loadQueue() {
+        this.loadingOngoingQueue = true;
+        await DetectionController.getDetectionQueue().then((res:DetectionCandidate[]) => {
+          this.ongoingQueue = res;
+        }).catch((err => {
+          console.error("Failed to retrieve the detection queue.", err);
+        })).finally(() => {
+          this.loadingOngoingQueue = false;
+        })
+    }, 
+    
+    sendtoQueue() {
+      if(this.preQueue.length == 0) return;
+
+      this.loadingPrequeueUpload = true;
+      DetectionController.addCandidatesToDetection(this.preQueue).then((val:number) => {
+        
+        this.preQueue = []; // clean the preQueue
+      }).catch((err) => {
+        console.error("Failed to add the Frameworks to the database", err);
+      }).finally(() => {
+        this.loadingPrequeueUpload = false;
+      })
+    },
+    
     launchDetection() {
       this.displayErrorDetection = false;
       DetectionController.launchDetection(
@@ -448,7 +567,7 @@ export default Vue.extend({
             );
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
             `The analysis of the application ${this.application} failed to launch.`,
             err
@@ -473,7 +592,7 @@ export default Vue.extend({
             );
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(`Failed to stop the on-going analysis.`, err);
           this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`;
         });
@@ -481,14 +600,14 @@ export default Vue.extend({
 
     constantStatusCheck() {
       if (this.diplayNotInstalled) return;
-      this.checkStatus();
+      this.loadQueue();
       if (this.flaggedAsToDestroy) return;
-      setTimeout(this.constantStatusCheck, 3000);
+      setTimeout(this.constantStatusCheck, 5000);
     },
 
     cancelDetection() {
       // Todo
-    }
+    },
   },
 
   mounted() {
@@ -503,7 +622,7 @@ export default Vue.extend({
         await this.getConfiguration();
         await this.checkStatus();
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(
           "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
           err
@@ -512,20 +631,13 @@ export default Vue.extend({
       });
 
     this.constantStatusCheck();
+    this.getCandidates();
+    this.loadQueue();
   },
 
   beforeDestroy() {
     this.flaggedAsToDestroy = true;
   },
-
-  watch: {
-    getApplicationName(newApp) {
-      this.application = newApp;
-      this.resultDetection = [];
-      this.runningArtemis = false;
-      this.checkStatus();
-    }
-  }
 });
 </script>
 

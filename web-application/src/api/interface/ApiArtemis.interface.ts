@@ -1,4 +1,5 @@
 export interface Framework {
+  id: number,
   name: string;
   description: string;
   type: string;

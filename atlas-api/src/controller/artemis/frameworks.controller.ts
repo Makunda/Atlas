@@ -136,6 +136,54 @@ class FrameworksController {
       next(error);
     }
   }
+  
+    // Update frameworks
+    public updateFrameworksByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const frameworkData : CreateFrameworkDto = Object.assign({}, req.body.framework);
+        
+        const results: boolean = await this.frameworksService.updateFrameworkById(frameworkData);
+        res.status(200).send({ data: results, message: 'Updated by ID' });
+      } catch (error) {
+        next(error);
+      }
+    }
+
+    // Update frameworks
+    public forceAddFramework = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const frameworkData : CreateFrameworkDto = Object.assign({}, req.body.framework);
+        
+        const results: boolean = await this.frameworksService.forceAddFramework(frameworkData);
+        res.status(200).send({ data: results, message: 'Force add' });
+      } catch (error) {
+        next(error);
+      }
+    }
+
+    // Delete by ID
+    public deleteFrameworkTypeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const id = Number(req.body.id);
+        
+        const results: boolean = await this.frameworksService.deleteFrameworkById(id);
+        res.status(200).send({ data: results, message: 'Delete by id' });
+      } catch (error) {
+        next(error);
+      }
+    }
+
+    // Toggle
+    public toggleFrameworkTypeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const id = Number(req.body.id);
+        
+        const results: boolean = await this.frameworksService.toggleFrameworkTypeById(id);
+        res.status(200).send({ data: results, message: 'Toggle by ID' });
+      } catch (error) {
+        next(error);
+      }
+    }
 
 }
 

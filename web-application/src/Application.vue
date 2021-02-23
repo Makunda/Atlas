@@ -209,7 +209,7 @@ export default Vue.extend({
       this.applicationName = application;
       // Update store properties
       this.$store.state.applicationName = application;
-      console.log("New sate of store ", this.$store.state);
+      console.log("New state of store ", this.$store.state);
     },
 
     getApplicationList() {
