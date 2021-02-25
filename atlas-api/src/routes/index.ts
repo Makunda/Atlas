@@ -14,7 +14,7 @@ import AssistantsRoute from './assistants/assistants.route';
 const router = Router();
 
 // Add sub-routes
-router.use('/users', UserRouter);
+//router.use('/users', UserRouter);
 
 router.use('/demeter', DemeterRouter);
 router.use('/artemis', ArtemisRouter);

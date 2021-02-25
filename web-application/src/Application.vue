@@ -209,23 +209,20 @@ export default Vue.extend({
       this.applicationName = application;
       // Update store properties
       this.$store.state.applicationName = application;
-      console.log("New state of store ", this.$store.state);
     },
 
     getApplicationList() {
       this.loadingApplication = true;
-      ApplicationController.getListApplications().then(
-        (res: string[]) => {
-          this.applicationList = res;
-          if (res.length != 0) {
-            this.changeApplication(res[0]);
-          } else {
-            this.applicationName = "No Application found";
-          }
-
-          this.loadingApplication = false;
+      ApplicationController.getListApplications().then((res: string[]) => {
+        this.applicationList = res;
+        if (res.length != 0) {
+          this.changeApplication(res[0]);
+        } else {
+          this.applicationName = "No Application found";
         }
-      );
+
+        this.loadingApplication = false;
+      });
     },
 
     simpleHealthCheck() {

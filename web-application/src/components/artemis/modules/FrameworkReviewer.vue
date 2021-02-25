@@ -38,11 +38,20 @@
             </span>
           </p>
           <p>Filters :</p>
-          <p>
+          <p class="d-flex flex-row ">
             <v-checkbox
-              v-model="showOnlyToValidate"
-              value="0"
+              v-model="showOnly"
+              value="ToValidate"
               label="Filter frameworks to validate"
+              type="checkbox"
+              @change="refresh()"
+              required
+            ></v-checkbox>
+            <v-checkbox
+              class="ml-5"
+              v-model="showOnly"
+              value="Duplicates"
+              label="Filter duplicates frameworks"
               type="checkbox"
               @change="refresh()"
               required
@@ -99,10 +108,27 @@
 
                     <v-card-text>
                       <v-container>
+                        <v-row class="py-1 pb-5">
+                          <v-col cols="4">
+                            <v-subheader class="text-h6">
+                              Name:
+                            </v-subheader>
+                          </v-col>
+
+                          <v-col cols="8">
+                            <v-text-field
+                              v-model="editedItem.name"
+                              counter="25"
+                              hint="Name of the framework ( will be used during the detection )"
+                              label="Name"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+
                         <v-row class="py-1">
                           <v-col cols="4">
                             <v-subheader class="text-h6">
-                              Framework type :
+                              Framework type:
                             </v-subheader>
                           </v-col>
 
@@ -123,14 +149,14 @@
                         <v-row class="py-1">
                           <v-col cols="4">
                             <v-subheader class="text-h6">
-                              Category :
+                              Category:
                             </v-subheader>
                           </v-col>
 
                           <v-col cols="8">
                             <v-combobox
                               v-model="editedItem.category"
-                              :items="framewokCategories"
+                              :items="frameworkCategories"
                               item-text="name"
                               item-value="name"
                               label="Select a category"
@@ -141,7 +167,7 @@
                         <v-row class="py-1">
                           <v-col cols="4">
                             <v-subheader class="text-h6">
-                              Internal Types :
+                              Internal Types:
                             </v-subheader>
                           </v-col>
 
@@ -160,7 +186,7 @@
                         <v-row class="py-1 pb-5">
                           <v-col cols="4">
                             <v-subheader class="text-h6">
-                              Location :
+                              Location:
                             </v-subheader>
                           </v-col>
 
@@ -300,7 +326,7 @@
                   >
                   <v-row class="mb-4"
                     >This rules currently match the following obejct types:
-                    <v-chip-group column >
+                    <v-chip-group column>
                       <v-chip small v-for="tag in item.internalType" :key="tag">
                         {{ tag }}
                       </v-chip>
@@ -376,6 +402,38 @@
       </v-card-text>
     </v-card>
 
+    <v-card>
+      <v-card-title>
+        <v-icon class="mr-2" color="teal"> mdi-cogs </v-icon> Action on the
+        configuration</v-card-title
+      >
+      <v-card-text>
+        <v-container>
+          <v-row class="mb-4">
+            <v-col class="mt-1" cols="6">
+              Automatically clean the configuration from duplicates nodes<br>The duplicates framework properties will be merged.
+              <br>
+              {{ autoCleanInfo }}
+            </v-col>
+            <v-col cols="6">
+              <v-btn
+                  class="ma-2"
+                  :loading="loadingAutoClean"
+                  :disabled="loadingAutoClean"
+                  color="teal"
+                  dark
+                  @click="launchAutoClean"
+
+                >
+                  Auto cleaning
+                </v-btn>
+            </v-col>
+          </v-row>
+          <v-divider></v-divider>
+        </v-container>
+      </v-card-text>
+    </v-card>
+
     <v-snackbar v-model="displayUpdateSuccess" :timeout="2000">
       Framework {{ frameworkUpdateSnackBar }} was updated successfully
 
@@ -424,6 +482,7 @@ export default Vue.component("FrameworkReviewer", {
         value: "name",
       },
       { text: "Description", value: "description" },
+      { text: "Category", value: "category" },
       { text: "Type discovered", value: "type" },
       { text: "Discovery date", value: "discoveryDate" },
       { text: "Validation", value: "validation", sortable: false },
@@ -436,7 +495,7 @@ export default Vue.component("FrameworkReviewer", {
     numberItems: 0,
 
     // Check Box
-    showOnlyToValidate: false,
+    showOnly: "",
 
     currentIndex: 0 as number,
     focusedFramework: null as Framework,
@@ -476,7 +535,7 @@ export default Vue.component("FrameworkReviewer", {
     editItemError: "",
     editItemLoading: false,
 
-    framewokCategories: [] as Category[],
+    frameworkCategories: [] as Category[],
     internalTypes: [],
     loadingTable: false,
 
@@ -488,6 +547,10 @@ export default Vue.component("FrameworkReviewer", {
 
     // Searching
     loadingSearch: false,
+
+    // AutoClean
+    loadingAutoClean: false,
+    autoCleanInfo: "",
   }),
 
   computed: {
@@ -503,7 +566,7 @@ export default Vue.component("FrameworkReviewer", {
     getListCategories() {
       CategoryController.getAllNode()
         .then((res: Category[]) => {
-          this.framewokCategories = res;
+          this.frameworkCategories = res;
         })
         .catch((err) => {
           console.error("Failed to retrieve the list of categories", err);
@@ -638,7 +701,7 @@ export default Vue.component("FrameworkReviewer", {
       if (this.editedIndex > -1) {
         // Update framework
         this.editItemLoading = true;
-        FrameworkController.updateFrameworksById(this.items[this.editedIndex])
+        FrameworkController.updateFrameworksById(this.editedItem)
           .then((val: boolean) => {
             if (val) this.close();
             this.editItemError = "Failed to update the framework";
@@ -655,7 +718,7 @@ export default Vue.component("FrameworkReviewer", {
       } else {
         // Create framework
         // Create framework
-        FrameworkController.addFramework(this.items[this.editedIndex])
+        FrameworkController.addFramework(this.editedItem)
           .then((val: boolean) => {
             if (val) this.close();
             this.editItemError = "Failed to add the framework";
@@ -710,12 +773,46 @@ export default Vue.component("FrameworkReviewer", {
         });
     },
 
+    getDuplicatesFramework() {
+      this.loadingTable = true;
+      FrameworkController.getDuplicatesFrameworks()
+        .then((res: Framework[]) => {
+          this.items = res;
+          this.currentIndex = 0;
+          this.numberItems = res.length;
+        })
+        .catch((err) => {
+          console.error("Failed to retrieve the list of frameworks.", err);
+        })
+        .finally(() => {
+          this.loadingTable = false;
+        });
+    },
+
     refreshFramework() {
-      if (this.showOnlyToValidate) {
+      if (this.showOnly == "ToValidate") {
         this.getToValidateFramework();
+      } else if (this.showOnly == "Duplicates") {
+        this.showOnlyToValidate = false;
+        this.getDuplicatesFramework();
       } else {
         this.getBatchFramework();
       }
+    },
+
+    launchAutoClean() {
+      this.loadingAutoClean = true;
+      FrameworkController.launchAutoCleaning()
+        .then((res: number) => {
+          this.autoCleanInfo = `${res} groups were cleaned during the operation.`
+        })
+        .catch((err) => {
+          console.error("Failed to search for frameworks.", err);
+        })
+        .finally(() => {
+          this.loadingAutoClean =false;
+        });
+        
     },
 
     searchFrameworks() {

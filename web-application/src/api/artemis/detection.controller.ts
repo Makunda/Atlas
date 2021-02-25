@@ -22,7 +22,7 @@ export default class DetectionController {
 
     const data = {
       application: application,
-      language: language,
+      language: language
     };
     try {
       const res = await axios.post(url, data);
@@ -57,7 +57,7 @@ export default class DetectionController {
 
     const data = {
       application: application,
-      language: language,
+      language: language
     };
     try {
       const res = await axios.post(url, data);
@@ -236,6 +236,36 @@ export default class DetectionController {
     }
   }
 
+  /**
+   * Get the on-going detection 
+   */
+  public static async getCurrent(): Promise<DetectionCandidate> {
+    const url =
+      DetectionController.API_BASE_URL + "/api/artemis/detection/queue/current";
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if(res.data == null) return null;
+        return apiResponse.data as DetectionCandidate;
+      } else {
+        console.warn(
+          `Failed to retrieve the current detection. Status (${res.status})`
+        );
+      }
+
+      return null;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve the current detection.`,
+        error
+      );
+      throw error;
+    }
+  }
+
   // Get the list of pending detection
   public static async flushDetectionQueue(): Promise<boolean> {
     const url =
@@ -253,7 +283,6 @@ export default class DetectionController {
         );
         return false;
       }
-
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the queue of detection..`,
@@ -267,12 +296,14 @@ export default class DetectionController {
    * Add some candidates to the detection queue
    * @param candidates List of candidate to add
    */
-  public static async addCandidatesToDetection( candidates : DetectionCandidate[] ): Promise<number> {
+  public static async addCandidatesToDetection(
+    candidates: DetectionCandidate[]
+  ): Promise<number> {
     const url =
       DetectionController.API_BASE_URL + "/api/artemis/detection/queue/add";
 
     try {
-      const params = { candidates : candidates };
+      const params = { candidates: candidates };
       const res = await axios.post(url, params);
 
       if (res.status == 200) {
@@ -295,7 +326,8 @@ export default class DetectionController {
 
   public static async getDetectionCandidates(): Promise<DetectionCandidate[]> {
     const url =
-      DetectionController.API_BASE_URL + "/api/assistants/frameworks/candidates";
+      DetectionController.API_BASE_URL +
+      "/api/assistants/frameworks/candidates";
 
     try {
       const res = await axios.get(url);

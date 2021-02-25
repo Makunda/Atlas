@@ -173,6 +173,56 @@ export class FrameworkController {
     }
   }
 
+  // Get the list of Framework to validate
+  public static async getDuplicatesFrameworks(): Promise<Framework[]> {
+    const url =
+      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/duplicates";
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200 || res.status == 304) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          return apiResponse.data;
+        }
+      } else {
+        throw new Error(
+          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
+        );
+      }
+    } catch (err) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve a the list of duplicates frameworks.`,
+        err
+      );
+      throw err;
+    }
+  }
+
+    // Get the list of Framework to validate
+    public static async launchAutoCleaning(): Promise<number> {
+      const url =
+        FrameworkController.API_BASE_URL + "/api/artemis/frameworks/autoClean";
+      try {
+        const res = await axios.get(url);
+  
+        if (res.status == 200 || res.status == 304) {
+          const apiResponse: ApiResponse = res.data;
+          return Number(apiResponse.data);
+        } else {
+          throw new Error(
+            ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
+          );
+        }
+      } catch (err) {
+        console.error(
+          `Failed to reach the API : ${url}. Failed to retrieve execute the auto cleaning on the server.`,
+          err
+        );
+        throw err;
+      }
+    }
+
   // Get a batch of framework ( filter by internal type possible )
   public static async getFrameworkBatch(
     start: number,
@@ -358,7 +408,8 @@ export class FrameworkController {
    */
   public static async toggleFramework(id: number): Promise<boolean> {
     const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/toggle/validation";
+      FrameworkController.API_BASE_URL +
+      "/api/artemis/frameworks/toggle/validation";
 
     try {
       const body: any = { id: id };

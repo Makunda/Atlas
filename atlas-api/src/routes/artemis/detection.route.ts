@@ -24,6 +24,7 @@ class DetectionRoute implements Route {
     this.router.post(`${this.path}/queue/add`, this.detectionQueueController.addCandidates);
     this.router.get(`${this.path}/queue/get`, this.detectionQueueController.getQueue);
     this.router.get(`${this.path}/queue/flush`, this.detectionQueueController.flush);
+    this.router.get(`${this.path}/queue/current`, this.detectionQueueController.getCurrent);
   }
 }
 

@@ -31,7 +31,18 @@ class DetectionQueueController {
     try {
 
     this.detectionQueueAssistant.flushCandidates()
-    res.status(200).send({ data: true, message: "flushed" });
+    res.status(200).send({ data: true, message: "Flushed" });
+      
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getCurrent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+
+    const current = this.detectionQueueAssistant.getCurrent()
+    res.status(200).send({ data: current, message: "Current" });
       
     } catch (error) {
       next(error);

@@ -38,8 +38,18 @@ class FrameworksRoute implements Route {
     );
 
     this.router.get(
+      `${this.path}/duplicates`,
+      this.frameworksController.getDuplicateFrameworks
+    );
+
+    this.router.get(
+      `${this.path}/autoClean`,
+      this.frameworksController.autoClean
+    );
+
+    this.router.get(
       `${this.path}/internalTypes`,
-      this.frameworksController.getFrameworksinternalType
+      this.frameworksController.getFrameworksInternalType
     );
 
     this.router.post(

@@ -4,7 +4,7 @@
     <v-card-subtitle
       >Automatically analyze applications on-boarded.</v-card-subtitle
     >
-    <v-card-text>
+    <v-card-text class="pa-0">
       <v-container>
         <v-row width="100%">
           <v-col cols="6">
@@ -49,7 +49,12 @@
                   </v-row>
                   <v-row>
                     <v-spacer></v-spacer>
-                    <v-btn depressed color="primary">
+                    <v-btn
+                      depressed
+                      color="primary"
+                      @click="createAssistant"
+                      :loading="loadingAssistantCreation"
+                    >
                       Add assistant new
                     </v-btn>
                   </v-row>
@@ -60,14 +65,40 @@
           <v-col cols="6" class="pl-6">
             <v-row class="mb-4"><h3>Running assistants:</h3></v-row>
             <v-row style="width: 100%">
-              <v-card class="my-2" width="100%" max-height="70px">
-                  <v-card-text><h3>Asisstant 1</h3></v-card-text>
-              </v-card>
-              <v-card class="my-2" width="100%" max-height="70px">
-                  <v-card-text><h3>Asisstant 2</h3></v-card-text>
-              </v-card>
-              <v-card class="my-2" width="100%" max-height="70px">
-                  <v-card-text><h3>Asisstant 3</h3></v-card-text>
+              <v-card
+                v-for="(a, i) in assistantsList"
+                :key="i"
+                class="my-2"
+                width="100%"
+                min-height="70px"
+              >
+                <v-card-text>
+                  <v-container class="pa-0">
+                    <v-row>
+                      <v-col cols="10"
+                      ><h3>Assistant {{ i }}</h3>
+                      <p>
+                        Monitoring : <strong>{{ a.category }}</strong> and
+                        performing <strong>{{ a.actions }}</strong> actions
+                      </p></v-col
+                    >
+                    <v-col cols="1">
+                      <v-btn
+                        class="mt-2"
+                        fab
+                        dark
+                        x-small
+                        color="red"
+                        @click="removeAssistant(a)"
+                      >
+                        <v-icon dark>
+                          mdi-trash-can-outline
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
               </v-card>
             </v-row>
           </v-col>
@@ -94,6 +125,12 @@ export default Vue.extend({
 
     loadingCategories: false,
     categoriesList: [],
+
+    // Assistants
+    loadingAssistantCreation: false,
+
+    loadingAssistants: false,
+    assistantsList: [] as FrameworkAssistants,
   }),
 
   methods: {
@@ -125,9 +162,55 @@ export default Vue.extend({
         });
     },
 
+    getListAssistants() {
+      this.loadingAssistants = true;
+      FrameworkAssistants.getAllAssistants()
+        .then((res: FrameworkAssistants) => {
+          this.assistantsList = res;
+        })
+        .catch((err) => {
+          console.error("Failed to retrieve the list of assistants.", err);
+        })
+        .finally(() => {
+          this.loadingAssistants = false;
+        });
+    },
+
+    removeAssistant(id: number) {
+      FrameworkAssistants.removeAssistant(id)
+        .then((res) => {
+          this.getListAssistants();
+        })
+        .catch((err) => {
+          console.error("Failed to remove the assistant.", err);
+        });
+    },
+
+    createAssistant() {
+      if (this.selectedCategory == "" || this.selectedActions.length == 0)
+        return;
+
+      FrameworkAssistants.newAssistant(
+        this.selectedCategory,
+        this.selectedActions
+      )
+        .then((val: boolean) => {
+          this.selectedCategory = "";
+          this.selectedActions = [];
+          this.getListAssistants();
+        })
+        .catch((err) => {
+          console.error("Failed to create the assistant", err);
+        })
+        .finally(() => {
+          this.loadingAssistantCreation = false;
+        });
+    },
+
     refresh() {
       this.getListActions();
       this.getListCategories();
+      this.getListAssistants();
     },
   },
 

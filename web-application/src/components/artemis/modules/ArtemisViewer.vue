@@ -18,7 +18,7 @@
           on it's own database to discover frameworks.
         </p>
       </v-row>
-  
+
       <v-row class="mt-5">
         <h3>Actions:</h3>
       </v-row>
@@ -137,7 +137,10 @@
           type="info"
           v-if="ongoingDetection && ongoingDetection != ''"
         >
-          <p>{{ ongoingDetection }} <strong class="mx-2">Time Elapsed</strong>{{ toDisplay }}</p>
+          <p>
+            {{ ongoingDetection }} <strong class="mx-2">Time Elapsed</strong
+            >{{ toDisplay }}
+          </p>
         </v-alert>
         <v-alert
           class="ma-2"
@@ -374,7 +377,6 @@ export default Vue.extend({
       setTimeout(this.countDownTimer, 1000);
     },
 
-
     /**
      *  Get the status of the Detection
      */
@@ -384,8 +386,7 @@ export default Vue.extend({
       this.checkingStatus = true;
       DetectionController.getApplicationStatus(this.application)
         .then((res: DetectionResult) => {
-
-          console.log("Got status", res)
+          console.log("Got status", res);
           // If res is null, the application has no status
           if (res == null) {
             this.ongoingDetection = "";

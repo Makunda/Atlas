@@ -1,5 +1,4 @@
 export interface DetectionCandidate {
-    application: string;
-    language: string[];
-  }
-  
+  application: string;
+  language: string[];
+}

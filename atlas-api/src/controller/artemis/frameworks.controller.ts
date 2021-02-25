@@ -108,8 +108,30 @@ class FrameworksController {
     }
   }
 
+  // Get duplicate
+  public getDuplicateFrameworks= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const frameworks: Framework[] = await this.frameworksService.getDuplicateFrameworks();
+      res.status(200).send({ data: frameworks, message: 'Duplicates' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  
+  // Auto clean the detection
+  public autoClean= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const numGroupClean  = await this.frameworksService.autoClean();
+      res.status(200).send({ data: numGroupClean, message: 'Cleaned groups' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
   // Get internal types
-  public getFrameworksinternalType = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getFrameworksInternalType= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
     
       const types:string[] = await this.frameworksService.getFrameworksinternalType();

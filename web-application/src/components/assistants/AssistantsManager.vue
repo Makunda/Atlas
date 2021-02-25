@@ -14,7 +14,9 @@
     <v-card-text>
       <v-container>
         <!-- Predefined Assistans -->
-        <v-row width="100%" class="mb-5"> <FrameworkAssistant></FrameworkAssistant></v-row>
+        <v-row width="100%" class="mb-5">
+          <FrameworkAssistant></FrameworkAssistant
+        ></v-row>
         <!-- Regex Assistants -->
         <v-row width="100%">
           <RegexAssistants></RegexAssistants>

@@ -363,6 +363,42 @@ class FrameworksService {
   }
 
   /**
+   * Retrieve the list of duplicates values
+   */
+  public async getDuplicateFrameworks(): Promise<Framework[]> {
+    const res: QueryResult = await this.neo4jAl.execute(
+      "CALL artemis.api.get.framework.duplicates()"
+    );
+
+    const returnList: Framework[] = [];
+    let singleRecord;
+    for (let index = 0; index < res.records.length; index++) {
+      singleRecord = res.records[index];
+      returnList.push(FrameworksService.convertRecordToFramework(singleRecord));
+    }
+
+
+    return returnList;
+  }
+
+  /**
+   * Auto clean the repository of frameworks 
+   */
+  public async autoClean(): Promise<number> {
+    const res: QueryResult = await this.neo4jAl.execute(
+      "CALL artemis.api.get.framework.duplicates()"
+    );
+
+    if(res.records.length > 0) {
+      return Number(res.records[0].get(0));
+    }
+  
+    return 0;
+  }
+
+
+
+  /**
    * Delete a framework by its ID 
    * @param id Id of the framework to delete
    */

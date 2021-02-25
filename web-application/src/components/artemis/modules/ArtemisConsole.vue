@@ -19,7 +19,7 @@
         </p>
       </v-row>
 
-            <v-row class="mt-9">
+      <v-row class="mt-9">
         <h3>Configuration:</h3>
       </v-row>
       <v-row class="d-flex flex-column">
@@ -56,7 +56,7 @@
           disabled
         ></v-checkbox>
       </v-row>
-      
+
       <v-row class="mt-3">
         <p class="ml-5">
           <b
@@ -67,7 +67,6 @@
           >{{ version }}
         </p>
       </v-row>
-
 
       <v-row class="mt-3">
         <p class="ml-5">
@@ -122,7 +121,13 @@
                       color="indigo"
                       value="indigo"
                       hide-details
-                      @click="toPreQueue(can.application, lang, selected[`option-${i}-${y}`])"
+                      @click="
+                        toPreQueue(
+                          can.application,
+                          lang,
+                          selected[`option-${i}-${y}`]
+                        )
+                      "
                     ></v-checkbox>
                   </v-col>
                 </v-row>
@@ -139,18 +144,11 @@
       <v-row class="mt-5">
         <v-card width="100%">
           <v-card-text>
-           <v-chip-group
-            active-class="primary--text"
-            column
-          >
-              <v-chip
-              v-for="(tag, i) in preQueue"
-              :key="i"
-            >
-              {{ `${tag.application} ( on ${listToString(tag.languages)})` }}
-            </v-chip>
-
-           </v-chip-group>
+            <v-chip-group active-class="primary--text" column>
+              <v-chip v-for="(tag, i) in preQueue" :key="i">
+                {{ `${tag.application} ( on ${listToString(tag.languages)})` }}
+              </v-chip>
+            </v-chip-group>
             <v-spacer></v-spacer>
             <v-btn depressed color="primary" @click="sendtoQueue">
               Send {{ preQueue.length }} applications to the queue
@@ -159,61 +157,77 @@
         </v-card>
       </v-row>
 
-       <v-row class="mt-10 mb-5">
-        <h3>On-going queue:</h3>
-      </v-row>
-      <v-row class="mt-5 mb-8">
-        <v-card width="100%" :loading="loadingOngoingQueue">
-          <v-card-text>
-           <v-chip-group
-            active-class="primary--text"
-            column
-          >
-              <v-chip
-              v-for="(tag, i) in ongoingQueue"
-              :key="i"
+      <v-row>
+        <v-col cols="2" md="2">
+          <v-row class="mt-10 mb-5">
+            <h3>Current detection:</h3>
+          </v-row>
+          <v-row class="mt-5 mb-8">
+            <v-card
+              min-height="80px"
+              width="100%"
+              :loading="loadingOngoingQueue"
             >
-              {{ `${tag.application} ( on ${listToString(tag.languages)})` }}
-            </v-chip>
-
-           </v-chip-group>
-          </v-card-text>
-        </v-card>
+              <v-card-text>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-if="currentDetection && currentDetection !== 'undefined'"
+                  >
+                    {{
+                      `${currentDetection.application} ( on ${currentDetection.languages})`
+                    }}
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-card>
+          </v-row>
+        </v-col>
+        <v-col class="pl-5" cols="10" md="8">
+          <v-row class="mt-10 mb-5">
+            <h3>On-going queue:</h3>
+          </v-row>
+          <v-row class="mt-5 mb-8">
+            <v-card
+              min-height="80px"
+              width="100%"
+              :loading="loadingOngoingQueue"
+            >
+              <v-card-text>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip v-for="(tag, i) in ongoingQueue" :key="i">
+                    {{
+                      `${tag.application} ( on ${listToString(tag.languages)})`
+                    }}
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-card>
+          </v-row>
+        </v-col>
+        <v-col class="pl-5" cols="2" md="2">
+          <v-row class="mt-10 mb-5">
+            <h3>Actions:</h3>
+          </v-row>
+          <v-row class="mt-5 mb-8">
+            <v-card
+              min-height="80px"
+              width="100%"
+              :loading="loadingOngoingQueue"
+            >
+              <v-card-text>
+                <v-btn small tile color="error" @click="flushQueue">
+                  <v-icon left>
+                    mdi-eraser-variant
+                  </v-icon>
+                  Flush Queue
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-row>
+        </v-col>
       </v-row>
-
 
       <v-divider></v-divider>
-      <!-- <v-card class="my-6">
-        <v-card-title>
-          Result of the detection:
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-card-subtitle class="d-flex justify-end">
-          <v-checkbox
-            v-model="showOnlyFrameworks"
-            label="Show only detected as Frameworks"
-          ></v-checkbox>
-        </v-card-subtitle>
-
-        <v-data-table
-          :loading="runningArtemis"
-          :headers="headers"
-          :items="filteredFrameworks"
-          :items-per-page="20"
-          :search="search"
-          item-key="nema"
-          class="elevation-3"
-          style="width: 100%"
-        >
-        </v-data-table>
-      </v-card> -->
     </v-card-text>
     <div v-if="diplayNotInstalled" id="NotInstalledArtemis">
       <h2 class="ma-auto text--h2" id="Message">
@@ -322,50 +336,56 @@ export default Vue.extend({
     candidates: [] as DetectionCandidate[],
     selected: [],
 
-    loadingPrequeueUpload: false, 
+    loadingPrequeueUpload: false,
     preQueue: [] as DetectionCandidate[],
 
     loadingOngoingQueue: false,
     ongoingQueue: [] as DetectionCandidate[],
-
+    currentDetection: null as DetectionCandidate,
+    
+    loadingFlush: false,
 
     // On destroy
     flaggedAsToDestroy: false,
   }),
 
   methods: {
-
-        // functions 
-    listToString(items:string[]) : string {
+    // functions
+    listToString(items: string[]): string {
       return items.toString();
     },
 
-    toPreQueue(application:string, language: string, appended:boolean) {
-      if(appended) { // Add to the prequeue
-        for(const i in this.preQueue) {
-          if(this.preQueue[i].application == application && this.preQueue[i].languages.indexOf(language) == -1) {
-                this.preQueue[i].languages.push(language);
-                return;
+    toPreQueue(application: string, language: string, appended: boolean) {
+      if (appended) {
+        // Add to the prequeue
+        for (const i in this.preQueue) {
+          if (
+            this.preQueue[i].application == application &&
+            this.preQueue[i].languages.indexOf(language) == -1
+          ) {
+            this.preQueue[i].languages.push(language);
+            return;
           }
         }
 
-        this.preQueue.push({ application: application, languages: [language]})
+        this.preQueue.push({ application: application, languages: [language] });
         return;
+      } else {
+        // remove from  the prequeue
+        for (const i in this.preQueue) {
+          if (
+            this.preQueue[i].application == application &&
+            this.preQueue[i].languages.indexOf(language) != -1
+          ) {
+            const index = this.preQueue[i].languages.indexOf(language);
+            this.preQueue[i].languages.splice(index, 1);
 
-      } else { // remove from  the prequeue
-        for(const i in this.preQueue) {
-          if(this.preQueue[i].application == application && this.preQueue[i].languages.indexOf(language) != -1) {
-                const index = this.preQueue[i].languages.indexOf(language);
-                this.preQueue[i].languages.splice(index, 1);
-
-                if(this.preQueue[i].languages.length == 0) {
-                  this.preQueue.splice(i, 1);
-                }
-                return;
+            if (this.preQueue[i].languages.length == 0) {
+              this.preQueue.splice(i, 1);
+            }
+            return;
           }
-          
         }
-
       }
     },
 
@@ -527,30 +547,61 @@ export default Vue.extend({
     },
 
     async loadQueue() {
-        this.loadingOngoingQueue = true;
-        await DetectionController.getDetectionQueue().then((res:DetectionCandidate[]) => {
+      this.loadingOngoingQueue = true;
+      await DetectionController.getDetectionQueue()
+        .then((res: DetectionCandidate[]) => {
           this.ongoingQueue = res;
-        }).catch((err => {
-          console.error("Failed to retrieve the detection queue.", err);
-        })).finally(() => {
-          this.loadingOngoingQueue = false;
         })
-    }, 
-    
+        .catch((err) => {
+          console.error("Failed to retrieve the detection queue.", err);
+        })
+        .finally(() => {
+          this.loadingOngoingQueue = false;
+        });
+
+      await DetectionController.getCurrent()
+        .then((res: DetectionCandidate | null) => {
+          console.log("Curent detection is ", res);
+          this.currentDetection = res;
+        })
+        .catch((err) => {
+          console.error("Failed to retrieve the currrent detection.", err);
+        })
+        .finally(() => {
+          this.loadingOngoingQueue = false;
+        });
+    },
+
     sendtoQueue() {
-      if(this.preQueue.length == 0) return;
+      if (this.preQueue.length == 0) return;
 
       this.loadingPrequeueUpload = true;
-      DetectionController.addCandidatesToDetection(this.preQueue).then((val:number) => {
-        
-        this.preQueue = []; // clean the preQueue
-      }).catch((err) => {
-        console.error("Failed to add the Frameworks to the database", err);
-      }).finally(() => {
-        this.loadingPrequeueUpload = false;
-      })
+      DetectionController.addCandidatesToDetection(this.preQueue)
+        .then((val: number) => {
+          this.preQueue = []; // clean the preQueue
+        })
+        .catch((err) => {
+          console.error("Failed to add the Frameworks to the database", err);
+        })
+        .finally(() => {
+          this.loadingPrequeueUpload = false;
+        });
     },
-    
+
+    flushQueue() {
+      this.loadingFlush = true;
+      DetectionController.flushDetectionQueue()
+        .then((val: boolean) => {
+          this.ongoingQueue = []; // clean the preQueue
+        })
+        .catch((err) => {
+          console.error("Failed to add the Frameworks to the database", err);
+        })
+        .finally(() => {
+          this.loadingFlush = false;
+        });
+    },
+
     launchDetection() {
       this.displayErrorDetection = false;
       DetectionController.launchDetection(

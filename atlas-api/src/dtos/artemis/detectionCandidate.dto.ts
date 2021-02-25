@@ -6,4 +6,6 @@ export class DetectionCandidate {
 
   @IsArray()
   public languages: string[];
+
+
 }

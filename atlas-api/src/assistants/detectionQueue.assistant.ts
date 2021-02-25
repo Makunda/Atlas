@@ -18,7 +18,13 @@ export class DetectionQueueAssistant {
   private onGoingDetection: CancellablePromise<Framework[]>;
   private candidateList: DetectionCandidate[];
 
-  public addCandidate(candidate: DetectionCandidate) {
+  public getCurrent() : DetectionCandidate {
+    if(this.onGoingDetection == null) return null;
+    
+    return { application : this.onGoingDetection.application, languages : [this.onGoingDetection.language]}
+  }
+
+  public addCandidate(candidate: DetectionCandidate) : void {
 
     var i : number;
     // Search and merge
@@ -39,7 +45,7 @@ export class DetectionQueueAssistant {
     
   }
 
-  public removeCandidateByName(name: string) {
+  public removeCandidateByName(name: string) : void {
     this.candidateList = this.candidateList.filter((x) => {
       return x.application == name;
     });
@@ -52,8 +58,12 @@ export class DetectionQueueAssistant {
   /**
    * Flush the entire list and cancel the current detection
    */
-  public flushCandidates() {
-    if (this.onGoingDetection) this.onGoingDetection.cancel(); // cancel the current detection
+  public flushCandidates() :void {
+    logger.info("Flush applications")
+    try {
+      if (this.onGoingDetection) this.onGoingDetection.cancel(); // cancel the current detection
+      logger.info(this.onGoingDetection.isDone())
+    } catch(ignore) {}
     this.candidateList = [];
   }
 

@@ -113,7 +113,9 @@ class DetectionService {
     const session = this.neo4jAl.getSession();
     const transaction = session.beginTransaction();
 
-    const promise: Promise<Framework[]> = transaction.run(request, params)
+    const promise: Promise<Framework[]> = new Promise ((resolve, reject) => {
+      
+      transaction.run(request, params)
       .then((res: QueryResult) => {
         logger.info(`Results of the detection : ${res.records.length}`);
         logger.info(`1st Results of the detection `, res.records[0]);
@@ -136,14 +138,14 @@ class DetectionService {
         // Add to sucess
         detection.markAsSuccess(resultList);
         this.finishedApplicationDetection.push(detection);
-        return resultList;
+        resolve(resultList);
       })
       .catch((err) => {
         // Add to failed detections
-        console.error("The analysis of the application failed.", err);
+        logger.error("The analysis of the application failed.", err);
         detection.markAsFailed();
         this.failedApplicationDetection.push(detection);
-        return [];
+        resolve([]);
       })
       .finally(() => {
         logger.info(`Detection finished for application ${appName} `);
@@ -154,6 +156,7 @@ class DetectionService {
           this.pendingApplicationDetection.splice(index, 1);
         }
       });
+    });
 
     // Make the promise above cancellable for the user
     const cancellablePromise: CancellablePromise<

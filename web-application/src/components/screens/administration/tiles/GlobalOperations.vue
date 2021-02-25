@@ -32,7 +32,7 @@
                   >This operation will erase the current modules view</em
                 >
               </v-col>
-              <v-col class="mb-2" md="12"  cols="4" fill-height>
+              <v-col class="mb-2" md="12" cols="4" fill-height>
                 <v-btn
                   depressed
                   color="orange"
