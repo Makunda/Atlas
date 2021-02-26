@@ -90,7 +90,7 @@ class AssistantController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const id: number = Number(req.query.id);
+      const id: number = Number(req.params.id);
 
 
       const status = FrameworkAssistantManager.getInstance()
@@ -112,7 +112,7 @@ class AssistantController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const id: number = Number(req.query.id);
+      const id: number = Number(req.params.id);
    
       FrameworkAssistantManager.getInstance()
         .removeAssistant(id)

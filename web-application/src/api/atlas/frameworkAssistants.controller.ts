@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
+import { IFrameworkAssistant } from "../interface/atlas/FrameworkAssistant.interface";
 
 export class FrameworkAssistants {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -63,7 +64,7 @@ export class FrameworkAssistants {
     }
   }
 
-  public static async getAllAssistants(): Promise<FrameworkAssistants[]> {
+  public static async getAllAssistants(): Promise<IFrameworkAssistant[]> {
     const url =
       FrameworkAssistants.API_BASE_URL +
       "/api/assistants/frameworks/all";
@@ -71,7 +72,7 @@ export class FrameworkAssistants {
     try {
       const res = await axios.get(url);
 
-      let assistants: FrameworkAssistants[] = [];
+      let assistants: IFrameworkAssistant[] = [];
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;

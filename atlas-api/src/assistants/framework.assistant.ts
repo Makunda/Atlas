@@ -84,9 +84,9 @@ export class FrameworkAssistantManager {
   public async applyLevelTagOnObjects(category: string) {
     // Check if the group doesn't exist before taking action
 
-    const params = { tag: this.levelTag + category, category: category };
+    const params = { tag: this.levelTag , category: category };
     const req =
-      "MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND NOT obj.Level CONTAINS $category SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS $category ] + $tag END RETURN COUNT(obj) as count;";
+      "MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND NOT obj.Level CONTAINS obj.ArtemisCategory SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS obj.ArtemisCategory ] + ( $tag + obj.ArtemisCategory )  END RETURN COUNT(obj) as count;";
     const res :QueryResult = await this.neo4jAl.executeWithParameters(req, params);
     
     if(res.records.length > 0 && res.records[0].get("count") != 0) {
@@ -100,9 +100,11 @@ export class FrameworkAssistantManager {
    */
   public async applyModuleTagOnObjects(category: string) {
     // Check if the group doesn't exist before taking action
-    const params = { tag: this.levelTag + category, category: category };
+    const params = { tag: this.moduleTag + category, category: category };
     const req =
-      "MATCH (obj:Object)<-[:Contains]-(m:Module) WHERE obj.ArtemisDetection=$category AND NOT m.Name CONTAINS $category SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS $category ] + $tag END RETURN COUNT(obj) as count;";
+      "MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND NOT EXISTS { "+ 
+        "(obj)<-[:Contains]-(m:Module) WHERE NOT m.Name CONTAINS $category "+
+      "} SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS $category ] + $tag END RETURN COUNT(obj) as count;"
     const res :QueryResult = await this.neo4jAl.executeWithParameters(req, params);
     if(res.records.length > 0 && res.records[0].get("count") != 0) {
       logger.info(`The assistant regrouped ${res.records[0].get("count")} nodes under their module for category ${category}`);
@@ -110,17 +112,34 @@ export class FrameworkAssistantManager {
   }
 
   /**
-   * Apply tags on Objects
+   * Apply tags on Objects for the architecture / The name of the arhitecture view is the name of the category. 
+   * The objects having a relationship to the main subset will also be extracted 
    * @param category Category to extract
    */
   public async applyArchitectureTagOnObjects(category: string) {
+    
     // Check if the group doesn't exist before taking action
-    const params = { tag: this.levelTag + category, category: category };
-    const req =
-      "MATCH (obj:Object)<-[:Contains]-(m:Subset) WHERE obj.ArtemisDetection=$category AND NOT m.Name CONTAINS $category SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS $category ] + $tag END RETURN COUNT(obj) as count;";
+    const params = { tag: this.architectureTag, prefix: "Framework ", category: category };
+    const req = `
+    MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND EXISTS(obj.ArtemisCategory)
+    AND NOT EXISTS { 
+      MATCH (obj)<-[:Contains]-(m:Subset)<-[]-(a:ArchiModel) 
+      WHERE a.Name=$prefix+obj.ArtemisDetection AND m.Name=obj.ArtemisCategory 
+      }
+    SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [($tag + $prefix + obj.ArtemisDetection+"$"+obj.ArtemisCategory)] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS obj.ArtemisCategory ] + ($tag + $prefix + obj.ArtemisDetection+"$"+obj.ArtemisCategory) END
+    WITH obj as obj, COLLECT(obj) as allFlagged
+    MATCH (obj)-[]-(other:Object) 
+    WHERE NOT other in allFlagged 
+    AND NOT EXISTS {
+      MATCH (other)<-[:Contains]-(m:Subset)<-[]-(a:ArchiModel) 
+      WHERE a.Name=$prefix+obj.ArtemisCategory AND m.Name=other.Level 
+      }
+    SET other.Tags = CASE WHEN other.Tags IS NULL THEN [($tag + $prefix + obj.ArtemisDetection+"$"+other.Level)] ELSE [ x IN other.Tags WHERE NOT x CONTAINS other.Level  ] + ($tag + $prefix +obj.ArtemisDetection+ "$" +other.Level) END
+    RETURN COUNT(DISTINCT obj) as countObj, COUNT(DISTINCT  other) as countOther;
+    `
     const res :QueryResult = await this.neo4jAl.executeWithParameters(req, params);
-    if(res.records.length > 0 && res.records[0].get("count") != 0) {
-      logger.info(`The assistant regrouped ${res.records[0].get("count")} nodes under their architecture for category ${category}`);
+    if(res.records.length > 0 && res.records[0].get("countObj") != 0) {
+      logger.info(`The assistant regrouped ${res.records[0].get("countObj")} nodes under their architecture for category ${category}.\n ${res.records[0].get("countOther")} will also be affected.`);
     }
   }
 
@@ -134,7 +153,7 @@ export class FrameworkAssistantManager {
     if (!this.moduleTag || this.moduleTag.length == 0)
       this.moduleTag = await this.getDemeterModuleTag();
     if (!this.architectureTag || this.architectureTag.length == 0)
-      this.architectureTag = await this.getDemeterModuleTag();
+      this.architectureTag = await this.getDemeterArchitectureTag();
 
     if (
       !this.artemisDetectionProperty ||
@@ -155,7 +174,7 @@ export class FrameworkAssistantManager {
   public async runAssistant(assistant: FrameworkAssistant) {
     if (!assistant.isRunning()) return; // Ignore if the assistants are not running
 
-    this.fetchResources();
+    await this.fetchResources();
 
     // Parse the actions and execute based on the category of the nodes
     const actions = assistant.getActions();
@@ -186,7 +205,7 @@ export class FrameworkAssistantManager {
         try {
           await this.runAssistant(this.assistants[i]);
         } catch (err) {
-          logger.error(`Failed to execute assistant ${this.assistants}`, err);
+          logger.error(`Failed to execute assistant [${this.assistants[i].serialize().category}]`, err);
         }
       }
     } catch (err) {
@@ -221,7 +240,7 @@ export class FrameworkAssistantManager {
       }
     }
 
-    if (id == null) id = maxId + 1;
+    if (!id) id = maxId + 1;
 
     this.assistants.push(new FrameworkAssistant(id, category, actions));
     this.dumpAssistantList();
@@ -233,7 +252,10 @@ export class FrameworkAssistantManager {
    * @returns true if the assistant was removed successfully, false otherwise
    */
   public removeAssistant(id: number) {
+    logger.info("Removing assistants with id ", id);
+    logger.info("Before", this.assistants);
     this.assistants = this.assistants.filter((x) => x.getId() != id);
+    logger.info("After", this.assistants);
     this.dumpAssistantList();
   }
 
@@ -309,6 +331,7 @@ export class FrameworkAssistantManager {
 
   private constructor() {
     this.assistants = [];
+    this.fetchResources()
 
     const filePath =
       FrameworkAssistantManager.RESOURCE_DIR +

@@ -76,7 +76,7 @@
                   <v-container class="pa-0">
                     <v-row>
                       <v-col cols="10"
-                      ><h3>Assistant {{ i }}</h3>
+                      ><h3>Assistant {{ a.id }}</h3>
                       <p>
                         Monitoring : <strong>{{ a.category }}</strong> and
                         performing <strong>{{ a.actions }}</strong> actions
@@ -111,6 +111,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { FrameworkAssistants } from "@/api/atlas/frameworkAssistants.controller";
+import { IFrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
 
 export default Vue.extend({
   name: "FrameworkAssistant",
@@ -130,7 +131,7 @@ export default Vue.extend({
     loadingAssistantCreation: false,
 
     loadingAssistants: false,
-    assistantsList: [] as FrameworkAssistants,
+    assistantsList: [] as IFrameworkAssistant[],
   }),
 
   methods: {
@@ -165,7 +166,7 @@ export default Vue.extend({
     getListAssistants() {
       this.loadingAssistants = true;
       FrameworkAssistants.getAllAssistants()
-        .then((res: FrameworkAssistants) => {
+        .then((res: IFrameworkAssistant[]) => {
           this.assistantsList = res;
         })
         .catch((err) => {
@@ -176,8 +177,8 @@ export default Vue.extend({
         });
     },
 
-    removeAssistant(id: number) {
-      FrameworkAssistants.removeAssistant(id)
+    removeAssistant(assistant: IFrameworkAssistant) {
+      FrameworkAssistants.removeAssistant(assistant.id)
         .then((res) => {
           this.getListAssistants();
         })
