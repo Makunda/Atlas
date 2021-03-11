@@ -40,6 +40,7 @@
 import GroupingTile from "@/components/screens/enrichment/tiles/GroupingTile.vue";
 // import DemeterGroupTile from "@/components/screens/main/tiles/DemeterGroupTile.vue";
 import TagViewer from "@/components/screens/enrichment/steps/TagViewer.vue";
+import UseCases from "@/components/dionysus/modules/UseCases.vue";
 import Vue from "vue";
 import { AtlasController } from "@/api/atlas/atlas.controller";
 
@@ -49,6 +50,7 @@ export default Vue.extend({
   components: {
     GroupingTile,
     // DemeterGroupTile,
+    UseCases,
     TagViewer
   },
 
@@ -76,6 +78,11 @@ export default Vue.extend({
         view: "TagViewer",
         name: "Tags",
         icon: "mdi-tag-multiple"
+      },
+      {
+        view: "UseCases",
+        name: "Use cases",
+        icon: "mdi-folder"
       }
     ]
   }),

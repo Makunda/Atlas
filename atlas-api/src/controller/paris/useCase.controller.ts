@@ -1,0 +1,79 @@
+import { IUseCase } from '@interfaces/paris/useCase.interface';
+import UseCaseService from '@services/paris/usecase.service';
+import { NextFunction, Request, Response } from 'express';
+
+
+export default class UseCaseController {
+    public useCaseService = new UseCaseService();
+
+    
+    public getAllUseCases = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+        const results:IUseCase[] = await this.useCaseService.getAllUseCases();
+        res.status(200).json({ data: results, message: 'Use cases' });
+        } catch (error) {
+        next(error);
+        }
+    };
+
+    public getRootUseCases = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const results:IUseCase[] = await this.useCaseService.getRootUseCases();
+            res.status(200).json({ data: results, message: 'Root use cases' });
+        } catch (error) {
+        next(error);
+        }
+    };
+
+    public getAttachedUseCases = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const id = Number(req.query.id);
+            const results:IUseCase[] = await this.useCaseService.getAttachedUseCases(id);
+            res.status(200).json({ data: results, message: 'Attached use cases' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public addUseCase = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const body :IUseCase = req.body
+            const results:IUseCase = await this.useCaseService.addUseCase(body);
+            res.status(200).json({ data: results, message: 'Created' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public editUseCase = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const body :IUseCase = req.body
+            const results:IUseCase = await this.useCaseService.updateUseCase(body);
+            res.status(200).json({ data: results, message: 'Updated' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public createAndAttach = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const body :IUseCase = req.body;
+            const id = Number(req.body.idParent);
+            const results:IUseCase = await this.useCaseService.createAndAttach(body, id);
+            res.status(200).json({ data: results, message: 'Updated' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public removeUseCase = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const id = Number(req.params.id);
+            const result:boolean = await this.useCaseService.removeUseCase(id);
+            res.status(200).json({ data: result, message: 'Deleted' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+}

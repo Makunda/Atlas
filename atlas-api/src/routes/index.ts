@@ -6,9 +6,10 @@ import ArtemisRouter from "./artemis/artemisIndex.route";
 import ImagingRouter from "./imaging/imagingIndex.route";
 import AtlasRouter from "./atlas/atlasIndex.route";
 import ConfigurationRouter from "./configuration/configurationIndex.route";
-import Pythiarouter from "./pythia/pythiaIndex.route";
+import PythiaRouter from "./pythia/pythiaIndex.route";
 import UtilsRoute from './utils/utilsIndex.route';
 import AssistantsRoute from './assistants/assistants.route';
+import ParisRouter from './paris/paris.route';
 
 // Init router and path
 const router = Router();
@@ -18,10 +19,11 @@ const router = Router();
 
 router.use('/demeter', DemeterRouter);
 router.use('/artemis', ArtemisRouter);
+router.use('/paris', ParisRouter);
 router.use('/imaging', ImagingRouter);
 router.use('/atlas', AtlasRouter);
 router.use('/configuration', ConfigurationRouter);
-router.use('/pythia', Pythiarouter);
+router.use('/pythia', PythiaRouter);
 router.use('/utils', UtilsRoute);
 router.use('/assistants', AssistantsRoute);
 
