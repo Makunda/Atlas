@@ -1,3 +1,4 @@
+import { IGroup } from '@interfaces/paris/group.interface';
 import { IUseCase } from '@interfaces/paris/useCase.interface';
 import UseCaseService from '@services/paris/usecase.service';
 import { NextFunction, Request, Response } from 'express';
@@ -27,8 +28,18 @@ export default class UseCaseController {
 
     public getAttachedUseCases = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const id = Number(req.query.id);
-            const results:IUseCase[] = await this.useCaseService.getAttachedUseCases(id);
+            const id = String(req.params.idNode);
+            const results:IUseCase[] = await this.useCaseService.getAttachedUseCases(parseInt(id));
+            res.status(200).json({ data: results, message: 'Attached use cases' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public getAttachedGroups = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const id = String(req.params.idNode);
+            const results:IGroup[] = await this.useCaseService.getAttachedGroups(parseInt(id));
             res.status(200).json({ data: results, message: 'Attached use cases' });
         } catch (error) {
             next(error);
@@ -40,6 +51,18 @@ export default class UseCaseController {
             const body :IUseCase = req.body
             const results:IUseCase = await this.useCaseService.addUseCase(body);
             res.status(200).json({ data: results, message: 'Created' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public checkValidity = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const request = String(req.body.request);
+            const awaitedResult = String(req.body.awaitedResult);
+
+            const result:boolean = await this.useCaseService.checkValidity(request, awaitedResult);
+            res.status(200).json({ data: result, message: 'Validity' });
         } catch (error) {
             next(error);
         }

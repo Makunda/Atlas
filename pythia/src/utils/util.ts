@@ -1,4 +1,4 @@
-import { Framework } from '@/interfaces/artemis/framework.interface';
+import {Framework} from '@/interfaces/artemis/framework.interface';
 
 export const isEmpty = (value: any): boolean => {
   if (value === null) {

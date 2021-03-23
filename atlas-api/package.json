@@ -6,6 +6,8 @@
     "lint": "eslint . --ext .ts",
     "start": "node -r module-alias/register ./dist --env=production",
     "start:dev": "nodemon --verbose",
+    "client": "npm run --prefix ../web-application serve",
+    "dev": "npm-run-all -p client start:dev",
     "test": "nodemon --config ./spec/nodemon.json"
   },
   "nodemonConfig": {

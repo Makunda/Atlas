@@ -1,5 +1,5 @@
 /*
-  Example: 
+  Example:
     "Name": "RATT01"
     "Type": "NotFramework",
     "Location": "No location discovered",
@@ -9,13 +9,13 @@
 */
 
 export interface Framework {
-    name: string;
-    description: string;
-    type: string;
-    category?: string;
-    internalType?: string;
-    location: string;
-    discoveryDate: string;
-    percentageOfDetection: number;
-  }
-  
+  name: string;
+  description: string;
+  type: string;
+  category?: string;
+  internalType?: string;
+  location: string;
+  discoveryDate: string;
+  percentageOfDetection: number;
+}
+

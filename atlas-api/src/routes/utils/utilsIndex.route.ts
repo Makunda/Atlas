@@ -1,4 +1,4 @@
-import { Router } from "express";
+import {Router} from "express";
 import UtilsRoute from "./utils.route";
 
 // Init router and path

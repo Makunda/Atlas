@@ -6,4 +6,5 @@ export interface IUseCase {
     categories: string[];
     active: boolean;
     selected: boolean;
+    children?: [];
   }

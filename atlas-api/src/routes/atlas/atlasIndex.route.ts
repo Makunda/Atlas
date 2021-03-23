@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import AgentRoute from './agent.route';
 import ExtensionRoute from './extension.route';
 

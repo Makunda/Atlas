@@ -148,6 +148,7 @@ import {
 } from "@/api/applications/application.controller";
 
 import Administration from "@/components/screens/administration/Administration.vue";
+import ImagingTuning from "@/components/screens/imagingTuning/ImagingTuning.vue";
 import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
 import Recommendation from "@/components/screens/recommendation/Recommendation.vue";
 import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
@@ -161,7 +162,8 @@ export default Vue.extend({
     Enrichment,
     Administration,
     Recommendation,
-    Frameworks
+    Frameworks,
+    ImagingTuning
   },
 
   mounted() {
@@ -193,6 +195,7 @@ export default Vue.extend({
         screen: "Frameworks",
         icon: "mdi-package-variant-closed"
       },
+      { name: "Imaging tuning", screen: "ImagingTuning", icon: "mdi-merge" },
       { name: "Administration", screen: "Administration", icon: "mdi-cog" }
     ],
 

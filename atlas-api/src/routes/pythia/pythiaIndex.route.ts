@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import PythiasArtemisRoute from './pythiasArtemis.route';
 
 // Init router and path

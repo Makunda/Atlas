@@ -1,8 +1,7 @@
-import { IUser } from '@entities/User';
-import { getRandomInt } from '@shared/functions';
-import { IUserDao } from './UserDao';
+import {IUser} from '@entities/User';
+import {getRandomInt} from '@shared/functions';
+import {IUserDao} from './UserDao';
 import MockDaoMock from '../MockDb/MockDao.mock';
-
 
 
 class UserDao extends MockDaoMock implements IUserDao {

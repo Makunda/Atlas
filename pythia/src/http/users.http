@@ -19,8 +19,8 @@ POST {{baseURL}}/users
 Content-Type: application/json
 
 {
-    "email": "example@gmail.com",
-	"password": "qwer1234"
+  "email": "example@gmail.com",
+  "password": "qwer1234"
 }
 
 ###
@@ -29,8 +29,8 @@ PUT {{baseURL}}/users/1
 Content-Type: application/json
 
 {
-    "email": "example@gmail.com",
-	"password": "qwer1234"
+  "email": "example@gmail.com",
+  "password": "qwer1234"
 }
 
 ###

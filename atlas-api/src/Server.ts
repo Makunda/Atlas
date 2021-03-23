@@ -43,9 +43,6 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
 }
 
-
-
-
 app.use(function (req, res, next) {
     res.setHeader(
       'Content-Security-Policy',
@@ -57,6 +54,11 @@ app.use(function (req, res, next) {
 
 // Add APIs
 app.use('/api', BaseRouter);
+
+// Front-end
+app.get('/', (req,res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 // Print API errors
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -10,9 +10,9 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
-import { logger, stream } from './utils/logger';
-import { Neo4JAccessLayer } from './utils/neo4jAccessLayer';
-import { QueryResult, ServerInfo } from 'neo4j-driver';
+import {logger, stream} from './utils/logger';
+import {Neo4JAccessLayer} from './utils/neo4jAccessLayer';
+import {QueryResult, ServerInfo} from 'neo4j-driver';
 import TokenService from './services/token.service';
 
 class App {
@@ -33,14 +33,14 @@ class App {
   }
 
   public initServices() {
-    const tokenService:TokenService = TokenService.getInstance();
+    const tokenService: TokenService = TokenService.getInstance();
   }
 
   public connectArtemis() {
-    const nal:Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+    const nal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
     const req = "CALL artemis.version()";
 
-    nal.execute(req).then((res:QueryResult) => {
+    nal.execute(req).then((res: QueryResult) => {
       const singleRecord = res.records[0];
       const version = singleRecord.get(0);
       logger.info(`✔ Artemis is connected. Version : ${version}`);
@@ -52,9 +52,9 @@ class App {
   }
 
   public connectNeo4j() {
-    if(Neo4JAccessLayer.connect()) {
-      const nal:Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
-      nal.testConnection().then((val:ServerInfo) => {
+    if (Neo4JAccessLayer.connect()) {
+      const nal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+      nal.testConnection().then((val: ServerInfo) => {
         logger.info("✔ Neo4j server is online and reachable !");
         this.connectArtemis();
         this.initServices();
@@ -83,18 +83,18 @@ class App {
 
   private initializeMiddlewares() {
     if (this.env === 'production') {
-      this.app.use(morgan('combined', { stream }));
-      this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
+      this.app.use(morgan('combined', {stream}));
+      this.app.use(cors({origin: 'your.domain.com', credentials: true}));
     } else if (this.env === 'development') {
-      this.app.use(morgan('dev', { stream }));
-      this.app.use(cors({ origin: true, credentials: true }));
+      this.app.use(morgan('dev', {stream}));
+      this.app.use(cors({origin: true, credentials: true}));
     }
 
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.urlencoded({extended: true}));
     this.app.use(cookieParser());
   }
 

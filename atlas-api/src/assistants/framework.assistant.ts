@@ -86,7 +86,7 @@ export class FrameworkAssistantManager {
 
     const params = { tag: this.levelTag , category: category };
     const req =
-      "MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND NOT obj.Level CONTAINS obj.ArtemisCategory SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag + obj.ArtemisCategory] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS obj.ArtemisCategory ] + ( $tag + obj.ArtemisCategory )  END RETURN COUNT(obj) as count;";
+      "MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND NOT obj.Level CONTAINS obj.ArtemisCategory SET obj.Level=obj.ArtemisCategory SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag + obj.ArtemisCategory] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS obj.ArtemisCategory ] + ( $tag + obj.ArtemisCategory )  END RETURN COUNT(obj) as count;";
     const res :QueryResult = await this.neo4jAl.executeWithParameters(req, params);
     
     if(res.records.length > 0 && res.records[0].get("count") != 0) {

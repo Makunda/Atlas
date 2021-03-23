@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import DemeterRoute from './demeter.route';
 import GroupingRoute from './grouping.route';
 import LevelRoute from './level.route';

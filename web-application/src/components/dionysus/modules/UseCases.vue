@@ -15,16 +15,15 @@
             <v-treeview
               :items="items"
               activatable
-              :load-children="fetchUseCase"
               open-on-click
               transition
             >
-              <template v-slot:prepend="{ item }">
-                <v-icon @click="fetchUseCase(item)"> mdi-folder-open-outline </v-icon>
+              <template v-slot:prepend="{ }">
+                <v-icon> mdi-folder-open-outline </v-icon>
 
               </template>
 
-              <template slot="label" slot-scope="{ item }">
+              <template slot="label" slot-scope="{ item }" @click="selected">
                 <v-container>
                   <v-row>
                     <!-- Title of the row -->
@@ -128,7 +127,7 @@
               class="title grey--text text--lighten-1 font-weight-light"
               style="align-self: center;"
             >
-              Select a User
+              Select a use case
             </div>
             <v-card
               v-else
@@ -264,10 +263,10 @@ export default Vue.extend({
   name: "UseCases",
 
   data: () => ({
-    selected: null,
     active: null,
     items: [] as IUseCase[],
     open: null as IUseCase,
+    selected: null as IUseCase,
 
     editedItem: {
       title: "",
@@ -299,11 +298,31 @@ export default Vue.extend({
   }),
 
   methods: {
+    async getChildren(item): Promise<IUseCase> {
+
+      return await UseCaseController.getAttachedUseCase(item.id).then(async (res: IUseCase[]) => {
+        item.children = res;
+
+        // Treat childrent
+        for(const i in item.children ) {
+          item.children[i] = await this.getChildren(item.children[i]);
+        }
+
+        return item;
+      }).catch((err) => {
+        console.log(`Failed to fetch the children for use case with id : ${item.id}`, err);
+        return item;
+      });
+    },
+
     getRootUseCase() {
       UseCaseController.getRootUseCase()
-        .then((res: IUseCase[]) => {
+        .then(async (res: IUseCase[]) => {
           if (res) {
-            this.items = res;
+            this.items = [];
+            for(const i in res) {
+              this.items.push(await this.getChildren(res[i]));
+            }
           }
         })
         .catch((err) => {
@@ -311,9 +330,9 @@ export default Vue.extend({
         });
     },
 
-    fetchUsers(item) {
-      console.log("DEBUG : Fetch for ", item);
-    },
+    selectItem (item) {
+        this.selected = item;
+      },
 
     createItem() {
       this.titleEditBox = "Create new Use case";
@@ -420,15 +439,6 @@ export default Vue.extend({
           });
       }
       this.close();
-    },
-
-    fetchUseCase(item) {
-      UseCaseController.getAttachedUseCase(item.id).then((res: IUseCase[]) => {
-        console.log("Children loaded", res)
-        item.children.push(...res);
-      }).catch((err) => {
-        console.log(`Failed to fetch the children for use case with id : ${item.id}`)  
-      })
     },
 
     refresh() {

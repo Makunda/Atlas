@@ -1,5 +1,4 @@
-import { Router } from 'express';
-import UserRouter from './Users';
+import {Router} from 'express';
 
 import DemeterRouter from './demeter/demeterIndex.route'
 import ArtemisRouter from "./artemis/artemisIndex.route";

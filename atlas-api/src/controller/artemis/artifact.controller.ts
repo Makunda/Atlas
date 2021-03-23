@@ -22,7 +22,6 @@ class ArtifactController {
       try {
         const detectionParams:LaunchDetectionDto = req.body;
         const listArtifact: Artifact[] = await this.artifactService.getArtifactAsTree(detectionParams.application, detectionParams.language);
-        console.log("Result of tree", listArtifact)
         res.status(200).json({ data: listArtifact, message: 'Artifact Tree' });
         
       } catch (error) {

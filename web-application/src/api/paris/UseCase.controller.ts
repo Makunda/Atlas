@@ -2,6 +2,7 @@ import axios from "axios";
 import { use } from "vue/types/umd";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
+import { IGroup } from "../interface/paris/group.interface";
 import { IUseCase } from "../interface/paris/useCase.interface";
 
 export class UseCaseController {
@@ -76,7 +77,7 @@ export class UseCaseController {
    * @param id Id of the use case
    */
   public static async getAttachedUseCase(id: number): Promise<IUseCase[]> {
-    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/attached/"+id;
+    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/attached/"+id+"/useCases";
 
     try {
       const res = await axios.get(url);
@@ -86,6 +87,35 @@ export class UseCaseController {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
           return apiResponse.data as IUseCase[];
+        }
+      } else {
+        console.warn(
+          `Failed to retrieve the list of use cases. Status (${res.status})`
+        );
+      }
+
+      return [];
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+
+  public static async getAttachedGroups(id: number): Promise<IGroup[]> {
+    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/attached/"+id+"/groups";
+
+    try {
+      const res = await axios.get(url);
+      let version: string;
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          return apiResponse.data as IGroup[];
         }
       } else {
         console.warn(
@@ -183,6 +213,42 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a use cases.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+
+  /**
+   * Check the validity of a query before the insertion
+   * @param request Request to verify
+   * @param awaitedResult Value
+   * @returns 
+   */  
+  public static async checkValidity(request: IUseCase, awaitedResult: number): Promise<boolean> {
+    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/check/validity";
+
+    try {
+      const params: any = {} ;
+      params.request = request;
+      params.awaitedResult = awaitedResult;
+
+      const res = await axios.post(url, params);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Boolean(apiResponse.data);
+      } else {
+        console.warn(
+          `Failed to verify the validity of the request. Status (${res.status})`
+        );
+      }
+
+      return false;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to verify the validity of the request.`,
         error
       );
       throw error;

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import ConfigurationRoute from './configuration.route';
 import TagRoute from './tag.route';
 

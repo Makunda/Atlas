@@ -6,8 +6,6 @@ import { int, Integer } from "neo4j-driver";
 class GroupingService {
     private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
-   
-
     /**
      * Get the candidate modules for a specific application
      * @param application Name of the application

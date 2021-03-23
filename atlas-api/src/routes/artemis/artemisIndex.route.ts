@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import ArtemisRoute from './artemis.route';
 import ArtifactRoute from './artifact.route';
 import CategoryRoute from './category.route';

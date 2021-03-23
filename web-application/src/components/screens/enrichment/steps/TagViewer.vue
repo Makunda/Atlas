@@ -45,7 +45,7 @@
         <v-col max-width="400px">
           <v-card-text
             class="d-flex justify-center"
-            v-if="!usecases || usecases.length == 0"
+            v-if="!items || items.length == 0"
           >
             <v-progress-circular
               class="mx-auto my-8"
@@ -61,10 +61,10 @@
             <v-btn color="info" @click="refreshtree()">Load tags</v-btn>
           </v-card-text>
 
-          <v-card-text v-if="usecases && usecases.length != 0">
+          <v-card-text v-if="items && items.length != 0">
             <v-treeview
               v-model="tree"
-              :items="usecases"
+              :items="items"
               :search="search"
               selected-color="indigo"
               open-on-click
@@ -76,18 +76,15 @@
               indeterminate-icon="mdi-bookmark-minus"
             >
               <template slot="label" slot-scope="{ item }">
-                <p v-if="item.children">{{ item.name }}</p>
-                <a
-                  v-if="!item.children && item.numMatch != 0"
-                  v-on:click="openDescription(item)"
-                  >{{ item.name }}</a
-                >
-                <a
-                  v-if="!item.children && item.numMatch == 0"
-                  class="text--secondary"
-                  v-on:click="openDescription(item)"
-                  >{{ item.name }}</a
-                >
+                <div v-if="item.isUseCase">
+                  <p class="pt-4">{{ item.title }}</p>
+                  <span v-if="item.groups" class="red--green">
+                    <i>- {{ item.groups.length }} tags</i>
+                  </span>
+                </div>
+                <div v-else @click="focusGroup(item)">
+                  <p class="pt-4">Tag : {{ item.name }}</p>
+                </div>
               </template>
             </v-treeview>
           </v-card-text>
@@ -96,36 +93,41 @@
         <v-divider vertical></v-divider>
 
         <v-col>
-          <v-card-text>
-            <h5 class="text-h5">Focused tag</h5>
-            <h6 v-if="focusedTag == null" class="text-subtitle-1">
-              No tag selected
-            </h6>
-            <span v-if="focusedTag != null">
-              <h6 class="text-subtitle-1 text-decoration-underline">Name:</h6>
-              <h6 class="text-body-1">{{ focusedTag.name }}</h6>
-              <h6 class="text-subtitle-1 text-decoration-underline">
-                Description:
-              </h6>
-              <h6 class="text-body-1">{{ focusedTag.description }}</h6>
-              <h6 class="text-subtitle-1 text-decoration-underline">
-                Number of objects concerned:
-              </h6>
-              <h6 class="text-body-1">{{ focusedTag.numMatch }}</h6>
-              <h6 class="text-subtitle-1 text-decoration-underline">
-                Categories:
-              </h6>
-              <v-row>
-                <v-chip
-                  v-for="b in splitCategories(focusedTag.categories)"
-                  v-bind:key="b"
-                  class="ma-2"
-                  color="primary"
-                  >{{ b }}</v-chip
+          <h6 v-if="focusedGroup == null" class="text-subtitle-1">
+            No tag selected
+          </h6>
+
+          <v-scroll-x-transition hide-on-leave>
+            <v-card-text>
+              <div v-if="focusedGroup != null">
+                <h5 class="text-h5 mb-5">Focused tag</h5>
+                <strong class="text-subtitle-1 text-decoration-underline"
+                  >Name:</strong
                 >
-              </v-row>
-            </span>
-          </v-card-text>
+                <h6 class="text-body-1 mb-3">{{ focusedGroup.name }}</h6>
+                <strong class="text-subtitle-1 text-decoration-underline">
+                  Description:
+                </strong>
+                <h6 class="text-body-1 mb-3">{{ focusedGroup.description }}</h6>
+                <strong class="text-subtitle-1 text-decoration-underline">
+                  Number of objects concerned:
+                </strong>
+                <h6 class="text-body-1 mb-3">{{ focusedGroup.numMatch }}</h6>
+                <strong class="text-subtitle-1 text-decoration-underline">
+                  Categories:
+                </strong>
+                <v-row>
+                  <v-chip
+                    v-for="b in focusedGroup.categories"
+                    v-bind:key="b"
+                    class="ma-2"
+                    color="primary"
+                    >{{ b }}</v-chip
+                  >
+                </v-row>
+              </div>
+            </v-card-text>
+          </v-scroll-x-transition>
         </v-col>
 
         <v-divider vertical></v-divider>
@@ -152,7 +154,7 @@
                 <v-icon left small>
                   mdi-label
                 </v-icon>
-                {{ selection.name }}
+                {{ selection.name || "Cat. " + selection.title }}
               </v-chip>
             </v-scroll-x-transition>
           </v-card-text>
@@ -178,24 +180,35 @@
           depressed
           @click="executeSelectedTags()"
         >
-          Execute {{ tree.length }}
+          Execute {{ getToExecuteSize() }} tags
           <v-icon right>
             mdi-animation-play
           </v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
+
+    <!-- Snack Bar information -->
+    <v-snackbar v-model="snackbarInfo" :timeout="5000">
+      {{ textSnackBar }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="snackbarInfo = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { ApplicationRecord } from "@/api/applications/application.controller";
-import {
-  UseCaseController,
-  UseCaseResult
-} from "@/api/demeter/useCase.controller";
+import { UseCaseController } from "@/api/paris/UseCase.controller";
 import { TagController, TagResult } from "@/api/demeter/tag.controller";
+import { IUseCase } from "@/api/interface/paris/useCase.interface";
+import { IGroup } from "@/api/interface/paris/group.interface";
+import { GroupController } from "@/api/paris/Group.controller";
 
 export default Vue.extend({
   name: "TagViewer",
@@ -205,14 +218,18 @@ export default Vue.extend({
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
     application: "" as string,
 
-    tree: [] as (UseCaseResult | TagResult)[],
-    usecases: [] as (UseCaseResult | TagResult)[],
+    // Snack bar
+    snackbarInfo: false,
+    textSnackBar: "",
+
+    tree: [] as (IUseCase | IGroup)[],
+    items: [],
     singleSelect: false,
     selected: [],
     onGoingQueries: [] as number[],
@@ -223,43 +240,52 @@ export default Vue.extend({
     tagResultList: [] as TagResult[],
     errorState: null as unknown,
     search: "",
-    focusedTag: null as TagResult | null,
+    focusedGroup: null as IGroup | null,
 
     // Loadings
     loadingApplication: true as boolean,
     loading: true as boolean,
     loadingQueries: false as boolean,
-
-    openDescription(item: TagResult) {
-      console.log("focus on : ", item);
-      this.focusedTag = item;
-    },
-
-    splitCategories(cat: string): string[] {
-      return cat.split(":");
-    }
   }),
 
   mounted() {
     this.application = this.$store.state.applicationName;
     if (this.application && this.application.length != 0) {
-      this.getTreeview();
+      this.getRootUseCase();
     }
   },
 
   methods: {
-    getTreeview() {
-      this.loading = true;
-      UseCaseController.getUseCaseAndTagsAsTree(this.application)
-        .then(useCases => {
-          this.loading = false;
-          this.usecases = useCases;
+    async getChildren(item): Promise<IUseCase> {
+      item.children = await UseCaseController.getAttachedUseCase(item.id);
+
+      for (const i in item.children) {
+        item.children[i] = await this.getChildren(item.children[i]);
+      }
+
+      const groups = await UseCaseController.getAttachedGroups(item.id);
+      item.children.push(...groups);
+      item.isUseCase = true;
+      return item;
+    },
+
+    focusGroup(item: IGroup) {
+      this.focusedGroup = item;
+    },
+
+    getRootUseCase() {
+      UseCaseController.getRootUseCase()
+        .then(async (res: IUseCase[]) => {
+          if (res) {
+            this.items = [];
+            for (const i in res) {
+              this.items.push(await this.getChildren(res[i]));
+            }
+          }
+          console.log("Tree", this.items);
         })
-        .catch(err => {
-          console.error("An error occurred while retrieving tags.", err);
-        })
-        .finally(() => {
-          this.loading = false;
+        .catch((err) => {
+          console.error("Failed to retrieve the root use cases", err);
         });
     },
 
@@ -275,14 +301,13 @@ export default Vue.extend({
             `${res.length} tags were loaded for application ${this.application}`
           );
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("An error occurred while retrieving tags.", err);
         });
     },
 
     refreshtree() {
-      this.getTagResults();
-      this.getTreeview();
+      this.getRootUseCase();
     },
 
     checkOnGoing(idTag: number) {
@@ -293,41 +318,41 @@ export default Vue.extend({
       this.loadingQueries = true;
 
       // Get selection, and filter tags
-      const toExecute: TagResult[] = this.tree.filter(x => {
-        return x && (x as TagResult).type !== undefined;
-      }) as TagResult[];
+      const toExecute: IGroup[] = this.tree.filter((x) => {
+        return x && (x as IGroup) !== undefined && !x.isUseCase;
+      }) as IGroup[];
 
+      console.log("ToExecute", toExecute);
       console.log(
         `About to execute ${toExecute.length} tags on the application.`
       );
 
-      for (const x in toExecute) {
-        await this.executeTag(toExecute[x].id);
-      }
+      const groupsID = this.tree.map((x) => x.id);
 
-      this.loadingQueries = false;
-    },
-
-    executeTag(idTag: number) {
-      this.onGoingQueries.push(idTag);
-      TagController.executeTag(this.application, idTag)
-        .then((res: TagResult) => {
-          console.log(res);
+      GroupController.executeListGroupAsTag(this.application, groupsID)
+        .then((res:number) => {
+            this.snackbarInfo = true;
+            this.textSnackBar = `${res} objects were tags during the process.`;
         })
-        .catch(err => {
-          console.error("Failed to execute the Tag request.", err);
+        .catch((err) => {
+          this.snackbarInfo = true;
+          this.textSnackBar =`Failed to flags objects. Error :${err}`;
         })
         .finally(() => {
-          const index = this.onGoingQueries.indexOf(idTag);
-          if (index > -1) {
-            this.onGoingQueries.splice(index, 1);
-          }
+          this.loadingQueries = false;
         });
+    },
+
+    getToExecuteSize() {
+      const toExecute: IGroup[] = this.tree.filter((x) => {
+        return x && (x as IGroup) !== undefined && !x.isUseCase;
+      }) as IGroup[];
+      return toExecute.length;
     },
 
     convertBadgeToHTML(badgeValue: string): string {
       let categorieBadges = "";
-      badgeValue.split(":").forEach(x => {
+      badgeValue.split(":").forEach((x) => {
         categorieBadges += `<v-chip class="ma-2" color="primary">${x}</v-chip>`;
       });
       return categorieBadges;
@@ -335,7 +360,7 @@ export default Vue.extend({
 
     sortByNumMAtch(a: TagResult, b: TagResult) {
       return b.numMatch - a.numMatch;
-    }
+    },
   },
 
   watch: {
@@ -344,7 +369,7 @@ export default Vue.extend({
       if (this.application && this.application.length != 0) {
         this.getTreeview();
       }
-    }
-  }
+    },
+  },
 });
 </script>

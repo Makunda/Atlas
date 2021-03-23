@@ -10,4 +10,5 @@ export interface IGroup {
     creationDate: number;
     active: boolean;
     selected: boolean;
+    types: string[];
   }

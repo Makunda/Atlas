@@ -1,31 +1,32 @@
 import LevelService from "@services/demeter/level.service";
-import { logger } from "@shared/logger";
+import {logger} from "@shared/logger";
 import config from "config";
 import AAgent from "./agent.abstract";
 
 export default class LevelAgent extends AAgent {
-  async getPrefix(): Promise<string> {
-    return this.tagService.getCustomLevelTag();
-  }
+    private levelService: LevelService = new LevelService();
 
-  getAgentName(): string {
-    return "Level";
-  }
-  getDelay(): number {
-    return config.get("agent.reload.levelAgent");
-  }
-
-  private levelService: LevelService = new LevelService();
-
-  async group() {
-    try {
-      const num: number = await this.levelService.executeGroupingInAllApplications();
-
-      if (num != 0) {
-        logger.info(`${num} levels were discovered and added.`);
-      }
-    } catch (err) {
-      logger.error("The level agent failed to retrieve custom levels.", err);
+    async getPrefix(): Promise<string> {
+        return this.tagService.getCustomLevelTag();
     }
-  }
+
+    getAgentName(): string {
+        return "Level";
+    }
+
+    getDelay(): number {
+        return config.get("agent.reload.levelAgent");
+    }
+
+    async group() {
+        try {
+            const num: number = await this.levelService.executeGroupingInAllApplications();
+
+            if (num != 0) {
+                logger.info(`${num} levels were discovered and added.`);
+            }
+        } catch (err) {
+            logger.error("The level agent failed to retrieve custom levels.", err);
+        }
+    }
 }

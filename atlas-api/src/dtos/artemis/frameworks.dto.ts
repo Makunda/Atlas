@@ -1,35 +1,35 @@
-import { IsArray, IsDecimal, IsNumber, IsString } from "class-validator";
+import {IsArray, IsDecimal, IsNumber, IsString} from "class-validator";
 
 export class CreateFrameworkDto {
-  @IsNumber()
-  public id = -1;
+    @IsNumber()
+    public id = -1;
 
-  @IsString()
-  public name: string;
+    @IsString()
+    public name: string;
 
-  @IsString()
-  public description: string;
-  
-  @IsString()
-  public type: string;
+    @IsString()
+    public description: string;
 
-  @IsString()
-  public category: string;
+    @IsString()
+    public type: string;
 
-  @IsArray()
-  public internalType: string[];
+    @IsString()
+    public category: string;
 
-  @IsString()
-  public location: string;
+    @IsArray()
+    public internalType: string[];
 
-  @IsString()
-  public discoveryDate: string;
+    @IsString()
+    public location: string;
 
-  @IsDecimal()
-  public percentageOfDetection: string;
+    @IsString()
+    public discoveryDate: string;
 
-  @IsDecimal()
-  public numberOfDetection = 0;
-  
-  
+    @IsDecimal()
+    public percentageOfDetection: string;
+
+    @IsDecimal()
+    public numberOfDetection = 0;
+
+
 }

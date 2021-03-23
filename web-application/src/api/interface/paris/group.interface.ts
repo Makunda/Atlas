@@ -8,6 +8,7 @@ export interface IGroup {
     groupName: string;
     categories: string[];
     creationDate: number;
+    typesAsList: [];
     active: boolean;
     selected: boolean;
   }

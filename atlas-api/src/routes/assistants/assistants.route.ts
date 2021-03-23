@@ -1,4 +1,4 @@
-import { Router } from "express";
+import {Router} from "express";
 import FrameworkAssistantRoute from "./frameworkAssistants.route";
 
 // Init router and path
