@@ -38,7 +38,10 @@ class TransactionController {
             const startIndex = Number(req.query.start);
             const endIndex = Number(req.query.end);
 
-            const transactions: ITransaction[] = await this.transactionService.getBatchTransaction(applicationName, startIndex, endIndex);
+            const sort = String(req.query.sort) || "name";
+            const sortDesc = Boolean(req.query.sortDesc) || false;
+
+            const transactions: ITransaction[] = await this.transactionService.getBatchTransaction(applicationName, startIndex, endIndex, sort, sortDesc);
             res.status(200).json({data: transactions, message: 'Batch'});
 
         } catch (error) {
@@ -52,7 +55,11 @@ class TransactionController {
             const applicationName = String(req.params.application);
             const startIndex = Number(req.query.start);
             const endIndex = Number(req.query.end);
-            const transactions: ITransaction[] = await this.transactionService.getBatchMaskedTransaction(applicationName, startIndex, endIndex);
+
+            const sort = String(req.query.sort) || "name";
+            const sortDesc = Boolean(req.query.sortDesc) || false;
+
+            const transactions: ITransaction[] = await this.transactionService.getBatchMaskedTransaction(applicationName, startIndex, endIndex, sort, sortDesc);
             res.status(200).json({data: transactions, message: 'Batch'});
 
         } catch (error) {
@@ -78,6 +85,29 @@ class TransactionController {
             const transactionID = Number(req.params.transactionID);
             const transaction: ITransaction = await this.transactionService.unmaskTransaction(applicationName, transactionID);
             res.status(200).json({data: transaction, message: 'Transaction'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public unmaskAllTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const applicationName = String(req.params.application);
+            const state: boolean = await this.transactionService.unmaskAllTransaction(applicationName);
+            res.status(200).json({data: state, message: 'UnMasked all'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public maskByObjectCount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const applicationName = String(req.params.application);
+            const limit = Number(req.query.limit) || 0;
+            const count: number = await this.transactionService.maskTransactionByCount(applicationName, limit);
+            res.status(200).json({data: count, message: 'Masked'});
 
         } catch (error) {
             next(error);

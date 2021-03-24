@@ -17,8 +17,10 @@ class TransactionRoute implements Route {
         this.router.get(`${this.path}/number/unmasked/:application`, this.transactionController.getNumberTransaction);
         this.router.get(`${this.path}/batch/masked/:application`, this.transactionController.getBatchMaskedTransaction);
         this.router.get(`${this.path}/batch/unmasked/:application`, this.transactionController.getBatchTransaction);
-        this.router.get(`${this.path}/mask/:application/:transactionID`, this.transactionController.maskTransaction);
-        this.router.get(`${this.path}/unmask/:application/:transactionID`, this.transactionController.unmaskTransaction);
+        this.router.get(`${this.path}/mask/single/:application/:transactionID`, this.transactionController.maskTransaction);
+        this.router.get(`${this.path}/unmask/single/:application/:transactionID`, this.transactionController.unmaskTransaction);
+        this.router.get(`${this.path}/unmask/all/:application`, this.transactionController.unmaskAllTransaction);
+        this.router.get(`${this.path}/mask/by/:application`, this.transactionController.maskByObjectCount);
     }
 }
 

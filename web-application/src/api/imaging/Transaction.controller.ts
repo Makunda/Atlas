@@ -9,6 +9,34 @@ export default class TransactionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   /**
+   * Unmask all the transaction in an application
+   * @param application
+   */
+  public static async unMaskAllTransaction(
+      application: string
+  ): Promise<number> {
+    const url =
+        TransactionController.API_BASE_URL +
+        `/api/imaging/transactions/unmask/all/${application}`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Number(apiResponse.data);
+      } else {
+        throw new Error(
+            `Failed to unmask all transactions. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Retrieve the number of transaction
    * @param application
    */
@@ -45,7 +73,7 @@ export default class TransactionController {
   ): Promise<number> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/number/unmasked/${application}`;
+      `/api/imaging/transactions/number/masked/${application}`;
 
     try {
       const res = await axios.get(url);
@@ -69,15 +97,19 @@ export default class TransactionController {
    * @param application Name of the application
    * @param start Start index
    * @param end End index
+   * @param sort Sort parameter
+   * @param sortDesc Order of the sort
    */
   public static async getBatchMaskedTransaction(
     application: string,
     start: number,
-    end: number
+    end: number,
+    sort: string,
+    sortDesc: string
   ): Promise<ITransaction[]> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/batch/masked/${application}?start=${start}&end=${end}`;
+      `/api/imaging/transactions/batch/masked/${application}?start=${start}&end=${end}&sort=${sort}&sortDesc=${sortDesc}`;
 
     try {
       const res = await axios.get(url);
@@ -103,15 +135,19 @@ export default class TransactionController {
    * @param application Name of the application
    * @param start Start index
    * @param end End index
+   * @param sort Sort parameter
+   * @param sortDesc Order of the sort
    */
   public static async getBatchTransaction(
     application: string,
     start: number,
-    end: number
+    end: number,
+    sort: string,
+    sortDesc: string
   ): Promise<ITransaction[]> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/batch/unmasked/${application}?start=${start}&end=${end}`;
+      `/api/imaging/transactions/batch/unmasked/${application}?start=${start}&end=${end}&sort=${sort}&sortDesc=${sortDesc}`;
 
     try {
       const res = await axios.get(url);
@@ -143,7 +179,7 @@ export default class TransactionController {
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/mask/${application}/${transactionID}`;
+      `/api/imaging/transactions/mask/single/${application}/${transactionID}`;
 
     try {
       const res = await axios.get(url);
@@ -173,7 +209,7 @@ export default class TransactionController {
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/unmask/${application}/${transactionID}`;
+      `/api/imaging/transactions/unmask/single/${application}/${transactionID}`;
 
     try {
       const res = await axios.get(url);
@@ -184,6 +220,60 @@ export default class TransactionController {
       } else {
         throw new Error(
           `Failed to a batch of masked transactions. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  public static async unmaskAllTransaction(
+    application: string
+  ): Promise<boolean> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/unmask/all/${application}`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Boolean(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to un-mask all transactions. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Mask transaction by number of object inside it
+   * @param application Application concerned
+   * @param limit Minimum number of object
+   */
+  public static async maskByCount(
+    application: string,
+    limit: number
+  ): Promise<number> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/mask/by/${application}?limit=${limit}`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Number(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to un-mask all transactions. Status (${res.status})`
         );
       }
     } catch (error) {

@@ -1,5 +1,5 @@
 import {logger} from "@shared/logger";
-import {QueryResult} from "neo4j-driver";
+import {int, QueryResult} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import {ILevel, LevelNode} from "@interfaces/imaging/level.interface";
@@ -15,9 +15,6 @@ class LevelService {
      */
     public async createLevel(application: string, parentId: number, level: ILevel): Promise<ILevel> {
         try {
-            if(parentId == -1 && level.level != 1 ) {
-                throw new Error("Cannot created a level with no parent, if the level is not a level 1.")
-            }
 
             if(level.level < 3 ) {
                 throw new Error("Cannot created a level under level 3.")
@@ -36,19 +33,17 @@ class LevelService {
             const levelObj =  LevelNode.fromObj(row).getRecord();
 
             // Merge relationship with parent only if valid
-            if(parentId != -1 && level.level-1 < 0) {
-                const levelName = `Level${level.level}`;
-                const parentLevelName = `Level${level.level - 1}`;
+            const levelName = `Level${level.level}`;
+            const parentLevelName = `Level${level.level - 1}`;
 
-                const mergeReq = `MATCH (p:${parentLevelName}:\`${application}\`), (c:${levelName}:\`${application}\`) 
-                WHERE ID(p)=${parentId} AND ID(c)=${levelObj._id}  
+            const mergeReq = `MATCH (p:${parentLevelName}:\`${application}\`), (c:${levelName}:\`${application}\`) 
+                WHERE ID(p)=$parentID AND ID(c)=$levelID
                 MERGE (p)-[:Aggregates]->(c)
                 SET c.FullName = p.FullName + "##" + c.Name
                 SET c.Shade = p.Shade + "##" + c.Color
                 RETURN p as parent`;
 
-                await this.neo4jAl.execute(mergeReq);
-            }
+            await this.neo4jAl.executeWithParameters(mergeReq, { "parentID": int(parentId), "levelID": int(levelObj._id) });
 
             return levelObj;
         } catch (err) {
@@ -97,7 +92,7 @@ class LevelService {
             AND ID(n)=$idLevel 
             RETURN n as node;`;
 
-            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { "idLevel": levelID });
+            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { "idLevel": int(levelID) });
             if(!results.records || results.records.length == 0) return null;
 
             return LevelNode.fromObj(results.records[0].get("node")).getRecord();
@@ -140,6 +135,38 @@ class LevelService {
         } catch (err) {
             logger.error(
                 `Failed to get the children levels of level with id : ${levelID} of application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Get the parent level of a level
+     * @param application Name of the application
+     * @param levelID Id of the level
+     */
+    public async getParentLevel(application: string, levelID: number): Promise<ILevel> {
+        try {
+
+            const level = await this.findLevelById(application, levelID);
+
+            if(level == null || level.level <= 1) return null; // Ignore under level 1
+
+            const levelName = `Level${level.level}`;
+            const parentLevel = `Level${level.level-1}`;
+            const request = `MATCH (p:${parentLevel}:\`${application}\`)-[:Aggregates]->(n:${levelName}:\`${application}\`)  
+            WHERE ID(n)=$idLevel 
+            RETURN p as node LIMIT 1;`;
+
+            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { "idLevel": levelID });
+
+            if(!results || results.records.length == 0) return null;
+            return LevelNode.fromObj(results.records[0].get("node")).getRecord();
+
+        } catch (err) {
+            logger.error(
+                `Failed to get the parent level of level with id : ${levelID} of application ${application}.`,
                 err
             );
             throw new HttpException(500, "Internal error");
@@ -190,7 +217,7 @@ class LevelService {
         try {
             // find corresponding level
             const foundLevel = await this.findLevelById(application, level._id);
-            if(level == null || level.level >= 5) return null; // Ignore above level 4
+            if(!foundLevel) return null; // Ignore above level 4
 
             const levelName = `Level${foundLevel.level}`;
             const request = `MATCH (p:${levelName}:\`${application}\`)   

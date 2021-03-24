@@ -29,6 +29,18 @@ class LevelController {
         }
     };
 
+    public getParentLevel = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const applicationName = String(req.params.application);
+            const levelId = Number(req.params.id);
+            const levels: ILevel = await this.levelService.getParentLevel(applicationName, levelId);
+            res.status(200).json({data: levels, message: 'Attached'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
     public createLevel = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const level: ILevel = req.body;

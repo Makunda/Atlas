@@ -98,9 +98,12 @@
                     <v-col>{{ selected.count }}</v-col>
                   </v-row>
                   <v-row v-if="selected.level < 3">
-                    <i>Unfortunately. The modification of level above the level 3 is not possible for the moment.</i>
+                    <i
+                      >Unfortunately. The modification of level above the level
+                      3 is not possible for the moment.</i
+                    >
                   </v-row>
-                  <v-row class="mt-6">
+                  <v-row class="mt-6 justify-center" v-if="selected.level > 3">
                     <div class="text-center">
                       <v-btn
                         small
@@ -134,7 +137,6 @@
                         small
                         color="warning"
                         :disabled="selected.count > 0"
-                        dark
                       >
                         Delete level
                       </v-btn>
@@ -178,9 +180,9 @@
                 <v-textarea
                   rows="2"
                   label="FullName ( Auto generated )"
-                  v-model="editItem.fullName"
+                  disabled
                   :value="
-                    (parentItem ? parentItem.fullName : editItem.fullName) +
+                    (parentItem ? parentItem.fullName + '##' : '') +
                       editItem.name
                   "
                 ></v-textarea>
@@ -208,9 +210,10 @@
                 <v-textarea
                   rows="2"
                   label="Full Shade ( Auto computed )"
-                  v-model="editItem.shade"
-                  :value="editItem.shade + editItem.color"
-
+                  disabled
+                  :value="
+                    (parentItem ? parentItem.shade + '##' : '') + editItem.color
+                  "
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -282,18 +285,15 @@ export default Vue.extend({
   },
 
   methods: {
-    editLevel(item: ILevel) {
+    async editLevel(item: ILevel) {
+      this.parentItem = await LevelController.fetchParent(
+        this.application,
+        item
+      );
+
       this.editionType = "Edit ";
       this.editItem = Object.assign({}, item);
-      // remove name from fullName
-      item.fullName = item.fullName.substring(
-        0,
-        item.fullName.length - item.name.length
-      );
-      item.shade = item.shade.substring(
-        0,
-        item.shade.length - item.color.length
-      );
+
       this.dialog = true;
     },
 
@@ -303,14 +303,20 @@ export default Vue.extend({
       this.editItem = {};
       // remove name from fullName
       this.editItem._id = -1;
-      this.editItem.fullName = parentItem.fullName + "##";
-      this.editItem.shade = parentItem.shade + "##";
       this.editItem.level = parentItem.level + 1;
 
       this.dialog = true;
     },
 
     saveLevel() {
+      // treat level
+      this.editItem.fullName =
+        (this.parentItem ? this.parentItem.fullName + "##" : "") +
+        this.editItem.name;
+      this.editItem.shade =
+        (this.parentItem ? this.parentItem.shade + "##" : "") +
+        this.editItem.color;
+
       if (this.editItem._id != -1) {
         LevelController.updateLevel(this.application, this.editItem)
           .then((res: ILevel) => {
@@ -324,12 +330,31 @@ export default Vue.extend({
           })
           .finally(() => {
             this.editItem = {};
+            this.parentItem = {};
             this.dialog = false;
             this.refresh();
           });
       } else {
-        this.snackbarInfo = true;
-        this.textSnackBar = "Not implemented yet";
+        LevelController.createLevel(
+          this.application,
+          this.parentItem._id,
+          this.editItem
+        )
+          .then((res: ILevel) => {
+            this.snackbarInfo = true;
+            this.textSnackBar = "Creation of level is a success.";
+          })
+          .catch(err => {
+            console.error("Failed to create the level : ", err);
+            this.snackbarInfo = true;
+            this.textSnackBar = "Failed to create the level : " + err;
+          })
+          .finally(() => {
+            this.editItem = {};
+            this.parentItem = {};
+            this.dialog = false;
+            this.refresh();
+          });
       }
     },
 
@@ -395,6 +420,7 @@ export default Vue.extend({
     },
 
     refresh() {
+      this.selected = null;
       this.getRootLevels();
     }
   },

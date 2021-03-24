@@ -67,6 +67,33 @@ export default class LevelController {
     }
   }
 
+  /**
+   * Fetch the parent level of the application
+   * @param application Name of the application
+   * @param level
+   */
+  public static async fetchParent(application: string, level: ILevel): Promise<ILevel> {
+    const url =
+        LevelController.API_BASE_URL + `/api/imaging/levels/parent/${application}/${level._id}`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ILevel;
+      } else {
+        throw new Error("Failed to fetch the parent levels");
+      }
+    } catch (error) {
+      console.error(
+          `Failed to reach the API : ${url}. Failed to retrieve attached levels.`,
+          error
+      );
+      throw error;
+    }
+  }
+
   public static async createLevel(application: string, parentLevelID: number, level: ILevel): Promise<ILevel> {
     const url =
         LevelController.API_BASE_URL + `/api/imaging/levels/create/${application}`;

@@ -49,13 +49,13 @@ class LevelNode {
     public getMergeRequest(application: string): string {
         const levelName = `Level${this.levelObj.level}`
         const req = `MERGE (l:\`${application}\`:${levelName} { Name: '${this.levelObj.name}'} ) 
-            SET l.Concept = ${this.levelObj.concept}
-            SET l.AlternateDrilldown = ${this.levelObj.alternateDrilldown}
-            SET l.Color = '${this.levelObj.color}'
+            SET l.Concept = ${this.levelObj.concept || false}
+            SET l.AlternateDrilldown = ${this.levelObj.alternateDrilldown || true}
+            SET l.Color = '${this.levelObj.color || "rgb(0,0,0)"}'
             SET l.FullName = '${this.levelObj.fullName}'
             SET l.Name = '${this.levelObj.name}'
             SET l.Level = ${this.levelObj.level}
-            SET l.Count = ${this.levelObj.count}
+            SET l.Count = ${this.levelObj.count || 0 }
             SET l.Shade  = '${this.levelObj.shade}'
             RETURN l as node;`;
         return req;

@@ -15,6 +15,7 @@ class LevelsRoute implements Route {
     private initializeRoutes() {
         this.router.get(`${this.path}/roots/:application`, this.levelcontroller.getRootLevel);
         this.router.get(`${this.path}/attached/:application/:id`, this.levelcontroller.getAttachedLevel);
+        this.router.get(`${this.path}/parent/:application/:id`, this.levelcontroller.getParentLevel);
         this.router.put(`${this.path}/update/:application/:id`, this.levelcontroller.updateLevel);
         this.router.post(`${this.path}/create/:application`, this.levelcontroller.createLevel);
     }
