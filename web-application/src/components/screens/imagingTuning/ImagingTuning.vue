@@ -64,6 +64,12 @@ export default Vue.extend({
         name: "Transaction",
         title: "Explore the transaction ",
         icon: "mdi-apple-safari"
+      },
+      {
+        view: "HelloWorld",
+        name: "Icon Manager",
+        title: "Manage icons ",
+        icon: "mdi-file-image-outline"
       }
     ]
   }),

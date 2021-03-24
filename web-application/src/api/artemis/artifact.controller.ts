@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
-import { Artifact } from "../interface/ApiArtifact.interface";
+import { IArtifact } from "../interface/ApiArtifact.interface";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 import { ArtemisController } from "./artemis.controller";
 
@@ -10,7 +10,7 @@ export class ArtifactController {
   public static async getArtifactList(
     application: string,
     language: string
-  ): Promise<Artifact[]> {
+  ): Promise<IArtifact[]> {
     const url = ArtifactController.API_BASE_URL + "/api/artemis/artifacts/all";
 
     const data = {
@@ -42,7 +42,7 @@ export class ArtifactController {
   public static async getArtifactAsTree(
     application: string,
     language: string
-  ): Promise<Artifact[]> {
+  ): Promise<IArtifact[]> {
     const url = ArtifactController.API_BASE_URL + "/api/artemis/artifacts/tree";
 
     const data = {
@@ -74,7 +74,8 @@ export class ArtifactController {
   /**
    * Build the query
    * @param application Name of the application
-   * @param framework Framework to extract
+   * @param frameworkName Name of the framework
+   * @param regex
    */
   public static buildQuery(
     application: string,
@@ -96,8 +97,8 @@ export class ArtifactController {
   }
 
   public static getFullNameRec(
-    item: Artifact,
-    listArtifact: Artifact[]
+    item: IArtifact,
+    listArtifact: IArtifact[]
   ): string {
     let fullName = item.name + item.delimiter;
     let prev = item.parentId;
@@ -119,33 +120,74 @@ export class ArtifactController {
    * @param tree Tree selected
    */
   public static async buildQuerySet(
-    tree: Artifact[],
+    tree: IArtifact[],
     application: string,
     language: string
   ): Promise<string> {
-    const listArtifact: Artifact[] = await this.getArtifactList(
+    const listArtifact: IArtifact[] = await this.getArtifactList(
       application,
       language
     );
 
-    const req: string[] = [];
-    console.log("Tree : ", tree);
     for (const key in tree) {
       const element = ArtifactController.getFullNameRec(
         tree[key],
         listArtifact
       );
-      req.push(element);
+      tree[key].name = element;
     }
 
     let setRequest = "";
-    for (const key in req) {
-      const elem = req[key];
-      setRequest += `<span style='color: #66B245'>// Application : ${application}  :   ${req[key]} </span><br />`;
-      setRequest += this.buildQuery(application, elem, elem + "*");
+    for (const key in tree) {
+      const elem = tree[key];
+      setRequest += `<span style='color: #66B245'>// Application : ${application}  :   ${tree[
+        key
+      ].customName || tree[key].name} </span><br />`;
+      setRequest += this.buildQuery(
+        application,
+        tree[key].customName || tree[key].name,
+        tree[key].name + "*"
+      );
       setRequest += "<br /><br />";
     }
 
     return setRequest;
+  }
+
+  /**
+   * Launch selected query against the database
+   * @param tree
+   * @param application
+   * @param language
+   */
+  public static async launchQuerySet(
+    tree: IArtifact[],
+    application: string,
+    language: string
+  )  {
+    const listArtifact: IArtifact[] = await this.getArtifactList(
+      application,
+      language
+    );
+
+    for (const key in tree) {
+      const element = ArtifactController.getFullNameRec(
+        tree[key],
+        listArtifact
+      );
+      tree[key].name = element;
+    }
+
+    let setRequest = "";
+    for (const key in tree) {
+      setRequest +=
+        this.buildQuery(
+          application,
+          tree[key].customName || tree[key].name,
+          tree[key].name + "*"
+        ) + "\n";
+    }
+
+    // Launch the request
   }
 }

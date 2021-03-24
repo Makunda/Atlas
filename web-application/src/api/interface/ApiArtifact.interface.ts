@@ -1,7 +1,9 @@
-export interface Artifact {
+export interface IArtifact {
   id: number;
   name: string;
+  customName?: string;
   parentId: number;
   delimiter: string;
-  children?: Artifact[];
+  count: number;
+  children?: IArtifact[];
 }

@@ -1,18 +1,22 @@
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
-import {Artifact} from "@interfaces/artemis/artifact.interface";
+import {IArtifact} from "@interfaces/artemis/artifact.interface";
 import {logger} from "@shared/logger";
 import {int} from "neo4j-driver";
 
 export default class ArtifactService {
     private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
-    private static recursiveInsert(root: Artifact, listArtifact: Artifact[]): Artifact {
+    private static recursiveInsert(root: IArtifact, listArtifact: IArtifact[]): IArtifact {
         for (const index in listArtifact) {
             if (listArtifact[index].parentId == root.id) {
                 root.children.push(ArtifactService.recursiveInsert(listArtifact[index], listArtifact));
             }
         }
+
+        root.children.sort(function(a, b) {
+            return b.count - a.count;
+        });
 
         return root;
     }
@@ -20,7 +24,7 @@ export default class ArtifactService {
     public async getArtifactsList(
         appName: string,
         language: string
-    ): Promise<Artifact[]> {
+    ): Promise<IArtifact[]> {
         const req = `CALL artemis.api.breakdown.get($appName, $language)`;
         try {
             const val = await this.neo4jAl.executeWithParameters(req, {
@@ -49,10 +53,10 @@ export default class ArtifactService {
     public async getArtifactAsTree(
         appName: string,
         language: string
-    ): Promise<Artifact[]> {
+    ): Promise<IArtifact[]> {
 
-        const allArtifacts: Artifact[] = await this.getArtifactsList(appName, language);
-        const tree: Artifact[] = [];
+        const allArtifacts: IArtifact[] = await this.getArtifactsList(appName, language);
+        const tree: IArtifact[] = [];
 
         for (const key in allArtifacts) {
             const elem = allArtifacts[key];
@@ -64,12 +68,13 @@ export default class ArtifactService {
         return tree;
     }
 
-    private convertRecordToArtifact(res: any): Artifact {
-        const artifact: Artifact = {
+    private convertRecordToArtifact(res: any): IArtifact {
+        const artifact: IArtifact = {
             id: int(res.get("id")).toNumber(),
             name: res.get("name"),
             parentId: int(res.get("parentId")).toNumber(),
             delimiter: res.get("delimiter"),
+            count: int(res.get("count")).toNumber(),
             children: []
         };
 

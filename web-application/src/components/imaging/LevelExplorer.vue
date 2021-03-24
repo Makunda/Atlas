@@ -103,7 +103,7 @@
                       3 is not possible for the moment.</i
                     >
                   </v-row>
-                  <v-row class="mt-6 justify-center" v-if="selected.level > 3">
+                  <v-row class="mt-6 justify-center" v-if="selected.level >= 3">
                     <div class="text-center">
                       <v-btn
                         small
