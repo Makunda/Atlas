@@ -3,6 +3,7 @@ import {int, QueryResult} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import {IGroup} from "@interfaces/paris/group.interface";
+import {groupResultFromObj, IGroupResult} from "@interfaces/paris/groupResult.interface";
 
 class GroupService {
     private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
@@ -20,7 +21,7 @@ class GroupService {
             groupName: res.get("groupName"),
             categories: res.get("categories") || [],
             cypherRequestReturn: res.get("cypherRequestReturn") || "",
-            creationDate: res.get("creationDate") || 0,
+            creationDate: int(res.get("creationDate")).toNumber() || 0,
             active: res.get("active"),
             selected: res.get("selected"),
             types: res.get("types"),
@@ -75,8 +76,9 @@ class GroupService {
      */
     public async updateGroup(useCase: IGroup): Promise<IGroup> {
         try {
+            console.log("Received ", useCase);
             const request =
-                "CALL paris.groups.update.by.id($id, $active, $categories, $creationDate, $cypherRequest, $cypherRequestReturn, $description, $groupName, $name, $selected, $typesAsList)";
+                "CALL paris.groups.update.by.id($id, $active, $categories, $creationDate, $cypherRequest, $cypherRequestReturn, $description, $groupName, $name, $selected, $types)";
             const results: QueryResult = await this.neo4jAl.executeWithParameters(
                 request,
                 useCase
@@ -147,6 +149,38 @@ class GroupService {
             return Number(results.records[0].get(0));
         } catch (err) {
             logger.error("Failed to attach a group to a use case", err);
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Forecast all the Tag present in database and return only interesting one
+     * @param application Name of the application
+     */
+    public async forecastAll(
+        application: string
+    ): Promise<IGroupResult[]> {
+        try {
+            const request =
+                "CALL paris.groups.forecast.all($application);";
+            const params = {
+                application: application
+            };
+
+            const results: QueryResult = await this.neo4jAl.executeWithParameters(
+                request,
+                params
+            );
+
+            const groupList: IGroupResult[] = [];
+            for(let i = 0; i < results.records.length; i++) {
+                groupList.push(groupResultFromObj(results.records[i]));
+            }
+
+            return groupList;
+
+        } catch (err) {
+            logger.error("Failed to forecast all groups", err);
             throw new HttpException(500, "Internal error");
         }
     }

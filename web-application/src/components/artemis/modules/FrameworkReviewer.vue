@@ -411,22 +411,22 @@
         <v-container>
           <v-row class="mb-4">
             <v-col class="mt-1" cols="6">
-              Automatically clean the configuration from duplicates nodes<br>The duplicates framework properties will be merged.
-              <br>
+              Automatically clean the configuration from duplicates nodes<br />The
+              duplicates framework properties will be merged.
+              <br />
               {{ autoCleanInfo }}
             </v-col>
             <v-col cols="6">
               <v-btn
-                  class="ma-2"
-                  :loading="loadingAutoClean"
-                  :disabled="loadingAutoClean"
-                  color="teal"
-                  dark
-                  @click="launchAutoClean"
-
-                >
-                  Auto cleaning
-                </v-btn>
+                class="ma-2"
+                :loading="loadingAutoClean"
+                :disabled="loadingAutoClean"
+                color="teal"
+                dark
+                @click="launchAutoClean"
+              >
+                Auto cleaning
+              </v-btn>
             </v-col>
           </v-row>
           <v-divider></v-divider>
@@ -458,11 +458,11 @@
 </template>
 
 <script lang="ts">
-import { Framework } from "@/api/interface/ApiArtemis.interface";
 import { FrameworkController } from "@/api/artemis/framework.controller";
 import Vue from "vue";
 import { CategoryController } from "@/api/artemis/category.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
+import {Framework} from "@/api/interface/artemis/framework.interface";
 
 export default Vue.component("FrameworkReviewer", {
   data: () => ({
@@ -479,7 +479,7 @@ export default Vue.component("FrameworkReviewer", {
         text: "Name",
         align: "start",
         sortable: false,
-        value: "name",
+        value: "name"
       },
       { text: "Description", value: "description" },
       { text: "Category", value: "category" },
@@ -487,7 +487,7 @@ export default Vue.component("FrameworkReviewer", {
       { text: "Discovery date", value: "discoveryDate" },
       { text: "Validation", value: "validation", sortable: false },
       { text: "Actions", value: "actions", sortable: false },
-      { text: "", value: "data-table-expand" },
+      { text: "", value: "data-table-expand" }
     ],
 
     toSearch: "",
@@ -504,12 +504,12 @@ export default Vue.component("FrameworkReviewer", {
     frameworkTypes: [
       {
         name: "Framework",
-        value: "Framework",
+        value: "Framework"
       },
       {
         name: "Not a Framework",
-        value: "NotFramework",
-      },
+        value: "NotFramework"
+      }
     ],
 
     dialog: false,
@@ -521,7 +521,7 @@ export default Vue.component("FrameworkReviewer", {
       type: "NotFramework",
       category: "External",
       internalType: [""],
-      location: "",
+      location: ""
     } as Framework,
     defaultItem: {
       name: "",
@@ -529,7 +529,7 @@ export default Vue.component("FrameworkReviewer", {
       type: "NotFramework",
       category: "External",
       internalType: [""],
-      location: "",
+      location: ""
     } as Framework,
 
     editItemError: "",
@@ -550,16 +550,16 @@ export default Vue.component("FrameworkReviewer", {
 
     // AutoClean
     loadingAutoClean: false,
-    autoCleanInfo: "",
+    autoCleanInfo: ""
   }),
 
   computed: {
     filteredKeys() {
-      return this.headers.filter((key) => key !== "Name");
+      return this.headers.filter(key => key !== "Name");
     },
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
+    }
   },
 
   methods: {
@@ -568,7 +568,7 @@ export default Vue.component("FrameworkReviewer", {
         .then((res: Category[]) => {
           this.frameworkCategories = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of categories", err);
         });
     },
@@ -597,7 +597,7 @@ export default Vue.component("FrameworkReviewer", {
           }
           this.editItemError = "Failed to delete the framework";
         })
-        .catch((err) => {
+        .catch(err => {
           this.editItemError = err;
         })
         .finally(() => {
@@ -613,7 +613,7 @@ export default Vue.component("FrameworkReviewer", {
             this.refreshFramework();
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Toggle framework failed", err);
           this.editItemError = err;
         });
@@ -625,7 +625,7 @@ export default Vue.component("FrameworkReviewer", {
         .then((res: number) => {
           this.numberItems = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
         });
     },
@@ -635,7 +635,7 @@ export default Vue.component("FrameworkReviewer", {
         .then((res: string[]) => {
           this.internalTypes = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of internal types", err);
         });
     },
@@ -653,7 +653,7 @@ export default Vue.component("FrameworkReviewer", {
           this.displayUpdateSuccess = true;
           this.refreshFramework();
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to update the framework.", err);
           this.displayUpdateFailure = true;
         })
@@ -706,7 +706,7 @@ export default Vue.component("FrameworkReviewer", {
             if (val) this.close();
             this.editItemError = "Failed to update the framework";
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to update the framework", err);
             this.editItemError = err;
           })
@@ -723,7 +723,7 @@ export default Vue.component("FrameworkReviewer", {
             if (val) this.close();
             this.editItemError = "Failed to add the framework";
           })
-          .catch((err) => {
+          .catch(err => {
             console.error("Failed to add the framework", err);
             this.editItemError = err;
           })
@@ -749,7 +749,7 @@ export default Vue.component("FrameworkReviewer", {
             this.setFrameworkFocus(this.currentIndex);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
         })
         .finally(() => {
@@ -765,7 +765,7 @@ export default Vue.component("FrameworkReviewer", {
           this.currentIndex = 0;
           this.numberItems = res.length;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
         })
         .finally(() => {
@@ -781,7 +781,7 @@ export default Vue.component("FrameworkReviewer", {
           this.currentIndex = 0;
           this.numberItems = res.length;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of frameworks.", err);
         })
         .finally(() => {
@@ -804,15 +804,14 @@ export default Vue.component("FrameworkReviewer", {
       this.loadingAutoClean = true;
       FrameworkController.launchAutoCleaning()
         .then((res: number) => {
-          this.autoCleanInfo = `${res} groups were cleaned during the operation.`
+          this.autoCleanInfo = `${res} groups were cleaned during the operation.`;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to search for frameworks.", err);
         })
         .finally(() => {
-          this.loadingAutoClean =false;
+          this.loadingAutoClean = false;
         });
-        
     },
 
     searchFrameworks() {
@@ -830,7 +829,7 @@ export default Vue.component("FrameworkReviewer", {
           this.numberItems = res.length;
           this.currentIndex = 0;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to search for frameworks.", err);
         })
         .finally(() => {
@@ -864,14 +863,14 @@ export default Vue.component("FrameworkReviewer", {
       this.getInternalTypes();
       this.getNumberFrameworks();
       this.refreshFramework();
-    },
+    }
   },
 
   mounted() {
     this.refresh();
     this.getInternalTypes();
     this.getListCategories();
-  },
+  }
 });
 </script>
 

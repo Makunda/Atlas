@@ -27,13 +27,15 @@
 import Vue from "vue";
 import LevelExplorer from "@/components/imaging/LevelExplorer.vue";
 import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
+import IconManager from "@/components/imaging/IconManager.vue";
 
 export default Vue.extend({
   name: "ImagingTuning",
 
   components: {
     LevelExplorer,
-    TransactionExplorer
+    TransactionExplorer,
+    IconManager
   },
 
   computed: {
@@ -66,7 +68,7 @@ export default Vue.extend({
         icon: "mdi-apple-safari"
       },
       {
-        view: "HelloWorld",
+        view: "IconManager",
         name: "Icon Manager",
         title: "Manage icons ",
         icon: "mdi-file-image-outline"

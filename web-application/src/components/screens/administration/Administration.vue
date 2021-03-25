@@ -16,32 +16,8 @@
       </v-tabs>
     </v-row>
     <v-row>
-      <v-container class="my-10">
-        <!-- Grouping operations -->
-        <v-row v-if="tab == 0">
-          <v-col cols="7" md="7" sm="12">
-            <DemeterLevelsTile></DemeterLevelsTile>
-            <DemeterModuleTile></DemeterModuleTile>
-          </v-col>
-          <v-col col="5" md="5" sm="12">
-            <GlobalOperations></GlobalOperations>
-          </v-col>
-        </v-row>
-
-        <!-- Parameters -->
-        <v-row v-if="tab == 1">
-          <Parameters></Parameters>
-        </v-row>
-
-        <!-- Artemis Configuration -->
-        <v-row v-if="tab == 2">
-          <ArtemisParameters></ArtemisParameters>
-        </v-row>
-
-        <!-- Tag Creator Studio -->
-        <v-row v-if="tab == 3">
-          <TagStudio></TagStudio>
-        </v-row>
+      <v-container class="mx-auto mt-10">
+        <component :is="items[tab].view"></component>
       </v-container>
     </v-row>
   </v-container>
@@ -52,9 +28,9 @@ import Vue from "vue";
 import DemeterLevelsTile from "@/components/screens/administration/tiles/DemeterLevelsTile.vue";
 import DemeterModuleTile from "@/components/screens/administration/tiles/DemeterModuleTile.vue";
 import GlobalOperations from "@/components/screens/administration/tiles/GlobalOperations.vue";
-import Parameters from "@/components/screens/administration/steps/Parameters.vue";
-import TagStudio from "@/components/screens/administration/steps/TagStudio.vue";
+import DemeterParameters from "@/components/screens/administration/steps/DemeterParameters.vue";
 import ArtemisParameters from "@/components/screens/administration/steps/ArtemisParameters.vue";
+import GlobalParameters from "@/components/screens/administration/steps/GlobalParameters.vue";
 
 export default Vue.extend({
   name: "Administration",
@@ -63,23 +39,25 @@ export default Vue.extend({
     DemeterLevelsTile,
     GlobalOperations,
     DemeterModuleTile,
-    Parameters,
-    TagStudio,
+    DemeterParameters,
+    GlobalParameters,
     ArtemisParameters
   },
 
   data: () => ({
     tab: 0,
 
+    step: 1,
+
     items: [
       {
-        view: "GroupingStep",
-        name: "Grouping",
-        icon: "mdi-group"
+        view: "GlobalParameters",
+        name: "Global Parameters",
+        icon: "mdi-cogs"
       },
       {
-        view: "ParametersStep",
-        name: "Parameters",
+        view: "DemeterParameters",
+        name: "Demeter Parameters",
         icon: "mdi-cogs"
       },
       {
@@ -88,10 +66,10 @@ export default Vue.extend({
         icon: "mdi-cogs"
       },
       {
-        view: "TagStudio",
-        name: "Tag creator studio",
-        icon: "mdi-android-studio"
-      }
+        view: "GroupingStep",
+        name: "Grouping",
+        icon: "mdi-group"
+      },
     ]
   })
 });

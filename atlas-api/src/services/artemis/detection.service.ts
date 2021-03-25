@@ -29,6 +29,7 @@ class DetectionService {
      * @param appName Get the result of a pending detection
      */
     public getDetectionStatus(appName: string): Detection {
+
         const indexPending = this.pendingApplicationDetection.findIndex(
             (i) => i.application === appName
         );
@@ -95,7 +96,7 @@ class DetectionService {
      * @param language Language for the detection
      */
     public launchDetection(appName: string, language: string): CancellablePromise<Framework[]> {
-        const request = `CALL artemis.launch.detection($applicationName, $language, true);`;
+        const request = `CALL artemis.launch.detection($applicationName, $language);`;
         const params = {applicationName: appName, language: language};
 
         // If still pending do not launch the detection

@@ -3,12 +3,12 @@ import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
 
 class ArtemisService {
-    private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+    private static neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
     /**
      * Get the version of Artemis
      */
-    public async getVersion(): Promise<string> {
+    public static async getVersion(): Promise<string> {
         const req = `CALL artemis.version()`;
 
         try {
@@ -17,7 +17,7 @@ class ArtemisService {
                 logger.error(
                     "No version of Artemis was sent"
                 );
-                throw new HttpException(500, "Internal error");
+                throw new Error("Failed to get the version.")
             }
 
             return String(val.records[0].get(0));
@@ -26,7 +26,7 @@ class ArtemisService {
                 "Failed to verify the installation of artemis...",
                 err
             );
-            throw new HttpException(500, "Internal error");
+            throw new Error("Artemis is not installed.");
         }
     }
 }

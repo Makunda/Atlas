@@ -10,7 +10,10 @@ class ArtifactController {
     public getListArtifact= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
         const detectionParams:LaunchDetectionDto = req.body;
-        const listArtifact: IArtifact[] = await this.artifactService.getArtifactsList(detectionParams.application, detectionParams.language);
+
+        const external = (/true/i).test(String(req.query.external));
+
+        const listArtifact: IArtifact[] = await this.artifactService.getArtifactsList(detectionParams.application, detectionParams.language, external);
         res.status(200).json({ data: listArtifact, message: 'Artifact' });
         
       } catch (error) {
@@ -21,7 +24,11 @@ class ArtifactController {
     public getArtifactsAsTree= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
         const detectionParams:LaunchDetectionDto = req.body;
-        const listArtifact: IArtifact[] = await this.artifactService.getArtifactAsTree(detectionParams.application, detectionParams.language);
+
+        const external = (/true/i).test(String(req.query.external));
+
+        console.log("External : ", external);
+        const listArtifact: IArtifact[] = await this.artifactService.getArtifactAsTree(detectionParams.application, detectionParams.language, external);
         res.status(200).json({ data: listArtifact, message: 'Artifact Tree' });
         
       } catch (error) {

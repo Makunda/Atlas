@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { DetectionStatus } from "@/api/interface/ApiArtemis.interface";
 import Vue from "vue";
+import {DetectionStatus} from "@/api/interface/artemis/detectionStatus.enum";
 
 export default Vue.component("DetectionViewer", {
   props: ["detection"],

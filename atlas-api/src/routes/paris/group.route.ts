@@ -19,6 +19,7 @@ class GroupRoute implements Route {
         this.router.post(`${this.path}/addWithUseCase`, this.groupController.createAndAttach);
         this.router.post(`${this.path}/changeUseCase`, this.groupController.createAndAttach);
         this.router.post(`${this.path}/execute`, this.groupController.executeListGroup);
+        this.router.post(`${this.path}/forecast`, this.groupController.forecastAllGroups);
         this.router.put(`${this.path}/update`, this.groupController.editGroup);
     }
 }

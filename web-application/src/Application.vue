@@ -154,11 +154,13 @@ import Recommendation from "@/components/screens/recommendation/Recommendation.v
 import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
 import { Configuration } from "./Configuration";
 import { UtilsController } from "./api/utils/utils.controller";
+import Reporting from "@/components/screens/reports/Reporting.vue";
 
 export default Vue.extend({
   name: "Application",
 
   components: {
+    Reporting,
     Enrichment,
     Administration,
     Recommendation,
@@ -180,6 +182,7 @@ export default Vue.extend({
   data: () => ({
     tab: 0,
     items: [
+      { name: "Reporting", screen: "Reporting", icon: "mdi-file" },
       {
         name: "Enrichment",
         screen: "Enrichment",

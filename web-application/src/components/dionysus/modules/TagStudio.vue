@@ -93,7 +93,7 @@
                 <v-row>
                   <!-- Tag / Document assistant  -->
                   <v-col>
-                    <v-card class="mx-auto">
+                    <v-card class="mx-auto pa-3">
                       <v-card-text>
                         <v-row>
                           <p class="display-1 text--primary">
@@ -490,10 +490,10 @@ export default Vue.extend({
       this.closeDelete();
     },
 
-    editItem(item) {
+    editItem(item: IGroup) {
       this.validRequest = false;
       this.editMode = true;
-      this.editedIndex = this.items.indexOf(item);
+      this.editedIndex = item.id;
       this.group = Object.assign({}, item);
       this.dialog = true;
     },

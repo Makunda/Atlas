@@ -10,7 +10,7 @@ function convertRecordToRegexNode(record: any): RegexNode {
     id: int(record.get("id")).toNumber(),
     name: record.get("name"),
     regexes: record.get("regexes") || [],
-    internalType: record.get("internalType") || [],
+    internalType: record.get("internalTypes") || [],
     framework: record.get("framework") || "",
     category: record.get("category") || "",
     parentId:

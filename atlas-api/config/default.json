@@ -10,8 +10,19 @@
     },
 
     "workspace" : {
-        "profiles" : "./profiles/"
+        "profiles" : "./profiles/",
+        "extensions" : "./extensions/"
     },
+
+
+    "imaging" : {
+        "installation" : "C:\\Program Files\\CAST\\ImagingSystem\\",
+        "folders": {
+            "plugins": "neo4j\\plugins\\",
+            "tech_icon": "nginx\\html\\img\\technology\\"
+        }
+    },
+
 
     "neo4j": {
         "uri":"neo4j://localhost:7687",

@@ -2,6 +2,7 @@ import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 import { IGroup } from "../interface/paris/group.interface";
+import IGroupResult from "@/api/interface/paris/groupResult.interface";
 
 export class GroupController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -189,6 +190,34 @@ export class GroupController {
       console.error(
         `Failed to reach the API : ${url}. Failed to execute the list of group with Ids : ${ idList.join(", ")}..`,
         error
+      );
+      throw error;
+    }
+  }
+
+  public static async forecastAllGroups(application): Promise<IGroupResult[]> {
+    const url = GroupController.API_BASE_URL + "/api/paris/groups/forecast";
+
+    try {
+      const body = {
+        application: application
+      }
+
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if(Array.isArray(apiResponse.data)) {
+          return apiResponse.data as IGroupResult[];
+        }
+
+      } else {
+        throw new Error(`Failed with status ${status}.`);
+      }
+    } catch (error) {
+      console.error(
+          `Failed to execute the forecast.`,
+          error
       );
       throw error;
     }

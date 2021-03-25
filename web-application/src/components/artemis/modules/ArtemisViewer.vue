@@ -206,12 +206,11 @@ import { ArtemisController } from "@/api/artemis/artemis.controller";
 import { AtlasController } from "@/api/atlas/atlas.controller";
 
 import DetectionController from "@/api/artemis/detection.controller";
-import {
-  DetectionStatus,
-  DetectionResult,
-  Framework
-} from "@/api/interface/ApiArtemis.interface";
+
 import ConfigurationController from "@/api/configuration/configuration.controller";
+import {DetectionStatus} from "@/api/interface/artemis/detectionStatus.enum";
+import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
+import {Framework} from "@/api/interface/artemis/framework.interface";
 
 export default Vue.extend({
   name: "ActionTileViewer",

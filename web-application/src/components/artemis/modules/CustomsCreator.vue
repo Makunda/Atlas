@@ -21,7 +21,7 @@
       <v-container>
         <!-- REGEX CREATE SECTION -->
         <v-row>
-          <v-card class="ma-2">
+          <v-card class="ma-2" width="100%">
             <v-card-title>
               Custom Regex rules creator
             </v-card-title>
@@ -300,7 +300,17 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <h3 class="mx-4 mb-2">Select the language:</h3>
+                  <h3 class="mx-4 mb-2">Select the externality: {{ classExternality }}</h3>
+                </v-row>
+                <v-row class="mx-4 mb-2">
+                  <v-switch
+                      v-model="classExternality"
+                      :label="classExternality ? 'External class' : 'Internal classes'"
+                      color="primary"
+                  ></v-switch>
+                </v-row>
+                <v-row>
+                  <h3 class="mx-4 mb-2 mt-3">Select the language:</h3>
                 </v-row>
                 <v-row>
                   <v-col cols="12" md="6">
@@ -339,35 +349,38 @@
                         return-object
                       >
                         <template v-slot:label="{ item }">
-                         <v-container>
-                           <v-row>
-                             <p class="my-2">{{ item.customName || item.name }} <i class="text--persianGrey"
-                             >( items count : {{ item.count }})</i
-                             ></p>
+                          <v-container>
+                            <v-row>
+                              <p class="my-2">
+                                {{ item.customName || item.name }}
+                                <i class="text--persianGrey"
+                                  >( items count : {{ item.count }})</i
+                                >
+                              </p>
 
-                             <v-text-field
-                                 class="ml-2"
-                                 v-model="item.customName"
-                                 v-if="item === editItem"
-                                 dense
-                                 label="Custom Name"
-                             ></v-text-field>
-                             <v-icon
-                                 v-if="item !== editItem"
-                                 small
-                                 @click="editArtifact(item)"
-                                 class="ma-2"
-                             >mdi-pencil</v-icon
-                             >
-                             <v-icon
-                                 v-if="item === editItem"
-                                 small
-                                 @click="editItem = null"
-                                 class="ma-2"
-                             >mdi-close</v-icon
-                             >
-                           </v-row>
-                         </v-container>
+                              <v-text-field
+                                class="ml-2"
+                                v-model="item.customName"
+                                v-if="item === editItem"
+                                dense
+                                label="Custom Name"
+                              ></v-text-field>
+                              <v-icon
+                                v-if="item !== editItem"
+                                small
+                                @click="editArtifact(item)"
+                                class="ma-2"
+                                >mdi-pencil</v-icon
+                              >
+                              <v-icon
+                                v-if="item === editItem"
+                                small
+                                @click="editItem = null"
+                                class="ma-2"
+                                >mdi-close</v-icon
+                              >
+                            </v-row>
+                          </v-container>
                         </template>
                       </v-treeview>
 
@@ -380,12 +393,18 @@
                     </v-row>
                     <v-row>
                       <v-col cols="6" md="6">
-                        <v-btn large width="100%"  @click="createQuerySet()">
+                        <v-btn large width="100%" @click="createQuerySet()">
                           Generate the queries
                         </v-btn>
                       </v-col>
                       <v-col cols="6" md="6">
-                        <v-btn color="persianGrey" width="100%" dark large @click="launchQuerySet()">
+                        <v-btn
+                          color="persianGrey"
+                          width="100%"
+                          dark
+                          large
+                          @click="launchQuerySet()"
+                        >
                           Launch
                         </v-btn>
                       </v-col>
@@ -601,9 +620,9 @@ import { RegexNodeController } from "@/api/artemis/regexNode.controller";
 import { CategoryController } from "@/api/artemis/category.controller";
 import { ArtifactController } from "@/api/artemis/artifact.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
-import { IArtifact } from "@/api/interface/ApiArtifact.interface";
 import { ApplicationController } from "@/api/applications/application.controller";
 import { ArtemisController } from "@/api/artemis/artemis.controller";
+import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/artifact.interface";
 
 export default Vue.extend({
   name: "CustomsCreator",
@@ -651,6 +670,7 @@ export default Vue.extend({
     languageItems: [] as string[],
     defaultApplication: "",
     defaultLanguage: "",
+    classExternality: false,
 
     editItem: null,
 
@@ -840,7 +860,8 @@ export default Vue.extend({
       ArtifactController.buildQuerySet(
         this.artifactTree,
         this.defaultApplication,
-        this.defaultLanguage
+        this.defaultLanguage,
+        this.classExternality
       )
         .then((res: string) => {
           this.fullQuerySet = res;
@@ -893,7 +914,8 @@ export default Vue.extend({
       // Get the tree
       ArtifactController.getArtifactAsTree(
         this.defaultApplication,
-        this.defaultLanguage
+        this.defaultLanguage,
+        this.classExternality
       )
         .then((res: IArtifact[]) => {
           console.log("Get Artifact Tree", res);

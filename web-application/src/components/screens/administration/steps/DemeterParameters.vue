@@ -1,12 +1,10 @@
 <template>
   <v-row justify="center">
-    <v-col cols="12" sm="10" md="8" lg="6" class="mt-5">
-      <v-card ref="form">
+    <v-col >
+      <v-card>
         <v-card-text>
           <v-card-title>
-            <h2>
               Demeter configuration
-            </h2>
           </v-card-title>
 
           <div class="my-4 subtitle-1">
@@ -88,7 +86,7 @@ import { Properties, Credentials, Configuration } from "@/Configuration";
 import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
 
 export default Vue.extend({
-  name: "Parameters",
+  name: "DemeterParameters",
 
   computed: {
     formHasErrors(): boolean {

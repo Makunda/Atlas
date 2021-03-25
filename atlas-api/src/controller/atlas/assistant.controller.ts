@@ -7,11 +7,6 @@ import {
   DemeterActions,
 } from "src/assistants/assistant";
 import { FrameworkAssistantManager } from "src/assistants/framework.assistant";
-import { serialize } from "v8";
-import * as fs from 'fs';
-import * as path from 'path';
-
-
 
 class AssistantController {
   private candidateService = new ArtemisCandidates();

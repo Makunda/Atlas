@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import GroupingTile from "@/components/screens/enrichment/tiles/GroupingTile.vue";
-// import DemeterGroupTile from "@/components/screens/main/tiles/DemeterGroupTile.vue";
+// import DemeterGroupTile from "@/components/steps/main/tiles/DemeterGroupTile.vue";
 import TagViewer from "@/components/screens/enrichment/steps/TagViewer.vue";
 import UseCases from "@/components/dionysus/modules/UseCases.vue";
 import TagStudio from "@/components/dionysus/modules/TagStudio.vue";

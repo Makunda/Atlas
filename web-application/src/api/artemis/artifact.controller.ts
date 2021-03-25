@@ -1,17 +1,23 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
-import { IArtifact } from "../interface/ApiArtifact.interface";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import { ArtemisController } from "./artemis.controller";
+import { Artifact } from "@/api/interface/artemis/artifact.interface";
 
 export class ArtifactController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
+  /**
+   * Get the list of Artifact
+   * @param application Name of the application
+   * @param language Name of language
+   * @param external External
+   */
   public static async getArtifactList(
     application: string,
-    language: string
-  ): Promise<IArtifact[]> {
-    const url = ArtifactController.API_BASE_URL + "/api/artemis/artifacts/all";
+    language: string,
+    external: boolean
+  ): Promise<Artifact[]> {
+    const url = ArtifactController.API_BASE_URL + `/api/artemis/artifacts/all?external=${external}`;
 
     const data = {
       application: application,
@@ -27,7 +33,7 @@ export class ArtifactController {
         }
       } else {
         throw new Error(
-          `Failed to launch the breakdown of the application. Status (${res.status}). Message: ${res.data}`
+          `Failed to launch the breakdown of the application. Status (${res.status}). Message: ${res.data}.`
         );
       }
     } catch (error) {
@@ -39,11 +45,18 @@ export class ArtifactController {
     }
   }
 
+  /**
+   * Get the list of Artifact as Tree
+   * @param application Name of the application
+   * @param language Name of language
+   * @param external External
+   */
   public static async getArtifactAsTree(
     application: string,
-    language: string
-  ): Promise<IArtifact[]> {
-    const url = ArtifactController.API_BASE_URL + "/api/artemis/artifacts/tree";
+    language: string,
+    external: boolean
+  ): Promise<Artifact[]> {
+    const url = ArtifactController.API_BASE_URL + `/api/artemis/artifacts/tree?external=${external}`;
 
     const data = {
       application: application,
@@ -97,8 +110,8 @@ export class ArtifactController {
   }
 
   public static getFullNameRec(
-    item: IArtifact,
-    listArtifact: IArtifact[]
+    item: Artifact,
+    listArtifact: Artifact[]
   ): string {
     let fullName = item.name + item.delimiter;
     let prev = item.parentId;
@@ -118,15 +131,20 @@ export class ArtifactController {
   /**
    * Tree i
    * @param tree Tree selected
+   * @param application Name of the application
+   * @param language Language
+   * @external Externality of the artifact
    */
   public static async buildQuerySet(
-    tree: IArtifact[],
+    tree: Artifact[],
     application: string,
-    language: string
+    language: string,
+    external: boolean
   ): Promise<string> {
-    const listArtifact: IArtifact[] = await this.getArtifactList(
+    const listArtifact: Artifact[] = await this.getArtifactList(
       application,
-      language
+      language,
+        external
     );
 
     for (const key in tree) {
@@ -157,17 +175,20 @@ export class ArtifactController {
   /**
    * Launch selected query against the database
    * @param tree
-   * @param application
-   * @param language
+   * @param application Name of the application
+   * @param language Language of the discovery
+   * @param external Externality of the object
    */
   public static async launchQuerySet(
-    tree: IArtifact[],
+    tree: Artifact[],
     application: string,
-    language: string
+    language: string,
+    external: boolean
   )  {
-    const listArtifact: IArtifact[] = await this.getArtifactList(
+    const listArtifact: Artifact[] = await this.getArtifactList(
       application,
-      language
+      language,
+      external
     );
 
     for (const key in tree) {

@@ -5,8 +5,8 @@ import ArtemisService from "@services/artemis/artemis.service";
 
 class ExtensionService {
     public async verifyDemeterVersion(): Promise<boolean> {
-        const demeter = new DemeterService();
-        const version: string = await demeter.getVersion();
+
+        const version: string = await DemeterService.getVersion();
 
         const numVersion = Number(version.replace(".", ""));
 
@@ -22,8 +22,7 @@ class ExtensionService {
     }
 
     public async verifyArtemisVersion(): Promise<boolean> {
-        const artemis = new ArtemisService();
-        const version: string = await artemis.getVersion();
+        const version: string = await ArtemisService.getVersion();
 
         const numVersion = Number(version.replace(".", ""));
 

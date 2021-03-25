@@ -9,7 +9,6 @@ class GroupingController {
 
   /*
    * Module Section
-   *
    */
 
   // Get Module candidates  

@@ -1,6 +1,7 @@
 import { IGroup } from '@interfaces/paris/group.interface';
 import GroupService from '@services/paris/group.service';
 import e, { NextFunction, Request, Response } from 'express';
+import {IGroupResult} from "@interfaces/paris/groupResult.interface";
 
 
 export default class GroupController {
@@ -88,6 +89,17 @@ export default class GroupController {
 
             const result:number = await this.groupService.executeListGroup(application, idList, executionType);
             res.status(200).json({ data: result, message: 'Grouped' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public forecastAllGroups = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const application = String(req.body.application);
+
+            const result:IGroupResult[] = await this.groupService.forecastAll(application);
+            res.status(200).json({ data: result, message: 'Forecast' });
         } catch (error) {
             next(error);
         }

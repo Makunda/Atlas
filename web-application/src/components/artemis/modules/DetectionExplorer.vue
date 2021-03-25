@@ -172,8 +172,8 @@
 <script lang="ts">
 import Vue from "vue";
 import DetectionController from "@/api/artemis/detection.controller";
-import { DetectionResult } from "@/api/interface/ApiArtemis.interface";
 import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
+import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
 
 export default Vue.extend({
   name: "DetectionExplorer",

@@ -1,9 +1,9 @@
 import axios from "axios";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 import { DetectionResultDTO } from "../dto/ApiArtemis.dto";
-import { DetectionResult } from "../interface/ApiArtemis.interface";
 import { ApiComUtils } from "../ApiComUtils";
-import { DetectionCandidate } from "../interface/artemis/ApiDetectionCandidate.interface";
+import { DetectionCandidate } from "../interface/artemis/detectionCandidate.interface";
+import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
 
 export default class DetectionController {
   private static API_BASE_URL = ApiComUtils.getUrl();

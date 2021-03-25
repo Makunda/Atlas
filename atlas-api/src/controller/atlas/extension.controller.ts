@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import ExtensionService from "@services/atlas/extension.service";
+import ExtensionService from "@services/installation/extension.service";
 
 class ExtensionController {
     private extensionService = new ExtensionService();
