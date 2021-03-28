@@ -5,4 +5,8 @@ export interface IArtifact {
   delimiter: string;
   count: number;
   children: IArtifact[];
+  objectTypes: string[];
+  levels: string[];
+  modules: string[];
+  subsets: string[];
 }

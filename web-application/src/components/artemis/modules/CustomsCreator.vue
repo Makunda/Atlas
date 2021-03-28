@@ -291,137 +291,9 @@
             </v-card-text>
           </v-card>
         </v-row>
-        <!-- BREAKDOWN SECTION -->
-        <v-row>
-          <v-card class="ma-2" width="100%">
-            <v-card-title>
-              Generate rules from the breakdown of the application
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <h3 class="mx-4 mb-2">Select the externality: {{ classExternality }}</h3>
-                </v-row>
-                <v-row class="mx-4 mb-2">
-                  <v-switch
-                      v-model="classExternality"
-                      :label="classExternality ? 'External class' : 'Internal classes'"
-                      color="primary"
-                  ></v-switch>
-                </v-row>
-                <v-row>
-                  <h3 class="mx-4 mb-2 mt-3">Select the language:</h3>
-                </v-row>
-                <v-row>
-                  <v-col cols="12" md="6">
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <v-select
-                          class="mx-2"
-                          v-model="defaultApplication"
-                          :items="applicationItems"
-                          label="Applications"
-                          @change="getArtifactTree()"
-                          outlined
-                        ></v-select>
-                      </v-col>
 
-                      <v-col cols="12" md="6">
-                        <v-select
-                          class="mx-2"
-                          v-model="defaultLanguage"
-                          :items="languageItems"
-                          label="Language"
-                          @change="getArtifactTree()"
-                          outlined
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <h3 class="mx-4 mb-2">Select the rules to export:</h3>
-                    </v-row>
-                    <v-row class="mb-4">
-                      <v-treeview
-                        selectable
-                        v-model="artifactTree"
-                        :items="artifactItems"
-                        selection-type="independent"
-                        return-object
-                      >
-                        <template v-slot:label="{ item }">
-                          <v-container>
-                            <v-row>
-                              <p class="my-2">
-                                {{ item.customName || item.name }}
-                                <i class="text--persianGrey"
-                                  >( items count : {{ item.count }})</i
-                                >
-                              </p>
 
-                              <v-text-field
-                                class="ml-2"
-                                v-model="item.customName"
-                                v-if="item === editItem"
-                                dense
-                                label="Custom Name"
-                              ></v-text-field>
-                              <v-icon
-                                v-if="item !== editItem"
-                                small
-                                @click="editArtifact(item)"
-                                class="ma-2"
-                                >mdi-pencil</v-icon
-                              >
-                              <v-icon
-                                v-if="item === editItem"
-                                small
-                                @click="editItem = null"
-                                class="ma-2"
-                                >mdi-close</v-icon
-                              >
-                            </v-row>
-                          </v-container>
-                        </template>
-                      </v-treeview>
 
-                      <p class="pa-4" v-if="artifactItems.length == 0">
-                        <i
-                          >No object found for this language in the
-                          application.</i
-                        >
-                      </p>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6" md="6">
-                        <v-btn large width="100%" @click="createQuerySet()">
-                          Generate the queries
-                        </v-btn>
-                      </v-col>
-                      <v-col cols="6" md="6">
-                        <v-btn
-                          color="persianGrey"
-                          width="100%"
-                          dark
-                          large
-                          @click="launchQuerySet()"
-                        >
-                          Launch
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-card
-                      style="background-color: #606060; min-height: 100%; color: #ffdc16"
-                    >
-                      <p class="pa-4" v-html="fullQuerySet"></p>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-          </v-card>
-        </v-row>
         <!-- Export to cypher .file -->
 
         <v-row class="my-4">
@@ -626,6 +498,10 @@ import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/artif
 
 export default Vue.extend({
   name: "CustomsCreator",
+
+  components: {
+
+  },
 
   data: () => ({
     initiallyOpen: [],
@@ -856,122 +732,16 @@ export default Vue.extend({
         });
     },
 
-    createQuerySet() {
-      ArtifactController.buildQuerySet(
-        this.artifactTree,
-        this.defaultApplication,
-        this.defaultLanguage,
-        this.classExternality
-      )
-        .then((res: string) => {
-          this.fullQuerySet = res;
-        })
-        .catch(err => {
-          this.fullQuerySet = err;
-        });
-    },
-
-    getNodeList() {
-      RegexNodeController.getAllNode()
-        .then((res: ApiRegexNode[]) => {
-          this.parentIdList = [];
-          for (let i = 0; i < res.length; i++) {
-            const toPush = { id: res[i].id, name: res[i].name };
-            if (this.parentIdList.indexOf(toPush) === -1) {
-              this.parentIdList.push(toPush);
-            }
-          }
-          this.parentIdList.push({ id: -1, name: "No parent" });
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    },
-
-    getApplicationAndLanguages() {
-      ApplicationController.getListApplications()
-        .then((res: string[]) => {
-          console.log("Application list", res);
-          this.applicationItems = res;
-          this.defaultApplication = res[0];
-        })
-        .catch(err => {
-          console.error("Failed to get the list of the application");
-        });
-
-      ArtemisController.getSupportedLanguages()
-        .then((res: string[]) => {
-          this.languageItems = res;
-          this.defaultLanguage = res[0];
-        })
-        .catch(err => {
-          console.error("Failed to retrieve languages.", err);
-        });
-    },
-
-    getArtifactTree() {
-      console.log("Get Artifact Tree data");
-      // Get the tree
-      ArtifactController.getArtifactAsTree(
-        this.defaultApplication,
-        this.defaultLanguage,
-        this.classExternality
-      )
-        .then((res: IArtifact[]) => {
-          console.log("Get Artifact Tree", res);
-          this.artifactItems = res;
-        })
-        .catch(err => {
-          console.error(
-            `Error trying to retrieve the breakdown of ${this.defaultApplication}`,
-            err
-          );
-        });
-      // Get the list of application
-    },
-
-    // Build the list this.treeExport
-    async getRequests(tree: ApiRegexNode[]) {
-      if (tree.length == 0) return;
-      let fullResults = "";
-      try {
-        for (const item in tree) {
-          fullResults +=
-            "<span style='color: #66B245'>// " +
-            tree[item].name +
-            "</span><br />";
-          fullResults +=
-            (await RegexNodeController.getRegexRequest(tree[item].id)) +
-            ";<br /><br />";
-
-          if (tree[item].children) {
-            fullResults += await this.getRequests(tree[item].id);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to get the request", err);
-      }
-
-      return fullResults;
-    },
-
-    async buildRequestTree() {
-      this.fullExportRequest = await this.getRequests(this.treeExport);
-    },
 
     refresh() {
       this.getInternalTypes();
       this.getCategories();
-      this.getNodeList();
-      this.getAllNodesAsTree();
       this.initFocusView();
-      this.getApplicationAndLanguages();
     }
   },
 
   mounted() {
     this.refresh();
-    this.getArtifactTree();
   }
 });
 </script>

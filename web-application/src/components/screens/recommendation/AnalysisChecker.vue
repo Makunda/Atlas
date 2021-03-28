@@ -32,12 +32,13 @@ import Vue from "vue";
 import ModernizationStep from "./steps/ModernizationStep.vue";
 import ConfigurationStep from "./steps/ConfigurationStep.vue";
 import ExplorationStep from "./steps/ExplorationStep.vue";
+import BreakdownStep from "@/components/screens/recommendation/steps/BreakdownStep.vue";
 
 export default Vue.extend({
-  name: "Recommendation",
+  name: "AnalysisChecker",
 
   components: {
-    ModernizationStep,
+    BreakdownStep,
     ConfigurationStep,
     ExplorationStep
   },
@@ -72,9 +73,9 @@ export default Vue.extend({
         icon: "mdi-apple-safari"
       },
       {
-        view: "ModernizationStep",
-        name: "Modernization",
-        title: "Start modernize the ",
+        view: "BreakdownStep",
+        name: "Breakdown",
+        title: "Review the breakdown of the ",
         icon: "mdi-pickaxe"
       }
     ]

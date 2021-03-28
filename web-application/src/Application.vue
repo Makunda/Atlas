@@ -150,11 +150,11 @@ import {
 import Administration from "@/components/screens/administration/Administration.vue";
 import ImagingTuning from "@/components/screens/imagingTuning/ImagingTuning.vue";
 import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
-import Recommendation from "@/components/screens/recommendation/Recommendation.vue";
 import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
 import { Configuration } from "./Configuration";
 import { UtilsController } from "./api/utils/utils.controller";
 import Reporting from "@/components/screens/reports/Reporting.vue";
+import AnalysisChecker from "@/components/screens/recommendation/AnalysisChecker.vue";
 
 export default Vue.extend({
   name: "Application",
@@ -163,7 +163,7 @@ export default Vue.extend({
     Reporting,
     Enrichment,
     Administration,
-    Recommendation,
+    AnalysisChecker,
     Frameworks,
     ImagingTuning
   },
@@ -184,14 +184,14 @@ export default Vue.extend({
     items: [
       { name: "Reporting", screen: "Reporting", icon: "mdi-file" },
       {
+        name: "Analysis Checker",
+        screen: "AnalysisChecker",
+        icon: "mdi-file-cad"
+      },
+      {
         name: "Enrichment",
         screen: "Enrichment",
         icon: "mdi-hexagon-multiple"
-      },
-      {
-        name: "Recommendations",
-        screen: "Recommendation",
-        icon: "mdi-file-cad"
       },
       {
         name: "Frameworks",

@@ -36,9 +36,11 @@ export default class ArtifactService {
             if (!val.records || val.records.length == 0) return [];
 
             const artifacts = [];
+            console.log(`Request : CALL artemis.api.breakdown.get('${appName}', '${language}', ${String(externality)}`)
+            console.log("Records length", val.records.length)
             for (const it in val.records) {
                 if (Object.prototype.hasOwnProperty.call(val.records, it)) {
-                    artifacts.push(this.convertRecordToArtifact(val.records[it]));
+                    artifacts.push(ArtifactService.convertRecordToArtifact(val.records[it]));
                 }
             }
             return artifacts;
@@ -71,16 +73,23 @@ export default class ArtifactService {
         return tree;
     }
 
-    private convertRecordToArtifact(res: Record): IArtifact {
-        const artifact: IArtifact = {
+    /**
+     * Convert a record from Neo4j to the Artifact
+     * @param res Record to convert
+     * @private
+     */
+    private static convertRecordToArtifact(res: Record): IArtifact {
+        return {
             id: int(res.get("id")).toNumber(),
             name: res.get("name"),
             parentId: int(res.get("parentId")).toNumber(),
             delimiter: res.get("delimiter"),
             count: int(res.get("count")).toNumber(),
+            objectTypes: res.get("objectTypes"),
+            levels: res.get("levels"),
+            modules: res.get("modules"),
+            subsets: res.get("subsets"),
             children: []
         };
-
-        return artifact;
     }
 }

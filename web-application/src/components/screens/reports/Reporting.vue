@@ -104,7 +104,6 @@ export default Vue.extend({
         });
       // Launch
 
-      DetectionController.launchDetection()
 
       this.reportLoading = false;
       this.reportGenerated = true;
