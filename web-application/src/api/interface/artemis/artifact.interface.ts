@@ -1,6 +1,7 @@
 export interface Artifact {
   id: number;
   name: string;
+  fullName: string;
   customName?: string;
   parentId: number;
   delimiter: string;

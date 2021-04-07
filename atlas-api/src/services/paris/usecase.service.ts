@@ -207,13 +207,17 @@ class UseCaseService {
     /**
      * Get the version of Artemis
      */
-    public async updateUseCase(useCase: IUseCase): Promise<IUseCase> {
+    public async updateUseCase(useCase: IUseCase, parentId: number): Promise<IUseCase> {
         try {
             const request =
-                "CALL paris.cases.update.by.id($id, $title, $description, $categories, $active, $selected)";
+                "CALL paris.cases.update.by.id($id, $title, $description, $categories, $active, $selected, $parentId)";
+
+            const params: any = useCase;
+            params.parentId = parentId;
+
             const results: QueryResult = await this.neo4jAl.executeWithParameters(
                 request,
-                useCase
+                params
             );
 
             if (results.records.length == 0) return null;

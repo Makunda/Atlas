@@ -27,13 +27,27 @@ class ArtifactController {
 
         const external = (/true/i).test(String(req.query.external));
 
-        console.log("External : ", external);
         const listArtifact: IArtifact[] = await this.artifactService.getArtifactAsTree(detectionParams.application, detectionParams.language, external);
         res.status(200).json({ data: listArtifact, message: 'Artifact Tree' });
         
       } catch (error) {
         next(error);
       }
+    };
+
+    public extractArtifacts= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const artifactList: IArtifact[] = req.body.artifactList;
+            const extractionType = String(req.body.extractionType);
+            const groupType = String(req.body.groupType);
+            const application = String(req.body.application);
+
+            await this.artifactService.extractArtifacts(application, artifactList, extractionType, groupType);
+            res.status(200).json({ data: "OK", message: 'Artifact extraction' });
+
+        } catch (error) {
+            next(error);
+        }
     };
   }
   

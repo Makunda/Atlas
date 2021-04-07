@@ -133,6 +133,7 @@ export class ArtifactController {
    * @param tree Tree selected
    * @param application Name of the application
    * @param language Language
+   * @param external
    * @external Externality of the artifact
    */
   public static async buildQuerySet(
@@ -144,7 +145,7 @@ export class ArtifactController {
     const listArtifact: Artifact[] = await this.getArtifactList(
       application,
       language,
-        external
+      external
     );
 
     for (const key in tree) {
@@ -174,39 +175,42 @@ export class ArtifactController {
 
   /**
    * Launch selected query against the database
-   * @param tree
    * @param application Name of the application
-   * @param language Language of the discovery
-   * @param external Externality of the object
+   * @param artifactList
+   * @param extractionType
+   * @param groupType
    */
   public static async launchQuerySet(
-    tree: Artifact[],
     application: string,
-    language: string,
-    external: boolean
-  )  {
-    const listArtifact: Artifact[] = await this.getArtifactList(
-      application,
-      language,
-      external
-    );
+    artifactList: Artifact[],
+    extractionType: string,
+    groupType: string
+  ) {
+    const url = ArtifactController.API_BASE_URL + `/api/artemis/artifacts/extract`;
 
-    for (const key in tree) {
-      const element = ArtifactController.getFullNameRec(
-        tree[key],
-        listArtifact
+    const data = {
+      application: application,
+      artifactList: artifactList,
+      extractionType: extractionType,
+      groupType: groupType
+    };
+    try {
+      const res = await axios.post(url, data);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data;
+      } else {
+        throw new Error(
+          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to extract the Artifact list.`,
+        error
       );
-      tree[key].name = element;
-    }
-
-    let setRequest = "";
-    for (const key in tree) {
-      setRequest +=
-        this.buildQuery(
-          application,
-          tree[key].customName || tree[key].name,
-          tree[key].name + "*"
-        ) + "\n";
+      throw error;
     }
 
     // Launch the request

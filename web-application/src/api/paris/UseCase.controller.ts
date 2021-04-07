@@ -40,7 +40,6 @@ export class UseCaseController {
     }
   }
 
-
   /**
    * GEt all the root use cases ( not attached to another one )
    */
@@ -77,7 +76,11 @@ export class UseCaseController {
    * @param id Id of the use case
    */
   public static async getAttachedUseCase(id: number): Promise<IUseCase[]> {
-    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/attached/"+id+"/useCases";
+    const url =
+      UseCaseController.API_BASE_URL +
+      "/api/paris/useCases/attached/" +
+      id +
+      "/useCases";
 
     try {
       const res = await axios.get(url);
@@ -104,9 +107,12 @@ export class UseCaseController {
     }
   }
 
-
   public static async getAttachedGroups(id: number): Promise<IGroup[]> {
-    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/attached/"+id+"/groups";
+    const url =
+      UseCaseController.API_BASE_URL +
+      "/api/paris/useCases/attached/" +
+      id +
+      "/groups";
 
     try {
       const res = await axios.get(url);
@@ -147,9 +153,7 @@ export class UseCaseController {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as IUseCase;
       } else {
-        console.warn(
-          `Failed to add a use cases. Status (${res.status})`
-        );
+        console.warn(`Failed to add a use cases. Status (${res.status})`);
       }
 
       return null;
@@ -163,11 +167,14 @@ export class UseCaseController {
   }
 
   /**
-   * Delete 
+   * Delete
    * @param useCase Delete a use case
    */
   public static async deleteUseCase(useCase: IUseCase): Promise<boolean> {
-    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/delete/"+useCase.id;
+    const url =
+      UseCaseController.API_BASE_URL +
+      "/api/paris/useCases/delete/" +
+      useCase.id;
 
     try {
       const res = await axios.delete(url);
@@ -186,17 +193,20 @@ export class UseCaseController {
     }
   }
 
-  
   /**
    * Add a use case
    * @param useCase Use Case to add
    * @param idParent Id of the parent use case
    */
-  public static async addUseCaseWithParent(useCase: IUseCase, idParent: number): Promise<IUseCase> {
-    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/addWithParent";
+  public static async addUseCaseWithParent(
+    useCase: IUseCase,
+    idParent: number
+  ): Promise<IUseCase> {
+    const url =
+      UseCaseController.API_BASE_URL + "/api/paris/useCases/addWithParent";
 
     try {
-      const params: any = useCase ;
+      const params: any = useCase;
       params.idParent = idParent;
       const res = await axios.post(url, params);
 
@@ -204,9 +214,7 @@ export class UseCaseController {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as IUseCase;
       } else {
-        console.warn(
-          `Failed to add a use cases. Status (${res.status})`
-        );
+        console.warn(`Failed to add a use cases. Status (${res.status})`);
       }
 
       return null;
@@ -219,18 +227,22 @@ export class UseCaseController {
     }
   }
 
-
   /**
    * Check the validity of a query before the insertion
    * @param request Request to verify
    * @param awaitedResult Value
-   * @returns 
-   */  
-  public static async checkValidity(request: IUseCase, awaitedResult: number): Promise<boolean> {
-    const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/check/validity";
+   * @returns
+   */
+
+  public static async checkValidity(
+    request: IUseCase,
+    awaitedResult: number
+  ): Promise<boolean> {
+    const url =
+      UseCaseController.API_BASE_URL + "/api/paris/useCases/check/validity";
 
     try {
-      const params: any = {} ;
+      const params: any = {};
       params.request = request;
       params.awaitedResult = awaitedResult;
 
@@ -255,23 +267,28 @@ export class UseCaseController {
     }
   }
 
-   /**
+  /**
    * Edit a use case
    * @param useCase Use Case to add
+   * @param parentId Id of the parent (-1 for a root component )
    */
-  public static async editUseCase(useCase: IUseCase): Promise<IUseCase> {
+  public static async editUseCase(
+    useCase: IUseCase,
+    parentId: number
+  ): Promise<IUseCase> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/update";
 
     try {
-      const res = await axios.put(url, useCase);
+      const body = useCase;
+      body.parentId = parentId;
+
+      const res = await axios.put(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as IUseCase;
       } else {
-        console.warn(
-          `Failed to update a use cases. Status (${res.status})`
-        );
+        console.warn(`Failed to update a use cases. Status (${res.status})`);
       }
 
       return null;
@@ -283,6 +300,4 @@ export class UseCaseController {
       throw error;
     }
   }
-
-  
 }

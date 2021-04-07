@@ -15,6 +15,7 @@ class ArtifactRoute implements Route {
     private initializeRoutes() {
         this.router.post(`${this.path}/all`, this.artifactController.getListArtifact);
         this.router.post(`${this.path}/tree`, this.artifactController.getArtifactsAsTree);
+        this.router.post(`${this.path}/extract`, this.artifactController.extractArtifacts);
     }
 }
 

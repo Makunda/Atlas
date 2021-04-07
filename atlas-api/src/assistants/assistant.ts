@@ -69,6 +69,7 @@ export class FrameworkAssistant {
      * Serialize the object 
      */
     public serialize() : IFrameworkAssistant{
+        if(this.id == null) this.id = 0;
         return {
             id: this.id,
             started: this.started,

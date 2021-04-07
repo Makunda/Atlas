@@ -70,8 +70,11 @@ export default class UseCaseController {
 
     public editUseCase = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+
+            const parentId :number = Number(req.body.parentId) || -1;
             const body :IUseCase = req.body
-            const results:IUseCase = await this.useCaseService.updateUseCase(body);
+
+            const results:IUseCase = await this.useCaseService.updateUseCase(body, parentId);
             res.status(200).json({ data: results, message: 'Updated' });
         } catch (error) {
             next(error);

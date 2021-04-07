@@ -256,6 +256,7 @@ import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.in
 import {DetectionStatus} from "@/api/interface/artemis/detectionStatus.enum";
 import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
 import {Framework} from "@/api/interface/artemis/framework.interface";
+import {ApplicationController} from "@/api/applications/application.controller";
 
 export default Vue.extend({
   name: "ArtemisConsole",
@@ -530,15 +531,14 @@ export default Vue.extend({
         });
     },
 
-    getCandidates() {
+    getApplicationInsights() {
       this.loadingCandidates = true;
-      DetectionController.getDetectionCandidates()
+      ApplicationController.getApplicationInsights(this.application)
         .then((res: DetectionCandidate[]) => {
-          this.candidates = res;
-          console.log(res);
+          console.log("Inisghts :", res);
         })
         .catch((err) => {
-          console.error("Failed to get the candidates for the dection", err);
+          console.error("Failed to get the insights of the application", err);
         })
         .finally(() => {
           this.loadingCandidates = false;
@@ -681,7 +681,7 @@ export default Vue.extend({
       });
 
     this.constantStatusCheck();
-    this.getCandidates();
+    this.getApplicationInsights();
     this.loadQueue();
   },
 
