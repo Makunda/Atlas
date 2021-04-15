@@ -1,6 +1,5 @@
 import winstonDaily from 'winston-daily-rotate-file';
-
-const winston = require('winston');
+import winston from "winston";
 
 interface IMessage {
     timestamp: any;
@@ -9,16 +8,12 @@ interface IMessage {
 }
 
 const {combine, timestamp, printf} = winston.format;
-const logFormat = printf((message: IMessage) => `${message.timestamp} :: ${process.env.NODE_ENV} :: ${message.level}: ${message.message}`);
 
 const logger = winston.createLogger({
     level: 'info',
 
-    format: combine(
-        timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        logFormat,
+    format: winston.format.combine(
+        winston.format.json()
     ),
 
     defaultMeta: {service: 'user-service'},

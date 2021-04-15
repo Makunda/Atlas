@@ -101,7 +101,7 @@ class GroupService {
     public async attachToUseCase(
         idUseCase: number,
         idGroup: number
-    ): Promise<Boolean> {
+    ): Promise<boolean> {
         try {
             const request = "CALL paris.groups.attach.to.case($idUseCase, $idGroup);";
             const params = {idUseCase: idUseCase, idGroup: idGroup};
@@ -173,7 +173,7 @@ class GroupService {
             );
 
             const groupList: IGroupResult[] = [];
-            for(let i = 0; i < results.records.length; i++) {
+            for (let i = 0; i < results.records.length; i++) {
                 groupList.push(groupResultFromObj(results.records[i]));
             }
 
@@ -216,7 +216,7 @@ class GroupService {
     public async detachFromUseCase(
         idUseCase: number,
         idGroup: number
-    ): Promise<Boolean> {
+    ): Promise<boolean> {
         try {
             const request =
                 "CALL paris.groups.detach.from.case($idUseCase, $idGroup);";

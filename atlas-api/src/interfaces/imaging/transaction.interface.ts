@@ -1,5 +1,4 @@
 import {int} from "neo4j-driver";
-import {ILevel} from "@interfaces/imaging/level.interface";
 
 interface ITransaction {
     _id?: number;
@@ -17,4 +16,4 @@ function transactionFromObj(row: any): ITransaction {
     } as ITransaction
 }
 
-export { ITransaction, transactionFromObj }
+export {ITransaction, transactionFromObj}

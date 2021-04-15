@@ -1,6 +1,6 @@
-import config from "config";
+import config from 'config';
 
-import neo4j, {Driver, QueryResult, ServerInfo, Session} from "neo4j-driver";
+import neo4j, { Driver, QueryResult, ServerInfo, Session } from 'neo4j-driver';
 
 export class Neo4JAccessLayer {
   private static INSTANCE: Neo4JAccessLayer;
@@ -8,16 +8,13 @@ export class Neo4JAccessLayer {
   private driver: Driver;
 
   private constructor() {
-
-    this.uri = config.get("neo4j.uri");
-    const token = neo4j.auth.basic(config.get("neo4j.user"), config.get("neo4j.password"));
+    this.uri = config.get('neo4j.uri');
+    const token = neo4j.auth.basic(config.get('neo4j.user'), config.get('neo4j.password'));
 
     try {
       this.driver = neo4j.driver(this.uri, token);
     } catch (error) {
-      throw new Error(
-        `Cannot connect to the remote Neo4j database o ${this.uri}`
-      );
+      throw new Error(`Cannot connect to the remote Neo4j database o ${this.uri}`);
     }
   }
 
@@ -58,7 +55,6 @@ export class Neo4JAccessLayer {
       return results;
     } finally {
       session.close();
-
     }
   }
 
@@ -68,10 +64,7 @@ export class Neo4JAccessLayer {
    * @param params The parameters of the query, as an object
    * @param callback Callback function
    */
-  public async executeWithParameters(
-    request: string,
-    params: any
-  ): Promise<QueryResult> {
+  public async executeWithParameters(request: string, params: any): Promise<QueryResult> {
     const session: Session = this.driver.session();
     try {
       const results: QueryResult = await session.run(request, params);

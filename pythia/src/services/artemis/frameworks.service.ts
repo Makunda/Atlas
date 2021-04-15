@@ -1,9 +1,9 @@
 import config from 'config';
-import {CreateFrameworkDto} from '../../dtos/artemis/frameworks.dto';
+import { CreateFrameworkDto } from '@dtos/artemis/frameworks.dto';
 import HttpException from '../../exceptions/HttpException';
-import {Framework} from '../../interfaces/artemis/framework.interface';
-import {logger} from '../../utils/logger';
-import {Neo4JAccessLayer} from '../../utils/neo4jAccessLayer';
+import { Framework } from '@interfaces/artemis/framework.interface';
+import { logger } from '@utils/logger';
+import { Neo4JAccessLayer } from '@utils/neo4jAccessLayer';
 
 class FrameworksService {
   private ARTEMIS_LABEL = config.get('artemis.frameworkNode');
@@ -14,10 +14,10 @@ class FrameworksService {
    * @param name Name of the Framework to find
    */
   public async findFrameworkbyName(name: string): Promise<Framework> {
-    const req: string = `CALL artemis.api.find.framework($name)`;
+    const req = `CALL artemis.api.find.framework($name)`;
 
     try {
-      const val = await this.neo4jAl.executeWithParameters(req, {name: name});
+      const val = await this.neo4jAl.executeWithParameters(req, { name: name });
       if (!val.records || val.records.length == 0) return null;
 
       const singleRecord = val.records[0];
@@ -33,12 +33,12 @@ class FrameworksService {
    * @param name Name of the Framework to find
    */
   public async findFrameworkbyNameAndType(name: string, internalType: string): Promise<Framework> {
-    const req: string = `CALL artemis.api.find.framework($name, $internalType)`;
+    const req = `CALL artemis.api.find.framework($name, $internalType)`;
 
     try {
       const val = await this.neo4jAl.executeWithParameters(req, {
         name: name,
-        internalType: internalType
+        internalType: internalType,
       });
       if (!val.records || val.records.length == 0) return null;
 
@@ -60,8 +60,7 @@ class FrameworksService {
     const inBase: Framework = await this.findFrameworkbyName(frameworkData.name);
 
     if (inBase == null) throw new HttpException(404, `Framework with name ${name} does not exist.`);
-    const req: string = `CALL artemis.api.update.framework($name, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection);`;
-
+    const req = `CALL artemis.api.update.framework($name, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection);`;
 
     try {
       const results = await this.neo4jAl.executeWithParameters(req, frameworkData);
@@ -74,26 +73,27 @@ class FrameworksService {
       logger.error('An internal error occurred in FrameworksServices::findFrameworkbyName ', err);
       throw new HttpException(500, 'Internal error');
     }
-
   }
 
   public async addFramework(frameworkData: CreateFrameworkDto): Promise<Framework> {
     // Check if the Framework already exist. Update it, if it has more properties
-    logger.info(`Adding Framework with name ${frameworkData.name}`, frameworkData)
+    logger.info(`Adding Framework with name ${frameworkData.name}`, frameworkData);
     const inBase: Framework = await this.findFrameworkbyNameAndType(frameworkData.name, frameworkData.internalType);
 
     if (inBase != null) {
       // Merge existing framework
-      frameworkData.description = (inBase.description.length != 0) ? inBase.description : frameworkData.description;
-      frameworkData.location = (inBase.location.length != 0) ? inBase.location : frameworkData.location;
-      frameworkData.category = (inBase.category.length != 0) ? inBase.category : frameworkData.category;
-      frameworkData.internalType = (inBase.internalType.length != 0) ? inBase.category : frameworkData.internalType;
+      frameworkData.description = inBase.description.length != 0 ? inBase.description : frameworkData.description;
+      frameworkData.location = inBase.location.length != 0 ? inBase.location : frameworkData.location;
+      frameworkData.category = inBase.category.length != 0 ? inBase.category : frameworkData.category;
+      frameworkData.internalType = inBase.internalType.length != 0 ? inBase.category : frameworkData.internalType;
 
       return await this.updateFramework(frameworkData.name, frameworkData);
     } else {
       // Add a new framework
       // API : artemis.api.add.framework(String Name, String DiscoveryDate, String Location, String Description, String Type, String Category, String InternalType)
-      const req: string = `CALL artemis.api.add.framework($name, $discoveryDate, $location, $description, $type, $category, $internalType);`;
+      logger.info('To add ' + frameworkData);
+
+      const req = `CALL artemis.api.add.framework($name, $discoveryDate, $location, $description, $type, $category, $internalType);`;
       const results = await this.neo4jAl.executeWithParameters(req, frameworkData);
 
       if (!results.records || results.records.length == 0) return null;

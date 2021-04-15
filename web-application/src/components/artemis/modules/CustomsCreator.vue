@@ -292,8 +292,6 @@
           </v-card>
         </v-row>
 
-
-
         <!-- Export to cypher .file -->
 
         <v-row class="my-4">
@@ -499,9 +497,7 @@ import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/artif
 export default Vue.extend({
   name: "CustomsCreator",
 
-  components: {
-
-  },
+  components: {},
 
   data: () => ({
     initiallyOpen: [],
@@ -731,7 +727,6 @@ export default Vue.extend({
           console.error(err);
         });
     },
-
 
     refresh() {
       this.getInternalTypes();

@@ -13,11 +13,11 @@ export default class TransactionController {
    * @param application
    */
   public static async unMaskAllTransaction(
-      application: string
+    application: string
   ): Promise<number> {
     const url =
-        TransactionController.API_BASE_URL +
-        `/api/imaging/transactions/unmask/all/${application}`;
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/unmask/all/${application}`;
 
     try {
       const res = await axios.get(url);
@@ -27,7 +27,7 @@ export default class TransactionController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-            `Failed to unmask all transactions. Status (${res.status})`
+          `Failed to unmask all transactions. Status (${res.status})`
         );
       }
     } catch (error) {

@@ -76,26 +76,26 @@
                   <v-container class="pa-0">
                     <v-row>
                       <v-col cols="10"
-                      ><h3>Assistant {{ a.id }}</h3>
-                      <p>
-                        Monitoring : <strong>{{ a.category }}</strong> and
-                        performing <strong>{{ a.actions }}</strong> actions
-                      </p></v-col
-                    >
-                    <v-col cols="1">
-                      <v-btn
-                        class="mt-2"
-                        fab
-                        dark
-                        x-small
-                        color="red"
-                        @click="removeAssistant(a)"
+                        ><h3>Assistant {{ a.id }}</h3>
+                        <p>
+                          Monitoring : <strong>{{ a.category }}</strong> and
+                          performing <strong>{{ a.actions }}</strong> actions
+                        </p></v-col
                       >
-                        <v-icon dark>
-                          mdi-trash-can-outline
-                        </v-icon>
-                      </v-btn>
-                    </v-col>
+                      <v-col cols="1">
+                        <v-btn
+                          class="mt-2"
+                          fab
+                          dark
+                          x-small
+                          color="red"
+                          @click="removeAssistant(a)"
+                        >
+                          <v-icon dark>
+                            mdi-trash-can-outline
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
                     </v-row>
                   </v-container>
                 </v-card-text>
@@ -131,7 +131,7 @@ export default Vue.extend({
     loadingAssistantCreation: false,
 
     loadingAssistants: false,
-    assistantsList: [] as IFrameworkAssistant[],
+    assistantsList: [] as IFrameworkAssistant[]
   }),
 
   methods: {
@@ -141,7 +141,7 @@ export default Vue.extend({
         .then((res: string[]) => {
           this.actionsList = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of actions.", err);
         })
         .finally(() => {
@@ -155,7 +155,7 @@ export default Vue.extend({
         .then((res: string[]) => {
           this.categoriesList = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of categories.", err);
         })
         .finally(() => {
@@ -169,7 +169,7 @@ export default Vue.extend({
         .then((res: IFrameworkAssistant[]) => {
           this.assistantsList = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the list of assistants.", err);
         })
         .finally(() => {
@@ -179,10 +179,10 @@ export default Vue.extend({
 
     removeAssistant(assistant: IFrameworkAssistant) {
       FrameworkAssistants.removeAssistant(assistant.id)
-        .then((res) => {
+        .then(res => {
           this.getListAssistants();
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to remove the assistant.", err);
         });
     },
@@ -200,7 +200,7 @@ export default Vue.extend({
           this.selectedActions = [];
           this.getListAssistants();
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to create the assistant", err);
         })
         .finally(() => {
@@ -212,11 +212,11 @@ export default Vue.extend({
       this.getListActions();
       this.getListCategories();
       this.getListAssistants();
-    },
+    }
   },
 
   mounted() {
     this.refresh();
-  },
+  }
 });
 </script>

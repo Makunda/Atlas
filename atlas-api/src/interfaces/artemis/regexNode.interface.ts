@@ -1,10 +1,10 @@
 export interface RegexNode {
     id: number;
-    name : string;
+    name: string;
     regexes: string[];
     internalType: string[];
     framework: string;
     category: string;
     parentId: number;
     children?: RegexNode[];
-  }
+}

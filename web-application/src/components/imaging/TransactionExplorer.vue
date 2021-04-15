@@ -34,7 +34,12 @@
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
-                      <v-btn text color="persianGrey" @click="maskByCount" :loading="maskActionLoading">
+                      <v-btn
+                        text
+                        color="persianGrey"
+                        @click="maskByCount"
+                        :loading="maskActionLoading"
+                      >
                         <p>Mask the transactions .</p>
                       </v-btn>
                     </v-card-actions>
@@ -47,7 +52,12 @@
                       </div>
                     </v-card-text>
                     <v-card-actions>
-                      <v-btn text color="persianGrey" @click="unmaskAll" :loading="unmaskAllActionLoading">
+                      <v-btn
+                        text
+                        color="persianGrey"
+                        @click="unmaskAll"
+                        :loading="unmaskAllActionLoading"
+                      >
                         Unmask all
                       </v-btn>
                     </v-card-actions>
@@ -211,7 +221,6 @@ export default Vue.extend({
           this.application
         );
         await this.refresh();
-
       } catch (err) {
         console.error("Failed to un-mask all the transactions", err);
       } finally {
@@ -223,11 +232,10 @@ export default Vue.extend({
       try {
         this.maskActionLoading = true;
         this.numTransaction = await TransactionController.maskByCount(
-            this.application,
-            this.maskActionLimit
+          this.application,
+          this.maskActionLimit
         );
         await this.refresh();
-
       } catch (err) {
         console.error("Failed to mask by count", err);
       } finally {

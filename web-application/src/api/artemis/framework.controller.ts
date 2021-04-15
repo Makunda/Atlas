@@ -1,8 +1,8 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
-import {Framework} from "@/api/interface/artemis/framework.interface";
+import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
+import { Framework } from "@/api/interface/artemis/framework.interface";
 
 export class FrameworkController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -200,29 +200,29 @@ export class FrameworkController {
     }
   }
 
-    // Get the list of Framework to validate
-    public static async launchAutoCleaning(): Promise<number> {
-      const url =
-        FrameworkController.API_BASE_URL + "/api/artemis/frameworks/autoClean";
-      try {
-        const res = await axios.get(url);
-  
-        if (res.status == 200 || res.status == 304) {
-          const apiResponse: ApiResponse = res.data;
-          return Number(apiResponse.data);
-        } else {
-          throw new Error(
-            ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
-          );
-        }
-      } catch (err) {
-        console.error(
-          `Failed to reach the API : ${url}. Failed to retrieve execute the auto cleaning on the server.`,
-          err
+  // Get the list of Framework to validate
+  public static async launchAutoCleaning(): Promise<number> {
+    const url =
+      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/autoClean";
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200 || res.status == 304) {
+        const apiResponse: ApiResponse = res.data;
+        return Number(apiResponse.data);
+      } else {
+        throw new Error(
+          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
         );
-        throw err;
       }
+    } catch (err) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve execute the auto cleaning on the server.`,
+        err
+      );
+      throw err;
     }
+  }
 
   // Get a batch of framework ( filter by internal type possible )
   public static async getFrameworkBatch(

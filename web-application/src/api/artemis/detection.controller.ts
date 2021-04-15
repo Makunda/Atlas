@@ -3,7 +3,7 @@ import { ApiResponse } from "../interface/ApiResponse.interface";
 import { DetectionResultDTO } from "../dto/ApiArtemis.dto";
 import { ApiComUtils } from "../ApiComUtils";
 import { DetectionCandidate } from "../interface/artemis/detectionCandidate.interface";
-import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
+import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
 
 export default class DetectionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -237,7 +237,7 @@ export default class DetectionController {
   }
 
   /**
-   * Get the on-going detection 
+   * Get the on-going detection
    */
   public static async getCurrent(): Promise<DetectionCandidate> {
     const url =
@@ -248,7 +248,7 @@ export default class DetectionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        if(res.data == null) return null;
+        if (res.data == null) return null;
         return apiResponse.data as DetectionCandidate;
       } else {
         console.warn(

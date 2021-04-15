@@ -1,7 +1,6 @@
-
 export enum DetectionStatus {
-    Pending,
-    Success,
-    Failure,
-    Unknown
+  Pending,
+  Success,
+  Failure,
+  Unknown
 }

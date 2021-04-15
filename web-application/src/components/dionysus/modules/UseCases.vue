@@ -294,7 +294,11 @@ export default Vue.extend({
     open: null as IUseCase,
     selected: null as IUseCase,
 
+    // Files
+    files: [],
+
     editedItem: {
+      id: null,
       title: "",
       description: "",
       categories: [],
@@ -386,6 +390,7 @@ export default Vue.extend({
     editItem(item: IUseCase) {
       this.titleEditBox = `Edit the use case : ${item.title}`;
       this.editedIndex = this.items.indexOf(item);
+      console.log("Use Case ", item);
       this.parentUseCaseId = -1;
       this.editParentUseCaseId = item.parentId || -1;
       this.editedItem = Object.assign({}, item);
@@ -439,7 +444,19 @@ export default Vue.extend({
     },
 
     save() {
-      if (this.parentUseCaseId != -1 && this.editedIndex <= -1) {
+      console.log("About to save", this.editedItem);
+      if (this.editedItem.id && this.editedItem.id > 0) {
+        UseCaseController.editUseCase(this.editedItem, this.editParentUseCaseId)
+          .then((res: IUseCase) => {
+            this.textSnackBar = "Successfully updated the use case.";
+            this.snackbarInfo = true;
+            this.refresh();
+          })
+          .catch(err => {
+            this.textSnackBar = `Failed to update the use case. Error: ${err}`;
+            this.snackbarInfo = true;
+          });
+      } else if (this.parentUseCaseId != -1 && this.editedIndex <= -1) {
         UseCaseController.addUseCaseWithParent(
           this.editedItem,
           this.parentUseCaseId
@@ -451,17 +468,6 @@ export default Vue.extend({
           })
           .catch(err => {
             this.textSnackBar = `Failed to attach the new use case. Error: ${err}`;
-            this.snackbarInfo = true;
-          });
-      } else if (this.editedIndex > -1) {
-        UseCaseController.editUseCase(this.editedItem, this.editParentUseCaseId)
-          .then((res: IUseCase) => {
-            this.textSnackBar = "Successfully updated the use case.";
-            this.snackbarInfo = true;
-            this.refresh();
-          })
-          .catch(err => {
-            this.textSnackBar = `Failed to update the use case. Error: ${err}`;
             this.snackbarInfo = true;
           });
       } else {

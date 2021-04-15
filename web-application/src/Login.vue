@@ -85,7 +85,7 @@ export default Vue.extend({
   }),
 
   mounted() {
-    this.getInternalMode()
+    this.getInternalMode();
   },
 
   methods: {
@@ -118,24 +118,26 @@ export default Vue.extend({
 
     // Set Internal mode
     async setInternalMode() {
-      await ConfigurationController.setInternalMode(!this.switchInternalUse).then((res:boolean) => {
-        console.log("Internal mode was changed to ", res);
-      }).catch((err) => {
-        console.error("Failed to set internal mode to ", err);
-      });
+      await ConfigurationController.setInternalMode(!this.switchInternalUse)
+        .then((res: boolean) => {
+          console.log("Internal mode was changed to ", res);
+        })
+        .catch(err => {
+          console.error("Failed to set internal mode to ", err);
+        });
     },
 
     // Get Intrenal mode
     getInternalMode() {
-      ConfigurationController.getInternalMode().then((res:boolean) => {
-        this.switchInternalUse = res;
-      }).catch((err) => {
-        console.log("Failed to change the value of internal mode.", err);
-        this.switchInternalUse = false;
-      });
+      ConfigurationController.getInternalMode()
+        .then((res: boolean) => {
+          this.switchInternalUse = res;
+        })
+        .catch(err => {
+          console.log("Failed to change the value of internal mode.", err);
+          this.switchInternalUse = false;
+        });
     }
-
-
   }
 });
 </script>

@@ -44,7 +44,7 @@ class LevelController {
     public createLevel = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const level: ILevel = req.body;
-            const parentLevelID  = Number(req.body.parentId);
+            const parentLevelID = Number(req.body.parentId);
             const applicationName = String(req.params.application);
 
             const createdLevel: ILevel = await this.levelService.createLevel(applicationName, parentLevelID, level);

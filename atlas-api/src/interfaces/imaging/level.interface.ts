@@ -34,31 +34,12 @@ interface ILevel {
 }
 
 
-
 class LevelNode {
 
     private levelObj: ILevel;
 
-    public getRecord(): ILevel {
-        return this.levelObj;
-    }
-    /**
-     * Generate a merge request
-     * @param application
-     */
-    public getMergeRequest(application: string): string {
-        const levelName = `Level${this.levelObj.level}`
-        const req = `MERGE (l:\`${application}\`:${levelName} { Name: '${this.levelObj.name}'} ) 
-            SET l.Concept = ${this.levelObj.concept || false}
-            SET l.AlternateDrilldown = ${this.levelObj.alternateDrilldown || true}
-            SET l.Color = '${this.levelObj.color || "rgb(0,0,0)"}'
-            SET l.FullName = '${this.levelObj.fullName}'
-            SET l.Name = '${this.levelObj.name}'
-            SET l.Level = ${this.levelObj.level}
-            SET l.Count = ${this.levelObj.count || 0 }
-            SET l.Shade  = '${this.levelObj.shade}'
-            RETURN l as node;`;
-        return req;
+    constructor(level: ILevel) {
+        this.levelObj = level;
     }
 
     /**
@@ -80,9 +61,28 @@ class LevelNode {
         return new LevelNode(level);
     }
 
-    constructor(level: ILevel) {
-        this.levelObj = level;
+    public getRecord(): ILevel {
+        return this.levelObj;
+    }
+
+    /**
+     * Generate a merge request
+     * @param application
+     */
+    public getMergeRequest(application: string): string {
+        const levelName = `Level${this.levelObj.level}`
+        const req = `MERGE (l:\`${application}\`:${levelName} { Name: '${this.levelObj.name}'} ) 
+            SET l.Concept = ${this.levelObj.concept || false}
+            SET l.AlternateDrilldown = ${this.levelObj.alternateDrilldown || true}
+            SET l.Color = '${this.levelObj.color || "rgb(0,0,0)"}'
+            SET l.FullName = '${this.levelObj.fullName}'
+            SET l.Name = '${this.levelObj.name}'
+            SET l.Level = ${this.levelObj.level}
+            SET l.Count = ${this.levelObj.count || 0}
+            SET l.Shade  = '${this.levelObj.shade}'
+            RETURN l as node;`;
+        return req;
     }
 }
 
-export { ILevel, LevelNode }
+export {ILevel, LevelNode}

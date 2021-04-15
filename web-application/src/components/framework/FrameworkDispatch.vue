@@ -1,10 +1,5 @@
 <template>
   <v-dialog v-model="model" persistent max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn color="primary" dark v-bind="attrs" v-on="on">
-        Open Dialog
-      </v-btn>
-    </template>
     <v-card>
       <v-card-title>
         <span class="headline">Flag as a framework</span>
@@ -40,7 +35,8 @@
           </v-row>
           <v-row class="mt-8">
             <v-text-field
-              v-model="frameworkArtifact.name"
+              v-if="choice === 'custom'"
+              v-model="frameworkArtifact.fullName"
               :rules="[v => !!v || 'A name is required']"
               label="Name *"
               required
@@ -48,7 +44,7 @@
           </v-row>
           <v-row class="mt-4">
             <v-text-field
-              v-model="frameworkArtifact.fullName"
+              v-model="frameworkArtifact.name"
               :rules="[v => !!v || 'A pattern is required']"
               label="Pattern used *"
               required
@@ -71,6 +67,8 @@
               v-model="category"
               :loading="categoriesLoading"
               :items="categoriesFramework"
+              item-value="id"
+              item-text="name"
               :search-input.sync="searchCategories"
               outlined
               auto-select-first
@@ -85,7 +83,10 @@
             ></v-textarea>
           </v-row>
           <v-row v-if="error.length !== 0" class="red--text mt-3">
-            <v-icon color="red">mdi-message-alert-outline</v-icon> {{ error }}
+            <v-icon color="red" class="button-glow"
+              >mdi-message-alert-outline</v-icon
+            >
+            {{ error }}
           </v-row>
         </v-container>
         <small>*indicates required field</small>
@@ -109,6 +110,7 @@ import { IArtifact } from "../../../../atlas-api/src/interfaces/artemis/artifact
 import { CategoryController } from "@/api/artemis/category.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
 import { Framework } from "@/api/interface/artemis/framework.interface";
+import { FrameworkController } from "@/api/artemis/framework.controller";
 
 export default Vue.extend({
   name: "FrameworkDispatch",
@@ -136,10 +138,9 @@ export default Vue.extend({
     choice: function() {
       this.error = "";
       this.blink = false;
-      
-      this.getCategories();
-    },
 
+      this.getCategories();
+    }
   },
 
   data: () => ({
@@ -150,7 +151,7 @@ export default Vue.extend({
     frameworkArtifact: {} as IArtifact,
     authorizedType: [],
 
-    category: "",
+    category: null,
     description: "",
 
     searchCategories: null,
@@ -164,26 +165,47 @@ export default Vue.extend({
         this.error = "You must select a type of extraction for the framework.";
         this.blink = true;
       }
+
+      if (this.choice == "framework") {
+        this.sendToFramework();
+      }
+
+      if (this.choice == "custom") {
+        this.sendToCustom();
+      }
     },
 
+    /**
+     * Return the list of the Categories for 'Classic' Framework
+     */
     async getCategories(): Promise<Category[] | void> {
-
-      if (this.choice == 'framework') {
+      if (this.choice == "framework") {
         this.categoriesLoading = true;
         this.categoriesFramework = await CategoryController.getAllNode();
         this.categoriesLoading = false;
       }
     },
 
+    /**
+     * Send the created framework to the Framework controller
+     */
     async sendToFramework() {
       const framework = {
         name: this.frameworkArtifact.name,
-        description: "",
+        description: this.description,
         type: "Framework",
         category: this.category,
         internalType: this.frameworkArtifact.objectTypes,
-        location: ""
+        location: "Custom"
       } as Framework;
+
+      try {
+        await FrameworkController.addFramework(framework);
+        this.$emit('close');
+      } catch (err) {
+        console.error("Failed to add a Framework.", err);
+        this.error = "Failed to add the framework. Reason : " + err;
+      }
     },
 
     async sendToCustom() {

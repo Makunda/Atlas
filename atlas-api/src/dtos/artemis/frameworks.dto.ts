@@ -14,7 +14,7 @@ export class CreateFrameworkDto {
     public type: string;
 
     @IsString()
-    public category: string;
+    public category: string | number;
 
     @IsArray()
     public internalType: string[];
@@ -26,7 +26,7 @@ export class CreateFrameworkDto {
     public discoveryDate: string;
 
     @IsDecimal()
-    public percentageOfDetection: string;
+    public percentageOfDetection = 0;
 
     @IsDecimal()
     public numberOfDetection = 0;

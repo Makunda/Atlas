@@ -1,10 +1,10 @@
 <template>
   <v-row justify="center">
-    <v-col >
+    <v-col>
       <v-card>
         <v-card-text>
           <v-card-title>
-              Demeter configuration
+            Demeter configuration
           </v-card-title>
 
           <div class="my-4 subtitle-1">

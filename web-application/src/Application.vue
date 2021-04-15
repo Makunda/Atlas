@@ -39,7 +39,7 @@ import Vue from "vue/types/umd";
               }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title
-              :color="tab == i ? '#ffffff' : '#a5a4a4'"
+              :color="tab === i ? '#ffffff' : '#a5a4a4'"
               class="text-uppercase"
               >{{ v.name }}</v-list-item-title
             >
@@ -48,7 +48,19 @@ import Vue from "vue/types/umd";
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-list>
+          <v-list
+
+            <v-list-item link @click="tab = 'Administration'">
+              <v-list-item-icon>
+                <v-icon>mdi-cog</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title>Administration</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-list-item
@@ -198,8 +210,7 @@ export default Vue.extend({
         screen: "Frameworks",
         icon: "mdi-package-variant-closed"
       },
-      { name: "Imaging tuning", screen: "ImagingTuning", icon: "mdi-merge" },
-      { name: "Administration", screen: "Administration", icon: "mdi-cog" }
+      { name: "Imaging tuning", screen: "ImagingTuning", icon: "mdi-merge" }
     ],
 
     loadingApplication: true as boolean,

@@ -462,7 +462,7 @@ import { FrameworkController } from "@/api/artemis/framework.controller";
 import Vue from "vue";
 import { CategoryController } from "@/api/artemis/category.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
-import {Framework} from "@/api/interface/artemis/framework.interface";
+import { Framework } from "@/api/interface/artemis/framework.interface";
 
 export default Vue.component("FrameworkReviewer", {
   data: () => ({

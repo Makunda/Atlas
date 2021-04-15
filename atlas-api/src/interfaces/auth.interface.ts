@@ -1,14 +1,14 @@
-import { Request } from 'express';
+import {Request} from 'express';
 
 export interface DataStoredInToken {
-  id: number;
+    id: number;
 }
 
 export interface TokenData {
-  token: string;
-  expiresIn: number;
+    token: string;
+    expiresIn: number;
 }
 
 export interface RequestWithToken extends Request {
-  token: string;
+    token: string;
 }

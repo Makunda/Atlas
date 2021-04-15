@@ -66,8 +66,7 @@ export class FrameworkAssistants {
 
   public static async getAllAssistants(): Promise<IFrameworkAssistant[]> {
     const url =
-      FrameworkAssistants.API_BASE_URL +
-      "/api/assistants/frameworks/all";
+      FrameworkAssistants.API_BASE_URL + "/api/assistants/frameworks/all";
 
     try {
       const res = await axios.get(url);
@@ -80,7 +79,9 @@ export class FrameworkAssistants {
           assistants = apiResponse.data;
         }
       } else {
-        console.warn(`Failed to get all the assistants. Status (${res.status})`);
+        console.warn(
+          `Failed to get all the assistants. Status (${res.status})`
+        );
       }
 
       return assistants;
@@ -93,13 +94,15 @@ export class FrameworkAssistants {
     }
   }
 
-  public static async newAssistant(category : string, actions: string[]): Promise<boolean> {
+  public static async newAssistant(
+    category: string,
+    actions: string[]
+  ): Promise<boolean> {
     const url =
-      FrameworkAssistants.API_BASE_URL +
-      "/api/assistants/frameworks/new";
+      FrameworkAssistants.API_BASE_URL + "/api/assistants/frameworks/new";
 
     try {
-      const body = { category : category, actions : actions }
+      const body = { category: category, actions: actions };
       const res = await axios.post(url, body);
 
       if (res.status == 200) {
@@ -118,10 +121,11 @@ export class FrameworkAssistants {
     }
   }
 
-  public static async removeAssistant(id:number): Promise<boolean> {
+  public static async removeAssistant(id: number): Promise<boolean> {
     const url =
       FrameworkAssistants.API_BASE_URL +
-      "/api/assistants/frameworks/remove/"+id;
+      "/api/assistants/frameworks/remove/" +
+      id;
 
     try {
       const res = await axios.delete(url);
@@ -141,5 +145,4 @@ export class FrameworkAssistants {
       throw error;
     }
   }
-
 }

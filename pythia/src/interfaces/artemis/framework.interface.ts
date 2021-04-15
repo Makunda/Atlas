@@ -18,4 +18,3 @@ export interface Framework {
   discoveryDate: string;
   percentageOfDetection: number;
 }
-

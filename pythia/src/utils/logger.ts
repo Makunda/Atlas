@@ -10,10 +10,10 @@ if (!fs.existsSync(logDir)) {
 }
 
 // winston format
-const {combine, timestamp, printf} = winston.format;
+const { combine, timestamp, printf } = winston.format;
 
 // Define log format
-const logFormat = printf(({timestamp, level, message}) => `${timestamp} ${level}: ${message}`);
+const logFormat = printf(({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`);
 
 /*
  * Log Level
@@ -63,4 +63,4 @@ const stream = {
   },
 };
 
-export {logger, stream};
+export { logger, stream };

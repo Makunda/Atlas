@@ -2,7 +2,7 @@ import {int, Record} from "neo4j-driver";
 
 interface IGroupResult {
     idGroup: number;
-    objectConcerned : number;
+    objectConcerned: number;
     name: string;
     description: string;
 }
@@ -17,4 +17,4 @@ function groupResultFromObj(row: Record): IGroupResult {
     } as IGroupResult
 }
 
-export { IGroupResult, groupResultFromObj }
+export {IGroupResult, groupResultFromObj}

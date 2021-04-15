@@ -4,7 +4,7 @@ import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
 
-import express, { NextFunction, Request, Response } from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
 
@@ -12,7 +12,7 @@ import BaseRouter from './routes';
 import {logger} from '@shared/logger';
 
 const app = express();
-const { BAD_REQUEST } = StatusCodes;
+const {BAD_REQUEST} = StatusCodes;
 
 
 /************************************************************************************
@@ -45,18 +45,18 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(function (req, res, next) {
     res.setHeader(
-      'Content-Security-Policy',
-      "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';"
+        'Content-Security-Policy',
+        "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';"
     );
     next();
-  });
-  
+});
+
 
 // Add APIs
 app.use('/api', BaseRouter);
 
 // Front-end
-app.get('/', (req,res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 

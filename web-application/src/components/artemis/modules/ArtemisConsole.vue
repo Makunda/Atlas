@@ -253,10 +253,10 @@ import DetectionController from "@/api/artemis/detection.controller";
 import ConfigurationController from "@/api/configuration/configuration.controller";
 import { DetectionCandidate } from "@/api/interface/artemis/detectionCandidate.interface";
 import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.interface";
-import {DetectionStatus} from "@/api/interface/artemis/detectionStatus.enum";
-import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
-import {Framework} from "@/api/interface/artemis/framework.interface";
-import {ApplicationController} from "@/api/applications/application.controller";
+import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
+import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
+import { Framework } from "@/api/interface/artemis/framework.interface";
+import { ApplicationController } from "@/api/applications/application.controller";
 
 export default Vue.extend({
   name: "ArtemisConsole",
@@ -265,13 +265,13 @@ export default Vue.extend({
     filteredFrameworks() {
       console.log(
         "Result size : " +
-          this.resultDetection.filter((d) => {
+          this.resultDetection.filter(d => {
             return d.type == "Framework";
           }).length
       );
 
       if (this.showOnlyFrameworks) {
-        return this.resultDetection.filter((d) => {
+        return this.resultDetection.filter(d => {
           return d.type == "Framework";
         });
       } else {
@@ -281,7 +281,7 @@ export default Vue.extend({
 
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   data: () => ({
@@ -291,11 +291,11 @@ export default Vue.extend({
         text: "Framework",
         align: "start",
         sortable: true,
-        value: "name",
+        value: "name"
       },
       { text: "Description", value: "description" },
       { text: "Category", value: "category" },
-      { text: "Detected as ", value: "type" },
+      { text: "Detected as ", value: "type" }
     ],
     showOnlyFrameworks: true as boolean,
 
@@ -342,11 +342,11 @@ export default Vue.extend({
     loadingOngoingQueue: false,
     ongoingQueue: [] as DetectionCandidate[],
     currentDetection: null as DetectionCandidate,
-    
+
     loadingFlush: false,
 
     // On destroy
-    flaggedAsToDestroy: false,
+    flaggedAsToDestroy: false
   }),
 
   methods: {
@@ -405,7 +405,7 @@ export default Vue.extend({
           this.availableLanguages = res;
           this.selectedLanguage = res[0];
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve languages.", err);
         });
 
@@ -421,7 +421,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
           this.errorOnlineMode = true;
           console.error(
             "Failed to change online mode of Artemis Framework detector.",
@@ -442,7 +442,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.repositoryMode = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             "Failed to change the repository setting of Artemis.",
             err
@@ -519,7 +519,7 @@ export default Vue.extend({
               break;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             `Failed to retrieve the status of the application ${this.application}.`,
             err
@@ -537,7 +537,7 @@ export default Vue.extend({
         .then((res: DetectionCandidate[]) => {
           console.log("Inisghts :", res);
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to get the insights of the application", err);
         })
         .finally(() => {
@@ -551,7 +551,7 @@ export default Vue.extend({
         .then((res: DetectionCandidate[]) => {
           this.ongoingQueue = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the detection queue.", err);
         })
         .finally(() => {
@@ -563,7 +563,7 @@ export default Vue.extend({
           console.log("Curent detection is ", res);
           this.currentDetection = res;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the currrent detection.", err);
         })
         .finally(() => {
@@ -579,7 +579,7 @@ export default Vue.extend({
         .then((val: number) => {
           this.preQueue = []; // clean the preQueue
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to add the Frameworks to the database", err);
         })
         .finally(() => {
@@ -593,7 +593,7 @@ export default Vue.extend({
         .then((val: boolean) => {
           this.ongoingQueue = []; // clean the preQueue
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to add the Frameworks to the database", err);
         })
         .finally(() => {
@@ -617,7 +617,7 @@ export default Vue.extend({
             );
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(
             `The analysis of the application ${this.application} failed to launch.`,
             err
@@ -642,7 +642,7 @@ export default Vue.extend({
             );
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(`Failed to stop the on-going analysis.`, err);
           this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`;
         });
@@ -657,7 +657,7 @@ export default Vue.extend({
 
     cancelDetection() {
       // Todo
-    },
+    }
   },
 
   mounted() {
@@ -672,7 +672,7 @@ export default Vue.extend({
         await this.getConfiguration();
         await this.checkStatus();
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(
           "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
           err
@@ -687,7 +687,7 @@ export default Vue.extend({
 
   beforeDestroy() {
     this.flaggedAsToDestroy = true;
-  },
+  }
 });
 </script>
 

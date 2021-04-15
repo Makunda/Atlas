@@ -5,7 +5,6 @@ import HttpException from "@exceptions/HttpException";
 
 
 import {ArtemisCandidates} from "@services/artemis/artemisCandidates.service";
-import {level} from "winston";
 import {IApplicationInsights} from "@interfaces/imaging/applicationInsights.interface";
 
 class ApplicationService {
@@ -45,7 +44,7 @@ class ApplicationService {
             const ac = new ArtemisCandidates();
             const info = await ac.getCandidateInformation(application);
 
-            if(info == null) throw new Error(`No application with name ${application} was found.`);
+            if (info == null) throw new Error(`No application with name ${application} was found.`);
 
             const supportedLanguages = info.languages;
             let levels = [];
@@ -55,16 +54,16 @@ class ApplicationService {
             // Retrieve application infos
             const levelRequest = `MATCH (n:Level5:\`${application}\`) RETURN COLLECT(n.Name) as levels5;`;
             const levelRes = await this.neo4jAl.execute(levelRequest);
-            if(levelRes.records && levelRes.records.length != 0) levels = levelRes.records[0].get("levels5");
+            if (levelRes.records && levelRes.records.length != 0) levels = levelRes.records[0].get("levels5");
 
 
             const moduleRequest = `MATCH (n:Module:\`${application}\`) RETURN COLLECT(n.Name) as modules;`;
-            const moduleRes = await  this.neo4jAl.execute(moduleRequest);
-            if(moduleRes.records && moduleRes.records.length != 0) modules = moduleRes.records[0].get("modules");
+            const moduleRes = await this.neo4jAl.execute(moduleRequest);
+            if (moduleRes.records && moduleRes.records.length != 0) modules = moduleRes.records[0].get("modules");
 
             const architecturesRequest = `MATCH (n:ArchiModel:\`${application}\`) RETURN COLLECT(n.Name) as archiModels;`;
             const archiRes = await this.neo4jAl.execute(architecturesRequest);
-            if(archiRes.records && archiRes.records.length != 0) architectures = archiRes.records[0].get("archiModels");
+            if (archiRes.records && archiRes.records.length != 0) architectures = archiRes.records[0].get("archiModels");
 
             return {
                 name: application,

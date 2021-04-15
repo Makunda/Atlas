@@ -18,5 +18,5 @@ export interface Framework {
     location: string;
     discoveryDate: string;
     percentageOfDetection?: number;
-  }
+}
   

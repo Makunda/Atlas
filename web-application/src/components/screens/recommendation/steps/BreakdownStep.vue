@@ -12,7 +12,7 @@ import BreakdownApplication from "@/components/artemis/tiles/BreakdownApplicatio
 
 export default Vue.extend({
   name: "BreakdownStep",
-  components: {BreakdownApplication},
+  components: { BreakdownApplication },
   data: () => ({})
 });
 </script>

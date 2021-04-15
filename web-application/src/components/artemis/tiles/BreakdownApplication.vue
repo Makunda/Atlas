@@ -21,19 +21,29 @@
         </v-row>
         <v-row class="mx-4">
           <v-col cols="12" md="4">Number of levels: </v-col>
-          <v-col cols="12" md="8"><strong>{{ insights.levels5.length || 0 }}</strong></v-col>
+          <v-col cols="12" md="8"
+            ><strong>{{ insights.levels5.length || 0 }}</strong></v-col
+          >
         </v-row>
         <v-row class="mx-4">
           <v-col cols="12" md="4">Number of modules: </v-col>
-          <v-col cols="12" md="8"><strong>{{ insights.modules.length || 0 }}</strong></v-col>
+          <v-col cols="12" md="8"
+            ><strong>{{ insights.modules.length || 0 }}</strong></v-col
+          >
         </v-row>
         <v-row class="mx-4">
           <v-col cols="12" md="4">Number of architectures: </v-col>
-          <v-col cols="12" md="8"><strong>{{ insights.architectures.length || 0 }}</strong></v-col>
+          <v-col cols="12" md="8"
+            ><strong>{{ insights.architectures.length || 0 }}</strong></v-col
+          >
         </v-row>
         <v-row class="mx-4">
-          <v-col cols="12" md="4">Supported technologies for the breakdown: </v-col>
-          <v-col cols="12" md="8"><strong>{{ insights.technologies || 'None' }}</strong></v-col>
+          <v-col cols="12" md="4"
+            >Supported technologies for the breakdown:
+          </v-col>
+          <v-col cols="12" md="8"
+            ><strong>{{ insights.technologies || "None" }}</strong></v-col
+          >
         </v-row>
 
         <v-row class="mt-6">
@@ -113,7 +123,6 @@
                           >( items count : {{ item.count }})</i
                         >
                         <br />
-
                       </p>
 
                       <v-tooltip bottom>
@@ -195,9 +204,11 @@
                       >
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
-                          <v-icon @click="selectFramework(item)" class="ma-2"
-                                  v-bind="attrs"
-                                  v-on="on"
+                          <v-icon
+                            @click="selectFramework(item)"
+                            class="ma-2"
+                            v-bind="attrs"
+                            v-on="on"
                             >mdi-keyboard-caps</v-icon
                           >
                         </template>
@@ -275,9 +286,11 @@
     </v-snackbar>
 
     <!--  Framework Modal  -->
-    <FrameworkDispatch v-bind:model="showFrameworkModal"
-                       v-bind:artifact="selectedArtifact"
-                       v-on:close="showFrameworkModal = false">
+    <FrameworkDispatch
+      v-bind:model="showFrameworkModal"
+      v-bind:artifact="selectedArtifact"
+      v-on:close="showFrameworkModal = false"
+    >
     </FrameworkDispatch>
   </v-card>
 </template>
@@ -295,7 +308,7 @@ import AgentController from "@/api/agents/agent.controller";
 import { DetectionCandidate } from "@/api/interface/artemis/detectionCandidate.interface";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
-import {IArtifact} from "../../../../../atlas-api/src/interfaces/artemis/artifact.interface";
+import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/artifact.interface";
 
 export default Vue.extend({
   name: "BreakdownApplication",
@@ -329,7 +342,7 @@ export default Vue.extend({
     // Application information
     applicationName: "" as string,
     applicationInformation: null,
-    insights : {} as IApplicationInsights,
+    insights: {} as IApplicationInsights,
 
     // Snackbar
     snackbarInfo: false,
@@ -418,7 +431,7 @@ export default Vue.extend({
 
     selectFramework(artifact: IArtifact) {
       this.showFrameworkModal = true;
-      this.selectedArtifact =  artifact;
+      this.selectedArtifact = artifact;
     },
 
     createQuerySet() {

@@ -161,9 +161,7 @@ export default class ConfigurationController {
     }
   }
 
-  public static async setInternalMode(
-    value: boolean
-  ): Promise<boolean> {
+  public static async setInternalMode(value: boolean): Promise<boolean> {
     const url =
       ConfigurationController.API_BASE_URL +
       `/api/configuration/parameters/artemis/internalMode`;
@@ -206,7 +204,6 @@ export default class ConfigurationController {
       throw error;
     }
   }
-
 
   public static async setDemeterWorkspace(
     newWorkspace: string

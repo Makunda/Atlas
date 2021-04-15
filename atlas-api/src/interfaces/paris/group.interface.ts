@@ -1,7 +1,6 @@
-
 export interface IGroup {
     id: number;
-    name : string;
+    name: string;
     description: string;
     cypherRequest: string;
     cypherRequestReturn: string;
@@ -11,4 +10,4 @@ export interface IGroup {
     active: boolean;
     selected: boolean;
     types: string[];
-  }
+}

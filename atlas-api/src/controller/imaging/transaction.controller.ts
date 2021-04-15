@@ -1,6 +1,4 @@
 import {NextFunction, Request, Response} from 'express';
-import {ILevel} from "@interfaces/imaging/level.interface";
-import LevelService from '@services/imaging/level.service';
 import TransactionService from "@services/imaging/transaction.service";
 import {ITransaction} from "@interfaces/imaging/transaction.interface";
 

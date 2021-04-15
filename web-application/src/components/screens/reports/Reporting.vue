@@ -4,10 +4,8 @@
       <v-container>
         <v-card class="mx-auto mt-10">
           <v-card-title
-            ><h3>
-              Generate reports for application {{ application }}
-
-            </h3><v-spacer></v-spacer>
+            ><h3>Generate reports for application {{ application }}</h3>
+            <v-spacer></v-spacer>
             <v-btn icon color="green" @click="refresh">
               <v-icon>mdi-cached</v-icon>
             </v-btn></v-card-title
@@ -32,11 +30,13 @@
               <v-row v-if="!reportGenerated && reportLoading">
                 <v-container>
                   <v-row> Creating report ...</v-row>
-                  <v-row> <v-progress-circular
+                  <v-row>
+                    <v-progress-circular
                       :size="50"
                       color="primary"
                       indeterminate
-                  ></v-progress-circular></v-row>
+                    ></v-progress-circular
+                  ></v-row>
                 </v-container>
               </v-row>
 
@@ -46,7 +46,6 @@
                   <v-row> {{ groupResult }} </v-row>
                 </v-container>
               </v-row>
-
             </v-container>
           </v-card-text>
         </v-card>
@@ -59,7 +58,7 @@
 import Vue from "vue";
 import { GroupController } from "@/api/paris/Group.controller";
 import IGroupResult from "@/api/interface/paris/groupResult.interface";
-import {ArtemisController} from "@/api/artemis/artemis.controller";
+import { ArtemisController } from "@/api/artemis/artemis.controller";
 import DetectionController from "@/api/artemis/detection.controller";
 
 export default Vue.extend({
@@ -103,7 +102,6 @@ export default Vue.extend({
           console.error("Error : ", err);
         });
       // Launch
-
 
       this.reportLoading = false;
       this.reportGenerated = true;

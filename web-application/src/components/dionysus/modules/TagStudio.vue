@@ -125,7 +125,7 @@
                           <v-text-field
                             outlined
                             v-model="group.name"
-                            :rules="[(v) => !!v || 'Name is required']"
+                            :rules="[v => !!v || 'Name is required']"
                             label="Name of the rule"
                             required
                           ></v-text-field>
@@ -139,7 +139,7 @@
                           <v-text-field
                             outlined
                             v-model="group.groupName"
-                            :rules="[(v) => !!v || 'Group is required']"
+                            :rules="[v => !!v || 'Group is required']"
                             label="Name of the group that will be created"
                             required
                           ></v-text-field>
@@ -149,7 +149,7 @@
                             v-model="group.cypherRequest"
                             label="Associated Request"
                             :rules="[
-                              (v) => !!v || 'Associated request is required',
+                              v => !!v || 'Associated request is required'
                             ]"
                             placeholder="Type here your neo4j Cypher request..."
                             @change="validRequest = false"
@@ -157,7 +157,7 @@
                           <v-text-field
                             outlined
                             v-model="group.cypherRequestReturn"
-                            :rules="[(v) => !!v || 'Return value is required']"
+                            :rules="[v => !!v || 'Return value is required']"
                             label="Name of the returned value"
                             @change="validRequest = false"
                             required
@@ -169,7 +169,7 @@
                             item-value="id"
                             label="Select the parent use case"
                             :rules="[
-                              (v) => !!v || 'You must select a parent use case',
+                              v => !!v || 'You must select a parent use case'
                             ]"
                             persistent-hint
                             single-line
@@ -407,20 +407,20 @@ export default Vue.extend({
         template:
           "MATCH (n:Object:%%APPLICATION_NAME%%) WHERE n.Type CONTAINS 'JPA' RETURN n as node",
         explanation:
-          "The request will match all the objects where the type contains the string 'JPA'. ",
+          "The request will match all the objects where the type contains the string 'JPA'. "
       },
       {
         title: "Group by Name",
         template:
           "MATCH (n:Object:%%APPLICATION_NAME%%) WHERE n.FullName CONTAINS 'javax.persistence' RETURN n as node",
-        explanation: "",
+        explanation: ""
       },
       {
         title: "Group by Relationship and Type ",
         template:
           "MATCH (n:Object:%%APPLICATION_NAME%%) WHERE n.InternalType='SQLScriptProcedure' AND NOT (n)-[:USE]->(:Object { InternalType : 'SQLScriptTable'}) AND NOT (n)-[:CALL]->(:Object { InternalType : 'SQLScriptProcedure'}) RETURN n as node",
-        explanation: "",
-      },
+        explanation: ""
+      }
     ],
 
     // Loaders
@@ -442,7 +442,7 @@ export default Vue.extend({
     // Validation
     validRequest: false,
     validityError: "",
-    creationError: "",
+    creationError: ""
   }),
 
   methods: {
@@ -482,7 +482,7 @@ export default Vue.extend({
           this.snackbarInfo = true;
           this.initialize();
         })
-        .catch((err) => {
+        .catch(err => {
           this.textSnackBar = `Failed to delete the Group. Error: ${err}`;
           this.snackbarInfo = true;
         });
@@ -517,7 +517,7 @@ export default Vue.extend({
             this.initialize();
             this.close();
           })
-          .catch((err) => {
+          .catch(err => {
             this.textSnackBar = `Failed to udpdate the Category. Error: ${err}`;
             this.snackbarInfo = true;
             // Do not close
@@ -533,7 +533,7 @@ export default Vue.extend({
             this.initialize();
             this.close();
           })
-          .catch((err) => {
+          .catch(err => {
             this.textSnackBar = `Failed to add the Category. Error: ${err}`;
             this.snackbarInfo = true;
             // Do not close
@@ -567,7 +567,7 @@ export default Vue.extend({
             }
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the root use cases", err);
         });
     },
@@ -577,7 +577,7 @@ export default Vue.extend({
         .then((useCases: IUseCase[]) => {
           this.usecases = useCases;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Error trying to retrieve use cases tree:", err);
         });
     },
@@ -609,7 +609,7 @@ export default Vue.extend({
               "Failed to verify the cypher query above, please follow the Cypher Guidelines.";
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to add the request.");
         })
         .finally(() => {
@@ -625,7 +625,7 @@ export default Vue.extend({
       setTimeout(() => {
         this.creationError = "";
       }, 5000);
-    },
-  },
+    }
+  }
 });
 </script>

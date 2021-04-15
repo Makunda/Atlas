@@ -27,7 +27,9 @@
                 </v-row>
 
                 <v-row class="mt-7">
-                  <p class="text-decoration-underline text-subtitle-1">Manual input of the Imaging path :</p></v-row
+                  <p class="text-decoration-underline text-subtitle-1">
+                    Manual input of the Imaging path :
+                  </p></v-row
                 >
                 <v-row px-3>
                   <v-text-field
@@ -48,8 +50,7 @@
               >Status of the extensions</v-card-title
             >
             <v-card-text>
-              <v-row>
-              </v-row>
+              <v-row> </v-row>
             </v-card-text>
           </v-card>
         </v-row>

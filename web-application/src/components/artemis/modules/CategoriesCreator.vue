@@ -18,11 +18,7 @@
     </v-card-subtitle>
     <v-card-text>
       <v-container>
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          class="elevation-1"
-        >
+        <v-data-table :headers="headers" :items="items" class="elevation-1">
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title>Category manager</v-toolbar-title>

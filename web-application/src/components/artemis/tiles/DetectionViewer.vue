@@ -21,7 +21,7 @@
 
 <script>
 import Vue from "vue";
-import {DetectionStatus} from "@/api/interface/artemis/detectionStatus.enum";
+import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 
 export default Vue.component("DetectionViewer", {
   props: ["detection"],

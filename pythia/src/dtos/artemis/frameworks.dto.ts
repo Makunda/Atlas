@@ -1,4 +1,4 @@
-import {IsDecimal, IsString} from 'class-validator';
+import { IsDecimal, IsString } from 'class-validator';
 
 export class CreateFrameworkDto {
   @IsString()
@@ -27,6 +27,4 @@ export class CreateFrameworkDto {
 
   @IsDecimal()
   public numberOfDetection: string;
-
-
 }

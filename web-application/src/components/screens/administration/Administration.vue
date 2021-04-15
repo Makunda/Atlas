@@ -69,7 +69,7 @@ export default Vue.extend({
         view: "GroupingStep",
         name: "Grouping",
         icon: "mdi-group"
-      },
+      }
     ]
   })
 });

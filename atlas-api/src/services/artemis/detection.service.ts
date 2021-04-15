@@ -1,13 +1,8 @@
-import app from "@server";
 import {logger} from "@shared/logger";
 import config from "config";
 import {QueryResult} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
-import {
-    CancellablePromise,
-    Detection,
-    DetectionStatus,
-} from "@interfaces/artemis/detectionStatus.interface";
+import {CancellablePromise, Detection,} from "@interfaces/artemis/detectionStatus.interface";
 import {Framework} from "@interfaces/artemis/framework.interface";
 import FrameworksService from "./framework.service";
 
@@ -23,6 +18,18 @@ class DetectionService {
 
     private failedApplicationDetection: Detection[] = [];
     private finishedApplicationDetection: Detection[] = [];
+
+    private constructor() {
+
+    }
+
+    public static getInstance(): DetectionService {
+        if (DetectionService.INSTANCE == null) {
+            DetectionService.INSTANCE = new DetectionService();
+        }
+
+        return DetectionService.INSTANCE
+    }
 
     /**
      *
@@ -197,18 +204,6 @@ class DetectionService {
         }
 
         return canceled;
-    }
-
-    private constructor() {
-
-    }
-
-    public static getInstance(): DetectionService {
-        if (DetectionService.INSTANCE == null) {
-            DetectionService.INSTANCE = new DetectionService();
-        }
-
-        return DetectionService.INSTANCE
     }
 }
 

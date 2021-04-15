@@ -2,12 +2,12 @@
   <v-container fluid>
     <v-row>
       <v-tabs
-          class="pt-3"
-          v-model="tab"
-          align-with-title
-          fixed-tabs
-          background-color="charcoal"
-          dark
+        class="pt-3"
+        v-model="tab"
+        align-with-title
+        fixed-tabs
+        background-color="charcoal"
+        dark
       >
         <v-tab v-for="item in items" :key="item.name">
           <v-icon class="mr-3" v-if="item.icon">{{ item.icon }}</v-icon>

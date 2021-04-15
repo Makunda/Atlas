@@ -1,6 +1,5 @@
 import {logger} from "@shared/logger";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
-import HttpException from "@exceptions/HttpException";
 
 class ArtemisService {
     private static neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();

@@ -1,8 +1,7 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import FrameworksController from '@controllers/artemis/frameworks.controller';
 import Route from '@interfaces/routes.interface';
 import authMiddleware from '@middlewares/auth.middleware';
-
 
 class FrameworksRoute implements Route {
   public path = '/frameworks';

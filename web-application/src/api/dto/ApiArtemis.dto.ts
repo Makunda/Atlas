@@ -1,7 +1,6 @@
-import {DetectionResult} from "@/api/interface/artemis/detectionResult.interface";
-import {DetectionStatus} from "@/api/interface/artemis/detectionStatus.enum";
-import {Framework} from "@/api/interface/artemis/framework.interface";
-
+import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
+import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
+import { Framework } from "@/api/interface/artemis/framework.interface";
 
 export class DetectionResultDTO implements DetectionResult {
   public application: string;

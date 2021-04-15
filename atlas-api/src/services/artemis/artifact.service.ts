@@ -15,11 +15,52 @@ export default class ArtifactService {
             }
         }
 
-        root.children.sort(function(a, b) {
+        root.children.sort(function (a, b) {
             return b.count - a.count;
         });
 
         return root;
+    }
+
+    /**
+     * Get the prefix to perform the extraction
+     * @param type Type of extraction as a string
+     * @private
+     */
+    private static async getExtractionPrefix(type: string): Promise<string> {
+        const tagService = new TagService();
+
+        switch (type) {
+            case "level":
+                return await tagService.getCustomLevelTag();
+            case "module":
+                return await tagService.getCustomModuleTag();
+            case "architecture":
+                return await tagService.getCustomArchitectureTag();
+            default:
+                throw new Error(`No prefix existing for extraction ${type}.`);
+        }
+    }
+
+    /**
+     * Convert a record from Neo4j to the Artifact
+     * @param res Record to convert
+     * @private
+     */
+    private static convertRecordToArtifact(res: Record): IArtifact {
+        return {
+            id: int(res.get("id")).toNumber(),
+            name: res.get("name"),
+            fullName: res.get("fullName"),
+            parentId: int(res.get("parentId")).toNumber(),
+            delimiter: res.get("delimiter"),
+            count: int(res.get("count")).toNumber(),
+            objectTypes: res.get("objectTypes"),
+            levels: res.get("levels"),
+            modules: res.get("modules"),
+            subsets: res.get("subsets"),
+            children: []
+        };
     }
 
     public async getArtifactsList(
@@ -75,26 +116,6 @@ export default class ArtifactService {
     }
 
     /**
-     * Get the prefix to perform the extraction
-     * @param type Type of extraction as a string
-     * @private
-     */
-    private static async getExtractionPrefix(type: string) : Promise<string> {
-        const tagService = new TagService();
-
-        switch (type) {
-            case "level":
-                return await tagService.getCustomLevelTag();
-            case "module":
-                return await tagService.getCustomModuleTag();
-            case "architecture":
-                return await tagService.getCustomArchitectureTag();
-            default:
-                throw new Error(`No prefix existing for extraction ${type}.`);
-        }
-    }
-
-    /**
      * Extract a list of artifact to the selected location
      * @param application Name of the application
      * @param artifactList List of the artifact to extract
@@ -107,74 +128,53 @@ export default class ArtifactService {
         extractionType: string,
         groupType: string
     ): Promise<void> {
-    try {
-        const prefix: string = await ArtifactService.getExtractionPrefix(groupType);
+        try {
+            const prefix: string = await ArtifactService.getExtractionPrefix(groupType);
 
-        let req : string;
-        let params = {};
+            let req: string;
+            let params = {};
 
-        // MATCH (o:Object:app) WHERE
-        if(groupType == "together"){
-            // eslint-disable-next-line max-len
-            // const fullNameList: string[] = artifactList.map(x => x.name);
+            // MATCH (o:Object:app) WHERE
+            if (groupType == "together") {
+                // eslint-disable-next-line max-len
+                // const fullNameList: string[] = artifactList.map(x => x.name);
 
-            req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType AND 
+                req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType AND 
             any( x IN $listFullName WHERE o.FullName CONTAINS x) 
             SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tagPrefix] 
             ELSE o.Tags + ('$a_Audit Service$'+controllers.Level) END `
-        } else {
-            // split them
-            for(const a of artifactList) {
-                try {
-                    const tagName = prefix+(a.customName || a.name);
-                    // eslint-disable-next-line max-len
-                    req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType 
+            } else {
+                // split them
+                for (const a of artifactList) {
+                    try {
+                        const tagName = prefix + (a.customName || a.name);
+                        // eslint-disable-next-line max-len
+                        req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType 
                 AND o.FullName CONTAINS $fullName 
                 SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tagName] 
                 ELSE o.Tags + $tagName END`;
 
 
-                    params = {
-                        listInternalType : a.objectTypes,
-                        fullName : a.fullName,
-                        tagName: tagName
-                    }
+                        params = {
+                            listInternalType: a.objectTypes,
+                            fullName: a.fullName,
+                            tagName: tagName
+                        }
 
-                    await this.neo4jAl.executeWithParameters(req, params);
-                } catch (err) {
-                    logger.error(`Failed to extract the artifact : ${String(a)}`, err);
+                        await this.neo4jAl.executeWithParameters(req, params);
+                    } catch (err) {
+                        logger.error(`Failed to extract the artifact : ${String(a)}`, err);
+                    }
                 }
             }
+
+        } catch (err) {
+            logger.error(
+                `Failed to realize the extraction of artifacts of the application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
         }
 
-    } catch (err) {
-        logger.error(
-            `Failed to realize the extraction of artifacts of the application ${application}.`,
-            err
-        );
-        throw new HttpException(500, "Internal error");
-    }
-
-    }
-
-    /**
-     * Convert a record from Neo4j to the Artifact
-     * @param res Record to convert
-     * @private
-     */
-    private static convertRecordToArtifact(res: Record): IArtifact {
-        return {
-            id: int(res.get("id")).toNumber(),
-            name: res.get("name"),
-            fullName: res.get("fullName"),
-            parentId: int(res.get("parentId")).toNumber(),
-            delimiter: res.get("delimiter"),
-            count: int(res.get("count")).toNumber(),
-            objectTypes: res.get("objectTypes"),
-            levels: res.get("levels"),
-            modules: res.get("modules"),
-            subsets: res.get("subsets"),
-            children: []
-        };
     }
 }

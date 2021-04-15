@@ -1,18 +1,17 @@
 import {logger} from "@shared/logger";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
-import {int} from "neo4j-driver";
+import {int, Record} from "neo4j-driver";
 import {Category} from "@interfaces/artemis/category.interface";
 import {CreateCategoryDto} from "@dtos/artemis/category.dto";
 
-function convertRecordToCategoryNode(record: any): Category {
-    const category: Category = {
+function convertRecordToCategoryNode(record: Record): Category {
+    return {
         id: int(record.get("id")).toNumber(),
         name: record.get("name"),
         iconUrl: record.get("iconUrl"),
     };
 
-    return category;
 }
 
 class CategoryService {
@@ -38,6 +37,28 @@ class CategoryService {
         } catch (err) {
             logger.error(
                 "An internal error occurred in CategoryService::getAllNodes ",
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Find a category node by its Id in the database
+     * @param id Id of the Category node to find
+     * @return The Category node or Null if none was found
+     */
+    public async getNodeById(id: number) : Promise<Category> {
+        const req = `CALL artemis.api.category.get.node.byId($id)`;
+
+        try {
+            const val = await this.neo4jAl.executeWithParameters(req, { id : id });
+            if (!val.records || val.records.length == 0) return null;
+
+            return convertRecordToCategoryNode(val.records[0]);
+        } catch (err) {
+            logger.error(
+                "An internal error occurred in CategoryService::getNodeById ",
                 err
             );
             throw new HttpException(500, "Internal error");

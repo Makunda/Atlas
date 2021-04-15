@@ -188,6 +188,59 @@
       </v-card-actions>
     </v-card>
 
+    <!-- Export / Import -->
+    <v-row class="mt-5 mx-4">
+      <v-container>
+        <v-row class="my-5"
+          ><h4 class="text-h5">Export / Import options</h4></v-row
+        >
+        <v-row class="my-5"><h4>Export a zip file containing tags.</h4></v-row>
+        <v-row class="my-5">
+          <v-btn
+            large
+            color="persianGrey"
+            class="ml-7"
+            dark
+            @click="generateZip"
+          >
+            Generate the export
+          </v-btn>
+        </v-row>
+        <v-row class="my-5"><h4>Import a zip file containing tags.</h4></v-row>
+        <v-row class="my-5">
+          <v-file-input
+            v-model="files"
+            color="persianGrey"
+            counter
+            multiple
+            placeholder="Select the Zip containing Paris extensions data"
+            prepend-icon="mdi-paperclip"
+            outlined
+            :show-size="1000"
+          >
+            <template v-slot:selection="{ index, text }">
+              <v-chip
+                v-if="index < 2"
+                color="deep-purple accent-4"
+                dark
+                label
+                small
+              >
+                {{ text }}
+              </v-chip>
+
+              <span
+                v-else-if="index === 2"
+                class="overline grey--text text--darken-3 mx-2"
+              >
+                +{{ files.length - 2 }} File(s)
+              </span>
+            </template>
+          </v-file-input>
+        </v-row>
+      </v-container>
+    </v-row>
+    <v-row> </v-row>
     <!-- Snack Bar information -->
     <v-snackbar v-model="snackbarInfo" :timeout="5000">
       {{ textSnackBar }}
@@ -209,6 +262,8 @@ import { TagController, TagResult } from "@/api/demeter/tag.controller";
 import { IUseCase } from "@/api/interface/paris/useCase.interface";
 import { IGroup } from "@/api/interface/paris/group.interface";
 import { GroupController } from "@/api/paris/Group.controller";
+import DragAndDropTile from "@/components/tiles/DragAndDropTile.vue";
+import { ExportController } from "@/api/paris/Export.controller";
 
 export default Vue.extend({
   name: "TagViewer",
@@ -218,7 +273,7 @@ export default Vue.extend({
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   data: () => ({
@@ -245,7 +300,7 @@ export default Vue.extend({
     // Loadings
     loadingApplication: true as boolean,
     loading: true as boolean,
-    loadingQueries: false as boolean,
+    loadingQueries: false as boolean
   }),
 
   mounted() {
@@ -273,6 +328,10 @@ export default Vue.extend({
       this.focusedGroup = item;
     },
 
+    generateZip() {
+      window.open(ExportController.getDownloadUrl());
+    },
+
     getRootUseCase() {
       UseCaseController.getRootUseCase()
         .then(async (res: IUseCase[]) => {
@@ -284,7 +343,7 @@ export default Vue.extend({
           }
           console.log("Tree", this.items);
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("Failed to retrieve the root use cases", err);
         });
     },
@@ -301,7 +360,7 @@ export default Vue.extend({
             `${res.length} tags were loaded for application ${this.application}`
           );
         })
-        .catch((err) => {
+        .catch(err => {
           console.error("An error occurred while retrieving tags.", err);
         });
     },
@@ -318,7 +377,7 @@ export default Vue.extend({
       this.loadingQueries = true;
 
       // Get selection, and filter tags
-      const toExecute: IGroup[] = this.tree.filter((x) => {
+      const toExecute: IGroup[] = this.tree.filter(x => {
         return x && (x as IGroup) !== undefined && !x.isUseCase;
       }) as IGroup[];
 
@@ -327,16 +386,16 @@ export default Vue.extend({
         `About to execute ${toExecute.length} tags on the application.`
       );
 
-      const groupsID = this.tree.map((x) => x.id);
+      const groupsID = this.tree.map(x => x.id);
 
       GroupController.executeListGroupAsTag(this.application, groupsID)
-        .then((res:number) => {
-            this.snackbarInfo = true;
-            this.textSnackBar = `${res} objects were tags during the process.`;
-        })
-        .catch((err) => {
+        .then((res: number) => {
           this.snackbarInfo = true;
-          this.textSnackBar =`Failed to flags objects. Error :${err}`;
+          this.textSnackBar = `${res} objects were tags during the process.`;
+        })
+        .catch(err => {
+          this.snackbarInfo = true;
+          this.textSnackBar = `Failed to flags objects. Error :${err}`;
         })
         .finally(() => {
           this.loadingQueries = false;
@@ -344,7 +403,7 @@ export default Vue.extend({
     },
 
     getToExecuteSize() {
-      const toExecute: IGroup[] = this.tree.filter((x) => {
+      const toExecute: IGroup[] = this.tree.filter(x => {
         return x && (x as IGroup) !== undefined && !x.isUseCase;
       }) as IGroup[];
       return toExecute.length;
@@ -352,7 +411,7 @@ export default Vue.extend({
 
     convertBadgeToHTML(badgeValue: string): string {
       let categorieBadges = "";
-      badgeValue.split(":").forEach((x) => {
+      badgeValue.split(":").forEach(x => {
         categorieBadges += `<v-chip class="ma-2" color="primary">${x}</v-chip>`;
       });
       return categorieBadges;
@@ -360,7 +419,7 @@ export default Vue.extend({
 
     sortByNumMAtch(a: TagResult, b: TagResult) {
       return b.numMatch - a.numMatch;
-    },
+    }
   },
 
   watch: {
@@ -369,7 +428,7 @@ export default Vue.extend({
       if (this.application && this.application.length != 0) {
         this.getTreeview();
       }
-    },
-  },
+    }
+  }
 });
 </script>

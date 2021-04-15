@@ -237,7 +237,7 @@ class UseCaseService {
     public async attachUseCase(
         idParent: number,
         idChild: number
-    ): Promise<Boolean> {
+    ): Promise<boolean> {
         try {
             const request = "CALL paris.cases.attach.to.case($idParent, $idChild);";
             const params = {idParent: idParent, idChild: idChild};
@@ -263,7 +263,7 @@ class UseCaseService {
     public async detachUseCase(
         idParent: number,
         idChild: number
-    ): Promise<Boolean> {
+    ): Promise<boolean> {
         try {
             const request = "CALL paris.cases.detach.from.case($idParent, $idChild);";
             const params = {idParent: idParent, idChild: idChild};

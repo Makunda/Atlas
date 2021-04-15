@@ -17,7 +17,9 @@ export class ArtifactController {
     language: string,
     external: boolean
   ): Promise<Artifact[]> {
-    const url = ArtifactController.API_BASE_URL + `/api/artemis/artifacts/all?external=${external}`;
+    const url =
+      ArtifactController.API_BASE_URL +
+      `/api/artemis/artifacts/all?external=${external}`;
 
     const data = {
       application: application,
@@ -56,7 +58,9 @@ export class ArtifactController {
     language: string,
     external: boolean
   ): Promise<Artifact[]> {
-    const url = ArtifactController.API_BASE_URL + `/api/artemis/artifacts/tree?external=${external}`;
+    const url =
+      ArtifactController.API_BASE_URL +
+      `/api/artemis/artifacts/tree?external=${external}`;
 
     const data = {
       application: application,
@@ -186,7 +190,8 @@ export class ArtifactController {
     extractionType: string,
     groupType: string
   ) {
-    const url = ArtifactController.API_BASE_URL + `/api/artemis/artifacts/extract`;
+    const url =
+      ArtifactController.API_BASE_URL + `/api/artemis/artifacts/extract`;
 
     const data = {
       application: application,

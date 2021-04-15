@@ -16,7 +16,7 @@ class LevelService {
     public async createLevel(application: string, parentId: number, level: ILevel): Promise<ILevel> {
         try {
 
-            if(level.level < 3 ) {
+            if (level.level < 3) {
                 throw new Error("Cannot created a level under level 3.")
             }
 
@@ -24,13 +24,13 @@ class LevelService {
             const req = node.getMergeRequest(application);
             const results: QueryResult = await this.neo4jAl.execute(req);
 
-            if(!results.records || results.records.length === 0) {
+            if (!results.records || results.records.length === 0) {
                 throw new Error(`The request : '${req}'. Returned no result.`)
             }
 
             const singleRecord = results.records[0];
             const row = singleRecord.get("node");
-            const levelObj =  LevelNode.fromObj(row).getRecord();
+            const levelObj = LevelNode.fromObj(row).getRecord();
 
             // Merge relationship with parent only if valid
             const levelName = `Level${level.level}`;
@@ -43,7 +43,10 @@ class LevelService {
                 SET c.Shade = p.Shade + "##" + c.Color
                 RETURN p as parent`;
 
-            await this.neo4jAl.executeWithParameters(mergeReq, { "parentID": int(parentId), "levelID": int(levelObj._id) });
+            await this.neo4jAl.executeWithParameters(mergeReq, {
+                "parentID": int(parentId),
+                "levelID": int(levelObj._id)
+            });
 
             return levelObj;
         } catch (err) {
@@ -66,7 +69,7 @@ class LevelService {
             for (let i = 0; i < results.records.length; i++) {
                 const singleRecord = results.records[i];
                 const level = singleRecord.get("node");
-                levels.push( LevelNode.fromObj(level).getRecord() );
+                levels.push(LevelNode.fromObj(level).getRecord());
             }
 
             return levels;
@@ -85,15 +88,15 @@ class LevelService {
      * @param application Name of the application
      * @param levelID ID of the level
      */
-    public async findLevelById(application: string, levelID: number) : Promise<ILevel> {
+    public async findLevelById(application: string, levelID: number): Promise<ILevel> {
         try {
             const request = `MATCH (n:\`${application}\`) 
             WHERE ( n:Level1 OR n:Level2 OR n:Level3 OR n:Level4 OR n:Level5 )
             AND ID(n)=$idLevel 
             RETURN n as node;`;
 
-            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { "idLevel": int(levelID) });
-            if(!results.records || results.records.length == 0) return null;
+            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, {"idLevel": int(levelID)});
+            if (!results.records || results.records.length == 0) return null;
 
             return LevelNode.fromObj(results.records[0].get("node")).getRecord();
         } catch (err) {
@@ -115,21 +118,21 @@ class LevelService {
 
             const level = await this.findLevelById(application, levelID);
 
-            if(level == null || level.level >= 5) return []; // Ignore above level 4
+            if (level == null || level.level >= 5) return []; // Ignore above level 4
 
             const levelName = `Level${level.level}`;
-            const childLevelName = `Level${level.level+1}`;
+            const childLevelName = `Level${level.level + 1}`;
             const request = `MATCH (p:${levelName}:\`${application}\`)-[:Aggregates]->(n:${childLevelName}:\`${application}\`)  
             WHERE ID(p)=$idLevel 
             RETURN n as node ORDER BY n.Name;`;
 
-            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { "idLevel": levelID });
+            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, {"idLevel": levelID});
 
             const levels: ILevel[] = [];
             for (let i = 0; i < results.records.length; i++) {
                 const singleRecord = results.records[i];
                 const level = singleRecord.get("node");
-                levels.push( LevelNode.fromObj(level).getRecord() );
+                levels.push(LevelNode.fromObj(level).getRecord());
             }
             return levels;
         } catch (err) {
@@ -151,17 +154,17 @@ class LevelService {
 
             const level = await this.findLevelById(application, levelID);
 
-            if(level == null || level.level <= 1) return null; // Ignore under level 1
+            if (level == null || level.level <= 1) return null; // Ignore under level 1
 
             const levelName = `Level${level.level}`;
-            const parentLevel = `Level${level.level-1}`;
+            const parentLevel = `Level${level.level - 1}`;
             const request = `MATCH (p:${parentLevel}:\`${application}\`)-[:Aggregates]->(n:${levelName}:\`${application}\`)  
             WHERE ID(n)=$idLevel 
             RETURN p as node LIMIT 1;`;
 
-            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { "idLevel": levelID });
+            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, {"idLevel": levelID});
 
-            if(!results || results.records.length == 0) return null;
+            if (!results || results.records.length == 0) return null;
             return LevelNode.fromObj(results.records[0].get("node")).getRecord();
 
         } catch (err) {
@@ -182,26 +185,26 @@ class LevelService {
         const levelName = `Level${level.level}`;
 
         // For level 5 only recount the objects and also re-assign objects level
-        if(level.level == 5) {
+        if (level.level == 5) {
             let request = `MATCH (p:${levelName}:\`${application}\`)-[]->(o:Object:\`${application}\`)  
             WHERE ID(p)=$idLevel 
             WITH p, COUNT(o) as countNode 
             SET p.Count = countNode;`;
-            await this.neo4jAl.executeWithParameters(request, { "idLevel": level._id });
+            await this.neo4jAl.executeWithParameters(request, {"idLevel": level._id});
 
             // Reassign objects
             request = `MATCH (p:${levelName}:\`${application}\`)-[]->(o:Object:\`${application}\`)  
             WHERE ID(p)=$idLevel 
             SET o.Level = p.Name;`;
-            await this.neo4jAl.executeWithParameters(request, { "idLevel": level._id });
+            await this.neo4jAl.executeWithParameters(request, {"idLevel": level._id});
 
         } else {
-            const childrenLevelName = `Level${level.level+1}`;
+            const childrenLevelName = `Level${level.level + 1}`;
             const request = `MATCH (p:${levelName}:\`${application}\`)-[]->(l:\`${childrenLevelName}\`)  
             WHERE ID(p)=$idLevel 
             WITH p, SUM(l.Count) as countNode 
             SET p.Count = countNode;`;
-            await this.neo4jAl.executeWithParameters(request, { "idLevel": level._id });
+            await this.neo4jAl.executeWithParameters(request, {"idLevel": level._id});
         }
 
         // Recount level above
@@ -217,7 +220,7 @@ class LevelService {
         try {
             // find corresponding level
             const foundLevel = await this.findLevelById(application, level._id);
-            if(!foundLevel) return null; // Ignore above level 4
+            if (!foundLevel) return null; // Ignore above level 4
 
             const levelName = `Level${foundLevel.level}`;
             const request = `MATCH (p:${levelName}:\`${application}\`)   
@@ -244,9 +247,9 @@ class LevelService {
                     "shade": level.shade
                 });
 
-            if(!results || results.records.length == 0) return null;
+            if (!results || results.records.length == 0) return null;
 
-            const levelUpdate =  LevelNode.fromObj(results.records[0].get("node")).getRecord();
+            const levelUpdate = LevelNode.fromObj(results.records[0].get("node")).getRecord();
             await this.refreshLevel(application, levelUpdate);
 
             return levelUpdate;
