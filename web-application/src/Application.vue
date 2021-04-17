@@ -48,7 +48,7 @@ import Vue from "vue/types/umd";
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-list
+          <v-list>
 
             <v-list-item link @click="tab = 'Administration'">
               <v-list-item-icon>

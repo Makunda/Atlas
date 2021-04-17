@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import {DetectionQueueAssistant} from 'src/assistants/detectionQueue.assistant';
+import {DetectionQueueAssistant} from '@assistants/detectionQueue.assistant';
 import {DetectionCandidate} from '@dtos/artemis/detectionCandidate.dto';
 
 class DetectionQueueController {

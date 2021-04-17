@@ -7,6 +7,14 @@ import path from 'path';
 import dotenv from 'dotenv';
 import commandLineArgs from 'command-line-args';
 
+import tsConfigPaths from 'tsconfig-paths';
+
+/**
+ * Set the production path
+ */
+function setProdPath() {
+    require("module-alias/register")
+}
 
 (() => {
     // Setup command line options
@@ -24,5 +32,11 @@ import commandLineArgs from 'command-line-args';
     });
     if (result2.error) {
         throw result2.error;
+    }
+
+    // Print
+    console.log("Process ENV : " + process.env.NODE_ENV)
+    if(process.env.NODE_ENV === 'production') {
+        setProdPath()
     }
 })();

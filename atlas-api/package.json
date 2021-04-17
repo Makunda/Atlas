@@ -2,12 +2,14 @@
   "name": "atlas-api",
   "version": "0.0.0",
   "scripts": {
-    "build": "ts-node build.ts",
+    "client:build": "npm run --prefix ../web-application build",
+    "api:build": "ts-node build.ts",
+    "build": "npm-run-all -p client:build api:build",
     "lint": "eslint . --ext .ts",
-    "start": "node -r module-alias/register ./dist --env=production",
+    "start": "node ./dist --env=production",
     "start:dev": "nodemon --verbose",
-    "client": "npm run --prefix ../web-application serve",
-    "dev": "npm-run-all -p client start:dev",
+    "client:dev": "npm run --prefix ../web-application serve",
+    "dev": "npm-run-all -p client:dev start:dev",
     "test": "nodemon --config ./spec/nodemon.json"
   },
   "nodemonConfig": {
@@ -25,6 +27,7 @@
     "@daos": "dist/daos",
     "@entities": "dist/entities",
     "@shared": "dist/shared",
+    "@assistants": "dist/assistants",
     "@server": "dist/Server",
     "@controller": "dist/controller",
     "@services": "dist/services",

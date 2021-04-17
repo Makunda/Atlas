@@ -184,7 +184,7 @@ class UseCaseService {
     }
 
     /**
-     * Get the version of Artemis
+     * Add the use case to the knowledge base
      */
     public async addUseCase(useCase: IUseCase): Promise<IUseCase> {
         try {
@@ -205,7 +205,7 @@ class UseCaseService {
     }
 
     /**
-     * Get the version of Artemis
+     * Update a specific use case using its id. Update also the parent id
      */
     public async updateUseCase(useCase: IUseCase, parentId: number): Promise<IUseCase> {
         try {
