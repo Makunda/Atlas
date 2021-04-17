@@ -57,7 +57,7 @@ app.use('/api', BaseRouter);
 
 // Front-end
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    res.redirect("/atlas/main")
 });
 
 // Print API errors

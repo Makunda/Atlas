@@ -50,7 +50,7 @@ import Vue from "vue/types/umd";
         <div class="pa-2">
           <v-list>
 
-            <v-list-item link @click="tab = 'Administration'">
+            <v-list-item @click="changeView('Administration')">
               <v-list-item-icon>
                 <v-icon>mdi-cog</v-icon>
               </v-list-item-icon>
@@ -144,7 +144,7 @@ import Vue from "vue/types/umd";
     <v-row no-gutters>
       <component
         class="custom-container"
-        :is="items[tab].screen"
+        :is="currentScreen"
         v-model="applicationName"
       ></component>
     </v-row>
@@ -193,6 +193,8 @@ export default Vue.extend({
 
   data: () => ({
     tab: 0,
+    currentScreen: "Reporting",
+
     items: [
       { name: "Reporting", screen: "Reporting", icon: "mdi-file" },
       {
@@ -270,6 +272,12 @@ export default Vue.extend({
         });
     },
 
+    changeView(view: string) {
+      console.log("Go to administration");
+      this.$store.state.currentView = view;
+      this.currentScreen = view;
+    },
+
     logout() {
       Configuration.deleteProperties();
       document.location.reload();
@@ -283,6 +291,7 @@ export default Vue.extend({
 
     tab: function() {
       this.$store.state.currentView = this.items[this.tab].name;
+      this.currentScreen = this.items[this.tab].screen;
     },
 
     getCurrentView(newView) {
