@@ -188,7 +188,9 @@ export class ArtifactController {
     application: string,
     artifactList: Artifact[],
     extractionType: string,
-    groupType: string
+    groupType: string,
+    primaryGroupName: string,
+    secondaryGroupName: string
   ) {
     const url =
       ArtifactController.API_BASE_URL + `/api/artemis/artifacts/extract`;
@@ -197,7 +199,9 @@ export class ArtifactController {
       application: application,
       artifactList: artifactList,
       extractionType: extractionType,
-      groupType: groupType
+      groupType: groupType,
+      primaryGroupName: primaryGroupName,
+      secondaryGroupName: secondaryGroupName
     };
     try {
       const res = await axios.post(url, data);

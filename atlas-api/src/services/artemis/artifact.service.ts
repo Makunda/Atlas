@@ -2,7 +2,7 @@ import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import {IArtifact} from "@interfaces/artemis/artifact.interface";
 import {logger} from "@shared/logger";
-import {int, Record} from "neo4j-driver";
+import {int, Record, Transaction} from "neo4j-driver";
 import TagService from "@services/configuration/tag.services";
 
 export default class ArtifactService {
@@ -78,8 +78,6 @@ export default class ArtifactService {
             if (!val.records || val.records.length == 0) return [];
 
             const artifacts = [];
-            console.log(`Request : CALL artemis.api.breakdown.get('${appName}', '${language}', ${String(externality)}`)
-            console.log("Records length", val.records.length)
             for (const it in val.records) {
                 if (Object.prototype.hasOwnProperty.call(val.records, it)) {
                     artifacts.push(ArtifactService.convertRecordToArtifact(val.records[it]));
@@ -116,57 +114,115 @@ export default class ArtifactService {
     }
 
     /**
+     * Generate the tag base on the type of the extraction
+     * @param extractionType
+     * @param primaryGroupName
+     * @param secondaryGroupName
+     * @private
+     */
+    private static async generateTag(extractionType: string, primaryGroupName: string, secondaryGroupName: string) {
+        const prefix = await ArtifactService.getExtractionPrefix(extractionType);
+
+        switch (extractionType) {
+            case "level":
+                return prefix + primaryGroupName;
+            case "module":
+                return prefix + primaryGroupName;
+            case "architecture":
+                return prefix + primaryGroupName + "$" + secondaryGroupName;
+            default:
+                throw new Error(`No prefix existing for extraction ${extractionType}.`);
+        }
+    }
+
+    /**
      * Extract a list of artifact to the selected location
      * @param application Name of the application
      * @param artifactList List of the artifact to extract
      * @param extractionType Type of the extraction
      * @param groupType Type of recoupment (Together split)
+     * @param primaryGroupName
+     * @param secondaryGroupName
      */
     public async extractArtifacts(
         application: string,
         artifactList: IArtifact[],
         extractionType: string,
-        groupType: string
+        groupType: string,
+        primaryGroupName: string,
+        secondaryGroupName: string
     ): Promise<void> {
         try {
             const prefix: string = await ArtifactService.getExtractionPrefix(groupType);
 
-            let req: string;
+            const reqMap: [string, unknown][] = [];
+
             let params = {};
 
-            // MATCH (o:Object:app) WHERE
-            if (groupType == "together") {
-                // eslint-disable-next-line max-len
-                // const fullNameList: string[] = artifactList.map(x => x.name);
-
-                req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType AND 
-            any( x IN $listFullName WHERE o.FullName CONTAINS x) 
-            SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tagPrefix] 
-            ELSE o.Tags + ('$a_Audit Service$'+controllers.Level) END `
-            } else {
-                // split them
-                for (const a of artifactList) {
-                    try {
-                        const tagName = prefix + (a.customName || a.name);
-                        // eslint-disable-next-line max-len
-                        req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType 
-                AND o.FullName CONTAINS $fullName 
-                SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tagName] 
-                ELSE o.Tags + $tagName END`;
-
-
-                        params = {
-                            listInternalType: a.objectTypes,
-                            fullName: a.fullName,
-                            tagName: tagName
+            // eslint-disable-next-line no-console
+            console.log("Extraction type: ", groupType);
+            
+            // split them
+            for (const a of artifactList) {
+                try {
+                    let tagName: string;
+                    
+                    if (extractionType === "together") {
+                        if (groupType === 'architecture') {
+                            tagName = prefix + primaryGroupName + "$" + secondaryGroupName;
+                        } else {
+                            tagName = prefix + primaryGroupName;
                         }
-
-                        await this.neo4jAl.executeWithParameters(req, params);
-                    } catch (err) {
-                        logger.error(`Failed to extract the artifact : ${String(a)}`, err);
+                    } else {
+                        if(groupType === 'architecture') {
+                            tagName = prefix + primaryGroupName + "$" + (a.customName || a.name);
+                        } else {
+                            tagName = prefix + (a.customName || a.name);
+                        }
                     }
+                    
+                    // eslint-disable-next-line max-len
+                    const req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType 
+                    AND o.FullName CONTAINS $fullName 
+                    SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tagName] 
+                    ELSE o.Tags + $tagName END`;
+
+
+                    params = {
+                        listInternalType: a.objectTypes,
+                        fullName: a.fullName,
+                        tagName: tagName
+                    }
+
+                    reqMap.push([req, params]);
+                } catch (err) {
+                    logger.error(`Failed to extract the artifact : ${String(a)}`, err);
                 }
             }
+
+            console.log("To execute :", reqMap);
+
+            const session = this.neo4jAl.getSession();
+            let tx: Transaction = null;
+            try {
+                tx = session.beginTransaction();
+
+                reqMap.forEach(x => {
+                    const req = x[0];
+                    const params = x[1];
+                    tx.run(req, params);
+                });
+
+                await tx.commit()
+                console.info("Transaction successfully committed.")
+            } catch (err) {
+                if(tx != null) {
+                    await tx.rollback();
+                }
+                logger.error("Failed to group nodes.", err);
+                throw err;
+            }
+            
 
         } catch (err) {
             logger.error(

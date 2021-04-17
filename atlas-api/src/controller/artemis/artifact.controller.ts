@@ -42,7 +42,13 @@ class ArtifactController {
             const groupType = String(req.body.groupType);
             const application = String(req.body.application);
 
-            await this.artifactService.extractArtifacts(application, artifactList, extractionType, groupType);
+            const primaryGroupName = String(req.body.primaryGroupName) || "";
+            const secondaryGroupName = String(req.body.secondaryGroupName) || "";
+
+            console.log("Received: ", req.body);
+
+            await this.artifactService.extractArtifacts(application, artifactList,
+                extractionType, groupType, primaryGroupName, secondaryGroupName);
             res.status(200).json({data: "OK", message: 'Artifact extraction'});
 
         } catch (error) {

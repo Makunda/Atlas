@@ -230,7 +230,7 @@
                 </template>
               </v-treeview>
 
-              <p class="pa-4" v-if="artifactItems.length == 0">
+              <p class="pa-4" v-if="artifactItems.length === 0">
                 <i>No object found for this language in the application.</i>
               </p>
             </v-row>
@@ -251,6 +251,67 @@
                 outlined
               ></v-select>
             </v-row>
+            <v-row
+              v-if="
+                selectedTarget === 'architecture' ||
+                  selectedTarget === 'module' ||
+                  (selectedTarget === 'level' &&
+                    selectedLocation === 'together')
+              "
+            >
+              <h3 class="mx-4 mb-6">
+                Enter the name of the {{ selectedTarget }}:
+              </h3>
+            </v-row>
+            <v-row
+              class="mx-4 mb-2"
+              v-if="
+                selectedTarget === 'architecture' ||
+                  selectedTarget === 'module' ||
+                  (selectedTarget === 'level' &&
+                    selectedLocation === 'together')
+              "
+            >
+              <v-text-field
+                class="mx-2"
+                v-model="primaryGroupName"
+                :label="selectedTarget"
+                outlined
+                clearable
+              ></v-text-field>
+            </v-row>
+            <v-row  v-if="
+                selectedTarget === 'architecture' &&
+                  selectedLocation !== 'together'
+              ">
+              <p class="mx-4 mb-6">If you choose to extract the nodes separately, one subset will be created by item selected. </p>
+            </v-row>
+            <v-row
+              v-if="
+                selectedTarget === 'architecture' &&
+                  selectedLocation === 'together'
+              "
+            >
+              <h3 class="mx-4 mb-6">
+                Enter the name of the subset:
+              </h3>
+            </v-row>
+            <v-row
+              class="mx-4 mb-2"
+              v-if="
+                selectedTarget === 'architecture' &&
+                  selectedLocation === 'together'
+              "
+            >
+              <v-text-field
+                class="mx-2"
+                v-model="secondaryGroupName"
+                label="subset"
+                outlined
+                clearable
+              ></v-text-field>
+            </v-row>
+
             <v-row>
               <v-col cols="6" md="6">
                 <v-btn large width="100%" @click="createQuerySet()">
@@ -343,6 +404,10 @@ export default Vue.extend({
     applicationName: "" as string,
     applicationInformation: null,
     insights: {} as IApplicationInsights,
+
+    // Group Name
+    primaryGroupName: "",
+    secondaryGroupName: "",
 
     // Snackbar
     snackbarInfo: false,
@@ -569,15 +634,19 @@ export default Vue.extend({
     },
 
     extractArtifacts() {
+      const extractionType = this.selectedTarget;
+
       ArtifactController.launchQuerySet(
         this.applicationName,
         this.artifactTree,
         this.selectedLocation,
-        this.selectedTarget
+        this.selectedTarget,
+        this.primaryGroupName,
+        this.secondaryGroupName
       )
         .then((res: any) => {
           this.textSnackBar =
-            "Extraction is a success. Refresh Imaging in few seconds";
+            `Extraction to a ${extractionType} is a success. Refresh Imaging in few seconds`;
           this.refresh();
         })
         .catch(err => {
