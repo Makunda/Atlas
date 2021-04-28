@@ -4,6 +4,7 @@ import { ApiComUtils } from "@/api/ApiComUtils";
 import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import ITransaction from "@/api/interface/imaging/Transaction.interface";
+import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
 
 export default class TransactionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -65,6 +66,34 @@ export default class TransactionController {
   }
 
   /**
+   * Get the insights of the unmasked transaction
+   * @param application Name of the transaction
+   */
+  public static async getInsightsUnmaskedTransaction(
+    application: string
+  ): Promise<ITransactionsInsights> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/insights/unmasked/${application}`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ITransactionsInsights;
+      } else {
+        throw new Error(
+          `Failed to get transactions insights. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to get transactions insights : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Retrieve the number of transaction
    * @param application
    */
@@ -109,10 +138,17 @@ export default class TransactionController {
   ): Promise<ITransaction[]> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/batch/masked/${application}?start=${start}&end=${end}&sort=${sort}&sortDesc=${sortDesc}`;
+      `/api/imaging/transactions/batch/masked/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const body = {
+        start: start,
+        end: end,
+        sort: sort,
+        sortDesc: sortDesc
+      };
+
+      const res = await axios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -137,20 +173,30 @@ export default class TransactionController {
    * @param end End index
    * @param sort Sort parameter
    * @param sortDesc Order of the sort
+   * @param filter Optional filter on transactions
    */
   public static async getBatchTransaction(
     application: string,
     start: number,
     end: number,
     sort: string,
-    sortDesc: string
+    sortDesc: string,
+    filter?: Record<string, number>
   ): Promise<ITransaction[]> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/batch/unmasked/${application}?start=${start}&end=${end}&sort=${sort}&sortDesc=${sortDesc}`;
+      `/api/imaging/transactions/batch/unmasked/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const body = {
+        start: start,
+        end: end,
+        sort: sort,
+        sortDesc: sortDesc,
+        filter: filter
+      };
+
+      const res = await axios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -189,7 +235,32 @@ export default class TransactionController {
         return apiResponse.data as ITransaction;
       } else {
         throw new Error(
-          `Failed to a batch of masked transactions. Status (${res.status})`
+          `Failed to get a batch of masked transactions. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  public static async maskTransactionWithFilter(
+    application: string,
+    filter: Record<string, unknown>
+  ): Promise<ITransaction> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/mask/filter/${application}`;
+
+    try {
+      const res = await axios.post(url, filter);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ITransaction;
+      } else {
+        throw new Error(
+          `Failed to mask transactions with filter. Status (${res.status})`
         );
       }
     } catch (error) {

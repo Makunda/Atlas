@@ -67,6 +67,136 @@
             </v-card-text>
           </v-card>
         </v-row>
+        <!-- Filter panel -->
+        <v-row>
+          <v-card class="ma-4" width="100%">
+            <v-card-title class="ma-3">
+              Filter transactions
+            </v-card-title>
+            <v-card-subtitle> </v-card-subtitle>
+            <v-card-text>
+              <v-row>
+                <!-- Number Object / SubObject -->
+                <v-col class="px-4" cols="4">
+                  <v-row class="mx-3">
+                    <h3>Filter by number of Object/SubObject</h3>
+                  </v-row>
+                  <v-row class="ma-3">
+                    Min Object :
+                    <strong class="mr-3">{{
+                      transactionInsights.minObject
+                    }}</strong>
+                    Max Object :
+                    <strong>{{ transactionInsights.maxObject }}</strong>
+                  </v-row>
+                  <v-row class="mx-3">
+                    <v-range-slider
+                      v-model="rangeObject"
+                      :max="transactionInsights.maxObject"
+                      :min="transactionInsights.minObject"
+                      hide-details
+                      persistent-hint
+                      hint="Number of object"
+                      class="align-center"
+                    >
+                      <template v-slot:prepend>
+                        <v-text-field
+                          :value="rangeObject[0]"
+                          class="mt-0 pt-0"
+                          hide-details
+                          single-line
+                          type="number"
+                          style="width: 60px"
+                          @change="$set(rangeObject, 0, $event)"
+                        ></v-text-field>
+                      </template>
+                      <template v-slot:append>
+                        <v-text-field
+                          :value="rangeObject[1]"
+                          class="mt-0 pt-0"
+                          hide-details
+                          single-line
+                          type="number"
+                          style="width: 60px"
+                          @change="$set(rangeObject, 1, $event)"
+                        ></v-text-field>
+                      </template>
+                    </v-range-slider>
+                  </v-row>
+                </v-col>
+                <!-- Number Technologies -->
+                <v-col class="px-4" cols="4">
+                  <v-row class="mx-3">
+                    <h3>Filter by number of Technologies</h3>
+                  </v-row>
+                  <v-row class="ma-3">
+                    Min Technologies :
+                    <strong class="mr-3">{{
+                      transactionInsights.minTechnology
+                    }}</strong>
+                    Max Technologies :
+                    <strong>{{ transactionInsights.maxTechnology }}</strong>
+                  </v-row>
+                  <v-row class="mx-3">
+                    <v-range-slider
+                      v-model="rangeTechnology"
+                      :max="transactionInsights.maxTechnology"
+                      :min="transactionInsights.minTechnology"
+                      hide-details
+                      persistent-hint
+                      hint="Number of object"
+                      class="align-center"
+                    >
+                      <template v-slot:prepend>
+                        <v-text-field
+                          :value="rangeTechnology[0]"
+                          class="mt-0 pt-0"
+                          hide-details
+                          single-line
+                          type="number"
+                          style="width: 60px"
+                          @change="$set(rangeTechnology, 0, $event)"
+                        ></v-text-field>
+                      </template>
+                      <template v-slot:append>
+                        <v-text-field
+                          :value="rangeTechnology[1]"
+                          class="mt-0 pt-0"
+                          hide-details
+                          single-line
+                          type="number"
+                          style="width: 60px"
+                          @change="$set(rangeTechnology, 1, $event)"
+                        ></v-text-field>
+                      </template>
+                    </v-range-slider>
+                  </v-row>
+                </v-col>
+                <!-- Search technologies -->
+                <v-col class="px-4" cols="4">
+                  <v-row class="mx-3">
+                    <h3>Search by technology</h3>
+                  </v-row>
+                  <v-row class="mx-3">
+                    <v-text-field
+                      v-model="technologySearch"
+                      label="Technology"
+                    ></v-text-field>
+                  </v-row>
+                </v-col>
+              </v-row>
+              <v-row class="mt-6 mb-1">
+                <v-spacer></v-spacer>
+                <v-btn class="mr-3" depressed color="grey" dark @click="transactionApiCall()">
+                  Apply filter
+                </v-btn>
+                <v-btn depressed color="persianGrey" dark @click="transactionApiCall()">
+                  Remove all non-compliant
+                </v-btn>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-row>
         <v-row>
           <!-- Transaction -->
           <v-card class="ma-4" width="100%">
@@ -117,7 +247,7 @@
                 <v-icon>mdi-cached</v-icon>
               </v-btn>
             </v-card-title>
-            <v-card-subtitle></v-card-subtitle>
+            <v-card-subtitle> </v-card-subtitle>
             <v-card-text>
               <v-data-table
                 :headers="headersMasked"
@@ -145,6 +275,7 @@
 import Vue from "vue";
 import TransactionController from "@/api/imaging/Transaction.controller";
 import ITransaction from "@/api/interface/imaging/Transaction.interface";
+import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
 
 export default Vue.extend({
   name: "TransactionExplorer",
@@ -210,7 +341,13 @@ export default Vue.extend({
     maskActionLimit: 0,
     maskActionLoading: false,
 
-    unmaskAllActionLoading: false
+    unmaskAllActionLoading: false,
+
+    // Transaction Insight
+    transactionInsights: {} as ITransactionsInsights,
+    rangeObject: [0, 20],
+    rangeTechnology: [0, 20],
+    technologySearch: ""
   }),
 
   methods: {
@@ -243,6 +380,26 @@ export default Vue.extend({
       }
     },
 
+    async getInsights() {
+      try {
+        this.transactionInsights = await TransactionController.getInsightsUnmaskedTransaction(
+          this.application
+        );
+
+        this.rangeTechnology = [
+          this.transactionInsights.minTechnology,
+          this.transactionInsights.maxTechnology
+        ];
+
+        this.rangeObject = [
+          this.transactionInsights.minObject,
+          this.transactionInsights.maxObject
+        ];
+      } catch (err) {
+        console.error("Failed to get the insights of transactions", err);
+      }
+    },
+
     async getNumberTransaction() {
       try {
         this.numTransaction = await TransactionController.getNumberTransaction(
@@ -268,13 +425,23 @@ export default Vue.extend({
       this.loadingTransaction = true;
 
       await this.getNumberTransaction();
+
+      const filter = {
+        minTechnology: this.rangeTechnology[0],
+        maxTechnologies: this.rangeTechnology[1],
+        minObject: this.rangeObject[0],
+        maxObject: this.rangeObject[1],
+        techContained : this.technologySearch
+      };
+
       const { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
       const transactions = await TransactionController.getBatchTransaction(
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
         sortBy,
-        sortDesc
+        sortDesc,
+        filter
       );
 
       this.loadingTransaction = false;
@@ -319,12 +486,14 @@ export default Vue.extend({
     refresh() {
       this.transactionApiCall();
       this.maskedTransactionApiCall();
+      this.getInsights();
     }
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
+      this.refresh();
     },
 
     optionsTransaction: {

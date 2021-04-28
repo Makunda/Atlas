@@ -40,20 +40,111 @@ class TransactionService {
         return int(singleRecord.get("count")).toNumber();
     }
 
+
+    /**
+     * Get the total number of masked transactions
+     * @param application
+     */
+    public async getInsightsUnmaskedTransaction(application: string): Promise<Record<string, number>> {
+        try {
+            const reqMin = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n) 
+            WHERE n:Object OR n:SubObject
+            WITH t, COUNT(n) as countO, COUNT(DISTINCT n.Level) as technologiesCount 
+            RETURN min(countO) as minCountO,
+            min(technologiesCount) as minTechCount`;
+
+            const reqMax = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n) 
+            WHERE n:Object OR n:SubObject
+            WITH t, COUNT(n) as countO, COUNT(DISTINCT n.Level) as technologiesCount 
+            RETURN max(countO) as maxCountO, 
+            max(technologiesCount) as maxTechCount`;
+
+            const resultMin = await this.neo4jAl.execute(reqMin);
+            const resultMax = await this.neo4jAl.execute(reqMax);
+
+            const singleMinRecord = resultMin.records[0];
+            const singleMaxRecord = resultMax.records[0];
+
+            return {
+                minObject : int(singleMinRecord.get("minCountO")).toNumber(),
+                maxObject : int(singleMaxRecord.get("maxCountO")).toNumber(),
+                minTechnology : int(singleMinRecord.get("minTechCount")).toNumber(),
+                maxTechnology : int(singleMaxRecord.get("maxTechCount")).toNumber()
+            }
+        } catch (err) {
+            throw new Error(`Failed to retrieve insights ${err}`)
+        }
+    }
+
+    /**
+     * Build filter
+     * @param filter
+     * @param reverse Reverse the filter with NOT clause
+     * @private
+     */
+    private buildFilter(filter : Record<string, unknown>, reverse?: boolean) {
+        let filterReq = "";
+        const conditions = [];
+        if(filter) {
+            for(const [variable, value] of Object.entries(filter)) {
+
+                switch (variable) {
+                    case "minTechnologies":
+                        conditions.push("SIZE(technologies) >= " + Number(value));
+                        break;
+                    case "maxTechnologies":
+                        conditions.push("SIZE(technologies) <= " + Number(value));
+                        break;
+                    case "minObject":
+                        conditions.push("count >= " + Number(value));
+                        break;
+                    case "maxObject":
+                        conditions.push("count <= " + Number(value));
+                        break;
+                    case "techContained":
+                        conditions.push(`any(x IN technologies WHERE x CONTAINS '${String(value)}') `);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if(conditions.length > 0) {
+                if(!reverse) {
+                    filterReq = ` WHERE ${conditions.join(" AND ")} `;
+                } else {
+                    filterReq = ` WHERE NOT ${conditions.join(" AND NOT ")} `;
+                }
+            }
+        }
+
+        return filterReq;
+    }
+
     /**
      * Get a batch of transactions
      * @param application Application
      * @param start Start index
      * @param end End index
+     * @param filter
      * @param sort Property to sort on
      * @param sortDesc Direction of the sort
      */
-    public async getBatchTransaction(application: string, start: number, end: number, sort?: string, sortDesc?: boolean): Promise<ITransaction[]> {
+    public async getBatchTransaction(application: string, start: number, end: number,
+                                     filter? : Record<string, unknown>,
+                                     sort?: string,
+                                     sortDesc?: boolean): Promise<ITransaction[]> {
+
         try {
-            const req = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n:Object)  
-            RETURN t as tran, COUNT(n) as count , COLLECT(DISTINCT n.Level) as technologies 
-            ORDER BY ${this.getSortParameter("t", sort)} ${this.getSortDesc(sortDesc)} 
+            const req = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n) 
+            WHERE n:Object OR n:SubObject
+            WITH t as tran, COUNT(n) as count, COLLECT(DISTINCT n.Level) as technologies 
+            ${this.buildFilter(filter)}  
+            RETURN tran, count, technologies
+            ORDER BY ${TransactionService.getSortParameter("tran", sort)} ${TransactionService.getSortDesc(sortDesc)} 
             SKIP $toSkip LIMIT $toGet `;
+
+            console.log("Req ", req)
 
             const result = await this.neo4jAl.executeWithParameters(req, {
                 "toSkip": int(start),
@@ -86,13 +177,16 @@ class TransactionService {
      * @param sort Property to sort on
      * @param sortDesc Direction of the sort
      */
-    public async getBatchMaskedTransaction(application: string, start: number, end: number, sort?: string, sortDesc?: boolean): Promise<ITransaction[]> {
-
+    public async getBatchMaskedTransaction(application: string, start: number,
+                                           end: number, sort?: string,
+                                           sortDesc?: boolean): Promise<ITransaction[]> {
 
         try {
-            const req = `MATCH (t:${TransactionService.MASKED_TRANSACTION_LABEL}:\`${application}\`)-[:Contains]->(n:Object)  
-            RETURN t as tran, COUNT(n) as count , COLLECT(DISTINCT n.Level) as technologies  
-            ORDER BY ${this.getSortParameter("t", sort)} ${this.getSortDesc(sortDesc)} 
+            const req = `MATCH (t:${TransactionService.MASKED_TRANSACTION_LABEL}:\`${application}\`)-[:Contains]->(n)
+            WHERE n:Object OR n:SubObject 
+            RETURN t as tran, COUNT(n) as count , COLLECT(DISTINCT n.Level) as technologies, 
+            COUNT(DISTINCT n.Level) as numTechnologies 
+            ORDER BY ${TransactionService.getSortParameter("t", sort)} ${TransactionService.getSortDesc(sortDesc)} 
             SKIP $toSkip LIMIT $toGet `;
 
             const result = await this.neo4jAl.executeWithParameters(req, {
@@ -105,6 +199,7 @@ class TransactionService {
                 const tr = transactionFromObj(result.records[i].get("tran"));
                 tr.count = int(result.records[i].get("count")).toNumber();
                 tr.technologies = result.records[i].get("technologies");
+                tr.numTechnologies = result.records[i].get("numTechnologies");
                 listTransaction.push(tr);
             }
 
@@ -112,6 +207,37 @@ class TransactionService {
         } catch (err) {
             logger.error(
                 `Failed to get catch of transaction for application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Mask all the transaction not compliant with filter
+     * @param application Name of the application
+     * @param filter
+     */
+    public async maskTransactionWithFilter(application: string, filter: Record<string, unknown>): Promise<number> {
+        try {
+
+            const req = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n) 
+            OPTIONAL MATCH (t)-[]->(n:TransactionNode) 
+            WHERE n:Object OR n:SubObject
+            WITH t as tran, COUNT(n) as count, COLLECT(DISTINCT n.Level) as technologies 
+            ${this.buildFilter(filter, true)}  
+            REMOVE t:Transaction SET t:${TransactionService.MASKED_TRANSACTION_LABEL} 
+            REMOVE n:TransactionNode SET n:${TransactionService.MASKED_TRANSACTION_NODE_LABEL} 
+            RETURN COUNT(t) as node;
+            `;
+
+            const result = await this.neo4jAl.execute(req);
+            if (!result || result.records.length == 0) return null;
+
+            return int(result.records[0].get("node")).toNumber();
+        } catch (err) {
+            logger.error(
+                `Failed to mask a transaction for application ${application}.`,
                 err
             );
             throw new HttpException(500, "Internal error");
@@ -229,7 +355,7 @@ class TransactionService {
 
 
     // sort option
-    private getSortParameter(obj: string, sort: string): string {
+    private static getSortParameter(obj: string, sort: string): string {
         switch (sort) {
             case "name":
                 return obj + ".Name";
@@ -244,7 +370,7 @@ class TransactionService {
         }
     }
 
-    private getSortDesc(sortDesc: boolean): string {
+    private static getSortDesc(sortDesc: boolean): string {
         if (sortDesc) {
             return "DESC"
         } else {

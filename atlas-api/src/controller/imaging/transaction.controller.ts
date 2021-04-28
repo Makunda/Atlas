@@ -29,17 +29,32 @@ class TransactionController {
     };
 
 
+    public getInsightsUnmaskedTransactions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const applicationName = String(req.params.application);
+            const insights: Record<string, unknown> = await this.transactionService.getInsightsUnmaskedTransaction(applicationName);
+            res.status(200).json({data: insights, message: 'Insights'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+
     public getBatchTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
 
             const applicationName = String(req.params.application);
-            const startIndex = Number(req.query.start);
-            const endIndex = Number(req.query.end);
+            const startIndex = Number(req.body.start);
+            const endIndex = Number(req.body.end);
 
-            const sort = String(req.query.sort) || "name";
-            const sortDesc = Boolean(req.query.sortDesc) || false;
+            const sort = String(req.body.sort) || "name";
+            const sortDesc = Boolean(req.body.sortDesc) || false;
 
-            const transactions: ITransaction[] = await this.transactionService.getBatchTransaction(applicationName, startIndex, endIndex, sort, sortDesc);
+            const filter : Record<string, unknown> = req.body.filter || {};
+
+            const transactions: ITransaction[] = await this.transactionService.getBatchTransaction(
+                applicationName, startIndex, endIndex, filter, sort, sortDesc);
             res.status(200).json({data: transactions, message: 'Batch'});
 
         } catch (error) {
@@ -49,13 +64,12 @@ class TransactionController {
 
     public getBatchMaskedTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            console.log("Req query", req.query)
             const applicationName = String(req.params.application);
-            const startIndex = Number(req.query.start);
-            const endIndex = Number(req.query.end);
+            const startIndex = Number(req.body.start);
+            const endIndex = Number(req.body.end);
 
-            const sort = String(req.query.sort) || "name";
-            const sortDesc = Boolean(req.query.sortDesc) || false;
+            const sort = String(req.body.sort) || "name";
+            const sortDesc = Boolean(req.body.sortDesc) || false;
 
             const transactions: ITransaction[] = await this.transactionService.getBatchMaskedTransaction(applicationName, startIndex, endIndex, sort, sortDesc);
             res.status(200).json({data: transactions, message: 'Batch'});
@@ -71,6 +85,19 @@ class TransactionController {
             const transactionID = Number(req.params.transactionID);
             const transaction: ITransaction = await this.transactionService.maskTransaction(applicationName, transactionID);
             res.status(200).json({data: transaction, message: 'Transaction'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public maskTransactionWithFilter = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const applicationName = String(req.params.application);
+            const filter : Record<string, unknown> = req.body.filter || {};
+
+            const transactionMasked: number = await this.transactionService.maskTransactionWithFilter(applicationName, filter);
+            res.status(200).json({data: transactionMasked, message: 'Transaction Masked'});
 
         } catch (error) {
             next(error);
