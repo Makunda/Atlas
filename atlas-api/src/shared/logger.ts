@@ -1,11 +1,7 @@
 import winstonDaily from 'winston-daily-rotate-file';
 import winston from "winston";
 
-interface IMessage {
-    timestamp: any;
-    level: string;
-    message: string;
-}
+
 
 const {combine, timestamp, printf} = winston.format;
 
@@ -55,7 +51,7 @@ const stream = {
 };
 
 
-if (process.env.NODE_ENV !== 'production') {
+if (process && process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
         format: winston.format.simple(),
     }));

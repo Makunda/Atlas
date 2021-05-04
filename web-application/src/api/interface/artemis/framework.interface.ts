@@ -1,6 +1,8 @@
 export interface Framework {
   id: number;
   name: string;
+  pattern: string;
+  isRegex: boolean;
   description: string;
   type: string;
   category: string;

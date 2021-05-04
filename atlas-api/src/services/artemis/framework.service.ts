@@ -4,8 +4,7 @@ import HttpException from "../../exceptions/HttpException";
 import {Framework} from "@interfaces/artemis/framework.interface";
 import {logger} from "@shared/logger";
 import {Neo4JAccessLayer} from "../../database/neo4jAccessLayer";
-import {int, QueryResult} from "neo4j-driver";
-import CategoryController from "@controller/artemis/category.controller";
+import {int, QueryResult, Record} from "neo4j-driver";
 import CategoryService from "@services/artemis/category.service";
 
 class FrameworksService {
@@ -21,11 +20,13 @@ class FrameworksService {
      * Convert a neo4j record to a Framework
      * @param res Record to convert
      */
-    public static convertRecordToFramework(res: any): Framework {
+    public static convertRecordToFramework(res: Record): Framework {
 
-        const framework: Framework = {
+        return {
             id: int(res.get("id")).toNumber() || -1,
             name: res.get("name"),
+            pattern: res.get("pattern"),
+            isRegex: Boolean(res.get("isRegex")),
             description: res.get("description"),
             type: res.get("type"),
             category: res.get("category") || "",
@@ -34,13 +35,12 @@ class FrameworksService {
             discoveryDate: res.get("discoveryDate"),
             percentageOfDetection: Number(res.get("percentageOfDetection")) || 0,
         };
-
-        return framework;
     }
 
     /**
      * Find a framework in the database
      * @param name Name of the Framework to find
+     * @param internalType Internal type of the framework
      */
     public async findFrameworkbyName(
         name: string,
@@ -139,7 +139,7 @@ class FrameworksService {
             categoryName = String(frameworkData.category);
         }
 
-        const req = `CALL artemis.api.merge.framework($name, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection)`;
+        const req = `CALL artemis.api.merge.framework($name, $pattern, $isRegex, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection)`;
 
         const params: any = Object.assign({}, frameworkData);
         params.category = categoryName ? categoryName : "Undefined";
@@ -186,7 +186,7 @@ class FrameworksService {
                 404,
                 `Framework with name ${frameworkData.name} does not exist.`
             );
-        const req = `CALL artemis.api.update.framework($oldName, $oldInternalType, $name, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection);`;
+        const req = `CALL artemis.api.update.framework($oldName, $oldInternalType, $name, $pattern, $isRegex, $discoveryDate, $location, $description, $type, $category, $internalType, $numberOfDetection, $percentageOfDetection);`;
 
         try {
             const results = await this.neo4jAl.executeWithParameters(req, params);
@@ -212,7 +212,7 @@ class FrameworksService {
         const params: any = Object.assign({}, frameworkData);
         // Force Id
         //params.id = int(frameworkData.id);
-        const req = `CALL artemis.api.update.framework.by.id($id, $name, $discoveryDate, $location, $description, $type, $category, $internalType);`;
+        const req = `CALL artemis.api.update.framework.by.id($id, $name, $pattern, $isRegex, $discoveryDate, $location, $description, $type, $category, $internalType);`;
 
         try {
             const results = await this.neo4jAl.executeWithParameters(req, params);
@@ -237,7 +237,7 @@ class FrameworksService {
         // Force Id
         //params.id = int(frameworkData.id);
         console.log("HERE")
-        const req = `CALL artemis.api.add.framework($id, $name, $discoveryDate, $location, $description, $type, $category, $internalType);`;
+        const req = `CALL artemis.api.add.framework($id, $name, $pattern, $isRegex, $discoveryDate, $location, $description, $type, $category, $internalType);`;
 
         try {
             const results = await this.neo4jAl.executeWithParameters(req, params);

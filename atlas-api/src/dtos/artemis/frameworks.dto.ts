@@ -1,4 +1,4 @@
-import {IsArray, IsDecimal, IsNumber, IsString} from "class-validator";
+import {IsArray, IsBoolean, IsDecimal, IsNumber, IsString} from "class-validator";
 
 export class CreateFrameworkDto {
     @IsNumber()
@@ -6,6 +6,12 @@ export class CreateFrameworkDto {
 
     @IsString()
     public name: string;
+
+    @IsString()
+    public pattern: string;
+
+    @IsBoolean()
+    public isRegex: boolean;
 
     @IsString()
     public description: string;

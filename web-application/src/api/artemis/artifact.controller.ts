@@ -222,6 +222,5 @@ export class ArtifactController {
       throw error;
     }
 
-    // Launch the request
   }
 }

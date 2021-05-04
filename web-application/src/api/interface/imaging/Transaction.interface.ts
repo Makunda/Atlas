@@ -3,5 +3,6 @@ export default interface ITransaction {
   count?: number;
   name: string;
   technologies?: string[];
+  numTechnologies?: number;
   fullName: string;
 }

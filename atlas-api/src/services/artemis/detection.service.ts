@@ -32,8 +32,8 @@ class DetectionService {
     }
 
     /**
-     *
-     * @param appName Get the result of a pending detection
+     * Get the result of a pending detection
+     * @param appName Name of the application
      */
     public getDetectionStatus(appName: string): Detection {
 

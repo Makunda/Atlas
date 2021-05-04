@@ -41,14 +41,34 @@
               label="Name *"
               required
             ></v-text-field>
+            <v-text-field
+              v-if="choice === 'framework'"
+              v-model="frameworkArtifact.name"
+              :rules="[v => !!v || 'A name is required']"
+              label="Name *"
+              required
+            ></v-text-field>
           </v-row>
           <v-row class="mt-4">
             <v-text-field
-              v-model="frameworkArtifact.name"
+              v-model="frameworkArtifact.pattern"
               :rules="[v => !!v || 'A pattern is required']"
               label="Pattern used *"
               required
             ></v-text-field>
+          </v-row>
+          <v-row class="mt-4">
+            <v-checkbox
+              v-model="frameworkArtifact.isRegex"
+              label="Set pattern as regex"
+              required
+            ></v-checkbox>
+            <span class="subtitle-2">
+              <p>
+                If not selected, Artemis will search objects with their names
+                equals to the pattern.
+              </p>
+            </span>
           </v-row>
           <v-row class="mt-5">
             <v-select
@@ -132,7 +152,10 @@ export default Vue.extend({
       } else {
         this.frameworkArtifact.fullName += "*";
       }
+      
       this.authorizedType = this.frameworkArtifact.objectTypes;
+      this.frameworkArtifact.pattern = this.frameworkArtifact.name + ".*";
+      this.frameworkArtifact.isRegex = true;
     },
 
     choice: function() {
@@ -158,6 +181,7 @@ export default Vue.extend({
     categoriesFramework: [],
     categoriesLoading: false
   }),
+  
 
   methods: {
     validate() {
@@ -195,13 +219,15 @@ export default Vue.extend({
         description: this.description,
         type: "Framework",
         category: this.category,
+        pattern: this.frameworkArtifact.pattern,
+        isRegex: this.frameworkArtifact.isRegex,
         internalType: this.frameworkArtifact.objectTypes,
         location: "Custom"
       } as Framework;
 
       try {
         await FrameworkController.addFramework(framework);
-        this.$emit('close');
+        this.$emit("close");
       } catch (err) {
         console.error("Failed to add a Framework.", err);
         this.error = "Failed to add the framework. Reason : " + err;

@@ -183,7 +183,7 @@ export default class ArtifactService {
                     
                     // eslint-disable-next-line max-len
                     const req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType 
-                    AND o.FullName CONTAINS $fullName 
+                    AND o.FullName STARTS WITH $fullName 
                     SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tagName] 
                     ELSE o.Tags + $tagName END`;
 

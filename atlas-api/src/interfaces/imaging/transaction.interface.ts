@@ -4,7 +4,7 @@ interface ITransaction {
     _id?: number;
     count?: number;
     technologies?: string [];
-    numTechnologies?: string [];
+    numTechnologies?: number;
     name: string;
     fullName: string;
 }

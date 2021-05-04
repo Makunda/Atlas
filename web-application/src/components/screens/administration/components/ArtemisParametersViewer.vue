@@ -50,6 +50,47 @@
             </v-btn>
           </v-col>
         </v-row>
+
+        <v-row>
+          <v-col cols="12" md="4">
+            <h3>Load a new Framework Configuration</h3>
+            <p>
+              Load a zip file containing the new versions of the frameworks
+              detected. <br />
+              New Frameworks will be merged with ancient ones found on this
+              instance.
+            </p>
+            <p v-if="loadingSuccess != ''">
+              {{ loadingSuccess }}
+            </p>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-file-input
+              v-model="file"
+              placeholder="Select a zip file"
+              prepend-icon="mdi-paperclip"
+            >
+              <template v-slot:selection="{ text }">
+                <v-chip small label color="primary">
+                  {{ text }}
+                </v-chip>
+              </template>
+            </v-file-input>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-btn
+              class="mt-3"
+              color="charcoal"
+              dark
+              @click="loadConfigFiles()"
+              :loading="loadingConfigFiles"
+            >
+              Load the configuration
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-container>
     </v-card-text>
   </v-card>
@@ -58,6 +99,7 @@
 <script lang="ts">
 import ConfigurationController from "@/api/configuration/configuration.controller";
 import Vue from "vue";
+import {ArtemisController} from "@/api/artemis/artemis.controller";
 
 export default Vue.extend({
   name: "ArtemisParametersViewer",
@@ -65,7 +107,12 @@ export default Vue.extend({
   data: () => ({
     artemisWorkspace: "",
     updatingWorkspace: false,
-    updateSuccess: ""
+    updateSuccess: "",
+
+    // Upload new configuration
+    file: null,
+    loadingConfigFiles: false,
+    loadingSuccess: []
   }),
 
   methods: {
@@ -84,7 +131,7 @@ export default Vue.extend({
       ConfigurationController.setArtemisWorkspace(this.artemisWorkspace)
         .then(async (res: string) => {
           await this.getArtemisWorkspace();
-          this.updateSuccess = `Succesfully updated the workspace`;
+          this.updateSuccess = `Successfully updated the workspace`;
           setTimeout(
             function() {
               this.updateSuccess = "";
@@ -98,6 +145,21 @@ export default Vue.extend({
         .finally(() => {
           this.updatingWorkspace = false;
         });
+    },
+
+
+    async loadConfigFiles() {
+      if(this.file == null) {
+        this.loadingSuccess = "Please select a file to upload.";
+      } else {
+        try {
+          const res = await ArtemisController.triggerImport(this.file);
+
+          this.loadingSuccess = res;
+        } catch (error) {
+          this.loadingSuccess = "Failed to upload the new configuration";
+        }
+      }
     },
 
     refresh() {

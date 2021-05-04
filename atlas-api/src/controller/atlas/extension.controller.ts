@@ -25,6 +25,8 @@ class ExtensionController {
             next(error);
         }
     };
+
+
 }
 
 export default ExtensionController;

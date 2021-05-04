@@ -258,6 +258,7 @@ import { DetectionResult } from "@/api/interface/artemis/detectionResult.interfa
 import { Framework } from "@/api/interface/artemis/framework.interface";
 import { ApplicationController } from "@/api/applications/application.controller";
 import {IApplicationInsights} from "@/api/interface/imaging/Application.interface";
+import {ArtemisCandidates} from "../../../../../atlas-api/src/services/artemis/artemisCandidates.service";
 
 export default Vue.extend({
   name: "ArtemisConsole",
@@ -354,6 +355,14 @@ export default Vue.extend({
     // functions
     listToString(items: string[]): string {
       return items.toString();
+    },
+
+    async getCandidates() {
+      try {
+        this.candidates = await DetectionController.getDetectionCandidates();
+      } catch (e) {
+        console.error("Failed to get the list of candidates", e);
+      }
     },
 
     toPreQueue(application: string, language: string, appended: boolean) {
@@ -681,6 +690,7 @@ export default Vue.extend({
         this.diplayNotInstalled = true;
       });
 
+    this.getCandidates();
     this.constantStatusCheck();
     this.getApplicationInsights();
     this.loadQueue();

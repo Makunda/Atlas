@@ -221,6 +221,7 @@
                 :server-items-length="numTransaction"
                 :loading="loadingTransaction"
                 class="elevation-1"
+                fixed-header
               >
                 <template v-slot:item.actions="{ item }">
                   <v-icon small class="mr-2" @click="maskTransaction(item)">
@@ -299,8 +300,9 @@ export default Vue.extend({
         value: "name"
       },
       { text: "Full Name", value: "fullName" },
-      { text: "Count", value: "count" },
+      { text: "Object Count", value: "count" },
       { text: "Technologies", value: "technologies" },
+      { text: "Number of technologies", value: "numTechnologies" },
       { text: "Actions", value: "actions", sortable: false }
     ],
 
@@ -311,8 +313,9 @@ export default Vue.extend({
         value: "name"
       },
       { text: "Full Name", value: "fullName" },
-      { text: "Count", value: "count" },
+      { text: "Object Count", value: "count" },
       { text: "Technologies", value: "technologies" },
+      { text: "Number of technologies", value: "numTechnologies" },
       { text: "Actions", value: "actions", sortable: false }
     ],
 
@@ -483,10 +486,10 @@ export default Vue.extend({
       this.refresh();
     },
 
-    refresh() {
-      this.transactionApiCall();
-      this.maskedTransactionApiCall();
-      this.getInsights();
+    async refresh() {
+      await this.getInsights();
+      await this.transactionApiCall();
+      await this.maskedTransactionApiCall();
     }
   },
 

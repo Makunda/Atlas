@@ -138,13 +138,12 @@ class TransactionService {
         try {
             const req = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n) 
             WHERE n:Object OR n:SubObject
-            WITH t as tran, COUNT(n) as count, COLLECT(DISTINCT n.Level) as technologies 
-            ${this.buildFilter(filter)}  
-            RETURN tran, count, technologies
+            WITH t as tran, COUNT(n) as count, COLLECT(DISTINCT n.Level) as technologies, 
+            COUNT(DISTINCT n.Level) as countTechnology 
+            ${this.buildFilter(filter)} 
+            RETURN tran, count, technologies, countTechnology
             ORDER BY ${TransactionService.getSortParameter("tran", sort)} ${TransactionService.getSortDesc(sortDesc)} 
             SKIP $toSkip LIMIT $toGet `;
-
-            console.log("Req ", req)
 
             const result = await this.neo4jAl.executeWithParameters(req, {
                 "toSkip": int(start),
@@ -156,6 +155,7 @@ class TransactionService {
                 const tr = transactionFromObj(result.records[i].get("tran"));
                 tr.count = int(result.records[i].get("count")).toNumber();
                 tr.technologies = result.records[i].get("technologies");
+                tr.numTechnologies = int(result.records[i].get("countTechnology")).toNumber();
                 listTransaction.push(tr);
             }
 
@@ -336,7 +336,6 @@ class TransactionService {
             REMOVE tranNode:TransactionNode SET tranNode:${TransactionService.MASKED_TRANSACTION_NODE_LABEL}
             RETURN COUNT(tran) as masked`;
 
-            console.log("Debug :", req)
             const result = await this.neo4jAl.executeWithParameters(req, {
                 "limitCount": limit
             });

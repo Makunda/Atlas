@@ -1,10 +1,8 @@
-//CALL artemis.api.application.get.all.candidate.languages()
-
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import {DetectionCandidate} from "@dtos/artemis/detectionCandidate.dto";
-import HttpException from "@exceptions/HttpException";
 import {logger} from "@shared/logger";
-import {Record} from 'neo4j-driver';
+import HttpException from "@exceptions/HttpException";
+import {Record} from "neo4j-driver";
 
 export class ArtemisCandidates {
 

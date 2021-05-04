@@ -99,6 +99,7 @@ export class ArtemisController {
 
   /**
    * Get the Repository mode of artemis
+   * TODO : Remove direct call
    */
   public static async getRepositoryMode(): Promise<boolean> {
     const request = `CALL artemis.get.repositoryMode();`;
@@ -110,6 +111,7 @@ export class ArtemisController {
 
   /**
    * Set the Repository mode of artemis
+   * TODO : Remove direct call
    */
   public static async setMailsRecipients(
     listRecipients: string
@@ -133,6 +135,7 @@ export class ArtemisController {
 
   /**
    * Get the Repository mode of artemis
+   * TODO : Remove direct call
    */
   public static async getMailsRecipients(): Promise<string[]> {
     const request = `CALL artemis.get.mailsRecipients();`;
@@ -140,5 +143,52 @@ export class ArtemisController {
     const results: QueryResult = await this.neo4jal.execute(request);
     const newValue: string = results.records[0].get(0);
     return newValue.split(",");
+  }
+
+  /**
+   * Export all the data from artemis to a zip
+   */
+  public static launchExportAll(): void {
+    const url =
+      ArtemisController.API_BASE_URL + `/api/artemis/utils/export/all`;
+
+    const popout = window.open(url);
+    window.setTimeout(function() {
+      popout.close();
+    }, 1000);
+  }
+
+  /**
+   * Send the new configuration to the platform to be processed
+   * @param file
+   */
+  public static async triggerImport(file): Promise<string> {
+    const url =
+      ArtemisController.API_BASE_URL + `/api/artemis/utils/import/frameworks`;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return String(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to extract the Artifact list.`,
+        error
+      );
+      throw error;
+    }
   }
 }

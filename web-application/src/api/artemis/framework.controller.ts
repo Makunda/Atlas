@@ -270,6 +270,8 @@ export class FrameworkController {
 
   /**
    * Update a framework ( the name will be used
+   * @param oldName
+   * @param oldInternalType
    * @param framework Framework updated
    */
   public static async updateFrameworks(

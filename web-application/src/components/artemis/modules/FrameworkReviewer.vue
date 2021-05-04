@@ -110,7 +110,7 @@
                       <v-container>
                         <v-row class="py-1 pb-5">
                           <v-col cols="4">
-                            <v-subheader class="text-h6">
+                            <v-subheader class="subtitle-1">
                               Name:
                             </v-subheader>
                           </v-col>
@@ -125,9 +125,45 @@
                           </v-col>
                         </v-row>
 
+                        <v-row class="py-1 pb-2">
+                          <v-col cols="4">
+                            <v-subheader class="subtitle-1">
+                              Pattern :
+                            </v-subheader>
+                          </v-col>
+
+                          <v-col cols="8">
+                            <v-text-field
+                              v-model="editedItem.pattern"
+                              counter="25"
+                              hint="Name of the framework ( will be used during the detection )"
+                              label="Name"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+
+                        <v-row class="py-1 pb-5">
+                          <v-col cols="4">
+                            <v-subheader class="subtitle-1">
+                              Pattern regex Mode:
+                            </v-subheader>
+                          </v-col>
+
+                          <v-col cols="8">
+                            <v-checkbox
+                              v-model="editedItem.isRegex"
+                              :label="
+                                editedItem.isRegex
+                                  ? `Regex mode enabled`
+                                  : `Regex mode disabled`
+                              "
+                            ></v-checkbox>
+                          </v-col>
+                        </v-row>
+
                         <v-row class="py-1">
                           <v-col cols="4">
-                            <v-subheader class="text-h6">
+                            <v-subheader class="subtitle-1">
                               Framework type:
                             </v-subheader>
                           </v-col>
@@ -148,7 +184,7 @@
 
                         <v-row class="py-1">
                           <v-col cols="4">
-                            <v-subheader class="text-h6">
+                            <v-subheader class="subtitle-1">
                               Category:
                             </v-subheader>
                           </v-col>
@@ -166,7 +202,7 @@
                         </v-row>
                         <v-row class="py-1">
                           <v-col cols="4">
-                            <v-subheader class="text-h6">
+                            <v-subheader class="subtitle-1">
                               Internal Types:
                             </v-subheader>
                           </v-col>
@@ -185,7 +221,7 @@
                         </v-row>
                         <v-row class="py-1 pb-5">
                           <v-col cols="4">
-                            <v-subheader class="text-h6">
+                            <v-subheader class="subtitle-1">
                               Location:
                             </v-subheader>
                           </v-col>
@@ -313,6 +349,14 @@
                 <v-container>
                   <v-row class="my-4">More info about {{ item.name }}</v-row>
                   <v-row class="mb-4"
+                    >Pattern:
+                    <strong class="ml-3">{{ item.pattern }} </strong></v-row
+                  >
+                  <v-row class="mb-4"
+                    >Regex Mode:
+                    <strong class="ml-3">{{ item.isRegex }} </strong></v-row
+                  >
+                  <v-row class="mb-4"
                     >Category:
                     <strong class="ml-3">{{ item.category }} </strong></v-row
                   >
@@ -429,6 +473,24 @@
               </v-btn>
             </v-col>
           </v-row>
+          <v-row class="mb-4">
+            <v-col class="mt-1" cols="6">
+              Export the frameworks to a zip file
+              <br />
+            </v-col>
+            <v-col cols="6">
+              <v-btn
+                class="ma-2"
+                :loading="generatingDownload"
+                :disabled="generatingDownload"
+                color="teal"
+                dark
+                @click="launchExport"
+              >
+                Download
+              </v-btn>
+            </v-col>
+          </v-row>
           <v-divider></v-divider>
         </v-container>
       </v-card-text>
@@ -463,6 +525,7 @@ import Vue from "vue";
 import { CategoryController } from "@/api/artemis/category.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
 import { Framework } from "@/api/interface/artemis/framework.interface";
+import { ArtemisController } from "@/api/artemis/artemis.controller";
 
 export default Vue.component("FrameworkReviewer", {
   data: () => ({
@@ -550,7 +613,10 @@ export default Vue.component("FrameworkReviewer", {
 
     // AutoClean
     loadingAutoClean: false,
-    autoCleanInfo: ""
+    autoCleanInfo: "",
+
+    // Export
+    generatingDownload: false
   }),
 
   computed: {
@@ -836,6 +902,10 @@ export default Vue.component("FrameworkReviewer", {
           this.loadingTable = false;
           this.loadingSearch = false;
         });
+    },
+
+    launchExport() {
+      ArtemisController.launchExportAll();
     },
 
     nextPage() {

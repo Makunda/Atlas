@@ -35,20 +35,25 @@ export class FrameworkAssistantManager {
         // Import the assistants
         if (!fs.existsSync(FrameworkAssistantManager.RESOURCE_DIR)) {
             fs.mkdirSync(FrameworkAssistantManager.RESOURCE_DIR);
-        } else {
-            // Load assistants from it
-            this.assistants = [];
-            try {
-                const jsonContent: IFrameworkAssistant[] = JSON.parse(
-                    fs.readFileSync(filePath, "utf8")
-                );
-                jsonContent.forEach((x) => {
-                    this.assistants.push(FrameworkAssistant.fromJson(x));
-                });
-            } catch (err) {
-                logger.error("Failed to load the Assistant file.", err);
-            }
         }
+
+        //Create file if not exists
+        if(!fs.existsSync(filePath)) {
+            fs.appendFileSync(filePath, "{}");
+        }
+        // Load assistants from it
+        this.assistants = [];
+        try {
+            const jsonContent: IFrameworkAssistant[] = JSON.parse(
+                fs.readFileSync(filePath, "utf8")
+            );
+            jsonContent.forEach((x) => {
+                this.assistants.push(FrameworkAssistant.fromJson(x));
+            });
+        } catch (err) {
+            logger.error("Failed to load the Assistant file.", err);
+        }
+
 
         //
         this.iterateOverAssistants();
