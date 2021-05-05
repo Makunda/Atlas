@@ -49,7 +49,6 @@ import Vue from "vue/types/umd";
       <template v-slot:append>
         <div class="pa-2">
           <v-list>
-
             <v-list-item @click="changeView('Administration')">
               <v-list-item-icon>
                 <v-icon>mdi-cog</v-icon>
@@ -59,7 +58,6 @@ import Vue from "vue/types/umd";
                 <v-list-item-title>Administration</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
 
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">

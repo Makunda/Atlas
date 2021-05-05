@@ -187,10 +187,21 @@
               </v-row>
               <v-row class="mt-6 mb-1">
                 <v-spacer></v-spacer>
-                <v-btn class="mr-3" depressed color="grey" dark @click="transactionApiCall()">
+                <v-btn
+                  class="mr-3"
+                  depressed
+                  color="grey"
+                  dark
+                  @click="transactionApiCall()"
+                >
                   Apply filter
                 </v-btn>
-                <v-btn depressed color="persianGrey" dark @click="transactionApiCall()">
+                <v-btn
+                  depressed
+                  color="persianGrey"
+                  dark
+                  @click="transactionApiCall()"
+                >
                   Remove all non-compliant
                 </v-btn>
               </v-row>
@@ -434,7 +445,7 @@ export default Vue.extend({
         maxTechnologies: this.rangeTechnology[1],
         minObject: this.rangeObject[0],
         maxObject: this.rangeObject[1],
-        techContained : this.technologySearch
+        techContained: this.technologySearch
       };
 
       const { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;

@@ -1,8 +1,9 @@
+import {Record} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import {DetectionCandidate} from "@dtos/artemis/detectionCandidate.dto";
 import {logger} from "@shared/logger";
 import HttpException from "@exceptions/HttpException";
-import {Record} from "neo4j-driver";
+
 
 export class ArtemisCandidates {
 

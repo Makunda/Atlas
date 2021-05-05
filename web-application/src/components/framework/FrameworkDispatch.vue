@@ -152,7 +152,7 @@ export default Vue.extend({
       } else {
         this.frameworkArtifact.fullName += "*";
       }
-      
+
       this.authorizedType = this.frameworkArtifact.objectTypes;
       this.frameworkArtifact.pattern = this.frameworkArtifact.name + ".*";
       this.frameworkArtifact.isRegex = true;
@@ -181,7 +181,6 @@ export default Vue.extend({
     categoriesFramework: [],
     categoriesLoading: false
   }),
-  
 
   methods: {
     validate() {

@@ -99,7 +99,7 @@
 <script lang="ts">
 import ConfigurationController from "@/api/configuration/configuration.controller";
 import Vue from "vue";
-import {ArtemisController} from "@/api/artemis/artemis.controller";
+import { ArtemisController } from "@/api/artemis/artemis.controller";
 
 export default Vue.extend({
   name: "ArtemisParametersViewer",
@@ -147,9 +147,8 @@ export default Vue.extend({
         });
     },
 
-
     async loadConfigFiles() {
-      if(this.file == null) {
+      if (this.file == null) {
         this.loadingSuccess = "Please select a file to upload.";
       } else {
         try {

@@ -73,7 +73,7 @@ class ArtemisService {
 
         const sanitized_path : string = filePath.replace(/\\/g, "\\\\");
         const req = `CALL artemis.api.import.data("${sanitized_path}")`;
-        console.log("Req : ", req);
+
         try {
             const res = await this.neo4jAl.execute(req);
             for(let i = 0; i < res.records.length; i++) {

@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import { Configuration, Credentials } from "@/Configuration";
+import { Configuration, Credentials } from "./Configuration";
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
 import { ServerInfo } from "neo4j-driver";
 import ConfigurationController from "./api/configuration/configuration.controller";

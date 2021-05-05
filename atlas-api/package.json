@@ -36,7 +36,9 @@
     "@interfaces": "dist/interfaces",
     "@exceptions": "dist/exceptions"
   },
-  "bin": "dist/index.js",
+  "bin": {
+    "atlas" : "dist/index.js"
+  },
   "pkg": {
     "scripts": [
       "dist/**/*.js"
@@ -44,6 +46,7 @@
     "assets": [
       "dist/**/*",
       "dist/pre-start/env/production.env",
+      "dist/pre-start/env/development.env",
       "config/**/*",
       "profiles/**/*",
       "serialization/**/*",

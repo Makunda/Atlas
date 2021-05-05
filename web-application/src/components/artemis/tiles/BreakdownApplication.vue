@@ -280,11 +280,16 @@
                 clearable
               ></v-text-field>
             </v-row>
-            <v-row  v-if="
+            <v-row
+              v-if="
                 selectedTarget === 'architecture' &&
                   selectedLocation !== 'together'
-              ">
-              <p class="mx-4 mb-6">If you choose to extract the nodes separately, one subset will be created by item selected. </p>
+              "
+            >
+              <p class="mx-4 mb-6">
+                If you choose to extract the nodes separately, one subset will
+                be created by item selected.
+              </p>
             </v-row>
             <v-row
               v-if="
@@ -645,8 +650,7 @@ export default Vue.extend({
         this.secondaryGroupName
       )
         .then((res: any) => {
-          this.textSnackBar =
-            `Extraction to a ${extractionType} is a success. Refresh Imaging in few seconds`;
+          this.textSnackBar = `Extraction to a ${extractionType} is a success. Refresh Imaging in few seconds`;
           this.refresh();
         })
         .catch(err => {

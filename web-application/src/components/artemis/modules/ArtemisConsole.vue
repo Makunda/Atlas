@@ -257,8 +257,7 @@ import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
 import { Framework } from "@/api/interface/artemis/framework.interface";
 import { ApplicationController } from "@/api/applications/application.controller";
-import {IApplicationInsights} from "@/api/interface/imaging/Application.interface";
-import {ArtemisCandidates} from "../../../../../atlas-api/src/services/artemis/artemisCandidates.service";
+import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 
 export default Vue.extend({
   name: "ArtemisConsole",
