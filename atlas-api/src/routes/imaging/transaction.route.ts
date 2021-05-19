@@ -40,8 +40,11 @@ class TransactionRoute implements Route {
         this.router.get(`${this.path}/unmask/all/:application`,
             this.transactionController.unmaskAllTransaction);
 
-        this.router.get(`${this.path}/mask/by/:application`,
+        this.router.post(`${this.path}/mask/byCount`,
             this.transactionController.maskByObjectCount);
+
+        this.router.post(`${this.path}/mask/byTerms`,
+            this.transactionController.maskObjectByTerms);
     }
 }
 

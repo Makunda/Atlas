@@ -44,6 +44,32 @@
                       </v-btn>
                     </v-card-actions>
                   </v-card>
+                  <v-card class="mr-2" max-width="344">
+                    <v-card-text>
+                      <div>Clean by number of objects</div>
+                      <div class="text--primary">
+                        Mask all the transactions containing certain terms in
+                        their names
+                        <v-combobox
+                          v-model="maskActionTermsList"
+                          label="List of terms"
+                          multiple
+                          chips
+                        ></v-combobox>
+                      </div>
+                    </v-card-text>
+                    <v-spacer></v-spacer>
+                    <v-card-actions>
+                      <v-btn
+                        text
+                        color="persianGrey"
+                        @click="maskByTerms"
+                        :loading="maskActionLoading"
+                      >
+                        <p>Mask the transactions</p>
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
                   <v-card max-width="344">
                     <v-card-text>
                       <div>Reset transactions</div>
@@ -304,13 +330,15 @@ export default Vue.extend({
   },
 
   data: () => ({
+    application: "",
+
     headers: [
       {
         text: "Name",
         align: "start",
         value: "name"
       },
-      { text: "Full Name", value: "fullName" },
+      //{ text: "Full Name", value: "fullName" },
       { text: "Object Count", value: "count" },
       { text: "Technologies", value: "technologies" },
       { text: "Number of technologies", value: "numTechnologies" },
@@ -323,7 +351,7 @@ export default Vue.extend({
         align: "start",
         value: "name"
       },
-      { text: "Full Name", value: "fullName" },
+      //{ text: "Full Name", value: "fullName" },
       { text: "Object Count", value: "count" },
       { text: "Technologies", value: "technologies" },
       { text: "Number of technologies", value: "numTechnologies" },
@@ -354,6 +382,7 @@ export default Vue.extend({
     // Power Actions
     maskActionLimit: 0,
     maskActionLoading: false,
+    maskActionTermsList: [] as string[],
 
     unmaskAllActionLoading: false,
 
@@ -388,7 +417,22 @@ export default Vue.extend({
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to mask by count", err);
+        console.error("Failed to mask by count.", err);
+      } finally {
+        this.maskActionLoading = false;
+      }
+    },
+
+    async maskByTerms() {
+      try {
+        this.maskActionLoading = true;
+        this.numTransaction = await TransactionController.maskByTerms(
+          this.application,
+          this.maskActionTermsList
+        );
+        await this.refresh();
+      } catch (err) {
+        console.error("Failed to mask by terms.", err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -449,12 +493,20 @@ export default Vue.extend({
       };
 
       const { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
+
+      let sortByOption = null;
+      let sortByDesccOption = null;
+      if (Array.isArray(sortBy) && sortBy.length === 1)
+        sortByOption = sortBy[0];
+      if (Array.isArray(sortDesc) && sortDesc.length === 1)
+        sortByDesccOption = sortDesc[0];
+
       const transactions = await TransactionController.getBatchTransaction(
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
-        sortBy,
-        sortDesc,
+        sortByOption,
+        sortByDesccOption,
         filter
       );
 
@@ -474,12 +526,20 @@ export default Vue.extend({
         page,
         itemsPerPage
       } = this.optionsMaskedTransaction;
+
+      let sortByOption = null;
+      let sortByDesccOption = null;
+      if (Array.isArray(sortBy) && sortBy.length === 1)
+        sortByOption = sortBy[0];
+      if (Array.isArray(sortDesc) && sortDesc.length === 1)
+        sortByDesccOption = sortDesc[0];
+
       const transactions = await TransactionController.getBatchMaskedTransaction(
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
-        sortBy,
-        sortDesc
+          sortByOption,
+          sortByDesccOption
       );
 
       this.loadingMaskedTransaction = false;

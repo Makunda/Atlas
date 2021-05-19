@@ -104,6 +104,12 @@ export default class LevelController {
     }
   }
 
+  /**
+   * Create a level for a specific application
+   * @param application Name of the application
+   * @param parentLevelID
+   * @param level
+   */
   public static async createLevel(
     application: string,
     parentLevelID: number,
@@ -157,6 +163,36 @@ export default class LevelController {
       console.error(
         `Failed to reach the API : ${url}. Failed to create new levels.`,
         error
+      );
+      throw error;
+    }
+  }
+
+  public static async hideLevel(
+      application: string,
+      level: ILevel
+  ): Promise<ILevel> {
+    const url =
+        LevelController.API_BASE_URL +
+        `/api/imaging/levels/hide/${application}`;
+
+    try {
+      const body = {
+        levelId: level._id
+      };
+
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ILevel;
+      } else {
+        throw new Error(`The API returned status : ${res.status}. ${res.data}`);
+      }
+    } catch (error) {
+      console.error(
+          `Failed to reach the API : ${url}. Failed to hide.`,
+          error
       );
       throw error;
     }

@@ -265,13 +265,12 @@ export default Vue.extend({
             function() {
               this.healthcheck();
             }.bind(this),
-            5000
+            10000
           );
         });
     },
 
     changeView(view: string) {
-      console.log("Go to administration");
       this.$store.state.currentView = view;
       this.currentScreen = view;
     },

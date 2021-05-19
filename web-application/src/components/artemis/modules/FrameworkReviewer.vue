@@ -711,7 +711,6 @@ export default Vue.component("FrameworkReviewer", {
       const oldType: string = this.focusedFramework.internalType;
 
       this.frameworkUpdateSnackBar = oldName;
-      console.log("New Framework : ", item);
 
       this.updatingFramework = true;
       FrameworkController.updateFrameworks(oldName, oldType, item)
@@ -741,7 +740,6 @@ export default Vue.component("FrameworkReviewer", {
     },
 
     deleteItemConfirm() {
-      console.log("Deletion not implemented");
       this.closeDelete();
     },
 

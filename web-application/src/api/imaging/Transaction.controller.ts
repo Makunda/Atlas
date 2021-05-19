@@ -205,7 +205,7 @@ export default class TransactionController {
         }
       } else {
         throw new Error(
-          `Failed to a batch of masked transactions. Status (${res.status})`
+          `Failed to a batch of transactions. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -334,17 +334,56 @@ export default class TransactionController {
   ): Promise<number> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/mask/by/${application}?limit=${limit}`;
+      `/api/imaging/transactions/mask/byCount`;
 
     try {
-      const res = await axios.get(url);
+      const body = {
+        application: application,
+        limit: limit
+      };
+      const res = await axios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to un-mask all transactions. Status (${res.status})`
+          `Failed to mask transactions by Number of objects. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Mask transaction by list of terms in the name
+   * @param application Application concerned
+   * @param terms
+   */
+  public static async maskByTerms(
+    application: string,
+    terms: string[]
+  ): Promise<number> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/mask/byTerms`;
+
+    try {
+      const body = {
+        application: application,
+        terms: terms
+      };
+      console.log(`DEBUG : Url ${url} `, body);
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Number(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to mask transactions by terms. Status (${res.status})`
         );
       }
     } catch (error) {

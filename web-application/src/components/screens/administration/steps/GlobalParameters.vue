@@ -2,6 +2,10 @@
   <v-card>
     <v-card-title>
       Global parameters
+      <v-spacer></v-spacer>
+      <v-btn icon color="green" @click="refresh()">
+        <v-icon>mdi-cached</v-icon>
+      </v-btn>
     </v-card-title>
     <v-card-subtitle>
       Modify the parameters of the Atlas platform
@@ -16,27 +20,31 @@
             </v-card-title>
             <v-card-text>
               <v-container class="pa-3">
-                <v-row
-                  ><p class="text-subtitle-1 pt-3">
-                    Auto detect Imaging installation path :
-                  </p>
-                  <v-spacer></v-spacer
-                  ><v-btn class="ma-2" color="persianGrey" dark>
-                    Auto Detect
-                  </v-btn>
-                </v-row>
-
-                <v-row class="mt-7">
-                  <p class="text-decoration-underline text-subtitle-1">
-                    Manual input of the Imaging path :
-                  </p></v-row
-                >
-                <v-row px-3>
-                  <v-text-field
-                    label="Main input"
-                    :rules="rules"
-                    hide-details="auto"
-                  ></v-text-field>
+                <v-row >
+                  <v-col cols="12" md="2">
+                    <p class="text-decoration-underline text-subtitle-1 pt-4">
+                      Actual Imaging path :
+                    </p>
+                  </v-col>
+                  <v-col cols="12" md="8">
+                    <v-text-field
+                      outlined
+                      v-model="imagingPath"
+                      label="Main input"
+                      hide-details="auto"
+                    ></v-text-field>
+                    <p class="subtitle-2 red--text" v-if="pathError" >
+                      {{pathError}}
+                    </p>
+                    <p class="subtitle-2 light-green--text" v-if="pathSuccess" >
+                      {{ pathSuccess }}
+                    </p>
+                  </v-col>
+                  <v-col cols="2" md="2">
+                    <v-btn class="mt-2"  color="persianGrey" @click="setImagingPath()" dark>
+                      Apply changes
+                    </v-btn>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -47,10 +55,34 @@
           <!--    Path to imaging on the system       -->
           <v-card width="100%">
             <v-card-title class="text-h6"
-              >Status of the extensions</v-card-title
+              >Status of the extensions
+              <v-spacer></v-spacer>
+              <v-btn icon color="green" @click="refreshExtension()">
+                <v-icon>mdi-cached</v-icon>
+              </v-btn>
+            </v-card-title
             >
             <v-card-text>
-              <v-row> </v-row>
+              <v-row class="justify-center pa-3">
+                <v-col cols="12" md="4" class="d-flex flex-column align-center justify-center">
+                  <img src="@/assets/extensions/demeter_icon.png" height="150px" width="150px">
+                  <h4 class="pt-3">Demeter Extension</h4>
+                  <p>Imaging remodelling</p>
+                  <p>{{  demeterSuccess }}</p>
+                  <p v-if="demeterError" class="red--text">{{  demeterError }}</p>
+
+                </v-col>
+                <v-col cols="12" md="4" class="d-flex flex-column align-center  justify-center">
+                  <img src="@/assets/extensions/artemis_icon.png" height="150px" width="150px">
+                  <h4 class="pt-3">Artemis Extension</h4>
+                  <p>Frameworks and communities detection</p>
+                  <p>{{  artemisSuccess }}</p>
+                  <p v-if="artemisError" class="red--text">{{  artemisError }}</p>
+                </v-col>
+                <v-col cols="12" md="4" class="d-flex flex-column align-center  justify-center">
+
+                </v-col>
+              </v-row>
             </v-card-text>
           </v-card>
         </v-row>
@@ -61,16 +93,86 @@
 
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import { Properties, Credentials, Configuration } from "@/Configuration";
-import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
+import InstallationController from "@/api/imaging/Installation.controller";
 
 export default Vue.extend({
   name: "GlobalParameters",
 
   computed: {},
 
-  data: () => ({}),
+  data: () => ({
+    publicPath: process.env.BASE_URL,
 
-  methods: {}
+    imagingPath: "",
+
+    // errors & success
+    pathError: "",
+    pathSuccess: "",
+
+    demeterError: "",
+    demeterSuccess : "",
+
+    artemisError: "",
+    artemisSuccess : ""
+  }),
+
+  methods: {
+    refresh() {
+      this.getImagingPath();
+    },
+
+    refreshExtension() {
+      this.getDemeterVersion();
+      this.getArtemisVersion();
+    },
+
+    async setImagingPath() {
+      try {
+        this.imagingPath = await InstallationController.setImagingPath(
+          this.imagingPath
+        );
+        this.pathError = "";
+        this.pathSuccess = "The path was successfully changed.";
+      } catch (err) {
+        this.pathSuccess = "";
+        this.pathError = err;
+      }
+    },
+
+    async getImagingPath() {
+      try {
+        this.imagingPath = await InstallationController.getImagingPath();
+        this.pathError = "";
+      } catch (err) {
+        this.pathSuccess = "";
+        this.pathError = err;
+      }
+    },
+
+    async getDemeterVersion() {
+      try {
+        this.demeterSuccess = "Version : " + await InstallationController.getDemeterStatus();
+        this.demeterError = "";
+      } catch (err) {
+        this.demeterSuccess = "";
+        this.demeterError = err;
+      }
+    },
+
+    async getArtemisVersion() {
+      try {
+        this.artemisSuccess = "Version : " + await InstallationController.getArtemisStatus();
+        this.artemisError = "";
+      } catch (err) {
+        this.artemisSuccess = "";
+        this.artemisError = err;
+      }
+    }
+  },
+
+  mounted() {
+    this.refresh();
+    this.refreshExtension();
+  }
 });
 </script>

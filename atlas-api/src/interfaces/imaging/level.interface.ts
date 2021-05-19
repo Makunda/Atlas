@@ -22,6 +22,7 @@ import {int} from "neo4j-driver";
 
 interface ILevel {
     _id?: number;
+    hidden?: boolean;
     concept: boolean;
     alternateDrilldown?: boolean;
     color: string;
@@ -46,9 +47,10 @@ class LevelNode {
      * Create an object from a row
      * @param row
      */
-    public static fromObj(row: any): LevelNode {
+    public static fromObj(row: any, hidden=false): LevelNode {
         const level = {
             _id: int(row["identity"]).toNumber() || -1,
+            hidden: hidden,
             concept: Boolean(row["properties"]["Concept"]) || false,
             alternateDrilldown: Boolean(row["properties"]["AlternateDrilldown"]) || false,
             color: String(row["properties"]["Color"]),
@@ -60,6 +62,8 @@ class LevelNode {
         } as ILevel
         return new LevelNode(level);
     }
+
+
 
     public getRecord(): ILevel {
         return this.levelObj;

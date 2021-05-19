@@ -49,8 +49,14 @@
               <v-icon left>
                 mdi-image-auto-adjust
               </v-icon>
-              Assistant {{ daemonLevelState ? "active" : "stopped" }}
+              <span v-if="daemonLevelState">
+                Assistant active
+              </span>
+              <span v-else>
+                Click to activate
+              </span>
             </v-btn>
+            <p class="justify-center text-center w-100 px-5 pt-2">Click on the button above to toggle the state of the assistant</p>
           </v-col>
         </v-row>
       </v-container>
@@ -91,7 +97,6 @@ export default Vue.extend({
     getStatus() {
       AgentController.getStatus(this.nameAgent)
         .then((res: boolean) => {
-          console.log("Status of the Module agent", res);
           this.daemonLevelState = res;
         })
         .catch(err => {

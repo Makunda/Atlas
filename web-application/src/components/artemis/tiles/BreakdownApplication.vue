@@ -539,7 +539,6 @@ export default Vue.extend({
     getApplicationAndLanguages() {
       ApplicationController.getListApplications()
         .then((res: string[]) => {
-          console.log("Application list", res);
           this.applicationItems = res;
           this.defaultApplication = res[0];
         })
@@ -566,7 +565,6 @@ export default Vue.extend({
         this.classExternality
       )
         .then((res: Artifact[]) => {
-          console.log("Get Artifact Tree", res);
           this.artifactItems = res;
         })
         .catch(err => {

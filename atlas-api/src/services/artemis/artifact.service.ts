@@ -214,7 +214,6 @@ export default class ArtifactService {
                 });
 
                 await tx.commit()
-                console.info("Transaction successfully committed.")
             } catch (err) {
                 if(tx != null) {
                     await tx.rollback();

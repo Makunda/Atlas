@@ -30,9 +30,6 @@ export class ArtemisController {
         if (Array.isArray(apiResponse.data)) {
           languageList = apiResponse.data;
         }
-        console.info(
-          `${languageList.length} languages were retrieved. ${languageList}`
-        );
       } else {
         console.warn(`Failed to retrieve languages. Status (${res.status})`);
       }

@@ -194,7 +194,7 @@ export default Vue.extend({
           this.items = res;
         })
         .catch(err => {
-          console.log("Failed to retrieve the list of Category", err);
+          console.error("Failed to retrieve the list of Category", err);
         });
     },
 

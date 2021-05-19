@@ -127,10 +127,22 @@ class TransactionController {
         }
     };
 
+    public maskObjectByTerms = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const applicationName = String(req.body.application);
+            const terms: string[] = req.body.terms || [];
+            const state: number = await this.transactionService.maskTransactionByTerms(applicationName, terms);
+            res.status(200).json({data: state, message: 'UnMasked all'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
     public maskByObjectCount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const applicationName = String(req.params.application);
-            const limit = Number(req.query.limit) || 0;
+            const applicationName = String(req.body.application);
+            const limit = Number(req.body.limit) || 0;
             const count: number = await this.transactionService.maskTransactionByCount(applicationName, limit);
             res.status(200).json({data: count, message: 'Masked'});
 

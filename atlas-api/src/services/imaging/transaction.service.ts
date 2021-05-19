@@ -136,14 +136,15 @@ class TransactionService {
                                      sortDesc?: boolean): Promise<ITransaction[]> {
 
         try {
-            const req = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n) 
+            const req = `MATCH (t:Transaction:\`${application}\`)
+            OPTIONAL MATCH (t)-[:Contains]->(n:\`${application}\`) 
             WHERE n:Object OR n:SubObject
             WITH t as tran, COUNT(n) as count, COLLECT(DISTINCT n.Level) as technologies, 
             COUNT(DISTINCT n.Level) as countTechnology 
             ${this.buildFilter(filter)} 
             RETURN tran, count, technologies, countTechnology
             ORDER BY ${TransactionService.getSortParameter("tran", sort)} ${TransactionService.getSortDesc(sortDesc)} 
-            SKIP $toSkip LIMIT $toGet `;
+            SKIP $toSkip LIMIT $toGet;`;
 
             const result = await this.neo4jAl.executeWithParameters(req, {
                 "toSkip": int(start),
@@ -182,7 +183,8 @@ class TransactionService {
                                            sortDesc?: boolean): Promise<ITransaction[]> {
 
         try {
-            const req = `MATCH (t:${TransactionService.MASKED_TRANSACTION_LABEL}:\`${application}\`)-[:Contains]->(n)
+            const req = `MATCH (t:${TransactionService.MASKED_TRANSACTION_LABEL}:\`${application}\`)
+            OPTIONAL MATCH (t)-[:Contains]->(n:\`${application}\`)
             WHERE n:Object OR n:SubObject 
             RETURN t as tran, COUNT(n) as count , COLLECT(DISTINCT n.Level) as technologies, 
             COUNT(DISTINCT n.Level) as numTechnologies 
@@ -199,14 +201,14 @@ class TransactionService {
                 const tr = transactionFromObj(result.records[i].get("tran"));
                 tr.count = int(result.records[i].get("count")).toNumber();
                 tr.technologies = result.records[i].get("technologies");
-                tr.numTechnologies = result.records[i].get("numTechnologies");
+                tr.numTechnologies = int(result.records[i].get("numTechnologies")).toNumber();
                 listTransaction.push(tr);
             }
 
             return listTransaction;
         } catch (err) {
             logger.error(
-                `Failed to get catch of transaction for application ${application}.`,
+                `Failed to get the list of transactions for application ${application}.`,
                 err
             );
             throw new HttpException(500, "Internal error");
@@ -322,19 +324,55 @@ class TransactionService {
     }
 
     /**
+     * Mask a batch of transactions containing a list of certain terms
+     * @param application Name of the application
+     * @param terms
+     */
+    public async maskTransactionByTerms(application: string, terms : string[]): Promise<number> {
+        try {
+            // Ignore if the list of term is empty
+            if(terms.length == 0) return 0;
+
+            const req = `
+            MATCH (t:Transaction:\`${application}\`) WHERE any(x in $termList WHERE t.Name contains x)
+            WITH t as tran ,COUNT(n) as couOn
+            OPTIONAL MATCH (t)-[]->(tn:TransactionNode:\`${application}\`)
+            REMOVE tran:Transaction SET tran:${TransactionService.MASKED_TRANSACTION_LABEL} 
+            REMOVE tranNode:TransactionNode SET tranNode:${TransactionService.MASKED_TRANSACTION_NODE_LABEL} 
+            RETURN COUNT(tran) as masked`
+
+            const result = await this.neo4jAl.executeWithParameters(req, {
+            "termList": terms
+            });
+
+            if (!result || result.records.length == 0) return 0;
+            return int(result.records[0].get("masked")).toNumber();
+
+        } catch (err) {
+            logger.error(
+            `Failed to get catch of transaction for application ${application}.`,
+            err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
      * Mask all the transactions under a certain limit
      * @param application Name of the application
      * @param limit Limit of object in a transaction under which the transation will be masked
      */
     public async maskTransactionByCount(application: string, limit: number): Promise<number> {
         try {
-            const req = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n:Object) 
-            OPTIONAL MATCH (t)-[]->(tn:TransactionNode) 
-            WITH t as tran, COUNT(n) as count, tn as tranNode 
-            WHERE count < $limitCount 
+            const req = `
+            MATCH (t:Transaction:\`${application}\`)
+            OPTIONAL MATCH (t)-[:Contains]->(n:\`${application}\`) WHERE n:Object or n:SubObject 
+            WITH t as tran ,COUNT(n) as couOn
+            WHERE COUNT(couOn) > $limitCount
+            OPTIONAL MATCH (t)-[]->(tn:TransactionNode:\`${application}\`)
             REMOVE tran:Transaction SET tran:${TransactionService.MASKED_TRANSACTION_LABEL} 
-            REMOVE tranNode:TransactionNode SET tranNode:${TransactionService.MASKED_TRANSACTION_NODE_LABEL}
-            RETURN COUNT(tran) as masked`;
+            REMOVE tranNode:TransactionNode SET tranNode:${TransactionService.MASKED_TRANSACTION_NODE_LABEL} 
+            RETURN COUNT(tran) as masked`
 
             const result = await this.neo4jAl.executeWithParameters(req, {
                 "limitCount": limit

@@ -264,12 +264,6 @@ export default Vue.extend({
 
   computed: {
     filteredFrameworks() {
-      console.log(
-        "Result size : " +
-          this.resultDetection.filter(d => {
-            return d.type == "Framework";
-          }).length
-      );
 
       if (this.showOnlyFrameworks) {
         return this.resultDetection.filter(d => {
@@ -410,7 +404,6 @@ export default Vue.extend({
 
       await ArtemisController.getSupportedLanguages()
         .then((res: string[]) => {
-          console.log("Avaible languages are :" + res.join(";"));
           this.availableLanguages = res;
           this.selectedLanguage = res[0];
         })
@@ -493,7 +486,6 @@ export default Vue.extend({
       this.checkingStatus = true;
       DetectionController.getApplicationStatus(this.application)
         .then((res: DetectionResult) => {
-          console.log("Got status", res);
           // If res is null, the application has no status
           if (res == null) {
             this.ongoingDetection = "";
@@ -569,7 +561,6 @@ export default Vue.extend({
 
       await DetectionController.getCurrent()
         .then((res: DetectionCandidate | null) => {
-          console.log("Curent detection is ", res);
           this.currentDetection = res;
         })
         .catch(err => {

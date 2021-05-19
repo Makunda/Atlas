@@ -343,7 +343,7 @@ export default Vue.extend({
           return item;
         })
         .catch(err => {
-          console.log(
+          console.error(
             `Failed to fetch the children for use case with id : ${item.id}`,
             err
           );
@@ -390,7 +390,6 @@ export default Vue.extend({
     editItem(item: IUseCase) {
       this.titleEditBox = `Edit the use case : ${item.title}`;
       this.editedIndex = this.items.indexOf(item);
-      console.log("Use Case ", item);
       this.parentUseCaseId = -1;
       this.editParentUseCaseId = item.parentId || -1;
       this.editedItem = Object.assign({}, item);
@@ -444,7 +443,6 @@ export default Vue.extend({
     },
 
     save() {
-      console.log("About to save", this.editedItem);
       if (this.editedItem.id && this.editedItem.id > 0) {
         UseCaseController.editUseCase(this.editedItem, this.editParentUseCaseId)
           .then((res: IUseCase) => {

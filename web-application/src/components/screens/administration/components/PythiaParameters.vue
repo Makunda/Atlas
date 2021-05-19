@@ -174,7 +174,7 @@ export default Vue.extend({
           this.framewokToPull = res;
         })
         .catch(err => {
-          console.log("Failed to pull fremwork", err);
+          console.error("Failed to pull fremwork", err);
         });
     },
 
@@ -217,7 +217,6 @@ export default Vue.extend({
       ConfigurationController.setPythiaToken(this.pythiaToken)
         .then((res: boolean) => {
           this.pythiaToken = this.placeHolderToken;
-          console.log("Token was successfully changed.");
           if (res == false) {
             this.errorConnectionPythia =
               "No Token was detected in the configuration";

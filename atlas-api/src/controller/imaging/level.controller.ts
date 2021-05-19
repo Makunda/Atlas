@@ -69,6 +69,58 @@ class LevelController {
         }
     };
 
+    public hideLevel = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const idLevel: number = req.body.levelId;
+            const applicationName = String(req.params.application);
+
+            const updatedLevel: ILevel = await this.levelService.hideLevel(applicationName, idLevel);
+            res.status(200).json({data: updatedLevel, message: 'Level hidden'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public findLevelByDepth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const levelDepth = Number(req.params.depth);
+            const applicationName = String(req.params.application);
+
+            const levels: ILevel[] = await this.levelService.getLevelsByDepth(applicationName, levelDepth);
+            res.status(200).json({data: levels, message: `Level ${levelDepth}`});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public findLevelByName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const levelName = String(req.body.depth);
+            const applicationName = String(req.params.application);
+
+            const levels: ILevel[] = await this.levelService.findLevelsByName(applicationName, levelName);
+            res.status(200).json({data: levels, message: `Levels with Name`});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public findLevelByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const levelId = Number(req.body.levelId);
+            const applicationName = String(req.params.application);
+
+            const level: ILevel = await this.levelService.findLevelById(applicationName, levelId);
+            res.status(200).json({data: level, message: `Level with ID`});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
 }
 
 export default LevelController;

@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LevelExplorer from "@/components/imaging/LevelExplorer.vue";
+import LevelExplorer from "@/components/imaging/levels/LevelExplorer.vue";
 import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
 import IconManager from "@/components/imaging/IconManager.vue";
 

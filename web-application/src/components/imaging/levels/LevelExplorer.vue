@@ -1,154 +1,150 @@
 <template>
   <v-card>
-    <v-card-title>
-      Review the level of the application.
-      <v-spacer></v-spacer>
-      <v-btn class="mr-5" icon color="green" @click="refresh">
-        <v-icon>mdi-cached</v-icon>
-      </v-btn>
+    <v-card-title class="charcoal white--text headline">
+      Levels viewer
     </v-card-title>
-    <v-card-subtitle></v-card-subtitle>
-    <v-card-text>
-      <v-container>
-        <v-card>
-          <v-card-title class="charcoal white--text headline">
-            Levels viewer
-          </v-card-title>
-          <v-row class="pa-4" justify="space-between">
-            <v-col cols="5">
-              <v-treeview
-                v-model="tree"
-                :active.sync="active"
-                :items="levels"
-                :open.sync="open"
-                color="warning"
-                transition
-              >
-                <template slot="label" slot-scope="{ item }">
-                  <v-container
-                    style="cursor: pointer;"
-                    @click="focusLevel(item)"
-                    ><v-row>
-                      <p class="pt-4">{{ item.name }}</p>
-                      <v-chip
-                        small
-                        :class="'mt-4 ml-3 ' + getLevelColor(item.level)"
-                        text-color="white"
-                      >
-                        <v-avatar
-                          left
-                          :class="getLevelColor(item.level) + ' darken-4'"
-                        >
-                          {{ item.level }}
-                        </v-avatar>
-                        Level
-                      </v-chip>
-                    </v-row></v-container
+    <v-row class="pa-4" justify="space-between">
+      <v-col cols="5">
+        <v-treeview
+          v-model="tree"
+          :active.sync="active"
+          :items="levels"
+          :open.sync="open"
+          color="warning"
+          transition
+        >
+          <template slot="label" slot-scope="{ item }">
+            <v-container style="cursor: pointer;" @click="focusLevel(item)"
+              ><v-row>
+                <p class="pt-4">{{ item.name }}</p>
+                <v-chip
+                  small
+                  :class="'mt-4 ml-3 ' + getLevelColor(item.level)"
+                  text-color="white"
+                >
+                  <v-avatar
+                    left
+                    :class="getLevelColor(item.level) + ' darken-4'"
                   >
-                </template>
-              </v-treeview>
-            </v-col>
+                    {{ item.level }}
+                  </v-avatar>
+                  Level
+                </v-chip>
+              </v-row></v-container
+            >
+          </template>
+        </v-treeview>
+      </v-col>
 
-            <v-divider vertical></v-divider>
+      <v-divider vertical></v-divider>
 
-            <v-col class="d-flex text-center">
-              <v-scroll-y-transition mode="out-in">
-                <div
-                  v-if="!selected"
-                  class="title grey--text text--lighten-1 font-weight-light"
-                  style="align-self: center;"
+      <v-col class="d-flex text-center">
+        <v-scroll-y-transition mode="out-in">
+          <div
+            v-if="!selected"
+            class="title grey--text text--lighten-1 font-weight-light"
+            style="align-self: center;"
+          >
+            Select a Level
+          </div>
+          <v-card
+            v-else
+            :key="selected._id"
+            class="pt-6 mx-auto"
+            flat
+            max-width="600"
+          >
+            <v-row class="justify-center mb-4">
+              <p class="text-h5 mr-2">{{ selected.name }}</p>
+              <v-chip :class="getLevelColor(selected.level)" text-color="white">
+                <v-avatar
+                  left
+                  :class="getLevelColor(selected.level) + ' darken-4'"
                 >
-                  Select a Level
-                </div>
-                <v-card
-                  v-else
-                  :key="selected._id"
-                  class="pt-6 mx-auto"
-                  flat
-                  max-width="600"
+                  {{ selected.level }}
+                </v-avatar>
+                Level
+              </v-chip>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row class="text-left" tag="v-card-text">
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                Name:
+              </v-col>
+              <v-col>{{ selected.name }}</v-col>
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                FullName:
+              </v-col>
+              <v-col>{{ selected.fullName }}</v-col>
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                Count:
+              </v-col>
+              <v-col>{{ selected.count }}</v-col>
+            </v-row>
+            <v-row v-if="selected.level < 3">
+              <i
+                >Unfortunately. The modification of level above the level 3 is
+                not possible for the moment.</i
+              >
+            </v-row>
+            <v-row class="mt-6 justify-center" v-if="selected.level >= 3">
+              <div class="text-center">
+                <v-btn
+                  small
+                  rounded
+                  color="success"
+                  dark
+                  :disabled="selected.level < 2"
+                  @click="createLevel(selected)"
                 >
-                  <v-row class="justify-center mb-4">
-                    <p class="text-h5 mr-2">{{ selected.name }}</p>
-                    <v-chip
-                      :class="getLevelColor(selected.level)"
-                      text-color="white"
-                    >
-                      <v-avatar
-                        left
-                        :class="getLevelColor(selected.level) + ' darken-4'"
-                      >
-                        {{ selected.level }}
-                      </v-avatar>
-                      Level
-                    </v-chip>
-                  </v-row>
-                  <v-divider></v-divider>
-                  <v-row class="text-left" tag="v-card-text">
-                    <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
-                      Name:
-                    </v-col>
-                    <v-col>{{ selected.name }}</v-col>
-                    <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
-                      FullName:
-                    </v-col>
-                    <v-col>{{ selected.fullName }}</v-col>
-                    <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
-                      Count:
-                    </v-col>
-                    <v-col>{{ selected.count }}</v-col>
-                  </v-row>
-                  <v-row v-if="selected.level < 3">
-                    <i
-                      >Unfortunately. The modification of level above the level
-                      3 is not possible for the moment.</i
-                    >
-                  </v-row>
-                  <v-row class="mt-6 justify-center" v-if="selected.level >= 3">
-                    <div class="text-center">
-                      <v-btn
-                        small
-                        rounded
-                        color="success"
-                        dark
-                        :disabled="selected.level < 2"
-                        @click="createLevel(selected)"
-                      >
-                        <v-icon left>
-                          mdi-plus
-                        </v-icon>
-                        Add a child
-                      </v-btn>
-                      <v-btn
-                        class="mx-3"
-                        rounded
-                        small
-                        color="primary"
-                        dark
-                        :disabled="selected.level < 3"
-                        @click="editLevel(selected)"
-                      >
-                        <v-icon left>
-                          mdi-pencil
-                        </v-icon>
-                        Modify level
-                      </v-btn>
-                      <v-btn
-                        rounded
-                        small
-                        color="warning"
-                        :disabled="selected.count > 0"
-                      >
-                        Delete level
-                      </v-btn>
-                    </div>
-                  </v-row>
-                </v-card>
-              </v-scroll-y-transition>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-container>
-    </v-card-text>
+                  <v-icon left>
+                    mdi-plus
+                  </v-icon>
+                  Add a child
+                </v-btn>
+                <v-btn
+                  class="mx-3"
+                  rounded
+                  small
+                  color="primary"
+                  dark
+                  :disabled="selected.level < 3"
+                  @click="editLevel(selected)"
+                >
+                  <v-icon left>
+                    mdi-pencil
+                  </v-icon>
+                  Modify level
+                </v-btn>
+                <v-btn
+                  class="mx-3"
+                  rounded
+                  small
+                  color="primary"
+                  dark
+                  :disabled="selected.level < 3"
+                  :loading="hidingLevel"
+                  @click="hideLevel(selected)"
+                >
+                  <v-icon left>
+                    mdi-eye-off
+                  </v-icon>
+                  Hide level
+                </v-btn>
+                <v-btn
+                  rounded
+                  small
+                  color="warning"
+                  :disabled="selected.count > 0"
+                >
+                  Delete level
+                </v-btn>
+              </div>
+            </v-row>
+          </v-card>
+        </v-scroll-y-transition>
+      </v-col>
+    </v-row>
     <!-- Level Edit / creation -->
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
@@ -231,7 +227,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     <!-- Snack Bar information -->
     <v-snackbar v-model="snackbarInfo" :timeout="5000">
       {{ textSnackBar }}
@@ -270,7 +265,10 @@ export default Vue.extend({
     editionType: "",
     dialog: false,
     parentItem: null as ILevel,
-    editItem: {} as ILevel
+    editItem: {} as ILevel,
+
+    // Hiding level
+    hidingLevel: false
   }),
 
   computed: {
@@ -355,6 +353,20 @@ export default Vue.extend({
             this.dialog = false;
             this.refresh();
           });
+      }
+    },
+
+    async hideLevel(level: ILevel) {
+      this.hidingLevel = true;
+      try {
+        await LevelController.hideLevel(this.application, level);
+        this.textSnackBar = "Level has been hidden successfully";
+        this.refresh();
+      } catch (err) {
+        this.textSnackBar = err;
+      } finally {
+        this.snackbarInfo = true;
+        this.hidingLevel = false;
       }
     },
 

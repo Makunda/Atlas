@@ -551,7 +551,6 @@ export default Vue.extend({
       }
 
       const groups = await UseCaseController.getAttachedGroups(item.id);
-      console.log("got groups ", groups);
       item.children.push(...groups);
       item.isUseCase = true;
       return item;

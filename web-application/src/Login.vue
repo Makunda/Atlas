@@ -99,13 +99,11 @@ export default Vue.extend({
       // Connect to Neo4j
       Neo4JAccessLayer.connectWithCredentials(this.credentials);
       const neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
-      console.log("new props ", properties);
 
       neo4jAl
         .testConnection()
         .then((res: ServerInfo) => {
           // Successful connection , redirect to main
-          console.log("Connection successful.", res);
           this.$router.replace("/atlas/main");
           window.location.reload();
         })
@@ -120,7 +118,7 @@ export default Vue.extend({
     async setInternalMode() {
       await ConfigurationController.setInternalMode(!this.switchInternalUse)
         .then((res: boolean) => {
-          console.log("Internal mode was changed to ", res);
+          return;
         })
         .catch(err => {
           console.error("Failed to set internal mode to ", err);
