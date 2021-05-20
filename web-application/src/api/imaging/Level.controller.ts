@@ -37,6 +37,38 @@ export default class LevelController {
   }
 
   /**
+   * Return the list of the level containing a certain string
+   * @param application Name of the application
+   * @param name Name to search
+   */
+  public static async findLevelByName(application: string, name: string): Promise<ILevel[]> {
+    const url =
+        LevelController.API_BASE_URL + `/api/imaging/levels/find/${application}/name`;
+
+    try {
+      const body = { name: name };
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          return apiResponse.data as ILevel[];
+        }
+      } else {
+        console.warn(`Failed to retrieve root levels. Status (${res.status})`);
+      }
+
+      return [];
+    } catch (error) {
+      console.error(
+          `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
+          error
+      );
+      throw error;
+    }
+  }
+
+  /**
    * Fetch children of a level
    * @param application Name of the application concerned by the search
    * @param level Parent level
@@ -168,13 +200,53 @@ export default class LevelController {
     }
   }
 
-  public static async hideLevel(
-      application: string,
-      level: ILevel
+  /**
+   * Retrieve the list of root levels in the applications
+   * @param application Name of the application
+   * @param depth Depth of the application
+   */
+  public static async getHiddenLevelByDepth(
+    application: string,
+    depth: number
+  ): Promise<ILevel[]> {
+    const url =
+      LevelController.API_BASE_URL +
+      `/api/imaging/levels/hidden/byDepth/${application}/${depth}`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          return apiResponse.data as ILevel[];
+        }
+      } else {
+        console.warn(`Failed to retrieve root levels. Status (${res.status})`);
+      }
+
+      return [];
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Display a level that was previously hidden
+   * @param application Name of the application
+   * @param level Hidden level to display
+   */
+  public static async unhideLevel(
+    application: string,
+    level: ILevel
   ): Promise<ILevel> {
     const url =
-        LevelController.API_BASE_URL +
-        `/api/imaging/levels/hide/${application}`;
+      LevelController.API_BASE_URL +
+      `/api/imaging/levels/unhide/${application}`;
 
     try {
       const body = {
@@ -191,8 +263,42 @@ export default class LevelController {
       }
     } catch (error) {
       console.error(
-          `Failed to reach the API : ${url}. Failed to hide.`,
-          error
+        `Failed to reach the API : ${url}. Failed to unhide a level.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Hide a level in the user interface
+   * @param application Name of the application
+   * @param level Level to hide
+   */
+  public static async hideLevel(
+    application: string,
+    level: ILevel
+  ): Promise<ILevel> {
+    const url =
+      LevelController.API_BASE_URL + `/api/imaging/levels/hide/${application}`;
+
+    try {
+      const body = {
+        levelId: level._id
+      };
+
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ILevel;
+      } else {
+        throw new Error(`The API returned status : ${res.status}. ${res.data}`);
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to hide a level.`,
+        error
       );
       throw error;
     }

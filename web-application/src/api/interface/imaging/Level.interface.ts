@@ -1,5 +1,6 @@
 export default interface ILevel {
   _id?: number;
+  hidden?: boolean;
   concept: boolean;
   alternateDrilldown?: boolean;
   color: string;

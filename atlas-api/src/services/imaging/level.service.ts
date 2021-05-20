@@ -61,10 +61,22 @@ class LevelService {
         }
     }
 
+    /**
+     * Get all the level with a certain depth ( from 1 to 5 ) and return a list of them
+     * @param application Name of the application
+     * @param depth Depth of the level to search
+     */
     public async getLevelsByDepth(application: string, depth: number): Promise<ILevel[]> {
         try {
             const levelName = `Level${depth}`
-            const request = `MATCH (n:${levelName}:\`${application}\`) RETURN n as node ORDER BY n.Name;`;
+            const hiddenLevelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${depth}`
+
+            // Retrieve level and hidden levels
+            const request = `MATCH (n:\`${application}\`) 
+            WHERE n:${levelName} OR n:${hiddenLevelName} 
+            RETURN n as node , 
+            CASE WHEN n:${levelName} THEN false ELSE true END as hidden ORDER BY n.Name;`;
+
 
             const results: QueryResult = await this.neo4jAl.execute(request);
 
@@ -72,12 +84,12 @@ class LevelService {
             for (let i = 0; i < results.records.length; i++) {
                 const singleRecord = results.records[i];
                 const level = singleRecord.get("node");
-                levels.push(LevelNode.fromObj(level).getRecord());
+                const hidden = Boolean(singleRecord.get("hidden"));
+                levels.push(LevelNode.fromObj(level, hidden).getRecord());
             }
 
             return levels;
         } catch (err) {
-            console.error("DEBUG :", err)
             logger.error(
                 `Failed to get the levels with depth :${depth} of application ${application}.`,
                 err
@@ -94,7 +106,18 @@ class LevelService {
     public async findLevelById(application: string, levelID: number): Promise<ILevel> {
         try {
             const request = `MATCH (n:\`${application}\`) 
-            WHERE ( n:Level1 OR n:Level2 OR n:Level3 OR n:Level4 OR n:Level5 )
+            WHERE (
+            n:Level1 
+            OR n:Level2 
+            OR n:Level3 
+            OR n:Level4 
+            OR n:Level5 
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}1
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}2
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}3
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}4
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}5
+            )
             AND ID(n)=$idLevel 
             RETURN n as node;`;
 
@@ -119,7 +142,18 @@ class LevelService {
     public async findLevelsByName(application: string, name: string): Promise<ILevel[]> {
         try {
             const request = `MATCH (n:\`${application}\`) 
-            WHERE ( n:Level1 OR n:Level2 OR n:Level3 OR n:Level4 OR n:Level5 )
+            WHERE ( 
+            n:Level1 
+            OR n:Level2 
+            OR n:Level3 
+            OR n:Level4 
+            OR n:Level5 
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}1
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}2
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}3
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}4
+            OR n:${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}5
+            )
             AND n.Name CONTAINS $name
             RETURN n as node;`;
 
@@ -155,11 +189,14 @@ class LevelService {
 
             if (level == null || level.level >= 5) return []; // Ignore above level 4
 
-            const levelName = `Level${level.level}`;
             const childLevelName = `Level${level.level + 1}`;
-            const request = `MATCH (p:\`${application}\`)-[:Aggregates]->(n:${childLevelName}:\`${application}\`)  
-            WHERE ID(p)=$idLevel 
-            RETURN n as node ORDER BY n.Name;`;
+            const hiddenChildLevelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${level.level + 1}`;
+
+            const request = `MATCH (p:\`${application}\`)-[:Aggregates]->(n:\`${application}\`)  
+            WHERE ID(p)=$idLevel AND ( n:${childLevelName} OR n:${hiddenChildLevelName} )
+            RETURN n as node,
+            CASE WHEN n:${childLevelName} THEN false ELSE true END as hidden 
+            ORDER BY n.Name;`;
 
             const results: QueryResult = await this.neo4jAl.executeWithParameters(request, {"idLevel": levelID});
 
@@ -167,7 +204,8 @@ class LevelService {
             for (let i = 0; i < results.records.length; i++) {
                 const singleRecord = results.records[i];
                 const level = singleRecord.get("node");
-                levels.push(LevelNode.fromObj(level).getRecord());
+                const hidden = Boolean(singleRecord.get("hidden"));
+                levels.push(LevelNode.fromObj(level, hidden).getRecord());
             }
             return levels;
         } catch (err) {
@@ -353,7 +391,7 @@ class LevelService {
      * @param application Name of application
      * @param depth Depth of the application
      */
-    public async getHiddenLevel(application: string, depth: number) : Promise<ILevel[]> {
+    public async findHiddenLevelByDetph(application: string, depth: number) : Promise<ILevel[]> {
         const labelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${depth}`;
         const req = `MATCH (l:${labelName}) RETURN l as node;`;
 
@@ -373,7 +411,7 @@ class LevelService {
      * @param application Application name
      * @param id Id of the level
      */
-    public async getHiddenLevelById(application: string, id: number) : Promise<ILevel> {
+    public async findHiddenLevelById(application: string, id: number) : Promise<ILevel> {
         // Search application
         const req = `MATCH (l:\`${application}\`) WHERE ID(l)=$idLevel RETURN l as node;`;
         const results: QueryResult = await this.neo4jAl.executeWithParameters(req, { idLevel : id});
@@ -386,6 +424,8 @@ class LevelService {
         return LevelNode.fromObj(level).getRecord();
     }
 
+
+
     /**
      * Un-hide a Children
      * @param application Name of the application
@@ -393,7 +433,7 @@ class LevelService {
      */
     public async unHideChildren(application: string, id: number) : Promise<ILevel> {
         // Get the level
-        const level = await this.getHiddenLevelById(application, id);
+        const level = await this.findLevelById(application, id);
 
         // Reformat the level
         const labelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${level.level}`;
@@ -402,8 +442,9 @@ class LevelService {
         // Change the label
         const req = `MATCH (l:${labelName}) WHERE ID(l)=$idNode 
         REMOVE l:${labelName} SET l:${newLabel} RETURN l as node;`;
-        const results: QueryResult = await this.neo4jAl.executeWithParameters(req, { idLevel : id});
+        const results: QueryResult = await this.neo4jAl.executeWithParameters(req, { idNode : id});
 
+        // Parse all the level under it
         if(level.level < 5) {
             const childLevelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${level.level + 1}`;
             const request = `MATCH (p:\`${application}\`)-[:Aggregates]->(n:${childLevelName}:\`${application}\`)  
@@ -415,6 +456,21 @@ class LevelService {
                 const singleRecord = results.records[i];
                 const childId = int(singleRecord.get("id_node")).toNumber();
                 await this.unHideChildren(application, childId);
+            }
+        }
+
+        // Parse the parents to reactive them
+        if(level.level > 1) {
+            const childLevelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${level.level - 1}`;
+            const request = `MATCH (p:\`${application}\`)<-[:Aggregates]-(n:${childLevelName}:\`${application}\`)  
+            WHERE ID(p)=$idLevel 
+            RETURN ID(n) as id_node;`;
+
+            const results: QueryResult = await this.neo4jAl.executeWithParameters(request, {"idLevel": level._id});
+            for (let i = 0; i < results.records.length; i++) {
+                const singleRecord = results.records[i];
+                const parentnId = int(singleRecord.get("id_node")).toNumber();
+                await this.unHideChildren(application, parentnId);
             }
         }
 
@@ -466,6 +522,27 @@ class LevelService {
         if (!results.records || results.records.length == 0) return null;
         return LevelNode.fromObj(results.records[0].get("node")).getRecord();
 
+    }
+
+    /**
+     * Unhide a level and all the children under it
+     * @param application
+     * @param levelID
+     */
+    public async unHideLevel(application: string, levelID: number) : Promise<ILevel> {
+        try {
+            const level : ILevel = await this.unHideChildren(application, levelID);
+
+            // Refresh all the levels
+            await this.refreshLevels(application, 5);
+            return level;
+        } catch (err) {
+            logger.error(
+                `Failed to hide the level with id :${levelID} of application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
     }
 
     /**

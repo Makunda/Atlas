@@ -82,6 +82,46 @@ class LevelController {
         }
     };
 
+    public unHideLevel = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const idLevel: number = req.body.levelId;
+            const applicationName = String(req.params.application);
+
+            const updatedLevel: ILevel = await this.levelService.unHideLevel(applicationName, idLevel);
+            res.status(200).json({data: updatedLevel, message: 'Level hidden'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public findHiddenLevelByDetph = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const depthLevel: number = Number(req.params.depth);
+            const applicationName = String(req.params.application);
+
+            const hiddenLevel: ILevel[] = await this.levelService.findHiddenLevelByDetph(applicationName, depthLevel);
+            res.status(200).json({data: hiddenLevel, message: 'Levels hidden'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public findHiddenLevelById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const idLevel: number = req.body.idLevel;
+            const applicationName = String(req.params.application);
+
+            const hiddenLevel: ILevel = await this.levelService.findHiddenLevelById(applicationName, idLevel);
+            res.status(200).json({data: hiddenLevel, message: 'Levels with depth'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+
     public findLevelByDepth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const levelDepth = Number(req.params.depth);
@@ -97,7 +137,7 @@ class LevelController {
 
     public findLevelByName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const levelName = String(req.body.depth);
+            const levelName = String(req.body.name);
             const applicationName = String(req.params.application);
 
             const levels: ILevel[] = await this.levelService.findLevelsByName(applicationName, levelName);
