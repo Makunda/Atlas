@@ -1,26 +1,37 @@
 import {logger} from "@shared/logger";
-import {Transaction} from "neo4j-driver";
+import {QueryResult, Transaction} from "neo4j-driver";
 import {Framework} from "./framework.interface";
+import FrameworksService from "@services/artemis/framework.service";
+import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
+import {uuidv4} from "../../utils/utils";
 
 export enum DetectionStatus {
+    NotStarted,
     Pending,
     Success,
     Failure,
     Unknown
 }
 
+/**
+ * Class to handle the different properties of a detection
+ */
 export class Detection {
-    public application: string;
+
+    // Attribute must be public
+    public readonly id: string;
+    public readonly application: string;
     public timestampStart: number;
     public timestampFinish = 0;
-    public language: string;
+    public readonly language: string;
     public status: DetectionStatus;
     public data: Framework[] = [];
 
     constructor(application: string, language: string) {
+        this.id = uuidv4();
         this.application = application;
         this.language = language;
-        this.status = DetectionStatus.Unknown;
+        this.status = DetectionStatus.NotStarted;
         this.timestampStart = Date.now();
     }
 
@@ -38,36 +49,135 @@ export class Detection {
     public markAsPending() {
         this.status = DetectionStatus.Pending;
     }
+
+    public getResults() : Framework[] {
+        return this.data;
+    }
+
+    public getDetectionStatus(): DetectionStatus {
+        return this.status;
+    }
+
+    public getLanguage(): string{
+        return this.language;
+    }
+
+    public getApplication(): string{
+        return this.application;
+    }
+
+    public getId(): string {
+        return this.id;
+    }
+
+    public isRunning() : boolean {
+        return this.status == DetectionStatus.Pending;
+    }
 }
 
-export class CancellablePromise<T> {
-    public cancel: CallableFunction;
-    public promise: Promise<T>;
-    public application: string;
-    public language: string;
-    public transaction: Transaction;
-    public isFinished: boolean;
+/**
+ * Class handling the detection along its related premise
+ */
+export class CancellableDetectionPromise {
+    private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
-    constructor(application: string, language: string, transaction: Transaction, wrappedPromise: Promise<T>) {
-        this.transaction = transaction;
-        this.application = application;
-        this.language = language;
-        this.isFinished = false;
+    private cancel: CallableFunction;
+    private promise: Promise<Framework[]>;
+    private wrappedPromise: Promise<Framework[]>
+
+    private transaction: Transaction;
+    private detection: Detection;
+
+    constructor(application: string, language: string) {
+
+        const session = this.neo4jAl.getSession();
+        this.transaction = session.beginTransaction();
+        this.detection = new Detection(application, language); // Declare a new detection
+        this.wrappedPromise = this.buildWrapPromise(application, language);
+
         this.promise = new Promise((resolve, reject) => {
             this.cancel = reject;
-            wrappedPromise.then((res: T) => {
-                this.transaction.commit();
+            this.detection.markAsPending();
+            this.wrappedPromise.then((res: Framework[]) => {
+                this.transaction.commit().then(r => {
+                    this.detection.markAsSuccess(res);
+                });
                 resolve(res);
             }).catch((err) => {
-                this.transaction.rollback();
-                logger.info(`The promise for application ${this.application} was cancelled.`);
-            }).finally(() => {
-                this.isFinished = true;
-            })
+                this.transaction.rollback().then(r => {
+                    logger.warn(`The transaction has been rolled backed.`, err);
+                });
+                logger.warn(`The detection for application ${this.detection.getApplication()} was cancelled.`);
+                this.detection.markAsFailed();
+            });
         })
     }
 
+    public cancelPromise() {
+        this.cancel();
+    }
+
+    /**
+     * Build the wrap promise
+     */
+    private buildWrapPromise(application: string, language: string): Promise<Framework[]> {
+        return new Promise((resolve, reject) => {
+            const request = `CALL artemis.launch.detection($applicationName, $language);`;
+
+            this.transaction.run(request, {applicationName: application, language: language})
+                .then((res: QueryResult) => {
+                    console.log(`The query ${request} ended.`)
+                    const resultList: Framework[] = [];
+                    let framework: Framework;
+
+                    for (let i = 0; i < res.records.length; i++) {
+                        framework = FrameworksService.convertRecordToFramework(res.records[i]);
+                        resultList.push(framework);
+                    }
+                    resolve(resultList);
+                })
+                .catch((err) => {
+                    // Add to failed detections
+                    logger.error(`The analysis of the ${application} failed.`, err);
+                    console.error(`The query ${request} failed.`, err)
+                    resolve([]);
+                });
+        });
+    }
+
+    /**
+     * "Primary key of the detection" to avoid launching the same detection multiple time
+     */
+    public getDetectionPk() : string {
+        return CancellableDetectionPromise.generateDetectionPk(this.detection.getApplication(),
+            this.detection.getLanguage());
+    }
+
+    /**
+     * Generate the primary key of a Detection
+     * @param application
+     * @param language
+     */
+    public static generateDetectionPk(application: string, language: string) : string {
+        return application+"+"+language;
+    }
+
+    public getStatus() : DetectionStatus {
+        return this.detection.getDetectionStatus();
+    }
+
+    /***
+     * Return the detection associated to the promise
+     */
+    public getDetection() : Detection {
+        return this.detection;
+    }
+
+    public getResults() : Framework[] {
+        return this.detection.getResults();
+    }
+
     public isDone(): boolean {
-        return this.isFinished;
+        return !this.detection.isRunning();
     }
 }

@@ -137,8 +137,6 @@ export default Vue.extend({
           );
           this.statisticsList = res;
 
-          console.log(`${res.length} statistics were loaded.`);
-
           const pivotPoint: number = Math.floor(res.length / 2);
           this.leftStats = res.splice(0, pivotPoint);
           this.rightStats = res;

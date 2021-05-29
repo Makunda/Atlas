@@ -3,6 +3,7 @@ import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { Framework } from "@/api/interface/artemis/framework.interface";
 
 export class DetectionResultDTO implements DetectionResult {
+  public id: string;
   public application: string;
   public timestampStart: number;
   public timestampFinish = 0;
@@ -16,6 +17,7 @@ export class DetectionResultDTO implements DetectionResult {
     }
 
     const dto = new DetectionResultDTO();
+    dto.id = String(obj["id"] || "");
     dto.application = String(obj["application"]) || "No Application";
     dto.timestampStart = Number(obj["timestampStart"]) || 0;
     dto.timestampFinish = Number(obj["timestampFinish"]) || 0;

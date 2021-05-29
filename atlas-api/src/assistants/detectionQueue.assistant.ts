@@ -1,9 +1,9 @@
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import {DetectionCandidate} from "@dtos/artemis/detectionCandidate.dto";
-import {CancellablePromise} from "@interfaces/artemis/detectionStatus.interface";
 import {Framework} from "@interfaces/artemis/framework.interface";
 import DetectionService from "@services/artemis/detection.service";
 import {logger} from "@shared/logger";
+import {CancellableDetectionPromise} from "@interfaces/artemis/detectionStatus.interface";
 
 
 export class DetectionQueueAssistant {
@@ -12,7 +12,7 @@ export class DetectionQueueAssistant {
     private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
     private detectionService: DetectionService = DetectionService.getInstance();
 
-    private onGoingDetection: CancellablePromise<Framework[]>;
+    private onGoingDetection: CancellableDetectionPromise;
     private candidateList: DetectionCandidate[];
 
     constructor() {
@@ -32,8 +32,8 @@ export class DetectionQueueAssistant {
         if (this.onGoingDetection == null) return null;
 
         return {
-            application: this.onGoingDetection.application,
-            languages: [this.onGoingDetection.language]
+            application: this.onGoingDetection.getDetection().getApplication(),
+            languages: [this.onGoingDetection.getDetection().getLanguage()]
         }
     }
 
@@ -74,9 +74,9 @@ export class DetectionQueueAssistant {
     public flushCandidates(): void {
         logger.info("Flush applications")
         try {
-            if (this.onGoingDetection) this.onGoingDetection.cancel(); // cancel the current detection
-            logger.info(this.onGoingDetection.isDone())
-        } catch (ignore) {
+            if(this.onGoingDetection) this.onGoingDetection.cancelPromise(); // cancel the current detection
+        } catch (err) {
+            logger.error("Failed to cancel the current promise trying to flush the queue");
         }
         this.candidateList = [];
     }

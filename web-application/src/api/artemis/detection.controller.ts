@@ -36,7 +36,7 @@ export default class DetectionController {
       }
     } catch (error) {
       console.error(
-        `Failed to reach the API : ${url}. The detection was not launched.`,
+        `Failed to reach the API : ${url}. Failed to retrieve the status of the application.`,
         error
       );
       throw error;
@@ -174,28 +174,34 @@ export default class DetectionController {
     }
   }
 
+  /**
+   * Get the update status of a specific detection. Returns null
+   * @param application Name of the application
+   * @param language Language of the detection
+   */
   public static async getApplicationStatus(
-    application: string
-  ): Promise<DetectionResult> {
+    application: string,
+    language: string
+  ): Promise<DetectionResult | null> {
     const url =
       DetectionController.API_BASE_URL +
-      "/api/artemis/detection/status/" +
-      application;
+      `/api/artemis/detection/status/${application}?language=${language}`;
+
+    // A language and an application need to be provided
+    if (application == null || language == null) return null;
 
     try {
       const res = await axios.get(url);
+      console.log("REs Detection", res);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (apiResponse == null) return null; // No status
 
-        const appStatus: DetectionResultDTO = DetectionResultDTO.fromRecord(
-          apiResponse.data
-        );
-        return appStatus;
+        return DetectionResultDTO.fromRecord(apiResponse.data);
       } else {
-        console.warn(`Failed to launch the detection. Status (${res.status})`);
-        return null;
+        console.warn(`Failed to retrieve the status of the application. Status (${res.status})`);
+        throw new Error(res.data);
       }
     } catch (error) {
       console.error(
@@ -206,7 +212,9 @@ export default class DetectionController {
     }
   }
 
-  // Get the list of pending detection
+  /**
+   * Get actual detection queue
+   */
   public static async getDetectionQueue(): Promise<DetectionCandidate[]> {
     const url =
       DetectionController.API_BASE_URL + "/api/artemis/detection/queue/get";

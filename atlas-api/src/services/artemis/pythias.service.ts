@@ -75,7 +75,6 @@ class PythiaService {
         try {
             const val = await this.neo4jAl.execute(req);
             if (!val.records || val.records.length == 0) return 0;
-            console.log("Forecast pull : " + req);
 
             return Number(val.records[0].get(0));
         } catch (err) {

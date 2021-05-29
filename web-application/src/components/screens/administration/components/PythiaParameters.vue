@@ -188,7 +188,6 @@ export default Vue.extend({
           } else {
             this.errorConnectionPythia = "";
           }
-          console.log("Local URI ", res);
         })
         .catch(err => {
           console.error("Failed to retrieve the URI of Pythia", err);
@@ -259,7 +258,6 @@ export default Vue.extend({
       await new Promise<void>((resolve, reject) => {
         ConfigurationController.setPythiaURL(this.pythiaURI)
           .then((res: string) => {
-            console.log("Pythia URI was changed to ", res);
             resolve();
           })
           .catch(err => {

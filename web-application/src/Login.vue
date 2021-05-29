@@ -1,13 +1,14 @@
 <!-- Login modal -->
 <template>
   <v-app class="main-application">
-    <v-container class="login-container mx-auto" v-if="showLogin" fill-height>
-      <v-card class="mx-auto" ref="form">
+    <v-container class="login-container mx-auto" v-if="showLogin" fill-height >
+      <v-card class="mx-auto" ref="form" min-width="500px">
         <v-card-text>
-          <v-card-title class="mt-3 mb-8">
-            <h2>
-              Log in to Neo4j database
+          <v-card-title class="mt-3 mb-8 d-flex flex-column justify-center text-center">
+            <h2 >
+              Log in to Atlas
             </h2>
+            <p class="subtitle-2">NASD Toolkit 2021</p>
           </v-card-title>
           <v-text-field
             ref="neo4jUser"
@@ -24,12 +25,7 @@
             label="Database password"
             @click:append="show1 = !show1"
           ></v-text-field>
-          <v-text-field
-            v-model="uri"
-            name="input-10-1"
-            label="Database bolt URI"
-            @click:append="show1 = !show1"
-          ></v-text-field>
+          <p>Database bolt URI : {{uri}}</p>
 
           <!-- Information on connection -->
           <div
@@ -39,7 +35,7 @@
           >
             <span class="white--text"
               >Wrong credentials / URI. Contact your CAST Imaging administrator
-              for more informations.</span
+              for more information.</span
             >
           </div>
           <v-divider></v-divider>

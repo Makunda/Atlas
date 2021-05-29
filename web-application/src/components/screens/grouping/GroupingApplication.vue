@@ -83,7 +83,7 @@ export default Vue.extend({
 
   methods: {
     getLevelList() {
-      console.log("Not empty.");
+      console.log("Not implemented.");
     }
   },
 

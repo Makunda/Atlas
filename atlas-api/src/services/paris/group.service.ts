@@ -76,7 +76,6 @@ class GroupService {
      */
     public async updateGroup(useCase: IGroup): Promise<IGroup> {
         try {
-            console.log("Received ", useCase);
             const request =
                 "CALL paris.groups.update.by.id($id, $active, $categories, $creationDate, $cypherRequest, $cypherRequestReturn, $description, $groupName, $name, $selected, $types)";
             const results: QueryResult = await this.neo4jAl.executeWithParameters(

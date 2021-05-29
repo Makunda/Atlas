@@ -104,9 +104,7 @@ export default Vue.component("TagCandidateTile", {
           // Get the first 3 tags ordered by match
           this.tagResultList = res.sort(this.sortByNumMAtch).splice(0, sliceIt);
           this.loading = false;
-          console.log(
-            `${res.length} tags were loaded for application ${this.value}.`
-          );
+
         })
         .catch(err => {
           console.error("An error occurred while retrieving tags.", err);

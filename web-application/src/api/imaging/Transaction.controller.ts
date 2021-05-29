@@ -375,7 +375,6 @@ export default class TransactionController {
         application: application,
         terms: terms
       };
-      console.log(`DEBUG : Url ${url} `, body);
       const res = await axios.post(url, body);
 
       if (res.status == 200) {

@@ -484,7 +484,7 @@ export default Vue.extend({
       if (this.checkingStatus) return;
 
       this.checkingStatus = true;
-      DetectionController.getApplicationStatus(this.application)
+      DetectionController.getApplicationStatus(this.application, this.selectedLanguage)
         .then((res: DetectionResult) => {
           // If res is null, the application has no status
           if (res == null) {

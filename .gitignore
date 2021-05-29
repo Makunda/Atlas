@@ -37,3 +37,5 @@ demeter-web.zip
 *.exe
 *.zip
 *.exe
+*.exe
+atlas-api/bin/atlas-api.exe

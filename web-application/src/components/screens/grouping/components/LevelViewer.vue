@@ -99,7 +99,7 @@ export default Vue.component("LevelViewer", {
           if (res) {
             this.getLevelGroups();
           } else {
-            console.log(
+            console.error(
               `Failed to undo the grouping undone for level ${group} on application ${appName}.`
             );
           }

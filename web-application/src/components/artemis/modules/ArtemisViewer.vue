@@ -148,9 +148,19 @@
           border="left"
           dense
           type="error"
-          v-if="errorDetection && errorDetection != ''"
+          v-if="errorDetection && errorDetection !== ''"
         >
           {{ errorDetection }}
+        </v-alert>
+        <v-alert
+            class="ma-2"
+            width="100%"
+            border="left"
+            dense
+            type="success"
+            v-if="message && message !== ''"
+        >
+          {{ message }}
         </v-alert>
       </v-row>
       <v-divider></v-divider>
@@ -262,6 +272,9 @@ export default Vue.extend({
     errorRepositoryMode: false as boolean,
     errorDetection: "",
 
+    // Message
+    message: "",
+
     // Detection
     filterValidFramework: true,
     search: "",
@@ -372,17 +385,23 @@ export default Vue.extend({
     /**
      *  Get the status of the Detection
      */
-    checkStatus() {
-      if (this.checkingStatus) return;
+    checkStatus(): boolean {
+      // Skip if already checking status or if no language was selected
+      if (this.checkingStatus || this.selectedLanguage == null) return;
 
       this.checkingStatus = true;
-      DetectionController.getApplicationStatus(this.application)
+      DetectionController.getApplicationStatus(
+        this.application,
+        this.selectedLanguage
+      )
         .then((res: DetectionResult) => {
+
           // If res is null, the application has no status
           if (res == null) {
+            this.message = `No detection was launched for ${this.application}`;
             this.ongoingDetection = "";
             this.errorDetection = "";
-            return;
+            return true;
           }
 
           this.detection = res;
@@ -403,7 +422,7 @@ export default Vue.extend({
               break;
             case DetectionStatus.Failure:
               this.errorDetection =
-                "An error occured during the detection. Please check the logs";
+                "An error occurred during the detection. Please check the logs";
               this.ongoingDetection = "";
               this.runningArtemis = false;
               break;
@@ -418,6 +437,7 @@ export default Vue.extend({
             err
           );
           this.errorDetection = `Failed to retrieve the status of the application ${this.application}.`;
+          return true;
         })
         .finally(() => {
           this.checkingStatus = false;
@@ -473,9 +493,11 @@ export default Vue.extend({
 
     constantStatusCheck() {
       if (this.diplayNotInstalled) return;
-      this.checkStatus();
+      const stopFlag = this.checkStatus();
+
+      if(stopFlag) return;
       if (this.flaggedAsToDestroy) return;
-      setTimeout(this.constantStatusCheck, 3000);
+      setTimeout(this.constantStatusCheck, 5000);
     },
 
     cancelDetection() {
@@ -493,7 +515,6 @@ export default Vue.extend({
         this.disabledTile = false;
         this.application = this.$store.state.applicationName;
         await this.getConfiguration();
-        await this.checkStatus();
       })
       .catch(err => {
         console.error(

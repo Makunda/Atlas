@@ -57,7 +57,6 @@ export class Configuration {
    * @param properties New parameters
    */
   public static saveProperties(properties: Properties) {
-    console.log("Properties Saved");
     sessionStorage.setItem(COOKIE_NAME, JSON.stringify(properties));
   }
 

@@ -368,8 +368,8 @@ class TransactionService {
             MATCH (t:Transaction:\`${application}\`)
             OPTIONAL MATCH (t)-[:Contains]->(n:\`${application}\`) WHERE n:Object or n:SubObject 
             WITH t as tran ,COUNT(n) as couOn
-            WHERE COUNT(couOn) > $limitCount
-            OPTIONAL MATCH (t)-[]->(tn:TransactionNode:\`${application}\`)
+            WHERE couOn < $limitCount
+            OPTIONAL MATCH (tran)-[]->(tranNode:TransactionNode:\`${application}\`)
             REMOVE tran:Transaction SET tran:${TransactionService.MASKED_TRANSACTION_LABEL} 
             REMOVE tranNode:TransactionNode SET tranNode:${TransactionService.MASKED_TRANSACTION_NODE_LABEL} 
             RETURN COUNT(tran) as masked`

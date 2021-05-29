@@ -1,29 +1,41 @@
-import {NextFunction, Request, Response} from 'express';
+import {application, NextFunction, Request, Response} from 'express';
 import {LaunchDetectionDto} from '@dtos/artemis/detection.dto';
-import {CancellablePromise, Detection} from '@interfaces/artemis/detectionStatus.interface';
+import {
+    CancellableDetectionPromise,
+    Detection,
+    DetectionStatus
+} from '@interfaces/artemis/detectionStatus.interface';
 import DetectionService from '@services/artemis/detection.service';
 import {Framework} from '@interfaces/artemis/framework.interface';
 
 class DetectionController {
     public detectionService: DetectionService = DetectionService.getInstance();
 
-    public getStatusDetection = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public getStatusDetection = (req: Request, res: Response, next: NextFunction): void => {
         try {
 
-            const name = String(req.params.name);
-            const results: Detection = this.detectionService.getDetectionStatus(name);
+            const application = String(req.params.application);
+            const language = String(req.query.language);
 
-            res.status(200).send({data: results, message: "status"});
+            if(!application || !language) {
+                res.status(400).send({ data: "Missing parameters", message: "Bad request"});
+            } else {
+                const results: Detection | null = this.detectionService.getDetectionStatus(application, language);
+                res.status(200).send({data: results, message: "status"});
+
+            }
+
 
         } catch (error) {
+            console.error("Failed to retrieve the status of the application", error)
             next(error);
         }
     };
 
-    public getSuccessfullDetections = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public getSuccessfullDetections = (req: Request, res: Response, next: NextFunction): void => {
         try {
 
-            const results: Detection[] = this.detectionService.getSuccesfulDetections();
+            const results: Detection[] = this.detectionService.getSuccessfulDetections();
 
             res.status(200).send({data: results, message: "success"});
 
@@ -32,7 +44,7 @@ class DetectionController {
         }
     };
 
-    public getPendingDetections = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public getPendingDetections = (req: Request, res: Response, next: NextFunction): void  => {
         try {
 
             const results: Detection[] = this.detectionService.getPendingDetections();
@@ -45,7 +57,7 @@ class DetectionController {
     };
 
 
-    public getFailedDetections = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public getFailedDetections = (req: Request, res: Response, next: NextFunction): void => {
         try {
 
             const results: Detection[] = this.detectionService.getFailedDetections();
@@ -57,24 +69,25 @@ class DetectionController {
         }
     };
 
-    public launchDetection = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public launchDetection = (req: Request, res: Response, next: NextFunction): void => {
         try {
             const detectionParams: LaunchDetectionDto = req.body;
-            const val: CancellablePromise<Framework[]> = this.detectionService.launchDetection(detectionParams.application, detectionParams.language);
+            const val: CancellableDetectionPromise = this.detectionService.launchDetection(detectionParams.application, detectionParams.language);
             const b: boolean = (val != null);
-            res.status(200).send({data: b, message: "detection"});
-
+            res.status(200).send({data: b, message: "Detection launched"});
         } catch (error) {
+            console.log(`Detection failed to launch`, error)
+
             next(error);
         }
     };
 
-    public stopDetection = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public stopDetection = (req: Request, res: Response, next: NextFunction): void => {
         try {
             const detectionParams: LaunchDetectionDto = req.body;
-            const val: boolean = await this.detectionService.cancelDetection(detectionParams.application, detectionParams.language);
+            this.detectionService.cancelDetection(detectionParams.application, detectionParams.language);
 
-            res.status(200).send({data: val, message: "cancelled"});
+            res.status(200).send({data: true, message: "cancelled"});
         } catch (error) {
             next(error);
         }

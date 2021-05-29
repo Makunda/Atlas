@@ -59,7 +59,6 @@ class RegexNodesService {
         const req = `CALL artemis.api.regex.create.node($name, $regexes, $internalType, $framework, $category, $parentId)`;
 
         try {
-            console.log("Adding item :", node);
             const val = await this.neo4jAl.executeWithParameters(req, node);
             if (!val.records || val.records.length == 0) return null;
 

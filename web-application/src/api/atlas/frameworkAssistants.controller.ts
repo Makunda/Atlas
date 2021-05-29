@@ -24,7 +24,6 @@ export class FrameworkAssistants {
       } else {
         console.warn(`Failed to get the actions. Status (${res.status})`);
       }
-      console.log("Action retrieved", actions);
       return actions;
     } catch (error) {
       console.error(

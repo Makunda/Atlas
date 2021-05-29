@@ -236,7 +236,6 @@ class FrameworksService {
         const params: any = Object.assign({}, frameworkData);
         // Force Id
         //params.id = int(frameworkData.id);
-        console.log("HERE")
         const req = `CALL artemis.api.add.framework($id, $name, $pattern, $isRegex, $discoveryDate, $location, $description, $type, $category, $internalType);`;
 
         try {

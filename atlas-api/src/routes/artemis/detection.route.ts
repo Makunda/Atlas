@@ -15,7 +15,7 @@ class DetectionRoute implements Route {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/status/:name(\\w+)`, this.detectionsController.getStatusDetection);
+        this.router.get(`${this.path}/status/:application(\\w+)`, this.detectionsController.getStatusDetection);
         this.router.get(`${this.path}/successes`, this.detectionsController.getSuccessfullDetections);
         this.router.get(`${this.path}/pending`, this.detectionsController.getPendingDetections);
         this.router.get(`${this.path}/failed`, this.detectionsController.getFailedDetections);
