@@ -10,9 +10,9 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
-import { logger, stream } from './utils/logger';
-import { Neo4JAccessLayer } from './utils/neo4jAccessLayer';
-import { QueryResult, ServerInfo } from 'neo4j-driver';
+import {logger, stream} from './utils/logger';
+import {Neo4JAccessLayer} from './utils/neo4jAccessLayer';
+import {QueryResult, ServerInfo} from 'neo4j-driver';
 import TokenService from './services/token.service';
 
 class App {
@@ -88,18 +88,18 @@ class App {
 
   private initializeMiddlewares() {
     if (this.env === 'production') {
-      this.app.use(morgan('combined', { stream }));
-      this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
+      this.app.use(morgan('combined', {stream}));
+      this.app.use(cors({origin: 'your.domain.com', credentials: true}));
     } else if (this.env === 'development') {
-      this.app.use(morgan('dev', { stream }));
-      this.app.use(cors({ origin: true, credentials: true }));
+      this.app.use(morgan('dev', {stream}));
+      this.app.use(cors({origin: true, credentials: true}));
     }
 
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.urlencoded({extended: true}));
     this.app.use(cookieParser());
   }
 

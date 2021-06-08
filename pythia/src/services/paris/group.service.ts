@@ -1,10 +1,9 @@
-import { logger } from '@shared/logger';
-import { int, QueryResult } from 'neo4j-driver';
+import {logger} from '@shared/logger';
+import {int, QueryResult} from 'neo4j-driver';
 import HttpException from '@exceptions/HttpException';
-import { groupResultFromObj, IGroupResult } from '@interfaces/paris/groupResult.interface';
-import { Neo4JAccessLayer } from '@utils/neo4jAccessLayer';
-import { Group } from '@interfaces/demeter/Group';
-import { Case } from '@interfaces/demeter/Case';
+import {Neo4JAccessLayer} from '@utils/neo4jAccessLayer';
+import {Group} from '@interfaces/demeter/Group';
+import {Case} from '@interfaces/demeter/Case';
 
 class GroupService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
@@ -74,7 +73,6 @@ class GroupService {
    */
   public async updateGroup(useCase: IGroup): Promise<IGroup> {
     try {
-      console.log('Received ', useCase);
       const request =
         'CALL paris.groups.update.by.id($id, $active, $categories, $creationDate, $cypherRequest, $cypherRequestReturn, $description, $groupName, $name, $selected, $types)';
       const results: QueryResult = await this.neo4jAl.executeWithParameters(request, useCase);

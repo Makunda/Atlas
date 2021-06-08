@@ -11,6 +11,9 @@ atlas-api/bin/*
 
 # Compiled js
 
+# Keys
+.key
+
 
 # local env files
 .env.local
@@ -39,3 +42,5 @@ demeter-web.zip
 *.exe
 *.exe
 atlas-api/bin/atlas-api.exe
+*.key
+*.key

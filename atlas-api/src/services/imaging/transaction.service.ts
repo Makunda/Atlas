@@ -12,6 +12,30 @@ class TransactionService {
     private static MASKED_TRANSACTION_NODE_LABEL = "TransactionNodeMasked";
     private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
+    // sort option
+    private static getSortParameter(obj: string, sort: string): string {
+        switch (sort) {
+            case "name":
+                return obj + ".Name";
+            case "fullName":
+                return obj + ".FullName";
+            case "technologie":
+                return "SIZE(technologies)";
+            case "count":
+                return "count";
+            default:
+                return obj + ".Name";
+        }
+    }
+
+    private static getSortDesc(sortDesc: boolean): string {
+        if (sortDesc) {
+            return "DESC"
+        } else {
+            return "ASC";
+        }
+    }
+
     /**
      * Get the total number of transactions
      * @param application
@@ -40,7 +64,6 @@ class TransactionService {
         return int(singleRecord.get("count")).toNumber();
     }
 
-
     /**
      * Get the total number of masked transactions
      * @param application
@@ -66,59 +89,14 @@ class TransactionService {
             const singleMaxRecord = resultMax.records[0];
 
             return {
-                minObject : int(singleMinRecord.get("minCountO")).toNumber(),
-                maxObject : int(singleMaxRecord.get("maxCountO")).toNumber(),
-                minTechnology : int(singleMinRecord.get("minTechCount")).toNumber(),
-                maxTechnology : int(singleMaxRecord.get("maxTechCount")).toNumber()
+                minObject: int(singleMinRecord.get("minCountO")).toNumber(),
+                maxObject: int(singleMaxRecord.get("maxCountO")).toNumber(),
+                minTechnology: int(singleMinRecord.get("minTechCount")).toNumber(),
+                maxTechnology: int(singleMaxRecord.get("maxTechCount")).toNumber()
             }
         } catch (err) {
             throw new Error(`Failed to retrieve insights ${err}`)
         }
-    }
-
-    /**
-     * Build filter
-     * @param filter
-     * @param reverse Reverse the filter with NOT clause
-     * @private
-     */
-    private buildFilter(filter : Record<string, unknown>, reverse?: boolean) {
-        let filterReq = "";
-        const conditions = [];
-        if(filter) {
-            for(const [variable, value] of Object.entries(filter)) {
-
-                switch (variable) {
-                    case "minTechnologies":
-                        conditions.push("SIZE(technologies) >= " + Number(value));
-                        break;
-                    case "maxTechnologies":
-                        conditions.push("SIZE(technologies) <= " + Number(value));
-                        break;
-                    case "minObject":
-                        conditions.push("count >= " + Number(value));
-                        break;
-                    case "maxObject":
-                        conditions.push("count <= " + Number(value));
-                        break;
-                    case "techContained":
-                        conditions.push(`any(x IN technologies WHERE x CONTAINS '${String(value)}') `);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if(conditions.length > 0) {
-                if(!reverse) {
-                    filterReq = ` WHERE ${conditions.join(" AND ")} `;
-                } else {
-                    filterReq = ` WHERE NOT ${conditions.join(" AND NOT ")} `;
-                }
-            }
-        }
-
-        return filterReq;
     }
 
     /**
@@ -131,7 +109,7 @@ class TransactionService {
      * @param sortDesc Direction of the sort
      */
     public async getBatchTransaction(application: string, start: number, end: number,
-                                     filter? : Record<string, unknown>,
+                                     filter?: Record<string, unknown>,
                                      sort?: string,
                                      sortDesc?: boolean): Promise<ITransaction[]> {
 
@@ -328,10 +306,10 @@ class TransactionService {
      * @param application Name of the application
      * @param terms
      */
-    public async maskTransactionByTerms(application: string, terms : string[]): Promise<number> {
+    public async maskTransactionByTerms(application: string, terms: string[]): Promise<number> {
         try {
             // Ignore if the list of term is empty
-            if(terms.length == 0) return 0;
+            if (terms.length == 0) return 0;
 
             const req = `
             MATCH (t:Transaction:\`${application}\`) WHERE any(x in $termList WHERE t.Name contains x)
@@ -342,7 +320,7 @@ class TransactionService {
             RETURN COUNT(tran) as masked`
 
             const result = await this.neo4jAl.executeWithParameters(req, {
-            "termList": terms
+                "termList": terms
             });
 
             if (!result || result.records.length == 0) return 0;
@@ -350,8 +328,8 @@ class TransactionService {
 
         } catch (err) {
             logger.error(
-            `Failed to get catch of transaction for application ${application}.`,
-            err
+                `Failed to get catch of transaction for application ${application}.`,
+                err
             );
             throw new HttpException(500, "Internal error");
         }
@@ -390,29 +368,49 @@ class TransactionService {
         }
     }
 
+    /**
+     * Build filter
+     * @param filter
+     * @param reverse Reverse the filter with NOT clause
+     * @private
+     */
+    private buildFilter(filter: Record<string, unknown>, reverse?: boolean) {
+        let filterReq = "";
+        const conditions = [];
+        if (filter) {
+            for (const [variable, value] of Object.entries(filter)) {
 
-    // sort option
-    private static getSortParameter(obj: string, sort: string): string {
-        switch (sort) {
-            case "name":
-                return obj + ".Name";
-            case "fullName":
-                return obj + ".FullName";
-            case "technologie":
-                return "SIZE(technologies)";
-            case "count":
-                return "count";
-            default:
-                return obj + ".Name";
-        }
-    }
+                switch (variable) {
+                    case "minTechnologies":
+                        conditions.push("SIZE(technologies) >= " + Number(value));
+                        break;
+                    case "maxTechnologies":
+                        conditions.push("SIZE(technologies) <= " + Number(value));
+                        break;
+                    case "minObject":
+                        conditions.push("count >= " + Number(value));
+                        break;
+                    case "maxObject":
+                        conditions.push("count <= " + Number(value));
+                        break;
+                    case "techContained":
+                        conditions.push(`any(x IN technologies WHERE x CONTAINS '${String(value)}') `);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-    private static getSortDesc(sortDesc: boolean): string {
-        if (sortDesc) {
-            return "DESC"
-        } else {
-            return "ASC";
+            if (conditions.length > 0) {
+                if (!reverse) {
+                    filterReq = ` WHERE ${conditions.join(" AND ")} `;
+                } else {
+                    filterReq = ` WHERE NOT ${conditions.join(" AND NOT ")} `;
+                }
+            }
         }
+
+        return filterReq;
     }
 }
 

@@ -3,12 +3,10 @@ import {int, QueryResult} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import {ILevel, LevelNode} from "@interfaces/imaging/level.interface";
-import InstallationController from "@controller/imaging/installation.controller";
-import app from "@server";
 
 class LevelService {
-    private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
     private static HIDDEN_LEVEL_LABEL_PREFIX = "HiddenL";
+    private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
     /**
      * Create a whole new level in Imaging
@@ -357,19 +355,18 @@ class LevelService {
      * @param application Application Name
      * @param depth Depth of the level
      */
-    public async refreshLevels(application: string, depth: number) : Promise<void> {
+    public async refreshLevels(application: string, depth: number): Promise<void> {
         if (depth >= 1 && depth < 5) {
             // Refresh level 1-4
             const req = `
             MATCH (l51:Level${depth}:\`${application}\`)-[r:References]->(l52:Level${depth}:\`${application}\`) 
             DELETE r;`;
-            const req2 = `MATCH (l51:Level${depth}:\`${application}\`)-[]->(:Level${depth+1})-[]->(:Level${depth+1})<-[]-(l52:Level${depth}:\`${application}\`) 
+            const req2 = `MATCH (l51:Level${depth}:\`${application}\`)-[]->(:Level${depth + 1})-[]->(:Level${depth + 1})<-[]-(l52:Level${depth}:\`${application}\`) 
             WHERE ID(l51)<>ID(l52) WITH l51, l52 MERGE (l51)-[:References]->(l52);`
             await this.neo4jAl.execute(req);
             await this.neo4jAl.execute(req2);
 
-        }
-        else if(depth == 5) {
+        } else if (depth == 5) {
             // Refresh level 5
             const req = `
             MATCH (l51:Level5:\`${application}\`)-[r:References]->(l52:Level5:\`${application}\`) 
@@ -378,12 +375,12 @@ class LevelService {
             WHERE ID(l51)<>ID(l52) WITH l51, l52 MERGE (l51)-[:References]->(l52);`
             await this.neo4jAl.execute(req);
             await this.neo4jAl.execute(req2);
-        } else  {
+        } else {
             return;
         }
 
         // Refresh levels
-        if(depth > 1) await this.refreshLevels(application, depth - 1)
+        if (depth > 1) await this.refreshLevels(application, depth - 1)
     }
 
     /**
@@ -391,7 +388,7 @@ class LevelService {
      * @param application Name of application
      * @param depth Depth of the application
      */
-    public async findHiddenLevelByDetph(application: string, depth: number) : Promise<ILevel[]> {
+    public async findHiddenLevelByDetph(application: string, depth: number): Promise<ILevel[]> {
         const labelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${depth}`;
         const req = `MATCH (l:${labelName}) RETURN l as node;`;
 
@@ -411,12 +408,12 @@ class LevelService {
      * @param application Application name
      * @param id Id of the level
      */
-    public async findHiddenLevelById(application: string, id: number) : Promise<ILevel> {
+    public async findHiddenLevelById(application: string, id: number): Promise<ILevel> {
         // Search application
         const req = `MATCH (l:\`${application}\`) WHERE ID(l)=$idLevel RETURN l as node;`;
-        const results: QueryResult = await this.neo4jAl.executeWithParameters(req, { idLevel : id});
+        const results: QueryResult = await this.neo4jAl.executeWithParameters(req, {idLevel: id});
 
-        if(results.records && results.records.length) return null;
+        if (results.records && results.records.length) return null;
 
         // Return the level
         const singleRecord = results.records[0];
@@ -425,13 +422,12 @@ class LevelService {
     }
 
 
-
     /**
      * Un-hide a Children
      * @param application Name of the application
      * @param id Id of the children
      */
-    public async unHideChildren(application: string, id: number) : Promise<ILevel> {
+    public async unHideChildren(application: string, id: number): Promise<ILevel> {
         // Get the level
         const level = await this.findLevelById(application, id);
 
@@ -442,10 +438,10 @@ class LevelService {
         // Change the label
         const req = `MATCH (l:${labelName}) WHERE ID(l)=$idNode 
         REMOVE l:${labelName} SET l:${newLabel} RETURN l as node;`;
-        const results: QueryResult = await this.neo4jAl.executeWithParameters(req, { idNode : id});
+        const results: QueryResult = await this.neo4jAl.executeWithParameters(req, {idNode: id});
 
         // Parse all the level under it
-        if(level.level < 5) {
+        if (level.level < 5) {
             const childLevelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${level.level + 1}`;
             const request = `MATCH (p:\`${application}\`)-[:Aggregates]->(n:${childLevelName}:\`${application}\`)  
             WHERE ID(p)=$idLevel 
@@ -460,7 +456,7 @@ class LevelService {
         }
 
         // Parse the parents to reactive them
-        if(level.level > 1) {
+        if (level.level > 1) {
             const childLevelName = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${level.level - 1}`;
             const request = `MATCH (p:\`${application}\`)<-[:Aggregates]-(n:${childLevelName}:\`${application}\`)  
             WHERE ID(p)=$idLevel 
@@ -474,7 +470,7 @@ class LevelService {
             }
         }
 
-        if(results.records && results.records.length) return null;
+        if (results.records && results.records.length) return null;
 
         // Return the level
         const singleRecord = results.records[0];
@@ -487,10 +483,10 @@ class LevelService {
      * @param application
      * @param levelID
      */
-    public async hideChildren(application: string, levelID: number) : Promise<ILevel> {
+    public async hideChildren(application: string, levelID: number): Promise<ILevel> {
         // Find the level
         const level = await this.findLevelById(application, levelID);
-        if(level == null) return;
+        if (level == null) return;
 
         const newLabel = `${LevelService.HIDDEN_LEVEL_LABEL_PREFIX}${level.level}`;
         const oldLabel = `Level${level.level}`;
@@ -504,7 +500,7 @@ class LevelService {
         const results: QueryResult = await this.neo4jAl.executeWithParameters(request, {"idLevel": int(levelID)});
 
         // Hide children levels recursively
-        if(level.level < 5) {
+        if (level.level < 5) {
             const childLevelName = `Level${level.level + 1}`;
             const request = `MATCH (p:\`${application}\`)-[:Aggregates]->(n:${childLevelName}:\`${application}\`)  
             WHERE ID(p)=$idLevel 
@@ -529,9 +525,9 @@ class LevelService {
      * @param application
      * @param levelID
      */
-    public async unHideLevel(application: string, levelID: number) : Promise<ILevel> {
+    public async unHideLevel(application: string, levelID: number): Promise<ILevel> {
         try {
-            const level : ILevel = await this.unHideChildren(application, levelID);
+            const level: ILevel = await this.unHideChildren(application, levelID);
 
             // Refresh all the levels
             await this.refreshLevels(application, 5);
@@ -550,9 +546,9 @@ class LevelService {
      * @param application
      * @param levelID
      */
-    public async hideLevel(application: string, levelID: number) : Promise<ILevel> {
+    public async hideLevel(application: string, levelID: number): Promise<ILevel> {
         try {
-            const level : ILevel = await this.hideChildren(application, levelID);
+            const level: ILevel = await this.hideChildren(application, levelID);
 
             // Refresh all the levels
             await this.refreshLevels(application, 5);

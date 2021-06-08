@@ -51,7 +51,7 @@ class TransactionController {
             const sort = String(req.body.sort) || "name";
             const sortDesc = Boolean(req.body.sortDesc) || false;
 
-            const filter : Record<string, unknown> = req.body.filter || {};
+            const filter: Record<string, unknown> = req.body.filter || {};
 
             const transactions: ITransaction[] = await this.transactionService.getBatchTransaction(
                 applicationName, startIndex, endIndex, filter, sort, sortDesc);
@@ -94,7 +94,7 @@ class TransactionController {
     public maskTransactionWithFilter = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const applicationName = String(req.params.application);
-            const filter : Record<string, unknown> = req.body.filter || {};
+            const filter: Record<string, unknown> = req.body.filter || {};
 
             const transactionMasked: number = await this.transactionService.maskTransactionWithFilter(applicationName, filter);
             res.status(200).json({data: transactionMasked, message: 'Transaction Masked'});

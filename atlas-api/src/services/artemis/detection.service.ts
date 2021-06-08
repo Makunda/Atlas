@@ -6,8 +6,6 @@ import {
     DetectionStatus,
 } from "@interfaces/artemis/detectionStatus.interface";
 import {logger} from "@shared/logger";
-import app from "@server";
-import {application} from "express";
 
 class DetectionService {
 
@@ -22,16 +20,24 @@ class DetectionService {
 
     }
 
+    public static getInstance(): DetectionService {
+        if (DetectionService.INSTANCE == null) {
+            DetectionService.INSTANCE = new DetectionService();
+        }
+
+        return DetectionService.INSTANCE
+    }
+
     /**
      * Find a pending detection based on application name and language
      * @param application Name of the application
      * @param language Language of the detection
      */
-    public findPendingDetection(application: string, language: string) : CancellableDetectionPromise | null {
+    public findPendingDetection(application: string, language: string): CancellableDetectionPromise | null {
         // If still pending do not launch the detection
         const genPk = CancellableDetectionPromise.generateDetectionPk(application, language);
-        for( const i of this.detectionList) {
-            if(i.getDetectionPk() == genPk) {
+        for (const i of this.detectionList) {
+            if (i.getDetectionPk() == genPk) {
                 return i;
             }
         }
@@ -44,11 +50,11 @@ class DetectionService {
      * @param application
      * @param language
      */
-    public removePendingDetection(application: string, language: string) : boolean {
+    public removePendingDetection(application: string, language: string): boolean {
         // If still pending do not launch the detection
         const genPk = CancellableDetectionPromise.generateDetectionPk(application, language);
-        for( let i =0; i < this.detectionList.length; i ++) {
-            if(this.detectionList[i].getDetectionPk() == genPk) {
+        for (let i = 0; i < this.detectionList.length; i++) {
+            if (this.detectionList[i].getDetectionPk() == genPk) {
                 this.detectionList.splice(i, 1);
                 return true;
             }
@@ -58,16 +64,6 @@ class DetectionService {
         return false;
     }
 
-
-
-    public static getInstance(): DetectionService {
-        if (DetectionService.INSTANCE == null) {
-            DetectionService.INSTANCE = new DetectionService();
-        }
-
-        return DetectionService.INSTANCE
-    }
-
     /**
      * Get the result of a pending detection
      * @param appName Name of the application
@@ -75,7 +71,7 @@ class DetectionService {
      */
     public getDetectionStatus(appName: string, language: string): Detection | null {
         const detection = this.findPendingDetection(appName, language)
-        if(detection == null) return null;
+        if (detection == null) return null;
 
         return detection.getDetection();
     }
@@ -85,7 +81,7 @@ class DetectionService {
      */
     public getPendingDetections(): Detection[] {
         return this.detectionList.filter(x => x.getStatus() == DetectionStatus.Pending)
-            .map( x => x.getDetection());
+            .map(x => x.getDetection());
     }
 
     /**
@@ -93,7 +89,7 @@ class DetectionService {
      */
     public getSuccessfulDetections(): Detection[] {
         return this.detectionList.filter(x => x.getStatus() == DetectionStatus.Success)
-            .map( x => x.getDetection());
+            .map(x => x.getDetection());
     }
 
     /**
@@ -101,14 +97,14 @@ class DetectionService {
      */
     public getFailedDetections(): Detection[] {
         return this.detectionList.filter(x => x.getStatus() == DetectionStatus.Failure)
-            .map( x => x.getDetection());
+            .map(x => x.getDetection());
     }
 
     /**
      * Get a detection using its ID
      * @param uuid
      */
-    public getDetectionByID(uuid: string) : Detection | null {
+    public getDetectionByID(uuid: string): Detection | null {
         const indexPending: number = this.detectionList.findIndex(
             (i) => i.getDetection().getId() == uuid
         );
@@ -149,7 +145,7 @@ class DetectionService {
      * @param application
      * @param language
      */
-    public getDetectionResults(application: string, language: string) : Detection {
+    public getDetectionResults(application: string, language: string): Detection {
         logger.info(`Requesting detection results for application ${application} and language : ${language}.`)
         const promiseDetection = this.findPendingDetection(application, language);
 
@@ -170,7 +166,7 @@ class DetectionService {
 
         try {
             const detection = this.findPendingDetection(application, language)
-            if(detection == null) return null;
+            if (detection == null) return null;
 
             detection.cancelPromise();
 

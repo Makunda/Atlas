@@ -10,10 +10,22 @@ import 'express-async-errors';
 
 import BaseRouter from './routes';
 import {logger} from '@shared/logger';
+import LoginService from "@services/login/login.service";
 
 const app = express();
 const {BAD_REQUEST} = StatusCodes;
 
+let loginService : LoginService;
+
+// Initialize login service
+try {
+    loginService = LoginService.getInstance();
+} catch (err) {
+    logger.error("Fatal error, failed to instantiate LoginService.", err);
+    throw Error("Login service failed to start");
+}
+
+let wall = false;
 
 /************************************************************************************
  *                              Set basic express settings
@@ -38,7 +50,7 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-// Security
+// Activate helmet on production environment
 if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
 }
@@ -50,6 +62,21 @@ app.use(function (req, res, next) {
     );
     next();
 });
+
+app.use(/^\/api\/(?!login).*/, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await loginService.verifyActualLicense();
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        if(!result) {
+            next(new Error("NO LICENCE DETECTED"));
+        } else {
+            next();
+        }
+    } catch (err) {
+        next(err);
+    }
+});
+
 
 
 // Add APIs

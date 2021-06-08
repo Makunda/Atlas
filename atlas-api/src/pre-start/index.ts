@@ -7,8 +7,6 @@ import path from 'path';
 import dotenv from 'dotenv';
 import commandLineArgs from 'command-line-args';
 
-import tsConfigPaths from 'tsconfig-paths';
-
 /**
  * Set the production path
  */
@@ -37,7 +35,7 @@ function setProdPath() {
 
     // Print
     console.log("Process ENV : " + process.env.NODE_ENV)
-    if(process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production') {
         setProdPath()
     }
 })();

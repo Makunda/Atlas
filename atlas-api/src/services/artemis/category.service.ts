@@ -48,11 +48,11 @@ class CategoryService {
      * @param id Id of the Category node to find
      * @return The Category node or Null if none was found
      */
-    public async getNodeById(id: number) : Promise<Category> {
+    public async getNodeById(id: number): Promise<Category> {
         const req = `CALL artemis.api.category.get.node.byId($id)`;
 
         try {
-            const val = await this.neo4jAl.executeWithParameters(req, { id : id });
+            const val = await this.neo4jAl.executeWithParameters(req, {id: id});
             if (!val.records || val.records.length == 0) return null;
 
             return convertRecordToCategoryNode(val.records[0]);

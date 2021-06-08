@@ -38,7 +38,7 @@ export class FrameworkAssistantManager {
         }
 
         //Create file if not exists
-        if(!fs.existsSync(filePath)) {
+        if (!fs.existsSync(filePath)) {
             fs.appendFileSync(filePath, "{}");
         }
         // Load assistants from it

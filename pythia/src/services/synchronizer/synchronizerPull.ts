@@ -1,7 +1,7 @@
-import { QueryResult } from 'neo4j-driver';
-import { Neo4JAccessLayer } from '@utils/neo4jAccessLayer';
-import { Framework } from '@/interfaces/artemis/framework.interface';
-import { convertRecordToFramework } from '@/utils/util';
+import {QueryResult} from 'neo4j-driver';
+import {Neo4JAccessLayer} from '@utils/neo4jAccessLayer';
+import {Framework} from '@/interfaces/artemis/framework.interface';
+import {convertRecordToFramework} from '@/utils/util';
 
 class SynchronizerPullService {
   private static neo4jAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
@@ -11,7 +11,7 @@ class SynchronizerPullService {
    */
   public static async pullFrameworks(lastPullTimestamp: number): Promise<Framework[]> {
     const req = `CALL artemis.api.get.framework.youngerThan($timeStamp)`;
-    const results: QueryResult = await this.neo4jAL.executeWithParameters(req, { timeStamp: lastPullTimestamp });
+    const results: QueryResult = await this.neo4jAL.executeWithParameters(req, {timeStamp: lastPullTimestamp});
 
     const frameworks: Framework[] = [];
     for (let index = 0; index < results.records.length; index++) {
@@ -27,7 +27,7 @@ class SynchronizerPullService {
    */
   public static async pullFrameworksForecast(lastPullTimestamp: number): Promise<number> {
     const req = `CALL artemis.api.get.framework.youngerThan.forecast($timeStamp)`;
-    const results: QueryResult = await this.neo4jAL.executeWithParameters(req, { timeStamp: lastPullTimestamp });
+    const results: QueryResult = await this.neo4jAL.executeWithParameters(req, {timeStamp: lastPullTimestamp});
 
     if (!results.records || results.records.length == 0) return 0;
 

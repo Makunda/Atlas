@@ -37,7 +37,7 @@
     "@exceptions": "dist/exceptions"
   },
   "bin": {
-    "atlas" : "dist/index.js"
+    "atlas": "dist/index.js"
   },
   "pkg": {
     "scripts": [
@@ -92,6 +92,7 @@
     "build.ts"
   ],
   "dependencies": {
+    "@types/jsonwebtoken": "^8.5.1",
     "class-validator": "^0.13.1",
     "command-line-args": "^5.1.1",
     "config": "^3.3.3",
@@ -104,6 +105,7 @@
     "http-status-codes": "^2.1.4",
     "jet-logger": "^1.0.4",
     "jsonfile": "^6.1.0",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "neo4j-driver": "^4.2.2",

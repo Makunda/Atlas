@@ -9,8 +9,7 @@
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": "tsc",
     "test": "jest --forceExit --detectOpenHandles",
-    "lint": "eslint --ignore-path .gitignore --ext .ts src/",
-    "lint:fix": "npm run lint -- --fix"
+
   },
   "_moduleAliases": {
     "@agents": "dist/agents",

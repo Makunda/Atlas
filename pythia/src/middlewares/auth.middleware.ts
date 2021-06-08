@@ -1,6 +1,6 @@
-import { NextFunction, Response } from 'express';
+import {NextFunction, Response} from 'express';
 import HttpException from '../exceptions/HttpException';
-import { RequestWithToken } from '../interfaces/auth.interface';
+import {RequestWithToken} from '../interfaces/auth.interface';
 import TokenService from '../services/token.service';
 
 const authMiddleware = async (req: RequestWithToken, res: Response, next: NextFunction) => {

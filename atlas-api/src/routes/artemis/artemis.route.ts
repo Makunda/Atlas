@@ -11,7 +11,7 @@ class ArtemisRoute implements Route {
     public router = Router();
     public artemisController = new ArtemisController();
 
-    private multerUpload : Multer;
+    private multerUpload: Multer;
 
     constructor() {
 
@@ -19,22 +19,22 @@ class ArtemisRoute implements Route {
         // Multer
         type CallbackFunction = (...args: any) => void;
         const appDir = path.dirname(require.main.filename);
-        const tempDirectory : string = appDir+"/../temp/";
+        const tempDirectory: string = appDir + "/../temp/";
 
-        if(!fs.existsSync(tempDirectory)) {
+        if (!fs.existsSync(tempDirectory)) {
             fs.mkdirSync(tempDirectory);
         }
 
         const storage = multer.diskStorage({
-            destination: function(req: Request, file: any, cb: CallbackFunction) {
+            destination: function (req: Request, file: any, cb: CallbackFunction) {
                 cb(null, tempDirectory);
             },
 
-            filename: function(req:Request, file: any, cb:CallbackFunction) {
+            filename: function (req: Request, file: any, cb: CallbackFunction) {
                 cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
             }
         });
-        this.multerUpload = multer({ storage: storage });
+        this.multerUpload = multer({storage: storage});
 
         this.initializeRoutes();
 

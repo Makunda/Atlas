@@ -9,9 +9,12 @@ import PythiaRouter from "./pythia/pythiaIndex.route";
 import UtilsRoute from './utils/utilsIndex.route';
 import AssistantsRoute from './assistants/assistants.route';
 import ParisRouter from './paris/paris.route';
+import LoginRoute from "./login/login.route";
 
 // Init router and path
 const router = Router();
+
+const loginRoute = new LoginRoute();
 
 // Add sub-routes
 //router.use('/users', UserRouter);
@@ -25,6 +28,7 @@ router.use('/configuration', ConfigurationRouter);
 router.use('/pythia', PythiaRouter);
 router.use('/utils', UtilsRoute);
 router.use('/assistants', AssistantsRoute);
+router.use('/login', loginRoute.router);
 
 
 // Export the base-router

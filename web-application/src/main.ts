@@ -13,7 +13,7 @@ import { Component } from "vue-router/types/router";
 Vue.config.productionTip = false;
 Vue.use(Vuex);
 
-console.log("Launching Olympus");
+console.log("Launching Atlas");
 
 // Test Neo4J Connection
 // If connected, render the app view, otherwise ask for a login
@@ -22,6 +22,8 @@ const neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
 // Declare application
 let el: Component;
+
+// Get token from Server
 
 neo4jAl
   .testConnection()

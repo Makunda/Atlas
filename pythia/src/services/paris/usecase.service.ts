@@ -1,9 +1,9 @@
-import { logger } from '@shared/logger';
-import { int, QueryResult } from 'neo4j-driver';
-import { Neo4JAccessLayer } from '@database/neo4jAccessLayer';
+import {logger} from '@shared/logger';
+import {int, QueryResult} from 'neo4j-driver';
+import {Neo4JAccessLayer} from '@database/neo4jAccessLayer';
 import HttpException from '@exceptions/HttpException';
-import { IUseCase } from '@interfaces/paris/useCase.interface';
-import { Case } from '@interfaces/demeter/Case';
+import {IUseCase} from '@interfaces/paris/useCase.interface';
+import {Case} from '@interfaces/demeter/Case';
 
 class UseCaseService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();

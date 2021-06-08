@@ -1,9 +1,9 @@
 import config from 'config';
-import { CreateFrameworkDto } from '@dtos/artemis/frameworks.dto';
+import {CreateFrameworkDto} from '@dtos/artemis/frameworks.dto';
 import HttpException from '../../exceptions/HttpException';
-import { Framework } from '@interfaces/artemis/framework.interface';
-import { logger } from '@utils/logger';
-import { Neo4JAccessLayer } from '@utils/neo4jAccessLayer';
+import {Framework} from '@interfaces/artemis/framework.interface';
+import {logger} from '@utils/logger';
+import {Neo4JAccessLayer} from '@utils/neo4jAccessLayer';
 
 class FrameworksService {
   private ARTEMIS_LABEL = config.get('artemis.frameworkNode');
@@ -17,7 +17,7 @@ class FrameworksService {
     const req = `CALL artemis.api.find.framework($name)`;
 
     try {
-      const val = await this.neo4jAl.executeWithParameters(req, { name: name });
+      const val = await this.neo4jAl.executeWithParameters(req, {name: name});
       if (!val.records || val.records.length == 0) return null;
 
       const singleRecord = val.records[0];

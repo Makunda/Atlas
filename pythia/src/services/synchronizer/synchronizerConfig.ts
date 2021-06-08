@@ -1,5 +1,5 @@
-import { QueryResult } from 'neo4j-driver';
-import { Neo4JAccessLayer } from '@utils/neo4jAccessLayer';
+import {QueryResult} from 'neo4j-driver';
+import {Neo4JAccessLayer} from '@utils/neo4jAccessLayer';
 
 class SynchronizerService {
   private static INSTANCE: SynchronizerService = new SynchronizerService();
@@ -44,9 +44,6 @@ class SynchronizerService {
         lastUpdate = await this.deleteAndCreate();
       }
     }
-
-    console.log('Got last update :' + lastUpdate);
-
     return lastUpdate;
   }
 
@@ -59,7 +56,7 @@ class SynchronizerService {
     const req = `MATCH (o:${SynchronizerService.SYNC_NODE_LABEL}) SET o.LastUpdate=$date RETURN o.LastUpdate as lastDate LIMIT 1`;
 
     // Insert the token
-    const res: QueryResult = await this.neo4jAL.executeWithParameters(req, { date: Number(new Date()) });
+    const res: QueryResult = await this.neo4jAL.executeWithParameters(req, {date: Number(new Date())});
 
     if (!res.records || res.records.length == 0) {
       lastUpdate = await this.createConfig();
@@ -86,7 +83,7 @@ class SynchronizerService {
     const req = `CREATE (o:${SynchronizerService.SYNC_NODE_LABEL}) SET o.LastUpdate=$date`;
 
     // Insert the token
-    await this.neo4jAL.executeWithParameters(req, { date: dateTime });
+    await this.neo4jAL.executeWithParameters(req, {date: dateTime});
 
     return dateTime;
   }

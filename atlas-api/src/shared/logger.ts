@@ -2,7 +2,6 @@ import winstonDaily from 'winston-daily-rotate-file';
 import winston from "winston";
 
 
-
 const {combine, timestamp, printf} = winston.format;
 
 const logger = winston.createLogger({

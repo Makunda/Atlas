@@ -131,9 +131,9 @@ class FrameworksService {
         frameworkData.numberOfDetection = frameworkData.numberOfDetection || 0;
 
         const cs = new CategoryService();
-        let categoryName : string;
-        if(!isNaN(Number(frameworkData.category))) {
-            const categoryNode =  await cs.getNodeById(Number(frameworkData.category));
+        let categoryName: string;
+        if (!isNaN(Number(frameworkData.category))) {
+            const categoryNode = await cs.getNodeById(Number(frameworkData.category));
             categoryName = categoryNode.name;
         } else {
             categoryName = String(frameworkData.category);

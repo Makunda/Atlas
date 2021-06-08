@@ -1,8 +1,8 @@
 import config from 'config';
-import { QueryResult } from 'neo4j-driver';
-import { logger } from '@utils/logger';
-import { Neo4JAccessLayer } from '@utils/neo4jAccessLayer';
-import { uuidv4, wait } from '@utils/util';
+import {QueryResult} from 'neo4j-driver';
+import {logger} from '@utils/logger';
+import {Neo4JAccessLayer} from '@utils/neo4jAccessLayer';
+import {uuidv4, wait} from '@utils/util';
 
 class TokenService {
   private static INSTANCE: TokenService = new TokenService();
@@ -47,7 +47,7 @@ class TokenService {
     const req = 'CREATE (o:PythiaToken) SET o.Token=$token SET o.Creation=$creationDate';
 
     // Insert the token
-    await this.neo4jAL.executeWithParameters(req, { token: token, creationDate: new Date() });
+    await this.neo4jAL.executeWithParameters(req, {token: token, creationDate: new Date()});
 
     this.inBaseToken.push(token);
 

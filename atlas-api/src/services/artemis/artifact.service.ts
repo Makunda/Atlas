@@ -63,6 +63,28 @@ export default class ArtifactService {
         };
     }
 
+    /**
+     * Generate the tag base on the type of the extraction
+     * @param extractionType
+     * @param primaryGroupName
+     * @param secondaryGroupName
+     * @private
+     */
+    private static async generateTag(extractionType: string, primaryGroupName: string, secondaryGroupName: string) {
+        const prefix = await ArtifactService.getExtractionPrefix(extractionType);
+
+        switch (extractionType) {
+            case "level":
+                return prefix + primaryGroupName;
+            case "module":
+                return prefix + primaryGroupName;
+            case "architecture":
+                return prefix + primaryGroupName + "$" + secondaryGroupName;
+            default:
+                throw new Error(`No prefix existing for extraction ${extractionType}.`);
+        }
+    }
+
     public async getArtifactsList(
         appName: string,
         language: string,
@@ -114,28 +136,6 @@ export default class ArtifactService {
     }
 
     /**
-     * Generate the tag base on the type of the extraction
-     * @param extractionType
-     * @param primaryGroupName
-     * @param secondaryGroupName
-     * @private
-     */
-    private static async generateTag(extractionType: string, primaryGroupName: string, secondaryGroupName: string) {
-        const prefix = await ArtifactService.getExtractionPrefix(extractionType);
-
-        switch (extractionType) {
-            case "level":
-                return prefix + primaryGroupName;
-            case "module":
-                return prefix + primaryGroupName;
-            case "architecture":
-                return prefix + primaryGroupName + "$" + secondaryGroupName;
-            default:
-                throw new Error(`No prefix existing for extraction ${extractionType}.`);
-        }
-    }
-
-    /**
      * Extract a list of artifact to the selected location
      * @param application Name of the application
      * @param artifactList List of the artifact to extract
@@ -161,12 +161,12 @@ export default class ArtifactService {
 
             // eslint-disable-next-line no-console
             console.log("Extraction type: ", groupType);
-            
+
             // split them
             for (const a of artifactList) {
                 try {
                     let tagName: string;
-                    
+
                     if (extractionType === "together") {
                         if (groupType === 'architecture') {
                             tagName = prefix + primaryGroupName + "$" + secondaryGroupName;
@@ -174,13 +174,13 @@ export default class ArtifactService {
                             tagName = prefix + primaryGroupName;
                         }
                     } else {
-                        if(groupType === 'architecture') {
+                        if (groupType === 'architecture') {
                             tagName = prefix + primaryGroupName + "$" + (a.customName || a.name);
                         } else {
                             tagName = prefix + (a.customName || a.name);
                         }
                     }
-                    
+
                     // eslint-disable-next-line max-len
                     const req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType 
                     AND o.FullName STARTS WITH $fullName 
@@ -215,13 +215,13 @@ export default class ArtifactService {
 
                 await tx.commit()
             } catch (err) {
-                if(tx != null) {
+                if (tx != null) {
                     await tx.rollback();
                 }
                 logger.error("Failed to group nodes.", err);
                 throw err;
             }
-            
+
 
         } catch (err) {
             logger.error(

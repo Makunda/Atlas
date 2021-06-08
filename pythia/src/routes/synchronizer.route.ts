@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import Route from '@interfaces/routes.interface';
 import authMiddleware from '@middlewares/auth.middleware';
 import SynchronizerController from '@controllers/synchronizer.controller';

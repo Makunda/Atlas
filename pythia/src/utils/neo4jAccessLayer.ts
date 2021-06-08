@@ -1,6 +1,6 @@
 import config from 'config';
 
-import neo4j, { Driver, QueryResult, ServerInfo, Session } from 'neo4j-driver';
+import neo4j, {Driver, QueryResult, ServerInfo, Session} from 'neo4j-driver';
 
 export class Neo4JAccessLayer {
   private static INSTANCE: Neo4JAccessLayer;

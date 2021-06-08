@@ -34,15 +34,15 @@ class ArtemisService {
     /**
      * Generate an export of the Framework
      */
-    public static async launch_export() : Promise<string> {
+    public static async launch_export(): Promise<string> {
         const appDir = path.dirname(require.main.filename);
-        const filePath : string = appDir+"/../temp";
+        const filePath: string = appDir + "/../temp";
 
-        if(!fs.existsSync(filePath)) {
+        if (!fs.existsSync(filePath)) {
             fs.mkdirSync(filePath);
         }
 
-        const sanitized_path : string = filePath.replace("\\", "\\\\");
+        const sanitized_path: string = filePath.replace("\\", "\\\\");
         const req = `CALL artemis.api.export.all("${sanitized_path}")`;
 
         try {
@@ -69,14 +69,14 @@ class ArtemisService {
      * Launch import of the frameworks
      * @param filePath
      */
-    public static async launch_import(filePath : string) : Promise<string> {
+    public static async launch_import(filePath: string): Promise<string> {
 
-        const sanitized_path : string = filePath.replace(/\\/g, "\\\\");
+        const sanitized_path: string = filePath.replace(/\\/g, "\\\\");
         const req = `CALL artemis.api.import.data("${sanitized_path}")`;
 
         try {
             const res = await this.neo4jAl.execute(req);
-            for(let i = 0; i < res.records.length; i++) {
+            for (let i = 0; i < res.records.length; i++) {
                 logger.info(`Import : ${String(res.records[i].get(0))}`);
             }
 

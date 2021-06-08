@@ -1,12 +1,10 @@
-import {application, NextFunction, Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import {LaunchDetectionDto} from '@dtos/artemis/detection.dto';
 import {
     CancellableDetectionPromise,
-    Detection,
-    DetectionStatus
+    Detection
 } from '@interfaces/artemis/detectionStatus.interface';
 import DetectionService from '@services/artemis/detection.service';
-import {Framework} from '@interfaces/artemis/framework.interface';
 
 class DetectionController {
     public detectionService: DetectionService = DetectionService.getInstance();
@@ -17,8 +15,8 @@ class DetectionController {
             const application = String(req.params.application);
             const language = String(req.query.language);
 
-            if(!application || !language) {
-                res.status(400).send({ data: "Missing parameters", message: "Bad request"});
+            if (!application || !language) {
+                res.status(400).send({data: "Missing parameters", message: "Bad request"});
             } else {
                 const results: Detection | null = this.detectionService.getDetectionStatus(application, language);
                 res.status(200).send({data: results, message: "status"});
@@ -44,7 +42,7 @@ class DetectionController {
         }
     };
 
-    public getPendingDetections = (req: Request, res: Response, next: NextFunction): void  => {
+    public getPendingDetections = (req: Request, res: Response, next: NextFunction): void => {
         try {
 
             const results: Detection[] = this.detectionService.getPendingDetections();

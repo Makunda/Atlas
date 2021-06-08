@@ -27,14 +27,14 @@ class ArtemisController {
             res.sendFile(path.resolve(fileCreated), (err) => {
                 // File was sent
                 // Delete the file
-                if(err) {
+                if (err) {
                     logger.error("Failed to send the file : ", err)
                 }
 
                 try {
                     fs.unlinkSync(fileCreated)
                     logger.info(`The temporary file '${fileCreated}' was successfully removed`);
-                } catch(err) {
+                } catch (err) {
                     logger.error(err)
                 }
             });
@@ -59,7 +59,7 @@ class ArtemisController {
             try {
                 fs.unlinkSync(file.path)
                 logger.info(`The temporary file '${file.path}' was successfully removed`);
-            } catch(err) {
+            } catch (err) {
                 logger.error(`Failed to remove temporary file ${file.path}.`, err)
             }
 
