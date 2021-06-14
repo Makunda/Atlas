@@ -47,7 +47,7 @@ class LevelNode {
      * Create an object from a row
      * @param row
      */
-    public static fromObj(row: any, hidden=false): LevelNode {
+    public static fromObj(row: any, hidden = false): LevelNode {
         const level = {
             _id: int(row["identity"]).toNumber() || -1,
             hidden: hidden,
@@ -62,7 +62,6 @@ class LevelNode {
         } as ILevel
         return new LevelNode(level);
     }
-
 
 
     public getRecord(): ILevel {

@@ -44,3 +44,5 @@ demeter-web.zip
 atlas-api/bin/atlas-api.exe
 *.key
 *.key
+*.exe
+*.xlsx

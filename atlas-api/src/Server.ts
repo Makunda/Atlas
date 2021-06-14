@@ -15,7 +15,7 @@ import LoginService from "@services/login/login.service";
 const app = express();
 const {BAD_REQUEST} = StatusCodes;
 
-let loginService : LoginService;
+let loginService: LoginService;
 
 // Initialize login service
 try {
@@ -67,8 +67,8 @@ app.use(/^\/api\/(?!login).*/, async (req: Request, res: Response, next: NextFun
     try {
         const result = await loginService.verifyActualLicense();
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        if(!result) {
-            next(new Error("NO LICENCE DETECTED"));
+        if (!result) {
+            next(new Error("NO LICENSE DETECTED"));
         } else {
             next();
         }
@@ -76,7 +76,6 @@ app.use(/^\/api\/(?!login).*/, async (req: Request, res: Response, next: NextFun
         next(err);
     }
 });
-
 
 
 // Add APIs

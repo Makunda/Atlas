@@ -228,6 +228,7 @@
       </v-row>
 
       <v-divider></v-divider>
+
     </v-card-text>
     <div v-if="diplayNotInstalled" id="NotInstalledArtemis">
       <h2 class="ma-auto text--h2" id="Message">

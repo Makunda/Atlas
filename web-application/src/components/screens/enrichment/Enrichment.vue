@@ -37,7 +37,6 @@
 </template>
 
 <script lang="ts">
-import GroupingTile from "@/components/screens/enrichment/tiles/GroupingTile.vue";
 // import DemeterGroupTile from "@/components/steps/main/tiles/DemeterGroupTile.vue";
 import TagViewer from "@/components/screens/enrichment/steps/TagViewer.vue";
 import UseCases from "@/components/dionysus/modules/UseCases.vue";
@@ -49,8 +48,6 @@ export default Vue.extend({
   name: "Enrichment",
 
   components: {
-    GroupingTile,
-    // DemeterGroupTile,
     TagStudio,
     UseCases,
     TagViewer
@@ -71,11 +68,6 @@ export default Vue.extend({
     // Navigation
     tab: 0,
     items: [
-      {
-        view: "GroupingTile",
-        name: "Assistants",
-        icon: "mdi-assistant"
-      },
       {
         view: "TagViewer",
         name: "Tags",

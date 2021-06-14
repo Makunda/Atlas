@@ -1,14 +1,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import Application from "@/Application.vue";
-import Login from "./Login.vue";
+import Default from "@/views/Default.vue";
+import Login from "./views/Login.vue";
+import License from "./views/License.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import store from "./store";
 
 import { Neo4JAccessLayer } from "./api/Neo4jAccessLayer";
 import { Component } from "vue-router/types/router";
+import { LicenseController } from "@/api/login/License.controller";
+import { LicenseStatus } from "@/api/interface/license/License.interface";
 
 Vue.config.productionTip = false;
 Vue.use(Vuex);
@@ -27,15 +30,24 @@ let el: Component;
 
 neo4jAl
   .testConnection()
-  .then(() => {
+  .then(async () => {
     // Successful connection
-    router.replace("/atlas/main");
-    el = Application;
+
+    // Verify License
+    // Verify the license
+    const license = await LicenseController.getLicense();
+    console.log("Checking license : ", license)
+    if (license.status == LicenseStatus.NOT_VALID) {
+      el = License;
+      router.replace("/license");
+    } else {
+      el = Default;
+    }
   })
   .catch(err => {
     // Cannot connect to the Neo4j instance
     console.warn("Connection to Neo4j failed.", err);
-    router.replace("/atlas/login");
+    router.replace("/login");
     el = Login;
   })
   .finally(() => {

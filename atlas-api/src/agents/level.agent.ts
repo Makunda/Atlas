@@ -21,7 +21,6 @@ export default class LevelAgent extends AAgent {
     async group() {
         try {
             const num: number = await this.levelService.executeGroupingInAllApplications();
-
             if (num != 0) {
                 logger.info(`${num} levels were discovered and added.`);
             }

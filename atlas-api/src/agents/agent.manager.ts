@@ -27,6 +27,10 @@ export class AgentManager {
         this.levelAgent = new LevelAgent();
         this.moduleAgent = new ModuleAgent();
         this.architectureAgent = new ArchitectureAgent();
+
+        this.frameworkAgent.launch();
+        this.levelAgent.launch();
+        this.architectureAgent.launch();
     }
 
     /**

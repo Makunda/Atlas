@@ -41,7 +41,7 @@ export class UseCaseController {
   }
 
   /**
-   * GEt all the root use cases ( not attached to another one )
+   * Get all the root use cases ( not attached to another one )
    */
   public static async getRootUseCase(): Promise<IUseCase[]> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/roots";

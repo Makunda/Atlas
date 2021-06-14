@@ -73,6 +73,7 @@ export default Vue.extend({
     loadingToggle: false
   }),
 
+
   methods: {
     getStatus() {
       AgentController.getStatus(this.nameAgent)

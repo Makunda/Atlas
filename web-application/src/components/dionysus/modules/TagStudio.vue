@@ -8,9 +8,9 @@
       <v-card-subtitle
         >In this creator studio you'll be able to create your own Demeter
         recommendations ,in order to enrich your configuration, and display more
-        informations on CAST Imaging System.<br />
+        information on CAST Imaging System.<br />
         <br />
-        For more informations on tags and documents, please refer to the
+        For more information on tags and documents, please refer to the
         official <a href="#">CAST Imaging documentation</a>.</v-card-subtitle
       >
       <v-card-text>

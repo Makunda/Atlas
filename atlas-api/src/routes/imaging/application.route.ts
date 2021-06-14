@@ -15,6 +15,7 @@ class ApplicationRoute implements Route {
     private initializeRoutes() {
         this.router.get(`${this.path}/all`, this.applicationController.getApplications);
         this.router.get(`${this.path}/insights/:application`, this.applicationController.getApplicationsInsights);
+        this.router.get(`${this.path}/technologies/:application`, this.applicationController.getTechnology);
     }
 }
 

@@ -5,6 +5,7 @@ import * as crypto from "crypto";
 import * as jwt from "jsonwebtoken";
 import {Node} from "neo4j-driver";
 import {logger} from "@shared/logger";
+import {timeConverter} from "../../utils/utils";
 
 interface Session {
     data: string,
@@ -28,9 +29,9 @@ class LoginService {
 
         // Read keys
         this.cert = fs.readFileSync(path.join(appDir, '../config/keys/public.pem'));
-        this.privateKey = fs.readFileSync(path.join(appDir,'../config/keys/private.key'));
+        this.privateKey = fs.readFileSync(path.join(appDir, '../config/keys/private.key'));
 
-        // Read key for licence
+        // Read key for license
         this.publicLoginKey = fs.readFileSync(
             path.join(appDir, '../config/keys/privateLicense.key')
         );
@@ -40,7 +41,7 @@ class LoginService {
      * Get the instance of the Login service
      * @public
      */
-    public static getInstance() : LoginService {
+    public static getInstance(): LoginService {
         if (LoginService.INSTANCE == null) {
             LoginService.INSTANCE = new LoginService();
         }
@@ -206,7 +207,7 @@ class LoginService {
 
         // In Data
 
-        const verifier = crypto.createVerify('RSA-SHA1024');
+        const verifier = crypto.createVerify('sha256');
         verifier.update(data);
         verifier.end()
 
@@ -219,10 +220,11 @@ class LoginService {
             throw new Error("The format of the license is not correct.")
         }
 
-        const todaytimestamp = Date.now();
+        const todaytimestamp = Date.now() / 1000;
         const timestampLicense = parseInt(splitData[1]);
 
         if (todaytimestamp > timestampLicense) {
+            logger.warn(`License expired on ${timeConverter(timestampLicense)}. Today's date ${timeConverter(todaytimestamp)}`);
             throw new Error("This license has expired.")
         }
 

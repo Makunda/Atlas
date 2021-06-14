@@ -116,6 +116,22 @@ class DetectionService {
         return this.detectionList[indexPending].getDetection();
     }
 
+    /**
+     * Remove a specific cancellable promise from the list
+     * @param cancellablePromise To be removec
+     * @private
+     */
+    private removeCancellablePromise(cancellablePromise: CancellableDetectionPromise) {
+        const indexPending: number = this.detectionList.findIndex(
+            (i) => i.getDetectionPk() == cancellablePromise.getDetectionPk()
+        );
+
+        if (indexPending != -1) {
+            this.detectionList[indexPending].cancelPromise();
+            this.detectionList.splice(indexPending, 1);
+        }
+    }
+
 
     /**
      * Launch the framework detector against a specific application
@@ -130,11 +146,15 @@ class DetectionService {
         );
 
         if (indexPending != -1) {
-            throw Error("A similar detection is already pending");
+            this.detectionList[indexPending].cancelPromise();
+            this.detectionList.splice(indexPending, 1);
         }
 
+
         // Make the promise above cancellable for the user
-        const cancellablePromise: CancellableDetectionPromise = new CancellableDetectionPromise(appName, language);
+        const cancellablePromise: CancellableDetectionPromise = new CancellableDetectionPromise(appName, language, () =>{
+            this.removeCancellablePromise(cancellablePromise);
+        });
         this.detectionList.push(cancellablePromise);
 
         return cancellablePromise;

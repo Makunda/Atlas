@@ -1,0 +1,10 @@
+{
+  "Mainframe": {
+    "JCL": ["JCL Job", "JCL Data Set", "JCL Procedure", "JCL Index", "JCL Step", "JCL External Program"],
+    "CICS" : ["CICS Map"],
+    "Shell": ["SHELL Program", "Shell Program Call"],
+    "Cobol": ["Cobol Program Batch"]
+
+  },
+
+}

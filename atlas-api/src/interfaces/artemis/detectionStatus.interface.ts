@@ -50,7 +50,7 @@ export class Detection {
         this.status = DetectionStatus.Pending;
     }
 
-    public getResults() : Framework[] {
+    public getResults(): Framework[] {
         return this.data;
     }
 
@@ -58,11 +58,11 @@ export class Detection {
         return this.status;
     }
 
-    public getLanguage(): string{
+    public getLanguage(): string {
         return this.language;
     }
 
-    public getApplication(): string{
+    public getApplication(): string {
         return this.application;
     }
 
@@ -70,7 +70,7 @@ export class Detection {
         return this.id;
     }
 
-    public isRunning() : boolean {
+    public isRunning(): boolean {
         return this.status == DetectionStatus.Pending;
     }
 }
@@ -88,33 +88,74 @@ export class CancellableDetectionPromise {
     private transaction: Transaction;
     private detection: Detection;
 
-    constructor(application: string, language: string) {
+    constructor(application: string, language: string, onError: () => void) {
+        try {
+            const session = this.neo4jAl.getSession();
+            this.transaction = session.beginTransaction();
+            this.detection = new Detection(application, language); // Declare a new detection
+            this.wrappedPromise = this.buildWrapPromise(application, language);
 
-        const session = this.neo4jAl.getSession();
-        this.transaction = session.beginTransaction();
-        this.detection = new Detection(application, language); // Declare a new detection
-        this.wrappedPromise = this.buildWrapPromise(application, language);
+            this.promise = new Promise((resolve, reject) => {
+                this.cancel = reject;
+                this.detection.markAsPending();
+                this.wrappedPromise.then((res: Framework[]) => {
+                    this.transaction.commit().then(r => {
+                        this.detection.markAsSuccess(res);
+                    });
+                    resolve(res);
+                }).catch((err) => {
+                    this.transaction.rollback().then(r => {
+                        logger.error(`The transaction has been rolled backed.`, err);
+                    });
+                    logger.error(`The detection for application ${this.detection.getApplication()} was cancelled.`);
+                    this.detection.markAsFailed();
+                });
+            })
+        } catch (err) {
+            logger.error(`Failed to create a Cancellable promise for application ${application} on ${language}`, err);
+            onError();
+        }
 
-        this.promise = new Promise((resolve, reject) => {
-            this.cancel = reject;
-            this.detection.markAsPending();
-            this.wrappedPromise.then((res: Framework[]) => {
-                this.transaction.commit().then(r => {
-                    this.detection.markAsSuccess(res);
-                });
-                resolve(res);
-            }).catch((err) => {
-                this.transaction.rollback().then(r => {
-                    logger.warn(`The transaction has been rolled backed.`, err);
-                });
-                logger.warn(`The detection for application ${this.detection.getApplication()} was cancelled.`);
-                this.detection.markAsFailed();
-            });
-        })
+    }
+
+    /**
+     * Generate the primary key of a Detection
+     * @param application
+     * @param language
+     */
+    public static generateDetectionPk(application: string, language: string): string {
+        return application + "+" + language;
     }
 
     public cancelPromise() {
         this.cancel();
+    }
+
+    /**
+     * "Primary key of the detection" to avoid launching the same detection multiple time
+     */
+    public getDetectionPk(): string {
+        return CancellableDetectionPromise.generateDetectionPk(this.detection.getApplication(),
+            this.detection.getLanguage());
+    }
+
+    public getStatus(): DetectionStatus {
+        return this.detection.getDetectionStatus();
+    }
+
+    /***
+     * Return the detection associated to the promise
+     */
+    public getDetection(): Detection {
+        return this.detection;
+    }
+
+    public getResults(): Framework[] {
+        return this.detection.getResults();
+    }
+
+    public isDone(): boolean {
+        return !this.detection.isRunning();
     }
 
     /**
@@ -134,50 +175,15 @@ export class CancellableDetectionPromise {
                         framework = FrameworksService.convertRecordToFramework(res.records[i]);
                         resultList.push(framework);
                     }
+                    console.log(`Detection successful ${resultList.length}`);
                     resolve(resultList);
                 })
                 .catch((err) => {
                     // Add to failed detections
                     logger.error(`The analysis of the ${application} failed.`, err);
                     console.error(`The query ${request} failed.`, err)
-                    resolve([]);
+                    reject(err);
                 });
         });
-    }
-
-    /**
-     * "Primary key of the detection" to avoid launching the same detection multiple time
-     */
-    public getDetectionPk() : string {
-        return CancellableDetectionPromise.generateDetectionPk(this.detection.getApplication(),
-            this.detection.getLanguage());
-    }
-
-    /**
-     * Generate the primary key of a Detection
-     * @param application
-     * @param language
-     */
-    public static generateDetectionPk(application: string, language: string) : string {
-        return application+"+"+language;
-    }
-
-    public getStatus() : DetectionStatus {
-        return this.detection.getDetectionStatus();
-    }
-
-    /***
-     * Return the detection associated to the promise
-     */
-    public getDetection() : Detection {
-        return this.detection;
-    }
-
-    public getResults() : Framework[] {
-        return this.detection.getResults();
-    }
-
-    public isDone(): boolean {
-        return !this.detection.isRunning();
     }
 }

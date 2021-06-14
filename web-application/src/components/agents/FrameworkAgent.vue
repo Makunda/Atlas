@@ -77,6 +77,7 @@ export default Vue.extend({
     loadingAction: false
   }),
 
+
   methods: {
     getPrefix() {
       AgentController.getPrefix(this.nameAgent)

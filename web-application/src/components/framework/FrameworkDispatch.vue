@@ -149,12 +149,10 @@ export default Vue.extend({
       ) {
         this.frameworkArtifact.fullName +=
           this.frameworkArtifact.delimiter + "*";
-      } else {
-        this.frameworkArtifact.fullName += "*";
       }
 
       this.authorizedType = this.frameworkArtifact.objectTypes;
-      this.frameworkArtifact.pattern = this.frameworkArtifact.name + ".*";
+      this.frameworkArtifact.pattern = this.frameworkArtifact.fullName + ".*";
       this.frameworkArtifact.isRegex = true;
     },
 

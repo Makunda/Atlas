@@ -1,0 +1,9 @@
+{
+  "nickname" : "DeadCodeType",
+  "name": "Dead code in the application (Types)",
+  "description" : "List the different types of objects having no relationship with the rest of the application",
+  "categories": ["maintenance"],
+  "parameters": [],
+  "request": "MATCH (o:Object:`%APPLICATION_NAME%`) WHERE NOt (o)-[]-(:Object) RETURN DISTINCT o.Type as Type,COUNT(DISTINCT o) as `Count of Object`;",
+  "returnValues": ["Type", "Count of Object"]
+}

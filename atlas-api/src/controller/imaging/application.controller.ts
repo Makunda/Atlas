@@ -27,6 +27,17 @@ class ApplicationController {
             next(error);
         }
     };
+
+    public getTechnology = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const applicationName = String(req.params.application);
+            const insights: string[] = await this.applicationService.getTechnology(applicationName);
+            res.status(200).json({data: insights, message: 'Technology'});
+
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 export default ApplicationController;

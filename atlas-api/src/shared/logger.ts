@@ -4,6 +4,24 @@ import winston from "winston";
 
 const {combine, timestamp, printf} = winston.format;
 
+const options = {
+    file: {
+        level: 'info',
+        filename: `logs/app.log`,
+        handleExceptions: true,
+        json: true,
+        maxsize: 5242880, // 5MB
+        maxFiles: 5,
+        colorize: false,
+    },
+    console: {
+        level: 'info',
+        handleExceptions: true,
+        json: false,
+        colorize: true,
+    },
+};
+
 const logger = winston.createLogger({
     level: 'info',
 
@@ -13,33 +31,10 @@ const logger = winston.createLogger({
 
     defaultMeta: {service: 'user-service'},
     transports: [
-        //
-        // - Write all logs with level `error` and below to `error.log`
-        // - Write all logs with level `info` and below to `combined.log`
-        //
-        new winstonDaily({
-            level: 'info',
-            datePattern: 'YYYY-MM-DD',
-            dirname: 'logs/info', // log file /logs/info/*.log in save
-            filename: `%DATE%.log`,
-            maxFiles: 30, // 30 Days saved
-            json: false,
-            zippedArchive: true,
-        }),
-        // error log setting
-        new winstonDaily({
-            level: 'error',
-            datePattern: 'YYYY-MM-DD',
-            dirname: 'logs/error', // log file /logs/error/*.log in save
-            filename: `%DATE%.error.log`,
-            maxFiles: 30, // 30 Days saved
-            handleExceptions: true,
-            json: false,
-            zippedArchive: true,
-        }),
-
-
+        new winston.transports.File(options.file),
+        new winston.transports.Console(options.console)
     ],
+    exitOnError: false,
 });
 
 

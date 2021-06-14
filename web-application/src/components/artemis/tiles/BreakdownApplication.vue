@@ -117,13 +117,23 @@
                 <template v-slot:label="{ item }">
                   <v-container>
                     <v-row>
-                      <p class="my-2" style="word-break: break-word">
-                        <strong>{{ item.customName || item.name }} </strong>
-                        <i class="text--persianGrey"
-                          >( items count : {{ item.count }})</i
-                        >
-                        <br />
-                      </p>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <p
+                            class="my-2"
+                            style="word-break: break-word"
+                            v-on="on"
+                            v-bind="attrs"
+                          >
+                            <strong>{{ item.customName || item.name }} </strong>
+                            <i class="text--persianGrey"
+                              >( items count : {{ item.count }})</i
+                            >
+                            <br />
+                          </p>
+                        </template>
+                        <span>Full name: {{ item.fullName }}</span>
+                      </v-tooltip>
 
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -425,7 +435,7 @@ export default Vue.extend({
     // Artifacts
     loadingArtifacts: false,
 
-    artifactItems: [],
+    artifactItems: [] as Artifact[],
     artifactTree: [],
     applicationItems: [] as string[],
     languageItems: [] as string[],
@@ -536,47 +546,43 @@ export default Vue.extend({
         });
     },
 
-    getApplicationAndLanguages() {
-      ApplicationController.getListApplications()
-        .then((res: string[]) => {
-          this.applicationItems = res;
-          this.defaultApplication = res[0];
-        })
-        .catch(err => {
-          console.error("Failed to get the list of the application");
-        });
+    /**
+     * Get the languages supported
+     */
+    async getApplicationAndLanguages() {
+      try {
+        this.applicationItems = await ApplicationController.getListApplications();
+        this.defaultApplication = this.applicationItems[0];
+      } catch (err) {
+        console.error("Failed to get the list of the application", err);
+      }
 
-      ArtemisController.getSupportedLanguages()
-        .then((res: string[]) => {
-          this.languageItems = res;
-          this.defaultLanguage = res[0];
-        })
-        .catch(err => {
-          console.error("Failed to retrieve languages.", err);
-        });
+      try {
+        this.languageItems = await ArtemisController.getSupportedLanguages();
+        this.defaultLanguage = this.languageItems[0];
+      } catch (err) {
+        console.error("Failed to retrieve languages.", err);
+      }
     },
 
-    getArtifactTree() {
+    async getArtifactTree() {
       // Get the tree
       this.loadingArtifacts = true;
-      ArtifactController.getArtifactAsTree(
-        this.applicationName,
-        this.defaultLanguage,
-        this.classExternality
-      )
-        .then((res: Artifact[]) => {
-          this.artifactItems = res;
-        })
-        .catch(err => {
-          console.error(
-            `Error trying to retrieve the breakdown of ${this.defaultApplication}`,
-            err
-          );
-        })
-        .finally(() => {
-          this.loadingArtifacts = false;
-        });
-      // Get the list of application
+
+      try {
+        this.artifactItems = await ArtifactController.getArtifactAsTree(
+          this.applicationName,
+          this.defaultLanguage,
+          this.classExternality
+        );
+      } catch (err) {
+        console.error(
+          `Error trying to retrieve the breakdown of ${this.defaultApplication}`,
+          err
+        );
+      } finally {
+        this.loadingArtifacts = false;
+      }
     },
 
     // Get prefix to build the queries
@@ -658,16 +664,15 @@ export default Vue.extend({
         });
     },
 
-    refresh() {
+    async refresh() {
       this.getApplicationInsights();
+      await this.getApplicationAndLanguages();
       this.getArtifactTree();
-      this.getApplicationAndLanguages();
     }
   },
 
   mounted() {
     this.applicationName = this.$store.state.applicationName;
-
     this.refresh();
   }
 });

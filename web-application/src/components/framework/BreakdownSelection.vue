@@ -83,7 +83,7 @@
           </v-row>
           <v-row v-if="error.length !== 0" class="red--text mt-3">
             <v-icon color="red" class="button-glow"
-              >mdi-message-alert-outline</v-icon
+              >mdi-message-alert-outline<//hv-icon
             >
             {{ error }}
           </v-row>

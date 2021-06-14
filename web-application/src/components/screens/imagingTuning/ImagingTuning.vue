@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row>
+    <v-row class="mb-10">
       <v-tabs
         class="pt-3"
         v-model="tab"
@@ -15,8 +15,8 @@
         </v-tab>
       </v-tabs>
     </v-row>
-    <v-row>
-      <v-container class="mx-auto mt-10">
+    <v-row class="mt-15">
+      <v-container class="mx-auto ">
         <component :is="items[tab].view"></component>
       </v-container>
     </v-row>

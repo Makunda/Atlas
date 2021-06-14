@@ -1,6 +1,4 @@
-import LevelService from "@services/imaging/level.service";
 import {NextFunction, Request, Response} from "express";
-import {ILevel} from "@interfaces/imaging/level.interface";
 import InstallationService from "@services/installation/installation.service";
 
 
