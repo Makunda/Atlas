@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import ReportingEngine from "@services/atlas/reporting/ReportingEngine";
 import {logger} from "@shared/logger";
-import fs from "fs";
 import {ReportInterface} from "@interfaces/report/Report.interface";
 
 
@@ -80,8 +79,8 @@ export class ReportController {
             let parameters = {};
 
             if (body.id == null) throw new Error("Missing 'id' property.")
-            if (body.application  == null) throw new Error("Missing 'application' property.")
-            if (body.parameters  != null) parameters = body.parameters;
+            if (body.application == null) throw new Error("Missing 'application' property.")
+            if (body.parameters != null) parameters = body.parameters;
             const id = body.id, application = body.application;
 
             const filePath: string = await this.reportService.generateReportAndExport(id, application, parameters);

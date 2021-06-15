@@ -2,8 +2,8 @@
   <v-card class="px-5 mb-5 pt-4" :disabled="disabledTile">
     <v-card-text>
       <v-row>
-        <h5 class="text-h4 black--text">
-          Automatic framework discovery
+        <h5 class="text-h4 mb-3 black--text">
+          Automatic framework discovery on {{ application }} application
         </h5>
       </v-row>
       <v-row class="my-5">

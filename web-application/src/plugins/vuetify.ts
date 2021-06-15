@@ -8,8 +8,11 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
+        deepblue: "#073B4C",
+        lightblue: "#00779b",
         grey: "#363636",
         charcoal: "#425b66", // ##577684
+        deepcharcoal: "#31444c", // ##577684
         persianGrey: "#2a9d8f", // #2a9d8f
         orange: "#e9c46a", // #3F51B5
         brown: "#f4a261", // #3F51B5
@@ -18,6 +21,6 @@ export default new Vuetify({
     }
   },
   icons: {
-    iconfont: 'mdi', // default - only for display purposes
+    iconfont: "mdi" // default - only for display purposes
   },
 });

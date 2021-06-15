@@ -1,13 +1,15 @@
 <template>
   <v-card>
     <v-card-title>
-      Global parameters
+      <h3 class="text-h4 mb-3 ">
+        Global parameters
+      </h3>
       <v-spacer></v-spacer>
       <v-btn icon color="green" @click="refresh()">
         <v-icon>mdi-cached</v-icon>
       </v-btn>
     </v-card-title>
-    <v-card-subtitle>
+    <v-card-subtitle class="ml-1">
       Modify the parameters of the Atlas platform
     </v-card-subtitle>
     <v-card-text>

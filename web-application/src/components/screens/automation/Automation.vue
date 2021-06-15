@@ -6,7 +6,7 @@
         v-model="tab"
         align-with-title
         fixed-tabs
-        background-color="charcoal"
+        background-color="deepcharcoal"
         dark
       >
         <v-tab v-for="item in items" :key="item.name">

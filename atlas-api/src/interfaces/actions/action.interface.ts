@@ -1,4 +1,3 @@
-
 export default class ActionInterface {
     id?: number;
     title: string;

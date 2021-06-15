@@ -1,71 +1,82 @@
 <!-- Login modal -->
 <template>
   <v-app class="main-application">
-    <v-container v-if="showLogin" class="login-container mx-auto" fill-height>
-      <v-card ref="form" class="mx-auto" min-width="500px">
-        <v-card-text>
-          <v-card-title class="mt-3 mb-8 d-flex flex-column justify-center text-center">
-            <h2>
-              Log in to Atlas
-            </h2>
-            <p class="subtitle-2">NASD Toolkit 2021</p>
-          </v-card-title>
-          <v-text-field
-              ref="neo4jUser"
-              v-model="credentials.user"
-              label="Database user"
-              placeholder="Neo4j user"
-              required
-          ></v-text-field>
-          <v-text-field
-              v-model="credentials.password"
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-              label="Database password"
-              name="input-10-1"
-              @click:append="show1 = !show1"
-          ></v-text-field>
-          <p>Database bolt URI : {{ uri }}</p>
+    <v-container fluid fill-height class="pa-0">
+      <v-row style="height: 100%">
+        <v-col
+          md="6"
+          style="background: #073B4C; height: 100%; position: relative"
+        >
+          <v-container bg fill-height grid-list-md text-xs-center>
+          <img src="@/assets/svg/Globe_icon.svg" id="background-logo" />
+            <v-layout row wrap align-center justify-center>
+              <v-flex style="margin-left: 20%; z-index: 10">
+                <h2 class="white--text text-h1">Atlas</h2>
+                <h2 class="white--text text-h3">NASD Toolkit 2021</h2>
+                <h2 class="white--text text-subtitle-1">
+                  <i>Version 2.3.0</i>
+                </h2>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-col>
+        <v-col md="6">
+          <v-container bg fill-height grid-list-md text-xs-center>
+            <v-layout row wrap align-center justify-center>
+              <v-card ref="form" class="mx-auto" min-width="500px">
+                <v-card-text>
+                  <v-text-field
+                    ref="neo4jUser"
+                    v-model="credentials.user"
+                    label="Username"
+                    placeholder="Neo4j user"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="credentials.password"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
+                    label="Password"
+                    name="input-10-1"
+                    @click:append="show1 = !show1"
+                  ></v-text-field>
+                  <p>Database bolt URI : {{ uri }}</p>
 
-          <!-- Information on connection -->
-          <div
-              v-if="failedLogin"
-              class="red darken-2 text-center pa-2"
-              width="100%"
-          >
-            <span class="white--text"
-            >Wrong credentials / URI. Contact your CAST Imaging administrator
-              for more information.</span
-            >
-          </div>
-          <v-divider></v-divider>
-
-          <div>
-            <p class="mt-2 text-subtitle-1">Options :</p>
-            <v-switch
-                v-model="switchInternalUse"
-                label="Internal use ( CAST User )"
-                @change="setInternalMode"
-            ></v-switch>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="save">
-            Login
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+                  <!-- Information on connection -->
+                  <div
+                    v-if="failedLogin"
+                    class="red darken-2 text-center pa-2"
+                    width="100%"
+                  >
+                    <span class="white--text"
+                      >Wrong credentials / URI. Contact your CAST Imaging
+                      administrator for more information.</span
+                    >
+                  </div>
+                  <v-divider></v-divider>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" text @click="save">
+                    Login
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-layout>
+          </v-container>
+        </v-col>
+      </v-row>
     </v-container>
   </v-app>
 </template>
 
 <script lang="ts">
-import {Vue} from "vue-property-decorator";
-import {Configuration, Credentials} from "../Configuration";
-import {Neo4JAccessLayer} from "../api/Neo4jAccessLayer";
-import {ServerInfo} from "neo4j-driver";
+import { Vue } from "vue-property-decorator";
+import { Configuration, Credentials } from "@/Configuration";
+import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
+import { ServerInfo } from "neo4j-driver";
 import ConfigurationController from "../api/configuration/configuration.controller";
+
 
 export default Vue.extend({
   name: "Login",
@@ -97,46 +108,57 @@ export default Vue.extend({
       const neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
       neo4jAl
-          .testConnection()
-          .then((res: ServerInfo) => {
-            // Successful connection , redirect to main
-            this.$router.replace("/atlas/");
-            window.location.reload();
-          })
-          .catch(err => {
-            // Cannot connect to the Neo4j instance
-            console.error("Cannot connect to Neo4j", err);
-            this.failedLogin = true;
-          });
+        .testConnection()
+        .then((res: ServerInfo) => {
+          // Successful connection , redirect to main
+          this.$router.replace("/atlas/");
+          window.location.reload();
+        })
+        .catch(err => {
+          // Cannot connect to the Neo4j instance
+          console.error("Cannot connect to Neo4j", err);
+          this.failedLogin = true;
+        });
     },
 
     // Set Internal mode
     async setInternalMode() {
       await ConfigurationController.setInternalMode(!this.switchInternalUse)
-          .then((res: boolean) => {
-            return;
-          })
-          .catch(err => {
-            console.error("Failed to set internal mode to ", err);
-          });
+        .then((res: boolean) => {
+          return;
+        })
+        .catch(err => {
+          console.error("Failed to set internal mode to ", err);
+        });
     },
 
     // Get Intrenal mode
     getInternalMode() {
       ConfigurationController.getInternalMode()
-          .then((res: boolean) => {
-            this.switchInternalUse = res;
-          })
-          .catch(err => {
-            console.log("Failed to change the value of internal mode.", err);
-            this.switchInternalUse = false;
-          });
+        .then((res: boolean) => {
+          this.switchInternalUse = res;
+        })
+        .catch(err => {
+          console.log("Failed to change the value of internal mode.", err);
+          this.switchInternalUse = false;
+        });
     }
   }
 });
 </script>
 
 <style>
+#background-logo {
+  z-index: 1;
+  background-size: contain;
+  position: absolute;
+  margin-top: auto;
+  margin-right: auto;
+  color: white;
+  opacity: 0.2;
+  fill: #1e4d5b;
+}
+
 .login-container {
   display: block;
   width: 100%;

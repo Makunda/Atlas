@@ -36,12 +36,9 @@
             </div>
             <p>
               <i
-                >Disclaimer : It can happens that even with the perfect
-                configuration, the statistics display bad scores. Further
-                investigation is necessary to understand where these scores come
-                from.<br />
-                That can done with the action tiles, below this section, to
-                investigate directly in CAST Imaging.</i
+                >Disclaimer: It can happen that even with a perfect configuration, the statistics show bad scores.
+                Further investigation is needed to understand where these results come from.<br />
+                This can be done with the action tiles, below this section, to investigate directly in CAST Imaging.</i
               >
             </p>
           </v-row>

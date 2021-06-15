@@ -1,12 +1,12 @@
 import {NextFunction, Request, Response} from "express";
-import ActionInterface from "@interfaces/actions/action.interface";
 import StatisticsEngine from "@services/atlas/statistics/StatisticsEngine";
 import StatisticResultInterface from "@interfaces/statistics/statisticResult.interface";
+import {logger} from "@shared/logger";
 
 
 export default class StatisticsController {
 
-    private statisticEngine : StatisticsEngine = StatisticsEngine.getInstance();
+    private statisticEngine: StatisticsEngine = StatisticsEngine.getInstance();
 
     /**
      * Get the list of the actions.
@@ -19,7 +19,7 @@ export default class StatisticsController {
         try {
 
             const body = req.body;
-            if (body.application  == null) throw new Error("Missing 'application' property.")
+            if (body.application == null) throw new Error("Missing 'application' property.")
 
             // Check options
             if (body.category != null) {
@@ -31,6 +31,7 @@ export default class StatisticsController {
                 res.status(200).json({data: stats, message: `Result list`});
             }
         } catch (error) {
+            logger.error("Failed to get Statistics", error)
             next(error);
         }
     };

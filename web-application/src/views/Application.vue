@@ -5,6 +5,7 @@ import Vue from "vue/types/umd";
     <v-app>
       <v-navigation-drawer
         class="side-bar"
+        color="deepblue"
         dark
         expand-on-hover
         fixed
@@ -35,12 +36,12 @@ import Vue from "vue/types/umd";
           >
             <v-list-item v-for="(v, i) in items" v-bind:key="i" link>
               <v-list-item-icon>
-                <v-icon :color="tab === i ? '#ffffff' : '#a5a4a4'" class="pl-1"
+                <v-icon color="#ffffff" class="pl-1"
                   >{{ v.icon }}
                 </v-icon>
               </v-list-item-icon>
               <v-list-item-title
-                :color="tab === i ? '#ffffff' : '#a5a4a4'"
+                color="#ffffff"
                 class="text-uppercase"
                 >{{ v.name }}
               </v-list-item-title>
@@ -50,15 +51,6 @@ import Vue from "vue/types/umd";
         <template v-slot:append>
           <div class="pa-2">
             <v-list>
-              <v-list-item @click="goTo('administration')">
-                <v-list-item-icon>
-                  <v-icon>mdi-cog</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title>Administration</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
 
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -87,26 +79,6 @@ import Vue from "vue/types/umd";
                 </template>
                 <span>Lost connection to the database</span>
               </v-tooltip>
-
-              <v-list-item href="https://github.com/Makunda/Demeter/wiki" link>
-                <v-list-item-icon>
-                  <v-icon>mdi-information-outline</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title>Documentation</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item link @click="logout()">
-                <v-list-item-icon>
-                  <v-icon>mdi-exit-to-app</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title>Logout</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
             </v-list>
           </div>
         </template>
@@ -120,7 +92,6 @@ import Vue from "vue/types/umd";
           min-width="50px"
         >
           <v-toolbar-title class="ml-8 screen-title"> </v-toolbar-title>
-          <v-spacer></v-spacer>
           <v-toolbar-title class="mt-2"
             >Application selection :</v-toolbar-title
           >
@@ -136,12 +107,29 @@ import Vue from "vue/types/umd";
             label="Pick an application"
             solo-inverted
           ></v-autocomplete>
+
+          <v-spacer></v-spacer>
+
+          <!--  Panel Adminitration / Logout    -->
+          <span class="mt-2 d-flex flex-row">
+            <v-btn text @click="goTo('administration', true)">
+              <p class="lighten-3 mr-2 pt-4">Administration</p>
+              <v-icon>mdi-text</v-icon>
+            </v-btn>
+            <v-divider class="mx-2" dark
+                vertical
+            ></v-divider>
+            <v-btn text @click="logout()">
+              <p class="lighten-3 mr-2 pt-4">Logout</p>
+              <v-icon>mdi-exit-to-app</v-icon>
+            </v-btn>
+          </span>
+
         </v-toolbar>
       </v-row>
       <v-row no-gutters>
-
         <router-view v-slot="{ Component }" style="margin-left: 50px;">
-          <transition name="fade" mode="out-in">
+          <transition name="slide-fade">
             <component class="" :is="Component" />
           </transition>
         </router-view>
@@ -161,8 +149,8 @@ import Vue from "vue";
 
 import { ApplicationController } from "@/api/applications/application.controller";
 
-import { Configuration } from "../Configuration";
-import { UtilsController } from "../api/utils/utils.controller";
+import { Configuration } from "@/Configuration";
+import { UtilsController } from "@/api/utils/utils.controller";
 
 export default Vue.extend({
   name: "Application",
@@ -194,16 +182,6 @@ export default Vue.extend({
         name: "Tags",
         screen: "tags",
         icon: "mdi-hexagon-multiple"
-      },
-      {
-        name: "Automation",
-        screen: "automation",
-        icon: "mdi-robot-industrial"
-      },
-      {
-        name: "Frameworks",
-        screen: "frameworks",
-        icon: "mdi-package-variant-closed"
       },
       { name: "Imaging tuning", screen: "tuning", icon: "mdi-merge" }
     ],
@@ -265,8 +243,13 @@ export default Vue.extend({
         });
     },
 
-    goTo(section:string) {
-      this.$router.replace("/atlas/" + section);
+    goTo(section: string, absolute = false) {
+      if (!absolute) {
+        this.$router.replace("/atlas/" + section)
+      }
+      else {
+        this.$router.replace("/"+section);
+      }
     },
 
     changeView(view: string) {
@@ -294,7 +277,7 @@ export default Vue.extend({
   watch: {
     $route(to, from) {
       const toSplit: string[] = to.path.split("/");
-      const nameView = toSplit[toSplit.length-1];
+      const nameView = toSplit[toSplit.length - 1];
       this.updateViewTab(nameView);
 
       const toDepth = to.path.split("/").length;
@@ -317,25 +300,35 @@ export default Vue.extend({
           this.tab = i;
         }
       }
-      console.log(`Not found ${newView}`)
+      console.log(`Not found ${newView}`);
       // Do nothing if the view wasn't found
     }
   }
 });
 </script>
 
-<style>
+<style lang="sass">
+@import '../../node_modules/typeface-roboto/index.css'
+</style>
+
+
+<style scoped>
 .screen-title {
   font-size: 40px;
   margin-top: 6px;
   font-weight: 400;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+.slide-fade-enter-active {
+  transition: all .3s ease;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }
 
 .side-bar {

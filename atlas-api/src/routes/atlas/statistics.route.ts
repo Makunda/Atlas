@@ -1,5 +1,3 @@
-
-
 import Route from "@interfaces/routes.interface";
 import {Router} from "express";
 import StatisticsController from "@controller/atlas/statistics.controller";

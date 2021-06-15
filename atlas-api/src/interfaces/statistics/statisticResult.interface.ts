@@ -1,5 +1,3 @@
-
-
 export default interface StatisticResultInterface {
     title: string;
     description: string;

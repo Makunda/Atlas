@@ -3,13 +3,14 @@
     <v-card>
       <!-- Introduction Section -->
       <v-card-title>
-        Tag creator studio
+          <h3 class="text-h4 my-3">
+            Tag creator studio
+          </h3>
       </v-card-title>
-      <v-card-subtitle
+      <v-card-subtitle class="ml-3"
         >In this creator studio you'll be able to create your own Demeter
         recommendations ,in order to enrich your configuration, and display more
         information on CAST Imaging System.<br />
-        <br />
         For more information on tags and documents, please refer to the
         official <a href="#">CAST Imaging documentation</a>.</v-card-subtitle
       >

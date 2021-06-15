@@ -7,6 +7,8 @@ import cors from 'cors';
 import express, {NextFunction, Request, Response} from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
+import history from "connect-history-api-fallback";
+
 
 import BaseRouter from './routes';
 import {logger} from '@shared/logger';
@@ -24,8 +26,6 @@ try {
     logger.error("Fatal error, failed to instantiate LoginService.", err);
     throw Error("Login service failed to start");
 }
-
-let wall = false;
 
 /************************************************************************************
  *                              Set basic express settings
@@ -77,9 +77,11 @@ app.use(/^\/api\/(?!login).*/, async (req: Request, res: Response, next: NextFun
     }
 });
 
-
 // Add APIs
 app.use('/api', BaseRouter);
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+app.use(history());
 
 // Front-end
 app.get('/', (req, res) => {

@@ -121,6 +121,8 @@ export default Vue.extend({
     errorState: null as unknown
   }),
 
+
+
   methods: {
     /**
      * Get the results for a specific application

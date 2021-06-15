@@ -1,10 +1,6 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import { ReportInterface } from "@/api/interface/reports/report.interface";
-import ILevel from "@/api/interface/imaging/Level.interface";
-import { error } from "neo4j-driver";
-import ActionInterface from "@/api/interface/actions/Action.interface.fs";
 import StatisticInterface from "@/api/interface/statistics/Statistic.interface";
 
 export class StatisticsController {
@@ -26,7 +22,7 @@ export class StatisticsController {
         application: application
       };
       if (category) body.category = category;
-      const res = await axios.post(url);
+      const res = await axios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;

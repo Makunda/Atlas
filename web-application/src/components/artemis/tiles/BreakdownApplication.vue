@@ -2,7 +2,7 @@
   <!-- BREAKDOWN SECTION -->
   <v-card class="ma-2" width="100%">
     <v-card-title>
-      Generate rules from the breakdown of the application {{ applicationName }}
+      <h3 class="text-h4 mb-4">Review the breakdown of the {{ application }} application</h3><br>
       <v-spacer></v-spacer>
       <v-btn icon large color="green" class="px-4" @click="refresh()">
         <v-icon>mdi-cached</v-icon>

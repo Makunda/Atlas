@@ -4,6 +4,10 @@
     <v-divider></v-divider>
 
     <v-card class="pa-5 mb-3">
+      <v-card-title>
+        <h3 class="text-h4 mb-2">Explore the {{ application }} application</h3>
+      </v-card-title>
+
       <v-card-text>
         <v-row>
           <h5 class="text-h5 black--text">

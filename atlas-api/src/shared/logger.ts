@@ -1,4 +1,3 @@
-import winstonDaily from 'winston-daily-rotate-file';
 import winston from "winston";
 
 

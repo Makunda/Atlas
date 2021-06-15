@@ -1,4 +1,3 @@
-
 export default interface StatisticInterface {
     id?: number;
     title: string;

@@ -6,7 +6,7 @@
         v-model="tab"
         align-with-title
         fixed-tabs
-        background-color="charcoal"
+        background-color="deepcharcoal"
         dark
       >
         <v-tab v-for="item in items" :key="item.name">
@@ -64,11 +64,6 @@ export default Vue.extend({
         view: "ArtemisParameters",
         name: "Artemis Parameters",
         icon: "mdi-cogs"
-      },
-      {
-        view: "GroupingStep",
-        name: "Grouping",
-        icon: "mdi-group"
       }
     ]
   })

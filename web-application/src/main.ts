@@ -36,7 +36,6 @@ neo4jAl
     // Verify License
     // Verify the license
     const license = await LicenseController.getLicense();
-    console.log("Checking license : ", license)
     if (license.status == LicenseStatus.NOT_VALID) {
       el = License;
       router.replace("/license");

@@ -8,12 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@mdi/font": "^5.9.55",
     "@types/properties-reader": "^2.1.0",
     "axios": "^0.21.1",
     "core-js": "^3.8.2",
     "fork-ts-checker-webpack-plugin": "^6.2.0",
     "neo4j-driver": "^4.2.1",
     "properties-reader": "^2.2.0",
+    "typeface-roboto": "^1.1.13",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-cookie": "^1.1.4",
@@ -34,6 +36,7 @@
     "@vue/cli-service": "^4.5.10",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.2",
+    "copy-webpack-plugin": "^9.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",

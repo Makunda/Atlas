@@ -1,13 +1,14 @@
 <template>
   <v-container fluid>
-    <v-container class="mt-10 d-flex flex-column">
-      <h2 class="text-h4 mb-3 ml-13">
-        Generate reports for application {{ application }}
-      </h2>
+    <v-container class=" d-flex flex-column">
+
       <v-container class="ma-3 px-10">
         <v-card class="mx-auto mt-2">
           <v-card-title
             >
+            <h2 class="text-h4 mb-3 ">
+              Generate reports for application {{ application }}
+            </h2>
             <v-spacer></v-spacer>
             <v-text-field
               class="pt-1"

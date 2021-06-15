@@ -4,6 +4,7 @@ import Application from "../views/Application.vue";
 import Login from "../views/Login.vue";
 import License from "@/views/License.vue";
 import Home from "@/views/Home.vue";
+import ServerHome from "@/views/ServerHome.vue";
 import Reporting from "@/components/screens/reports/Reporting.vue";
 import AnalysisChecker from "@/components/screens/recommendation/AnalysisChecker.vue";
 import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
@@ -11,6 +12,8 @@ import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
 import ImagingTuning from "@/components/screens/imagingTuning/ImagingTuning.vue";
 import Automation from "@/components/screens/automation/Automation.vue";
 import Administration from "@/components/screens/administration/Administration.vue";
+import Server from "@/views/Server.vue";
+import NotFound from "@/views/NotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -18,43 +21,60 @@ Vue.component("Login", Login);
 Vue.component("License", License);
 Vue.component("Application", Application);
 Vue.component("Home", Home);
+Vue.component("ServerHome", ServerHome);
+Vue.component("Server", Server);
 
 const routes: Array<RouteConfig> = [
+  {
+    path: "",
+    redirect: "/atlas/"
+  },
   {
     path: "/atlas",
     name: "Main",
     component: Application,
     children: [
       {
-        path: '',
+        path: "",
         component: Home
       },
       {
-        path: 'reports',
+        path: "reports",
         component: Reporting
       },
       {
-        path: 'analysis',
+        path: "analysis",
         component: AnalysisChecker
       },
       {
-        path: 'tags',
+        path: "tags",
         component: Enrichment
       },
       {
-        path: 'automation',
+        path: "tuning",
+        component: ImagingTuning
+      }
+    ]
+  },
+  {
+    path: "/administration",
+    name: "Administration",
+    component: Server,
+    children: [
+      {
+        path: "",
+        component: ServerHome
+      },
+      {
+        path: "automation",
         component: Automation
       },
       {
-        path: 'frameworks',
+        path: "frameworks",
         component: Frameworks
       },
       {
-        path: 'tuning',
-        component: ImagingTuning
-      },
-      {
-        path: 'administration',
+        path: "parameters",
         component: Administration
       }
     ]
@@ -78,10 +98,11 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
+  { path: "/api" }, // Ignore or pass on to server
   {
     path: "*",
     name: "404",
-    component: { template: "<h2>404 - Not found</h2>" }
+    component: NotFound
   }
 ];
 

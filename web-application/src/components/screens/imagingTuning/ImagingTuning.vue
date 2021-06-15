@@ -6,7 +6,7 @@
         v-model="tab"
         align-with-title
         fixed-tabs
-        background-color="charcoal"
+        background-color="deepcharcoal"
         dark
       >
         <v-tab v-for="item in items" :key="item.name">
@@ -15,7 +15,7 @@
         </v-tab>
       </v-tabs>
     </v-row>
-    <v-row class="mt-15">
+    <v-row >
       <v-container class="mx-auto ">
         <component :is="items[tab].view"></component>
       </v-container>
@@ -85,15 +85,4 @@ export default Vue.extend({
 </script>
 
 <style>
-.modernization-stepper {
-  width: 100%;
-}
-
-.v-tab--active {
-  background-color: #5a727ca6;
-}
-
-.v-tabs-slider-wrapper {
-  border-bottom: 6px solid #2a9d8f;
-}
 </style>

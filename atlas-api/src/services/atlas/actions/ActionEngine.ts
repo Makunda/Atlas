@@ -51,7 +51,7 @@ export default class ActionEngine {
      */
     public getActionById(id: number): ActionInterface | null {
         for (let i = 0; i < this.actionList.length; i++) {
-            if(this.actionList[i].id == id) return this.actionList[i];
+            if (this.actionList[i].id == id) return this.actionList[i];
         }
         return null;
     }
@@ -82,51 +82,13 @@ export default class ActionEngine {
     }
 
     /**
-     * Process a json file in the Action directory
-     * @param path Path of the file
-     * @return The Action found in the file, or an empty array if something went wrong
-     * @private
-     */
-    private processFile(path: string) : ActionInterface[] {
-        try {
-            const actionList: ActionInterface[] = [];
-            const content: string = fs.readFileSync(path, {encoding: 'utf8'});
-            return JSON.parse(content) as ActionInterface[];
-        }
-        catch (err) {
-            logger.error(`Failed to load file with path ${path}.`, err);
-            return [];
-        }
-    }
-
-    /**
-     * Get a Demeter tag
-     * @param tagType Type of the tag
-     * @private
-     */
-    private async getTag(tagType:string) {
-        switch (tagType.toLowerCase()) {
-            case "level":
-                return await ActionEngine.TAGSERVICE.getCustomLevelTag();
-            case "module":
-                return await ActionEngine.TAGSERVICE.getCustomModuleTag();
-            case "architecture":
-                return await ActionEngine.TAGSERVICE.getCustomArchitectureTag();
-            case "frameworks":
-                return await ActionEngine.TAGSERVICE.getCustomFrameworksTag();
-            default:
-                throw new Error(`The tag ${tagType} is not recognized as a valid tag.`);
-        }
-    }
-
-    /**
      * Execute an action on a specific application
      * @param idAction Id of the action to execute
      * @param application Name of the application
      */
-    public async executeAction(idAction: number, application: string ) : Promise<void> {
+    public async executeAction(idAction: number, application: string): Promise<void> {
         const action: ActionInterface = this.getActionById(idAction);
-        if(action == null) throw new Error(`Action with ID ${idAction} doesn't exist.`);
+        if (action == null) throw new Error(`Action with ID ${idAction} doesn't exist.`);
 
         try {
 
@@ -142,7 +104,42 @@ export default class ActionEngine {
 
     }
 
+    /**
+     * Process a json file in the Action directory
+     * @param path Path of the file
+     * @return The Action found in the file, or an empty array if something went wrong
+     * @private
+     */
+    private processFile(path: string): ActionInterface[] {
+        try {
+            const actionList: ActionInterface[] = [];
+            const content: string = fs.readFileSync(path, {encoding: 'utf8'});
+            return JSON.parse(content) as ActionInterface[];
+        } catch (err) {
+            logger.error(`Failed to load file with path ${path}.`, err);
+            return [];
+        }
+    }
 
+    /**
+     * Get a Demeter tag
+     * @param tagType Type of the tag
+     * @private
+     */
+    private async getTag(tagType: string) {
+        switch (tagType.toLowerCase()) {
+            case "level":
+                return await ActionEngine.TAGSERVICE.getCustomLevelTag();
+            case "module":
+                return await ActionEngine.TAGSERVICE.getCustomModuleTag();
+            case "architecture":
+                return await ActionEngine.TAGSERVICE.getCustomArchitectureTag();
+            case "frameworks":
+                return await ActionEngine.TAGSERVICE.getCustomFrameworksTag();
+            default:
+                throw new Error(`The tag ${tagType} is not recognized as a valid tag.`);
+        }
+    }
 
     /**
      * List the actions files  in the actions directory and store them as a list
@@ -154,12 +151,13 @@ export default class ActionEngine {
         fileList.forEach(x => {
             try {
                 const actionList: ActionInterface[] = this.processFile(x);
-                for(let i = 0; i < actionList.length; i++) {
+                for (let i = 0; i < actionList.length; i++) {
                     try {
                         actionList[i].id = it;
                         it = it + 1;
                         this.actionList.push(actionList[i]);
-                    }  catch (ignored) {}
+                    } catch (ignored) {
+                    }
                 }
 
                 this.filesLoaded.push(x);

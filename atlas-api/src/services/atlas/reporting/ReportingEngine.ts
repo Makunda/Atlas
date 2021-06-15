@@ -52,7 +52,7 @@ export default class ReportingEngine {
      */
     public getReportById(id: number): ReportInterface | null {
         for (let i = 0; i < this.reports.length; i++) {
-            if(this.reports[i].id == id) return this.reports[i];
+            if (this.reports[i].id == id) return this.reports[i];
         }
         return null;
     }
@@ -90,7 +90,7 @@ export default class ReportingEngine {
      */
     public async generateReport(idDoc: number, application: string, parameters: any): Promise<ReportResultsInterface> {
 
-        const report : ReportInterface = this.getReportById(idDoc);
+        const report: ReportInterface = this.getReportById(idDoc);
         if (report == null) throw new Error(`No report with id ${idDoc} was found.`)
 
         // Verify the parameters, throw an error if parameters are not present
@@ -131,7 +131,7 @@ export default class ReportingEngine {
                 if (!r.has(col)) record.push("undefined")
                 else {
                     let obj = r.get(col);
-                    if(obj.low) obj = int(obj).toNumber(); // Cheapest way to check if it's an integer
+                    if (obj.low) obj = int(obj).toNumber(); // Cheapest way to check if it's an integer
                     record.push(obj)
                 }
             });
@@ -175,7 +175,7 @@ export default class ReportingEngine {
             const worksheet = workbook.addWorksheet(results.nickname, {properties: {tabColor: {argb: 'FFC0000'}}});
             // Put name in merged first column
             worksheet.mergeCells('A1:H1');
-            worksheet.getCell('A1').value = "Name: " +results.name;
+            worksheet.getCell('A1').value = "Name: " + results.name;
 
             // Put the description
             worksheet.mergeCells('A2:H2');
@@ -188,7 +188,7 @@ export default class ReportingEngine {
 
             worksheet.addRow(results.columns);
 
-            results.records.forEach( x => {
+            results.records.forEach(x => {
                 worksheet.addRow(x);
             });
             //

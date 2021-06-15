@@ -6,7 +6,7 @@
         v-model="tab"
         align-with-title
         fixed-tabs
-        background-color="charcoal"
+        background-color="deepcharcoal"
         dark
       >
         <v-tab v-for="item in items" :key="item.name">
@@ -17,10 +17,6 @@
     </v-row>
     <v-row>
       <v-container class="mx-auto mt-10">
-        <h4 class="text-h4 ml-3 my-5">
-          {{ items[tab].title + application + " application" }}
-        </h4>
-
         <component :is="items[tab].view"></component>
       </v-container>
     </v-row>

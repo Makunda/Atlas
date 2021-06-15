@@ -86,12 +86,12 @@ class ApplicationService {
      * Get the technologies (Level 4) in one application
      * @param application
      */
-    public async getTechnology(application: string) : Promise<string[]> {
+    public async getTechnology(application: string): Promise<string[]> {
         const req = `MATCH (l:\`${application}\`:Level4) RETURN DISTINCT l.Name as name`;
         const res = await this.neo4jAl.execute(req);
 
         const types: string[] = [];
-        if(!res.records) return types;
+        if (!res.records) return types;
 
         for (let i = 0; i < res.records.length; i++) {
             const type = String(res.records[i].get("name"));

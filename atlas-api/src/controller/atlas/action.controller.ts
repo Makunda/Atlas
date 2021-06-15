@@ -1,12 +1,11 @@
 import {NextFunction, Request, Response} from "express";
 import ActionEngine from "@services/atlas/actions/ActionEngine";
-import {ReportInterface} from "@interfaces/report/Report.interface";
 import ActionInterface from "@interfaces/actions/action.interface";
 
 
 export default class ActionController {
 
-    private actionService : ActionEngine = ActionEngine.getInstance();
+    private actionService: ActionEngine = ActionEngine.getInstance();
 
     /**
      * Get the list of the actions.
@@ -79,7 +78,7 @@ export default class ActionController {
             const body = req.body;
 
             if (body.id == null) throw new Error("Missing 'id' property.")
-            if (body.application  == null) throw new Error("Missing 'application' property.")
+            if (body.application == null) throw new Error("Missing 'application' property.")
             const id = body.id, application = body.application;
 
             await this.actionService.executeAction(id, application);

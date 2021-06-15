@@ -4,11 +4,9 @@ import path from "path";
 import {logger} from "@shared/logger";
 import fs from "fs";
 import glob from "glob";
-import ActionInterface from "@interfaces/actions/action.interface";
 import StatisticResultInterface from "@interfaces/statistics/statisticResult.interface";
 import StatisticInterface from "@interfaces/statistics/statistic.interface";
-import {int, QueryResult, Result} from "neo4j-driver";
-import {toNumber} from "neo4j-driver/types/integer";
+import {Integer, QueryResult} from "neo4j-driver";
 
 
 export default class StatisticsEngine {
@@ -38,24 +36,46 @@ export default class StatisticsEngine {
         return StatisticsEngine.INSTANCE;
     }
 
-
     /**
-     * Get a statistic using its id
-     * @param id Id of the report
+     * convert a Neo4j type to a number
+     * @param value
+     * @private
      */
-    private getStatisticById(id: number): StatisticInterface | null {
-        for (let i = 0; i < this.statList.length; i++) {
-            if(this.statList[i].id == id) return this.statList[i];
+    private static toNumber(value: Integer | number | string | { low: number; high: number }): number {
+        if (typeof (value) == 'string') return parseFloat(value);
+        if (typeof (value) == 'number') return value;
+        if (value.low && value.high) {
+            let res = value.high
+            for (let i = 0; i < 32; i++) {
+                res *= 2
+            }
+            return value.low + res
         }
-        return null;
     }
 
+    /**
+     * Process a json file in the Action directory
+     * @param path Path of the file
+     * @return The Action found in the file, or an empty array if something went wrong
+     * @private
+     */
+    private static processFile(path: string): StatisticInterface[] {
+        try {
+            const actionList: StatisticInterface[] = [];
+            const content: string = fs.readFileSync(path, {encoding: 'utf8'});
+            return JSON.parse(content) as StatisticInterface[];
+        } catch (err) {
+            logger.error(`Failed to load file with path ${path}.`, err);
+            return [];
+        }
+    }
 
     /**
      * Get the list of the report by category
      * @param category Category to search
      */
-    public async getStatisticsByCategory(category: string, application: string): Promise<StatisticResultInterface[]> {
+    public async getStatisticsByCategory(category: string, application: string):
+        Promise<StatisticResultInterface[]> {
         const statResults: StatisticResultInterface[] = [];
         for (const x of this.statList) {
             try {
@@ -97,37 +117,18 @@ export default class StatisticsEngine {
     }
 
     /**
-     * Process a json file in the Action directory
-     * @param path Path of the file
-     * @return The Action found in the file, or an empty array if something went wrong
-     * @private
-     */
-    private static processFile(path: string) : StatisticInterface[] {
-        try {
-            const actionList: ActionInterface[] = [];
-            const content: string = fs.readFileSync(path, {encoding: 'utf8'});
-            return JSON.parse(content) as StatisticInterface[];
-        }
-        catch (err) {
-            logger.error(`Failed to load file with path ${path}.`, err);
-            return [];
-        }
-    }
-
-
-    /**
      * Execute a statistic on a specific application
      * @param stat Statistic to be exeuted
      * @param application Name of the application
      */
-    public async executeStatistic(stat: StatisticInterface, application: string ) : Promise<StatisticResultInterface> {
+    public async executeStatistic(stat: StatisticInterface, application: string): Promise<StatisticResultInterface> {
         try {
             const req = stat.request.replace(StatisticsEngine.APPLICATION_NAME_PROP, application);
             const results: QueryResult = await StatisticsEngine.NEO4JAL.execute(req);
-            if(!results.records || results.records.length === 0)
+            if (!results.records || results.records.length === 0)
                 throw new Error(`The statistic with title '${stat.title}', failed to return results.`)
 
-            const result =  toNumber(results.records[0].get("percentage"));
+            const result = StatisticsEngine.toNumber(results.records[0].get("percentage"));
             return {
                 title: stat.title,
                 description: stat.description,
@@ -144,6 +145,17 @@ export default class StatisticsEngine {
     }
 
     /**
+     * Get a statistic using its id
+     * @param id Id of the report
+     */
+    private getStatisticById(id: number): StatisticInterface | null {
+        for (let i = 0; i < this.statList.length; i++) {
+            if (this.statList[i].id == id) return this.statList[i];
+        }
+        return null;
+    }
+
+    /**
      * List the actions files  in the actions directory and store them as a list
      * @private
      */
@@ -153,7 +165,7 @@ export default class StatisticsEngine {
         fileList.forEach(x => {
             try {
                 const sList: StatisticInterface[] = StatisticsEngine.processFile(x);
-                for(let i = 0; i < sList.length; i++) {
+                for (let i = 0; i < sList.length; i++) {
                     sList[i].id = it;
                     it = it + 1;
                     this.statList.push(sList[i]);
