@@ -54,7 +54,6 @@ export class ApplicationController {
       "/api/imaging/applications/insights/" +
       application;
 
-
     try {
       const res = await axios.get(url);
 
@@ -78,9 +77,7 @@ export class ApplicationController {
    * Get the technology in one application
    * @param application Name of the application
    */
-  public static async getTechnologies(
-    application: string
-  ): Promise<string[]> {
+  public static async getTechnologies(application: string): Promise<string[]> {
     const url =
       ApplicationController.API_BASE_URL +
       "/api/imaging/applications/technologies/" +
@@ -102,6 +99,35 @@ export class ApplicationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the technologies.`,
+        error
+      );
+    }
+  }
+
+  public static async getLevelsByDepth(
+    application: string,
+    depthLevel: number
+  ): Promise<string[]> {
+    const url =
+      ApplicationController.API_BASE_URL +
+      `/api/imaging/applications/levels/${application}/${depthLevel}/name`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          return apiResponse.data as string[];
+        }
+      } else {
+        throw new Error(
+          `Failed to retrieve levels${depthLevel} in application with name ${application}.`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve levels${depthLevel} in application with name ${application}.`,
         error
       );
     }

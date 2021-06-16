@@ -15,8 +15,8 @@ class GroupingRoute implements Route {
     private initializeRoutes() {
 
 
-        this.router.get(`${this.path}/modules/:name(\\w+)/candidates`, this.groupingController.getCandidateModulesApplication);
-        this.router.get(`${this.path}/modules/:name(\\w+)/grouped`, this.groupingController.getDemeterModulesApplication);
+        this.router.get(`${this.path}/modules/:name/candidates`, this.groupingController.getCandidateModulesApplication);
+        this.router.get(`${this.path}/modules/:name/grouped`, this.groupingController.getDemeterModulesApplication);
     }
 }
 

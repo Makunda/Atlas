@@ -13,8 +13,8 @@ class FrameworksRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:name(\\w+)`, authMiddleware, this.frameworksController.getFrameworkByName);
-    this.router.put(`${this.path}/:name(\\w+)`, this.frameworksController.updateFramework);
+    this.router.get(`${this.path}/:name`, authMiddleware, this.frameworksController.getFrameworkByName);
+    this.router.put(`${this.path}/:name`, this.frameworksController.updateFramework);
     this.router.post(`${this.path}`, this.frameworksController.addFramework);
   }
 }

@@ -88,7 +88,7 @@ export class CancellableDetectionPromise {
     private transaction: Transaction;
     private detection: Detection;
 
-    constructor(application: string, language: string, onError: () => void) {
+    constructor(application: string, language: string, onError: () => void, onComplete: (data : Detection) => void) {
         try {
             const session = this.neo4jAl.getSession();
             this.transaction = session.beginTransaction();
@@ -102,6 +102,7 @@ export class CancellableDetectionPromise {
                     this.transaction.commit().then(r => {
                         this.detection.markAsSuccess(res);
                     });
+                    onComplete(this.detection)
                     resolve(res);
                 }).catch((err) => {
                     this.transaction.rollback().then(r => {

@@ -244,6 +244,103 @@ export default class TransactionController {
     }
   }
 
+  /**
+   * Pin a transaction with a specific prefix
+   * @param application Name of the application
+   * @param transactionID Id of the transaction
+   * @param prefix Prefix to apply
+   */
+  public static async pinTransaction(
+    application: string,
+    transactionID: number,
+    prefix: string
+  ): Promise<ITransaction> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/pin/single/${application}/${transactionID}`;
+
+    try {
+      const body: any = { prefix: prefix };
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ITransaction;
+      } else {
+        throw new Error(`Failed to pin a transaction. Status (${res.status})`);
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Unpin a transaction with a specific prefix
+   * @param application Name of the application
+   * @param transactionID Id of the transaction
+   * @param prefix Prefix to apply
+   */
+  public static async unpinTransaction(
+    application: string,
+    transactionID: number,
+    prefix: string
+  ): Promise<ITransaction> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/unpin/single/${application}/${transactionID}`;
+
+    try {
+      const body: any = { prefix: prefix };
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ITransaction;
+      } else {
+        throw new Error(
+          `Failed to unpin a transaction. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Rename a transaction by its ID
+   * @param application Name of the application
+   * @param transactionID Id of the transaction
+   * @param name New Name to apply
+   */
+  public static async renameTransaction(
+    application: string,
+    transactionID: number,
+    name: string
+  ): Promise<ITransaction> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/rename/single/${application}/${transactionID}`;
+
+    try {
+      const body: any = { name: name };
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return apiResponse.data as ITransaction;
+      } else {
+        throw new Error(
+          `Failed to rename a transaction. Status (${res.status}).`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
   public static async maskTransactionWithFilter(
     application: string,
     filter: Record<string, unknown>

@@ -134,6 +134,18 @@ export default class LevelService {
     }
 
     /**
+     * Undo all the Demeter level in an application
+     * @param applicationName Name of the application
+     */
+    public async undoAllLevels(
+        applicationName: string
+    ): Promise<boolean> {
+        const request = `CALL demeter.undo.levels('${applicationName}');`;
+        const results: QueryResult = await this.neo4jAl.execute(request);
+        return (results.records && results.records.length != 0);
+    }
+
+    /**
      * Rename
      * @param applicationName Name of the application
      * @param groupName Old name of the group

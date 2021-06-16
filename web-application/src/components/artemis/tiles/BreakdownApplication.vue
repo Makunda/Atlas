@@ -2,7 +2,10 @@
   <!-- BREAKDOWN SECTION -->
   <v-card class="ma-2" width="100%">
     <v-card-title>
-      <h3 class="text-h4 mb-4">Review the breakdown of the {{ application }} application</h3><br>
+      <h3 class="text-h4 mb-4">
+        Review the breakdown of the {{ application }} application
+      </h3>
+      <br />
       <v-spacer></v-spacer>
       <v-btn icon large color="green" class="px-4" @click="refresh()">
         <v-icon>mdi-cached</v-icon>
@@ -62,6 +65,23 @@
           >
             {{ target.text }}
           </v-btn>
+        </v-row>
+
+        <v-row class="mx-4 mb-3">
+          <p>
+            Select the type of modification you want to apply on the
+            application. The level and the modules creation usually takes
+            between few seconds and 1 minutes for very large number of nodes.
+            The creation of Architectures views implying more resources, the
+            operation can take up to few minutes to be completed on large set of
+            nodes.<br>
+            <b
+              >It's not recommended to relaunch directly an architecture
+              grouping</b
+            >
+            if you're not seeing the results in CAST Imaging.<br />
+            Do not forget to refresh your views to see the changes.
+          </p>
         </v-row>
 
         <v-row>
@@ -245,10 +265,18 @@
               </p>
             </v-row>
 
-            <v-row>
-              <h3 class="mx-4 mb-6">
+            <v-row class="mx-4 mb-6">
+              <h3>
                 Do you want the selection in the same group or separated ?
               </h3>
+              <p>
+                The same group option will group the selected nodes under the
+                same entity. For levels, they will be grouped under a single
+                level 5. For creating modules and architectures, the group
+                option will group them under the same module/architecture. By
+                choosing the "Separated" option for modules and architectures,
+                multiple modules/architectures will be created.
+              </p>
             </v-row>
             <v-row class="mx-4 mb-2">
               <v-select
@@ -654,7 +682,7 @@ export default Vue.extend({
         this.secondaryGroupName
       )
         .then((res: any) => {
-          this.textSnackBar = `Extraction to a ${extractionType} is a success. Refresh Imaging in few seconds`;
+          this.textSnackBar = `Tags for ${extractionType} extraction were applied. Make sure the ${extractionType} agent is running.`;
           this.refresh();
         })
         .catch(err => {

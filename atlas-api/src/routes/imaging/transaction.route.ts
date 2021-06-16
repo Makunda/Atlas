@@ -45,6 +45,10 @@ class TransactionRoute implements Route {
 
         this.router.post(`${this.path}/mask/byTerms`,
             this.transactionController.maskObjectByTerms);
+
+        this.router.post(`${this.path}/pin/single/:application/:transactionID`, this.transactionController.pinTransaction);
+        this.router.post(`${this.path}/unpin/single/:application/:transactionID`, this.transactionController.unpinTransaction);
+        this.router.post(`${this.path}/rename/single/:application/:transactionID`, this.transactionController.renameTransaction);
     }
 }
 

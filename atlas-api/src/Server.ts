@@ -81,7 +81,7 @@ app.use(/^\/api\/(?!login).*/, async (req: Request, res: Response, next: NextFun
 app.use('/api', BaseRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-app.use(history());
+// app.use(history());
 
 // Front-end
 app.get('/', (req, res) => {

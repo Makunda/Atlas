@@ -160,6 +160,36 @@ export class LevelController {
   }
 
   /**
+   * Undo all the demeter level in one application
+   * @param applicationName
+   * @param groupName
+   */
+  public static async undoAllGroupedLevel5(
+    applicationName: string): Promise<boolean> {
+    const url =
+      LevelController.API_BASE_URL +
+      `/api/demeter/levels/${applicationName}/undo/all`;
+
+    try {
+      const res = await axios.post(url);
+      if (validStatus(res.status)) {
+        const apiResponse: ApiResponse = res.data;
+        return Boolean(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to undo all grouped levels. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to undo akk grouped levels.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
    * Rename
    * @param applicationName Name of the application
    * @param groupName Old name of the group

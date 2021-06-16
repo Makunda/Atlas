@@ -101,6 +101,26 @@ class ApplicationService {
         return types;
     }
 
+    /**
+     * Get the Level5 in one application
+     * @param application Name of the application
+     * @param numLevel Level depth
+     */
+    public async getLevels(application: string, numLevel: number): Promise<string[]> {
+        const req = `MATCH (l:\`${application}\`:Level${numLevel}) RETURN DISTINCT l.Name as name`;
+        const res = await this.neo4jAl.execute(req);
+
+        const types: string[] = [];
+        if (!res.records) return types;
+
+        for (let i = 0; i < res.records.length; i++) {
+            const type = String(res.records[i].get("name"));
+            types.push(type);
+        }
+
+        return types;
+    }
+
 
 }
 

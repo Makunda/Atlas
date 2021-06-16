@@ -15,11 +15,20 @@ class DetectionService {
 
     // Detections
     private detectionList: CancellableDetectionPromise[] = [];
+    private resultList: Detection[] = [];
 
+
+    /**
+     * Singleton
+     * @private
+     */
     private constructor() {
-
     }
 
+    /**
+     * Get the instance of the Detection Service
+     * @return An initialized Detection Service
+     */
     public static getInstance(): DetectionService {
         if (DetectionService.INSTANCE == null) {
             DetectionService.INSTANCE = new DetectionService();
@@ -41,7 +50,6 @@ class DetectionService {
                 return i;
             }
         }
-
         return null;
     }
 
@@ -60,8 +68,43 @@ class DetectionService {
             }
 
         }
-
         return false;
+    }
+
+    /**
+     * Add a detection to the detection results list
+     * Only keeps the 20 latest results.
+     * @param detection Detection to be saved
+     */
+    public addToResult(detection: Detection) : void {
+        // shift the list if too big
+        if(this.resultList.length > 20) this.resultList.shift();
+        this.resultList.push(detection);
+    }
+
+    /**
+     * Find a result using the ID of the detection
+     * @param idDetection
+     */
+    public findResult(idDetection: string) : Detection|null {
+        for (let i = 0; i < this.resultList.length; i++) {
+            if(idDetection == this.resultList[i].getId()) return this.resultList[i];
+        }
+        return null;
+    }
+
+    /**
+     * Get the list of results
+     */
+    public getResults() : Detection[] {
+        return this.resultList;
+    }
+
+    /**
+     * Remove all the results saved
+     */
+    public flushResults() : void {
+        this.resultList = [];
     }
 
     /**
@@ -137,7 +180,9 @@ class DetectionService {
         // Make the promise above cancellable for the user
         const cancellablePromise: CancellableDetectionPromise = new CancellableDetectionPromise(appName, language, () => {
             this.removeCancellablePromise(cancellablePromise);
-        });
+        }, (data: Detection) => {
+            this.addToResult(data);
+        } );
         this.detectionList.push(cancellablePromise);
 
         return cancellablePromise;

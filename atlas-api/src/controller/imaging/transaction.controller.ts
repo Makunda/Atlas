@@ -1,6 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import TransactionService from "@services/imaging/transaction.service";
 import {ITransaction} from "@interfaces/imaging/transaction.interface";
+import {logger} from "@shared/logger";
 
 
 class TransactionController {
@@ -28,7 +29,6 @@ class TransactionController {
         }
     };
 
-
     public getInsightsUnmaskedTransactions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const applicationName = String(req.params.application);
@@ -39,7 +39,6 @@ class TransactionController {
             next(error);
         }
     };
-
 
     public getBatchTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
@@ -79,6 +78,107 @@ class TransactionController {
         }
     };
 
+
+
+    /**
+     * Pin with a prefix a specific Transaction in the application
+     * POST Body: {
+     *     application: string,
+     *     application: number,
+     *     prefix: string
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
+    public pinTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.params.application);
+        const transactionID = Number(req.params.transactionID);
+
+        if(!req.body.prefix) {
+            res.status(403).json({err: true, message: 'Missing body parameter "prefix".'});
+            return;
+        }
+        const prefix = String(req.body.prefix);
+
+        try {
+
+            const transaction: ITransaction = await this.transactionService
+                .pinTransaction(applicationName, transactionID, prefix);
+            res.status(200).json({data: transaction, message: 'Renamed Transaction'});
+
+        } catch (error) {
+            logger.error(`Failed to pin transaction with id ${transactionID} with prefix ${prefix}`);
+            next(error);
+        }
+    };
+
+    /**
+     * Unpin with a prefix a specific Transaction in the application
+     * POST Body: {
+     *     application: string,
+     *     application: number,
+     *     prefix: string
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
+    public unpinTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.params.application);
+        const transactionID = Number(req.params.transactionID);
+
+        if(!req.body.prefix) {
+            res.status(403).json({err: true, message: 'Missing body parameter "prefix".'});
+            return;
+        }
+        const prefix = String(req.body.prefix);
+
+        try {
+            const transaction: ITransaction = await this.transactionService
+                .unpinTransaction(applicationName, transactionID, prefix);
+            res.status(200).json({data: transaction, message: 'Renamed Transaction'});
+
+        } catch (error) {
+            logger.error(`Failed to unpin transaction with id ${transactionID} with prefix ${prefix}`)
+            next(error);
+        }
+    };
+
+    /**
+     * Rename a transaction in the application
+     * POST Body: {
+     *     application: string,
+     *     application: number,
+     *     name: string
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
+    public renameTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.params.application);
+        const transactionID = Number(req.params.application);
+
+        const transactionName = String(req.body.name);
+
+        if(!transactionName || transactionName == "") {
+            res.status(403)
+                .json({err: true, message: 'Missing body parameter "name". This parameters cannot be empty.'});
+            return;
+        }
+
+        try {
+            const transaction: ITransaction = await this.transactionService.renameTransaction(applicationName, transactionID, transactionName);
+            res.status(200).json({data: transaction, message: 'Renamed Transaction'});
+
+        } catch (error) {
+            logger.error(`Failed to rename a transaction with name ${transactionName} in application ${applicationName}.`, error);
+            next(error);
+        }
+    };
+
+
     public maskTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const applicationName = String(req.params.application);
@@ -117,36 +217,83 @@ class TransactionController {
     };
 
     public unmaskAllTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.params.application);
         try {
-            const applicationName = String(req.params.application);
             const state: boolean = await this.transactionService.unmaskAllTransaction(applicationName);
             res.status(200).json({data: state, message: 'UnMasked all'});
 
         } catch (error) {
+            logger.error(`Failed to unmask All the transactions in application ${applicationName}.`, error);
             next(error);
         }
     };
 
+    /**
+     * Mask Transaction by Terms in their name
+     * POST Body {
+     *     application: string
+     *     terms : string[]
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
     public maskObjectByTerms = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.body.application);
+        const terms: string[] = req.body.terms || [];
+
         try {
-            const applicationName = String(req.body.application);
-            const terms: string[] = req.body.terms || [];
             const state: number = await this.transactionService.maskTransactionByTerms(applicationName, terms);
             res.status(200).json({data: state, message: 'UnMasked all'});
-
         } catch (error) {
+            logger.error(`Failed to mask Transaction with certain terms inside it in application with name ${applicationName}.`, error);
             next(error);
         }
     };
 
+    /**
+     * Mask the transaction by their number of Object
+     * POST Body {
+     *     application: string,
+     *     limit: number
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
     public maskByObjectCount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.body.application);
+        const limit = Number(req.body.limit) || 0;
+
         try {
-            const applicationName = String(req.body.application);
-            const limit = Number(req.body.limit) || 0;
             const count: number = await this.transactionService.maskTransactionByCount(applicationName, limit);
+            res.status(200).json({data: count, message: 'Masked'});
+        } catch (error) {
+            logger.error(`Failed to mask Transaction by object count in application ${applicationName}.`, error);
+            next(error);
+        }
+    };
+
+    /**
+     * Mask the transaction by their number of technology
+     * POST Body {
+     *     application: string,
+     *     limit: number
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
+    public maskByTechnologyCount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.body.application);
+        const limit = Number(req.body.limit) || 0;
+
+        try {
+            const count: number = await this.transactionService.maskTransactionByTechnologyCount(applicationName, limit);
             res.status(200).json({data: count, message: 'Masked'});
 
         } catch (error) {
+            logger.error(`Failed to mask Transaction by technology count in application ${applicationName}.`)
             next(error);
         }
     };

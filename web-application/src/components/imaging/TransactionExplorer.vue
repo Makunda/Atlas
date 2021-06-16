@@ -12,6 +12,30 @@
       <v-container>
         <v-row>
           <v-card class="ma-4" width="100%">
+            <v-card-title>Options</v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col md="3" class="d-flex flex-column">
+                    <p>
+                      Specify the prefix used to pin the transactions.<br />
+                      <b
+                        >This parameter is not stored and will be reset if you
+                        refresh this page.</b
+                      >
+                    </p>
+                    <v-text-field
+                      label="Pin Prefix"
+                      v-model="pinPrefix"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-row>
+        <v-row>
+          <v-card class="ma-4" width="100%">
             <v-card-title>
               Power actions
             </v-card-title>
@@ -204,10 +228,15 @@
                     <h3>Search by technology</h3>
                   </v-row>
                   <v-row class="mx-3">
-                    <v-text-field
+                    <v-select
                       v-model="technologySearch"
-                      label="Technology"
-                    ></v-text-field>
+                      :items="technologiesList"
+                      :loading="loadingTechList"
+                      filled
+                      chips
+                      label="Chips"
+                      multiple
+                    ></v-select>
                   </v-row>
                 </v-col>
               </v-row>
@@ -264,6 +293,22 @@
                   <v-icon small class="mr-2" @click="maskTransaction(item)">
                     mdi-eye-off
                   </v-icon>
+                  <v-icon
+                    v-if="!containsPrefix(item)"
+                    small
+                    class="mr-2"
+                    @click="pinTransaction(item)"
+                  >
+                    mdi-pin
+                  </v-icon>
+                  <v-icon
+                    v-if="containsPrefix(item)"
+                    small
+                    class="mr-2"
+                    @click="unpinTransaction(item)"
+                  >
+                    mdi-pin-off
+                  </v-icon>
                 </template>
               </v-data-table>
             </v-card-text>
@@ -314,6 +359,7 @@ import Vue from "vue";
 import TransactionController from "@/api/imaging/Transaction.controller";
 import ITransaction from "@/api/interface/imaging/Transaction.interface";
 import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
+import { ApplicationController } from "@/api/applications/application.controller";
 
 export default Vue.extend({
   name: "TransactionExplorer",
@@ -331,6 +377,9 @@ export default Vue.extend({
 
   data: () => ({
     application: "",
+
+    // options
+    pinPrefix: "_",
 
     headers: [
       {
@@ -368,8 +417,8 @@ export default Vue.extend({
     numMaskedTransaction: 0,
 
     // Transactions displayed
-    displayedTransaction: [],
-    displayedMaskedTransaction: [],
+    displayedTransaction: [] as ITransaction,
+    displayedMaskedTransaction: [] as ITransaction,
 
     startIndexTransaction: 0,
     endIndexTransaction: 0,
@@ -390,10 +439,20 @@ export default Vue.extend({
     transactionInsights: {} as ITransactionsInsights,
     rangeObject: [0, 20],
     rangeTechnology: [0, 20],
-    technologySearch: ""
+    technologySearch: [] as string[],
+    technologiesList: [] as string[],
+    loadingTechList: false
   }),
 
   methods: {
+    async containsPrefix(item: ITransaction): boolean {
+      try {
+        return item.name.indexOf(this.pinPrefix) == 0;
+      } catch (err) {
+        return false;
+      }
+    },
+
     async unmaskAll() {
       try {
         this.unmaskAllActionLoading = true;
@@ -405,6 +464,24 @@ export default Vue.extend({
         console.error("Failed to un-mask all the transactions", err);
       } finally {
         this.unmaskAllActionLoading = false;
+      }
+    },
+
+    async getTechnologies() {
+      try {
+        if (this.application == "") return;
+        this.loadingTechList = true;
+        this.technologiesList = await ApplicationController.getLevelsByDepth(
+          this.application,
+          5
+        );
+      } catch (err) {
+        console.error(
+          `Failed to retrieve technologies in the application ${this.application}.`,
+          err
+        );
+      } finally {
+        this.loadingTechList = false;
       }
     },
 
@@ -538,8 +615,8 @@ export default Vue.extend({
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
-          sortByOption,
-          sortByDesccOption
+        sortByOption,
+        sortByDesccOption
       );
 
       this.loadingMaskedTransaction = false;
@@ -552,6 +629,33 @@ export default Vue.extend({
       this.refresh();
     },
 
+    async pinTransaction(item: ITransaction) {
+      await TransactionController.pinTransaction(
+        this.application,
+        item._id,
+        this.pinPrefix
+      );
+      await this.refresh();
+    },
+
+    async unpinTransaction(item: ITransaction) {
+      await TransactionController.unpinTransaction(
+        this.application,
+        item._id,
+        this.pinPrefix
+      );
+      await this.refresh();
+    },
+
+    async renameTransaction(item: ITransaction) {
+      await TransactionController.renameTransaction(
+        this.application,
+        item._id,
+        item.name
+      );
+      await this.refresh();
+    },
+
     async unMaskTransaction(item: ITransaction) {
       await TransactionController.unmaskTransaction(this.application, item._id);
       this.refresh();
@@ -559,6 +663,7 @@ export default Vue.extend({
 
     async refresh() {
       await this.getInsights();
+      await this.getTechnologies();
       await this.transactionApiCall();
       await this.maskedTransactionApiCall();
     }

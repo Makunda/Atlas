@@ -114,20 +114,21 @@ class TransactionService {
                                      sortDesc?: boolean): Promise<ITransaction[]> {
 
         try {
+            const filterArray = this.buildFilter(filter);
             const req = `MATCH (t:Transaction:\`${application}\`)
             OPTIONAL MATCH (t)-[:Contains]->(n:\`${application}\`) 
             WHERE n:Object OR n:SubObject
             WITH t as tran, COUNT(n) as count, COLLECT(DISTINCT n.Level) as technologies, 
             COUNT(DISTINCT n.Level) as countTechnology 
-            ${this.buildFilter(filter)} 
+            ${filterArray[0]} 
             RETURN tran, count, technologies, countTechnology
             ORDER BY ${TransactionService.getSortParameter("tran", sort)} ${TransactionService.getSortDesc(sortDesc)} 
             SKIP $toSkip LIMIT $toGet;`;
 
-            const result = await this.neo4jAl.executeWithParameters(req, {
-                "toSkip": int(start),
-                "toGet": int(end - start)
-            });
+            const params : any = filterArray[1];
+            params.toSkip = int(start);
+            params.toGet = int(end - start);
+            const result = await this.neo4jAl.executeWithParameters(req, params);
 
             const listTransaction: ITransaction[] = [];
             for (let i = 0; i < result.records.length; i++) {
@@ -142,6 +143,89 @@ class TransactionService {
         } catch (err) {
             logger.error(
                 `Failed to get catch of transaction for application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Pin an Transaction with a Prefix
+     * @param application Name of the application
+     * @param idTransaction Id of the tran
+     * @param pinPrefix Prefix to be put in front of a transaction
+     */
+    public async pinTransaction(application: string, idTransaction: number, pinPrefix: string): Promise<ITransaction> {
+        try {
+            const req = `MATCH (t:Transaction:\`${application}\`) WHERE ID(t)=$idTran 
+            SET t.Name= CASE WHEN t.Name STARTS WITH $pinPrefix THEN t.Name ELSE 
+            ($pinPrefix + t.Name) END 
+            RETURN t as node;`;
+
+            const result = await this.neo4jAl.executeWithParameters(req,
+                {"idTran": int(idTransaction), pinPrefix: pinPrefix});
+            if (!result || result.records.length == 0) return null;
+
+            return transactionFromObj(result.records[0].get("node"));
+        } catch (err) {
+            logger.error(
+                `Failed to pin a transaction for application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Unpin an Transaction with a Prefix
+     * @param application Name of the application
+     * @param idTransaction Id of the tran
+     * @param pinPrefix Prefix to be put in front of a transaction
+     */
+    public async unpinTransaction(application: string, idTransaction: number, pinPrefix: string): Promise<ITransaction> {
+        try {
+
+            const req = `MATCH (t:Transaction:\`${application}\`) WHERE ID(t)=$idTran 
+            SET t.Name= CASE WHEN t.Name STARTS WITH $pinPrefix THEN 
+            substring(t.Name, SIZE($pinPrefix)) ELSE 
+            t.Name END 
+            RETURN t as node;`;
+
+            const result = await this.neo4jAl.executeWithParameters(req,
+                {"idTran": int(idTransaction), pinPrefix: pinPrefix});
+            if (!result || result.records.length == 0) return null;
+
+            return transactionFromObj(result.records[0].get("node"));
+        } catch (err) {
+            logger.error(
+                `Failed to pin a transaction for application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Rename a transaction using its ID in an application
+     * @param application Name of the application
+     * @param idTransaction Id of the Transaction Node
+     * @param newName New name of the transaction
+     */
+    public async renameTransaction(application: string, idTransaction: number, newName: string):
+        Promise<ITransaction> {
+        try {
+            const req = `MATCH (t:Transaction:\`${application}\`) WHERE ID(t)=$idTran 
+            SET t.Name= $newName 
+            RETURN t as node`;
+
+            const result = await this.neo4jAl.executeWithParameters(req,
+                {"idTran": int(idTransaction), newName: newName});
+            if (!result || result.records.length == 0) return null;
+
+            return transactionFromObj(result.records[0].get("node"));
+        } catch (err) {
+            logger.error(
+                `Failed to pin a transaction for application ${application}.`,
                 err
             );
             throw new HttpException(500, "Internal error");
@@ -200,18 +284,19 @@ class TransactionService {
      */
     public async maskTransactionWithFilter(application: string, filter: Record<string, unknown>): Promise<number> {
         try {
-
+            const filterArray = this.buildFilter(filter, true);
             const req = `MATCH (t:Transaction:\`${application}\`)-[:Contains]->(n) 
             OPTIONAL MATCH (t)-[]->(n:TransactionNode) 
             WHERE n:Object OR n:SubObject
             WITH t as tran, COUNT(n) as count, COLLECT(DISTINCT n.Level) as technologies 
-            ${this.buildFilter(filter, true)}  
+            ${filterArray[0]}  
             REMOVE t:Transaction SET t:${TransactionService.MASKED_TRANSACTION_LABEL} 
             REMOVE n:TransactionNode SET n:${TransactionService.MASKED_TRANSACTION_NODE_LABEL} 
             RETURN COUNT(t) as node;
             `;
 
-            const result = await this.neo4jAl.execute(req);
+            const params: any = filterArray[1];
+            const result = await this.neo4jAl.executeWithParameters(req,params);
             if (!result || result.records.length == 0) return null;
 
             return int(result.records[0].get("node")).toNumber();
@@ -346,7 +431,7 @@ class TransactionService {
             MATCH (t:Transaction:\`${application}\`)
             OPTIONAL MATCH (t)-[:Contains]->(n:\`${application}\`) WHERE n:Object or n:SubObject 
             WITH t as tran ,COUNT(n) as couOn
-            WHERE couOn < $limitCount
+            WHERE couOn <= $limitCount
             OPTIONAL MATCH (tran)-[]->(tranNode:TransactionNode:\`${application}\`)
             REMOVE tran:Transaction SET tran:${TransactionService.MASKED_TRANSACTION_LABEL} 
             REMOVE tranNode:TransactionNode SET tranNode:${TransactionService.MASKED_TRANSACTION_NODE_LABEL} 
@@ -369,32 +454,74 @@ class TransactionService {
     }
 
     /**
+     * Filter application by Technology Count
+     * @param application Name of the application
+     * @param limit Limit of the application
+     */
+    public async maskTransactionByTechnologyCount(application: string, limit: number): Promise<number> {
+        try {
+            const req = `
+            MATCH (t:Transaction:\`${application}\`)
+            OPTIONAL MATCH (t)-[:Contains]->(n:\`${application}\`) WHERE n:Object or n:SubObject 
+            WITH t as tran ,COUNT(DISTINCT n.Level) as couOn
+            WHERE couOn <= $techCount
+            OPTIONAL MATCH (tran)-[]->(tranNode:TransactionNode:\`${application}\`)
+            REMOVE tran:Transaction SET tran:${TransactionService.MASKED_TRANSACTION_LABEL} 
+            REMOVE tranNode:TransactionNode SET tranNode:${TransactionService.MASKED_TRANSACTION_NODE_LABEL} 
+            RETURN COUNT(tran) as masked`
+
+            const result = await this.neo4jAl.executeWithParameters(req, {
+                "techCount": limit
+            });
+
+            if (!result || result.records.length == 0) return 0;
+            return int(result.records[0].get("masked")).toNumber();
+
+        } catch (err) {
+            logger.error(
+                `Failed to get catch of transaction for application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
      * Build filter
      * @param filter
      * @param reverse Reverse the filter with NOT clause
+     * @return [Filter, Params]
      * @private
      */
-    private buildFilter(filter: Record<string, unknown>, reverse?: boolean) {
+    private buildFilter(filter: Record<string, unknown>, reverse?: boolean) : [string, any] {
         let filterReq = "";
         const conditions = [];
+
+        const params: any = {};
         if (filter) {
             for (const [variable, value] of Object.entries(filter)) {
-
                 switch (variable) {
                     case "minTechnologies":
-                        conditions.push("SIZE(technologies) >= " + Number(value));
+                        conditions.push("SIZE(technologies) >= $minTechnologies ");
+                        params.minTechnologies = Number(value);
                         break;
                     case "maxTechnologies":
-                        conditions.push("SIZE(technologies) <= " + Number(value));
+                        conditions.push("SIZE(technologies) <= $maxTechnologies ");
+                        params.maxTechnologies = Number(value);
                         break;
                     case "minObject":
-                        conditions.push("count >= " + Number(value));
+                        conditions.push("count >= $minObject ");
+                        params.minObject = Number(value);
                         break;
                     case "maxObject":
-                        conditions.push("count <= " + Number(value));
+                        conditions.push("count <= $maxObject ");
+                        params.maxObject = Number(value);
                         break;
                     case "techContained":
-                        conditions.push(`any(x IN technologies WHERE x CONTAINS '${String(value)}') `);
+                        if(Array.isArray(value) && value.length > 0) {
+                            conditions.push(`any(x IN technologies WHERE x IN $techContained ) `);
+                            params.techContained = value as string[];
+                        }
                         break;
                     default:
                         break;
@@ -410,7 +537,7 @@ class TransactionService {
             }
         }
 
-        return filterReq;
+        return [filterReq, params];
     }
 }
 

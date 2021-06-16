@@ -65,6 +65,22 @@ export default class LevelController {
         }
     };
 
+    /**
+     * Undo all the Level 5 Created by Demeter in a specific application
+     * @param req
+     * @param res
+     * @param next
+     */
+    public undoAllLevel = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const application = String(req.params.name);
+            const result: boolean = await this.levelService.undoAllLevels(application);
+            res.status(200).json({data: result, message: 'Undo level'});
+        } catch (error) {
+            next(error);
+        }
+    };
+
     // Rename one level
     public renameLevel = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {

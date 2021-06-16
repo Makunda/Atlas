@@ -13,12 +13,12 @@ class FrameworksRoute implements Route {
 
     private initializeRoutes() {
         this.router.get(
-            `${this.path}/find/:name(\\w+)`,
+            `${this.path}/find/:name`,
             this.frameworksController.getFrameworkByName
         );
 
         this.router.get(
-            `${this.path}/search/:name(\\w+)`,
+            `${this.path}/search/:name`,
             this.frameworksController.searchFrameworkByName
         );
 

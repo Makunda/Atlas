@@ -14,14 +14,15 @@ class LevelRoute implements Route {
 
     private initializeRoutes() {
         // GET
-        this.router.get(`${this.path}/:name(\\w+)/candidates`, this.levelController.getCandidateLevelsApplication);
-        this.router.get(`${this.path}/:name(\\w+)/grouped`, this.levelController.getDemeterLevelsApplication);
-        this.router.get(`${this.path}/:name(\\w+)/all`, this.levelController.getAllLevels5);
+        this.router.get(`${this.path}/:name/candidates`, this.levelController.getCandidateLevelsApplication);
+        this.router.get(`${this.path}/:name/grouped`, this.levelController.getDemeterLevelsApplication);
+        this.router.get(`${this.path}/:name/all`, this.levelController.getAllLevels5);
 
         // POST
-        this.router.post(`${this.path}/:name(\\w+)/group`, this.levelController.executeLevelGrouping);
-        this.router.post(`${this.path}/:name(\\w+)/undo`, this.levelController.undoOneLevel);
-        this.router.post(`${this.path}/:name(\\w+)/rename`, this.levelController.renameLevel);
+        this.router.post(`${this.path}/:name/group`, this.levelController.executeLevelGrouping);
+        this.router.post(`${this.path}/:name/undo`, this.levelController.undoOneLevel);
+        this.router.post(`${this.path}/:name/undo/all`, this.levelController.undoAllLevel);
+        this.router.post(`${this.path}/:name/rename`, this.levelController.renameLevel);
     }
 }
 
