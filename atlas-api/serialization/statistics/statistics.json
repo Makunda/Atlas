@@ -9,8 +9,8 @@
   {
     "title": "In Transaction",
     "categories" : ["configuration"],
-    "description": "Percentage of objects in transactions",
-    "request": "MATCH (o:Object:`%APPLICATION_NAME%`) WITH COUNT(o) as totObj MATCH (obj:Object:`%APPLICATION_NAME%`) WHERE NOT (:Transaction:`%APPLICATION_NAME%`)-[:Contains]->(obj) WITH  COUNT(DISTINCT obj) as notInTransaction, totObj RETURN toFloat(notInTransaction) / totObj as percentage;",
+    "description": "Percentage of objects in transactions. The isolated nodes in the application are excluded from this results",
+    "request": "MATCH (o:Object:`%APPLICATION_NAME%`) WHERE (o)-[]-(:Object) WITH COUNT(o) as totObj MATCH (obj:Object:`%APPLICATION_NAME%`) WHERE NOT (:Transaction:`%APPLICATION_NAME%`)-[:Contains]->(obj) WITH  COUNT(DISTINCT obj) as notInTransaction, totObj RETURN toFloat(notInTransaction) / totObj as percentage;",
     "inverseResult": false
   },
   {

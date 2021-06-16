@@ -3,47 +3,7 @@
     <ActionTileViewer></ActionTileViewer>
     <v-divider></v-divider>
 
-    <v-card class="pa-5 mb-3">
-      <v-card-title>
-        <h3 class="text-h4 mb-2">Explore the {{ application }} application</h3>
-      </v-card-title>
 
-      <v-card-text>
-        <v-row>
-          <h5 class="text-h5 black--text">
-            Grouping exploration : Detach objects and investigate in CAST
-            Imaging
-          </h5>
-        </v-row>
-        <v-row class="my-5">
-          <p>
-            Here is a selection of actions that you can execute on your
-            application. <br />
-            The objects matching these use cases will be detached from the
-            default levels and merged again to facilitate investigation and
-            overview.
-          </p>
-        </v-row>
-
-        <v-row>
-          <v-skeleton-loader
-            class="mx-auto"
-            width="300"
-            type="card"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            width="300"
-            type="card"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            width="300"
-            type="card"
-          ></v-skeleton-loader>
-        </v-row>
-      </v-card-text>
-    </v-card>
   </v-container>
 </template>
 

@@ -3,12 +3,9 @@
   <v-app class="main-application">
     <v-container fluid fill-height class="pa-0">
       <v-row style="height: 100%">
-        <v-col
-          md="6"
-          style="background: #073B4C; height: 100%; position: relative"
-        >
+        <v-col md="6" id="color-background">
           <v-container bg fill-height grid-list-md text-xs-center>
-          <img src="@/assets/svg/Globe_icon.svg" id="background-logo" />
+            <img src="@/assets/svg/Globe_icon.svg" id="background-logo" />
             <v-layout row wrap align-center justify-center>
               <v-flex style="margin-left: 20%; z-index: 10">
                 <h2 class="white--text text-h1">Atlas</h2>
@@ -23,7 +20,7 @@
         <v-col md="6">
           <v-container bg fill-height grid-list-md text-xs-center>
             <v-layout row wrap align-center justify-center>
-              <v-card ref="form" class="mx-auto" min-width="500px">
+              <v-card ref="form" class="mx-auto" min-width="500px" v-if="onlineDatabase">
                 <v-card-text>
                   <v-text-field
                     ref="neo4jUser"
@@ -62,6 +59,18 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
+              <v-card v-if="!onlineDatabase" class="mx-auto" min-width="500px" min-height="250px">
+                <v-card-text  class="d-flex flex-column" style="margin-top: 20px">
+                  <v-icon size="80" color="red" class="my-4">mdi-database-remove</v-icon>
+                  <span>
+                    Oops, it seems that the database at  <i color="#052C38">{{ uri }}</i> is unreachable.<br>
+                    Retry in few seconds or check your neo4j service.
+                  </span>
+                  <v-btn class="my-4" @click="simpleHealthCheck" text>
+                    <v-icon x-large color="#042732"  >mdi-refresh</v-icon>
+                  </v-btn>
+                </v-card-text>
+              </v-card>
             </v-layout>
           </v-container>
         </v-col>
@@ -76,7 +85,7 @@ import { Configuration, Credentials } from "@/Configuration";
 import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
 import { ServerInfo } from "neo4j-driver";
 import ConfigurationController from "../api/configuration/configuration.controller";
-
+import { UtilsController } from "@/api/utils/utils.controller";
 
 export default Vue.extend({
   name: "Login",
@@ -88,11 +97,15 @@ export default Vue.extend({
     uri: Configuration.getProperties().neo4jUri,
     credentials: {} as Credentials,
 
+    onlineDatabase: true,
+    healthcheckGoingon: false,
+
     switchInternalUse: false
   }),
 
   mounted() {
     this.getInternalMode();
+    this.simpleHealthCheck();
   },
 
   methods: {
@@ -118,6 +131,7 @@ export default Vue.extend({
           // Cannot connect to the Neo4j instance
           console.error("Cannot connect to Neo4j", err);
           this.failedLogin = true;
+          this.simpleHealthCheck();
         });
     },
 
@@ -142,12 +156,46 @@ export default Vue.extend({
           console.log("Failed to change the value of internal mode.", err);
           this.switchInternalUse = false;
         });
+    },
+
+    async simpleHealthCheck() {
+      try {
+        if(this.healthcheckGoingon) return;
+        this.healthcheckGoingon = true;
+        this.onlineDatabase = await UtilsController.healthCheck();
+        this.healthcheckGoingon = false;
+      } catch (err) {
+        this.onlineDatabase = false;
+        setTimeout(this.simpleHealthCheck, 3000);
+      }
     }
   }
 });
 </script>
 
 <style>
+#color-background {
+  height: 100%;
+  position: relative;
+  background: rgb(0, 36, 47);
+  background: -moz-linear-gradient(
+    28deg,
+    rgba(0, 36, 47, 1) 0%,
+    rgba(15, 79, 99, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    28deg,
+    rgba(0, 36, 47, 1) 0%,
+    rgba(15, 79, 99, 1) 100%
+  );
+  background: linear-gradient(
+    28deg,
+    rgba(0, 36, 47, 1) 0%,
+    rgba(15, 79, 99, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00242f",endColorstr="#0f4f63",GradientType=1);
+}
+
 #background-logo {
   z-index: 1;
   background-size: contain;
@@ -156,7 +204,7 @@ export default Vue.extend({
   margin-right: auto;
   color: white;
   opacity: 0.2;
-  fill: #1e4d5b;
+  fill: #0e4b5f;
 }
 
 .login-container {

@@ -69,37 +69,6 @@
             </v-card>
           </v-hover>
 
-          <!--   Framework Card    -->
-          <v-hover v-slot:default="{ hover }">
-            <v-card
-              class="ma-2"
-              width="344"
-              :dark="hover"
-              :color="hover ? 'persianGrey' : 'white'"
-            >
-              <v-card-text>
-                <span class="text-h4 text--primary d-flex flex-row">
-                  <v-icon x-large>mdi-file-excel</v-icon>
-                  <p
-                    class="ml-4 mt-4"
-                    :class="hover ? 'white--text' : 'black--text'"
-                  >
-                    Frameworks
-                  </p>
-                </span>
-                <p>
-                  Extract Frameworks automatically using web & repository
-                </p>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="goTo('frameworks')">
-                  Go to section
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-hover>
-
           <!--   Imaging Card    -->
           <v-hover v-slot:default="{ hover }" open-delay="200">
             <v-card
