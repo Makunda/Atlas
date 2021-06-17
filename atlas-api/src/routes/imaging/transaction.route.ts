@@ -25,19 +25,19 @@ class TransactionRoute implements Route {
         this.router.post(`${this.path}/batch/unmasked/:application`,
             this.transactionController.getBatchTransaction);
 
-        this.router.post(`${this.path}/mask/filter/:application`,
+        this.router.post(`${this.path}/mask/filter`,
             this.transactionController.maskTransactionWithFilter);
 
         this.router.get(`${this.path}/insights/unmasked/:application`,
             this.transactionController.getInsightsUnmaskedTransactions);
 
-        this.router.get(`${this.path}/mask/single/:application/:transactionID`,
+        this.router.post(`${this.path}/mask/single`,
             this.transactionController.maskTransaction);
 
-        this.router.get(`${this.path}/unmask/single/:application/:transactionID`,
+        this.router.post(`${this.path}/unmask/single`,
             this.transactionController.unmaskTransaction);
 
-        this.router.get(`${this.path}/unmask/all/:application`,
+        this.router.post(`${this.path}/unmask/all`,
             this.transactionController.unmaskAllTransaction);
 
         this.router.post(`${this.path}/mask/byCount`,
@@ -46,9 +46,13 @@ class TransactionRoute implements Route {
         this.router.post(`${this.path}/mask/byTerms`,
             this.transactionController.maskObjectByTerms);
 
-        this.router.post(`${this.path}/pin/single/:application/:transactionID`, this.transactionController.pinTransaction);
-        this.router.post(`${this.path}/unpin/single/:application/:transactionID`, this.transactionController.unpinTransaction);
-        this.router.post(`${this.path}/rename/single/:application/:transactionID`, this.transactionController.renameTransaction);
+        this.router.post(`${this.path}/mask/byTechnologies`,
+            this.transactionController.maskByTechnologyCount);
+
+
+        this.router.post(`${this.path}/pin/single`, this.transactionController.pinTransaction);
+        this.router.post(`${this.path}/unpin/single`, this.transactionController.unpinTransaction);
+        this.router.post(`${this.path}/rename/single`, this.transactionController.renameTransaction);
     }
 }
 

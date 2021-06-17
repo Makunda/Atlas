@@ -8,6 +8,7 @@ import {ITransaction, transactionFromObj} from "@interfaces/imaging/transaction.
  * Manage the modification done on Transaction in an application
  */
 class TransactionService {
+
     private static MASKED_TRANSACTION_LABEL = "TransactionMasked";
     private static MASKED_TRANSACTION_NODE_LABEL = "TransactionNodeMasked";
     private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();

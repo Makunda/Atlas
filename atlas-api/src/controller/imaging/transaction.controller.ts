@@ -5,29 +5,40 @@ import {logger} from "@shared/logger";
 
 
 class TransactionController {
-    private transactionService = new TransactionService();
+    private transactionService: TransactionService;
+
+    public constructor() {
+        try {
+            this.transactionService = new TransactionService();
+        } catch (error) {
+            logger.error("Failed to initialize the Transaction Controller.", error);
+        }
+    }
 
     public getNumberTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.params.application);
+
         try {
-            const applicationName = String(req.params.application);
             const transactions: number = await this.transactionService.getNumberTransaction(applicationName);
             res.status(200).json({data: transactions, message: 'Number transactions'});
 
         } catch (error) {
+            logger.error(`Failed to retrieve the number of Transaction in application ${applicationName}.`, error)
             next(error);
         }
-    };
+    }
 
     public getNumberMaskedTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const applicationName = String(req.params.application);
+
         try {
-            const applicationName = String(req.params.application);
             const transactions: number = await this.transactionService.getNumberMaskedTransaction(applicationName);
             res.status(200).json({data: transactions, message: 'Number masked transactions'});
-
         } catch (error) {
+            logger.error(`Failed to retrieve the number of Transaction in application ${applicationName}.`, error)
             next(error);
         }
-    };
+    }
 
     public getInsightsUnmaskedTransactions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
@@ -38,28 +49,29 @@ class TransactionController {
         } catch (error) {
             next(error);
         }
-    };
+    }
 
     public getBatchTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+        const applicationName = String(req.params.application);
+        const startIndex = Number(req.body.start);
+        const endIndex = Number(req.body.end);
+
+        const sort = String(req.body.sort) || "name";
+        const sortDesc = Boolean(req.body.sortDesc) || false;
+
+        const filter: Record<string, unknown> = req.body.filter || {};
+
         try {
-
-            const applicationName = String(req.params.application);
-            const startIndex = Number(req.body.start);
-            const endIndex = Number(req.body.end);
-
-            const sort = String(req.body.sort) || "name";
-            const sortDesc = Boolean(req.body.sortDesc) || false;
-
-            const filter: Record<string, unknown> = req.body.filter || {};
-
             const transactions: ITransaction[] = await this.transactionService.getBatchTransaction(
                 applicationName, startIndex, endIndex, filter, sort, sortDesc);
             res.status(200).json({data: transactions, message: 'Batch'});
 
         } catch (error) {
+            logger.error(`Failed to retrieve transactions with filter in application ${applicationName}.`, error);
             next(error);
         }
-    };
+    }
 
     public getBatchMaskedTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
@@ -76,15 +88,14 @@ class TransactionController {
         } catch (error) {
             next(error);
         }
-    };
-
+    }
 
 
     /**
      * Pin with a prefix a specific Transaction in the application
      * POST Body: {
      *     application: string,
-     *     application: number,
+     *     transactionID: number,
      *     prefix: string
      * }
      * @param req
@@ -92,13 +103,37 @@ class TransactionController {
      * @param next
      */
     public pinTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const applicationName = String(req.params.application);
-        const transactionID = Number(req.params.transactionID);
-
-        if(!req.body.prefix) {
-            res.status(403).json({err: true, message: 'Missing body parameter "prefix".'});
+        if (req.body == null) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
             return;
         }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+
+        if (!req.body.transactionID) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'transactionID' parameter in body (Number)."
+            });
+            return;
+        }
+
+        if (!req.body.prefix) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'prefix' parameter in body (String)."
+            });
+            return;
+        }
+
+        const applicationName = String(req.body.application);
+        const transactionID = Number(req.body.transactionID);
         const prefix = String(req.body.prefix);
 
         try {
@@ -111,13 +146,13 @@ class TransactionController {
             logger.error(`Failed to pin transaction with id ${transactionID} with prefix ${prefix}`);
             next(error);
         }
-    };
+    }
 
     /**
      * Unpin with a prefix a specific Transaction in the application
      * POST Body: {
      *     application: string,
-     *     application: number,
+     *     transactionID: number,
      *     prefix: string
      * }
      * @param req
@@ -125,13 +160,37 @@ class TransactionController {
      * @param next
      */
     public unpinTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const applicationName = String(req.params.application);
-        const transactionID = Number(req.params.transactionID);
-
-        if(!req.body.prefix) {
-            res.status(403).json({err: true, message: 'Missing body parameter "prefix".'});
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
             return;
         }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+
+        if (!req.body.transactionID) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'transactionID' parameter in body (Number)."
+            });
+            return;
+        }
+
+        if (!req.body.prefix) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'prefix' parameter in body (String)."
+            });
+            return;
+        }
+
+        const applicationName = String(req.body.application);
+        const transactionID = Number(req.body.transactionID);
         const prefix = String(req.body.prefix);
 
         try {
@@ -149,24 +208,46 @@ class TransactionController {
      * Rename a transaction in the application
      * POST Body: {
      *     application: string,
-     *     application: number,
-     *     name: string
+     *     transactionID: number,
+     *     transactionName: string
      * }
      * @param req
      * @param res
      * @param next
      */
     public renameTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const applicationName = String(req.params.application);
-        const transactionID = Number(req.params.application);
-
-        const transactionName = String(req.body.name);
-
-        if(!transactionName || transactionName == "") {
-            res.status(403)
-                .json({err: true, message: 'Missing body parameter "name". This parameters cannot be empty.'});
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
             return;
         }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+        if (!req.body.transactionID) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'transactionID' parameter in body (Number)."
+            });
+            return;
+        }
+
+        if (!req.body.transactionName) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'transactionName' parameter in body (String)."
+            });
+            return;
+        }
+
+        const applicationName = String(req.body.application);
+        const transactionID = Number(req.body.transactionID);
+        const transactionName = String(req.body.transactionName);
+
 
         try {
             const transaction: ITransaction = await this.transactionService.renameTransaction(applicationName, transactionID, transactionName);
@@ -178,46 +259,162 @@ class TransactionController {
         }
     };
 
-
+    /**
+     * Mask a transaction in an application
+     * POST Body {
+     *     application: String,
+     *     transactionID: Number
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
     public maskTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
+            return;
+        }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+        if (!req.body.transactionID) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'transactionID' parameter in body (Number)."
+            });
+            return;
+        }
+
+        const applicationName = String(req.body.application);
+        const transactionID = Number(req.body.transactionID);
+
         try {
-            const applicationName = String(req.params.application);
-            const transactionID = Number(req.params.transactionID);
             const transaction: ITransaction = await this.transactionService.maskTransaction(applicationName, transactionID);
             res.status(200).json({data: transaction, message: 'Transaction'});
 
         } catch (error) {
+            logger.error(`Failed to mask the transaction with Id:'${transactionID}' in application '${applicationName}'`)
             next(error);
         }
     };
 
+    /**
+     * Mask all teh transaction not compliant with the filter
+     * POST Body {
+     *     application: string,
+     *     filter: object
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
     public maskTransactionWithFilter = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const applicationName = String(req.params.application);
-            const filter: Record<string, unknown> = req.body.filter || {};
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
+            return;
+        }
 
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+        if (!req.body.filter) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'filter' parameter in body (Object)."
+            });
+            return;
+        }
+
+        const applicationName = String(req.body.application);
+        const filter: Record<string, unknown> = req.body.filter || {};
+
+        try {
             const transactionMasked: number = await this.transactionService.maskTransactionWithFilter(applicationName, filter);
             res.status(200).json({data: transactionMasked, message: 'Transaction Masked'});
 
         } catch (error) {
+            logger.error(`Failed to mask transaction with filter in application ${applicationName}.`, error);
             next(error);
         }
     };
 
+    /**
+     * Unmask alla transaction
+     * POST Body {
+     *     application: String,
+     *     transactionID: Number
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
     public unmaskTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
+            return;
+        }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+        if (!req.body.transactionID) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'transactionID' parameter in body (Number)."
+            });
+            return;
+        }
+
+        const applicationName = String(req.body.application);
+        const transactionID = Number(req.body.transactionID);
+
         try {
-            const applicationName = String(req.params.application);
-            const transactionID = Number(req.params.transactionID);
             const transaction: ITransaction = await this.transactionService.unmaskTransaction(applicationName, transactionID);
             res.status(200).json({data: transaction, message: 'Transaction'});
-
         } catch (error) {
+            logger.error(`Failed to unmask transaction with id:'${transactionID}' in application with name '${applicationName}.`, error);
             next(error);
         }
     };
 
+    /**
+     * Unmask ALL the transaction in an application
+     * POST Body {
+     *     application: String
+     * }
+     * @param req
+     * @param res
+     * @param next
+     */
     public unmaskAllTransaction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const applicationName = String(req.params.application);
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
+            return;
+        }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+
+        const applicationName = String(req.body.application);
+
         try {
             const state: boolean = await this.transactionService.unmaskAllTransaction(applicationName);
             res.status(200).json({data: state, message: 'UnMasked all'});
@@ -239,6 +436,27 @@ class TransactionController {
      * @param next
      */
     public maskObjectByTerms = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
+            return;
+        }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+
+        if (!req.body.terms) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'terms' parameter in body (String[])."
+            });
+            return;
+        }
+
         const applicationName = String(req.body.application);
         const terms: string[] = req.body.terms || [];
 
@@ -262,6 +480,27 @@ class TransactionController {
      * @param next
      */
     public maskByObjectCount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
+            return;
+        }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+
+        if (!req.body.limit) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'limit' parameter in body (Number)."
+            });
+            return;
+        }
+
         const applicationName = String(req.body.application);
         const limit = Number(req.body.limit) || 0;
 
@@ -285,6 +524,27 @@ class TransactionController {
      * @param next
      */
     public maskByTechnologyCount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        if (!req.body) {
+            res.status(400).json({error: true, message: "Missing 'body' in request."});
+            return;
+        }
+
+        if (!req.body.application) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'application' parameter in body (String)."
+            });
+            return;
+        }
+
+        if (!req.body.limit) {
+            res.status(400).json({
+                error: true,
+                message: "Missing 'limit' parameter in body (Number)."
+            });
+            return;
+        }
+
         const applicationName = String(req.body.application);
         const limit = Number(req.body.limit) || 0;
 

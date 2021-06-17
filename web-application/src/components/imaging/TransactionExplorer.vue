@@ -43,7 +43,7 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-card class="mr-2" max-width="344">
+                  <v-card class="ma-1" max-width="344">
                     <v-card-text>
                       <div>Clean by number of objects</div>
                       <div class="text--primary">
@@ -68,7 +68,32 @@
                       </v-btn>
                     </v-card-actions>
                   </v-card>
-                  <v-card class="mr-2" max-width="344">
+                  <v-card class="ma-1" max-width="344">
+                    <v-card-text>
+                      <div>Clean by number of Technology</div>
+                      <div class="text--primary">
+                        Mask all the transactions containing a number of technology inferior or equal to the input
+                        <v-text-field
+                            v-model="maskActionTechnology"
+                            type="number"
+                            label="Number of objects"
+                        ></v-text-field>
+                      </div>
+                    </v-card-text>
+                    <v-spacer></v-spacer>
+                    <v-card-actions>
+                      <v-btn
+                          text
+                          color="persianGrey"
+                          @click="maskByTechnology"
+                          :loading="maskActionLoading"
+                      >
+                        <p>Mask the transactions .</p>
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+
+                  <v-card class="ma-1" max-width="344">
                     <v-card-text>
                       <div>Clean by number of objects</div>
                       <div class="text--primary">
@@ -94,7 +119,7 @@
                       </v-btn>
                     </v-card-actions>
                   </v-card>
-                  <v-card max-width="344">
+                  <v-card class="ma-1" max-width="344">
                     <v-card-text>
                       <div>Reset transactions</div>
                       <div class="text--primary">
@@ -289,7 +314,14 @@
                 class="elevation-1"
                 fixed-header
               >
-                <template v-slot:item.actions="{ item }">
+                <template v-slot:item.technologies="{ item }">
+                  <v-chip-group active-class="primary--text" column>
+                    <v-chip small v-for="tech in item.technologies" :key="tech">
+                      {{ tech }}
+                    </v-chip>
+                  </v-chip-group>
+                </template>
+                <template v-slot:item.actions="{ item }" class="flex flex-row">
                   <v-icon small class="mr-2" @click="maskTransaction(item)">
                     mdi-eye-off
                   </v-icon>
@@ -308,6 +340,9 @@
                     @click="unpinTransaction(item)"
                   >
                     mdi-pin-off
+                  </v-icon>
+                  <v-icon small class="mr-2" @click="openRenameModal(item)">
+                    mdi-grease-pencil
                   </v-icon>
                 </template>
               </v-data-table>
@@ -340,6 +375,13 @@
                 :loading="loadingMaskedTransaction"
                 class="elevation-1"
               >
+                <template v-slot:item.technologies="{ item }">
+                  <v-chip-group active-class="primary--text" column>
+                    <v-chip small v-for="tech in item.technologies" :key="tech">
+                      {{ tech }}
+                    </v-chip>
+                  </v-chip-group>
+                </template>
                 <template v-slot:item.actions="{ item }">
                   <v-icon small class="mr-2" @click="unMaskTransaction(item)">
                     mdi-eye
@@ -351,6 +393,55 @@
         </v-row>
       </v-container>
     </v-card-text>
+
+    <!--  Modal Rename Transaction  -->
+    <v-dialog v-model="modalRename" width="500">
+      <v-card>
+        <v-card-title class="text-h5 white--text charcoal lighten-2">
+          Renaming a transaction
+        </v-card-title>
+
+        <v-card-text class="mt-4">
+          <v-container>
+            <v-row class="my-4">
+              Enter the new Name of the transaction n°{{
+                toEditTransaction._id
+              }}:
+            </v-row>
+            <v-row>
+              <v-text-field
+                label="Outlined"
+                v-model="toEditTransaction.name"
+                single-line
+                outlined
+              ></v-text-field>
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="red"
+            :loading="loadingRename"
+            text
+            @click="closeRenameModal"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="green"
+            text
+            :disabled="loadingRename"
+            @click="confirmRename"
+          >
+            Rename
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -417,8 +508,8 @@ export default Vue.extend({
     numMaskedTransaction: 0,
 
     // Transactions displayed
-    displayedTransaction: [] as ITransaction,
-    displayedMaskedTransaction: [] as ITransaction,
+    displayedTransaction: [] as ITransaction[],
+    displayedMaskedTransaction: [] as ITransaction[],
 
     startIndexTransaction: 0,
     endIndexTransaction: 0,
@@ -430,6 +521,7 @@ export default Vue.extend({
 
     // Power Actions
     maskActionLimit: 0,
+    maskActionTechnology: 0,
     maskActionLoading: false,
     maskActionTermsList: [] as string[],
 
@@ -441,11 +533,50 @@ export default Vue.extend({
     rangeTechnology: [0, 20],
     technologySearch: [] as string[],
     technologiesList: [] as string[],
-    loadingTechList: false
+    loadingTechList: false,
+
+    // Transaction Rename
+    modalRename: false,
+    loadingRename: false,
+    toEditTransaction: {} as ITransaction
   }),
 
   methods: {
-    async containsPrefix(item: ITransaction): boolean {
+    /**
+     *  Open the Rename modal for the transactions
+     **/
+    openRenameModal(item: ITransaction) {
+      this.toEditTransaction = Object.assign({}, item);
+      this.modalRename = true;
+    },
+
+    async confirmRename() {
+      try {
+        this.loadingRename = true;
+        await TransactionController.renameTransaction(
+          this.application,
+          this.toEditTransaction._id,
+          this.toEditTransaction.name
+        );
+        this.closeRenameModal();
+        this.refresh();
+      } catch (err) {
+        console.error("Failed to rename the transaction.", err);
+      } finally {
+        this.loadingRename = false;
+      }
+    },
+
+    closeRenameModal() {
+      this.modalRename = false;
+      this.toEditTransaction = {};
+    },
+
+    /**
+     * Check if the prefix is present in the Transaction Name
+     * @param item
+     */
+    containsPrefix(item: ITransaction): boolean {
       try {
         return item.name.indexOf(this.pinPrefix) == 0;
       } catch (err) {
@@ -495,6 +626,22 @@ export default Vue.extend({
         await this.refresh();
       } catch (err) {
         console.error("Failed to mask by count.", err);
+      } finally {
+        this.maskActionLoading = false;
+      }
+    },
+
+
+    async maskByTechnology() {
+      try {
+        this.maskActionLoading = true;
+        this.numTransaction = await TransactionController.maskByTechnology(
+            this.application,
+            this.maskActionTechnology
+        );
+        await this.refresh();
+      } catch (err) {
+        console.error("Failed to mask by technology.", err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -569,7 +716,11 @@ export default Vue.extend({
         techContained: this.technologySearch
       };
 
-      const { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
+      // eslint-disable-next-line prefer-const
+      let { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
+      if(itemsPerPage === -1) {
+        itemsPerPage = this.numTransaction;
+      }
 
       let sortByOption = null;
       let sortByDesccOption = null;
@@ -597,12 +748,12 @@ export default Vue.extend({
       this.loadingMaskedTransaction = true;
 
       await this.getNumberMaskedTransaction();
-      const {
-        sortBy,
-        sortDesc,
-        page,
-        itemsPerPage
-      } = this.optionsMaskedTransaction;
+      // eslint-disable-next-line prefer-const
+      let { sortBy, sortDesc, page, itemsPerPage } = this.optionsMaskedTransaction;
+
+      if(itemsPerPage === -1) {
+        itemsPerPage = this.numMaskedTransaction;
+      }
 
       let sortByOption = null;
       let sortByDesccOption = null;

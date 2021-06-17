@@ -18,17 +18,17 @@ export default class TransactionController {
   ): Promise<number> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/unmask/all/${application}`;
+      `/api/imaging/transactions/unmask/all`;
 
     try {
-      const res = await axios.get(url);
+      const res = await axios.post(url, { application: application });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to unmask all transactions. Status (${res.status})`
+          `Failed to unmask all transactions. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -157,7 +157,7 @@ export default class TransactionController {
         }
       } else {
         throw new Error(
-          `Failed to a batch of masked transactions. Status (${res.status})`
+          `Failed to a batch of masked transactions. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -205,7 +205,7 @@ export default class TransactionController {
         }
       } else {
         throw new Error(
-          `Failed to a batch of transactions. Status (${res.status})`
+          `Failed to a batch of transactions. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -225,17 +225,20 @@ export default class TransactionController {
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/mask/single/${application}/${transactionID}`;
+      `/api/imaging/transactions/mask/single`;
 
     try {
-      const res = await axios.get(url);
+      const res = await axios.post(url, {
+        application: application,
+        transactionID: transactionID
+      });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as ITransaction;
       } else {
         throw new Error(
-          `Failed to get a batch of masked transactions. Status (${res.status})`
+          `Failed to get a batch of masked transactions. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -257,17 +260,23 @@ export default class TransactionController {
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/pin/single/${application}/${transactionID}`;
+      `/api/imaging/transactions/pin/single`;
 
     try {
-      const body: any = { prefix: prefix };
+      const body: any = {
+        application: application,
+        transactionID: transactionID,
+        prefix: prefix
+      };
       const res = await axios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as ITransaction;
       } else {
-        throw new Error(`Failed to pin a transaction. Status (${res.status})`);
+        throw new Error(
+          `Failed to pin a transaction. Status (${res.status}). Error: ${res.data.message}`
+        );
       }
     } catch (error) {
       console.error(`Failed to reach the API : ${url}.`, error);
@@ -288,10 +297,14 @@ export default class TransactionController {
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/unpin/single/${application}/${transactionID}`;
+      `/api/imaging/transactions/unpin/single`;
 
     try {
-      const body: any = { prefix: prefix };
+      const body: any = {
+        application: application,
+        transactionID: transactionID,
+        prefix: prefix
+      };
       const res = await axios.post(url, body);
 
       if (res.status == 200) {
@@ -299,7 +312,7 @@ export default class TransactionController {
         return apiResponse.data as ITransaction;
       } else {
         throw new Error(
-          `Failed to unpin a transaction. Status (${res.status})`
+          `Failed to unpin a transaction. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -321,10 +334,14 @@ export default class TransactionController {
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/rename/single/${application}/${transactionID}`;
+      `/api/imaging/transactions/rename/single`;
 
     try {
-      const body: any = { name: name };
+      const body: any = {
+        application: application,
+        transactionID: transactionID,
+        transactionName: name
+      };
       const res = await axios.post(url, body);
 
       if (res.status == 200) {
@@ -332,7 +349,7 @@ export default class TransactionController {
         return apiResponse.data as ITransaction;
       } else {
         throw new Error(
-          `Failed to rename a transaction. Status (${res.status}).`
+          `Failed to rename a transaction. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -341,23 +358,31 @@ export default class TransactionController {
     }
   }
 
+  /**
+   * Mask a batch  of transaction not compliant with the filter
+   * @param application Name of the application
+   * @param filter Filter to be applied
+   */
   public static async maskTransactionWithFilter(
     application: string,
     filter: Record<string, unknown>
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/mask/filter/${application}`;
+      `/api/imaging/transactions/mask/filter`;
 
     try {
-      const res = await axios.post(url, filter);
+      const res = await axios.post(url, {
+        application: application,
+        filter: filter
+      });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as ITransaction;
       } else {
         throw new Error(
-          `Failed to mask transactions with filter. Status (${res.status})`
+          `Failed to mask transactions with filter. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -377,17 +402,20 @@ export default class TransactionController {
   ): Promise<ITransaction> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/unmask/single/${application}/${transactionID}`;
+      `/api/imaging/transactions/unmask/single`;
 
     try {
-      const res = await axios.get(url);
+      const res = await axios.post(url, {
+        application: application,
+        transactionID: transactionID
+      });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as ITransaction;
       } else {
         throw new Error(
-          `Failed to a batch of masked transactions. Status (${res.status})`
+          `Failed to a batch of masked transactions. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -396,15 +424,19 @@ export default class TransactionController {
     }
   }
 
+  /**
+   * Unmask all the transaction in an application
+   * @param application Name of the application
+   */
   public static async unmaskAllTransaction(
     application: string
   ): Promise<boolean> {
     const url =
       TransactionController.API_BASE_URL +
-      `/api/imaging/transactions/unmask/all/${application}`;
+      `/api/imaging/transactions/unmask/all`;
 
     try {
-      const res = await axios.get(url);
+      const res = await axios.post(url, { application: application });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -446,6 +478,40 @@ export default class TransactionController {
       } else {
         throw new Error(
           `Failed to mask transactions by Number of objects. Status (${res.status})`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Mask transaction by number of technology inside it
+   * @param application Application concerned
+   * @param limit Minimum number of technology
+   */
+  public static async maskByTechnology(
+    application: string,
+    limit: number
+  ): Promise<number> {
+    const url =
+      TransactionController.API_BASE_URL +
+      `/api/imaging/transactions/mask/byTechnologies`;
+
+    try {
+      const body = {
+        application: application,
+        limit: limit
+      };
+      const res = await axios.post(url, body);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Number(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to mask transactions by Number of Technology. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
