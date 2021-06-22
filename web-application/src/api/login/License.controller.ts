@@ -57,7 +57,6 @@ export class LicenseController {
         console.warn(`Failed to apply a new license. Status (${res.status})`);
         return { license: String(res.data), status: LicenseStatus.NOT_VALID };
       }
-
     } catch (error) {
       console.warn(`Failed to apply a new  license.`, error);
       return { license: String(license), status: LicenseStatus.NOT_VALID };

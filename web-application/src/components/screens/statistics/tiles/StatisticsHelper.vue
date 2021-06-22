@@ -1,7 +1,14 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn  class="d-flex flex-row" text color="red lighten-2" dark v-bind="attrs" v-on="on">
+      <v-btn
+        class="d-flex flex-row"
+        text
+        color="red lighten-2"
+        dark
+        v-bind="attrs"
+        v-on="on"
+      >
         <v-icon color="persianGrey">
           mdi-help-circle
         </v-icon>
@@ -36,9 +43,12 @@
             </div>
             <p>
               <i
-                >Disclaimer: It can happen that even with a perfect configuration, the statistics show bad scores.
-                Further investigation is needed to understand where these results come from.<br />
-                This can be done with the action tiles, below this section, to investigate directly in CAST Imaging.</i
+                >Disclaimer: It can happen that even with a perfect
+                configuration, the statistics show bad scores. Further
+                investigation is needed to understand where these results come
+                from.<br />
+                This can be done with the action tiles, below this section, to
+                investigate directly in CAST Imaging.</i
               >
             </p>
           </v-row>

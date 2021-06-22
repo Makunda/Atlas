@@ -9,8 +9,12 @@
       </v-btn>
     </v-card-title>
     <v-card-text>
-      <v-icon color="red" large class="mr-3">mdi-information-outline</v-icon><i class="text-h5 mt-3">Make sure the Level Agent is up and running.</i><br>
-      <a class="text-subtitle-1 ml-10" href="/administration/automation">Go to Agent Section</a>
+      <v-icon color="red" large class="mr-3">mdi-information-outline</v-icon
+      ><i class="text-h5 mt-3">Make sure the Level Agent is up and running.</i
+      ><br />
+      <a class="text-subtitle-1 ml-10" href="/administration/automation"
+        >Go to Agent Section</a
+      >
     </v-card-text>
     <v-card-text>
       <v-container fluid>
@@ -76,7 +80,6 @@ export default Vue.extend({
     getApplicationName() {
       return this.$store.state.applicationName;
     }
-
   },
 
   mounted() {

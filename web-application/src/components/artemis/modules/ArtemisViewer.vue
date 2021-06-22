@@ -153,12 +153,12 @@
           {{ errorDetection }}
         </v-alert>
         <v-alert
-            class="ma-2"
-            width="100%"
-            border="left"
-            dense
-            type="success"
-            v-if="message && message !== ''"
+          class="ma-2"
+          width="100%"
+          border="left"
+          dense
+          type="success"
+          v-if="message && message !== ''"
         >
           {{ message }}
         </v-alert>
@@ -227,7 +227,6 @@ export default Vue.extend({
 
   computed: {
     filteredFrameworks() {
-
       if (this.showOnlyFrameworks) {
         return this.resultDetection.filter(d => {
           return d.type == "Framework";
@@ -388,6 +387,7 @@ export default Vue.extend({
     checkStatus(): boolean {
       // Skip if already checking status or if no language was selected
       if (this.checkingStatus || this.selectedLanguage == null) return;
+      if (this.application == "") return;
 
       this.checkingStatus = true;
       DetectionController.getApplicationStatus(
@@ -395,7 +395,6 @@ export default Vue.extend({
         this.selectedLanguage
       )
         .then((res: DetectionResult) => {
-
           // If res is null, the application has no status
           if (res == null) {
             this.message = `No detection was launched for ${this.application}`;
@@ -495,7 +494,7 @@ export default Vue.extend({
       if (this.diplayNotInstalled) return;
       const stopFlag = this.checkStatus();
 
-      if(stopFlag) return;
+      if (stopFlag) return;
       if (this.flaggedAsToDestroy) return;
       setTimeout(this.constantStatusCheck, 5000);
     },

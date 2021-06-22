@@ -3,11 +3,13 @@
     <v-row style="width: 100%">
       <v-col cols="3"
         ><p>
-          <strong>Application</strong><br />{{ detection.application }}
+          <strong>Application</strong><br />{{ detectionObj.application }}
         </p></v-col
       >
       <v-col cols="3"
-        ><p><strong>Language</strong><br />{{ detection.language }}</p></v-col
+        ><p>
+          <strong>Language</strong><br />{{ detectionObj.language }}
+        </p></v-col
       >
       <v-col cols="3"
         ><p><strong>Time Elapsed</strong><br />{{ toDisplay }}</p></v-col
@@ -19,14 +21,16 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
+import DetectionInterface from "@/api/interface/artemis/detection.interface";
 
 export default Vue.component("DetectionViewer", {
   props: ["detection"],
 
   data: () => ({
+    detectionObj: {} as DetectionInterface,
     toDisplay: "",
     numResults: ""
   }),
@@ -48,27 +52,36 @@ export default Vue.component("DetectionViewer", {
 
     countDownTimer() {
       this.toDisplay = this.milisecondsToDhms(
-        Date.now() - this.detection.timestampStart
+        Date.now() - this.detectionObj.timestampStart
       );
       setTimeout(this.countDownTimer, 1000);
     }
   },
 
   mounted() {
-    if (this.detection.status == DetectionStatus.Pending) {
-      this.countDownTimer();
+    if (this.detection == null) {
+      return;
+    }
+
+    this.detectionObj = this.detection as DetectionInterface;
+    console.log("Detection", this.detectionObj);
+
+    if (this.detectionObj.status == DetectionStatus.Pending) {
       this.numResults = "Pending detection";
+      this.countDownTimer();
     } else {
       const elapsed =
-        this.detection.timestampFinish - this.detection.timestampStart;
+        this.detectionObj.timestampFinish - this.detectionObj.timestampStart;
       this.toDisplay =
         elapsed > 0 ? this.milisecondsToDhms(elapsed) : "No information";
-      this.numResults =
-        this.detection.data.length > 0
-          ? this.detection.data.filter(x => x == "Framework").length +
-            " framework detected"
-          : "No framework detected";
     }
+
+    // Results this.numResults =
+    this.numResults =
+      this.detectionObj.data.length > 0
+        ? this.detectionObj.data.filter(x => x.type === "Framework").length +
+          " framework detected."
+        : "No framework detected";
   }
 });
 </script>

@@ -101,7 +101,10 @@ import Vue from "vue/types/umd";
           min-width="50px"
         >
           <v-toolbar-title class="ml-8 screen-title"
-            ><span class="lighten-5">Atlas</span> <span class="font-weight-light">Administration</span></v-toolbar-title
+            ><span class="lighten-5">Atlas</span>
+            <span class="font-weight-light"
+              >Administration</span
+            ></v-toolbar-title
           >
 
           <v-spacer></v-spacer>

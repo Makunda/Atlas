@@ -11,6 +11,7 @@ class ArtifactController {
         try {
             const detectionParams: LaunchDetectionDto = req.body;
 
+            // TODO : Investigate on the Query's parameters
             const external = (/true/i).test(String(req.query.external));
 
             const listArtifact: IArtifact[] = await this.artifactService.getArtifactsList(detectionParams.application, detectionParams.language, external);

@@ -69,12 +69,15 @@ export class ReportController {
         application: application,
         parameters: params
       };
-      const res = await axios.post(url, body, {responseType:'arraybuffer'});
+      const res = await axios.post(url, body, { responseType: "arraybuffer" });
 
       if (res.status == 200) {
         const a = document.createElement("a");
 
-        const file = new Blob([res.data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"});
+        const file = new Blob([res.data], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"
+        });
         this.saveFile(file, "test.xlsx");
       } else {
         console.warn(

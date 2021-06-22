@@ -2,7 +2,9 @@
   <v-container>
     <v-card>
       <v-card-title>
-        <h3 class="text-h4 mb-2">Review the configuration of the {{ application }} application</h3>
+        <h3 class="text-h4 mb-2">
+          Review the configuration of the {{ application }} application
+        </h3>
       </v-card-title>
       <v-card-text>
         <v-row class="mx-2 mt-2 d-flex flex-column">

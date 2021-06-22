@@ -22,7 +22,7 @@
             </v-card-title>
             <v-card-text>
               <v-container class="pa-3">
-                <v-row >
+                <v-row>
                   <v-col cols="12" md="2">
                     <p class="text-decoration-underline text-subtitle-1 pt-4">
                       Actual Imaging path :
@@ -35,15 +35,20 @@
                       label="Main input"
                       hide-details="auto"
                     ></v-text-field>
-                    <p class="subtitle-2 red--text" v-if="pathError" >
-                      {{pathError}}
+                    <p class="subtitle-2 red--text" v-if="pathError">
+                      {{ pathError }}
                     </p>
-                    <p class="subtitle-2 light-green--text" v-if="pathSuccess" >
+                    <p class="subtitle-2 light-green--text" v-if="pathSuccess">
                       {{ pathSuccess }}
                     </p>
                   </v-col>
                   <v-col cols="2" md="2">
-                    <v-btn class="mt-2"  color="persianGrey" @click="setImagingPath()" dark>
+                    <v-btn
+                      class="mt-2"
+                      color="persianGrey"
+                      @click="setImagingPath()"
+                      dark
+                    >
                       Apply changes
                     </v-btn>
                   </v-col>
@@ -62,27 +67,48 @@
               <v-btn icon color="green" @click="refreshExtension()">
                 <v-icon>mdi-cached</v-icon>
               </v-btn>
-            </v-card-title
-            >
+            </v-card-title>
             <v-card-text>
               <v-row class="justify-center pa-3">
-                <v-col cols="12" md="4" class="d-flex flex-column align-center justify-center">
-                  <img src="@/assets/extensions/demeter_icon.png" height="150px" width="150px">
+                <v-col
+                  cols="12"
+                  md="4"
+                  class="d-flex flex-column align-center justify-center"
+                >
+                  <img
+                    src="@/assets/extensions/demeter_icon.png"
+                    height="150px"
+                    width="150px"
+                  />
                   <h4 class="pt-3">Demeter Extension</h4>
                   <p>Imaging remodelling</p>
-                  <p>{{  demeterSuccess }}</p>
-                  <p v-if="demeterError" class="red--text">{{  demeterError }}</p>
-
+                  <p>{{ demeterSuccess }}</p>
+                  <p v-if="demeterError" class="red--text">
+                    {{ demeterError }}
+                  </p>
                 </v-col>
-                <v-col cols="12" md="4" class="d-flex flex-column align-center  justify-center">
-                  <img src="@/assets/extensions/artemis_icon.png" height="150px" width="150px">
+                <v-col
+                  cols="12"
+                  md="4"
+                  class="d-flex flex-column align-center  justify-center"
+                >
+                  <img
+                    src="@/assets/extensions/artemis_icon.png"
+                    height="150px"
+                    width="150px"
+                  />
                   <h4 class="pt-3">Artemis Extension</h4>
                   <p>Frameworks and communities detection</p>
-                  <p>{{  artemisSuccess }}</p>
-                  <p v-if="artemisError" class="red--text">{{  artemisError }}</p>
+                  <p>{{ artemisSuccess }}</p>
+                  <p v-if="artemisError" class="red--text">
+                    {{ artemisError }}
+                  </p>
                 </v-col>
-                <v-col cols="12" md="4" class="d-flex flex-column align-center  justify-center">
-
+                <v-col
+                  cols="12"
+                  md="4"
+                  class="d-flex flex-column align-center  justify-center"
+                >
                 </v-col>
               </v-row>
             </v-card-text>
@@ -112,10 +138,10 @@ export default Vue.extend({
     pathSuccess: "",
 
     demeterError: "",
-    demeterSuccess : "",
+    demeterSuccess: "",
 
     artemisError: "",
-    artemisSuccess : ""
+    artemisSuccess: ""
   }),
 
   methods: {
@@ -153,7 +179,8 @@ export default Vue.extend({
 
     async getDemeterVersion() {
       try {
-        this.demeterSuccess = "Version : " + await InstallationController.getDemeterStatus();
+        this.demeterSuccess =
+          "Version : " + (await InstallationController.getDemeterStatus());
         this.demeterError = "";
       } catch (err) {
         this.demeterSuccess = "";
@@ -163,7 +190,8 @@ export default Vue.extend({
 
     async getArtemisVersion() {
       try {
-        this.artemisSuccess = "Version : " + await InstallationController.getArtemisStatus();
+        this.artemisSuccess =
+          "Version : " + (await InstallationController.getArtemisStatus());
         this.artemisError = "";
       } catch (err) {
         this.artemisSuccess = "";

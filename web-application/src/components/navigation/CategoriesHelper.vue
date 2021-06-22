@@ -79,7 +79,7 @@
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
-                  <v-icon x-large>mdi-file-excel</v-icon>
+                  <v-icon x-large>mdi-graphql</v-icon>
                   <p
                     class="ml-4 mt-4"
                     :class="hover ? 'white--text' : 'black--text'"

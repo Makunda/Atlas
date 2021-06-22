@@ -15,7 +15,7 @@
         </v-tab>
       </v-tabs>
     </v-row>
-    <v-row >
+    <v-row>
       <v-container class="mx-auto ">
         <component :is="items[tab].view"></component>
       </v-container>
@@ -84,5 +84,4 @@ export default Vue.extend({
 });
 </script>
 
-<style>
-</style>
+<style></style>

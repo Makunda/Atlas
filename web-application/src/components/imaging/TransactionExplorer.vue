@@ -72,21 +72,22 @@
                     <v-card-text>
                       <div>Clean by number of Technology</div>
                       <div class="text--primary">
-                        Mask all the transactions containing a number of technology inferior or equal to the input
+                        Mask all the transactions containing a number of
+                        technology inferior or equal to the input
                         <v-text-field
-                            v-model="maskActionTechnology"
-                            type="number"
-                            label="Number of objects"
+                          v-model="maskActionTechnology"
+                          type="number"
+                          label="Number of objects"
                         ></v-text-field>
                       </div>
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
                       <v-btn
-                          text
-                          color="persianGrey"
-                          @click="maskByTechnology"
-                          :loading="maskActionLoading"
+                        text
+                        color="persianGrey"
+                        @click="maskByTechnology"
+                        :loading="maskActionLoading"
                       >
                         <p>Mask the transactions .</p>
                       </v-btn>
@@ -631,13 +632,12 @@ export default Vue.extend({
       }
     },
 
-
     async maskByTechnology() {
       try {
         this.maskActionLoading = true;
         this.numTransaction = await TransactionController.maskByTechnology(
-            this.application,
-            this.maskActionTechnology
+          this.application,
+          this.maskActionTechnology
         );
         await this.refresh();
       } catch (err) {
@@ -718,7 +718,7 @@ export default Vue.extend({
 
       // eslint-disable-next-line prefer-const
       let { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
-      if(itemsPerPage === -1) {
+      if (itemsPerPage === -1) {
         itemsPerPage = this.numTransaction;
       }
 
@@ -748,10 +748,16 @@ export default Vue.extend({
       this.loadingMaskedTransaction = true;
 
       await this.getNumberMaskedTransaction();
-      // eslint-disable-next-line prefer-const
-      let { sortBy, sortDesc, page, itemsPerPage } = this.optionsMaskedTransaction;
+      const {
+        sortBy,
+        sortDesc,
+        page } = this.optionsMaskedTransaction;
 
-      if(itemsPerPage === -1) {
+      let {
+        itemsPerPage
+      } = this.optionsMaskedTransaction;
+
+      if (itemsPerPage === -1) {
         itemsPerPage = this.numMaskedTransaction;
       }
 

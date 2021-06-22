@@ -2,14 +2,11 @@
   <div id="app">
     <v-container id="main-container" style="">
       <span id="text-span">
-          <h1 class="white--text text-h1">404 - Not Found</h1>
-          <a href="/atlas/" class="white--text text-h3">Go back to Atlas</a>
-
+        <h1 class="white--text text-h1">404 - Not Found</h1>
+        <a href="/atlas/" class="white--text text-h3">Go back to Atlas</a>
       </span>
     </v-container>
   </div>
-
-
 </template>
 
 <script lang="ts">
@@ -49,5 +46,4 @@ export default Vue.extend({
   width: 100vw;
   height: 100vh;
 }
-
 </style>

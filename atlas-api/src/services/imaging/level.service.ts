@@ -3,6 +3,7 @@ import {int, QueryResult} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import {ILevel, LevelNode} from "@interfaces/imaging/level.interface";
+import TagService from "@services/configuration/tag.services";
 
 class LevelService {
     private static HIDDEN_LEVEL_LABEL_PREFIX = "HiddenL";
@@ -169,6 +170,42 @@ class LevelService {
         } catch (err) {
             logger.error(
                 `Failed to get the levels with name containing ${name} in application ${application}.`,
+                err
+            );
+            throw new HttpException(500, "Internal error");
+        }
+    }
+
+    /**
+     * Merge a Level ( 1 to 5 ) into a Level 5
+     * @param application Name of the application
+     * @param sourceLevelId ID of the source level
+     * @param targetLevelId Id of the level 5 ( Must point to a Level5 )
+     */
+    public async mergeLevel(application: string, sourceLevelId: number, targetLevelId: number) : Promise<number> {
+        try {
+            const demeterPrefix = await (new TagService()).getCustomLevelTag();
+
+            const req = `MATCH (lSource:\`${application}\`) WHERE ID(lSource)=$sourceLevelId 
+            WITH lSource 
+            MATCH (lDest:\`${application}\`:Level5) WHERE ID(lDest)=$targetLevelId 
+            WITH lSource, lDest 
+            MATCH (lSource)-[:Aggregates*1..5]->(obj:Object) 
+            SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$dmPrefix+lDest.Name] 
+            ELSE obj.Tags + ($dmPrefix+lDest.Name) END 
+            RETURN COUNT(DISTINCT obj) as count`
+            const params = { sourceLevelId: Number(sourceLevelId), targetLevelId: Number(targetLevelId), dmPrefix: String(demeterPrefix) }
+
+            const res: QueryResult = await this.neo4jAl.executeWithParameters(req, params);
+            if(!res.records || res.records.length <= 0) {
+                return 0;
+            }
+
+            return int(res.records[0].get("count")).toNumber();
+
+        } catch (err) {
+            logger.error(
+                `Failed to merge levels into another.`,
                 err
             );
             throw new HttpException(500, "Internal error");

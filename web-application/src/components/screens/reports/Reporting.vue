@@ -1,11 +1,9 @@
 <template>
   <v-container fluid>
     <v-container class=" d-flex flex-column">
-
       <v-container class="ma-3 px-10">
         <v-card class="mx-auto mt-2">
-          <v-card-title
-            >
+          <v-card-title>
             <h2 class="text-h4 mb-3 ">
               Generate reports for application {{ application }}
             </h2>

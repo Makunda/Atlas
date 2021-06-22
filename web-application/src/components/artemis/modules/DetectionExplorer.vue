@@ -4,22 +4,21 @@
       <h3 class="text-h4">
         Review the different detection operations previously launched
       </h3>
-    </v-row>
-    <v-row class="text-center pa-5">
       <v-spacer></v-spacer>
       <v-btn
-        color="charcoal"
+        text
+        rounded
+        color="green"
         class="ma-2 white--text"
-        :disabled="checkingStatus"
         @click="reload()"
         dark
       >
-        Reload
         <v-icon right dark>
           mdi-reload
         </v-icon>
       </v-btn>
     </v-row>
+
     <v-row class="mx-3 my-7">
       <v-card class="pa-3" style="width: 100%">
         <v-container>
@@ -87,16 +86,19 @@
             </v-expansion-panels>
           </v-row>
           <v-row>
-            <!-- Successful operations -->
+            <!-- Previous operations -->
             <div class="d-flex flex-column mx-1 my-3">
-              <h5 class="text-h5 ">Successful operations</h5>
-              <p v-if="successOperations.length == 0">
-                No successful operation detected
+              <h5 class="text-h5 ">Previous operations</h5>
+              <p v-if="previousOperations.length === 0">
+                No operation detected
+              </p>
+              <p v-if="errorPrevious !== ''" color="red">
+                {{ errorPrevious }}
               </p>
             </div>
             <v-expansion-panels class="mb-6" style="width: 100%">
               <v-expansion-panel
-                v-for="(item, i) in successOperations"
+                v-for="(item, i) in previousOperations"
                 :key="i"
               >
                 <v-expansion-panel-header expand-icon="mdi-menu-down">
@@ -116,46 +118,9 @@
                         class="float-right my-3"
                         color="charcoal"
                         dark
+                        @click="openResultModal(item)"
                       >
-                        Go to results
-                      </v-btn>
-                    </div>
-                  </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </v-row>
-          <v-row>
-            <!-- Failed operations -->
-            <div class="d-flex flex-column mx-1 my-3">
-              <h5 class="text-h5">Failed operations</h5>
-              <p v-if="failedOperations.length == 0">
-                No Failed operation detected
-              </p>
-            </div>
-            <v-expansion-panels class="mb-6" style="width: 100%">
-              <v-expansion-panel v-for="(item, i) in failedOperations" :key="i">
-                <v-expansion-panel-header expand-icon="mdi-menu-down">
-                  <h3>{{ item.application }}</h3>
-                  <v-spacer></v-spacer>
-                  <span style="max-width: 100px" class="text-body-1"
-                    >Status :
-                    <v-icon color="error">
-                      mdi-alert-circle
-                    </v-icon></span
-                  >
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <div class="d-flex flex-column">
-                    <DetectionViewer v-bind:detection="item"> </DetectionViewer>
-                    <div class="d-flex flex-row">
-                      <v-btn
-                        style="width: 150px"
-                        class="float-right my-3"
-                        color="charcoal"
-                        dark
-                      >
-                        Re-launch analysis
+                        Display results
                       </v-btn>
                     </div>
                   </div>
@@ -166,6 +131,11 @@
         </v-container>
       </v-card>
     </v-row>
+    <ModalDetectionResults
+      :detection="selectedDetection"
+      :status="modalDetection"
+      v-on:close="modalDetection = false"
+    ></ModalDetectionResults>
   </v-container>
 </template>
 
@@ -173,23 +143,31 @@
 import Vue from "vue";
 import DetectionController from "@/api/artemis/detection.controller";
 import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
+import ModalDetectionResults from "@/components/artemis/tiles/ModalDetectionResults.vue";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
+import DetectionInterface from "@/api/interface/artemis/detection.interface";
 
 export default Vue.extend({
   name: "DetectionExplorer",
 
   components: {
-    DetectionViewer
+    DetectionViewer,
+    ModalDetectionResults
   },
 
   data: () => ({
     pendingOperations: [] as DetectionResult[],
-    successOperations: [] as DetectionResult[],
-    failedOperations: [] as DetectionResult[],
+    previousOperations: [] as DetectionInterface[],
 
     getOperationErrors: "",
 
-    loadingPending: false
+    loadingPending: false,
+
+    loadPrevious: false,
+    errorPrevious: "",
+
+    selectedDetection: {} as DetectionInterface,
+    modalDetection: false
   }),
 
   methods: {
@@ -207,32 +185,25 @@ export default Vue.extend({
         });
     },
 
-    getSuccessfulOperations() {
-      DetectionController.getSuccessfulDetections()
-        .then((res: DetectionResult[]) => {
-          this.successOperations = res;
-        })
-        .catch(err => {
-          console.error("Failed to retrieve successful operations.", err);
-          this.getOperationErrors = `Failed to retrieve successful operations : ${err}`;
-        })
-        .finally(() => {
-          this.loadingPending = false;
-        });
+    /**
+     * Get all the previous operations
+     */
+    async getPreviousOperation() {
+      try {
+        this.loadPrevious = true;
+        this.previousOperations = await DetectionController.getDetectionResults();
+        this.errorPrevious = "";
+      } catch (error) {
+        console.error("Failed to load previous operations.", error);
+        this.errorPrevious = `Error: ${error}`;
+      } finally {
+        this.loadPrevious = true;
+      }
     },
 
-    getFailedOperations() {
-      DetectionController.getFailedDetections()
-        .then((res: DetectionResult[]) => {
-          this.failedOperations = res;
-        })
-        .catch(err => {
-          console.error("Failed to retrieve failed operations.", err);
-          this.getOperationErrors = `Failed to retrieve failed operations : ${err}`;
-        })
-        .finally(() => {
-          this.loadingPending = false;
-        });
+    openResultModal(detection: DetectionInterface) {
+      this.selectedDetection = Object.assign({}, detection);
+      this.modalDetection = true;
     },
 
     stopDetection(detection: DetectionResult) {
@@ -260,8 +231,7 @@ export default Vue.extend({
     reload() {
       this.getOperationErrors = "";
       this.getPendingOperations();
-      this.getSuccessfulOperations();
-      this.getPendingOperations();
+      this.getPreviousOperation();
     }
   },
 

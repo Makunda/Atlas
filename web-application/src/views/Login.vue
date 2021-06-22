@@ -20,7 +20,12 @@
         <v-col md="6">
           <v-container bg fill-height grid-list-md text-xs-center>
             <v-layout row wrap align-center justify-center>
-              <v-card ref="form" class="mx-auto" min-width="500px" v-if="onlineDatabase">
+              <v-card
+                ref="form"
+                class="mx-auto"
+                min-width="500px"
+                v-if="onlineDatabase"
+              >
                 <v-card-text>
                   <v-text-field
                     ref="neo4jUser"
@@ -59,15 +64,26 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-              <v-card v-if="!onlineDatabase" class="mx-auto" min-width="500px" min-height="250px">
-                <v-card-text  class="d-flex flex-column" style="margin-top: 20px">
-                  <v-icon size="80" color="red" class="my-4">mdi-database-remove</v-icon>
+              <v-card
+                v-if="!onlineDatabase"
+                class="mx-auto"
+                min-width="500px"
+                min-height="250px"
+              >
+                <v-card-text
+                  class="d-flex flex-column"
+                  style="margin-top: 20px"
+                >
+                  <v-icon size="80" color="red" class="my-4"
+                    >mdi-database-remove</v-icon
+                  >
                   <span>
-                    Oops, it seems that the database at  <i color="#052C38">{{ uri }}</i> is unreachable.<br>
+                    Oops, it seems that the database at
+                    <i color="#052C38">{{ uri }}</i> is unreachable.<br />
                     Retry in few seconds or check your neo4j service.
                   </span>
                   <v-btn class="my-4" @click="simpleHealthCheck" text>
-                    <v-icon x-large color="#042732"  >mdi-refresh</v-icon>
+                    <v-icon x-large color="#042732">mdi-refresh</v-icon>
                   </v-btn>
                 </v-card-text>
               </v-card>
@@ -160,7 +176,7 @@ export default Vue.extend({
 
     async simpleHealthCheck() {
       try {
-        if(this.healthcheckGoingon) return;
+        if (this.healthcheckGoingon) return;
         this.healthcheckGoingon = true;
         this.onlineDatabase = await UtilsController.healthCheck();
         this.healthcheckGoingon = false;

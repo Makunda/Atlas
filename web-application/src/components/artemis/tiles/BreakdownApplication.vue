@@ -74,7 +74,7 @@
             between few seconds and 1 minutes for very large number of nodes.
             The creation of Architectures views implying more resources, the
             operation can take up to few minutes to be completed on large set of
-            nodes.<br>
+            nodes.<br />
             <b
               >It's not recommended to relaunch directly an architecture
               grouping</b
@@ -93,6 +93,8 @@
           <v-switch
             v-model="classExternality"
             :label="classExternality ? 'External class' : 'Internal classes'"
+            :loading="loadingArtifacts"
+            :disabled="loadingArtifacts"
             color="primary"
           ></v-switch>
         </v-row>
@@ -107,6 +109,8 @@
                 class="mx-2"
                 v-model="defaultLanguage"
                 :items="languageItems"
+                :loading="loadingArtifacts"
+                :disabled="loadingArtifacts"
                 label="Language"
                 @change="getArtifactTree()"
                 outlined
@@ -407,12 +411,10 @@ import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { ApplicationController } from "@/api/applications/application.controller";
 import { ArtemisController } from "@/api/artemis/artemis.controller";
 import { Artifact } from "@/api/interface/artemis/artifact.interface";
-import DetectionController from "@/api/artemis/detection.controller";
 import AgentController from "@/api/agents/agent.controller";
-import { DetectionCandidate } from "@/api/interface/artemis/detectionCandidate.interface";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
-import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/artifact.interface";
+import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/artifact.interface"; // TODO Remove this horror
 
 export default Vue.extend({
   name: "BreakdownApplication",
@@ -469,7 +471,7 @@ export default Vue.extend({
     languageItems: [] as string[],
     defaultApplication: "",
     defaultLanguage: "",
-    classExternality: false,
+    classExternality: true,
 
     locationList: [
       { value: "separated", text: "I want them separated" },

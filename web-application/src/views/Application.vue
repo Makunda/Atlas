@@ -36,13 +36,9 @@ import Vue from "vue/types/umd";
           >
             <v-list-item v-for="(v, i) in items" v-bind:key="i" link>
               <v-list-item-icon>
-                <v-icon color="#ffffff" class="pl-1"
-                  >{{ v.icon }}
-                </v-icon>
+                <v-icon color="#ffffff" class="pl-1">{{ v.icon }} </v-icon>
               </v-list-item-icon>
-              <v-list-item-title
-                color="#ffffff"
-                class="text-uppercase"
+              <v-list-item-title color="#ffffff" class="text-uppercase"
                 >{{ v.name }}
               </v-list-item-title>
             </v-list-item>
@@ -51,7 +47,6 @@ import Vue from "vue/types/umd";
         <template v-slot:append>
           <div class="pa-2">
             <v-list>
-
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item
@@ -116,15 +111,12 @@ import Vue from "vue/types/umd";
               <p class="lighten-3 mr-2 pt-4">Administration</p>
               <v-icon>mdi-text</v-icon>
             </v-btn>
-            <v-divider class="mx-2" dark
-                vertical
-            ></v-divider>
+            <v-divider class="mx-2" dark vertical></v-divider>
             <v-btn text @click="logout()">
               <p class="lighten-3 mr-2 pt-4">Logout</p>
               <v-icon>mdi-exit-to-app</v-icon>
             </v-btn>
           </span>
-
         </v-toolbar>
       </v-row>
       <v-row no-gutters>
@@ -174,16 +166,16 @@ export default Vue.extend({
       { name: "Home", screen: "", icon: "mdi-home" },
       { name: "Reporting", screen: "reports", icon: "mdi-file" },
       {
-        name: "Analysis Checker",
+        name: "Frameworks & Breakdown",
         screen: "analysis",
-        icon: "mdi-file-cad"
+        icon: "mdi-magnify"
       },
       {
         name: "Tags",
         screen: "tags",
         icon: "mdi-hexagon-multiple"
       },
-      { name: "Imaging tuning", screen: "tuning", icon: "mdi-merge" }
+      { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" }
     ],
 
     loadingApplication: true as boolean,
@@ -245,10 +237,9 @@ export default Vue.extend({
 
     goTo(section: string, absolute = false) {
       if (!absolute) {
-        this.$router.replace("/atlas/" + section)
-      }
-      else {
-        this.$router.replace("/"+section);
+        this.$router.replace("/atlas/" + section);
+      } else {
+        this.$router.replace("/" + section);
       }
     },
 
@@ -311,7 +302,6 @@ export default Vue.extend({
 @import '../../node_modules/typeface-roboto/index.css'
 </style>
 
-
 <style scoped>
 .screen-title {
   font-size: 40px;
@@ -320,10 +310,10 @@ export default Vue.extend({
 }
 
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .slide-fade-enter, .slide-fade-leave-to
   /* .slide-fade-leave-active below version 2.1.8 */ {

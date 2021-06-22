@@ -64,7 +64,7 @@ export default Vue.extend({
       },
       {
         view: "ExplorationStep",
-        name: "Exploration",
+        name: "Frameworks",
         title: "Explore the ",
         icon: "mdi-apple-safari"
       },

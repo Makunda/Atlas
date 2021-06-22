@@ -4,6 +4,7 @@ import { DetectionResultDTO } from "../dto/ApiArtemis.dto";
 import { ApiComUtils } from "../ApiComUtils";
 import { DetectionCandidate } from "../interface/artemis/detectionCandidate.interface";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
+import DetectionInterface from "@/api/interface/artemis/detection.interface";
 
 export default class DetectionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -143,6 +144,38 @@ export default class DetectionController {
   }
 
   /**
+   * Get the list of previous Detections
+   */
+  public static async getDetectionResults(): Promise<DetectionInterface[]> {
+    const url =
+      DetectionController.API_BASE_URL + "/api/artemis/detection/results";
+
+    try {
+      const res = await axios.get(url);
+      let detectionList: DetectionInterface[] = [];
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          detectionList = apiResponse.data;
+        }
+      } else {
+        console.warn(
+          `Failed to retrieve successful operations. Status (${res.status})`
+        );
+      }
+
+      return detectionList;
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve successful operations.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
    * Get failed detection operations
    */
   public static async getFailedDetections(): Promise<DetectionResult[]> {
@@ -200,7 +233,9 @@ export default class DetectionController {
 
         return DetectionResultDTO.fromRecord(apiResponse.data);
       } else {
-        console.warn(`Failed to retrieve the status of the application. Status (${res.status})`);
+        console.warn(
+          `Failed to retrieve the status of the application. Status (${res.status})`
+        );
         throw new Error(res.data);
       }
     } catch (error) {

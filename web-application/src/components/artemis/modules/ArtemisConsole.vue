@@ -228,7 +228,6 @@
       </v-row>
 
       <v-divider></v-divider>
-
     </v-card-text>
     <div v-if="diplayNotInstalled" id="NotInstalledArtemis">
       <h2 class="ma-auto text--h2" id="Message">
@@ -265,7 +264,6 @@ export default Vue.extend({
 
   computed: {
     filteredFrameworks() {
-
       if (this.showOnlyFrameworks) {
         return this.resultDetection.filter(d => {
           return d.type == "Framework";
@@ -485,7 +483,10 @@ export default Vue.extend({
       if (this.checkingStatus) return;
 
       this.checkingStatus = true;
-      DetectionController.getApplicationStatus(this.application, this.selectedLanguage)
+      DetectionController.getApplicationStatus(
+        this.application,
+        this.selectedLanguage
+      )
         .then((res: DetectionResult) => {
           // If res is null, the application has no status
           if (res == null) {

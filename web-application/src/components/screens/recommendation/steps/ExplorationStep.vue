@@ -2,8 +2,6 @@
   <v-container>
     <ActionTileViewer></ActionTileViewer>
     <v-divider></v-divider>
-
-
   </v-container>
 </template>
 

@@ -37,13 +37,91 @@ export default class LevelController {
   }
 
   /**
+   * Find levels with a specific depth in the application
+   * @param application Name of the application
+   * @param depth Depth of th level
+   */
+  public static async findLevelByDepth(
+    application: string,
+    depth: number
+  ): Promise<ILevel[]> {
+    const url =
+      LevelController.API_BASE_URL +
+      `/api/imaging/levels/byDepth/${application}/${depth}`;
+
+    try {
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        if (Array.isArray(apiResponse.data)) {
+          return apiResponse.data as ILevel[];
+        }
+      } else {
+        console.warn(
+          `Failed to retrieve levels by depth. Status (${res.status})`
+        );
+      }
+
+      return [];
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to retrieve dy depth levels.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Merge a level into a level 5
+   * @param application Name of the application
+   * @param sourceId Id of the source level
+   * @param destinationId Id of the destination level 5
+   */
+  public static async mergeLevel(
+    application: string,
+    sourceId: number,
+    destinationId: number
+  ): Promise<number> {
+    const url =
+      LevelController.API_BASE_URL + `/api/imaging/levels/merge/${application}`;
+
+    try {
+      const res = await axios.post(url, {
+        sourceId: sourceId,
+        destinationId: destinationId
+      });
+
+      if (res.status == 200) {
+        const apiResponse: ApiResponse = res.data;
+        return Number(apiResponse.data);
+      } else {
+        throw new Error(
+          `Failed to merge level. Status (${res.status}). Error: ${res.data.message}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to merge levels.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
    * Return the list of the level containing a certain string
    * @param application Name of the application
    * @param name Name to search
    */
-  public static async findLevelByName(application: string, name: string): Promise<ILevel[]> {
+  public static async findLevelByName(
+    application: string,
+    name: string
+  ): Promise<ILevel[]> {
     const url =
-        LevelController.API_BASE_URL + `/api/imaging/levels/find/${application}/name`;
+      LevelController.API_BASE_URL +
+      `/api/imaging/levels/find/${application}/name`;
 
     try {
       const body = { name: name };
@@ -61,8 +139,8 @@ export default class LevelController {
       return [];
     } catch (error) {
       console.error(
-          `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
-          error
+        `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
+        error
       );
       throw error;
     }

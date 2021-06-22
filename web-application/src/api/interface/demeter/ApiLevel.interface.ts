@@ -4,7 +4,7 @@ interface GroupRecord {
   countTag: number;
 }
 
- interface Level5Group {
+interface Level5Group {
   id: number;
   name: string;
   application: string;
@@ -12,7 +12,4 @@ interface GroupRecord {
   demeterGroup: boolean;
 }
 
-export {
-  Level5Group,
-  GroupRecord
-}
+export { Level5Group, GroupRecord };

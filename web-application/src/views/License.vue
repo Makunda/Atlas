@@ -49,7 +49,10 @@
 import { Vue } from "vue-property-decorator";
 
 import { LicenseController } from "@/api/login/License.controller";
-import {LicenseInterface, LicenseStatus} from "@/api/interface/license/License.interface";
+import {
+  LicenseInterface,
+  LicenseStatus
+} from "@/api/interface/license/License.interface";
 
 export default Vue.extend({
   name: "License",

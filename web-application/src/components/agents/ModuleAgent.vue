@@ -50,7 +50,9 @@
                 Click to activate
               </span>
             </v-btn>
-            <p class="justify-center text-center w-100 px-5 pt-2">Click on the button above to toggle the state of the assistant</p>
+            <p class="justify-center text-center w-100 px-5 pt-2">
+              Click on the button above to toggle the state of the assistant
+            </p>
           </v-col>
         </v-row>
       </v-container>

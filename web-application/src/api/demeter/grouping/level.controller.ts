@@ -165,7 +165,8 @@ export class LevelController {
    * @param groupName
    */
   public static async undoAllGroupedLevel5(
-    applicationName: string): Promise<boolean> {
+    applicationName: string
+  ): Promise<boolean> {
     const url =
       LevelController.API_BASE_URL +
       `/api/demeter/levels/${applicationName}/undo/all`;

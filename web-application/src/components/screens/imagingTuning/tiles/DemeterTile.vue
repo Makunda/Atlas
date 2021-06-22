@@ -47,14 +47,9 @@
 
         <v-row class="my-4">
           <v-spacer></v-spacer>
-          <v-btn
-              color="persianGrey"
-              dark
-              @click="dialogAll = true"
-          >
+          <v-btn color="persianGrey" dark @click="dialogAll = true">
             Delete ALL Demeter Levels
           </v-btn>
-
         </v-row>
 
         <v-row v-if="errorMessage && !loadingLevels">
@@ -62,7 +57,6 @@
         </v-row>
       </v-container>
     </v-card-text>
-
 
     <!--  Modal confirmation  -->
     <v-dialog v-model="dialog" width="500">
@@ -199,7 +193,8 @@ export default Vue.extend({
         this.errorMessage = "";
       } catch (err) {
         console.error(
-          `Failed to delete the level with name ${this.toDeleteLevel} in application ${this.application}`, err
+          `Failed to delete the level with name ${this.toDeleteLevel} in application ${this.application}`,
+          err
         );
         this.errorMessage = `Failed to delete the level with name ${this.toDeleteLevel} in application ${this.application}. Error: ${err}`;
       } finally {

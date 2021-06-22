@@ -15,21 +15,42 @@
           <!--  Card in charge of the management of the displayed levels  -->
           <v-card class="pb-8 px-auto" min-width="100%" :loading="loadingRoots">
             <v-card-title class="charcoal white--text headline">
-              Levels viewer
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="searchLevel"
-                label="Search a level by name"
-                dark
-                flat
-                solo-inverted
-                hide-details
-                clearable
-                clear-icon="mdi-close-circle-outline"
-              ></v-text-field>
-              <v-btn class="mx-3" icon color="green" @click="refresh()">
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
+              <v-container fluid>
+                <v-row>
+                  <v-col md="2" class="mt-2">
+                    <p>Levels viewer</p>
+                  </v-col>
+
+                  <v-col md="3">
+                    <v-select
+                      class="mt-1"
+                      dark
+                      v-model="selectedLevel"
+                      :items="levelItems"
+                      item-text="text"
+                      item-value="value"
+                      label="Outlined style"
+                      dense
+                      outlined
+                    ></v-select>
+                  </v-col>
+                  <v-col md="6" class="d-flex flex-row align-content-end">
+                    <v-text-field
+                      v-model="searchLevel"
+                      label="Search a level by name"
+                      dark
+                      flat
+                      solo-inverted
+                      hide-details
+                      clearable
+                      clear-icon="mdi-close-circle-outline"
+                    ></v-text-field>
+                    <v-btn class="mx-3" icon color="green" @click="refresh()">
+                      <v-icon>mdi-cached</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
             </v-card-title>
 
             <v-row class="pa-4" justify="space-between">
@@ -113,20 +134,16 @@
                       </v-chip>
                     </v-row>
                     <v-divider></v-divider>
-                    <v-row class="text-left" tag="v-card-text">
-                      <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
-                        Name:
-                      </v-col>
-                      <v-col>{{ selected.name }}</v-col>
-                      <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
-                        FullName:
-                      </v-col>
-                      <v-col>{{ selected.fullName }}</v-col>
-                      <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
-                        Count:
-                      </v-col>
-                      <v-col>{{ selected.count }}</v-col>
+                    <v-row class="mt-3" tag="v-card-text"
+                      ><b>Name:</b> {{ selected.name }}
                     </v-row>
+                    <v-row tag="v-card-text"
+                      ><b>FullName:</b> {{ selected.fullName }}
+                    </v-row>
+                    <v-row tag="v-card-text"
+                      ><b>Count:</b> {{ selected.count }}
+                    </v-row>
+
                     <v-row v-if="selected.level < 3">
                       <i
                         >Unfortunately. The modification of level above the
@@ -152,7 +169,7 @@
                           Add a child
                         </v-btn>
                         <v-btn
-                          class="mx-3"
+                          class="ma-2"
                           rounded
                           small
                           color="primary"
@@ -164,6 +181,19 @@
                             mdi-pencil
                           </v-icon>
                           Modify level
+                        </v-btn>
+                        <v-btn
+                          class="ma-2"
+                          rounded
+                          small
+                          color="primary"
+                          dark
+                          @click="openMergeModal()"
+                        >
+                          <v-icon left>
+                            mdi-merge
+                          </v-icon>
+                          Merge level
                         </v-btn>
                         <v-btn
                           v-if="!selected.hidden"
@@ -183,7 +213,7 @@
                         </v-btn>
                         <v-btn
                           v-if="selected.hidden"
-                          class="mx-3"
+                          class="ma-2"
                           rounded
                           small
                           color="primary"
@@ -317,6 +347,14 @@
         </v-row>
       </v-container>
     </v-card-text>
+
+    <!--  Merge modal  -->
+    <LevelMergeModal
+      v-bind:application="application"
+      v-bind:level="selected"
+      v-bind:dialog="mergeDialog"
+      @close="mergeDialog = false"
+    ></LevelMergeModal>
   </v-card>
 </template>
 
@@ -325,24 +363,40 @@ import Vue from "vue";
 import LevelController from "@/api/imaging/Level.controller";
 import ILevel from "@/api/interface/imaging/Level.interface";
 import DemeterTile from "../../screens/imagingTuning/tiles/DemeterTile.vue";
-
+import LevelMergeModal from "@/components/imaging/tiles/LevelMergeModal.vue";
 
 export default Vue.extend({
   name: "LevelExplorer",
 
   components: {
-    DemeterTile
+    DemeterTile,
+    LevelMergeModal
   },
 
   data: () => ({
+    application: "",
+
     tree: [],
     active: [],
     open: [],
     levels: [],
-    selected: null,
+    selected: {},
     loadingRoots: false,
 
+    mergeDialog: false,
+
     searchLevel: "",
+
+    // Levels Selection
+    levelItems: [
+      { text: "Level 1", value: 1 },
+      { text: "Level 2", value: 2 },
+      { text: "Level 3", value: 3 },
+      { text: "Level 4", value: 4 },
+      { text: "Level 5", value: 5 }
+    ],
+
+    selectedLevel: 5,
 
     // Hidden levels
     hiddenLevels: [],
@@ -374,6 +428,21 @@ export default Vue.extend({
   },
 
   methods: {
+    openMergeModal() {
+      if (this.application == "") return;
+      this.mergeDialog = true;
+    },
+
+    onCloseMergeDialog(args) {
+      if (args) {
+        this.snackbarInfo = true;
+        this.textSnackBar =
+          "Level merged successfully. Refresh Imaging in few seconds (Make sure the level agent is running)";
+      }
+
+      this.mergeDialog = false;
+    },
+
     async editLevel(item: ILevel) {
       this.parentItem = await LevelController.fetchParent(
         this.application,
@@ -506,44 +575,30 @@ export default Vue.extend({
       }
     },
 
-    getRootLevels() {
-      this.loadingRoots = true;
-      LevelController.getRootLevels(this.application)
-        .then(async (res: ILevel[]) => {
-          this.levels = [];
-          for (const i in res) {
-            this.levels.push(await this.getChildren(res[i]));
-          }
-        })
-        .catch(err => {
-          console.error(
-            "Failed to retrieve root levels of the application.",
-            err
-          );
-          this.snackbarInfo = true;
-          this.textSnackBar = err;
-        })
-        .finally(() => {
-          this.loadingRoots = false;
-        });
-    },
+    /**
+     * Get levels
+     */
+    async getLevels() {
+      if (this.application == "") return;
 
-    async getChildren(item) {
-      item.children = await LevelController.fetchChildren(
-        this.application,
-        item
-      );
-
-      for (const i in item.children) {
-        item.children[i] = await this.getChildren(item.children[i]);
+      try {
+        this.loadingRoots = true;
+        this.levels = await LevelController.findLevelByDepth(
+          this.application,
+          this.selectedLevel
+        );
+      } catch (error) {
+        console.error("Failed to retrieve levels of the application.", error);
+        this.snackbarInfo = true;
+        this.textSnackBar = error;
+      } finally {
+        this.loadingRoots = false;
       }
-
-      return item;
     },
 
     refresh() {
       this.selected = null;
-      this.getRootLevels();
+      this.getLevels();
     }
   },
 
@@ -551,6 +606,10 @@ export default Vue.extend({
     getApplicationName(newApp) {
       this.application = newApp;
       this.refresh();
+    },
+
+    selectedLevel: async function(newValue: string) {
+      this.getLevels();
     },
 
     searchLevel: async function(newValue: string) {
@@ -561,7 +620,7 @@ export default Vue.extend({
         );
       } else {
         // No search string
-        this.getRootLevels();
+        this.getLevels();
       }
     }
   }

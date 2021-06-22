@@ -17,13 +17,24 @@
         </v-icon>
       </v-btn>
     </template>
-      <v-btn fab dark color="#2A9D8F" v-if="fabChoice === ''" @click="fabChange('automation')">
-        <v-icon>mdi-robot-industrial</v-icon>
-      </v-btn>
-      <v-btn fab dark color="#2A9D8F" v-if="fabChoice === ''" @click="fabChange('framework')">
-        <v-icon>mdi-package-variant-closed</v-icon>
-      </v-btn>
-
+    <v-btn
+      fab
+      dark
+      color="#2A9D8F"
+      v-if="fabChoice === ''"
+      @click="fabChange('automation')"
+    >
+      <v-icon>mdi-robot-industrial</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      dark
+      color="#2A9D8F"
+      v-if="fabChoice === ''"
+      @click="fabChange('framework')"
+    >
+      <v-icon>mdi-package-variant-closed</v-icon>
+    </v-btn>
   </v-speed-dial>
 </template>
 
@@ -62,7 +73,7 @@ export default Vue.extend({
   methods: {
     fabChange(to: string) {
       if (to == "") {
-        this.fabChoice = '';
+        this.fabChoice = "";
         return;
       }
 

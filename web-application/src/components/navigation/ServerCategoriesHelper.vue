@@ -1,9 +1,9 @@
 <template>
   <v-card width="100%">
     <v-card-title
-    ><h1 class="text-h4">
-      Administration section
-    </h1></v-card-title
+      ><h1 class="text-h4">
+        Administration section
+      </h1></v-card-title
     >
     <v-card-subtitle></v-card-subtitle>
     <v-card-text>
@@ -12,17 +12,17 @@
           <!--   Framework Card    -->
           <v-hover v-slot:default="{ hover }">
             <v-card
-                class="ma-2"
-                width="344"
-                :dark="hover"
-                :color="hover ? 'persianGrey' : 'white'"
+              class="ma-2"
+              width="344"
+              :dark="hover"
+              :color="hover ? 'persianGrey' : 'white'"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
                   <v-icon x-large>mdi-file-excel</v-icon>
                   <p
-                      class="ml-4 mt-4"
-                      :class="hover ? 'white--text' : 'black--text'"
+                    class="ml-4 mt-4"
+                    :class="hover ? 'white--text' : 'black--text'"
                   >
                     Frameworks
                   </p>
@@ -43,23 +43,24 @@
           <!--   Automation Card    -->
           <v-hover v-slot:default="{ hover }" open-delay="200">
             <v-card
-                :dark="hover"
-                :color="hover ? 'persianGrey' : 'white'"
-                class="ma-2"
-                width="344"
+              :dark="hover"
+              :color="hover ? 'persianGrey' : 'white'"
+              class="ma-2"
+              width="344"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
                   <v-icon x-large>mdi-file-excel</v-icon>
                   <p
-                      class="ml-4 mt-4"
-                      :class="hover ? 'white--text' : 'black--text'"
+                    class="ml-4 mt-4"
+                    :class="hover ? 'white--text' : 'black--text'"
                   >
                     Automation
                   </p>
                 </span>
                 <p>
-                  Enable or disable the agent performing automatic actions on your appplication
+                  Enable or disable the agent performing automatic actions on
+                  your appplication
                 </p>
               </v-card-text>
               <v-card-actions>
@@ -74,23 +75,24 @@
           <!--   Parameters Card    -->
           <v-hover v-slot:default="{ hover }">
             <v-card
-                :dark="hover"
-                :color="hover ? 'persianGrey' : 'white'"
-                class="ma-2"
-                width="344"
+              :dark="hover"
+              :color="hover ? 'persianGrey' : 'white'"
+              class="ma-2"
+              width="344"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
                   <v-icon x-large>mdi-cog</v-icon>
                   <p
-                      class="ml-4 mt-4"
-                      :class="hover ? 'white--text' : 'black--text'"
+                    class="ml-4 mt-4"
+                    :class="hover ? 'white--text' : 'black--text'"
                   >
                     Parameters
                   </p>
                 </span>
                 <p>
-                  Adjust the parameters of the server, and configure the extensions
+                  Adjust the parameters of the server, and configure the
+                  extensions
                 </p>
               </v-card-text>
               <v-card-actions>

@@ -1,7 +1,7 @@
 <!-- Login modal -->
 <template>
   <v-container fluid class="pa-10">
-    <v-row >
+    <v-row>
       <v-card width="100%">
         <v-card-title
           ><h1 class="text-h4 mb-4">
@@ -22,20 +22,30 @@
                 <v-row class="mx-4 w-100" style="width: 100%">
                   <v-col cols="12" md="6">Number of levels: </v-col>
                   <v-col cols="12" md="6"
-                    ><strong>{{ (insights && insights.levels5 != null) ? insights.levels5.length : 0 }}</strong></v-col
+                    ><strong>{{
+                      insights && insights.levels5 != null
+                        ? insights.levels5.length
+                        : 0
+                    }}</strong></v-col
                   >
                 </v-row>
                 <v-row class="mx-4" style="width: 100%">
                   <v-col cols="12" md="6">Number of modules: </v-col>
                   <v-col cols="12" md="6"
-                    ><strong>{{ (insights && insights.modules != null) ? insights.modules.length : 0 }}</strong></v-col
+                    ><strong>{{
+                      insights && insights.modules != null
+                        ? insights.modules.length
+                        : 0
+                    }}</strong></v-col
                   >
                 </v-row>
                 <v-row class="mx-4" style="width: 100%">
                   <v-col cols="12" md="6">Number of architectures: </v-col>
                   <v-col cols="12" md="6"
                     ><strong>{{
-                      (insights && insights.architectures != null) ? insights.architectures.length : 0
+                      insights && insights.architectures != null
+                        ? insights.architectures.length
+                        : 0
                     }}</strong></v-col
                   >
                 </v-row>
@@ -47,13 +57,10 @@
                   </h3>
                 </v-row>
                 <v-row>
-                  <v-chip-group
-                      active-class="primary--text"
-                      column
-                  >
+                  <v-chip-group active-class="primary--text" column>
                     <v-chip
-                        v-for="technology in technologies"
-                        :key="technology"
+                      v-for="technology in technologies"
+                      :key="technology"
                     >
                       {{ technology }}
                     </v-chip>
@@ -72,7 +79,6 @@
                 <v-row>
                   <StatisticsColumn></StatisticsColumn>
                 </v-row>
-
               </v-col>
             </v-row>
           </v-container>
@@ -95,7 +101,7 @@ import { Vue } from "vue-property-decorator";
 import { ApplicationController } from "@/api/applications/application.controller";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import ActionsTile from "@/components/actions/ActionsTile.vue";
-import StatisticsHelper from "@/components/screens/statistics/tiles/StatisticsHelper.vue"
+import StatisticsHelper from "@/components/screens/statistics/tiles/StatisticsHelper.vue";
 import StatisticsColumn from "@/components/screens/statistics/StatisticsColumn.vue";
 import CategoriesHelper from "@/components/navigation/CategoriesHelper.vue";
 
@@ -133,18 +139,18 @@ export default Vue.extend({
 
   methods: {
     async getApplicationTechnologies() {
-      if(this.application == "") return;
+      if (this.application == "") return;
       this.technologies = await ApplicationController.getTechnologies(
         this.application
       );
     },
 
-    goTo(section:string) {
+    goTo(section: string) {
       this.$router.replace("/atlas/" + section);
     },
 
     getApplicationInsights() {
-      if(this.application == "") return;
+      if (this.application == "") return;
       this.loadingCandidate = true;
       ApplicationController.getApplicationInsights(this.application)
         .then((res: IApplicationInsights) => {

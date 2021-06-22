@@ -191,7 +191,6 @@ export default Vue.component("DemeterLevelsTile", {
         .then((res: Level5Group[]) => {
           this.loadingGroups = true;
           this.demeterGroups = res;
-
         })
         .catch(err => {
           this.loadingGroups = false;
