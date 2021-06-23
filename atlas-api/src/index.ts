@@ -2,8 +2,8 @@ import './pre-start'; // Must be the first import
 import 'module-alias'
 import app from '@server';
 import config from "config";
-import {logger} from '@shared/logger';
-import {AgentManager} from '@agents/agent.manager';
+import {logger} from '@shared/Logger';
+import {AgentManager} from '@agents/AgentManager';
 import {FrameworkAssistantManager} from './assistants/framework.assistant';
 
 // Start the server

@@ -1,8 +1,8 @@
-import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
+import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
 import {DetectionCandidate} from "@dtos/artemis/detectionCandidate.dto";
-import DetectionService from "@services/artemis/detection.service";
-import {logger} from "@shared/logger";
-import {CancellableDetectionPromise} from "@interfaces/artemis/detectionStatus.interface";
+import DetectionService from "@services/artemis/DetectionService";
+import {logger} from "@shared/Logger";
+import {CancellableDetectionPromise} from "@interfaces/artemis/DetectionStatus.interface";
 
 
 export class DetectionQueueAssistant {

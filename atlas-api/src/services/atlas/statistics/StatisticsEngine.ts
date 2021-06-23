@@ -1,7 +1,7 @@
-import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
+import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
 import path from "path";
 
-import {logger} from "@shared/logger";
+import {logger} from "@shared/Logger";
 import fs from "fs";
 import glob from "glob";
 import StatisticResultInterface from "@interfaces/statistics/statisticResult.interface";

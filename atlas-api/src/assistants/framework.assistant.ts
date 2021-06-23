@@ -1,7 +1,7 @@
 import config from "config";
-import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
-import TagService from "@services/configuration/tag.services";
-import {logger} from "@shared/logger";
+import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
+import TagService from "@services/configuration/TagService";
+import {logger} from "@shared/Logger";
 import {QueryResult} from "neo4j-driver";
 import {DemeterActions, FrameworkAssistant, IFrameworkAssistant,} from "./assistant";
 import fs from "fs";

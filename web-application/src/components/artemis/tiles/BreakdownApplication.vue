@@ -414,7 +414,7 @@ import { Artifact } from "@/api/interface/artemis/artifact.interface";
 import AgentController from "@/api/agents/agent.controller";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
-import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/artifact.interface"; // TODO Remove this horror
+import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/Artifact.interface"; // TODO Remove this horror
 
 export default Vue.extend({
   name: "BreakdownApplication",

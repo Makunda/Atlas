@@ -1,11 +1,11 @@
-import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
+import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
 import path from "path";
 
-import {logger} from "@shared/logger";
+import {logger} from "@shared/Logger";
 import fs from "fs";
 import glob from "glob";
-import ActionInterface from "@interfaces/actions/action.interface";
-import TagService from "@services/configuration/tag.services";
+import ActionInterface from "@interfaces/actions/Action.interface";
+import TagService from "@services/configuration/TagService";
 
 
 export default class ActionEngine {

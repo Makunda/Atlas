@@ -3,9 +3,9 @@ import glob from "glob";
 import * as excel from "exceljs";
 
 
-import {logger} from "@shared/logger";
+import {logger} from "@shared/Logger";
 import * as fs from "fs";
-import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
+import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
 import {ReportInterface, ReportResultsInterface} from "@interfaces/report/Report.interface";
 import {int} from "neo4j-driver";
 

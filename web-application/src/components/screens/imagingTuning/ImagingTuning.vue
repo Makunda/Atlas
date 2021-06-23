@@ -25,15 +25,16 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LevelExplorer from "@/components/imaging/levels/LevelExplorer.vue";
+import LevelExplorer from '@/components/imaging/levels/LevelExplorer.vue';
+import ModuleExplorer from '@/components/imaging/modules/ModulesExplorer.vue';
 import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
 import IconManager from "@/components/imaging/IconManager.vue";
-
 export default Vue.extend({
   name: "ImagingTuning",
 
   components: {
     LevelExplorer,
+    ModuleExplorer,
     TransactionExplorer,
     IconManager
   },
@@ -58,6 +59,12 @@ export default Vue.extend({
       {
         view: "LevelExplorer",
         name: "Level Manager",
+        title: "Review the configuration of the ",
+        icon: "mdi-folder-cog"
+      },
+      {
+        view: "ModuleExplorer",
+        name: "Module Manager",
         title: "Review the configuration of the ",
         icon: "mdi-folder-cog"
       },

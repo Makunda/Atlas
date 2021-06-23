@@ -1,8 +1,8 @@
-import {logger} from "@shared/logger";
+import {logger} from "@shared/Logger";
 import {QueryResult, Transaction} from "neo4j-driver";
-import {Framework} from "./framework.interface";
-import FrameworksService from "@services/artemis/framework.service";
-import {Neo4JAccessLayer} from "@database/neo4jAccessLayer";
+import {Framework} from "./Framework.interface";
+import FrameworksService from "@services/artemis/FrameworkService";
+import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
 import {uuidv4} from "../../utils/utils";
 
 export enum DetectionStatus {

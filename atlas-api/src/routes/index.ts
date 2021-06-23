@@ -1,15 +1,15 @@
 import {Router} from 'express';
 
-import DemeterRouter from './demeter/demeterIndex.route'
-import ArtemisRouter from "./artemis/artemisIndex.route";
-import ImagingRouter from "./imaging/imagingIndex.route";
-import AtlasRouter from "./atlas/atlasIndex.route";
-import ConfigurationRouter from "./configuration/configurationIndex.route";
-import PythiaRouter from "./pythia/pythiaIndex.route";
-import UtilsRoute from './utils/utilsIndex.route';
-import AssistantsRoute from './assistants/assistants.route';
-import ParisRouter from './paris/paris.route';
-import LoginRoute from "./login/login.route";
+import DemeterRouter from './demeter/DemeterIndexRoute'
+import ArtemisRouter from "./artemis/ArtemisRouteIndex";
+import ImagingRouter from "./imaging/ImagingIndexRoute";
+import AtlasRouter from "./atlas/AtlasIndexRoute";
+import ConfigurationRouter from "./configuration/ConfigurationIndexRoute";
+import PythiaRouter from "./pythia/PythiaIndexRoute";
+import UtilsRoute from './utils/UtilsIndexRoute';
+import AssistantsRoute from './assistants/AssistantsRoute';
+import ParisRouter from './paris/ParisRoute';
+import LoginRoute from "./login/LoginRoute";
 
 // Init router and path
 const router = Router();

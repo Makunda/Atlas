@@ -2,7 +2,7 @@ import StatusCodes from 'http-status-codes';
 import {Request, Response, Router} from 'express';
 
 import UserDao from '@daos/User/UserDao.mock';
-import {IRequest, paramMissingError} from '@shared/constants';
+import {IRequest, paramMissingError} from '@shared/Constants';
 
 const router = Router();
 const userDao = new UserDao();
