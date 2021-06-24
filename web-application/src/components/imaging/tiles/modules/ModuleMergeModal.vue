@@ -7,9 +7,9 @@
     <template>
       <v-card>
         <v-toolbar color="charcoal lighten-2" dark
-          >Merging level '{{
-            level && level.name ? level.name : "NO LEVEL SELECTED"
-          }}' into another Level</v-toolbar
+          >Merging Module '{{
+            module && module.name ? module.name : "NO MODULE SELECTED"
+          }}' into another Module</v-toolbar
         >
         <v-card-text>
           <v-container>
@@ -18,14 +18,16 @@
                 In application :
                 {{ application ? application : "NO APPLICATION SELECTED" }}
                 <br />
-                Select a destination level 5 to merge all objects in
-                {{ level && level.name ? level.name : "NO LEVEL SELECTED" }}.
+                Select a destination module to merge all objects in
+                {{
+                  module && module.name ? module.name : "NO MODULE SELECTED"
+                }}.
               </p>
             </v-row>
             <v-row>
               <v-autocomplete
                 v-model="select"
-                :loading="loadingDestinationLevels"
+                :loading="loadingdestinationModules"
                 :items="item"
                 :search-input.sync="search"
                 item-text="name"
@@ -35,20 +37,29 @@
                 flat
                 hide-no-data
                 hide-details
-                label="Select a Level 5"
+                label="Select a Module"
               ></v-autocomplete>
             </v-row>
             <v-row class="mt-6 mx-2" v-if="select != null">
               <p>
                 You're about to merge all the object from
                 <b>{{
-                  level && level.name ? level.name : "NO LEVEL SELECTED"
+                  module && module.name ? module.name : "NO LEVEL SELECTED"
                 }}</b>
                 into <b>{{ select.name }}</b>
               </p>
             </v-row>
-            <v-row class="mt-6 mx-2" v-if="errorDestinationLevels !== ''">
-              <p class="red--text">{{ errorDestinationLevels }}</p>
+            <v-row
+              class="mt-6 mx-2"
+              v-if="
+                select != null && module != null && module._id == select._id
+              "
+            >
+              It is possible, but are you sure you want to merge a module with
+              itself ?
+            </v-row>
+            <v-row class="mt-6 mx-2" v-if="errordestinationModules !== ''">
+              <p class="red--text">{{ errordestinationModules }}</p>
             </v-row>
             <v-row class="mt-6 mx-2" v-if="errorMerge !== ''">
               <p class="red--text">{{ errorMerge }}</p>
@@ -61,9 +72,9 @@
           <v-btn
             color="green"
             text
-            @click="mergeLevel"
+            @click="mergeModule"
             :loading="loadingMerge"
-            :disabled="select == null"
+            :disabled="loadingMerge"
             >Merge</v-btn
           >
         </v-card-actions>
@@ -74,92 +85,90 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LevelController from "@/api/imaging/LevelController";
-import ILevel from "@/api/interface/imaging/Level.interface";
+import Module from "@/api/interface/imaging/Module";
+import ModuleController from "@/api/imaging/ModuleController";
 
 export default Vue.extend({
-  name: "LevelMergeModal",
+  name: "ModuleMergeModal",
 
   props: {
     application: String,
-    level: Object,
+    module: Object,
     dialog: Boolean
   },
 
   mounted() {
-    this.refresh()
+    this.refresh();
   },
 
   data() {
     return {
-      sourceLevel: {} as ILevel,
-      destinationLevels: [] as ILevel[],
+      sourceModule: {} as Module,
+      destinationModules: [] as Module[],
 
       search: null,
       select: null,
-      item: [] as ILevel[],
+      item: [] as Module[],
 
       // errors & loading merge
       loadingMerge: false,
       errorMerge: "",
 
       // errors & loading levels
-      errorDestinationLevels: "",
-      loadingDestinationLevels: false
+      errordestinationModules: "",
+      loadingdestinationModules: false
     };
   },
 
   methods: {
-
     async refresh() {
       this.errorMerge = "";
-      this.errorDestinationLevels = "";
-      await this.getDestinationLevel5();
+      this.errordestinationModules = "";
+      await this.getDestinationModules();
     },
     /**
      * Get the list of destination levels in the application
      */
-    async getDestinationLevel5() {
-      if(this.application == "") return;
+    async getDestinationModules() {
+      if (this.application == "") return;
       try {
-        this.loadingDestinationLevels = true;
-        this.destinationLevels = await LevelController.findLevelByDepth(
-          this.application,
-          5
+        this.loadingdestinationModules = true;
+        this.destinationModules = await ModuleController.getModules(
+          this.application
         );
-        this.errorDestinationLevels = "";
-        this.item = this.destinationLevels;
+        this.errordestinationModules = "";
+        this.item = this.destinationModules;
       } catch (err) {
-        this.errorDestinationLevels = err;
+        this.errordestinationModules = err;
       } finally {
-        this.loadingDestinationLevels = false;
+        this.loadingdestinationModules = false;
       }
     },
 
     querySelections(v) {
-      this.items = this.destinationLevels.filter(e => {
+      this.items = this.destinationModules.filter(e => {
         return (
           (e.name || "").toLowerCase().indexOf((v || "").toLowerCase()) > -1
         );
       });
     },
 
-    async mergeLevel() {
+    async mergeModule() {
       if (this.application == "") return;
       if (this.select == null) return;
-      if (this.level == null) return;
+      if (this.module == null) return;
 
       try {
         this.loadingMerge = true;
-        await LevelController.mergeLevel(
+        await ModuleController.mergeModules(
           this.application,
-          this.level._id,
-          this.select._id
+          this.module._id,
+          this.module._id
         );
         this.errorMerge = "";
         this.$emit("close");
       } catch (err) {
-        console.error(`Failed to merge the level`, err);
+        console.error(`Failed to merge the module`, err);
         this.errorMerge = err;
       } finally {
         this.loadingMerge = false;
@@ -179,11 +188,11 @@ export default Vue.extend({
       val && val !== this.select && this.querySelections(val);
     },
 
-    application : function(newVal) {
+    application: function(newVal) {
       this.refresh();
     },
 
-    level : function(newVal) {
+    module: function(newVal) {
       this.refresh();
     }
   }

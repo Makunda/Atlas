@@ -2,12 +2,12 @@
 <template>
   <v-card width="100%">
     <v-card-title>
-      <h3 class="py-3 pb-5 text-h4">Module Management</h3>
+      <h3 class="py-3 pb-5 text-h4">Architecture Management</h3>
     </v-card-title>
     <v-card-subtitle>
       <p class="subtitle-1 ml-1">
-        Manage the modules created in Imaging. Rename them, hide them, and
-        create new children.
+        Manage the architectures created in Imaging. Rename, hide and delete
+        them.
       </p>
     </v-card-subtitle>
     <v-card-text>
@@ -19,14 +19,14 @@
               <v-container fluid>
                 <v-row>
                   <v-col md="3" class="mt-2">
-                    <p>Modules viewer</p>
+                    <p>Architecture viewer</p>
                   </v-col>
 
                   <v-spacer></v-spacer>
                   <v-col md="6" class="d-flex flex-row align-content-end">
                     <v-text-field
-                      v-model="searchModule"
-                      label="Search a module by name"
+                      v-model="searchArchitecture"
+                      label="Search an architecture by name"
                       dark
                       flat
                       solo-inverted
@@ -55,7 +55,8 @@
                 <v-treeview
                   v-model="tree"
                   :active.sync="active"
-                  :items="modules"
+                  :items="architectures"
+                  item-children="subsets"
                   :open.sync="open"
                   color="warning"
                   transition
@@ -63,23 +64,27 @@
                   <template slot="label" slot-scope="{ item }">
                     <v-container
                       style="cursor: pointer;"
-                      @click="focusModule(item)"
+                      @click="focusArchitecture(item)"
                       ><v-row>
                         <p class="pt-4">{{ item.name }}</p>
                         <v-chip
                           small
-                          :class="
-                            'mt-4 ml-3 ' + (item.hidden ? 'black' : 'blue')
-                          "
+                          :class="`mt-4 ml-3 ${getColor(item)}`"
                           text-color="white"
                         >
-                          <p class="mt-4 mr-3">Module</p>
+                          <p class="mt-4 mr-3">
+                            {{
+                              item.type == "archimodel"
+                                ? "Architecture"
+                                : "Subset"
+                            }}
+                          </p>
                           <v-icon x-small color="red px-2" v-if="item.hidden"
                             >mdi-eye-off</v-icon
                           >
                         </v-chip>
-                      </v-row></v-container
-                    >
+                      </v-row>
+                    </v-container>
                   </template>
                 </v-treeview>
               </v-col>
@@ -93,7 +98,7 @@
                     class="title grey--text text--lighten-1 font-weight-light"
                     style="align-self: center;"
                   >
-                    Select a Module
+                    Select an Architecture or a subset
                   </div>
                   <v-card
                     v-else
@@ -105,19 +110,25 @@
                     <v-row class="justify-center mb-4">
                       <p class="text-h5 mr-2">{{ selected.name }}</p>
                       <v-chip
-                        :class="selected.hidden ? 'black' : 'blue'"
+                        :class="getColor(selected)"
                         text-color="white"
                       >
-                        Module
+                        {{
+                          selected.type == "archimodel" ? "Architecture" : "Subset"
+                        }}
                       </v-chip>
                     </v-row>
                     <v-divider></v-divider>
-                    <v-row class="mt-3" tag="v-card-text"
-                      ><b class="mr-2">Name:</b> {{ selected.name }}
+                    <v-card-text>
+                        <v-container>
+                            <v-row class="mt-3 text-subtitle-1"
+                      ><b class=" mr-2">Name:</b> {{ selected.name }}
                     </v-row>
-                    <v-row tag="v-card-text"
-                      ><b class="mr-2">Count:</b> {{ selected.count }}
+                    <v-row 
+                      ><b class="mr-2 text-subtitle-1">Count:</b> {{ selected.count }}
                     </v-row>
+                            </v-container>
+                    </v-card-text>
 
                     <v-row class="mt-6 justify-center">
                       <div class="text-center">
@@ -127,21 +138,14 @@
                           small
                           color="primary"
                           dark
-                          @click="editModule()"
+                          @click="editArchitecture()"
                         >
                           <v-icon left>
                             mdi-pencil
                           </v-icon>
                           Modify module
                         </v-btn>
-                        <v-btn
-                          class="ma-2"
-                          rounded
-                          small
-                          color="primary"
-                          dark
-                          @click="openMergeModal()"
-                        >
+                        <v-btn class="ma-2" rounded small color="primary" dark>
                           <v-icon left>
                             mdi-merge
                           </v-icon>
@@ -156,7 +160,7 @@
                           dark
                           :disabled="hidingModule"
                           :loading="hidingModule"
-                          @click="hideModule(selected)"
+                          @click="hideArchitecture(selected)"
                         >
                           <v-icon left>
                             mdi-eye-off
@@ -173,7 +177,7 @@
                           dark
                           :disabled="hidingModule"
                           :loading="hidingModule"
-                          @click="unhideModule(selected)"
+                          @click="unhideArchitecture(selected)"
                         >
                           <v-icon left>
                             mdi-eye
@@ -200,29 +204,6 @@
               </v-col>
             </v-row>
 
-            <!--  Merge modal  -->
-            <ModuleMergeModal
-              v-bind:application="application"
-              v-bind:module="selected"
-              v-bind:dialog="mergeDialog"
-              @close="mergeDialog = false"
-            ></ModuleMergeModal>
-
-            <!-- Delete Modal -->
-            <DeleteModuleModal
-              v-bind:module="selected"
-              v-bind:dialog="deleteModal"
-              @close="deleteModal = false">
-            </DeleteModuleModal>
-
-            <!--  Modify modal  -->
-            <ModifyModuleModal
-              v-bind:application="application"
-              v-bind:module="selected"
-              v-bind:dialog="editModal"
-              @close="editModal = false"
-            ></ModifyModuleModal>
-
             <!-- Snack Bar information -->
             <v-snackbar v-model="snackbarInfo" :timeout="5000">
               {{ textSnackBar }}
@@ -247,40 +228,30 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ModuleController from "@/api/imaging/ModuleController";
-import ModuleMergeModal from "../tiles/modules/ModuleMergeModal.vue";
-import DeleteModuleModal from "../tiles/modules/DeleteModuleModal.vue";
-import ModifyModuleModal from "../tiles/modules/ModifyModuleModal.vue";
-import Module from "@/api/interface/imaging/Module";
+import ArchitectureController from "@/api/imaging/ArchitectureController";
+import Archimodel from "@/api/interface/imaging/ArchiModel";
 
 export default Vue.extend({
-  name: "ModuleExplorer",
+  name: "ArchitectureExplorer",
 
-  components: {
-    ModuleMergeModal,
-    ModifyModuleModal,
-    DeleteModuleModal
-  },
+  components: {},
 
   data: () => ({
     application: "",
-    loadedModules: [] as Module[],
+    loadedArchitectures: [] as Archimodel[],
 
-    tree: [] as Module[],
-    modules: [] as Module[],
+    tree: [] as Archimodel[],
+    architectures: [] as Archimodel[],
     active: [],
     open: [],
-    selected: {} as Module,
+    selected: {} as Archimodel,
     loadingRoots: false,
 
     mergeDialog: false,
     editModal: false,
-    deleteModal :false,
+    deleteModal: false,
 
-    searchModule: "",
-
-    // Hidden levels
-    hiddenModule: [],
+    searchArchitecture: "",
 
     // Snackbar
     snackbarInfo: false,
@@ -290,8 +261,8 @@ export default Vue.extend({
     colorPicker: {},
     editionType: "",
     dialog: false,
-    parentItem: null as Module,
-    editItem: {} as Module,
+    parentItem: null as Archimodel,
+    editItem: {} as Archimodel,
 
     // Hiding level
     hidingModule: false
@@ -309,74 +280,66 @@ export default Vue.extend({
   },
 
   methods: {
-    async getModules() {
+    getColor(item) {
+      if (item.hidden) return "black";
+      if (item.type == "archimodel") return "blue";
+      else return "green";
+    },
+
+    async getArchitectures() {
       try {
         this.loadingRoots = true;
-        this.loadedModules = await ModuleController.getModules(
-          this.application
-        );
-        const hidden = await ModuleController.getHiddenModules(
+        this.loadedArchitectures = await ArchitectureController.getArchitectures(
           this.application
         );
 
-        this.loadedModules = this.loadedModules.concat(hidden);
-        this.modules = this.loadedModules;
+        this.architectures = this.loadedArchitectures;
       } catch (err) {
-        console.error(`Failed to retrieve modules in the application.`, err);
+        console.error(
+          `Failed to retrieve architecture in the application.`,
+          err
+        );
+        this.displaySnackBar(
+          `Failed to retrieve architecture in the application. ${err}`
+        );
       } finally {
         this.loadingRoots = false;
       }
     },
 
-    openMergeModal() {
-      if (this.application == "") return;
-      this.mergeDialog = true;
-    },
-
-    onCloseMergeDialog(args) {
-      if (args) {
-        this.snackbarInfo = true;
-        this.textSnackBar =
-          "Module merged successfully. Refresh Imaging in few seconds (Make sure the module agent is running)";
-      }
-
-      this.mergeDialog = false;
-    },
-
-    async editLevel(item: Module) {
+    async editLevel(item: Archimodel) {
       this.editionType = "Edit ";
       this.editItem = Object.assign({}, item);
 
       this.dialog = true;
     },
 
-    async editModule() {
+    async editArchitecture() {
       this.editModal = true;
     },
 
-    async hideModule(module: Module) {
+    async hideArchitecture(architecture: Archimodel) {
       try {
         this.hidingModule = true;
-        await ModuleController.hideById(module._id);
-        this.displaySnackBar(`Module is now hidden`);
+
+        this.displaySnackBar(`Architecture is now hidden`);
         this.refresh();
       } catch (err) {
-        console.error("Failed to hide the module");
-        this.displaySnackBar(`Failed to hide the module. ${err}`);
+        console.error("Failed to hide the Architecture");
+        this.displaySnackBar(`Failed to hide the Architecture. ${err}`);
       } finally {
         this.hidingModule = false;
       }
     },
 
-    async unhideModule(module: Module) {
+    async unhideArchitecture(architecture: Archimodel) {
       try {
         this.hidingModule = true;
-        await ModuleController.unHideById(module._id);
-        this.displaySnackBar("Module is now displayed.");
+        this.displaySnackBar("Architecture is now displayed.");
         this.refresh();
       } catch (err) {
-        console.error("Failed to unhide the module");
-        this.displaySnackBar(`Failed to display the module. ${err}`);
+        console.error("Failed to unhide the Architecture");
+        this.displaySnackBar(`Failed to display the Architecture. ${err}`);
       } finally {
         this.hidingModule = false;
       }
@@ -387,13 +350,13 @@ export default Vue.extend({
       this.textSnackBar = text;
     },
 
-    focusModule(item) {
+    focusArchitecture(item) {
       this.selected = item;
     },
 
     refresh() {
       this.selected = null;
-      this.getModules();
+      this.getArchitectures();
     }
   },
 
@@ -404,30 +367,30 @@ export default Vue.extend({
     },
 
     selectedLevel: async function(newValue: string) {
-      await this.getModules();
+      await this.getArchitectures();
     },
 
     editModal: async function(newValue: string) {
-      await this.getModules();
+      await this.getArchitectures();
     },
 
     mergeDialog: async function(newValue: string) {
-      await this.getModules();
+      await this.getArchitectures();
     },
 
     deleteModal: async function(newValue: string) {
-      await this.getModules();
+      await this.getArchitectures();
     },
 
-    searchModule: async function(newValue: string) {
+    searchArchitecture: async function(newValue: string) {
       if (newValue && newValue.length > 0) {
-        this.modules = this.loadedModules.filter(
-          (x: Module) =>
+        this.architectures = this.loadedArchitectures.filter(
+          (x: Archimodel) =>
             x.name.toLowerCase().indexOf(newValue.toLowerCase()) >= 0
         );
       } else {
         // No search string
-        this.modules = this.loadedModules;
+        this.architectures = this.loadedArchitectures;
       }
     }
   }

@@ -2,7 +2,7 @@ import {logger} from "@shared/Logger";
 import {int} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
-import {ITransaction, transactionFromObj} from "@interfaces/imaging/transaction.interface";
+import {ITransaction, transactionFromObj} from "@interfaces/imaging/Transaction";
 
 /**
  * Manage the modification done on Transaction in an application

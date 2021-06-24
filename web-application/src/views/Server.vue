@@ -143,7 +143,7 @@ import Vue from "vue/types/umd";
 <script lang="ts">
 import Vue from "vue";
 
-import { ApplicationController } from "@/api/applications/application.controller";
+import { ApplicationController } from "@/api/applications/ApplicationController";
 
 import { Configuration } from "@/Configuration";
 import { UtilsController } from "@/api/utils/utils.controller";

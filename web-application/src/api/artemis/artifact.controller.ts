@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import { Artifact } from "../interface/artemis/artifact.interface";
+import { Artifact } from "../interface/artemis/Artifact";
 
 export class ArtifactController {
   private static API_BASE_URL = ApiComUtils.getUrl();

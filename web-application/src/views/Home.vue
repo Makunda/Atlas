@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import { ApplicationController } from "@/api/applications/application.controller";
+import { ApplicationController } from "@/api/applications/ApplicationController";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import ActionsTile from "@/components/actions/ActionsTile.vue";
 import StatisticsHelper from "@/components/screens/statistics/tiles/StatisticsHelper.vue";

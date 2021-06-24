@@ -256,7 +256,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ApplicationRecord } from "@/api/applications/application.controller";
+import { ApplicationRecord } from "@/api/applications/ApplicationController";
 import { UseCaseController } from "@/api/paris/UseCase.controller";
 import { TagController, TagResult } from "@/api/demeter/tag.controller";
 import { IUseCase } from "@/api/interface/paris/useCase.interface";

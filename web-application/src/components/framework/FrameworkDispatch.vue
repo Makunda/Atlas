@@ -129,7 +129,7 @@ import Vue from "vue";
 import { IArtifact } from "../../../../atlas-api/src/interfaces/artemis/Artifact.interface";
 import { CategoryController } from "@/api/artemis/category.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
-import { Framework } from "@/api/interface/artemis/framework.interface";
+import { Framework } from "@/api/interface/artemis/Framework";
 import { FrameworkController } from "@/api/artemis/framework.controller";
 
 export default Vue.extend({

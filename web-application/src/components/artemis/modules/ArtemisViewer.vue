@@ -220,7 +220,7 @@ import DetectionController from "@/api/artemis/detection.controller";
 import ConfigurationController from "@/api/configuration/configuration.controller";
 import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
-import { Framework } from "@/api/interface/artemis/framework.interface";
+import { Framework } from "@/api/interface/artemis/Framework";
 
 export default Vue.extend({
   name: "ActionTileViewer",

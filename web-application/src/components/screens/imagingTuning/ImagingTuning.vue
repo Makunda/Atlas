@@ -27,6 +27,7 @@
 import Vue from "vue";
 import LevelExplorer from '@/components/imaging/levels/LevelExplorer.vue';
 import ModuleExplorer from '@/components/imaging/modules/ModulesExplorer.vue';
+import ArchitectureExplorer from '@/components/imaging/architectures/ArchitectureExplorer.vue';
 import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
 import IconManager from "@/components/imaging/IconManager.vue";
 export default Vue.extend({
@@ -35,6 +36,7 @@ export default Vue.extend({
   components: {
     LevelExplorer,
     ModuleExplorer,
+    ArchitectureExplorer,
     TransactionExplorer,
     IconManager
   },
@@ -65,6 +67,12 @@ export default Vue.extend({
       {
         view: "ModuleExplorer",
         name: "Module Manager",
+        title: "Review the configuration of the ",
+        icon: "mdi-folder-cog"
+      },
+      {
+        view: "ArchitectureExplorer",
+        name: "Architecture Manager",
         title: "Review the configuration of the ",
         icon: "mdi-folder-cog"
       },

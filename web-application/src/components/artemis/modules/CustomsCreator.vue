@@ -488,11 +488,7 @@ import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { FrameworkController } from "@/api/artemis/framework.controller";
 import { RegexNodeController } from "@/api/artemis/regexNode.controller";
 import { CategoryController } from "@/api/artemis/category.controller";
-import { ArtifactController } from "@/api/artemis/artifact.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
-import { ApplicationController } from "@/api/applications/application.controller";
-import { ArtemisController } from "@/api/artemis/artemis.controller";
-import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/Artifact.interface";
 
 export default Vue.extend({
   name: "CustomsCreator",

@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import TransactionService from "@services/imaging/TransactionService";
-import {ITransaction} from "@interfaces/imaging/transaction.interface";
+import {ITransaction} from "@interfaces/imaging/Transaction";
 import {logger} from "@shared/Logger";
 
 

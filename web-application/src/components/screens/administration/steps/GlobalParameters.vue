@@ -121,7 +121,7 @@
 
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import InstallationController from "@/api/imaging/Installation.controller";
+import InstallationController from "@/api/imaging/InstallationController";
 
 export default Vue.extend({
   name: "GlobalParameters",

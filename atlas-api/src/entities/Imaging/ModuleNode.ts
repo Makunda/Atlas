@@ -1,4 +1,4 @@
-import IModule from "@interfaces/imaging/modules.interface";
+import IModule from "@interfaces/imaging/Module";
 import { int, Node } from "neo4j-driver";
 
 /**

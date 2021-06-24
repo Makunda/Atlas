@@ -1,9 +1,11 @@
+/* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import ModuleNode from "@entities/Imaging/ModuleNode";
 import HttpException from "@exceptions/HttpException";
-import IModule from "@interfaces/imaging/modules.interface";
+import IModule from "@interfaces/imaging/Module";
+import TagService from "@services/configuration/TagService";
 import { logger } from "@shared/Logger";
-import { QueryResult, Node} from "neo4j-driver";
+import { QueryResult, Node, int} from "neo4j-driver";
 
 /**
  * Class managing the different action linked to the Modules
@@ -59,7 +61,11 @@ export default class ModuleService {
             const modules: IModule[] = [];
             for (let index = 0; index < res.records.length; index++) {
                 const element: Node = res.records[index].get("node");
-                modules.push(ModuleNode.fromObj(element))
+                try {
+                    modules.push(ModuleNode.fromObj(element))
+                } catch (err) {
+                    logger.error(`The module with id: ${element.identity.toNumber()} is not in a correct format`, err)
+                }
             }
 
             return modules;
@@ -81,7 +87,7 @@ export default class ModuleService {
             const req = `MATCH (m:${hiddenPrefix}:\`${application}\`) 
             RETURN m as node`;
             const res: QueryResult = await ModuleService.NEO4JAL.execute(req);
-
+            
             if(!res || res.records.length == 0) return [];
             
             const modules: IModule[] = [];
@@ -109,8 +115,12 @@ export default class ModuleService {
 
             const req = `MATCH (m) 
             WHERE (m:Module or m:${hiddenPrefix}) AND ID(m)=$idModule
+            WITH m, m.Name as oldName
             SET m.Name=$name
             SET m.Color=$color
+            WITH m, oldName
+            MATCH (m)-[]->(o) WHERE o:Object OR o:SubObject
+            SET o.Module = CASE WHEN o.Module IS NULL THEN [$name] ELSE [ x in o.Module WHERE NOT x=oldName ] + $name END
             RETURN m as node`;
 
             const params: any = module;
@@ -124,6 +134,35 @@ export default class ModuleService {
             return ModuleNode.fromObj(element, true);
         } catch(error) {
             logger.error(`Failed to retrieve update module with id ${idModule}.`, error);
+            throw new HttpException(500, "Failed to update a module");
+        }
+    }
+
+
+    /**
+     * Merge Module into another
+     * @param {string} application Name of the application 
+     * @param {number} idModuleSource Id of the module that will be merged
+     * @param {number} idModuleDest Id of the destination module
+     * @return {Promise<number>} A promise returning the number of object merged
+     */
+     public async mergeModule(application: string, idModuleSource: number, idModuleDest: number) : Promise<number>{
+        try {
+            const modulePrefix = await (new TagService()).getCustomModuleTag();
+
+            const req = `MATCH (d:Module:\`${application}\`)  WHERE ID(d)=$IdDest 
+            WITH d as dest 
+            MATCH (m:Module:\`${application}\`)-[:Contains]->(obj:Object)  WHERE ID(m)=$IdSource
+            SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [($Prefix + dest.Name)] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS $Prefix ] + ($Prefix + dest.Name) END RETURN COUNT(DISTINCT obj) as count;
+            `;
+
+            const params = {IdSource: idModuleSource, IdDest: idModuleDest, Prefix: modulePrefix };
+            const res: QueryResult = await ModuleService.NEO4JAL.executeWithParameters(req, params);
+            if(!res || res.records.length == 0) return 0;
+                    
+            return int(res.records[0].get("count")).toInt();
+        } catch(error) {
+            logger.error(`Failed to merge module with id ${idModuleSource} in ${idModuleDest}.`, error);
             throw new HttpException(500, "Failed to update a module");
         }
     }

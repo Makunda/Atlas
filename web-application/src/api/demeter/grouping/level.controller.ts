@@ -102,6 +102,8 @@ export class LevelController {
   public static async getDemeterLevels(
     applicationName: string
   ): Promise<Level5Group[]> {
+    if(applicationName == "") return;
+
     const url =
       LevelController.API_BASE_URL +
       `/api/demeter/levels/${applicationName}/grouped`;

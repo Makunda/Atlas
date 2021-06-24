@@ -408,13 +408,12 @@ import Vue from "vue";
 import { ArtifactController } from "@/api/artemis/artifact.controller";
 import { RegexNodeController } from "@/api/artemis/regexNode.controller";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
-import { ApplicationController } from "@/api/applications/application.controller";
+import { ApplicationController } from "@/api/applications/ApplicationController";
 import { ArtemisController } from "@/api/artemis/artemis.controller";
-import { Artifact } from "@/api/interface/artemis/artifact.interface";
+import { Artifact } from "@/api/interface/artemis/Artifact";
 import AgentController from "@/api/agents/agent.controller";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
-import { IArtifact } from "../../../../../atlas-api/src/interfaces/artemis/Artifact.interface"; // TODO Remove this horror
 
 export default Vue.extend({
   name: "BreakdownApplication",
@@ -539,7 +538,7 @@ export default Vue.extend({
       }
     },
 
-    selectFramework(artifact: IArtifact) {
+    selectFramework(artifact: Artifact) {
       this.showFrameworkModal = true;
       this.selectedArtifact = artifact;
     },

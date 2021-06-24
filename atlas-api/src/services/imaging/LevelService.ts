@@ -2,7 +2,7 @@ import {logger} from "@shared/Logger";
 import {int, QueryResult} from "neo4j-driver";
 import {Neo4JAccessLayer} from "@database/Neo4jAccessLayer";
 import HttpException from "@exceptions/HttpException";
-import {ILevel, LevelNode} from "@interfaces/imaging/Level.interface";
+import {ILevel, LevelNode} from "@interfaces/imaging/Level";
 import TagService from "@services/configuration/TagService";
 
 class LevelService {

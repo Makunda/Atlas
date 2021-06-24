@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import {ILevel} from "@interfaces/imaging/Level.interface";
+import {ILevel} from "@interfaces/imaging/Level";
 import LevelService from '@services/imaging/LevelService';
 import {logger} from "@shared/Logger";
 

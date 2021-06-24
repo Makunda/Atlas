@@ -2,7 +2,7 @@ import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
-import { Framework } from "@/api/interface/artemis/framework.interface";
+import { Framework } from "@/api/interface/artemis/Framework";
 
 export class FrameworkController {
   private static API_BASE_URL = ApiComUtils.getUrl();

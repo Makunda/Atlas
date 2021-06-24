@@ -251,12 +251,12 @@ import { AtlasController } from "@/api/atlas/atlas.controller";
 import DetectionController from "@/api/artemis/detection.controller";
 
 import ConfigurationController from "@/api/configuration/configuration.controller";
-import { DetectionCandidate } from "@/api/interface/artemis/detectionCandidate.interface";
+import { DetectionCandidate } from "@/api/interface/artemis/DetectionCandidate";
 import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.interface";
 import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
-import { Framework } from "@/api/interface/artemis/framework.interface";
-import { ApplicationController } from "@/api/applications/application.controller";
+import { Framework } from "@/api/interface/artemis/Framework";
+import { ApplicationController } from "@/api/applications/ApplicationController";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 
 export default Vue.extend({
