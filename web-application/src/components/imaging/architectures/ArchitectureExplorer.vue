@@ -109,25 +109,21 @@
                   >
                     <v-row class="justify-center mb-4">
                       <p class="text-h5 mr-2">{{ selected.name }}</p>
-                      <v-chip
-                        :class="getColor(selected)"
-                        text-color="white"
-                      >
-                        {{
-                          selected.type == "archimodel" ? "Architecture" : "Subset"
-                        }}
+                      <v-chip :class="getColor(selected)" text-color="white">
+                        {{ getSelectedName(selected) }}
                       </v-chip>
                     </v-row>
                     <v-divider></v-divider>
                     <v-card-text>
-                        <v-container>
-                            <v-row class="mt-3 text-subtitle-1"
-                      ><b class=" mr-2">Name:</b> {{ selected.name }}
-                    </v-row>
-                    <v-row 
-                      ><b class="mr-2 text-subtitle-1">Count:</b> {{ selected.count }}
-                    </v-row>
-                            </v-container>
+                      <v-container>
+                        <v-row class="mt-3 text-subtitle-1"
+                          ><b class=" mr-2">Name:</b> {{ selected.name }}
+                        </v-row>
+                        <v-row class="mt-2 text-subtitle-1"
+                          ><b class="mr-2">Count:</b>
+                          {{ selected.count }}
+                        </v-row>
+                      </v-container>
                     </v-card-text>
 
                     <v-row class="mt-6 justify-center">
@@ -138,64 +134,80 @@
                           small
                           color="primary"
                           dark
-                          @click="editArchitecture()"
+                          @click="editModal = true"
                         >
                           <v-icon left>
                             mdi-pencil
                           </v-icon>
-                          Modify module
+                          Modify {{ getSelectedName(selected) }}
                         </v-btn>
-                        <v-btn class="ma-2" rounded small color="primary" dark>
-                          <v-icon left>
-                            mdi-merge
-                          </v-icon>
-                          Merge module
-                        </v-btn>
+
                         <v-btn
                           v-if="!selected.hidden"
-                          class="mx-3"
+                          class="ma-2"
                           rounded
                           small
                           color="primary"
                           dark
-                          :disabled="hidingModule"
-                          :loading="hidingModule"
-                          @click="hideArchitecture(selected)"
+                          :disabled="hidingElement"
+                          :loading="hidingElement"
+                          @click="hideElement(selected)"
                         >
                           <v-icon left>
                             mdi-eye-off
                           </v-icon>
-                          Hide Module
+                          Hide {{ getSelectedName(selected) }}
                         </v-btn>
 
                         <v-btn
                           v-if="selected.hidden"
-                          class="mx-3"
+                          class="ma-2"
                           rounded
                           small
                           color="primary"
                           dark
-                          :disabled="hidingModule"
-                          :loading="hidingModule"
-                          @click="unhideArchitecture(selected)"
+                          :disabled="hidingElement"
+                          :loading="hidingElement"
+                          @click="unhideElement(selected)"
                         >
                           <v-icon left>
                             mdi-eye
                           </v-icon>
-                          Show Module
+                          Show {{ getSelectedName(selected) }}
+                        </v-btn>
+
+                        <v-btn
+                          v-if="
+                            selected.hidden &&
+                              getSelectedName(selected) == 'Architecture'
+                          "
+                          class="ma-2"
+                          rounded
+                          small
+                          color="primary"
+                          dark
+                          :disabled="hidingElement"
+                          :loading="hidingElement"
+                          @click="displayCompleteArchiModel(selected)"
+                        >
+                          <v-icon left>
+                            mdi-eye
+                          </v-icon>
+                          Show {{ getSelectedName(selected) }} and all the
+                          children
                         </v-btn>
 
                         <v-btn
                           rounded
                           small
-                          class="mx-3"
+                          class="ma-2"
                           color="warning"
                           @click="deleteModal = true"
                         >
                           <v-icon left>
                             mdi-delete
                           </v-icon>
-                          Delete Module
+                          Delete {{ getSelectedName(selected) }}
                         </v-btn>
                       </div>
                     </v-row>
@@ -223,6 +235,22 @@
         </v-row>
       </v-container>
     </v-card-text>
+
+    <!--  Merge modal  -->
+    <DeleteArchitectureModal
+      v-bind:application="application"
+      v-bind:element="selected"
+      v-bind:dialog="deleteModal"
+      @close="deleteModal = false"
+    ></DeleteArchitectureModal>
+
+    <!--  Modify modal  -->
+    <ModifyArchitectureModal
+      v-bind:application="application"
+      v-bind:element="selected"
+      v-bind:dialog="editModal"
+      @close="editModal = false"
+    ></ModifyArchitectureModal>
   </v-card>
 </template>
 
@@ -230,11 +258,16 @@
 import Vue from "vue";
 import ArchitectureController from "@/api/imaging/ArchitectureController";
 import Archimodel from "@/api/interface/imaging/ArchiModel";
+import DeleteArchitectureModal from "@/components/imaging/tiles/architectures/DeleteArchitectureModal.vue";
+import ModifyArchitectureModal from "@/components/imaging/tiles/architectures/ModifyArchitectureModal.vue";
 
 export default Vue.extend({
   name: "ArchitectureExplorer",
 
-  components: {},
+  components: {
+    DeleteArchitectureModal,
+    ModifyArchitectureModal
+  },
 
   data: () => ({
     application: "",
@@ -265,13 +298,13 @@ export default Vue.extend({
     editItem: {} as Archimodel,
 
     // Hiding level
-    hidingModule: false
+    hidingElement: false,
   }),
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -284,6 +317,10 @@ export default Vue.extend({
       if (item.hidden) return "black";
       if (item.type == "archimodel") return "blue";
       else return "green";
+    },
+
+    getSelectedName(selected) {
+      return selected.type == "archimodel" ? "Architecture" : "Subset";
     },
 
     async getArchitectures() {
@@ -318,30 +355,67 @@ export default Vue.extend({
       this.editModal = true;
     },
 
-    async hideArchitecture(architecture: Archimodel) {
+    /**
+     * Hide Element
+     */
+    async hideElement(element) {
       try {
-        this.hidingModule = true;
+        this.hidingElement = true;
 
-        this.displaySnackBar(`Architecture is now hidden`);
+        await ArchitectureController.hideArchitectureElement(
+          element._id,
+          element.type
+        );
+        this.displaySnackBar(`Element is now hidden`);
         this.refresh();
       } catch (err) {
-        console.error("Failed to hide the Architecture");
-        this.displaySnackBar(`Failed to hide the Architecture. ${err}`);
+        console.error("Failed to hide the Architecture Element", err);
+        this.displaySnackBar(`Failed to hide the Architecture Element. ${err}`);
       } finally {
-        this.hidingModule = false;
+        this.hidingElement = false;
       }
     },
 
-    async unhideArchitecture(architecture: Archimodel) {
+    /**
+     * Display an architecture and all its children
+     */
+    async displayCompleteArchiModel(element) {
       try {
-        this.hidingModule = true;
-        this.displaySnackBar("Architecture is now displayed.");
+        this.hidingElement = true;
+
+        await ArchitectureController.displayCompleteArchimodelElement(
+          element._id
+        );
+        this.displaySnackBar(`Architecture is now displayed`);
         this.refresh();
       } catch (err) {
-        console.error("Failed to unhide the Architecture");
-        this.displaySnackBar(`Failed to display the Architecture. ${err}`);
+        console.error("Failed to display the complete Architecture", err);
+        this.displaySnackBar(
+          `Failed to display the complete Architecture. ${err}`
+        );
       } finally {
-        this.hidingModule = false;
+        this.hidingElement = false;
+      }
+    },
+
+    /**
+     * Unhide Element
+     */
+    async unhideElement(element) {
+      try {
+        this.hidingElement = true;
+
+        await ArchitectureController.displayArchitectureElement(
+          element._id,
+          element.type
+        );
+        this.displaySnackBar("Element is now displayed.");
+        this.refresh();
+      } catch (err) {
+        console.error("Failed to unhide the Element", err);
+        this.displaySnackBar(`Failed to display the Element. ${err}`);
+      } finally {
+        this.hidingElement = false;
       }
     },
 
@@ -357,7 +431,7 @@ export default Vue.extend({
     refresh() {
       this.selected = null;
       this.getArchitectures();
-    }
+    },
   },
 
   watch: {
@@ -392,7 +466,7 @@ export default Vue.extend({
         // No search string
         this.architectures = this.loadedArchitectures;
       }
-    }
-  }
+    },
+  },
 });
 </script>

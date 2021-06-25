@@ -7,29 +7,25 @@
     <template>
       <v-card>
         <v-toolbar color="charcoal lighten-2" dark
-          >Deleting Module '{{
-            module && module.name ? module.name : "NO MODULE SELECTED"
+          >Deleting {{ getSelectedName(element) }} '{{
+            element && element.name ? element.name : "NO ELEMENT SELECTED"
           }}'</v-toolbar
         >
         <v-card-text>
           <v-container>
-            <v-row class="my-4">
-              <p>
-                In application :
-                {{ application ? application : "NO APPLICATION SELECTED" }}
-                <br />
-              </p>
-            </v-row>
-            <v-row class="pb-5">
+            <v-row class="mt-4 pb-5">
               <h3>
-                You're about to delete the module '{{
-                  module && module.name ? module.name : "NO MODULE SELECTED"
+                You're about to delete the {{ getSelectedName(element) }} '{{
+                  element && element.name
+                    ? element.name
+                    : "NO ELEMENT SELECTED"
                 }}'. This action is not reversible. <br />
-                Are your sure that you want to delete the module ?
+                Are your sure that you want to delete the
+                {{ getSelectedName(element) }} ?
               </h3>
             </v-row>
-            <v-row class="mt-6 mx-2" v-if="errordestinationModules !== ''">
-              <p class="red--text">{{ errordestinationModules }}</p>
+            <v-row class="mt-6 mx-2" v-if="errorElementDelete !== ''">
+              <p class="red--text">{{ errorElementDelete }}</p>
             </v-row>
             <v-row class="mt-6 mx-2" v-if="errorModify !== ''">
               <p class="red--text">{{ errorModify }}</p>
@@ -42,7 +38,7 @@
           <v-btn
             color="red"
             text
-            @click="deleteModule"
+            @click="deleteElement"
             :loading="loadingModify"
             >Delete</v-btn
           >
@@ -54,13 +50,14 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ModuleController from "@/api/imaging/ModuleController";
+import ArchitectureController from "@/api/imaging/ArchitectureController";
 
 export default Vue.extend({
-  name: "DeleteModuleModal",
+  name: "DeleteArchitectureModal",
 
   props: {
-    module: Object,
+    application: String,
+    element: Object,
     dialog: Boolean
   },
 
@@ -70,13 +67,12 @@ export default Vue.extend({
 
   data() {
     return {
-
       // errors & loading merge
       loadingModify: false,
       errorModify: "",
 
       // errors & loading levels
-      errordestinationModules: "",
+      errorElementDelete: "",
       loadingdestinationModules: false
     };
   },
@@ -84,7 +80,7 @@ export default Vue.extend({
   methods: {
     async refresh() {
       this.errorModify = "";
-      this.errordestinationModules = "";
+      this.errorElementDelete = "";
       await this.getDestinationModules();
     },
 
@@ -96,20 +92,29 @@ export default Vue.extend({
       });
     },
 
+    getSelectedName(selected) {
+      return selected.type == "archimodel" ? "Architecture" : "Subset";
+    },
+
     /**
      * Modify a module
      */
-    async deleteModule() {
-      if (this.module == null) return;
+    async deleteElement() {
+      if (this.element == null) return;
 
       try {
         this.loadingModify = true;
-        await ModuleController.deleteById(this.module._id);
+
+        await ArchitectureController.deleteArchitectureElement(
+          this.application,
+          this.element._id,
+          this.element.type
+        );
         this.errorModify = "";
         this.$emit("close");
       } catch (err) {
-        console.error(`Failed to delete the module`, err);
-        this.errorModify = `Failed to delete the module. ${err}`;
+        console.error(`Failed to delete the element`, err);
+        this.errorModify = `Failed to delete the element. ${err}`;
       } finally {
         this.loadingModify = false;
       }
@@ -121,8 +126,7 @@ export default Vue.extend({
     closeModal() {
       this.$emit("close");
     }
-  },
-
+  }
 });
 </script>
 

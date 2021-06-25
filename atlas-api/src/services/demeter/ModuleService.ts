@@ -42,7 +42,7 @@ export default class ModuleService {
         const req = `CALL demeter.module.get.hiddenLabel()`;
         const res:QueryResult = await ModuleService.NEO4JAL.execute(req);
         if(!res || res.records.length == 0) throw new Error("Failed to retrieve the hidden module label");
-        return res.records[0].get(0);
+        return String(res.records[0].get(0));
     }
 
 
