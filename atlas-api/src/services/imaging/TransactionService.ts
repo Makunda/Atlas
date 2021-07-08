@@ -488,7 +488,7 @@ class TransactionService {
     }
 
     /**
-     * Build filter
+     * Build filter. Used in {{getBatchTransaction}}
      * @param filter
      * @param reverse Reverse the filter with NOT clause
      * @return [Filter, Params]
@@ -502,6 +502,10 @@ class TransactionService {
         if (filter) {
             for (const [variable, value] of Object.entries(filter)) {
                 switch (variable) {
+                    case "name":
+                        conditions.push("toLower(tran.Name) CONTAINS toLower($name) ");
+                        params.name = String(value);
+                        break;
                     case "minTechnologies":
                         conditions.push("SIZE(technologies) >= $minTechnologies ");
                         params.minTechnologies = Number(value);
@@ -520,7 +524,7 @@ class TransactionService {
                         break;
                     case "techContained":
                         if(Array.isArray(value) && value.length > 0) {
-                            conditions.push(`any(x IN technologies WHERE x IN $techContained ) `);
+                            conditions.push(`all(x IN $techContained WHERE  x IN technologies ) `);
                             params.techContained = value as string[];
                         }
                         break;

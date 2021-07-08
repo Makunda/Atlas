@@ -251,7 +251,7 @@
                 <!-- Search technologies -->
                 <v-col class="px-4" cols="4">
                   <v-row class="mx-3">
-                    <h3>Search by technology</h3>
+                    <h3>Search by technology (AND clause)</h3>
                   </v-row>
                   <v-row class="mx-3">
                     <v-select
@@ -259,6 +259,7 @@
                       :items="technologiesList"
                       :loading="loadingTechList"
                       filled
+                      rounded
                       chips
                       label="Chips"
                       multiple
@@ -273,7 +274,7 @@
                   depressed
                   color="grey"
                   dark
-                  @click="transactionApiCall()"
+                  @click="transactionApiCall"
                 >
                   Apply filter
                 </v-btn>
@@ -312,9 +313,21 @@
                 :options.sync="optionsTransaction"
                 :server-items-length="numTransaction"
                 :loading="loadingTransaction"
-                class="elevation-1"
+                class="elevation-1 pt-3"
                 fixed-header
               >
+              <template v-slot:top class="my-5">
+                <v-text-field
+                  filled
+                  rounded
+                  clearable
+                  v-model="searchName"
+                  @change="transactionApiCall()"
+                  label="Search Transaction by Name"
+                  class="mx-4"
+                ></v-text-field>
+              </template>
+
                 <template v-slot:item.technologies="{ item }">
                   <v-chip-group active-class="primary--text" column>
                     <v-chip small v-for="tech in item.technologies" :key="tech">
@@ -520,6 +533,9 @@ export default Vue.extend({
     endIndexMaskedTransaction: 0,
     pageMaskedTransaction: 0,
 
+    // Search Transaction
+    searchName: "",
+
     // Power Actions
     maskActionLimit: 0,
     maskActionTechnology: 0,
@@ -708,13 +724,15 @@ export default Vue.extend({
 
       await this.getNumberTransaction();
 
-      const filter = {
-        minTechnology: this.rangeTechnology[0],
+      const filter: any = {
+        minTechnologies: this.rangeTechnology[0],
         maxTechnologies: this.rangeTechnology[1],
         minObject: this.rangeObject[0],
         maxObject: this.rangeObject[1],
         techContained: this.technologySearch
       };
+
+      if (this.searchName != "") filter.name = this.searchName;
 
       // eslint-disable-next-line prefer-const
       let { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
@@ -728,6 +746,7 @@ export default Vue.extend({
         sortByOption = sortBy[0];
       if (Array.isArray(sortDesc) && sortDesc.length === 1)
         sortByDesccOption = sortDesc[0];
+
 
       const transactions = await TransactionController.getBatchTransaction(
         this.application,

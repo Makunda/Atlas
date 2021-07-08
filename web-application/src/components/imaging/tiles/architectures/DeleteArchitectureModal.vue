@@ -81,7 +81,6 @@ export default Vue.extend({
     async refresh() {
       this.errorModify = "";
       this.errorElementDelete = "";
-      await this.getDestinationModules();
     },
 
     querySelections(v) {

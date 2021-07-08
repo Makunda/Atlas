@@ -3,6 +3,7 @@ import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import ArchitectureNode from "@entities/Imaging/ArchitectureNode";
 import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";
+import TagService from "@services/configuration/TagService";
 import { logger } from "@shared/Logger";
 import { QueryResult, Node } from "neo4j-driver";
 
@@ -223,6 +224,70 @@ export default class ArchitectureService {
       });
     } catch (err) {
       logger.error(`Failed to hide subset with id: '${subsetId}'.`, err);
+      throw err;
+    }
+  }
+
+
+  /**
+   * Duplicate an architecture and give it a new name
+   * @param {number} architectureId Id of the architecture
+   * @param {string} name Name of the new Architecture
+   * @returns
+   */
+   public async duplicateArchitecture(architectureId: number, name: string ): Promise<void> {
+    try {
+      const tag = await (new TagService()).getCustomArchitectureTag();
+      const req = `MATCH (a:ArchiModel)-[]->(s:Subset)-[]->(o:Object) WHERE ID(a)=$architectureId 
+      SET o.Tags = CASE WHEN o.Tags IS NULL THEN [($tag+$name+"$"+s.Name)] ELSE o.Tags + ($tag+$name+"$"+s.Name) END`;
+      await ArchitectureService.NEO4JAL.executeWithParameters(req, {
+        architectureId: architectureId, name:name, tag:tag
+      });
+    } catch (err) {
+      logger.error(`Failed to duplicate architecture with id: '${architectureId}'.`, err);
+      throw err;
+    }
+  }
+
+
+  /**
+   * Group all the nodes in the application not in one of the subset of the architecture
+   * @param {string} application Name of the application
+   * @param {number} architectureId Id of the architecture
+   * @returns
+   */
+   public async groupUnassigned(application: string, architectureId: number): Promise<void> {
+    try {
+      const tag = await (new TagService()).getCustomArchitectureTag();
+      const req = `
+      MATCH (a:ArchiModel:\`${application}\`) WHERE ID(a)=$architectureId 
+      WITH a 
+      MATCH (o:Object:\`${application}\`) WHERE NOT (o)-[]->(:Subset)<-[]-(a)
+      SET o.Tags = CASE WHEN o.Tags IS NULL THEN [($tag+a.Name+"$Unassigned")] ELSE o.Tags + ($tag+a.Name+"$Unassigned") END`;
+      await ArchitectureService.NEO4JAL.executeWithParameters(req, {
+        architectureId: architectureId, tag:tag      });
+    } catch (err) {
+      logger.error(`Failed to create Unassigned subset for architecture with id: '${architectureId}'.`, err);
+      throw err;
+    }
+  }
+
+  /**
+   * Create Level Taxonomy architecture
+   * @param {string} application Name of the application
+   * @param {string} name Name of the new Architecture
+   * @returns
+   */
+   public async duplicateCastTaxonomy(application: string, name: string ): Promise<void> {
+    try {
+      const tag = await (new TagService()).getCustomArchitectureTag();
+      const req = `
+      MATCH (o:Object:\`${application}\`) WHERE EXISTS(o.Type)
+      SET o.Tags = CASE WHEN (o.Tags IS NULL OR o.Tags="") THEN [($tag+$name+"$"+o.Type)] ELSE o.Tags + ($tag+$name+"$"+o.Type) END`;
+      await ArchitectureService.NEO4JAL.executeWithParameters(req, {
+         name:name, tag:tag      });
+    } catch (err) {
+      logger.error(`Failed to recreate Cast Taxonomy.`, err);
       throw err;
     }
   }

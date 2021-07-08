@@ -194,4 +194,95 @@ export default class ArchitectureController {
       throw error;
     }
   }
+
+
+  /**
+   * Duplicate an existing architecture and assign a new name
+   * @param id Id of the architecture element
+   * @param name Name of the architecture
+   */
+   public static async duplicateArchiModel(
+    id: number,
+    name: string
+  ): Promise<void> {
+    const url =
+      ArchitectureController.API_BASE_URL +
+      `/api/imaging/architectures/archimodel/duplicate/byId`;
+
+    try {
+      const res = await axios.post(url, { id: id, name: name });
+
+      if (res.status != 200) {
+        throw new Error(
+          `Failed to duplicate architecture element. Status (${res.status}). Message: ${res.data}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to duplicate architecture element.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Duplicate an existing architecture and assign a new name
+   * @param id Id of the architecture element
+   * @param application Name of the application
+   */
+   public static async groupUnassigned(
+    id: number,
+    application: string
+  ): Promise<void> {
+    const url =
+      ArchitectureController.API_BASE_URL +
+      `/api/imaging/architectures/archimodel/group/unassigned`;
+
+    try {
+      const res = await axios.post(url, { id: id, application: application });
+
+      if (res.status != 200) {
+        throw new Error(
+          `Failed to duplicate architecture element. Status (${res.status}). Message: ${res.data}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to duplicate architecture element.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+   /**
+   * Duplicate an existing architecture and assign a new name
+   * @param id Id of the architecture element
+   * @param application Name of the application
+   */
+    public static async duplicateTaxonomy(
+      name: string,
+      application: string
+    ): Promise<void> {
+      const url =
+        ArchitectureController.API_BASE_URL +
+        `/api/imaging/architectures/archimodel/duplicate/taxonomy`;
+  
+      try {
+        const res = await axios.post(url, { name: name, application: application });
+  
+        if (res.status != 200) {
+          throw new Error(
+            `Failed to duplicate CAST Taxonomy. Status (${res.status}). Message: ${res.data}`
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Failed to reach the API : ${url}. Failed to duplicate CAST Taxonomy.`,
+          error
+        );
+        throw error;
+      }
+    }
 }

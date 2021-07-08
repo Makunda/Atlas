@@ -63,7 +63,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(/^\/api\/(?!login).*/, async (req: Request, res: Response, next: NextFunction) => {
+app.use(/^\/api\/(?!login|utils).*/, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await loginService.verifyActualLicense();
         // eslint-disable-next-line @typescript-eslint/no-misused-promises

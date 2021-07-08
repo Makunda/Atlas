@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import {ILevel} from "@interfaces/imaging/Level";
+import {Level} from "@interfaces/imaging/Level";
 import LevelService from '@services/imaging/LevelService';
 import {logger} from "@shared/Logger";
 
@@ -11,7 +11,7 @@ class LevelController {
         const applicationName = String(req.params.application);
 
         try {
-            const levels: ILevel[] = await this.levelService.getRootLevel(applicationName);
+            const levels: Level[] = await this.levelService.getRootLevel(applicationName);
             res.status(200).json({data: levels, message: 'Roots levels'});
 
         } catch (error) {
@@ -25,7 +25,7 @@ class LevelController {
         const levelId = Number(req.params.id);
 
         try {
-            const levels: ILevel[] = await this.levelService.getChildrenLevels(applicationName, levelId);
+            const levels: Level[] = await this.levelService.getChildrenLevels(applicationName, levelId);
             res.status(200).json({data: levels, message: 'Attached'});
 
         } catch (error) {
@@ -39,7 +39,7 @@ class LevelController {
         const levelId = Number(req.params.id);
 
         try {
-            const levels: ILevel = await this.levelService.getParentLevel(applicationName, levelId);
+            const levels: Level = await this.levelService.getParentLevel(applicationName, levelId);
             res.status(200).json({data: levels, message: 'Attached'});
         } catch (error) {
             logger.error(`Failed to get parent of level with id '${levelId}' in application '${applicationName}.'`, error);
@@ -58,12 +58,12 @@ class LevelController {
             return;
         }
 
-        const level: ILevel = req.body;
+        const level: Level = req.body;
         const parentLevelID = Number(req.body.parentId);
         const applicationName = String(req.params.application);
 
         try {
-            const createdLevel: ILevel = await this.levelService.createLevel(applicationName, parentLevelID, level);
+            const createdLevel: Level = await this.levelService.createLevel(applicationName, parentLevelID, level);
             res.status(200).json({data: createdLevel, message: 'Created'});
 
         } catch (error) {
@@ -79,11 +79,11 @@ class LevelController {
             return;
         }
 
-        const level: ILevel = req.body;
+        const level: Level = req.body;
         const applicationName = String(req.params.application);
 
         try {
-            const updatedLevel: ILevel = await this.levelService.updateLevel(applicationName, level);
+            const updatedLevel: Level = await this.levelService.updateLevel(applicationName, level);
             res.status(200).json({data: updatedLevel, message: 'Updated'});
 
         } catch (error) {
@@ -102,7 +102,7 @@ class LevelController {
         const applicationName = String(req.params.application);
 
         try {
-            const updatedLevel: ILevel = await this.levelService.hideLevel(applicationName, idLevel);
+            const updatedLevel: Level = await this.levelService.hideLevel(applicationName, idLevel);
             res.status(200).json({data: updatedLevel, message: 'Level hidden'});
 
         } catch (error) {
@@ -121,7 +121,7 @@ class LevelController {
         const applicationName = String(req.params.application);
 
         try {
-            const updatedLevel: ILevel = await this.levelService.unHideLevel(applicationName, idLevel);
+            const updatedLevel: Level = await this.levelService.unHideLevel(applicationName, idLevel);
             res.status(200).json({data: updatedLevel, message: 'Level hidden'});
         } catch (error) {
             logger.error(`Failed to unhide level with id:'${idLevel}' in application '${applicationName}.'`, error);
@@ -134,7 +134,7 @@ class LevelController {
         const applicationName = String(req.params.application);
 
         try {
-            const hiddenLevel: ILevel[] = await this.levelService.findHiddenLevelByDetph(applicationName, depthLevel);
+            const hiddenLevel: Level[] = await this.levelService.findHiddenLevelByDetph(applicationName, depthLevel);
             res.status(200).json({data: hiddenLevel, message: 'Levels hidden'});
         } catch (error) {
             logger.error(`Failed to find hidden level with depth:'${depthLevel}' in application '${applicationName}.'`, error);
@@ -152,7 +152,7 @@ class LevelController {
         const applicationName = String(req.params.application);
 
         try {
-            const hiddenLevel: ILevel = await this.levelService.findHiddenLevelById(applicationName, idLevel);
+            const hiddenLevel: Level = await this.levelService.findHiddenLevelById(applicationName, idLevel);
             res.status(200).json({data: hiddenLevel, message: `Hidden level with id ${idLevel}`});
         } catch (error) {
             logger.error(`Failed to find hidden level with id:'${idLevel}' in application '${applicationName}.'`, error);
@@ -200,7 +200,7 @@ class LevelController {
         const levelDepth = parseInt(req.params.depth);
 
         try {
-            const levels: ILevel[] = await this.levelService.getLevelsByDepth(applicationName, levelDepth);
+            const levels: Level[] = await this.levelService.getLevelsByDepth(applicationName, levelDepth);
             res.status(200).json({data: levels, message: `Level ${levelDepth}`});
         } catch (error) {
             logger.error(`Failed to retrieve levels with depth:'${levelDepth}' in application '${applicationName}.'`, error);
@@ -218,7 +218,7 @@ class LevelController {
         const applicationName = String(req.params.application);
 
         try {
-            const levels: ILevel[] = await this.levelService.findLevelsByName(applicationName, levelName);
+            const levels: Level[] = await this.levelService.findLevelsByName(applicationName, levelName);
             res.status(200).json({data: levels, message: `Levels with Name`});
         } catch (error) {
             logger.error(`Failed to retrieve levels containing:'${levelName}' in application '${applicationName}.'`, error);
@@ -236,7 +236,7 @@ class LevelController {
         const applicationName = String(req.params.application);
 
         try {
-            const level: ILevel = await this.levelService.findLevelById(applicationName, levelId);
+            const level: Level = await this.levelService.findLevelById(applicationName, levelId);
             res.status(200).json({data: level, message: `Level with ID`});
         } catch (error) {
             logger.error(`Failed to retrieve levels with Id:'${levelId}' in application '${applicationName}.'`, error);

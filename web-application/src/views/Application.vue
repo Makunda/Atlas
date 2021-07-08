@@ -155,7 +155,7 @@ export default Vue.extend({
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    }
+    },
   },
 
   data: () => ({
@@ -168,21 +168,22 @@ export default Vue.extend({
       {
         name: "Frameworks & Breakdown",
         screen: "analysis",
-        icon: "mdi-magnify"
+        icon: "mdi-magnify",
       },
       {
         name: "Tags",
         screen: "tags",
-        icon: "mdi-hexagon-multiple"
+        icon: "mdi-hexagon-multiple",
       },
-      { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" }
+      { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" },
+      { name: "Highlight", screen: "highlight", icon: "mdi-fire" },
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
     applicationList: [] as string[],
 
-    onlineDatabase: false
+    onlineDatabase: false,
   }),
 
   methods: {
@@ -212,7 +213,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineDatabase = res;
         })
-        .catch(err => {
+        .catch((err) => {
           this.onlineDatabase = false;
         });
     },
@@ -222,7 +223,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineDatabase = res;
         })
-        .catch(err => {
+        .catch((err) => {
           this.onlineDatabase = false;
         })
         .finally(() => {
@@ -262,7 +263,7 @@ export default Vue.extend({
     logout() {
       Configuration.deleteProperties();
       document.location.reload();
-    }
+    },
   },
 
   watch: {
@@ -293,8 +294,8 @@ export default Vue.extend({
       }
       console.log(`Not found ${newView}`);
       // Do nothing if the view wasn't found
-    }
-  }
+    },
+  },
 });
 </script>
 

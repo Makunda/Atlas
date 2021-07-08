@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable max-len */
 import {Router} from 'express';
 import Route from '@interfaces/routes.interface';
@@ -41,5 +42,9 @@ export default class ArchitectureRoute implements Route {
         this.router.post(`${this.path}/archimodel/display`, this.architectureController.displayArchitectureById);
         this.router.post(`${this.path}/archimodel/display/complete`, this.architectureController.displayCompleteArchitectureById);
         this.router.post(`${this.path}/subset/display`, this.architectureController.displaySubsetById);
+
+        this.router.post(`${this.path}/archimodel/duplicate/byId`, this.architectureController.duplicateArchitecture);
+        this.router.post(`${this.path}/archimodel/group/unassigned`, this.architectureController.groupUnassigned);
+        this.router.post(`${this.path}/archimodel/duplicate/taxonomy`, this.architectureController.duplicateCastTaxonomy);
     }
 }

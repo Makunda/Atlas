@@ -20,7 +20,7 @@
 
 import {int} from "neo4j-driver";
 
-interface ILevel {
+interface Level {
     _id?: number;
     hidden?: boolean;
     concept: boolean;
@@ -31,15 +31,15 @@ interface ILevel {
     fullName: string;
     name: string;
     shade: string;
-    children?: ILevel[];
+    children?: Level[];
 }
 
 
 class LevelNode {
 
-    private levelObj: ILevel;
+    private levelObj: Level;
 
-    constructor(level: ILevel) {
+    constructor(level: Level) {
         this.levelObj = level;
     }
 
@@ -59,12 +59,12 @@ class LevelNode {
             level: int(row["properties"]["Level"]).toNumber(),
             count: int(row["properties"]["Count"]).toNumber(),
             shade: String(row["properties"]["Shade"])
-        } as ILevel
+        } as Level
         return new LevelNode(level);
     }
 
 
-    public getRecord(): ILevel {
+    public getRecord(): Level {
         return this.levelObj;
     }
 
@@ -88,4 +88,4 @@ class LevelNode {
     }
 }
 
-export {ILevel, LevelNode}
+export {Level as Level, LevelNode}

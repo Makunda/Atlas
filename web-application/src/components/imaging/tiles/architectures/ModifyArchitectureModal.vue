@@ -19,7 +19,7 @@
             <v-row>
               <v-text-field
                 v-model="editElement.name"
-                label="Outlined"
+                label="Name"
                 name
                 clearable
               ></v-text-field>

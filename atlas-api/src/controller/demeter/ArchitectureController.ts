@@ -192,7 +192,92 @@ export default class ArchitectureController {
         }
       };
 
+  /**
+   *  Duplicate an Architecture
+   * { 
+   *   id: number,
+   *   name: string
+   * }
+   * @param req Request
+   * @param res Response
+   * @param next NextFunction
+   */
+     public duplicateArchitecture = async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ): Promise<void> => {
+      try {
+        checkBody(req, "id");
+        checkBody(req, "name");
+        const id = Number(req.body.id);
+        const name = String(req.body.name);
+  
+        await this.architectureService.duplicateArchitecture(id, name);
+        res.status(200).json({ data: true, message: "Architecture duplicated" });
+      } catch (error) {
+        next(error);
+      }
+    };
 
+    /**
+   *  Group all the nodes unassigned in an archimodel under a subset
+   * { 
+   *   id: number,
+   *   name: string,
+   *   application: string
+   * }
+   * @param req Request
+   * @param res Response
+   * @param next NextFunction
+   */
+     public groupUnassigned = async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ): Promise<void> => {
+      try {
+        checkBody(req, "id");
+        checkBody(req, "application");
+        const id = Number(req.body.id);
+        const application = String(req.body.application);
+  
+        await this.architectureService.groupUnassigned(application, id);
+        res.status(200).json({ data: true, message: "Architecture duplicated" });
+      } catch (error) {
+        next(error);
+      }
+    };
+
+  /**
+   *  Duplicate the Level 5 to a new architecture
+   * { 
+   *   name: string,
+   *   application: string
+   * }
+   * @param req Request
+   * @param res Response
+   * @param next NextFunction
+   */
+      public duplicateCastTaxonomy = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+      ): Promise<void> => {
+        try {
+          checkBody(req, "name");
+          checkBody(req, "application");
+          const name = String(req.body.name);
+          const application = String(req.body.application);
+    
+          await this.architectureService.duplicateCastTaxonomy(application, name);
+          res.status(200).json({ data: true, message: "Architecture duplicated" });
+        } catch (error) {
+          next(error);
+        }
+      };
+
+      
   /**
    * Hide a subset by its ID
    * POST {

@@ -9,6 +9,7 @@ import Reporting from "@/components/screens/reports/Reporting.vue";
 import AnalysisChecker from "@/components/screens/recommendation/AnalysisChecker.vue";
 import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
 import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
+import Highlight from "@/components/screens/highlight/Highlight.vue";
 import ImagingTuning from "@/components/screens/imagingTuning/ImagingTuning.vue";
 import Automation from "@/components/screens/automation/Automation.vue";
 import Administration from "@/components/screens/administration/Administration.vue";
@@ -53,6 +54,10 @@ const routes: Array<RouteConfig> = [
       {
         path: "tuning",
         component: ImagingTuning
+      },
+      {
+        path: "highlight",
+        component: Highlight
       }
     ]
   },

@@ -143,6 +143,36 @@
                         </v-btn>
 
                         <v-btn
+                          v-if="selected.type == 'archimodel'"
+                          class="ma-2"
+                          rounded
+                          small
+                          color="primary"
+                          dark
+                          @click="duplicateModal = true"
+                        >
+                          <v-icon left>
+                            mdi-content-copy
+                          </v-icon>
+                          Duplicate {{ getSelectedName(selected) }}
+                        </v-btn>
+
+                        <v-btn
+                          v-if="selected.type == 'archimodel'"
+                          class="ma-2"
+                          rounded
+                          small
+                          color="primary"
+                          dark
+                          @click="unassignedModal = true"
+                        >
+                          <v-icon left>
+                            mdi-group
+                          </v-icon>
+                          Create Unassigned Layer
+                        </v-btn>
+
+                        <v-btn
                           v-if="!selected.hidden"
                           class="ma-2"
                           rounded
@@ -233,6 +263,56 @@
             </v-snackbar>
           </v-card>
         </v-row>
+
+        <v-row>
+          <v-card class="mt-10" width="100%">
+            <v-card-title>
+              <h3 class="py-3 pb-5 text-h5">Power Actions</h3>
+            </v-card-title>
+            <v-card-subtitle>
+              <p class="subtitle-1 ml-1">
+                Launch global actions on the Architecture view
+              </p>
+            </v-card-subtitle>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="4">
+                    <p class="subtitle-1">
+                      Duplicate CAST Level 5 Taxonomy to a new Architecture
+                      <span class="subtitle-2">
+                        Create a new Architecture copying the Level 5. You need
+                        to provide a name to this Architecture. Make sure the
+                        Architecture agent is running.
+                      </span>
+                    </p>
+                  </v-col>
+                  <v-col cols="5">
+                    <v-text-field
+                      class="pt-0"
+                      label="Architecture Name"
+                      v-model="taxonomyArchitecture"
+                      :disabled="taxonomyArchitectureLoading"
+                    ></v-text-field>
+                    <v-row class="mx-1" v-if="taxonomyArchitectureError !== ''">
+                      <p class="red--text">{{ taxonomyArchitectureError }}</p>
+                    </v-row>
+                    <v-row class="mx-1" v-if="taxonomyArchitectureError !== ''">
+                      <p class="green--text">{{ taxonomyArchitectureSuccess }}</p>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-btn round color="primary" dark @click="replicateTaxonomy" :loading="taxonomyArchitectureLoading"
+                      >Replicate Architecture</v-btn
+                    >
+                  </v-col>
+                </v-row>
+                <v-row> </v-row>
+                <v-row> </v-row>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-row>
       </v-container>
     </v-card-text>
 
@@ -251,6 +331,22 @@
       v-bind:dialog="editModal"
       @close="editModal = false"
     ></ModifyArchitectureModal>
+
+    <!--  Dulicate modal  -->
+    <DuplicateArchitectureModal
+      v-bind:application="application"
+      v-bind:element="selected"
+      v-bind:dialog="duplicateModal"
+      @close="duplicateModal = false"
+    ></DuplicateArchitectureModal>
+
+    <!--  Dulicate modal  -->
+    <CreateUnassignedModal
+      v-bind:application="application"
+      v-bind:element="selected"
+      v-bind:dialog="unassignedModal"
+      @close="unassignedModal = false"
+    ></CreateUnassignedModal>
   </v-card>
 </template>
 
@@ -260,13 +356,17 @@ import ArchitectureController from "@/api/imaging/ArchitectureController";
 import Archimodel from "@/api/interface/imaging/ArchiModel";
 import DeleteArchitectureModal from "@/components/imaging/tiles/architectures/DeleteArchitectureModal.vue";
 import ModifyArchitectureModal from "@/components/imaging/tiles/architectures/ModifyArchitectureModal.vue";
+import DuplicateArchitectureModal from "@/components/imaging/tiles/architectures/DuplicateArchitectureModal.vue";
+import CreateUnassignedModal from "@/components/imaging/tiles/architectures/CreateUnassignedModal.vue";
 
 export default Vue.extend({
   name: "ArchitectureExplorer",
 
   components: {
     DeleteArchitectureModal,
-    ModifyArchitectureModal
+    ModifyArchitectureModal,
+    DuplicateArchitectureModal,
+    CreateUnassignedModal
   },
 
   data: () => ({
@@ -283,12 +383,20 @@ export default Vue.extend({
     mergeDialog: false,
     editModal: false,
     deleteModal: false,
+    duplicateModal: false,
+    unassignedModal: false,
 
     searchArchitecture: "",
 
     // Snackbar
     snackbarInfo: false,
     textSnackBar: "",
+
+    // Power Actions
+    taxonomyArchitecture: "",
+    taxonomyArchitectureLoading: false,
+    taxonomyArchitectureError: "",
+    taxonomyArchitectureSuccess: "",
 
     // Edit Dialog
     colorPicker: {},
@@ -298,13 +406,13 @@ export default Vue.extend({
     editItem: {} as Archimodel,
 
     // Hiding level
-    hidingElement: false,
+    hidingElement: false
   }),
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    },
+    }
   },
 
   mounted() {
@@ -321,6 +429,37 @@ export default Vue.extend({
 
     getSelectedName(selected) {
       return selected.type == "archimodel" ? "Architecture" : "Subset";
+    },
+
+    /**
+     * Replicate the Cast Taxonomy
+     */
+    async replicateTaxonomy() {
+      try {
+        this.taxonomyArchitectureError = "";
+        if (this.taxonomyArchitecture == "") {
+          this.taxonomyArchitectureError = "Name cannot be empty";
+          return;
+        } // Ignore if no name is provided
+
+        this.taxonomyArchitectureLoading = true;
+
+        await ArchitectureController.duplicateTaxonomy(
+          this.taxonomyArchitecture,
+          this.application
+        );
+
+        await this.refresh();
+
+        this.taxonomyArchitectureSuccess = `Duplication of the Levvel 5 is complete. A new Architecture with name '${this.taxonomyArchitecture} should appear in few seconds. 
+        This operation being complex it can take some time on large applications.'`;
+
+        this.taxonomyArchitecture = "";
+      } catch (err) {
+        this.taxonomyArchitectureError = err;
+      } finally {
+        this.taxonomyArchitectureLoading = false;
+      }
     },
 
     async getArchitectures() {
@@ -428,10 +567,10 @@ export default Vue.extend({
       this.selected = item;
     },
 
-    refresh() {
+    async refresh() {
       this.selected = null;
-      this.getArchitectures();
-    },
+      await this.getArchitectures();
+    }
   },
 
   watch: {
@@ -466,7 +605,7 @@ export default Vue.extend({
         // No search string
         this.architectures = this.loadedArchitectures;
       }
-    },
-  },
+    }
+  }
 });
 </script>

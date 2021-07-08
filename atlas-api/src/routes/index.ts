@@ -10,6 +10,7 @@ import UtilsRoute from './utils/UtilsIndexRoute';
 import AssistantsRoute from './assistants/AssistantsRoute';
 import ParisRouter from './paris/ParisRoute';
 import LoginRoute from "./login/LoginRoute";
+import HighlightIndexRoute from './highlight/HighlightIndexRoute';
 
 // Init router and path
 const router = Router();
@@ -25,6 +26,7 @@ router.use('/paris', ParisRouter);
 router.use('/imaging', ImagingRouter);
 router.use('/atlas', AtlasRouter);
 router.use('/configuration', ConfigurationRouter);
+router.use('/highlight', HighlightIndexRoute);
 router.use('/pythia', PythiaRouter);
 router.use('/utils', UtilsRoute);
 router.use('/assistants', AssistantsRoute);
