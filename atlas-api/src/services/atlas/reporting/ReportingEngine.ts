@@ -100,7 +100,11 @@ export default class ReportingEngine {
             keys.forEach(k => {
                 if (k == x.name) {
                     found = true;
-                }
+
+                    // Force conversion 
+                    if(x.type == "string") parameters[k] = String(parameters[k]);
+                    if(x.type == "number") parameters[k] = int(parameters[k]);
+                }       
             });
             if (!found)
                 throw new Error(`Parameter with name ${x.name} was not found. Please provide all the parameters : [${report.parameters.map(x => x.name).join(", ")}]}]`)

@@ -29,6 +29,7 @@ import LevelExplorer from '@/components/imaging/levels/LevelExplorer.vue';
 import ModuleExplorer from '@/components/imaging/modules/ModulesExplorer.vue';
 import ArchitectureExplorer from '@/components/imaging/architectures/ArchitectureExplorer.vue';
 import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
+import DataCallGraphExplorer from "@/components/imaging/DataCallGraphExplorer.vue";
 import IconManager from "@/components/imaging/IconManager.vue";
 export default Vue.extend({
   name: "ImagingTuning",
@@ -38,6 +39,7 @@ export default Vue.extend({
     ModuleExplorer,
     ArchitectureExplorer,
     TransactionExplorer,
+    DataCallGraphExplorer,
     IconManager
   },
 
@@ -80,6 +82,12 @@ export default Vue.extend({
         view: "TransactionExplorer",
         name: "Transaction",
         title: "Explore the transaction ",
+        icon: "mdi-apple-safari"
+      },
+      {
+        view: "DataCallGraphExplorer",
+        name: "Data Call Graph",
+        title: "Explore the DataCallGraph",
         icon: "mdi-apple-safari"
       }
     ]

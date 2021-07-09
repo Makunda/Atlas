@@ -59,6 +59,7 @@ export class ReportController {
    */
   public static async generateReport(
     reportId: number,
+    nickName: string,
     application: string,
     params: any
   ): Promise<void> {
@@ -78,7 +79,7 @@ export class ReportController {
           type:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"
         });
-        this.saveFile(file, "test.xlsx");
+        this.saveFile(file, `${nickName}_in_${application}.xlsx`);
       } else {
         console.warn(
           `Failed to retrieve the generate the report. Status (${res.status})`

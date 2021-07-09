@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      Review the transactions in the {{ application }} application.
+      Review the Data Call Graphs in the {{ application }} application.
       <v-spacer></v-spacer>
       <v-btn class="mr-5" icon color="green" @click="refresh">
         <v-icon>mdi-cached</v-icon>
@@ -18,7 +18,7 @@
                 <v-row>
                   <v-col md="3" class="d-flex flex-column">
                     <p>
-                      Specify the prefix used to pin the transactions.<br />
+                      Specify the prefix used to pin the Data Call Graph.<br />
                       <b
                         >This parameter is not stored and will be reset if you
                         refresh this page.</b
@@ -47,7 +47,7 @@
                     <v-card-text>
                       <div>Clean by number of objects</div>
                       <div class="text--primary">
-                        Mask all the transactions with a number of objects
+                        Mask all the Data Call Graph with a number of objects
                         inferior to a limit ( Recommended 10)
                         <v-text-field
                           v-model="maskActionLimit"
@@ -64,7 +64,7 @@
                         @click="maskByCount"
                         :loading="maskActionLoading"
                       >
-                        <p>Mask the transactions .</p>
+                        <p>Mask the Data Call Graph .</p>
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -72,7 +72,7 @@
                     <v-card-text>
                       <div>Clean by number of Technology</div>
                       <div class="text--primary">
-                        Mask all the transactions containing a number of
+                        Mask all the Data Call Graph containing a number of
                         technology inferior or equal to the input
                         <v-text-field
                           v-model="maskActionTechnology"
@@ -89,7 +89,7 @@
                         @click="maskByTechnology"
                         :loading="maskActionLoading"
                       >
-                        <p>Mask the transactions .</p>
+                        <p>Mask the Data Call Graph .</p>
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -98,7 +98,7 @@
                     <v-card-text>
                       <div>Clean by number of objects</div>
                       <div class="text--primary">
-                        Mask all the transactions containing certain terms in
+                        Mask all the Data Call Graph containing certain terms in
                         their names
                         <v-combobox
                           v-model="maskActionTermsList"
@@ -116,15 +116,15 @@
                         @click="maskByTerms"
                         :loading="maskActionLoading"
                       >
-                        <p>Mask the transactions</p>
+                        <p>Mask the Data Call Graph</p>
                       </v-btn>
                     </v-card-actions>
                   </v-card>
                   <v-card class="ma-1" max-width="344">
                     <v-card-text>
-                      <div>Reset transactions</div>
+                      <div>Reset Data Call Graph</div>
                       <div class="text--primary">
-                        Unmask all the transactions ( Reset )
+                        Unmask all the dataCallGraphs ( Reset )
                       </div>
                     </v-card-text>
                     <v-card-actions>
@@ -147,7 +147,7 @@
         <v-row>
           <v-card class="ma-4" width="100%">
             <v-card-title class="ma-3">
-              Filter transactions
+              Filter Data Call Graph
             </v-card-title>
             <v-card-subtitle> </v-card-subtitle>
             <v-card-text>
@@ -160,16 +160,16 @@
                   <v-row class="ma-3">
                     Min Object :
                     <strong class="mr-3">{{
-                      transactionInsights.minObject
+                      dataCallGraphInsights.minObject
                     }}</strong>
                     Max Object :
-                    <strong>{{ transactionInsights.maxObject }}</strong>
+                    <strong>{{ dataCallGraphInsights.maxObject }}</strong>
                   </v-row>
                   <v-row class="mx-3">
                     <v-range-slider
                       v-model="rangeObject"
-                      :max="transactionInsights.maxObject"
-                      :min="transactionInsights.minObject"
+                      :max="dataCallGraphInsights.maxObject"
+                      :min="dataCallGraphInsights.minObject"
                       hide-details
                       persistent-hint
                       hint="Number of object"
@@ -208,16 +208,16 @@
                   <v-row class="ma-3">
                     Min Technologies :
                     <strong class="mr-3">{{
-                      transactionInsights.minTechnology
+                      dataCallGraphInsights.minTechnology
                     }}</strong>
                     Max Technologies :
-                    <strong>{{ transactionInsights.maxTechnology }}</strong>
+                    <strong>{{ dataCallGraphInsights.maxTechnology }}</strong>
                   </v-row>
                   <v-row class="mx-3">
                     <v-range-slider
                       v-model="rangeTechnology"
-                      :max="transactionInsights.maxTechnology"
-                      :min="transactionInsights.minTechnology"
+                      :max="dataCallGraphInsights.maxTechnology"
+                      :min="dataCallGraphInsights.minTechnology"
                       hide-details
                       persistent-hint
                       hint="Number of object"
@@ -274,7 +274,7 @@
                   depressed
                   color="grey"
                   dark
-                  @click="transactionApiCall"
+                  @click="dataCallGraphApiCall"
                 >
                   Apply filter
                 </v-btn>
@@ -282,7 +282,7 @@
                   depressed
                   color="persianGrey"
                   dark
-                  @click="transactionApiCall()"
+                  @click="dataCallGraphApiCall()"
                 >
                   Remove all non-compliant
                 </v-btn>
@@ -291,16 +291,16 @@
           </v-card>
         </v-row>
         <v-row>
-          <!-- Transaction -->
+          <!-- Data Call Graph -->
           <v-card class="ma-4" width="100%">
             <v-card-title>
-              Transactions in the application
+              Data Call Graph in the application
               <v-spacer></v-spacer>
               <v-btn
                 class="mr-5"
                 icon
                 color="green"
-                @click="transactionApiCall()"
+                @click="dataCallGraphApiCall()"
               >
                 <v-icon>mdi-cached</v-icon>
               </v-btn>
@@ -309,10 +309,10 @@
             <v-card-text>
               <v-data-table
                 :headers="headers"
-                :items="displayedTransaction"
-                :options.sync="optionsTransaction"
-                :server-items-length="numTransaction"
-                :loading="loadingTransaction"
+                :items="displayedDataCallGraph"
+                :options.sync="optionsDataCallGraph"
+                :server-items-length="numDataCallGraph"
+                :loading="loadingDataCallGraph"
                 class="elevation-1 pt-3"
                 fixed-header
               >
@@ -322,8 +322,8 @@
                   rounded
                   clearable
                   v-model="searchName"
-                  @change="transactionApiCall()"
-                  label="Search Transaction by Name"
+                  @change="dataCallGraphApiCall"
+                  label="Search DataCallGraph by Name"
                   class="mx-4"
                 ></v-text-field>
               </template>
@@ -336,14 +336,14 @@
                   </v-chip-group>
                 </template>
                 <template v-slot:item.actions="{ item }" class="flex flex-row">
-                  <v-icon small class="mr-2" @click="maskTransaction(item)">
+                  <v-icon small class="mr-2" @click="maskDataCallGraph(item)">
                     mdi-eye-off
                   </v-icon>
                   <v-icon
                     v-if="!containsPrefix(item)"
                     small
                     class="mr-2"
-                    @click="pinTransaction(item)"
+                    @click="pinDataCallGraph(item)"
                   >
                     mdi-pin
                   </v-icon>
@@ -351,7 +351,7 @@
                     v-if="containsPrefix(item)"
                     small
                     class="mr-2"
-                    @click="unpinTransaction(item)"
+                    @click="unpinDataCallGraph(item)"
                   >
                     mdi-pin-off
                   </v-icon>
@@ -365,16 +365,16 @@
         </v-row>
         <v-row class="mt-5"> </v-row>
         <v-row>
-          <!-- Masked Transaction -->
+          <!-- Masked DataCallGraph -->
           <v-card class="ma-4" width="100%">
             <v-card-title>
-              Masked transactions in the application
+              Masked Data Call Graphs in the application
               <v-spacer></v-spacer>
               <v-btn
                 class="mr-5"
                 icon
                 color="green"
-                @click="maskedTransactionApiCall"
+                @click="maskedDataCallGraphApiCall"
               >
                 <v-icon>mdi-cached</v-icon>
               </v-btn>
@@ -383,10 +383,10 @@
             <v-card-text>
               <v-data-table
                 :headers="headersMasked"
-                :items="displayedMaskedTransaction"
-                :options.sync="optionsMaskedTransaction"
-                :server-items-length="numMaskedTransaction"
-                :loading="loadingMaskedTransaction"
+                :items="displayedMaskedDataCallGraph"
+                :options.sync="optionsMaskedDataCallGraph"
+                :server-items-length="numMaskedDataCallGraph"
+                :loading="loadingMaskedDataCallGraph"
                 class="elevation-1"
               >
                 <template v-slot:item.technologies="{ item }">
@@ -397,7 +397,7 @@
                   </v-chip-group>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                  <v-icon small class="mr-2" @click="unMaskTransaction(item)">
+                  <v-icon small class="mr-2" @click="unMaskDataCallGraph(item)">
                     mdi-eye
                   </v-icon>
                 </template>
@@ -408,24 +408,24 @@
       </v-container>
     </v-card-text>
 
-    <!--  Modal Rename Transaction  -->
+    <!--  Modal Rename DataCallGraph  -->
     <v-dialog v-model="modalRename" width="500">
       <v-card>
         <v-card-title class="text-h5 white--text charcoal lighten-2">
-          Renaming a transaction
+          Renaming a Data Call Graph
         </v-card-title>
 
         <v-card-text class="mt-4">
           <v-container>
             <v-row class="my-4">
-              Enter the new Name of the transaction n°{{
-                toEditTransaction._id
+              Enter the new Name of the Data Call Graph n°{{
+                toEditDataCallGraph._id
               }}:
             </v-row>
             <v-row>
               <v-text-field
                 label="Outlined"
-                v-model="toEditTransaction.name"
+                v-model="toEditDataCallGraph.name"
                 single-line
                 outlined
               ></v-text-field>
@@ -461,13 +461,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import TransactionController from "@/api/imaging/TransactionController";
-import ITransaction from "@/api/interface/imaging/Transaction.interface";
-import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
+import DataCallGraphController from "@/api/imaging/DataCallGraphController";
+import {DataCallGraph} from "@/api/interface/imaging/DataCallGraph";
+import DataCallGraphInsights from "@/api/interface/imaging/DataCallGraphInsights";
 import { ApplicationController } from "@/api/applications/ApplicationController";
 
 export default Vue.extend({
-  name: "TransactionExplorer",
+  name: "DataCallGraphExplorer",
 
   computed: {
     getApplicationName() {
@@ -484,7 +484,7 @@ export default Vue.extend({
     application: "",
 
     // options
-    pinPrefix: "_",
+    pinPrefix: "#",
 
     headers: [
       {
@@ -512,28 +512,28 @@ export default Vue.extend({
       { text: "Actions", value: "actions", sortable: false }
     ],
 
-    loadingTransaction: true,
-    loadingMaskedTransaction: true,
+    loadingDataCallGraph: true,
+    loadingMaskedDataCallGraph: true,
 
-    optionsTransaction: {},
-    optionsMaskedTransaction: {},
+    optionsDataCallGraph: {},
+    optionsMaskedDataCallGraph: {},
 
-    numTransaction: 0,
-    numMaskedTransaction: 0,
+    numDataCallGraph: 0,
+    numMaskedDataCallGraph: 0,
 
-    // Transactions displayed
-    displayedTransaction: [] as ITransaction[],
-    displayedMaskedTransaction: [] as ITransaction[],
+    // DataCallGraph displayed
+    displayedDataCallGraph: [] as DataCallGraph[],
+    displayedMaskedDataCallGraph: [] as DataCallGraph[],
 
-    startIndexTransaction: 0,
-    endIndexTransaction: 0,
-    pageTransaction: 0,
+    startIndexDataCallGraph: 0,
+    endIndexDataCallGraph: 0,
+    pageDataCallGraph: 0,
 
-    startIndexMaskedTransaction: 0,
-    endIndexMaskedTransaction: 0,
-    pageMaskedTransaction: 0,
+    startIndexMaskedDataCallGraph: 0,
+    endIndexMaskedDataCallGraph: 0,
+    pageMaskedDataCallGraph: 0,
 
-    // Search Transaction
+    // Search DataCallGraph
     searchName: "",
 
     // Power Actions
@@ -544,41 +544,41 @@ export default Vue.extend({
 
     unmaskAllActionLoading: false,
 
-    // Transaction Insight
-    transactionInsights: {} as ITransactionsInsights,
+    // DataCallGraph Insight
+    dataCallGraphInsights: {} as DataCallGraphInsights,
     rangeObject: [0, 20],
     rangeTechnology: [0, 20],
     technologySearch: [] as string[],
     technologiesList: [] as string[],
     loadingTechList: false,
 
-    // Transaction Rename
+    // DataCallGraph Rename
     modalRename: false,
     loadingRename: false,
-    toEditTransaction: {} as ITransaction
+    toEditDataCallGraph: {} as DataCallGraph
   }),
 
   methods: {
     /**
-     *  Open the Rename modal for the transactions
+     *  Open the Rename modal for the dataCallGraphs
      **/
-    openRenameModal(item: ITransaction) {
-      this.toEditTransaction = Object.assign({}, item);
+    openRenameModal(item: DataCallGraph) {
+      this.toEditDataCallGraph = Object.assign({}, item);
       this.modalRename = true;
     },
 
     async confirmRename() {
       try {
         this.loadingRename = true;
-        await TransactionController.renameTransaction(
+        await DataCallGraphController.renameDataCallGraph(
           this.application,
-          this.toEditTransaction._id,
-          this.toEditTransaction.name
+          this.toEditDataCallGraph._id,
+          this.toEditDataCallGraph.name
         );
         this.closeRenameModal();
         this.refresh();
       } catch (err) {
-        console.error("Failed to rename the transaction.", err);
+        console.error("Failed to rename the dataCallGraph.", err);
       } finally {
         this.loadingRename = false;
       }
@@ -586,14 +586,14 @@ export default Vue.extend({
 
     closeRenameModal() {
       this.modalRename = false;
-      this.toEditTransaction = {};
+      this.toEditDataCallGraph = {};
     },
 
     /**
-     * Check if the prefix is present in the Transaction Name
+     * Check if the prefix is present in the DataCallGraph Name
      * @param item
      */
-    containsPrefix(item: ITransaction): boolean {
+    containsPrefix(item: DataCallGraph): boolean {
       try {
         return item.name.indexOf(this.pinPrefix) == 0;
       } catch (err) {
@@ -604,12 +604,12 @@ export default Vue.extend({
     async unmaskAll() {
       try {
         this.unmaskAllActionLoading = true;
-        this.numTransaction = await TransactionController.unMaskAllTransaction(
+        this.numDataCallGraph = await DataCallGraphController.unMaskAllDataCallGraph(
           this.application
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to un-mask all the transactions", err);
+        console.error("Failed to un-mask all the dataCallGraphs", err);
       } finally {
         this.unmaskAllActionLoading = false;
       }
@@ -637,7 +637,7 @@ export default Vue.extend({
     async maskByCount() {
       try {
         this.maskActionLoading = true;
-        this.numTransaction = await TransactionController.maskByCount(
+        this.numDataCallGraph = await DataCallGraphController.maskByCount(
           this.application,
           this.maskActionLimit
         );
@@ -652,7 +652,7 @@ export default Vue.extend({
     async maskByTechnology() {
       try {
         this.maskActionLoading = true;
-        this.numTransaction = await TransactionController.maskByTechnology(
+        this.numDataCallGraph = await DataCallGraphController.maskByTechnology(
           this.application,
           this.maskActionTechnology
         );
@@ -667,7 +667,7 @@ export default Vue.extend({
     async maskByTerms() {
       try {
         this.maskActionLoading = true;
-        this.numTransaction = await TransactionController.maskByTerms(
+        this.numDataCallGraph = await DataCallGraphController.maskByTerms(
           this.application,
           this.maskActionTermsList
         );
@@ -681,49 +681,49 @@ export default Vue.extend({
 
     async getInsights() {
       try {
-        this.transactionInsights = await TransactionController.getInsightsUnmaskedTransaction(
+        this.dataCallGraphInsights = await DataCallGraphController.getInsightsUnmaskedDataCallGraph(
           this.application
         );
 
         this.rangeTechnology = [
-          this.transactionInsights.minTechnology,
-          this.transactionInsights.maxTechnology
+          this.dataCallGraphInsights.minTechnology,
+          this.dataCallGraphInsights.maxTechnology
         ];
 
         this.rangeObject = [
-          this.transactionInsights.minObject,
-          this.transactionInsights.maxObject
+          this.dataCallGraphInsights.minObject,
+          this.dataCallGraphInsights.maxObject
         ];
       } catch (err) {
-        console.error("Failed to get the insights of transactions", err);
+        console.error("Failed to get the insights of dataCallGraphs", err);
       }
     },
 
-    async getNumberTransaction() {
+    async getNumberDataCallGraph() {
       try {
-        this.numTransaction = await TransactionController.getNumberTransaction(
+        this.numDataCallGraph = await DataCallGraphController.getNumberDataCallGraph(
           this.application
         );
-        return this.numTransaction;
+        return this.numDataCallGraph;
       } catch (err) {
-        console.error("Failed to get the number of transaction", err);
+        console.error("Failed to get the number of dataCallGraph", err);
       }
     },
 
-    async getNumberMaskedTransaction() {
+    async getNumberMaskedDataCallGraph() {
       try {
-        this.numMaskedTransaction = await TransactionController.getNumberMaskedTransaction(
+        this.numMaskedDataCallGraph = await DataCallGraphController.getNumberMaskedDataCallGraph(
           this.application
         );
       } catch (err) {
-        console.error("Failed to get the number of transaction", err);
+        console.error("Failed to get the number of dataCallGraph", err);
       }
     },
 
-    async transactionApiCall() {
-      this.loadingTransaction = true;
+    async dataCallGraphApiCall() {
+      this.loadingDataCallGraph = true;
 
-      await this.getNumberTransaction();
+      await this.getNumberDataCallGraph();
 
       const filter: any = {
         minTechnologies: this.rangeTechnology[0],
@@ -736,9 +736,9 @@ export default Vue.extend({
       if (this.searchName != "") filter.name = this.searchName;
 
       // eslint-disable-next-line prefer-const
-      let { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
+      let { sortBy, sortDesc, page, itemsPerPage } = this.optionsDataCallGraph;
       if (itemsPerPage === -1) {
-        itemsPerPage = this.numTransaction;
+        itemsPerPage = this.numDataCallGraph;
       }
 
       let sortByOption = null;
@@ -749,7 +749,7 @@ export default Vue.extend({
         sortByDesccOption = sortDesc[0];
 
 
-      const transactions = await TransactionController.getBatchTransaction(
+      const dataCallGraphs = await DataCallGraphController.getBatchDataCallGraph(
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
@@ -758,27 +758,27 @@ export default Vue.extend({
         filter
       );
 
-      this.loadingTransaction = false;
-      this.displayedTransaction = transactions;
-      return transactions;
+      this.loadingDataCallGraph = false;
+      this.displayedDataCallGraph = dataCallGraphs;
+      return dataCallGraphs;
     },
 
-    // Call the api to retrieve Masked transactions
-    async maskedTransactionApiCall() {
-      this.loadingMaskedTransaction = true;
+    // Call the api to retrieve Masked dataCallGraphs
+    async maskedDataCallGraphApiCall() {
+      this.loadingMaskedDataCallGraph = true;
 
-      await this.getNumberMaskedTransaction();
+      await this.getNumberMaskedDataCallGraph();
       const {
         sortBy,
         sortDesc,
-        page } = this.optionsMaskedTransaction;
+        page } = this.optionsMaskedDataCallGraph;
 
       let {
         itemsPerPage
-      } = this.optionsMaskedTransaction;
+      } = this.optionsMaskedDataCallGraph;
 
       if (itemsPerPage === -1) {
-        itemsPerPage = this.numMaskedTransaction;
+        itemsPerPage = this.numMaskedDataCallGraph;
       }
 
       let sortByOption = null;
@@ -788,7 +788,7 @@ export default Vue.extend({
       if (Array.isArray(sortDesc) && sortDesc.length === 1)
         sortByDesccOption = sortDesc[0];
 
-      const transactions = await TransactionController.getBatchMaskedTransaction(
+      const dataCallGraphs = await DataCallGraphController.getBatchMaskedDataCallGraph(
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
@@ -796,18 +796,18 @@ export default Vue.extend({
         sortByDesccOption
       );
 
-      this.loadingMaskedTransaction = false;
-      this.displayedMaskedTransaction = transactions;
-      return transactions;
+      this.loadingMaskedDataCallGraph = false;
+      this.displayedMaskedDataCallGraph = dataCallGraphs;
+      return dataCallGraphs;
     },
 
-    async maskTransaction(item: ITransaction) {
-      await TransactionController.maskTransaction(this.application, item._id);
+    async maskDataCallGraph(item: DataCallGraph) {
+      await DataCallGraphController.maskDataCallGraph(this.application, item._id);
       this.refresh();
     },
 
-    async pinTransaction(item: ITransaction) {
-      await TransactionController.pinTransaction(
+    async pinDataCallGraph(item: DataCallGraph) {
+      await DataCallGraphController.pinDataCallGraph(
         this.application,
         item._id,
         this.pinPrefix
@@ -815,8 +815,8 @@ export default Vue.extend({
       await this.refresh();
     },
 
-    async unpinTransaction(item: ITransaction) {
-      await TransactionController.unpinTransaction(
+    async unpinDataCallGraph(item: DataCallGraph) {
+      await DataCallGraphController.unpinDataCallGraph(
         this.application,
         item._id,
         this.pinPrefix
@@ -824,8 +824,8 @@ export default Vue.extend({
       await this.refresh();
     },
 
-    async renameTransaction(item: ITransaction) {
-      await TransactionController.renameTransaction(
+    async renameDataCallGraph(item: DataCallGraph) {
+      await DataCallGraphController.renameDataCallGraph(
         this.application,
         item._id,
         item.name
@@ -833,16 +833,16 @@ export default Vue.extend({
       await this.refresh();
     },
 
-    async unMaskTransaction(item: ITransaction) {
-      await TransactionController.unmaskTransaction(this.application, item._id);
+    async unMaskDataCallGraph(item: DataCallGraph) {
+      await DataCallGraphController.unmaskDataCallGraph(this.application, item._id);
       this.refresh();
     },
 
     async refresh() {
       await this.getInsights();
       await this.getTechnologies();
-      await this.transactionApiCall();
-      await this.maskedTransactionApiCall();
+      await this.dataCallGraphApiCall();
+      await this.maskedDataCallGraphApiCall();
     }
   },
 
@@ -852,16 +852,16 @@ export default Vue.extend({
       this.refresh();
     },
 
-    optionsTransaction: {
+    optionsDataCallGraph: {
       handler() {
-        this.transactionApiCall();
+        this.dataCallGraphApiCall();
       },
       deep: true
     },
 
-    optionsMaskedTransaction: {
+    optionsMaskedDataCallGraph: {
       handler() {
-        this.maskedTransactionApiCall();
+        this.maskedDataCallGraphApiCall();
       },
       deep: true
     }

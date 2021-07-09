@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {NextFunction, Request, Response} from 'express';
 import TransactionService from "@services/imaging/TransactionService";
 import {ITransaction} from "@interfaces/imaging/Transaction";

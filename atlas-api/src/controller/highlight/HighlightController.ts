@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import {NextFunction, Request, Response} from 'express';
 import ModuleService from '@services/demeter/ModuleService';
-import { checkBody, checkParams } from '@shared/FunctionGlob';
+import { checkBody, checkParams, checkQuery } from '@shared/FunctionGlob';
 import HttpException from '@exceptions/HttpException';
 import HighlightService from '@services/highlight/HighlightService';
 import { logger } from '@shared/Logger';
@@ -29,8 +29,8 @@ export default class HighlightController {
                 throw new HttpException(400, "No file was detected during the upload");
             }
 
-            checkBody(req, "application");
-            const application = String(req.body.application);
+            checkParams(req, "application");
+            const application = String(req.params.application);
 
             // Launch the import
             const recommendations: CloudBlocker[] = await this.highlightService.processExcel(application, file.path);
@@ -62,11 +62,11 @@ export default class HighlightController {
         try {
             checkBody(req, "blockers");
             const blockers: CloudBlocker[] = req.body.blockers;
-
+            
             // Launch the import
-            const recommendations: number = await this.highlightService.applyRecommendations(blockers);
+            const recommendations:  CloudBlocker[] = await this.highlightService.applyRecommendations(blockers);
 
-            res.status(200).json({data: recommendations, message: 'Applied recommendations'});
+            res.status(200).json({data: recommendations, message: 'Not Applied recommendations'});
 
         } catch (error) {
             next(error);

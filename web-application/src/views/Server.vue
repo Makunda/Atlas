@@ -189,6 +189,8 @@ export default Vue.extend({
     applicationName: "" as string,
     applicationList: [] as string[],
 
+    transitionName: "",
+
     onlineDatabase: false
   }),
 
@@ -255,7 +257,7 @@ export default Vue.extend({
       this.currentScreen = view;
     },
 
-    updateViewTab(newView) {
+    updateViewTab(newView: string) {
       for (let i = 0; i < this.items.length; i++) {
         if (this.items[i].screen === newView) {
           // Found a view with a matching name

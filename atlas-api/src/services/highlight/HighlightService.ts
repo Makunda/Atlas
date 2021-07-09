@@ -7,7 +7,6 @@ import { QueryResult } from "neo4j-driver";
 import CloudBlocker from "./CloudBlocker";
 
 export default class HighlightService {
-
   private static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
   private static CLOUD_WORKSHEET = "CloudReady Improvement";
   private static INDEX_TABLE_COL_NAME = "Cloud Requirement";
@@ -17,7 +16,10 @@ export default class HighlightService {
    * @param application Name of the application
    * @param path Path to the Excel report
    */
-  public async processExcel(application: string, path: string): Promise<CloudBlocker[]> {
+  public async processExcel(
+    application: string,
+    path: string
+  ): Promise<CloudBlocker[]> {
     const workbook = new Excel.Workbook();
 
     try {
@@ -44,7 +46,11 @@ export default class HighlightService {
     let startingTableIndexC = 0;
 
     // Search in the first 15 x 15 zone
-    search_loop: for (let indexR = 1; indexR < worksheet.actualRowCount; indexR++) {
+    search_loop: for (
+      let indexR = 1;
+      indexR < worksheet.actualRowCount;
+      indexR++
+    ) {
       for (let indexC = 1; indexC < worksheet.actualColumnCount; indexC++) {
         const element = worksheet.getCell(indexR, indexC);
         if (String(element.text) == HighlightService.INDEX_TABLE_COL_NAME) {
@@ -97,7 +103,7 @@ export default class HighlightService {
         });
       }
     } while (valid);
-    
+
     return blockerList;
   }
 
@@ -105,26 +111,29 @@ export default class HighlightService {
    * Apply a list of blocker as recommendation in cast imaging
    * @param {string} application Name of the application
    * @param {CloudBlocker[]} blockers List of blockers to apply
-   * @return {Promise<number>} the number of modification 
+   * @return {Promise<CloudBlocker[]>} List of blockers not applied
    */
-  public async applyRecommendations(blockers: CloudBlocker[]) : Promise<number> {
-
-    
-
-    let numResults = 0;
+  public async applyRecommendations(
+    blockers: CloudBlocker[]
+  ): Promise<CloudBlocker[]> {
+    const returnList: CloudBlocker[] = [];
     for (const blocker of blockers) {
+      try {
         const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
     WHERE p.Description='File' AND r.value CONTAINS $file
     WITH o as o LIMIT 1 
     SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE o.Tags + $tag END
     return o as node;`;
 
-        const params: any =  { file: blocker.file, tag: blocker.file };
-        const res:QueryResult = await HighlightService.NEO4JAL.executeWithParameters(req, params);
-        if(res && res.records.length > 0) numResults++;
+        const params: any = { file: blocker.file, tag: blocker.file };
+        const res: QueryResult =
+          await HighlightService.NEO4JAL.executeWithParameters(req, params);
+        if (!res || res.records.length == 0) returnList.push(blocker);
+      } catch (ignored) {
+        returnList.push(blocker);
+      }
     }
 
-    return numResults;
-
+    return returnList;
   }
 }

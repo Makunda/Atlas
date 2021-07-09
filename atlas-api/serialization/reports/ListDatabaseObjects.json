@@ -11,6 +11,6 @@
       "values" : ["Oracle", "SQL", "DB2"]
     }
   ],
-  "request": "MATCH (o:Object:`%APPLICATION_NAME%`)-[]->(t:Object:`%APPLICATION_NAME%`) \nWHERE NOT o.Type CONTAINS $Type AND t.Type CONTAINS $Type \nRETURN DISTINCT o.FullName as SourceObject, o.Name as SourceName, o.Type as SourceType, t.FullName as DatabaseFullName, t.Name as DatabaseName, t.Type as DatabaseType; ",
+  "request": "MATCH (o:Object:`%APPLICATION_NAME%`)-[]->(t:Object:`%APPLICATION_NAME%`) WHERE NOT o.Type CONTAINS $Type AND t.Type CONTAINS $Type \nRETURN DISTINCT o.FullName as SourceObject, o.Name as SourceName, o.Type as SourceType, t.FullName as DatabaseFullName, t.Name as DatabaseName, t.Type as DatabaseType; ",
   "returnValues": ["SourceObject", "SourceName", "SourceType", "DatabaseFullName", "DatabaseName", "DatabaseType"]
 }

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 <template>
   <v-container fluid>
     <v-container class=" d-flex flex-column">
@@ -55,7 +56,7 @@
                   class="mx-auto ma-2"
                   max-width="450"
                   :class="
-                    focusReportId === report.id ? 'selectedCard' : 'normalCard'
+                    focusReport.id === report.id ? 'selectedCard' : 'normalCard'
                   "
                   outlined
                 >
@@ -64,9 +65,9 @@
                       ><v-list-item three-line>
                         <v-list-item-content>
                           <div
-                            class="text-overline mb-4"
+                            class="text-overline mb-4 d-flex flex-row"
                             :class="
-                              focusReportId === report.id
+                              focusReport.id === report.id
                                 ? 'white--text'
                                 : 'black--text'
                             "
@@ -82,7 +83,7 @@
                           <v-list-item-title
                             class="text-h5 mb-1"
                             :class="
-                              focusReportId === report.id
+                              focusReport.id === report.id
                                 ? 'white--text'
                                 : 'black--text'
                             "
@@ -91,7 +92,7 @@
                           </v-list-item-title>
                           <v-list-item-subtitle
                             :class="
-                              focusReportId === report.id
+                              focusReport.id === report.id
                                 ? 'white--text'
                                 : 'black--text'
                             "
@@ -106,7 +107,7 @@
                         <v-card
                           class="my-4"
                           v-show="
-                            focusReportId === report.id &&
+                            focusReport.id === report.id &&
                               report.parameters &&
                               report.parameters.length > 0
                           "
@@ -129,21 +130,26 @@
                                     <i>{{ p.description }}</i>
                                   </p>
                                 </v-row>
-                                <v-row v-if="p.values === null">
-                                  <v-text-field
-                                    v-model="focusReportParameters[p.name]"
-                                    :label="p.name"
-                                    clearable
-                                    outlined
-                                  ></v-text-field>
-                                </v-row>
-                                <v-row v-if="p.values !== null">
+                                <v-row
+                                  v-if="
+                                    p.values !== null &&
+                                      typeof p.values !== 'undefined'
+                                  "
+                                >
                                   <v-select
                                     v-model="focusReportParameters[p.name]"
                                     :items="p.values"
                                     :label="p.name"
                                     outlined
                                   ></v-select>
+                                </v-row>
+                                <v-row v-else>
+                                  <v-text-field
+                                    v-model="focusReportParameters[p.name]"
+                                    :label="p.name"
+                                    clearable
+                                    outlined
+                                  ></v-text-field>
                                 </v-row>
                               </v-container>
                             </v-row>
@@ -155,8 +161,9 @@
 
                   <v-card-actions class="mt-4">
                     <v-btn
-                      v-if="focusReportId !== report.id"
-                      @click="focusReportId = report.id"
+                      v-if="focusReport.id !== report.id"
+                      @click="focusReport = report"
+                      :loading="loadingReport === report.id"
                       outlined
                       rounded
                       text
@@ -165,8 +172,9 @@
                     </v-btn>
 
                     <v-btn
-                      v-if="focusReportId === report.id"
+                      v-if="focusReport.id === report.id"
                       @click="generateReports"
+                      :loading="loadingReport === report.id"
                       class="white--text"
                       outlined
                       rounded
@@ -175,8 +183,8 @@
                       Generate
                     </v-btn>
                     <v-btn
-                      v-if="focusReportId === report.id"
-                      @click="focusReportId = -1"
+                      v-if="focusReport.id === report.id"
+                      @click="focusReport = { id: -1 }"
                       class="white--text"
                       outlined
                       rounded
@@ -236,7 +244,7 @@ export default Vue.extend({
     reportList: [] as ReportInterface[],
 
     // Element
-    focusReportId: -1,
+    focusReport: {} as any,
     focusReportParameters: {},
     loadingReport: -1,
 
@@ -267,12 +275,17 @@ export default Vue.extend({
     async generateReports() {
       if (this.loadingReport !== -1) {
         this.snackbarInfoDisplay = true;
-        this.snackbarInfo = `Report ${this.focusReportId} is being processed. Please wait.`;
+        this.snackbarInfo = `A Report is being processed. Please wait.`;
       } else {
+
+        this.snackbarInfoDisplay = true;
+        this.snackbarInfo = `Generating report: ${this.focusReport.name}`
+
         try {
-          this.loadingReport = this.focusReportId;
+          this.loadingReport = this.focusReport.id;
           await ReportController.generateReport(
-            this.focusReportId,
+            this.focusReport.id,
+            this.focusReport.nickname,
             this.application,
             this.focusReportParameters
           );
