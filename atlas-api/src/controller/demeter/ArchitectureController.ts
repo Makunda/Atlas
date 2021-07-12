@@ -140,7 +140,6 @@ export default class ArchitectureController {
     }
   };
 
-
   /**
    * Display a Architecture by its ID and all the children attached
    * POST {
@@ -150,7 +149,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-   public displayCompleteArchitectureById = async (
+  public displayCompleteArchitectureById = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -166,8 +165,7 @@ export default class ArchitectureController {
     }
   };
 
-
-   /**
+  /**
    * Display a subset by its ID
    * POST {
    *  id: number
@@ -176,25 +174,25 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-     public displaySubsetById = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-      ): Promise<void> => {
-        try {
-          checkBody(req, "id");
-          const id = Number(req.body.id);
-    
-          await this.architectureService.displaySubsetById(id);
-          res.status(200).json({ data: true, message: "Display subset" });
-        } catch (error) {
-          next(error);
-        }
-      };
+  public displaySubsetById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      checkBody(req, "id");
+      const id = Number(req.body.id);
+
+      await this.architectureService.displaySubsetById(id);
+      res.status(200).json({ data: true, message: "Display subset" });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   /**
    *  Duplicate an Architecture
-   * { 
+   * {
    *   id: number,
    *   name: string
    * }
@@ -202,27 +200,27 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-     public duplicateArchitecture = async (
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ): Promise<void> => {
-      try {
-        checkBody(req, "id");
-        checkBody(req, "name");
-        const id = Number(req.body.id);
-        const name = String(req.body.name);
-  
-        await this.architectureService.duplicateArchitecture(id, name);
-        res.status(200).json({ data: true, message: "Architecture duplicated" });
-      } catch (error) {
-        next(error);
-      }
-    };
+  public duplicateArchitecture = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      checkBody(req, "id");
+      checkBody(req, "name");
+      const id = Number(req.body.id);
+      const name = String(req.body.name);
 
-    /**
+      await this.architectureService.duplicateArchitecture(id, name);
+      res.status(200).json({ data: true, message: "Architecture duplicated" });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
    *  Group all the nodes unassigned in an archimodel under a subset
-   * { 
+   * {
    *   id: number,
    *   name: string,
    *   application: string
@@ -231,27 +229,27 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-     public groupUnassigned = async (
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ): Promise<void> => {
-      try {
-        checkBody(req, "id");
-        checkBody(req, "application");
-        const id = Number(req.body.id);
-        const application = String(req.body.application);
-  
-        await this.architectureService.groupUnassigned(application, id);
-        res.status(200).json({ data: true, message: "Architecture duplicated" });
-      } catch (error) {
-        next(error);
-      }
-    };
+  public groupUnassigned = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      checkBody(req, "id");
+      checkBody(req, "application");
+      const id = Number(req.body.id);
+      const application = String(req.body.application);
+
+      await this.architectureService.groupUnassigned(application, id);
+      res.status(200).json({ data: true, message: "Architecture duplicated" });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   /**
    *  Duplicate the Level 5 to a new architecture
-   * { 
+   * {
    *   name: string,
    *   application: string
    * }
@@ -259,25 +257,24 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-      public duplicateCastTaxonomy = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-      ): Promise<void> => {
-        try {
-          checkBody(req, "name");
-          checkBody(req, "application");
-          const name = String(req.body.name);
-          const application = String(req.body.application);
-    
-          await this.architectureService.duplicateCastTaxonomy(application, name);
-          res.status(200).json({ data: true, message: "Architecture duplicated" });
-        } catch (error) {
-          next(error);
-        }
-      };
+  public duplicateCastTaxonomy = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      checkBody(req, "name");
+      checkBody(req, "application");
+      const name = String(req.body.name);
+      const application = String(req.body.application);
 
-      
+      await this.architectureService.duplicateCastTaxonomy(application, name);
+      res.status(200).json({ data: true, message: "Architecture duplicated" });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   /**
    * Hide a subset by its ID
    * POST {
@@ -304,7 +301,6 @@ export default class ArchitectureController {
     }
   };
 
-
   /**
    * Update an Architecture by its ID
    * POST {
@@ -314,7 +310,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-   public updateArchitectureByID = async (
+  public updateArchitectureByID = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -331,6 +327,30 @@ export default class ArchitectureController {
     }
   };
 
+   /**
+   * Generate a module from an architecture view
+   * POST {
+   *  id: number
+   * }
+   * @param req Request
+   * @param res Response
+   * @param next NextFunction
+   */
+    public generateModuleFromArchitecture = async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ): Promise<void> => {
+      try {
+        checkBody(req, "id");
+        const id = Number(req.body.id);
+  
+        const results: string[] = await this.architectureService.generateModules(id);
+        res.status(200).json({ data: results, message: "Module generation" });
+      } catch (error) {
+        next(error);
+      }
+    };
 
   /**
    * Update a Subset by its ID
@@ -341,7 +361,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-   public updateSubsetByID = async (
+  public updateSubsetByID = async (
     req: Request,
     res: Response,
     next: NextFunction

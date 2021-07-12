@@ -36,6 +36,7 @@ export default class ArchitectureRoute implements Route {
         
         /** Update the architecture */
         this.router.post(`${this.path}/archimodel/update`, this.architectureController.updateArchitectureByID);
+        this.router.post(`${this.path}/archimodel/generate/modules`, this.architectureController.generateModuleFromArchitecture);
         this.router.post(`${this.path}/subset/update`, this.architectureController.updateSubsetByID);
 
         /** Display the architecture */

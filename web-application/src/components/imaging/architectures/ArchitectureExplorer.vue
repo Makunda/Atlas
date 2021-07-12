@@ -164,6 +164,21 @@
                           small
                           color="primary"
                           dark
+                          @click="downloadModuleDefinition(selected._id)"
+                        >
+                          <v-icon left>
+                            mdi-content-copy
+                          </v-icon>
+                          To modules {{ getSelectedName(selected) }}
+                        </v-btn>
+
+                        <v-btn
+                          v-if="selected.type == 'archimodel'"
+                          class="ma-2"
+                          rounded
+                          small
+                          color="primary"
+                          dark
                           @click="unassignedModal = true"
                         >
                           <v-icon left>
@@ -298,11 +313,18 @@
                       <p class="red--text">{{ taxonomyArchitectureError }}</p>
                     </v-row>
                     <v-row class="mx-1" v-if="taxonomyArchitectureError !== ''">
-                      <p class="green--text">{{ taxonomyArchitectureSuccess }}</p>
+                      <p class="green--text">
+                        {{ taxonomyArchitectureSuccess }}
+                      </p>
                     </v-row>
                   </v-col>
                   <v-col cols="3">
-                    <v-btn round color="primary" dark @click="replicateTaxonomy" :loading="taxonomyArchitectureLoading"
+                    <v-btn
+                      round
+                      color="primary"
+                      dark
+                      @click="replicateTaxonomy"
+                      :loading="taxonomyArchitectureLoading"
                       >Replicate Architecture</v-btn
                     >
                   </v-col>
@@ -534,6 +556,21 @@ export default Vue.extend({
         );
       } finally {
         this.hidingElement = false;
+      }
+    },
+
+    /**
+     * Download the definition of the module for the current architecture id
+     * @params {number} architectureId Id of the architecture
+     */
+    async downloadModuleDefinition(architectureId: number) {
+      try {
+        await ArchitectureController.generateModulesFromArchitecture(
+          this.application,
+          architectureId
+        );
+      } catch (err) {
+        console.error("Failed to generate the module definition.", err);
       }
     },
 

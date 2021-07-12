@@ -5,10 +5,12 @@ import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";
 import TagService from "@services/configuration/TagService";
 import { logger } from "@shared/Logger";
-import { QueryResult, Node } from "neo4j-driver";
+import { QueryResult, Node, int } from "neo4j-driver";
 
 export default class ArchitectureService {
   private static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+  private static ARCHITECTURE_LABEL = "ArchiModel";
+  private static SUBSET_LABEL = "Subset";
 
   /**
    * Get the Hidden label of the architecture nodes
@@ -290,6 +292,55 @@ export default class ArchitectureService {
       logger.error(`Failed to recreate Cast Taxonomy.`, err);
       throw err;
     }
+  }
+  
+  /**
+   * Generate the explicit filter modules from the Architecture ID 
+   * @param {number} architectureId Id of the architecture 
+   */
+  public async generateModules(architectureId: number) : Promise<string[]> {
+    const req = `MATCH (a:${ArchitectureService.ARCHITECTURE_LABEL})-[]->(s:${ArchitectureService.SUBSET_LABEL})
+    WHERE ID(a)=$id
+    RETURN DISTINCT ID(s) as subsetId, s.Name as subsetName;
+    `;
+    const result: QueryResult = await ArchitectureService.NEO4JAL.executeWithParameters(req, {
+      id: int(architectureId)});
+    // Get subsets and store query results
+    const queries = [] as string[];
+    for (let index = 0; index < result.records.length; index++) {
+      const subset = int(result.records[index].get("subsetId"));
+      const subsetName = String(result.records[index].get("subsetName"));
+      
+      // Get Objects' ID
+      const reqObject = `MATCH (s:${ArchitectureService.SUBSET_LABEL})-[]->(o:Object)
+        WHERE ID(s)=$id
+        RETURN DISTINCT o.AipId as objectId;
+      `;
+      const objectResults: QueryResult = await ArchitectureService.NEO4JAL.executeWithParameters(reqObject, {
+        id: subset});
+      
+      // Iterate and store Object's ID
+      const objectList = [] as number[];
+      for (let index2 = 0; index < objectResults.records.length; index2++) {
+        const objectId = int(objectResults.records[index2].get("objectId")).toNumber();
+        objectList.push(objectId);
+      }
+
+      // Generate and store query
+      const query = `
+// Define the module: '${subsetName}'
+delete from §CI_OBJECTS_SET where set_name = '$(ModuleName)';
+  
+insert into §CI_OBJECTS_SET(set_name, object_id, error_id)
+select '$(ModuleName)', o.object_id, 0
+from §CDT_OBJECTS o
+where object_id IN (${objectList.join(", ")});
+
+`;
+      queries.push(query);
+    }
+
+    return queries;
   }
 
   /**

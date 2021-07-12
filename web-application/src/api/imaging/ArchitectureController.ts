@@ -77,7 +77,7 @@ export default class ArchitectureController {
    * @param type Type of the architecture element
    */
   public static async deleteArchitectureElement(
-    application: string, 
+    application: string,
     id: number,
     type: string
   ): Promise<void> {
@@ -96,6 +96,56 @@ export default class ArchitectureController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete architecture element.`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Generate Modules definition from an Architecture view
+   * @param {string} application Name of the application
+   * @param {number} id Id of the Architecture module
+   */
+  public static async generateModulesFromArchitecture(
+    application: string,
+    id: number
+  ): Promise<void> {
+    const url =
+      ArchitectureController.API_BASE_URL +
+      `/api/imaging/architectures/archimodel/generate/modules`;
+
+    try {
+      const res = await axios.post(url, { id: id });
+
+      if (res.status != 200) {
+        throw new Error(
+          `Failed to generate module from architecture views. Status (${res.status}). Message: ${res.data}`
+        );
+      } else {
+        // Save as text file the result
+        const apiResponse = res.data as ApiResponse;
+        const queries = apiResponse.data as string[];
+
+        const pom = document.createElement("a");
+        pom.setAttribute(
+          "href",
+          "data:text/plain;charset=utf-8," +
+            encodeURIComponent(queries.join("\n"))
+        );
+        pom.setAttribute("download", `Module_definition_${application}.txt`);
+
+        if (document.createEvent) {
+          const event = document.createEvent("MouseEvents");
+          event.initEvent("click", true, true);
+          pom.dispatchEvent(event);
+        } else {
+          pom.click();
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to generate module from architecture views.`,
         error
       );
       throw error;
@@ -132,13 +182,12 @@ export default class ArchitectureController {
     }
   }
 
-
   /**
    * Modify architecture element using its id
    * @param id Id of the architecture element
    * @param type Type of the architecture element
    */
-   public static async updateArchitectureElement(
+  public static async updateArchitectureElement(
     id: number,
     type: string,
     data: any
@@ -147,7 +196,7 @@ export default class ArchitectureController {
       ArchitectureController.API_BASE_URL +
       `/api/imaging/architectures/${type}/update`;
 
-    try { 
+    try {
       const params: any = data;
       params.id = id;
 
@@ -195,13 +244,12 @@ export default class ArchitectureController {
     }
   }
 
-
   /**
    * Duplicate an existing architecture and assign a new name
    * @param id Id of the architecture element
    * @param name Name of the architecture
    */
-   public static async duplicateArchiModel(
+  public static async duplicateArchiModel(
     id: number,
     name: string
   ): Promise<void> {
@@ -231,7 +279,7 @@ export default class ArchitectureController {
    * @param id Id of the architecture element
    * @param application Name of the application
    */
-   public static async groupUnassigned(
+  public static async groupUnassigned(
     id: number,
     application: string
   ): Promise<void> {
@@ -256,33 +304,36 @@ export default class ArchitectureController {
     }
   }
 
-   /**
+  /**
    * Duplicate an existing architecture and assign a new name
    * @param id Id of the architecture element
    * @param application Name of the application
    */
-    public static async duplicateTaxonomy(
-      name: string,
-      application: string
-    ): Promise<void> {
-      const url =
-        ArchitectureController.API_BASE_URL +
-        `/api/imaging/architectures/archimodel/duplicate/taxonomy`;
-  
-      try {
-        const res = await axios.post(url, { name: name, application: application });
-  
-        if (res.status != 200) {
-          throw new Error(
-            `Failed to duplicate CAST Taxonomy. Status (${res.status}). Message: ${res.data}`
-          );
-        }
-      } catch (error) {
-        console.error(
-          `Failed to reach the API : ${url}. Failed to duplicate CAST Taxonomy.`,
-          error
+  public static async duplicateTaxonomy(
+    name: string,
+    application: string
+  ): Promise<void> {
+    const url =
+      ArchitectureController.API_BASE_URL +
+      `/api/imaging/architectures/archimodel/duplicate/taxonomy`;
+
+    try {
+      const res = await axios.post(url, {
+        name: name,
+        application: application,
+      });
+
+      if (res.status != 200) {
+        throw new Error(
+          `Failed to duplicate CAST Taxonomy. Status (${res.status}). Message: ${res.data}`
         );
-        throw error;
       }
+    } catch (error) {
+      console.error(
+        `Failed to reach the API : ${url}. Failed to duplicate CAST Taxonomy.`,
+        error
+      );
+      throw error;
     }
+  }
 }
