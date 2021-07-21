@@ -163,6 +163,7 @@
                           rounded
                           small
                           color="primary"
+                          :loading="loadingModuleDefinition"
                           dark
                           @click="downloadModuleDefinition(selected._id)"
                         >
@@ -428,7 +429,10 @@ export default Vue.extend({
     editItem: {} as Archimodel,
 
     // Hiding level
-    hidingElement: false
+    hidingElement: false,
+
+    // Module definition 
+    loadingModuleDefinition: false
   }),
 
   computed: {
@@ -484,6 +488,9 @@ export default Vue.extend({
       }
     },
 
+    /**
+     * Get the architectures models in one application
+     */
     async getArchitectures() {
       try {
         this.loadingRoots = true;
@@ -505,6 +512,9 @@ export default Vue.extend({
       }
     },
 
+    /**
+     * Edit an Architecture
+     */
     async editLevel(item: Archimodel) {
       this.editionType = "Edit ";
       this.editItem = Object.assign({}, item);
@@ -565,12 +575,17 @@ export default Vue.extend({
      */
     async downloadModuleDefinition(architectureId: number) {
       try {
+        this.loadingModuleDefinition = true;
+        this.displaySnackBar("Generating the module definition..")
         await ArchitectureController.generateModulesFromArchitecture(
           this.application,
           architectureId
         );
       } catch (err) {
         console.error("Failed to generate the module definition.", err);
+        this.displaySnackBar(`Module generation failed. Error: ${err}`)
+      } finally {
+        this.loadingModuleDefinition = false;
       }
     },
 
@@ -613,6 +628,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
+       this.architectures = [];
+       this.loadedArchitectures = [];
       this.refresh();
     },
 

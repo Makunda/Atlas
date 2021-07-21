@@ -321,7 +321,7 @@ export default class ArchitectureService {
       
       // Iterate and store Object's ID
       const objectList = [] as number[];
-      for (let index2 = 0; index < objectResults.records.length; index2++) {
+      for (let index2 = 0; index2 < objectResults.records.length; index2++) {
         const objectId = int(objectResults.records[index2].get("objectId")).toNumber();
         objectList.push(objectId);
       }

@@ -64,9 +64,30 @@ export default class HighlightController {
             const blockers: CloudBlocker[] = req.body.blockers;
             
             // Launch the import
-            const recommendations:  CloudBlocker[] = await this.highlightService.applyRecommendations(blockers);
+            const [recommendations, errors]:  [CloudBlocker[], CloudBlocker[]] = await this.highlightService.applyRecommendations(blockers);
 
-            res.status(200).json({data: recommendations, message: 'Not Applied recommendations'});
+            res.status(200).json({data: recommendations, error: errors, message: 'Not Applied recommendations'});
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+     /**
+     * Test a recommendation on the on-boarded applications
+     * @param req Request
+     * @param res Response
+     * @param next Next Function
+     */
+      public testRecommendation= async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            checkBody(req, "blocker");
+            const blocker: CloudBlocker = req.body.blocker;
+            
+            // Launch the import
+            const success: boolean = await this.highlightService.testRecommendation(blocker);
+
+            res.status(200).json({data: success, message: 'Result of the test'});
 
         } catch (error) {
             next(error);

@@ -102,7 +102,7 @@
                           </p>
                           <v-spacer></v-spacer>
                           <v-btn
-                            v-if="editMode"
+                            v-show="editMode"
                             @click="close"
                             class="ma-2 mr-5"
                             small
@@ -117,8 +117,9 @@
 
                         <!-- Forms -->
                         <!-- Tag Form -->
+                        <v-expand-x-transition>
                         <v-form
-                          v-if="editMode"
+                          v-show="editMode"
                           class="pa-4"
                           ref="form"
                           lazy-validation
@@ -195,6 +196,7 @@
                             Open assitant
                           </v-btn>
                         </v-form>
+                        </v-expand-x-transition>
                         <div v-show="!editMode">
                           <h3 class="ma-auto">
                             Please select a tag or

@@ -13,6 +13,7 @@ import Highlight from "@/components/screens/highlight/Highlight.vue";
 import ImagingTuning from "@/components/screens/imagingTuning/ImagingTuning.vue";
 import Automation from "@/components/screens/automation/Automation.vue";
 import Administration from "@/components/screens/administration/Administration.vue";
+import AipAdministration from "@/components/screens/aip/administration/AipAdministration.vue";
 import Server from "@/views/Server.vue";
 import NotFound from "@/views/NotFound.vue";
 
@@ -77,6 +78,10 @@ const routes: Array<RouteConfig> = [
       {
         path: "frameworks",
         component: Frameworks
+      },
+      {
+        path: "aipAdministration",
+        component: AipAdministration
       },
       {
         path: "parameters",

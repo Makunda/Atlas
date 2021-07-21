@@ -115,12 +115,13 @@ export default class HighlightService {
    */
   public async applyRecommendations(
     blockers: CloudBlocker[]
-  ): Promise<CloudBlocker[]> {
+  ): Promise<[CloudBlocker[], CloudBlocker[]]> {
     const returnList: CloudBlocker[] = [];
+    const errorList: CloudBlocker[] = [];
     for (const blocker of blockers) {
       try {
         const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
-    WHERE p.Description='File' AND r.value CONTAINS $file
+    WHERE p.Description='File' AND r.value ENDS WITH $file 
     WITH o as o LIMIT 1 
     SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE o.Tags + $tag END
     return o as node;`;
@@ -129,11 +130,33 @@ export default class HighlightService {
         const res: QueryResult =
           await HighlightService.NEO4JAL.executeWithParameters(req, params);
         if (!res || res.records.length == 0) returnList.push(blocker);
+        else errorList.push(blocker);
       } catch (ignored) {
         returnList.push(blocker);
       }
     }
 
-    return returnList;
+    return [returnList, errorList];
+  }
+
+  /**
+   * Test a blocker
+   * @param {Blocker} blocker Blocker to test
+   * @returns True if the test is successful, False otherwise
+   */
+  public async testRecommendation(blocker: CloudBlocker): Promise<boolean> {
+    try {
+      const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
+  WHERE p.Description='File' AND r.value ENDS WITH $file 
+  return o as node LIMIT 1;`;
+
+      const params: any = { file: blocker.file, tag: blocker.file };
+      const res: QueryResult =
+        await HighlightService.NEO4JAL.executeWithParameters(req, params);
+      if (!res || res.records.length == 0) return true;
+      else return false;
+    } catch (ignored) {
+      return false;
+    }
   }
 }

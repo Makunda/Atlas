@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import HttpException from "@exceptions/HttpException";
 import {logger} from "./Logger";
 import {Request} from 'express';

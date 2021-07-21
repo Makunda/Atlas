@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {Request, Router} from 'express';
 import HighlightController from "@controller/highlight/HighlightController";
@@ -40,9 +41,13 @@ class HighlightRecommendationRoute implements Route {
         this.initializeRoutes();
     }
 
+    /**
+     * Initialize the Routes 
+     */
     private initializeRoutes() {
         this.router.post(`${this.path}/file/upload/cloud/blockers/:application`, this.multerUpload.single('file'), this.highlightController.processRecommendationFile);
         this.router.post(`${this.path}/apply/cloud/blockers`, this.highlightController.applyRecommendations);
+        this.router.post(`${this.path}/test/cloud/blockers`, this.highlightController.testRecommendation);
     }
 }
 

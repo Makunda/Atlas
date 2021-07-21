@@ -39,6 +39,7 @@ export default abstract class AAgent {
             try {
                 await this.group();
                 this.numRetry = 0;
+                await sleep(this.getDelay())
             } catch (err) {
                 this.numRetry++;
 

@@ -4,9 +4,9 @@ import {Node, int} from "neo4j-driver";
  * Different types of schema that can be 
  */
 export enum SchemaType {
-    LOCAL,
-    MANAGEMENT,
-    CENTRAL
+    LOCAL = "Local",
+    MANAGEMENT = "Management",
+    CENTRAL = "Central"
 }
 
 /**
@@ -24,6 +24,8 @@ export function schemaTypeFromString(type: string) : SchemaType {
             throw new Error(`${type} doesn't exist in the SchemaType.`)
     }
 }
+
+
 
 /**
  * Schema of one application on the server

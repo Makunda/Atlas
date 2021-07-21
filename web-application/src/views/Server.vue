@@ -168,6 +168,7 @@ export default Vue.extend({
 
     items: [
       { name: "Server", screen: "", icon: "mdi-server" },
+      { name: "Aip Servers", screen: "aipAdministration", icon: "mdi-server" },
       {
         name: "Automation",
         screen: "automation",

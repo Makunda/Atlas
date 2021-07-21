@@ -77,4 +77,38 @@ export class HighlightController {
       }
   
     }
+
+    /**
+   * Apply a list of recommendation on the application
+   */
+  public static async testBlocker(blocker: CloudBlocker): Promise<CloudBlocker[]> {
+    const url =
+      HighlightController.API_BASE_URL + "/api/highlight/recommendations/test/cloud/blockers";
+
+      try {
+        const body = {
+          blocker: blocker
+        }
+
+        const res = await axios.post(url, body);
+  
+        if (res.status == 200) {
+          const apiResponse: ApiResponse = res.data;
+          if(Array.isArray(apiResponse.data)) {
+              return apiResponse.data as CloudBlocker[];
+          }
+        } else {
+          throw new Error(
+            `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Failed to reach the API : ${url}. Failed to test the recommendations.`,
+          error
+        );
+        throw error;
+      }
+  
+    }
 }

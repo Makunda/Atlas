@@ -4,7 +4,7 @@
   "scripts": {
     "client:build": "npm run --prefix ../web-application build",
     "api:build": "ts-node build.ts",
-    "build": "npm-run-all -p client:build api:build",
+    "build": "npm-run-all client:build api:build",
     "lint": "eslint . --ext .ts",
     "start": "node ./dist --env=production",
     "start:dev": "nodemon --verbose",

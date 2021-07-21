@@ -95,6 +95,28 @@
                         </v-col>
                         <v-col cols="6">
                           <v-text-field
+                            v-model="defaultReplacement"
+                            label="Regex to be removed"
+                            multiple
+                            chips
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-btn color="success" @click="removeBeginning"
+                            >Remove beginnning</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+
+                      <!-- Replacement  -->
+                      <v-row>
+                        <v-col cols="2">
+                          <p>
+                            <span class="subtitle-1">Modify file path:</span>
+                          </p>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-text-field
                             v-model="defaultRegex"
                             label="Regular expression to modify file fields"
                             multiple
@@ -323,6 +345,7 @@ export default Vue.extend({
     pagination: {},
 
     defaultRegex: "(\\w+\\.\\w+)",
+    defaultReplacement: "",
 
     // Applying tags
     loadingApply: false,
@@ -375,7 +398,6 @@ export default Vue.extend({
               ? this.blockerDisplayedList.length - 1
               : index + batchSize;
           const batch = this.blockerDisplayedList.slice(index, upBound);
-          console.log("To send", batch);
           
           // Send batch
           const noApplied = await HighlightController.applyBlockers(batch);
@@ -496,6 +518,18 @@ export default Vue.extend({
       this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
       this.blockerDisplayedList.forEach((x: CloudBlocker) => {
         const regexResult = x.file.match(this.defaultRegex);
+        if (regexResult && regexResult.length > 0) {
+          x.file = regexResult[1];
+        }
+      });
+    },
+
+    removeBeginning() {
+      const regex = new RegExp("", 'gi');
+
+      this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
+      this.blockerDisplayedList.forEach((x: CloudBlocker) => {
+        const regexResult = x.file.replace(regex, '');
         if (regexResult && regexResult.length > 0) {
           x.file = regexResult[1];
         }

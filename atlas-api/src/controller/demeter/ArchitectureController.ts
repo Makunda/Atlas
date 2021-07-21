@@ -5,6 +5,7 @@ import { checkBody, checkParams } from "@shared/FunctionGlob";
 import HttpException from "@exceptions/HttpException";
 import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";
+import { logger } from "@shared/Logger";
 
 export default class ArchitectureController {
   private architectureService = new ArchitectureService();
@@ -348,6 +349,7 @@ export default class ArchitectureController {
         const results: string[] = await this.architectureService.generateModules(id);
         res.status(200).json({ data: results, message: "Module generation" });
       } catch (error) {
+        logger.error("Failed to generate the module definition.", error)
         next(error);
       }
     };
