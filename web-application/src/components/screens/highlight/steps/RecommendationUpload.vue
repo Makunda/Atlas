@@ -371,7 +371,7 @@ export default Vue.extend({
     // Review results
     appliedBlockers: 0,
     errorApplying: "",
-    blockerNotApplied: [] as CloudBlocker,
+    blockerNotApplied: [] as CloudBlocker[],
 
     // Progression
     sizeToSend: 0,

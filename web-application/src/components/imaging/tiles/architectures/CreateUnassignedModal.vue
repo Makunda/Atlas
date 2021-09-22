@@ -50,6 +50,9 @@
           >
         </v-card-actions>
       </v-card>
+
+
+
     </template>
   </v-dialog>
 </template>
@@ -57,6 +60,7 @@
 <script lang="ts">
 import Vue from "vue";
 import ArchitectureController from "@/api/imaging/ArchitectureController";
+import AddAIPServerModal from "@/components/aip/AddAIPServerModal.vue";
 
 export default Vue.extend({
   name: "CreateUnassignedModal",
@@ -66,6 +70,8 @@ export default Vue.extend({
     element: Object,
     dialog: Boolean
   },
+
+
 
   mounted() {
     this.refresh();
@@ -86,7 +92,10 @@ export default Vue.extend({
 
       // errors & loading levels
       errordestinationModules: "",
-      loadingdestinationModules: false
+      loadingdestinationModules: false,
+
+      // Modal 
+      dialogAddServer: false
     };
   },
 

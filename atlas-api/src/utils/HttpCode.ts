@@ -1,0 +1,19 @@
+export enum HttpCode {
+  // Success
+  SUCCESS = 200,
+  CREATED = 201,
+  ACCEPTED = 202,
+
+  // Redirection
+  REDIRECT_PERMANENT = 301,
+  REDIRECT_TEMPORARY = 302,
+
+  // Client
+  BAD_REQUEST = 400,
+  ACCESS_UNAUTHORIZED = 401,
+  ACCESS_REFUSED = 403,
+  NOT_FOUND = 404,
+
+  // Server
+  INTERNAL_ERROR = 500,
+}

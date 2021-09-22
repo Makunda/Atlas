@@ -49,9 +49,9 @@ export interface AipSchema {
     const type = schemaTypeFromString(properties["Type"]);
 
     return {
-        id: int(n.identity).toNumber(),
-        name: String(properties["Name"]),
-        schema: String(properties["Url"]),
-        type: type
+      id: int(n.identity).toNumber(),
+      name: String(properties["Name"]),
+      schema: String(properties["Schema"]),
+      type: type,
     } as AipSchema;
 }

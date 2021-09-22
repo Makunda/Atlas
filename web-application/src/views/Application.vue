@@ -176,7 +176,8 @@ export default Vue.extend({
         icon: "mdi-hexagon-multiple",
       },
       { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" },
-      { name: "Highlight", screen: "highlight", icon: "mdi-fire" },
+      { name: "Highlight Injection", screen: "highlight", icon: "mdi-fire" },
+      { name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" },
     ],
 
     loadingApplication: true as boolean,
