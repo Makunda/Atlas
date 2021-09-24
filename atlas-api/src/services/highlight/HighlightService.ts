@@ -4,7 +4,7 @@ import { logger } from "@shared/Logger";
 import Excel from "exceljs";
 import { file } from "find";
 import { QueryResult } from "neo4j-driver";
-import CloudBlocker from "./CloudBlocker";
+import CloudBlocker from "../../interfaces/highlight/recommendations/CloudBlocker";
 
 export default class HighlightService {
   private static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
@@ -18,7 +18,7 @@ export default class HighlightService {
    */
   public async processExcel(
     application: string,
-    path: string
+    path: string,
   ): Promise<CloudBlocker[]> {
     const workbook = new Excel.Workbook();
 
@@ -35,7 +35,7 @@ export default class HighlightService {
         .includes(HighlightService.CLOUD_WORKSHEET)
     ) {
       throw new Error(
-        `Excel report is not correct. Failed to find ${HighlightService.CLOUD_WORKSHEET}.`
+        `Excel report is not correct. Failed to find ${HighlightService.CLOUD_WORKSHEET}.`,
       );
     }
 
@@ -64,7 +64,7 @@ export default class HighlightService {
 
     if (!found) {
       throw new Error(
-        `The excel file is not valid. Missing ${HighlightService.INDEX_TABLE_COL_NAME} table in worksheet ${HighlightService.CLOUD_WORKSHEET}`
+        `The excel file is not valid. Missing ${HighlightService.INDEX_TABLE_COL_NAME} table in worksheet ${HighlightService.CLOUD_WORKSHEET}`,
       );
     }
 
@@ -75,19 +75,19 @@ export default class HighlightService {
       startingTableIndexR++;
       const requirement = worksheet.getCell(
         startingTableIndexR,
-        startingTableIndexC
+        startingTableIndexC,
       ).text;
       const blocker = worksheet.getCell(
         startingTableIndexR,
-        startingTableIndexC + 1
+        startingTableIndexC + 1,
       ).text;
       const technology = worksheet.getCell(
         startingTableIndexR,
-        startingTableIndexC + 2
+        startingTableIndexC + 2,
       ).text;
       const file = worksheet.getCell(
         startingTableIndexR,
-        startingTableIndexC + 3
+        startingTableIndexC + 3,
       ).text;
 
       // If end of the table is reached
@@ -114,7 +114,7 @@ export default class HighlightService {
    * @return {Promise<CloudBlocker[]>} List of blockers not applied
    */
   public async applyRecommendations(
-    blockers: CloudBlocker[]
+    blockers: CloudBlocker[],
   ): Promise<[CloudBlocker[], CloudBlocker[]]> {
     const returnList: CloudBlocker[] = [];
     const errorList: CloudBlocker[] = [];
@@ -123,10 +123,10 @@ export default class HighlightService {
         const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
     WHERE p.Description='File' AND r.value ENDS WITH $file 
     WITH o as o LIMIT 1 
-    SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE o.Tags + $tag END
+    SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE [ x in o.Tags WHERE NOT x=$tag ] + $tag END
     return o as node;`;
 
-        const params: any = { file: blocker.file, tag: blocker.file };
+        const params: any = { file: blocker.file, tag: blocker.blocker };
         const res: QueryResult =
           await HighlightService.NEO4JAL.executeWithParameters(req, params);
         if (!res || res.records.length == 0) returnList.push(blocker);

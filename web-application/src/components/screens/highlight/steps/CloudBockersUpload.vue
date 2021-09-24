@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <h3 class="text-h4">
-        Review the blockers in the {{ application }} application.
+        Inject <strong>Cloud blockers</strong> into {{ application }} application.
       </h3>
       <v-spacer></v-spacer>
       <v-btn class="mr-5" icon color="green" @click="refresh">
@@ -316,7 +316,7 @@ import CloudBlocker from "@/api/interface/highlight/CloudBlocker";
 import { HighlightController } from "@/api/highlight/HighlightController";
 
 export default Vue.extend({
-  name: "RecommendationUpload",
+  name: "CloudBockersUpload",
 
   computed: {
     getApplicationName() {

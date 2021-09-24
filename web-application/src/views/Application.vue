@@ -125,13 +125,8 @@ import Vue from "vue/types/umd";
             <component class="" :is="Component" />
           </transition>
         </router-view>
-
-        <!--      <component-->
-        <!--          :is="currentScreen"-->
-        <!--          v-model="applicationName"-->
-        <!--          class="custom-container"-->
-        <!--      ></component>-->
       </v-row>
+      <FlashMessage />
     </v-app>
   </div>
 </template>
@@ -140,12 +135,16 @@ import Vue from "vue/types/umd";
 import Vue from "vue";
 
 import { ApplicationController } from "@/api/applications/ApplicationController";
-
+import FlashMessage from "@/modules/flash/FlashMessage.vue";
 import { Configuration } from "@/Configuration";
 import { UtilsController } from "@/api/utils/utils.controller";
 
 export default Vue.extend({
   name: "Application",
+
+  components: {
+    FlashMessage
+  },
 
   mounted() {
     this.getApplicationList();

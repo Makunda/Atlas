@@ -1,9 +1,10 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import CloudBlocker from "../interface/highlight/CloudBlocker";
+import flash, { FlashType } from "@/modules/flash/Flash";
+import OssRecommendation from "../interface/highlight/OssRecommendation";
 
-export class HighlightController {
+export class OSSController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   /**
@@ -11,11 +12,11 @@ export class HighlightController {
    */
   public static async uploadFile(
     file: any,
-    application: string
-  ): Promise<CloudBlocker[]> {
+    application: string,
+  ): Promise<OssRecommendation[]> {
     const url =
-      HighlightController.API_BASE_URL +
-      `/api/highlight/recommendations/cloud/file/upload/blockers/${application}`;
+      OSSController.API_BASE_URL +
+      `/api/highlight/recommendations/oss/file/upload/blockers/${application}`;
 
     try {
       const formData = new FormData();
@@ -23,24 +24,29 @@ export class HighlightController {
       formData.append("application", application);
       const res = await axios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as CloudBlocker[];
+          return apiResponse.data as OssRecommendation[];
         }
       } else {
         throw new Error(
-          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
+      flash.commit("add", {
+        type: FlashType.ERROR,
+        title: "Failed to send the list of recommendation.",
+        body: error,
+      });
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -50,15 +56,17 @@ export class HighlightController {
    * Apply a list of recommendation on the application
    */
   public static async applyBlockers(
-    blockers: CloudBlocker[]
-  ): Promise<CloudBlocker[]> {
+    blockers: OssRecommendation[],
+    taggingType: string,
+  ): Promise<OssRecommendation[]> {
     const url =
-      HighlightController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/apply/blockers";
+      OSSController.API_BASE_URL +
+      "/api/highlight/recommendations/oss/apply/blockers";
 
     try {
       const body = {
-        blockers: blockers
+        blockers: blockers,
+        taggingType: taggingType,
       };
 
       const res = await axios.post(url, body);
@@ -66,17 +74,17 @@ export class HighlightController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as CloudBlocker[];
+          return apiResponse.data as OssRecommendation[];
         }
       } else {
         throw new Error(
-          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to apply the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -86,15 +94,15 @@ export class HighlightController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: CloudBlocker
-  ): Promise<CloudBlocker[]> {
+    blocker: OssRecommendation,
+  ): Promise<OssRecommendation[]> {
     const url =
-      HighlightController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/test/blockers";
+      OSSController.API_BASE_URL +
+      "/api/highlight/recommendations/oss/test/blockers";
 
     try {
       const body = {
-        blocker: blocker
+        blocker: blocker,
       };
 
       const res = await axios.post(url, body);
@@ -102,17 +110,17 @@ export class HighlightController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as CloudBlocker[];
+          return apiResponse.data as OssRecommendation[];
         }
       } else {
         throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }

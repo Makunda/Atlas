@@ -25,12 +25,16 @@
 
 <script lang="ts">
 import Vue from "vue";
-import RecommendationUpload from "./steps/RecommendationUpload.vue";
+import CloudBockersUpload from "./steps/CloudBockersUpload.vue";
+import OSSUpload from "./steps/OSSUpload.vue";
+
+
 export default Vue.extend({
   name: "Highlight",
 
   components: {
-    RecommendationUpload
+    CloudBockersUpload,
+    OSSUpload,
   },
 
   computed: {
@@ -51,9 +55,14 @@ export default Vue.extend({
 
     items: [
       {
-        view: "RecommendationUpload",
-        name: "File Upload",
+        view: "CloudBockersUpload",
+        name: "Cloud Blockers",
         icon: "mdi-folder-cog"
+      },
+      {
+        view: "OSSUpload",
+        name: "OSS Injection",
+        icon: "mdi-open-source-initiative"
       }
     ]
   }),

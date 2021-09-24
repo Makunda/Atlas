@@ -1,19 +1,19 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import {Request, Router} from 'express';
-import HighlightCloudBlockerController from "@controller/highlight/HighlightCloudBlockerController";
+import { Request, Router } from "express";
 import Route from "@interfaces/routes.interface";
 
 import path from "path";
 import multer, { Multer } from "multer";
 import fs from "fs";
+import HighlightOpenSourceController from "@controller/highlight/HighlightOpenSourceController";
 
-class HighlightRecommendationRoute implements Route {
+class HighlightOssRoute implements Route {
   public path = "";
   public router = Router();
   private multerUpload: Multer;
 
-  private highlightController = new HighlightCloudBlockerController();
+  private highlightController = new HighlightOpenSourceController();
 
   constructor() {
     // Multer
@@ -64,5 +64,4 @@ class HighlightRecommendationRoute implements Route {
   }
 }
 
-export default HighlightRecommendationRoute;
-  
+export default HighlightOssRoute;

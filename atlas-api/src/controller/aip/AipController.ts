@@ -134,7 +134,7 @@ export default class AipController {
       checkBody(req, "schema");
       checkParams(req, "id");
 
-      const schema = req.body.schema;
+      const schema = req.body.schema as AipSchema;
       const idConfiguration = Number(req.params.id);
 
       const aipSchema: AipSchema =
