@@ -11,7 +11,7 @@
                 <h2 class="white--text text-h1">Atlas</h2>
                 <h2 class="white--text text-h3">NASD Toolkit 2021</h2>
                 <h2 class="white--text text-subtitle-1">
-                  <i>Version 2.3.0</i>
+                  <i>Version 2.5.0</i>
                 </h2>
               </v-flex>
             </v-layout>

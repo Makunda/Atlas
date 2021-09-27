@@ -2,7 +2,6 @@
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import { logger } from "@shared/Logger";
 import Excel from "exceljs";
-import { file } from "find";
 import { QueryResult } from "neo4j-driver";
 import CloudBlocker from "../../interfaces/highlight/recommendations/CloudBlocker";
 
@@ -147,8 +146,8 @@ export default class HighlightService {
   public async testRecommendation(blocker: CloudBlocker): Promise<boolean> {
     try {
       const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
-  WHERE p.Description='File' AND r.value ENDS WITH $file 
-  return o as node LIMIT 1;`;
+      WHERE p.Description='File' AND r.value ENDS WITH $file 
+      return o as node LIMIT 1;`;
 
       const params: any = { file: blocker.file, tag: blocker.file };
       const res: QueryResult =
