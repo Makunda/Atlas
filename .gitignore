@@ -46,3 +46,5 @@ atlas-api/bin/atlas-api.exe
 *.key
 *.exe
 *.xlsx
+atlas-api/config/recommendations/cloud_service.json
+atlas-api/config/recommendations/cloud_services.json
