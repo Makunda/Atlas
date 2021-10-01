@@ -42,13 +42,34 @@
     "imaging": {
       "name": "Oracle Database",
       "type": [
+        "Oracle function",
+        "Oracle view",
+        "Oracle procedure",
+        "Oracle table",
+        "Oracle public synonym",
+        "Oracle private synonym",
         "Oracle Table",
-        "Oracle Function",
-        "Oracle SQL Script",
-        "Oracle Trigger",
         "Oracle View",
-        "Oracle Procedure"
+        "Oracle SQL Script",
+        "Oracle Procedure",
+        "Oracle Function",
+        "Oracle materialized view",
+        "Oracle Trigger",
+        "Oracle dml trigger",
+        "Oracle database event trigger",
+        "Oracle ddl trigger"
       ]
+    }
+  },
+  {
+    "id": "oracle_reporting",
+    "name": "Oracle Reporting",
+    "description": "",
+    "categories": ["database", "SQL"],
+    "highlight": "Oracle Reports",
+    "imaging": {
+      "name": "Oracle Reporting",
+      "type": ["Oracle Report Data Link", "Oracle Report Group", "Oracle Report Query"]
     }
   },
   {
@@ -63,14 +84,25 @@
     }
   },
   {
-    "id": "pg_db",
+    "id": "postgres_db",
     "name": "Postgresql Database",
     "description": "",
     "categories": ["database", "SQL"],
-    "highlight": "Postgres_Database",
+    "highlight": "Postgresql",
     "imaging": {
       "name": "Postgresql Database",
-      "type": ["Postgresql Function", "Postgresql Table"]
+      "type": ["Postgresql Table", "Postgresql Function", "Postgresql SQL Script"]
+    }
+  },
+  {
+    "id": "pl1",
+    "name": "PL1",
+    "description": "",
+    "categories": ["mainframe"],
+    "highlight": "PL1",
+    "imaging": {
+      "name": "PL1",
+      "type": ["PLC Include", "PLI Procedure", "PLI MainProcedure"]
     }
   },
   {
@@ -176,7 +208,14 @@
     "highlight": "Typescript",
     "imaging": {
       "name": "Typescript Presentation",
-      "type": ["Typescript Module"]
+      "type": [
+        "Typescript Class",
+        "Typescript Function",
+        "Typescript Interface",
+        "Typescript Method",
+        "Typescript Module",
+        "Typescript Namespace"
+      ]
     }
   },
   {
@@ -220,7 +259,32 @@
     "highlight": "Db2",
     "imaging": {
       "name": "DB2 Database",
-      "type": ["DB2 Table", "DB2 View", "DB2 Function", "DB2 Trigger", "DB2 SQL Script", "DB2 Procedure"]
+      "type": [
+        "DB2 Alias",
+        "DB2 Database",
+        "DB2 Distinct UDT",
+        "DB2 Instance",
+        "DB2 Nickname",
+        "DB2 Schema",
+        "DB2 Structured UDT",
+        "DB2 System",
+        "DB2 z/OS alias",
+        "DB2 z/OS database",
+        "DB2 z/OS DML trigger",
+        "DB2 z/OS foreign key table constraint",
+        "DB2 z/OS index",
+        "DB2 z/OS relational table",
+        "DB2 z/OS schema",
+        "DB2 z/OS table column",
+        "DB2 z/OS type",
+        "DB2 z/OS view column",
+        "DB2 zOS alias",
+        "DB2 zOS function",
+        "DB2 zOS private stored procedure",
+        "DB2 zOS procedure",
+        "DB2 zOS view",
+        "DB2ZOS primary key table constraint"
+      ]
     }
   },
   {
@@ -231,7 +295,30 @@
     "highlight": "Cobol",
     "imaging": {
       "name": "Cobol",
-      "type": ["Cobol Program Batch", "Cobol Program", "Cobol CopyBook", "Cobol Program TP"]
+      "type": [
+        "Cobol Class",
+        "Cobol Conditional Test",
+        "Cobol Constant Data",
+        "Cobol CopyBook",
+        "Cobol Data Link",
+        "Cobol Data",
+        "Cobol DB Definition",
+        "Cobol Directory",
+        "Cobol Division",
+        "Cobol Entry Point",
+        "Cobol External File",
+        "Cobol File Link",
+        "Cobol Interface",
+        "Cobol Literal",
+        "Cobol Map",
+        "Cobol Paragraph",
+        "Cobol Program",
+        "Cobol PSB",
+        "Cobol Root Directory",
+        "Cobol Section",
+        "Cobol Transaction",
+        "Cobol Transient Data"
+      ]
     }
   },
   {
@@ -266,6 +353,82 @@
     }
   },
   {
+    "id": "php",
+    "name": "PHP",
+    "description": "",
+    "categories": ["programming", "web"],
+    "highlight": "PHP",
+    "imaging": {
+      "name": "PHP",
+      "type": [
+        "PHP Array",
+        "PHP Class Constant",
+        "PHP Class",
+        "PHP Constructor",
+        "PHP Define",
+        "PHP Function",
+        "PHP Interface",
+        "PHP Member",
+        "PHP Method",
+        "PHP Section",
+        "PHP Symfony Controller Class",
+        "PHP Symfony Controller",
+        "PHP Symfony Route",
+        "PHP Symfony Service"
+      ]
+    }
+  },
+  {
+    "id": "ios",
+    "name": "iOs",
+    "description": "",
+    "categories": ["mobile"],
+    "highlight": "ios",
+    "imaging": {
+      "name": "iOS Presentation",
+      "type": ["iOS Get Resource Service", "iOS Application Object", "iOS UI ApplicationDelegate", "StoryBoard File"]
+    }
+  },
+  {
+    "id": "android",
+    "name": "Android",
+    "description": "",
+    "categories": ["mobile"],
+    "highlight": "Android",
+    "imaging": {
+      "name": "Android",
+      "type": [
+        "Android Application",
+        "Android Button",
+        "Android Check Box",
+        "Android Delete Resource Service",
+        "Android Edit Text",
+        "Android EventHandler",
+        "Android External Storage",
+        "Android Get Resource Service",
+        "Android Grid View",
+        "Android Group",
+        "Android Internal Storage",
+        "Android Item",
+        "Android Layout",
+        "Android Linear Layout",
+        "Android List View",
+        "Android Menu",
+        "Android Post Resource Service",
+        "Android Put Resource Service",
+        "Android Relative Layout",
+        "Android Shared Preferences",
+        "Android Spinner",
+        "Android Switch",
+        "Android Text View",
+        "Android Time Picker",
+        "Android UI XML File",
+        "Android Undefined Widget",
+        "Android Web View"
+      ]
+    }
+  },
+  {
     "id": "vb_net",
     "name": "VB/.Net",
     "description": "",
@@ -284,7 +447,20 @@
     "highlight": "Aspx",
     "imaging": {
       "name": "ASPX Presentation",
-      "type": ["Active Server PageX", "Web User Control", "HTML5 ASPX Content", "ASP.NET Web Service File"]
+      "type": [
+        "Active Server PageX",
+        "Web User Control",
+        "HTML5 ASPX Content",
+        "ASP.NET Web Service File",
+        "ASP Server eCollection",
+        "ASP Server eCollectionItem",
+        "ASP Server eMethod",
+        "ASP Server eObject",
+        "ASP Server eProperty",
+        "ASP Server Objects",
+        "ASP Source File",
+        "ASP"
+      ]
     }
   },
   {
@@ -307,12 +483,20 @@
     "imaging": {
       "name": "CICS Transaction",
       "type": [
-        "CICS Map",
-        "CICS Transaction",
         "Cobol Transaction",
         "Unknown CICS Transient Data",
         "CICS DataSet",
-        "CICS Transient Data"
+        "CICS DB2 Transaction",
+        "CICS Definition File",
+        "CICS Folder",
+        "CICS Group",
+        "CICS Map definition",
+        "CICS Map",
+        "CICS Mapset",
+        "CICS Temporary Storage",
+        "CICS Transaction",
+        "CICS Transient Data",
+        "CICS"
       ]
     }
   },
@@ -357,7 +541,65 @@
     "highlight": "Cpp",
     "imaging": {
       "name": "C/C++",
-      "type": ["C/C++ File", "C/C++ Miscellaneous file"]
+      "type": [
+        "C/C++ Classes",
+        "C/C++ Constructors or Destructors",
+        "C/C++ Data Structure",
+        "C/C++ Dependencies",
+        "C/C++ Directory",
+        "C/C++ Enum Item",
+        "C/C++ Enum",
+        "C/C++ File Scope Folder",
+        "C/C++ File",
+        "C/C++ free function template specialization",
+        "C/C++ Function Parameter",
+        "C/C++ Function Specialization",
+        "C/C++ Function",
+        "C/C++ Functions",
+        "C/C++ Global Variable",
+        "C/C++ Global variables folder",
+        "C/C++ Header",
+        "C/C++ Macro",
+        "C/C++ Miscellaneous file",
+        "C/C++ Program",
+        "C/C++ Root Directory",
+        "C/C++ Struct",
+        "C/C++ Template Parameter",
+        "C/C++ Typedef or using (type alias)",
+        "C/C++ Typedef",
+        "C/C++ Union",
+        "C/C++",
+        "C++ (Managed) Event Add",
+        "C++ (Managed) Event Raise",
+        "C++ (Managed) Event Remove",
+        "C++ (Managed) Event",
+        "C++ (Managed) Property Get",
+        "C++ (Managed) Property Set",
+        "C++ (Managed) Property",
+        "C++ Class or structure",
+        "C++ Class Specialization",
+        "C++ Class Template ",
+        "C++ Class Template",
+        "C++ Class",
+        "C++ class/struct template specialization",
+        "C++ Classes Folder",
+        "C++ Constructor Specialization",
+        "C++ constructor template specialization",
+        "C++ Constructor Template",
+        "C++ Constructor",
+        "C++ Destructor",
+        "C++ free function template",
+        "C++ Function Template",
+        "C++ member function template specialization",
+        "C++ member function template",
+        "C++ Member",
+        "C++ Method Specialization",
+        "C++ Method Template",
+        "C++ Method",
+        "C++ Namespace",
+        "C++ union template ",
+        "C++ union template specialization"
+      ]
     }
   },
   {
@@ -368,14 +610,14 @@
     "highlight": "Perl",
     "imaging": {
       "name": "Perl Script",
-      "type": ["Perl Program"]
+      "type": ["Perl Program", "Perl Project", "Perl Function"]
     }
   },
   {
     "id": "node_js",
     "name": "Node JS",
     "description": "",
-    "categories": ["programming"],
+    "categories": ["programming", "frontend"],
     "highlight": "NodeJs",
     "imaging": {
       "name": "Node JS",
@@ -390,7 +632,32 @@
         "NodeJS AWS Lambda PUT Operation",
         "NodeJS AWS Lambda DELETE Operation",
         "NodeJS AWS Lambda Function",
-        "NodeJS AWS Lambda GET Operation"
+        "NodeJS AWS Lambda GET Operation",
+        "NodeJS CosmosDB Unknown Client",
+        "NodeJS CosmosDB Unknown Collection",
+        "NodeJS CosmosDB Unknown Database",
+        "NodeJS CouchDB database",
+        "NodeJS Delete HttpRequest service",
+        "NodeJS Delete Operation",
+        "NodeJS Express Controller",
+        "NodeJS external library",
+        "NodeJS Get HttpRequest service",
+        "NodeJS Get Operation",
+        "NodeJS loopback application",
+        "NodeJS Marklogic collection",
+        "NodeJS Marklogic database",
+        "NodeJS MongoDB collection",
+        "NodeJS MongoDB connection",
+        "NodeJS Port",
+        "NodeJS Post HttpRequest service",
+        "NodeJS Post Operation",
+        "NodeJS Put HttpRequest service",
+        "NodeJS Put Operation",
+        "NodeJS S3 Bucket",
+        "NodeJS S3 Region",
+        "NodeJS Service",
+        "NodeJS unknown database table",
+        "NodeJS Use Operation"
       ]
     }
   },
@@ -418,6 +685,144 @@
         "PB Function",
         "PB Userobject",
         "PB Member Variable"
+      ]
+    }
+  },
+  {
+    "id": "abap",
+    "name": "ABAP",
+    "description": "",
+    "categories": ["programming", "sap"],
+    "highlight": "ABAP",
+    "imaging": {
+      "name": "ABAP Logic",
+      "type": [
+        "ABAP BADI",
+        "ABAP Class Pool",
+        "ABAP Class",
+        "ABAP Constructor",
+        "ABAP enhancement",
+        "ABAP enhancement-section",
+        "ABAP Event Block",
+        "ABAP Event Method",
+        "ABAP Event",
+        "ABAP File Level Code",
+        "ABAP File used for bookmark (invisible)",
+        "ABAP Flow Logic File",
+        "ABAP Form",
+        "ABAP Frame",
+        "ABAP Function Pool",
+        "ABAP Function",
+        "ABAP Global Type",
+        "ABAP Global Variable",
+        "ABAP Include",
+        "ABAP Interface Pool",
+        "ABAP Interface",
+        "ABAP Macro",
+        "ABAP Member",
+        "ABAP Method",
+        "ABAP Module Pool",
+        "ABAP Module",
+        "ABAP Package",
+        "ABAP Parameter",
+        "ABAP Processing Screen",
+        "ABAP Program",
+        "ABAP Selection Screen",
+        "ABAP Type Pool",
+        "ABAP Unresolved Folder",
+        "ABAP Unresolved Object",
+        "ABAP User-Exit"
+      ]
+    }
+  },
+  {
+    "id": "abap_storage",
+    "name": "SAP ABAP Storage",
+    "description": "",
+    "categories": ["database", "sap"],
+    "highlight": "ABAP Storage",
+    "imaging": {
+      "name": "SAP ABAP Storage",
+      "type": ["SAP Table", "SAP View", "SAP unresolved Table"]
+    }
+  },
+  {
+    "id": "ibm_mq",
+    "name": "IBM MQ",
+    "description": "",
+    "categories": ["MQ", "ibm"],
+    "highlight": "IBM MQ",
+    "imaging": {
+      "name": "IBM MQ",
+      "type": ["IBMMQ Java QueueCall", "IBMMQ Java QueueReceive", "API IBM MQ", "Publisher IBM MQ"]
+    }
+  },
+  {
+    "id": "java_mq",
+    "name": "Java MQ",
+    "description": "",
+    "categories": ["MQ"],
+    "highlight": "Java MQ",
+    "imaging": {
+      "name": "Java MQ",
+      "type": ["Java Class Message Queue", "API Apache ActiveMQ"]
+    }
+  },
+  {
+    "id": "active_mq",
+    "name": "Active MQ",
+    "description": "",
+    "categories": ["MQ"],
+    "highlight": "Active MQ",
+    "imaging": {
+      "name": "Active MQ",
+      "type": ["ActiveMQ Java QueueCall", "ActiveMQ Java QueueReceive", "ActiveMQ Python QueueCall"]
+    }
+  },
+  {
+    "id": "rabbit_mq",
+    "name": "Rabbit MQ",
+    "description": "",
+    "categories": ["MQ"],
+    "highlight": "Rabbit MQ",
+    "imaging": {
+      "name": "Rabbit MQ",
+      "type": [
+        "RabbitMQ Java Exchange",
+        "RabbitMQ Java Queue",
+        "RabbitMQ Python Exchange",
+        "RabbitMQ Python Queue",
+        "RabbitMQ Python QueueCall",
+        "RabbitMQ Python QueueReceive"
+      ]
+    }
+  },
+  {
+    "id": "sybase_db",
+    "name": "Sybase Database",
+    "description": "",
+    "categories": ["database"],
+    "highlight": "Sybase Database",
+    "imaging": {
+      "name": "Sybase Database",
+      "type": [
+        "Sybase database",
+        "Sybase DML trigger",
+        "Sybase foreign key table constraint",
+        "Sybase index",
+        "Sybase instance",
+        "Sybase java function",
+        "Sybase primary key table constraint",
+        "Sybase procedure",
+        "Sybase schema",
+        "Sybase table column",
+        "Sybase table",
+        "Sybase unique table constraint",
+        "Sybase unknown database",
+        "Sybase unknown instance",
+        "Sybase unknown schema",
+        "Sybase view column",
+        "Sybase view"
       ]
     }
   }

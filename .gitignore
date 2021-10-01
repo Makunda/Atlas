@@ -49,3 +49,4 @@ atlas-api/bin/atlas-api.exe
 *.xlsx
 atlas-api/config/recommendations/cloud_service.json
 atlas-api/config/recommendations/cloud_services.json
+atlas-api/config/technologies/technologies.json

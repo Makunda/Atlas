@@ -16,6 +16,10 @@ async function launch() {
     // Initialize the routines
     await Neo4JAccessLayer.connect();
 
+    const extensionModule = await import("./extensions/ExtensionManager");
+    const extensionManager = extensionModule.default.getInstance();
+    extensionManager.register();
+
     // Import autonomous modules and Cron operations
     const AgentModule: any = await import("@agents/AgentManager");
     const FrameworkAssistantModule: any = await import("./assistants/framework.assistant");
