@@ -27,7 +27,7 @@
 import Vue from "vue";
 import CloudBockersUpload from "./steps/CloudBockersUpload.vue";
 import OSSUpload from "./steps/OSSUpload.vue";
-
+import ObsolescenceUpload from "./steps/ObsolescenceUpload.vue";
 
 export default Vue.extend({
   name: "Highlight",
@@ -35,6 +35,7 @@ export default Vue.extend({
   components: {
     CloudBockersUpload,
     OSSUpload,
+    ObsolescenceUpload
   },
 
   computed: {
@@ -63,12 +64,17 @@ export default Vue.extend({
         view: "OSSUpload",
         name: "OSS Injection",
         icon: "mdi-open-source-initiative"
+      },
+      {
+        view: "ObsolescenceUpload",
+        name: "Obsolescence Injection",
+        icon: "mdi-calendar-alert"
       }
     ]
   }),
 
   watch: {
-    getApplicationName(newApp) {
+    getApplicationName(old, newApp) {
       this.application = newApp;
     }
   }

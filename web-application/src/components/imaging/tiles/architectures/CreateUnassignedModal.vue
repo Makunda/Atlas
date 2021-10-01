@@ -26,7 +26,10 @@
                   >This operation may take some time if the application is
                   huge.</strong
                 ><br />
-                <v-icon>mdi-information-outline</v-icon><i class="mt-1 mx-1">Make sure the architecture agent is running.</i>
+                <v-icon>mdi-information-outline</v-icon
+                ><i class="mt-1 mx-1"
+                  >Make sure the architecture agent is running.</i
+                >
               </p>
             </v-row>
 
@@ -50,9 +53,6 @@
           >
         </v-card-actions>
       </v-card>
-
-
-
     </template>
   </v-dialog>
 </template>
@@ -70,8 +70,6 @@ export default Vue.extend({
     element: Object,
     dialog: Boolean
   },
-
-
 
   mounted() {
     this.refresh();
@@ -94,7 +92,7 @@ export default Vue.extend({
       errordestinationModules: "",
       loadingdestinationModules: false,
 
-      // Modal 
+      // Modal
       dialogAddServer: false
     };
   },

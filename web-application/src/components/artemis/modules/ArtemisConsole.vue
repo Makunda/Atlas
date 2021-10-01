@@ -237,7 +237,8 @@
           href="https://extend.castsoftware.com/#/extension?id=com.castsoftware.uc.artemis&version=2.0.0"
         >
           CAST Extend
-        </a>
+        </a>. 
+        <br />or verify that the Artemis workspace has been correctly declared in the parameters.
       </h2>
     </div>
   </v-card>

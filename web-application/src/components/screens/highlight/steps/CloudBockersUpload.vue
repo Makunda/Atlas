@@ -2,7 +2,8 @@
   <v-card>
     <v-card-title>
       <h3 class="text-h4">
-        Inject <strong>Cloud blockers</strong> into {{ application }} application.
+        Inject <strong>Cloud blockers</strong> into
+        {{ application }} application.
       </h3>
       <v-spacer></v-spacer>
       <v-btn class="mr-5" icon color="green" @click="refresh">
@@ -16,20 +17,20 @@
     <v-card-text>
       <v-stepper v-model="e1">
         <v-stepper-header>
-          <v-stepper-step :complete="e1 > 1" step="1">
-            Upload
+          <v-stepper-step :complete="e1 > 1" step="1" class="white--text">
+            <span class="white--text">Upload</span>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
           <v-stepper-step :complete="e1 > 2" step="2">
-            Review
+            <span class="white--text">Review</span>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
           <v-stepper-step step="3">
-            Confirm
+            <span class="white--text">Confirm</span>
           </v-stepper-step>
         </v-stepper-header>
 
@@ -40,6 +41,8 @@
                 <v-row>
                   <h4>Import the Cast Highlight Excel File</h4>
                 </v-row>
+
+                <!-- File input -->
                 <v-row class="mt-8">
                   <v-file-input
                     v-model="file"
@@ -47,6 +50,17 @@
                     outlined
                     dense
                   ></v-file-input>
+                </v-row>
+
+                <!-- Progress bar during file upload -->
+                <v-row v-if="fileUploading">
+                  <p>Processing the file</p>
+                  <v-progress-linear
+                    color="light-blue"
+                    height="5"
+                    striped
+                    indeterminate
+                  ></v-progress-linear>
                 </v-row>
               </v-container>
             </v-card>
@@ -197,6 +211,7 @@
                     :items-per-page="20"
                     :search="search"
                     show-select
+                    item-key="id"
                     class="elevation-1"
                   >
                     <template v-slot:item.file="props">
@@ -314,6 +329,7 @@
 import Vue from "vue";
 import CloudBlocker from "@/api/interface/highlight/CloudBlocker";
 import { HighlightController } from "@/api/highlight/HighlightController";
+import flash, { FlashType } from '@/modules/flash/Flash';
 
 export default Vue.extend({
   name: "CloudBockersUpload",
@@ -375,12 +391,16 @@ export default Vue.extend({
 
     // Progression
     sizeToSend: 0,
-    sizeSent: 0
+    sizeSent: 0,
+    fileUploading: false
   }),
 
   methods: {
     async applyTags() {
       this.e1 = 3;
+      this.sizeSent = 0;
+      this.sizeToSend = 0;
+
       this.loadingApply = true;
       this.blockerNotApplied = [];
       this.errorApplying = "";
@@ -398,7 +418,7 @@ export default Vue.extend({
               ? this.blockerDisplayedList.length - 1
               : index + batchSize;
           const batch = this.blockerDisplayedList.slice(index, upBound);
-          
+
           // Send batch
           const noApplied = await HighlightController.applyBlockers(batch);
           this.blockerNotApplied = this.blockerNotApplied.concat(noApplied);
@@ -452,6 +472,8 @@ export default Vue.extend({
     },
 
     async sendFileToApi() {
+      this.fileUploading = true;
+
       try {
         if (this.file == null) return;
         if (this.application == null) return;
@@ -460,6 +482,8 @@ export default Vue.extend({
           this.file,
           this.application
         );
+
+        for (const i in this.blockerList) this.blockerList[i].id = i;
 
         this.blockerDisplayedList = [...this.blockerList];
 
@@ -479,6 +503,13 @@ export default Vue.extend({
         this.e1 = 2;
       } catch (err) {
         console.error("Failed to process the file.", err);
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to process the file.",
+          body: err
+        });
+      } finally {
+        this.fileUploading = false;
       }
     },
 
@@ -525,11 +556,11 @@ export default Vue.extend({
     },
 
     removeBeginning() {
-      const regex = new RegExp("", 'gi');
+      const regex = new RegExp("", "gi");
 
       this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
       this.blockerDisplayedList.forEach((x: CloudBlocker) => {
-        const regexResult = x.file.replace(regex, '');
+        const regexResult = x.file.replace(regex, "");
         if (regexResult && regexResult.length > 0) {
           x.file = regexResult[1];
         }
@@ -548,3 +579,21 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style scoped>
+.v-stepper__header {
+  background-color: #425B66 !important;
+  border-bottom: 6px solid #2a9d8f;
+  color: white !important;
+}
+
+.v-stepper__label {
+  text-shadow: 0px 0px 0px white !important;
+  color: white !important;
+}
+
+.theme--light.v-stepper .v-stepper__label {
+  color: white !important;
+  
+}
+</style>

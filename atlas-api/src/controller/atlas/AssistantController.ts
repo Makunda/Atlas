@@ -1,154 +1,116 @@
-import {DetectionCandidate} from "@dtos/artemis/detectionCandidate.dto";
-import {ArtemisCandidates} from "@services/artemis/ArtemisCandidatesService";
-import {NextFunction, Request, Response} from "express";
-import {DemeterActions, FrameworkAssistant,} from "@assistants/assistant";
-import {FrameworkAssistantManager} from "@assistants/framework.assistant";
+import { DetectionCandidate } from "@dtos/artemis/detectionCandidate.dto";
+import { ArtemisCandidates } from "@services/artemis/ArtemisCandidatesService";
+import { NextFunction, Request, Response } from "express";
+import { DemeterActions, FrameworkAssistant } from "@assistants/assistant";
+import { FrameworkAssistantManager } from "@assistants/framework.assistant";
 
 class AssistantController {
-    private candidateService = new ArtemisCandidates();
-    private fAssistantManager = FrameworkAssistantManager.getInstance();
+  private candidateService = new ArtemisCandidates();
+  private fAssistantManager = FrameworkAssistantManager.getInstance();
 
-    public getCandidateList = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        try {
-            const candidateResults: DetectionCandidate[] = await this.candidateService.getCandidateList();
-            res.status(200).json({
-                data: candidateResults,
-                message: "Framework detection candidate",
-            });
-        } catch (error) {
-            next(error);
-        }
-    };
+  public getCandidateList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const candidateResults: DetectionCandidate[] = await this.candidateService.getCandidateList();
+      res.status(200).json({
+        data: candidateResults,
+        message: "Framework detection candidate",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-    public createNew = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        try {
-            const category = String(req.body.category);
-            let actions: string[] = [];
+  public createNew = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const category = String(req.body.category);
+      let actions: string[] = [];
 
-            if (Array.isArray(req.body.actions)) {
-                actions = req.body.actions;
-            }
+      if (Array.isArray(req.body.actions)) {
+        actions = req.body.actions;
+      }
 
-            FrameworkAssistantManager.getInstance()
-                .addAssistant(
-                    category,
-                    actions.map((x) => x as DemeterActions)
-                );
+      FrameworkAssistantManager.getInstance().addAssistant(
+        category,
+        actions.map((x) => x as DemeterActions)
+      );
 
-            res.status(200)
-                .json({
-                    data: true,
-                    message: "Created",
-                });
-        } catch (error) {
-            next(error);
-        }
-    };
+      res.status(200).json({
+        data: true,
+        message: "Created",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-    /** Get the list of assistants running on the server */
-    public getAssistants = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        try {
-            const assistants: FrameworkAssistant[] = FrameworkAssistantManager.getInstance()
-                .getAssistants();
+  /** Get the list of assistants running on the server */
+  public getAssistants = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const assistants: FrameworkAssistant[] = FrameworkAssistantManager.getInstance().getAssistants();
 
-            res.status(200)
-                .json({
-                    data: assistants.map(x => x.serialize()),
-                    message: "Assistants",
-                });
-        } catch (error) {
-            next(error);
-        }
-    };
+      res.status(200).json({
+        data: assistants.map((x) => x.serialize()),
+        message: "Assistants",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 
+  /** Start the assistant */
+  public startWithId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const id = Number(req.params.id);
 
-    /** Start the assistant */
-    public startWithId = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        try {
-            const id = Number(req.params.id);
+      const status = FrameworkAssistantManager.getInstance().starAssistantById(id);
 
+      res.status(200).json({
+        data: status,
+        message: "Status",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-            const status = FrameworkAssistantManager.getInstance()
-                .starAssistantById(id);
+  public deleteWithId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const id = Number(req.params.id);
 
-            res.status(200)
-                .json({
-                    data: status,
-                    message: "Status",
-                });
-        } catch (error) {
-            next(error);
-        }
-    };
+      FrameworkAssistantManager.getInstance().removeAssistant(id);
 
-    public deleteWithId = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        try {
-            const id = Number(req.params.id);
+      res.status(200).json({
+        data: true,
+        message: "Deleted",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-            FrameworkAssistantManager.getInstance()
-                .removeAssistant(id)
+  public getFrameworkCategories = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const categories: string[] = await this.fAssistantManager.getCategories();
+      res.status(200).json({
+        data: categories,
+        message: "Categories",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-            res.status(200)
-                .json({
-                    data: true,
-                    message: "Deleted",
-                });
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    public getFrameworkCategories = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        try {
-            const categories: string[] = await this.fAssistantManager.getCategories();
-            res.status(200).json({
-                data: categories,
-                message: "Categories",
-            });
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    public getDemeterActions = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        try {
-            const categories: string[] = await this.fAssistantManager.getDemeterActions();
-            res.status(200).json({
-                data: categories,
-                message: "Actions",
-            });
-        } catch (error) {
-            next(error);
-        }
-    };
+  public getDemeterActions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const categories: string[] = await this.fAssistantManager.getDemeterActions();
+      res.status(200).json({
+        data: categories,
+        message: "Actions",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AssistantController;

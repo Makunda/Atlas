@@ -39,11 +39,7 @@
         <v-divider></v-divider>
         <v-card-actions class="justify-end">
           <v-btn color="green" text @click="closeModal">Cancel</v-btn>
-          <v-btn
-            color="red"
-            text
-            @click="deleteModule"
-            :loading="loadingModify"
+          <v-btn color="red" text @click="deleteModule" :loading="loadingModify"
             >Delete</v-btn
           >
         </v-card-actions>
@@ -70,7 +66,6 @@ export default Vue.extend({
 
   data() {
     return {
-
       // errors & loading merge
       loadingModify: false,
       errorModify: "",
@@ -120,8 +115,7 @@ export default Vue.extend({
     closeModal() {
       this.$emit("close");
     }
-  },
-
+  }
 });
 </script>
 

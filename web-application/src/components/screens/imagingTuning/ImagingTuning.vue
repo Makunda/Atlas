@@ -25,9 +25,9 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LevelExplorer from '@/components/imaging/levels/LevelExplorer.vue';
-import ModuleExplorer from '@/components/imaging/modules/ModulesExplorer.vue';
-import ArchitectureExplorer from '@/components/imaging/architectures/ArchitectureExplorer.vue';
+import LevelExplorer from "@/components/imaging/levels/LevelExplorer.vue";
+import ModuleExplorer from "@/components/imaging/modules/ModulesExplorer.vue";
+import ArchitectureExplorer from "@/components/imaging/architectures/ArchitectureExplorer.vue";
 import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
 import DataCallGraphExplorer from "@/components/imaging/DataCallGraphExplorer.vue";
 import IconManager from "@/components/imaging/IconManager.vue";

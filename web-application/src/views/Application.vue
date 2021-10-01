@@ -154,7 +154,7 @@ export default Vue.extend({
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    },
+    }
   },
 
   data: () => ({
@@ -167,23 +167,23 @@ export default Vue.extend({
       {
         name: "Frameworks & Breakdown",
         screen: "analysis",
-        icon: "mdi-magnify",
+        icon: "mdi-magnify"
       },
       {
         name: "Tags",
         screen: "tags",
-        icon: "mdi-hexagon-multiple",
+        icon: "mdi-hexagon-multiple"
       },
       { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" },
       { name: "Highlight Injection", screen: "highlight", icon: "mdi-fire" },
-      { name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" },
+      { name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" }
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
     applicationList: [] as string[],
 
-    onlineDatabase: false,
+    onlineDatabase: false
   }),
 
   methods: {
@@ -198,7 +198,7 @@ export default Vue.extend({
       this.loadingApplication = true;
       ApplicationController.getListApplications().then((res: string[]) => {
         this.applicationList = res;
-        if (res.length != 0) {
+        if (res && res.length != 0) {
           this.changeApplication(res[0]);
         } else {
           this.applicationName = "No Application found";
@@ -213,7 +213,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineDatabase = res;
         })
-        .catch((err) => {
+        .catch(() => {
           this.onlineDatabase = false;
         });
     },
@@ -223,7 +223,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineDatabase = res;
         })
-        .catch((err) => {
+        .catch(() => {
           this.onlineDatabase = false;
         })
         .finally(() => {
@@ -263,7 +263,7 @@ export default Vue.extend({
     logout() {
       Configuration.deleteProperties();
       document.location.reload();
-    },
+    }
   },
 
   watch: {
@@ -294,8 +294,8 @@ export default Vue.extend({
       }
       console.log(`Not found ${newView}`);
       // Do nothing if the view wasn't found
-    },
-  },
+    }
+  }
 });
 </script>
 

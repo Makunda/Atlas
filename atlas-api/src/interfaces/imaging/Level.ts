@@ -18,63 +18,60 @@
 }
 }*/
 
-import {int} from "neo4j-driver";
+import { int } from "neo4j-driver";
 
 interface Level {
-    _id?: number;
-    hidden?: boolean;
-    concept: boolean;
-    alternateDrilldown?: boolean;
-    color: string;
-    level: number;
-    count: number;
-    fullName: string;
-    name: string;
-    shade: string;
-    children?: Level[];
+  _id?: number;
+  hidden?: boolean;
+  concept: boolean;
+  alternateDrilldown?: boolean;
+  color: string;
+  level: number;
+  count: number;
+  fullName: string;
+  name: string;
+  shade: string;
+  children?: Level[];
 }
 
-
 class LevelNode {
+  private levelObj: Level;
 
-    private levelObj: Level;
+  constructor(level: Level) {
+    this.levelObj = level;
+  }
 
-    constructor(level: Level) {
-        this.levelObj = level;
-    }
+  /**
+   * Create an object from a row
+   * @param row
+   */
+  public static fromObj(row: any, hidden = false): LevelNode {
+    const level = {
+      _id: int(row["identity"]).toNumber() || -1,
+      hidden: hidden,
+      concept: Boolean(row["properties"]["Concept"]) || false,
+      alternateDrilldown: Boolean(row["properties"]["AlternateDrilldown"]) || false,
+      color: String(row["properties"]["Color"]),
+      fullName: String(row["properties"]["FullName"]),
+      name: String(row["properties"]["Name"]),
+      level: int(row["properties"]["Level"]).toNumber(),
+      count: int(row["properties"]["Count"]).toNumber(),
+      shade: String(row["properties"]["Shade"]),
+    } as Level;
+    return new LevelNode(level);
+  }
 
-    /**
-     * Create an object from a row
-     * @param row
-     */
-    public static fromObj(row: any, hidden = false): LevelNode {
-        const level = {
-            _id: int(row["identity"]).toNumber() || -1,
-            hidden: hidden,
-            concept: Boolean(row["properties"]["Concept"]) || false,
-            alternateDrilldown: Boolean(row["properties"]["AlternateDrilldown"]) || false,
-            color: String(row["properties"]["Color"]),
-            fullName: String(row["properties"]["FullName"]),
-            name: String(row["properties"]["Name"]),
-            level: int(row["properties"]["Level"]).toNumber(),
-            count: int(row["properties"]["Count"]).toNumber(),
-            shade: String(row["properties"]["Shade"])
-        } as Level
-        return new LevelNode(level);
-    }
+  public getRecord(): Level {
+    return this.levelObj;
+  }
 
-
-    public getRecord(): Level {
-        return this.levelObj;
-    }
-
-    /**
-     * Generate a merge request
-     * @param application
-     */
-    public getMergeRequest(application: string): string {
-        const levelName = `Level${this.levelObj.level}`
-        const req = `MERGE (l:\`${application}\`:${levelName} { Name: '${this.levelObj.name}'} ) 
+  /**
+   * Generate a merge request
+   * @param application
+   */
+  public getMergeRequest(application: string): string {
+    const levelName = `Level${this.levelObj.level}`;
+    const req = `MERGE (l:\`${application}\`:${levelName} { Name: '${this.levelObj.name}'} ) 
             SET l.Concept = ${this.levelObj.concept || false}
             SET l.AlternateDrilldown = ${this.levelObj.alternateDrilldown || true}
             SET l.Color = '${this.levelObj.color || "rgb(0,0,0)"}'
@@ -84,8 +81,8 @@ class LevelNode {
             SET l.Count = ${this.levelObj.count || 0}
             SET l.Shade  = '${this.levelObj.shade}'
             RETURN l as node;`;
-        return req;
-    }
+    return req;
+  }
 }
 
-export {Level as Level, LevelNode}
+export { Level as Level, LevelNode };

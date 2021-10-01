@@ -17,13 +17,13 @@
 
 import Subset from "./Subset";
 
-    export default interface Archimodel {
-        _id?: number;
-        hidden: boolean;
-        name: string;
-        type: string;
-        count: number;
-        modelId: string;
-        color: string;
-        subsets? : Subset[];
-    }
+export default interface Archimodel {
+  _id?: number;
+  hidden: boolean;
+  name: string;
+  type: string;
+  count: number;
+  modelId: string;
+  color: string;
+  subsets?: Subset[];
+}

@@ -1,21 +1,20 @@
 {
-  "nickname" : "TransactionComplexity",
+  "nickname": "TransactionComplexity",
   "name": "Complexity by Transaction",
-  "description" : "List the transactions by their complexity.",
+  "description": "List the transactions by their complexity.",
   "categories": ["database"],
   "parameters": [
     {
       "name": "Complexity",
       "description": "Type of complexity",
       "type": "string",
-      "values" : ["Cyclomatic Complexity", "Integration Complexity", "Essential Complexity"]
+      "values": ["Cyclomatic Complexity", "Integration Complexity", "Essential Complexity"]
     },
     {
       "name": "Limit",
       "description": "Limit of transactions returned (Integer)",
       "type": "number"
     }
-
   ],
   "request": "MATCH (t:Transaction:`%APPLICATION_NAME%`) WITH t OPTIONAL MATCH (t)-[]->(o:Object)<-[:BELONGTO]-(s:SubObject)-[r]->(p:ObjectProperty) WHERE p.Description=$Complexity OPTIONAL MATCH (t)-[]->(o:Object)-[r2]->(p:ObjectProperty) WHERE p.Description=$Complexity RETURN DISTINCT  t.Name as `Transaction Name`, p.Description as `Type of complexity`, COUNT(DISTINCT o) as `Number of Objects`,  SUM(toInteger(r.value)) + SUM(toInteger(r2.value)) as `Total Complexity` ORDER BY `Total Complexity` DESC LIMIT $Limit",
   "returnValues": ["Transaction Name", "Type of complexity", "Number of Objects", "Total Complexity"]

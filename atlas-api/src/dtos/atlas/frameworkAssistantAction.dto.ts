@@ -1,10 +1,9 @@
-import {IsArray, IsString} from "class-validator";
+import { IsArray, IsString } from "class-validator";
 
 export class FrameworkAssistantAction {
+  @IsString()
+  public category: string;
 
-    @IsString()
-    public category: string;
-
-    @IsArray()
-    public actions: string[];
+  @IsArray()
+  public actions: string[];
 }

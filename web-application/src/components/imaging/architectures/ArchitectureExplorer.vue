@@ -431,7 +431,7 @@ export default Vue.extend({
     // Hiding level
     hidingElement: false,
 
-    // Module definition 
+    // Module definition
     loadingModuleDefinition: false
   }),
 
@@ -576,14 +576,14 @@ export default Vue.extend({
     async downloadModuleDefinition(architectureId: number) {
       try {
         this.loadingModuleDefinition = true;
-        this.displaySnackBar("Generating the module definition..")
+        this.displaySnackBar("Generating the module definition..");
         await ArchitectureController.generateModulesFromArchitecture(
           this.application,
           architectureId
         );
       } catch (err) {
         console.error("Failed to generate the module definition.", err);
-        this.displaySnackBar(`Module generation failed. Error: ${err}`)
+        this.displaySnackBar(`Module generation failed. Error: ${err}`);
       } finally {
         this.loadingModuleDefinition = false;
       }
@@ -628,8 +628,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-       this.architectures = [];
-       this.loadedArchitectures = [];
+      this.architectures = [];
+      this.loadedArchitectures = [];
       this.refresh();
     },
 

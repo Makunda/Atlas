@@ -1,81 +1,80 @@
 export enum DemeterActions {
-    groupLevel = "groupLevel",
-    groupModule = "groupModule",
-    groupArchitecture = "groupArchitecture",
+  groupLevel = "groupLevel",
+  groupModule = "groupModule",
+  groupArchitecture = "groupArchitecture",
 }
 
 export interface IFrameworkAssistant {
-    id: number;
-    started: boolean;
-    category: string;
-    actions: DemeterActions[];
+  id: number;
+  started: boolean;
+  category: string;
+  actions: DemeterActions[];
 }
 
 export class FrameworkAssistant {
-    private id: number;
-    private started: boolean;
-    private category: string;
-    private actions: DemeterActions[];
+  private id: number;
+  private started: boolean;
+  private category: string;
+  private actions: DemeterActions[];
 
-    constructor(id: number, category: string, actions: DemeterActions[]) {
-        this.id = id;
-        this.started = true;
-        this.category = category;
-        this.actions = actions;
-    }
+  constructor(id: number, category: string, actions: DemeterActions[]) {
+    this.id = id;
+    this.started = true;
+    this.category = category;
+    this.actions = actions;
+  }
 
-    /**
-     * Return the JSON
-     */
-    public static fromJson(json: IFrameworkAssistant): FrameworkAssistant {
-        const assistant: FrameworkAssistant = new FrameworkAssistant(json.id, json.category, json.actions);
-        assistant.started = json.started;
-        return assistant;
-    }
+  /**
+   * Return the JSON
+   */
+  public static fromJson(json: IFrameworkAssistant): FrameworkAssistant {
+    const assistant: FrameworkAssistant = new FrameworkAssistant(json.id, json.category, json.actions);
+    assistant.started = json.started;
+    return assistant;
+  }
 
-    public getId(): number {
-        return this.id;
-    }
+  public getId(): number {
+    return this.id;
+  }
 
-    public setCategory(category: string) {
-        this.category = category;
-    }
+  public setCategory(category: string) {
+    this.category = category;
+  }
 
-    public getCategory(): string {
-        return this.category;
-    }
+  public getCategory(): string {
+    return this.category;
+  }
 
-    public setActions(actions: DemeterActions[]) {
-        this.actions = actions;
-    }
+  public setActions(actions: DemeterActions[]) {
+    this.actions = actions;
+  }
 
-    public getActions(): DemeterActions[] {
-        return this.actions;
-    }
+  public getActions(): DemeterActions[] {
+    return this.actions;
+  }
 
-    public isRunning(): boolean {
-        return this.started;
-    }
+  public isRunning(): boolean {
+    return this.started;
+  }
 
-    public start() {
-        this.started = true;
-    }
+  public start() {
+    this.started = true;
+  }
 
-    public stop() {
-        this.started = false;
-    }
+  public stop() {
+    this.started = false;
+  }
 
-    /**
-     * Serialize the object
-     */
-    public serialize(): IFrameworkAssistant {
-        if (this.id == null) this.id = 0;
-        return {
-            id: this.id,
-            started: this.started,
-            category: this.category,
-            actions: this.actions
-        }
-    }
+  /**
+   * Serialize the object
+   */
+  public serialize(): IFrameworkAssistant {
+    if (this.id == null) this.id = 0;
+    return {
+      id: this.id,
+      started: this.started,
+      category: this.category,
+      actions: this.actions,
+    };
+  }
 }
-  

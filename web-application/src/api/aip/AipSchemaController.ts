@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { AipSchema } from "../interface/aip/AipSchema";
-import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 
 export class AipSchemaController {
   private static API_BASE_URL = ApiComUtils.getUrl();

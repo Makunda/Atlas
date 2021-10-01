@@ -17,11 +17,11 @@
  */
 
 export default interface Subset {
-    _id: number;
-    name: string;
-    type: string;
-    count: number;
-    modelId: string;
-    color: string;
-    hidden: boolean;
+  _id: number;
+  name: string;
+  type: string;
+  count: number;
+  modelId: string;
+  color: string;
+  hidden: boolean;
 }

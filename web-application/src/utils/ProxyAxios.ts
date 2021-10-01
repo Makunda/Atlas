@@ -16,9 +16,9 @@ export default class ProxyAxios {
       config = {
         headers: {
           Authorization: `Bearer ${String(
-            Vue.$cookies.get(Cookie.AUTH_COOKIE),
-          )}`,
-        },
+            Vue.$cookies.get(Cookie.AUTH_COOKIE)
+          )}`
+        }
       };
     }
 
@@ -47,9 +47,9 @@ export default class ProxyAxios {
       config = {
         headers: {
           Authorization: `Bearer ${String(
-            Vue.$cookies.get(Cookie.AUTH_COOKIE),
-          )}`,
-        },
+            Vue.$cookies.get(Cookie.AUTH_COOKIE)
+          )}`
+        }
       };
     }
 

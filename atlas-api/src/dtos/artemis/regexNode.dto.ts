@@ -1,28 +1,27 @@
-import {IsArray, IsDecimal, IsString} from "class-validator";
+import { IsArray, IsDecimal, IsString } from "class-validator";
 
 export class CreateRegexNodeDto {
-    @IsDecimal()
-    public id: number;
+  @IsDecimal()
+  public id: number;
 
-    @IsString()
-    public name: string;
+  @IsString()
+  public name: string;
 
-    @IsArray()
-    public regexes: string[];
+  @IsArray()
+  public regexes: string[];
 
-    @IsArray()
-    public internalType: string[];
+  @IsArray()
+  public internalType: string[];
 
-    @IsString()
-    public framework: string;
+  @IsString()
+  public framework: string;
 
-    @IsString()
-    public category: string;
+  @IsString()
+  public category: string;
 
-    @IsDecimal()
-    public parentId: number;
+  @IsDecimal()
+  public parentId: number;
 
-    @IsArray()
-    public children: CreateRegexNodeDto[];
-
+  @IsArray()
+  public children: CreateRegexNodeDto[];
 }

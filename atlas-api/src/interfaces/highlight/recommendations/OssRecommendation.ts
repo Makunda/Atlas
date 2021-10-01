@@ -20,4 +20,15 @@ export default interface OssRecommendation {
   vulnerabilityHigh: string[];
   vulnerabilityMedium: string[];
   vulnerabilityLow: string[];
+
+  // Integration to the application
+  integration?: OssLinks[];
+}
+
+/**
+ * Links
+ */
+export interface OssLinks {
+  type: string;
+  count: number;
 }

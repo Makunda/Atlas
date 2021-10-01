@@ -212,7 +212,8 @@
             <DeleteModuleModal
               v-bind:module="selected"
               v-bind:dialog="deleteModal"
-              @close="deleteModal = false">
+              @close="deleteModal = false"
+            >
             </DeleteModuleModal>
 
             <!--  Modify modal  -->
@@ -275,7 +276,7 @@ export default Vue.extend({
 
     mergeDialog: false,
     editModal: false,
-    deleteModal :false,
+    deleteModal: false,
 
     searchModule: "",
 

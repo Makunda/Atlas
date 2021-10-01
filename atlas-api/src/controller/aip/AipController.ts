@@ -7,14 +7,13 @@ import SchemaPgService from "@services/aip/SchemaPgService";
 import { checkBody, checkParams, checkQuery } from "@shared/FunctionGlob";
 import { logger } from "@shared/Logger";
 import { NextFunction, Request, Response } from "express";
-import { HttpCode } from "src/utils/HttpCode";
+import { HttpCode } from "@utils/HttpCode";
 
 /**
  * Controller for the AIP service
  */
 export default class AipController {
-  private aipConfigurationNeo4jService =
-    AipConfigurationNeo4jService.getInstance();
+  private aipConfigurationNeo4jService = AipConfigurationNeo4jService.getInstance();
   private aipConfigurationPgService = new AipConfigurationPgService();
   private schemaPgService = new SchemaPgService();
 
@@ -24,17 +23,10 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public getAllConfigurationNode = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public getAllConfigurationNode = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const configNodes: AipConfiguration[] =
-        await this.aipConfigurationNeo4jService.getAllConfigurationNode();
-      res
-        .status(200)
-        .json({ data: configNodes, message: "Configuration nodes list" });
+      const configNodes: AipConfiguration[] = await this.aipConfigurationNeo4jService.getAllConfigurationNode();
+      res.status(200).json({ data: configNodes, message: "Configuration nodes list" });
     } catch (error) {
       next(error);
     }
@@ -46,18 +38,13 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public getConfigurationNodeById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public getConfigurationNodeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkQuery(req, "id");
 
       const id = Number(req.query.id);
 
-      const configNode: AipConfiguration =
-        await this.aipConfigurationNeo4jService.getConfigurationNodeById(id);
+      const configNode: AipConfiguration = await this.aipConfigurationNeo4jService.getConfigurationNodeById(id);
       res.status(200).json({ data: configNode, message: "Configuration node" });
     } catch (error) {
       next(error);
@@ -70,18 +57,13 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public getAttachedSchema = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public getAttachedSchema = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkQuery(req, "id");
 
       const id = Number(req.query.id);
 
-      const configNodes: AipSchema[] =
-        await this.aipConfigurationNeo4jService.getAttachedSchemas(id);
+      const configNodes: AipSchema[] = await this.aipConfigurationNeo4jService.getAttachedSchemas(id);
       res.status(200).json({ data: configNodes, message: "Aip Schemas" });
     } catch (error) {
       next(error);
@@ -94,19 +76,14 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public createConfigurationNode = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public createConfigurationNode = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "configuration");
 
       const configuration = req.body.configuration;
-      const configNode: AipConfiguration =
-        await this.aipConfigurationNeo4jService.createConfigurationNode(
-          configuration,
-        );
+      const configNode: AipConfiguration = await this.aipConfigurationNeo4jService.createConfigurationNode(
+        configuration
+      );
 
       res.status(200).json({ data: configNode, message: "Aip Configuration" });
     } catch (error) {
@@ -125,11 +102,7 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public createSchemaNode = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public createSchemaNode = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "schema");
       checkParams(req, "id");
@@ -137,11 +110,7 @@ export default class AipController {
       const schema = req.body.schema as AipSchema;
       const idConfiguration = Number(req.params.id);
 
-      const aipSchema: AipSchema =
-        await this.aipConfigurationNeo4jService.createSchemaNode(
-          schema,
-          idConfiguration,
-        );
+      const aipSchema: AipSchema = await this.aipConfigurationNeo4jService.createSchemaNode(schema, idConfiguration);
       res.status(200).json({ data: aipSchema, message: "Schema created" });
     } catch (error) {
       logger.error("Failed to create a schema node.", error);
@@ -158,11 +127,7 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public deleteSchemaNode = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public deleteSchemaNode = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkParams(req, "id");
 
@@ -185,19 +150,13 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public deleteConfigurationNode = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public deleteConfigurationNode = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkParams(req, "id");
 
       const idConfiguration = Number(req.params.id);
 
-      await this.aipConfigurationNeo4jService.deleteConfigurationNode(
-        idConfiguration,
-      );
+      await this.aipConfigurationNeo4jService.deleteConfigurationNode(idConfiguration);
       res.status(200).json({ message: "Configuration deleted" });
     } catch (error) {
       next(error);
@@ -213,11 +172,7 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public testConfiguration = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public testConfiguration = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "configuration");
 
@@ -240,32 +195,21 @@ export default class AipController {
    * @param res Response
    * @param next Next Function
    */
-  public getListSchema = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  public getListSchema = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkParams(req, "id");
 
       const idConfiguration = Number(req.params.id);
 
       // getConfigurationNodeById
-      const aipConfiguration =
-        await this.aipConfigurationNeo4jService.getConfigurationNodeById(
-          idConfiguration,
-        );
+      const aipConfiguration = await this.aipConfigurationNeo4jService.getConfigurationNodeById(idConfiguration);
 
       const schemas = await this.schemaPgService.getSchema(aipConfiguration);
 
-      res
-        .status(HttpCode.SUCCESS)
-        .json({ message: "List of schema", data: schemas });
+      res.status(HttpCode.SUCCESS).json({ message: "List of schema", data: schemas });
     } catch (error) {
       console.debug("Failed to retrieve the list of schema", error);
-      res
-        .status(HttpCode.BAD_REQUEST)
-        .json({ message: "Failed to get schemas", error: error });
+      res.status(HttpCode.BAD_REQUEST).json({ message: "Failed to get schemas", error: error });
     }
   };
 }

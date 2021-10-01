@@ -1,22 +1,18 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "es6",  
+    "target": "ESNEXT",
     "module": "commonjs",
-    "outDir": "dist", 
-    "strict": true, 
-    "strictNullChecks": false,  
+    "outDir": "dist",
+    "strict": true,
+    "strictNullChecks": false,
     "experimentalDecorators": true,
-    "esModuleInterop": true, 
+    "esModuleInterop": true,
     "sourceMap": false,
-    "baseUrl": "./", 
+    "baseUrl": "./",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
-  
-  "exclude": [
-    "spec",
-    "src/**/*.mock.ts",
-    "src/public/"
-  ]
+
+  "exclude": ["spec", "src/**/*.mock.ts"]
 }

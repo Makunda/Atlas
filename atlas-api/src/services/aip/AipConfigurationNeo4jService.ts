@@ -1,13 +1,10 @@
 /* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import Neo4jNoResults from "@exceptions/Neo4jNoResults";
-import {
-  AipConfiguration,
-  aipConfigurationFromNode,
-} from "@interfaces/aip/AipConfiguration";
+import { AipConfiguration, aipConfigurationFromNode } from "@interfaces/aip/AipConfiguration";
 import { AipSchema, aipSchemaFromNode } from "@interfaces/aip/AipSchema";
 import { logger } from "@shared/Logger";
-import { int, Neo4jError, Node } from "neo4j-driver";
+import { int, Node } from "neo4j-driver";
 
 /**
  *  Class in charge of the management of the AIP configuration nodes
@@ -56,10 +53,7 @@ export default class AipConfigurationNeo4jService {
         DETACH DELETE a
         ;`;
     const params = { id: int(id) };
-    await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(
-      req,
-      params,
-    );
+    await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(req, params);
   }
 
   /**
@@ -72,20 +66,14 @@ export default class AipConfigurationNeo4jService {
         DETACH DELETE a
         ;`;
     const params = { id: int(id) };
-    await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(
-      req,
-      params,
-    );
+    await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(req, params);
   }
 
   /**
    * Create and attach a Schema node
    * @param {Number} id
    */
-  public async createSchemaNode(
-    schema: AipSchema,
-    configurationNodeId: number,
-  ): Promise<AipSchema> {
+  public async createSchemaNode(schema: AipSchema, configurationNodeId: number): Promise<AipSchema> {
     const req = `
         MATCH (n:${AipConfigurationNeo4jService.CONFIGURATION_NODE_LABEL}) WHERE ID(n)=$idNode
         MERGE (n)-[:${AipConfigurationNeo4jService.CONFIGURATION_TO_SCHEMA_REL}]->(s:${AipConfigurationNeo4jService.APP_SCHEMA_NODE_LABEL} {
@@ -97,11 +85,7 @@ export default class AipConfigurationNeo4jService {
         ;`;
     const params: any = schema;
     params.idNode = int(configurationNodeId);
-    const results =
-      await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(
-        req,
-        params,
-      );
+    const results = await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(req, params);
 
     if (!results || results.records.length == 0) {
       throw new Neo4jNoResults("Failed to create the Schema node", req);
@@ -121,11 +105,7 @@ export default class AipConfigurationNeo4jService {
             MATCH (c:${AipConfigurationNeo4jService.CONFIGURATION_NODE_LABEL})-[:${AipConfigurationNeo4jService.CONFIGURATION_TO_SCHEMA_REL}]->(a:${AipConfigurationNeo4jService.APP_SCHEMA_NODE_LABEL}) WHERE ID(c)=$id 
             RETURN DISTINCT a as node;`;
       const params = { id: int(idNode) };
-      const results =
-        await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(
-          req,
-          params,
-        );
+      const results = await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(req, params);
 
       const schemaReturnList = [];
 
@@ -137,17 +117,13 @@ export default class AipConfigurationNeo4jService {
         } catch (err) {
           const schemaId = int(schemaNode.identity).toNumber();
           this.deleteSchemaNode(schemaId);
-          logger.warn(
-            `Schema node with ID ${idNode} was badly formatted and removed.`,
-          );
+          logger.warn(`Schema node with ID ${idNode} was badly formatted and removed.`);
         }
       }
 
       return schemaReturnList;
     } catch (err) {
-      logger.error(
-        `Failed to get the Attached schemas of node with ID : ${idNode}.`,
-      );
+      logger.error(`Failed to get the Attached schemas of node with ID : ${idNode}.`);
       throw err;
     }
   }
@@ -156,9 +132,7 @@ export default class AipConfigurationNeo4jService {
    * Create the configuration node
    * @return {Promise<AipConfigurationNeo4jService>} Promise returning the AipConfiguration created;
    */
-  public async createConfigurationNode(
-    configuration: AipConfiguration,
-  ): Promise<AipConfiguration> {
+  public async createConfigurationNode(configuration: AipConfiguration): Promise<AipConfiguration> {
     const req = `
                 MERGE (c:${AipConfigurationNeo4jService.CONFIGURATION_NODE_LABEL} {
                     Name : $name, 
@@ -169,11 +143,7 @@ export default class AipConfigurationNeo4jService {
                     Password: $password
                 }) RETURN c as node;
             `;
-    const results =
-      await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(
-        req,
-        configuration,
-      );
+    const results = await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(req, configuration);
     if (!results || results.records.length === 0) {
       throw new Neo4jNoResults("Failed to create the configuration node", req);
     }
@@ -219,24 +189,18 @@ export default class AipConfigurationNeo4jService {
    * Get one configuration node by its id
    * @return {Promise<AipConfiguration|undefined>} Promise returning the complete list of the AipConfiguration Node
    */
-  public async getConfigurationNodeById(
-    id: number,
-  ): Promise<AipConfiguration | undefined> {
+  public async getConfigurationNodeById(id: number): Promise<AipConfiguration | undefined> {
     const req = `
             MATCH (c:${AipConfigurationNeo4jService.CONFIGURATION_NODE_LABEL}) 
             WHERE ID(c)=$idNode
             RETURN DISTINCT c as node;
         `;
-    const results =
-      await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(req, {
-        idNode: id,
-      });
+    const results = await AipConfigurationNeo4jService.neo4jAl.executeWithParameters(req, {
+      idNode: id,
+    });
 
     if (!results || results.records.length === 0) {
-      throw new Neo4jNoResults(
-        `Failed to get the configuration node with id: ${id}.`,
-        req,
-      );
+      throw new Neo4jNoResults(`Failed to get the configuration node with id: ${id}.`, req);
     }
 
     const element: Node = results.records[0].get("node");

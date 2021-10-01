@@ -118,84 +118,84 @@
                         <!-- Forms -->
                         <!-- Tag Form -->
                         <v-expand-x-transition>
-                        <v-form
-                          v-show="editMode"
-                          class="pa-4"
-                          ref="form"
-                          lazy-validation
-                        >
-                          <v-text-field
-                            outlined
-                            v-model="group.name"
-                            :rules="[v => !!v || 'Name is required']"
-                            label="Name of the rule"
-                            required
-                          ></v-text-field>
-                          <v-textarea
-                            outlined
-                            name="associatedDescription"
-                            v-model="group.description"
-                            label="Associated description"
-                            placeholder="Type here the descirption assoicated to your tag..."
-                          ></v-textarea>
-                          <v-text-field
-                            outlined
-                            v-model="group.groupName"
-                            :rules="[v => !!v || 'Group is required']"
-                            label="Name of the group that will be created"
-                            required
-                          ></v-text-field>
-                          <v-textarea
-                            outlined
-                            name="cypherRequest"
-                            v-model="group.cypherRequest"
-                            label="Associated Request"
-                            :rules="[
-                              v => !!v || 'Associated request is required'
-                            ]"
-                            placeholder="Type here your neo4j Cypher request..."
-                            @change="validRequest = false"
-                          ></v-textarea>
-                          <v-text-field
-                            outlined
-                            v-model="group.cypherRequestReturn"
-                            :rules="[v => !!v || 'Return value is required']"
-                            label="Name of the returned value"
-                            @change="validRequest = false"
-                            required
-                          ></v-text-field>
-                          <v-select
-                            v-model="selectedUseCaseId"
-                            :items="usecases"
-                            item-text="title"
-                            item-value="id"
-                            label="Select the parent use case"
-                            :rules="[
-                              v => !!v || 'You must select a parent use case'
-                            ]"
-                            persistent-hint
-                            single-line
-                          ></v-select>
-                          <v-checkbox
-                            class="pl-5"
-                            v-model="group.active"
-                            label="Set recommendation as active"
-                          ></v-checkbox>
-                          <v-checkbox
-                            class="pl-5"
-                            v-model="group.selected"
-                            label="Set recommendation as selected"
-                          ></v-checkbox>
-                          <v-btn
-                            class="ma-2 float"
-                            color="info"
-                            @click="
-                              showAssistant = showAssistant ? false : true
-                            "
+                          <v-form
+                            v-show="editMode"
+                            class="pa-4"
+                            ref="form"
+                            lazy-validation
                           >
-                            Open assitant
-                          </v-btn>
-                        </v-form>
+                            <v-text-field
+                              outlined
+                              v-model="group.name"
+                              :rules="[v => !!v || 'Name is required']"
+                              label="Name of the rule"
+                              required
+                            ></v-text-field>
+                            <v-textarea
+                              outlined
+                              name="associatedDescription"
+                              v-model="group.description"
+                              label="Associated description"
+                              placeholder="Type here the descirption assoicated to your tag..."
+                            ></v-textarea>
+                            <v-text-field
+                              outlined
+                              v-model="group.groupName"
+                              :rules="[v => !!v || 'Group is required']"
+                              label="Name of the group that will be created"
+                              required
+                            ></v-text-field>
+                            <v-textarea
+                              outlined
+                              name="cypherRequest"
+                              v-model="group.cypherRequest"
+                              label="Associated Request"
+                              :rules="[
+                                v => !!v || 'Associated request is required'
+                              ]"
+                              placeholder="Type here your neo4j Cypher request..."
+                              @change="validRequest = false"
+                            ></v-textarea>
+                            <v-text-field
+                              outlined
+                              v-model="group.cypherRequestReturn"
+                              :rules="[v => !!v || 'Return value is required']"
+                              label="Name of the returned value"
+                              @change="validRequest = false"
+                              required
+                            ></v-text-field>
+                            <v-select
+                              v-model="selectedUseCaseId"
+                              :items="usecases"
+                              item-text="title"
+                              item-value="id"
+                              label="Select the parent use case"
+                              :rules="[
+                                v => !!v || 'You must select a parent use case'
+                              ]"
+                              persistent-hint
+                              single-line
+                            ></v-select>
+                            <v-checkbox
+                              class="pl-5"
+                              v-model="group.active"
+                              label="Set recommendation as active"
+                            ></v-checkbox>
+                            <v-checkbox
+                              class="pl-5"
+                              v-model="group.selected"
+                              label="Set recommendation as selected"
+                            ></v-checkbox>
+                            <v-btn
+                              class="ma-2 float"
+                              color="info"
+                              @click="
+                                showAssistant = showAssistant ? false : true
+                              "
+                            >
+                              Open assitant
+                            </v-btn>
+                          </v-form>
                         </v-expand-x-transition>
                         <div v-show="!editMode">
                           <h3 class="ma-auto">

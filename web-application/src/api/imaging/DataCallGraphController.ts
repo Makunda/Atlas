@@ -1,7 +1,7 @@
 import { ApiComUtils } from "@/api/ApiComUtils";
 import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import {DataCallGraph} from "@/api/interface/imaging/DataCallGraph";
+import { DataCallGraph } from "@/api/interface/imaging/DataCallGraph";
 import DataCallGraphInsights from "../interface/imaging/DataCallGraphInsights";
 
 export default class DataCallGraphController {

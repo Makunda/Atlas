@@ -31,6 +31,8 @@
         >
           CAST Extend
         </a>
+        <br>or verify that the Artemis workspace has been correctly declared in the
+        parameters.
       </h2>
     </div>
   </v-container>

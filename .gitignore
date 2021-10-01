@@ -4,6 +4,7 @@ atlas-api/dist/*
 web-application/dist/*
 dist/*
 atlas-api/bin/*
+atlas-api/config/recommendations/*
 
 #logs
 *-audit.json

@@ -12,7 +12,11 @@
       <v-container>
         <v-row>
           <v-col cols="12" md="5">
-            <v-select :items="schemaNames" label="Outlined style" outlined></v-select>
+            <v-select
+              :items="schemaNames"
+              label="Outlined style"
+              outlined
+            ></v-select>
           </v-col>
           <v-col cols="12" md="2">
             <p class="text-center">send to</p>
@@ -27,14 +31,14 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { AipConfiguration } from '@/api/interface/aip/Aipconfiguration';
-import { AipSchema } from '@/api/interface/aip/AipSchema';
+import { AipConfiguration } from "@/api/interface/aip/Aipconfiguration";
+import { AipSchema } from "@/api/interface/aip/AipSchema";
 
 export default Vue.extend({
   name: "RulesInjection",
 
   data: () => ({
-      schemaNames: undefined as [AipSchema, AipConfiguration]
+    schemaNames: undefined as [AipSchema, AipConfiguration]
   })
 });
 </script>

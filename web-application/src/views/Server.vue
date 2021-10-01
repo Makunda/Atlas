@@ -232,7 +232,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineDatabase = res;
         })
-        .catch(err => {
+        .catch(() => {
           this.onlineDatabase = false;
         })
         .finally(() => {

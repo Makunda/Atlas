@@ -19,19 +19,19 @@
       <v-stepper v-model="e1">
         <v-stepper-header>
           <v-stepper-step :complete="e1 > 1" step="1">
-            Upload
+            <span class="white--text">Upload</span>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
           <v-stepper-step :complete="e1 > 2" step="2">
-            Review
+            <span class="white--text">Review</span>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
           <v-stepper-step step="3">
-            Confirm
+            <span class="white--text">Confirm</span>
           </v-stepper-step>
         </v-stepper-header>
 
@@ -49,6 +49,17 @@
                     outlined
                     dense
                   ></v-file-input>
+                </v-row>
+
+                <!-- Progress bar during file upload -->
+                <v-row v-if="fileUploading">
+                  <p>Processing the file</p>
+                  <v-progress-linear
+                    color="light-blue"
+                    height="5"
+                    striped
+                    indeterminate
+                  ></v-progress-linear>
                 </v-row>
               </v-container>
             </v-card>
@@ -156,9 +167,7 @@
                       <!-- Fitler on Violations -->
                       <v-row>
                         <v-col cols="12" md="2">
-                          <v-subheader
-                            >Filter by violations (only clause):</v-subheader
-                          >
+                          <v-subheader>Filter by age:</v-subheader>
                         </v-col>
                         <v-col cols="12" md="10" class="d-flex flex-row">
                           <v-checkbox
@@ -245,10 +254,11 @@
                     :items="blockerDisplayedList"
                     :items-per-page="20"
                     :search="search"
+                    item-key="id"
                     show-select
                     class="elevation-1"
                   >
-                    <template v-slot:item.file="props">
+                    <template v-slot:item.component="props">
                       <v-edit-dialog
                         :return-value.sync="props.item.file"
                         large
@@ -258,13 +268,13 @@
                         @open="open"
                         @close="close"
                       >
-                        <div>{{ props.item.file }}</div>
+                        <div>{{ props.item.component }}</div>
                         <template v-slot:input>
                           <div class="mt-4 text-h6">
-                            Update File
+                            Update Pattern
                           </div>
                           <v-text-field
-                            v-model="props.item.file"
+                            v-model="props.item.component"
                             label="Edit"
                             single-line
                             counter
@@ -274,6 +284,7 @@
                       </v-edit-dialog>
                     </template>
 
+                    <!-- Crud actions  -->
                     <template v-slot:item.actions="{ item }">
                       <v-icon small @click="deleteItem(item)">
                         mdi-delete
@@ -363,6 +374,7 @@
 import Vue from "vue";
 import OssRecommendation from "@/api/interface/highlight/OssRecommendation";
 import { OSSController } from "@/api/highlight/OSSController";
+import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({
   name: "OSSUpload",
@@ -436,7 +448,8 @@ export default Vue.extend({
 
     // Progression
     sizeToSend: 0,
-    sizeSent: 0
+    sizeSent: 0,
+    fileUploading: false
   }),
 
   methods: {
@@ -533,6 +546,8 @@ export default Vue.extend({
     },
 
     async sendFileToApi() {
+      this.fileUploading = true;
+
       try {
         if (this.file == null) return;
         if (this.application == null) return;
@@ -541,6 +556,9 @@ export default Vue.extend({
           this.file,
           this.application
         );
+
+        // Assign ID
+        for (const i in this.blockerList) this.blockerList[i].id = i;
 
         this.blockerDisplayedList = [...this.blockerList];
 
@@ -559,7 +577,13 @@ export default Vue.extend({
 
         this.e1 = 2;
       } catch (err) {
-        console.error("Failed to process the file.", err);
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to process the file.",
+          body: err
+        });
+      } finally {
+        this.fileUploading = false;
       }
     },
 
@@ -629,3 +653,20 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style scoped>
+.v-stepper__header {
+  background-color: #425b66 !important;
+  border-bottom: 6px solid #2a9d8f;
+  color: white !important;
+}
+
+.v-stepper__label {
+  text-shadow: 0px 0px 0px white !important;
+  color: white !important;
+}
+
+.theme--light.v-stepper .v-stepper__label {
+  color: white !important;
+}
+</style>

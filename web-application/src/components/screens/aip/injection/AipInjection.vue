@@ -20,8 +20,6 @@
         <component :is="items[tab].view"></component>
       </v-container>
     </v-row>
-
-   
   </v-container>
 </template>
 
@@ -53,13 +51,12 @@ export default Vue.extend({
         view: "RulesInjection",
         name: "Inject Rules",
         icon: "mdi-assistant"
-      },
+      }
     ]
   }),
 
   mounted() {
     this.applicationName = this.$store.state.applicationName;
-    
   },
 
   watch: {
@@ -74,5 +71,4 @@ export default Vue.extend({
 .v-tab-active {
   background-color: #425b66 !important;
 }
-
 </style>

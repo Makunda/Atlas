@@ -1,7 +1,7 @@
 {
-  "nickname" : "DeadCodeType",
+  "nickname": "DeadCodeType",
   "name": "Dead code in the application (Types)",
-  "description" : "List the different types of objects having no relationships with the rest of the application",
+  "description": "List the different types of objects having no relationships with the rest of the application",
   "categories": ["maintenance", "modernization"],
   "parameters": [],
   "request": "MATCH (o:Object:`%APPLICATION_NAME%`) WHERE NOT (o)-[]-(:Object) WITH DISTINCT o.Type as TypeObj , COUNT(DISTINCT o) as NumObject OPTIONAL MATCH (other:Object:`%APPLICATION_NAME%`) WHERE other.Type=TypeObj RETURN TypeObj as `Object Type`, COUNT(DISTINCT other) as `Total Objects`, NumObject as `Unused Objects`, 100.0 * NumObject / COUNT(DISTINCT other) as Percentage",

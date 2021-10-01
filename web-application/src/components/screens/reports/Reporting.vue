@@ -277,9 +277,8 @@ export default Vue.extend({
         this.snackbarInfoDisplay = true;
         this.snackbarInfo = `A Report is being processed. Please wait.`;
       } else {
-
         this.snackbarInfoDisplay = true;
-        this.snackbarInfo = `Generating report: ${this.focusReport.name}`
+        this.snackbarInfo = `Generating report: ${this.focusReport.name}`;
 
         try {
           this.loadingReport = this.focusReport.id;

@@ -6,7 +6,7 @@ import { Node, int } from "neo4j-driver";
 export enum SchemaType {
   LOCAL = "Local",
   MANAGEMENT = "Management",
-  CENTRAL = "Central",
+  CENTRAL = "Central"
 }
 
 /**

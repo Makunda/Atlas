@@ -1,9 +1,9 @@
-import {IsString} from 'class-validator';
+import { IsString } from "class-validator";
 
 export class LaunchDetectionDto {
-    @IsString()
-    public application: string;
+  @IsString()
+  public application: string;
 
-    @IsString()
-    public language: string;
+  @IsString()
+  public language: string;
 }

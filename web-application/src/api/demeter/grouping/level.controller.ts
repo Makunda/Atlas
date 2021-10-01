@@ -102,7 +102,7 @@ export class LevelController {
   public static async getDemeterLevels(
     applicationName: string
   ): Promise<Level5Group[]> {
-    if(applicationName == "") return;
+    if (applicationName == "") return;
 
     const url =
       LevelController.API_BASE_URL +
