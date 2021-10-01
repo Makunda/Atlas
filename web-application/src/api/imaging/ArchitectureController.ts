@@ -320,7 +320,7 @@ export default class ArchitectureController {
     try {
       const res = await axios.post(url, {
         name: name,
-        application: application,
+        application: application
       });
 
       if (res.status != 200) {

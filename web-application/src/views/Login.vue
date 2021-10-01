@@ -99,7 +99,6 @@
 import { Vue } from "vue-property-decorator";
 import { Configuration, Credentials } from "@/Configuration";
 import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
-import { ServerInfo } from "neo4j-driver";
 import ConfigurationController from "../api/configuration/configuration.controller";
 import { UtilsController } from "@/api/utils/utils.controller";
 
@@ -138,7 +137,7 @@ export default Vue.extend({
 
       neo4jAl
         .testConnection()
-        .then((res: ServerInfo) => {
+        .then(() => {
           // Successful connection , redirect to main
           this.$router.replace("/atlas/");
           window.location.reload();
@@ -154,7 +153,7 @@ export default Vue.extend({
     // Set Internal mode
     async setInternalMode() {
       await ConfigurationController.setInternalMode(!this.switchInternalUse)
-        .then((res: boolean) => {
+        .then(() => {
           return;
         })
         .catch(err => {

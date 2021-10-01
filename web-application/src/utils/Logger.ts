@@ -3,7 +3,7 @@ export default class Logger {
     type: string,
     title: string,
     text: string,
-    data?: any,
+    data?: any
   ): void {
     let display = `[${type}] ${title} - ${text}`;
 

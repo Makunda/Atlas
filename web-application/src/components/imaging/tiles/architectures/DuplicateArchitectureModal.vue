@@ -109,7 +109,7 @@ export default Vue.extend({
         this.loadingModify = true;
         await ArchitectureController.duplicateArchiModel(
           this.element._id,
-          this.nameDuplicate,
+          this.nameDuplicate
         );
         this.errorModify = "";
         this.$emit("close");

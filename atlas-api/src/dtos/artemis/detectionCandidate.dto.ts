@@ -1,11 +1,9 @@
-import {IsArray, IsString} from 'class-validator';
+import { IsArray, IsString } from "class-validator";
 
 export class DetectionCandidate {
-    @IsString()
-    public application: string;
+  @IsString()
+  public application: string;
 
-    @IsArray()
-    public languages: string[];
-
-
+  @IsArray()
+  public languages: string[];
 }

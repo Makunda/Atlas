@@ -2,6 +2,7 @@
  * Open source safety interface
  */
 export default interface OssRecommendation {
+  id?: number;
   application: string;
   origin: string;
   description: string;
@@ -20,4 +21,15 @@ export default interface OssRecommendation {
   vulnerabilityHigh: string[];
   vulnerabilityMedium: string[];
   vulnerabilityLow: string[];
+
+  // Integration to the application
+  integration?: OssLinks[];
+}
+
+/**
+ * Links
+ */
+export interface OssLinks {
+  type: string;
+  count: number;
 }

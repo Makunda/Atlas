@@ -316,17 +316,17 @@
                 class="elevation-1 pt-3"
                 fixed-header
               >
-              <template v-slot:top class="my-5">
-                <v-text-field
-                  filled
-                  rounded
-                  clearable
-                  v-model="searchName"
-                  @change="transactionApiCall()"
-                  label="Search Transaction by Name"
-                  class="mx-4"
-                ></v-text-field>
-              </template>
+                <template v-slot:top class="my-5">
+                  <v-text-field
+                    filled
+                    rounded
+                    clearable
+                    v-model="searchName"
+                    @change="transactionApiCall()"
+                    label="Search Transaction by Name"
+                    class="mx-4"
+                  ></v-text-field>
+                </template>
 
                 <template v-slot:item.technologies="{ item }">
                   <v-chip-group active-class="primary--text" column>
@@ -748,7 +748,6 @@ export default Vue.extend({
       if (Array.isArray(sortDesc) && sortDesc.length === 1)
         sortByDesccOption = sortDesc[0];
 
-
       const transactions = await TransactionController.getBatchTransaction(
         this.application,
         (page - 1) * itemsPerPage,
@@ -768,14 +767,9 @@ export default Vue.extend({
       this.loadingMaskedTransaction = true;
 
       await this.getNumberMaskedTransaction();
-      const {
-        sortBy,
-        sortDesc,
-        page } = this.optionsMaskedTransaction;
+      const { sortBy, sortDesc, page } = this.optionsMaskedTransaction;
 
-      let {
-        itemsPerPage
-      } = this.optionsMaskedTransaction;
+      let { itemsPerPage } = this.optionsMaskedTransaction;
 
       if (itemsPerPage === -1) {
         itemsPerPage = this.numMaskedTransaction;

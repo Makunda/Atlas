@@ -7,7 +7,7 @@ export enum FlashType {
   INFO,
   SUCCESS,
   ERROR,
-  NEUTRAL,
+  NEUTRAL
 }
 
 export interface Flash {
@@ -17,25 +17,25 @@ export interface Flash {
   body: string;
 
   length?: number;
-  duration?: number; // in miliseconds
+  duration?: number; // in milliseconds
   createdOn?: number;
 }
 
 const flash = new Vuex.Store({
   state: {
-    notifications: [] as Flash[],
+    notifications: [] as Flash[]
   },
   getters: {
     pop(state): Flash | undefined {
       return state.notifications.pop();
-    },
+    }
   },
   mutations: {
     // Change authentication
     add(state, message: Flash) {
       state.notifications.push(message);
-    },
-  },
+    }
+  }
 });
 
 export default flash;

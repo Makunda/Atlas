@@ -43,7 +43,7 @@ export default Vue.extend({
   computed: {
     count() {
       return flash.state.notifications.length;
-    },
+    }
   },
 
   methods: {
@@ -75,16 +75,18 @@ export default Vue.extend({
     close(position: number) {
       // remove the notification
       this.displayedNotification.splice(position, 1);
-    },
+    }
   },
 
   data: () => ({
-    displayedNotification: [
-    ] as Flash[],
+    displayedNotification: [] as Flash[]
   }),
 
   watch: {
     count(newCount, oldCount) {
+      // Check if a violation has been added or removed
+      if (newCount < oldCount) return;
+
       // Pop new notification
       const notification: Flash = flash.getters.pop;
 
@@ -116,8 +118,8 @@ export default Vue.extend({
         }, 500);
 
       this.displayedNotification.push(notification);
-    },
-  },
+    }
+  }
 });
 </script>
 

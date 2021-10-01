@@ -1,4 +1,4 @@
-import {Node, int} from "neo4j-driver";
+import { Node, int } from "neo4j-driver";
 import { AipSchema } from "./AipSchema";
 
 /**

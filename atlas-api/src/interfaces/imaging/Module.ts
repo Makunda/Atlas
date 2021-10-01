@@ -16,11 +16,11 @@
 }*/
 
 export default interface IModule {
-    _id?: number;
-    hidden?: boolean;
-    concept: boolean;
-    alternateDrilldown?: boolean;
-    color: string;
-    count: number;
-    name: string;
+  _id?: number;
+  hidden?: boolean;
+  concept: boolean;
+  alternateDrilldown?: boolean;
+  color: string;
+  count: number;
+  name: string;
 }

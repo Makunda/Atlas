@@ -3,129 +3,18 @@ import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import DocumentNode from "@entities/Imaging/DocumentNode";
 import OssRecommendation from "@interfaces/highlight/recommendations/OssRecommendation";
 import { logger } from "@shared/Logger";
+import ExcelUtils from "@utils/Excel/ExcelUtils";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
+import fs from "fs";
 
 /**
  * Service in Charge of the processing of Open source service
  */
 export default class HighlightOssService {
-  private static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
-  private static PORTFOLIO_LEVEL_TAB = "Portfolio-Level Components";
-  private static APPLICATION_LEVEL_TAB = "Detected Components";
-
-  private static INDEX_TABLE_COL_NAME = "Component";
-
-  /**
-   *  Map the header of the file
-   * @param worksheet Worksheet to explore
-   * @param x X coord
-   * @param y Y coord
-   * @returns Return a bind of the cols
-   */
-  private static mapColumnTitle(
-    worksheet: Excel.Worksheet,
-    x: number,
-    y: number,
-  ): Map<string, number> {
-    const map = new Map<string, number>();
-    let end = false;
-    let colName: string;
-
-    let initialCol = y;
-    do {
-      try {
-        colName = worksheet.getCell(x, initialCol).text;
-      } catch (ignored) {
-        // ignored
-      }
-
-      if (colName && colName.length != 0) {
-        map.set(colName, initialCol);
-        initialCol++;
-      } else {
-        end = true;
-      }
-    } while (!end);
-
-    return map;
-  }
-
-  /**
-   * Get a value in the worksheet as a string, or return an empty string
-   * @param worksheet Worksheet
-   * @param row Row index
-   * @param colName Column name to search
-   * @param colMapping
-   */
-  private static getValueOrEmpty(
-    worksheet: Excel.Worksheet,
-    row: number,
-    colName: string,
-    colMapping: Map<string, number>,
-  ): string {
-    // Verification on the mapping
-    if (!colMapping.has(colName)) return "";
-
-    const y = colMapping.get(colName);
-    return worksheet.getCell(row, y).text;
-  }
-
-  /**
-   * Get a value in the worksheet as a string, or return an empty string
-   * @param worksheet Worksheet
-   * @param row Row index
-   * @param colName Column name to search
-   * @param colMapping
-   */
-  private static getStringArrayOrEmpty(
-    worksheet: Excel.Worksheet,
-    row: number,
-    colName: string,
-    colMapping: Map<string, number>,
-  ): string[] {
-    // Verification on the mapping
-    if (!colMapping.has(colName)) return [];
-
-    const y = colMapping.get(colName);
-    const arrayASstring = worksheet.getCell(row, y).text;
-
-    // Filter empty values / string
-    return arrayASstring.split("\n").filter((item) => item);
-  }
-
-  /**
-   * Find a value in a worksheet
-   * @param worksheet Worksheet to parse
-   * @param value Value to look for
-   * @returns The 2D coords as [row, col]
-   */
-  private static findStartCoord(
-    worksheet: Excel.Worksheet,
-    value: string,
-  ): [number, number] {
-    let startingTableIndexR = 1;
-    let startingTableIndexC = 1;
-
-    // Search in the table
-    search_loop: for (
-      let indexR = 1;
-      indexR <= worksheet.actualRowCount;
-      indexR++
-    ) {
-      for (let indexC = 1; indexC <= worksheet.actualColumnCount; indexC++) {
-        const element = worksheet.getCell(indexR, indexC);
-
-        if (element.text == value) {
-          startingTableIndexC = indexC;
-          startingTableIndexR = indexR;
-          break search_loop; // Break entire loop since index was found
-        }
-      }
-    }
-
-    return [startingTableIndexR, startingTableIndexC];
-  }
+  protected static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+  protected static PORTFOLIO_LEVEL_TAB = "Portfolio-Level Components";
+  protected static APPLICATION_LEVEL_TAB = "Detected Components";
 
   /**
    * Sanitize the component based on the technology
@@ -133,10 +22,7 @@ export default class HighlightOssService {
    * @param technology Technology of the component
    * @returns [root, info] Return the root and additional information
    */
-  private sanitizeComponentName(
-    name: string,
-    technology: string,
-  ): [string, string] {
+  private sanitizeComponentName(name: string, technology: string): [string, string] {
     if (technology == "java") {
       let info = "";
       if (name.includes(":")) {
@@ -157,85 +43,39 @@ export default class HighlightOssService {
    * @todo Quick implementation need to make this approach generic
    */
   public treatPortfolioLevel(workbook: Excel.Workbook): OssRecommendation[] {
-    const worksheet = workbook.getWorksheet(
-      HighlightOssService.PORTFOLIO_LEVEL_TAB,
-    );
+    const worksheet = workbook.getWorksheet(HighlightOssService.PORTFOLIO_LEVEL_TAB);
 
     // Find origin value as starting point
-    const [row, col] = HighlightOssService.findStartCoord(worksheet, "Origin");
+    const [row, col] = ExcelUtils.findStartCoord(worksheet, "Origin");
 
     // Launch discovery
-    const columnMapping: Map<string, number> =
-      HighlightOssService.mapColumnTitle(worksheet, row, col);
+    const columnMapping: Map<string, number> = ExcelUtils.mapColumnTitle(worksheet, row, col);
 
     // Component	Version	Description	Release Date	Url	License	License Change	Origin	CWEs	CVEs	Applications
     const recommendation: OssRecommendation[] = [];
     // Parse all the lines from the start
     for (let indexR = row; indexR < worksheet.actualRowCount; indexR++) {
       // Sanitize component name
-      const component = HighlightOssService.getValueOrEmpty(
-        worksheet,
-        indexR,
-        "Component",
-        columnMapping,
-      );
-      const technology = HighlightOssService.getValueOrEmpty(
-        worksheet,
-        indexR,
-        "Technologies",
-        columnMapping,
-      );
+      const component = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Component", columnMapping);
+      const technology = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Technologies", columnMapping);
 
-      const [componentName, info] = this.sanitizeComponentName(
-        component,
-        technology,
-      );
-      let description = HighlightOssService.getValueOrEmpty(
-        worksheet,
-        indexR,
-        "Description",
-        columnMapping,
-      );
+      const [componentName, info] = this.sanitizeComponentName(component, technology);
+      let description = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Description", columnMapping);
 
       if (info) {
         description = `Additional component's info: ${info}. ` + componentName;
       }
 
       recommendation.push({
-        application: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Applications",
-          columnMapping,
-        ),
-        origin: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Origin",
-          columnMapping,
-        ),
+        application: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Applications", columnMapping),
+        origin: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Origin", columnMapping),
         component: componentName,
         description: description,
-        version: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Version",
-          columnMapping,
-        ),
+        version: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Version", columnMapping),
         status: "",
         technology: technology,
-        link: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Version",
-          columnMapping,
-        ),
-        release: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Release Date",
-          columnMapping,
-        ),
+        link: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Version", columnMapping),
+        release: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Release Date", columnMapping),
         lastVersion: "",
         lastRelease: "",
         gap: "",
@@ -256,55 +96,33 @@ export default class HighlightOssService {
    * @param workbook Workbook to treat
    * @todo Quick implementation need to make this approach generic
    */
-  public treatApplicationLevel(
-    workbook: Excel.Workbook,
-    application: string,
-  ): OssRecommendation[] {
-    const worksheet = workbook.getWorksheet(
-      HighlightOssService.APPLICATION_LEVEL_TAB,
-    );
+  public treatApplicationLevel(workbook: Excel.Workbook, application: string): OssRecommendation[] {
+    const worksheet = workbook.getWorksheet(HighlightOssService.APPLICATION_LEVEL_TAB);
 
     // Find origin value as starting point
-    const [x, y] = HighlightOssService.findStartCoord(worksheet, "Origin");
+    const [x, y] = ExcelUtils.findStartCoord(worksheet, "Origin");
 
     // Launch discovery
     // Origin	Third-Party Component	Status	Technologies	Link	Version	Release Date	Last Version	Last Release Date	Gap	Releases / 12 months	Licenses	Critical	High	Medium	Low
 
     // Launch discovery
-    const columnMapping: Map<string, number> =
-      HighlightOssService.mapColumnTitle(worksheet, x, y);
+    const columnMapping: Map<string, number> = ExcelUtils.mapColumnTitle(worksheet, x, y);
+
+    logger.info(`columnMapping : ${worksheet.actualRowCount} rows & ${worksheet.actualColumnCount} cols `);
 
     const recommendation: OssRecommendation[] = [];
     // Parse all the lines from the start
-    for (let indexR = x + 1; indexR <= worksheet.actualRowCount; indexR++) {
+    for (let indexR = x + 1; indexR <= 32767; indexR++) {
       // Check if line empty  to avoid inserting empty rows
-      const component = HighlightOssService.getValueOrEmpty(
-        worksheet,
-        indexR,
-        "Third-Party Component",
-        columnMapping,
-      );
+      const component = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Third-Party Component", columnMapping);
 
-      if (component === "") continue;
+      if (component === "") break;
 
-      const technology = HighlightOssService.getValueOrEmpty(
-        worksheet,
-        indexR,
-        "Technologies",
-        columnMapping,
-      );
+      const technology = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Technologies", columnMapping);
 
-      const [componentName, info] = this.sanitizeComponentName(
-        component,
-        technology,
-      );
+      const [componentName, info] = this.sanitizeComponentName(component, technology);
 
-      let description = HighlightOssService.getValueOrEmpty(
-        worksheet,
-        indexR,
-        "Description",
-        columnMapping,
-      );
+      let description = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Description", columnMapping);
 
       if (info) {
         description = `Additional component's info: ${info}. ` + description;
@@ -312,95 +130,26 @@ export default class HighlightOssService {
 
       recommendation.push({
         application: application,
-        origin: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Origin",
-          columnMapping,
-        ),
+        origin: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Origin", columnMapping),
         component: componentName,
         description: description,
-        version: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Version",
-          columnMapping,
-        ),
-        status: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Status",
-          columnMapping,
-        ),
+        version: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Version", columnMapping),
+        status: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Status", columnMapping),
         technology: technology,
-        link: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Link",
-          columnMapping,
-        ),
-        release: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Release Date",
-          columnMapping,
-        ),
-        lastVersion: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Last Version",
-          columnMapping,
-        ),
-        lastRelease: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Last Release Date",
-          columnMapping,
-        ),
-        gap: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Gap",
-          columnMapping,
-        ),
-        releaseFrequency: HighlightOssService.getValueOrEmpty(
-          worksheet,
-          indexR,
-          "Releases / 12 months",
-          columnMapping,
-        ),
-        licenses: HighlightOssService.getStringArrayOrEmpty(
-          worksheet,
-          indexR,
-          "Licenses",
-          columnMapping,
-        ),
-        vulnerabilityCritical: HighlightOssService.getStringArrayOrEmpty(
-          worksheet,
-          indexR,
-          "Critical",
-          columnMapping,
-        ),
-        vulnerabilityHigh: HighlightOssService.getStringArrayOrEmpty(
-          worksheet,
-          indexR,
-          "High",
-          columnMapping,
-        ),
-        vulnerabilityMedium: HighlightOssService.getStringArrayOrEmpty(
-          worksheet,
-          indexR,
-          "Medium",
-          columnMapping,
-        ),
-        vulnerabilityLow: HighlightOssService.getStringArrayOrEmpty(
-          worksheet,
-          indexR,
-          "Low",
-          columnMapping,
-        ),
+        link: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Link", columnMapping),
+        release: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Release Date", columnMapping),
+        lastVersion: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Last Version", columnMapping),
+        lastRelease: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Last Release Date", columnMapping),
+        gap: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Gap", columnMapping),
+        releaseFrequency: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Releases / 12 months", columnMapping),
+        licenses: ExcelUtils.getStringArrayOrEmpty(worksheet, indexR, "Licenses", columnMapping),
+        vulnerabilityCritical: ExcelUtils.getStringArrayOrEmpty(worksheet, indexR, "Critical", columnMapping),
+        vulnerabilityHigh: ExcelUtils.getStringArrayOrEmpty(worksheet, indexR, "High", columnMapping),
+        vulnerabilityMedium: ExcelUtils.getStringArrayOrEmpty(worksheet, indexR, "Medium", columnMapping),
+        vulnerabilityLow: ExcelUtils.getStringArrayOrEmpty(worksheet, indexR, "Low", columnMapping),
       });
     }
+
     return recommendation;
   }
 
@@ -409,10 +158,7 @@ export default class HighlightOssService {
    * @param application Name of the application
    * @param path Path to the Excel report
    */
-  public async processExcel(
-    application: string,
-    path: string,
-  ): Promise<OssRecommendation[]> {
+  public async processExcel(application: string, path: string): Promise<OssRecommendation[]> {
     const workbook = new Excel.Workbook();
 
     try {
@@ -424,14 +170,17 @@ export default class HighlightOssService {
 
     // Verify that the file can be processed
     const tabs = workbook.worksheets.map((x) => x.name);
+
     if (tabs.includes(HighlightOssService.PORTFOLIO_LEVEL_TAB)) {
+      logger.info("Treating a portfolio level Excel.");
       return this.treatPortfolioLevel(workbook);
     } else if (tabs.includes(HighlightOssService.APPLICATION_LEVEL_TAB)) {
+      logger.info("Treating a application level Excel.");
       return this.treatApplicationLevel(workbook, application);
     } else {
       // No worksheet has been identified, so throw an error
       throw new Error(
-        `Excel report is not correct. Failed to find '${HighlightOssService.APPLICATION_LEVEL_TAB}' or '${HighlightOssService.PORTFOLIO_LEVEL_TAB}'.`,
+        `Excel report is not correct. Failed to find '${HighlightOssService.APPLICATION_LEVEL_TAB}' or '${HighlightOssService.PORTFOLIO_LEVEL_TAB}'.`
       );
     }
   }
@@ -444,7 +193,7 @@ export default class HighlightOssService {
    */
   public async applyRecommendations(
     blockers: OssRecommendation[],
-    taggingType: string,
+    taggingType: string
   ): Promise<[OssRecommendation[], OssRecommendation[]]> {
     const returnList: OssRecommendation[] = [];
     const errorList: OssRecommendation[] = [];
@@ -474,9 +223,7 @@ export default class HighlightOssService {
    * @param blocker Blocker to tag
    * @returns True if the document creation
    */
-  private async createDocumentContains(
-    blocker: OssRecommendation,
-  ): Promise<boolean> {
+  protected async createDocumentContains(blocker: OssRecommendation): Promise<boolean> {
     const req = `MATCH (o:\`${blocker.application}\`:Object)
     WHERE o.FullName CONTAINS $Pattern
     return ID(o) as idNode;`;
@@ -485,8 +232,7 @@ export default class HighlightOssService {
 
     const pattern = this.patternByTechnology(blocker);
     const params: any = { Pattern: pattern };
-    const res: QueryResult =
-      await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
+    const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
 
     // Get nodes ID
     if (!res || res.records.length == 0) return false;
@@ -496,12 +242,7 @@ export default class HighlightOssService {
     // Create the document
     const title = this.getBlockerTitle(blocker);
     const description = this.getDescription(blocker);
-    const doc = new DocumentNode(
-      blocker.application,
-      title,
-      description,
-      idNodes,
-    );
+    const doc = new DocumentNode(blocker.application, title, description, idNodes);
 
     doc.create();
 
@@ -512,16 +253,12 @@ export default class HighlightOssService {
    * Create a pattern based on the component names and the technology
    * @param blocker Blocker
    */
-  private patternByTechnology(blocker: OssRecommendation): string {
+  protected patternByTechnology(blocker: OssRecommendation): string {
     switch (blocker.technology) {
       case "java":
         return blocker.component + ".";
       case "C#":
-        return (
-          (blocker.component.includes("/")
-            ? blocker.component.split("/")[1]
-            : blocker.component) + "."
-        );
+        return (blocker.component.includes("/") ? blocker.component.split("/")[1] : blocker.component) + ".";
     }
   }
 
@@ -529,13 +266,11 @@ export default class HighlightOssService {
    * Append vulnerable to the title if contains a CVE
    * @param blocker Blocker to create
    */
-  private getBlockerTitle(blocker: OssRecommendation): string {
+  protected getBlockerTitle(blocker: OssRecommendation): string {
     const baseTitle = blocker.component;
-    if (blocker.vulnerabilityCritical.length > 0)
-      return "Critical Risk: " + baseTitle;
+    if (blocker.vulnerabilityCritical.length > 0) return "OSS Critical Risk: " + baseTitle;
     if (blocker.vulnerabilityHigh.length > 0) return "High Risk: " + baseTitle;
-    if (blocker.vulnerabilityMedium.length > 0)
-      return "Medium Risk: " + baseTitle;
+    if (blocker.vulnerabilityMedium.length > 0) return "OSS Medium Risk: " + baseTitle;
     if (blocker.vulnerabilityLow.length > 0) return "Low Risk: " + baseTitle;
 
     return "Framework: " + baseTitle;
@@ -561,19 +296,15 @@ export default class HighlightOssService {
         ".\n";
     if (blocker.vulnerabilityHigh.length > 0)
       description +=
-        `${blocker.vulnerabilityHigh.length} CVEs with a critical risk : ` +
-        blocker.vulnerabilityHigh.join(", ") +
-        ".\n";
+        `${blocker.vulnerabilityHigh.length} CVEs with a high risk : ` + blocker.vulnerabilityHigh.join(", ") + ".\n";
     if (blocker.vulnerabilityMedium.length > 0)
       description +=
-        `${blocker.vulnerabilityMedium.length} CVEs with a critical risk : ` +
+        `${blocker.vulnerabilityMedium.length} CVEs with a medium risk : ` +
         blocker.vulnerabilityMedium.join(", ") +
         ".\n";
     if (blocker.vulnerabilityLow.length > 0)
       description +=
-        `${blocker.vulnerabilityLow.length} CVEs with a critical risk : ` +
-        blocker.vulnerabilityLow.join(", ") +
-        ".\n";
+        `${blocker.vulnerabilityLow.length} CVEs with a low risk : ` + blocker.vulnerabilityLow.join(", ") + ".\n";
 
     return description;
   }
@@ -583,9 +314,7 @@ export default class HighlightOssService {
    * @param blocker Blocker to tag
    * @returns True if the tag creation worked
    */
-  private async createTagContains(
-    blocker: OssRecommendation,
-  ): Promise<boolean> {
+  protected async createTagContains(blocker: OssRecommendation): Promise<boolean> {
     const req = `MATCH (o:\`${blocker.application}\`:Object)
     WHERE o.FullName CONTAINS $Pattern
     SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE [ x in o.Tags WHERE NOT x=$tag ] + $tag END
@@ -597,10 +326,16 @@ export default class HighlightOssService {
       Pattern: pattern,
       tag: this.getBlockerTitle(blocker),
     };
-    const res: QueryResult =
-      await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
 
-    console.log(`${res.records.length} for pattern : ${pattern}`);
+    // Create file
+    const tag = this.getBlockerTitle(blocker);
+    const reqWrite = `MATCH (o:\`${blocker.application}\`:Object)
+    WHERE o.FullName CONTAINS ${pattern} 
+    SET o.Tags = CASE WHEN o.Tags IS NULL THEN ['${tag}'] ELSE [ x in o.Tags WHERE NOT x='${tag}' ] + '${tag}' END
+    return o as node;`;
+
+    const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
+
     return res && res.records.length > 0;
   }
 
@@ -609,9 +344,7 @@ export default class HighlightOssService {
    * @param {Blocker} blocker Blocker to test
    * @returns True if the test is successful, False otherwise
    */
-  public async testRecommendation(
-    blocker: OssRecommendation,
-  ): Promise<boolean> {
+  public async testRecommendation(blocker: OssRecommendation): Promise<boolean> {
     try {
       const req = `MATCH (o:\`${blocker.application}\`:Object) 
  WHERE p.FullName STARTS WITH $OssRecommendation
@@ -626,8 +359,7 @@ export default class HighlightOssService {
       }
 
       const params: any = { file: root };
-      const res: QueryResult =
-        await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
+      const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
       if (!res || res.records.length == 0) return true;
       else return false;
     } catch (ignored) {

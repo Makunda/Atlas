@@ -1,7 +1,7 @@
 {
-  "nickname" : "MasterDataPoints",
+  "nickname": "MasterDataPoints",
   "name": "Tables most present in the Transactions",
-  "description" : "List the table in tha application with the highest number of transaction going through.",
+  "description": "List the table in tha application with the highest number of transaction going through.",
   "categories": ["database"],
   "parameters": [],
   "request": "MATCH (o:Object:`%APPLICATION_NAME%`)<-[]-(t:Transaction)-[]->(other:Object) WHERE o.Type CONTAINS 'Table' RETURN DISTINCT o.Name as `Name of the Table`, o.FullName as `FullName of the Table`, COUNT(DISTINCT t) as `Transaction score` ORDER BY COUNT(DISTINCT t) DESC;",

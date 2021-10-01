@@ -1,0 +1,424 @@
+[
+  {
+    "id": "t_sql",
+    "name": "SQL Server",
+    "description": "",
+    "categories": ["database", "SQL"],
+    "highlight": "T/Sql",
+    "imaging": {
+      "name": "T/Sql",
+      "type": [
+        "SQL Server Procedure",
+        "SQL Server View",
+        "SQL Server Table",
+        "SQL Server SQL Script",
+        "SQL Server Function",
+        "Microsoft view",
+        "Microsoft function",
+        "Microsoft table",
+        "Microsoft procedure",
+        "SQL Server Trigger",
+        "Microsoft DML trigger"
+      ]
+    }
+  },
+  {
+    "id": "my_sql",
+    "name": "MySQL",
+    "description": "",
+    "categories": ["database", "SQL"],
+    "highlight": "Use_MySQL_Database",
+    "imaging": {
+      "name": "MySQL",
+      "type": ["MySQL SQL Script", "MySQL Trigger", "MySQL Procedure", "MySQL View", "MySQL Function", "MySQL Table"]
+    }
+  },
+  {
+    "id": "oracle_db",
+    "name": "Oracle",
+    "description": "",
+    "categories": ["database", "SQL"],
+    "highlight": "PlSql",
+    "imaging": {
+      "name": "Oracle Database",
+      "type": [
+        "Oracle Table",
+        "Oracle Function",
+        "Oracle SQL Script",
+        "Oracle Trigger",
+        "Oracle View",
+        "Oracle Procedure"
+      ]
+    }
+  },
+  {
+    "id": "ansi_db",
+    "name": "ANSI Database",
+    "description": "",
+    "categories": ["database", "SQL"],
+    "highlight": "SQL",
+    "imaging": {
+      "name": "Ansi Database",
+      "type": ["ANSI Table", "ANSI Procedure", "ANSI SQL Script", "ANSI Function", "ANSI Trigger"]
+    }
+  },
+  {
+    "id": "pg_db",
+    "name": "Postgresql Database",
+    "description": "",
+    "categories": ["database", "SQL"],
+    "highlight": "Postgres_Database",
+    "imaging": {
+      "name": "Postgresql Database",
+      "type": ["Postgresql Function", "Postgresql Table"]
+    }
+  },
+  {
+    "id": "c_sharp",
+    "name": "C#",
+    "description": "",
+    "categories": ["programming"],
+    "highlight": "CS",
+    "imaging": {
+      "name": "C# Business Logic",
+      "type": [
+        "C# Class",
+        "C# Interface",
+        "C# Binary Operator",
+        "C# Exception",
+        "C# Structure",
+        "C# Generic Structure",
+        "C# Custom Control",
+        "C# Form",
+        "C# DataSet",
+        "C# Class DAO",
+        "C# Generic Delegate",
+        "C# Windows Serviced Component",
+        "C# Generic Class",
+        "C# Unary Operator",
+        "C# Method",
+        "C# Generic Type Parameter",
+        "C# Instantiated Interface",
+        "C# Property",
+        "C# User Control"
+      ]
+    }
+  },
+  {
+    "id": "python",
+    "name": "Python",
+    "description": "",
+    "categories": ["programming", "script", "bigdata"],
+    "highlight": "Python",
+    "imaging": {
+      "name": "Python Coordination",
+      "type": ["Python Module", "Python main"]
+    }
+  },
+  {
+    "id": "net",
+    "name": ".NET",
+    "description": "",
+    "categories": ["programming", "microsoft"],
+    "highlight": "net",
+    "imaging": {
+      "name": ".NET Business Logic",
+      "type": [
+        ".NET Class",
+        ".NET Delegate",
+        ".NET Exception",
+        ".NET Structure",
+        ".NET Interface",
+        ".NET Method",
+        ".NET Instantiated Generic Interface",
+        ".NET Custom Control",
+        ".NET Custom Attribute"
+      ]
+    }
+  },
+  {
+    "id": "java",
+    "name": "Java",
+    "description": "",
+    "categories": ["programming", "microsoft"],
+    "highlight": "Java",
+    "imaging": {
+      "name": "Java Business Logic",
+      "type": [
+        "Java Class",
+        "Java Class Batch",
+        "Java Interface",
+        "Java Class Rich Client",
+        "Java Properties File",
+        "Generic Java Interface",
+        "Generic Java Class",
+        "Java Enum",
+        "Java Class DAO"
+      ]
+    }
+  },
+  {
+    "id": "javascript",
+    "name": "Javascript",
+    "description": "",
+    "categories": ["programming", "script", "frontend"],
+    "highlight": "Javascript",
+    "imaging": {
+      "name": "Javascript Presentation",
+      "type": ["JavaScript Files", "HTML5 JavaScript source code fragment"]
+    }
+  },
+  {
+    "id": "typescript",
+    "name": "Typescript",
+    "description": "",
+    "categories": ["programming", "script", "frontend"],
+    "highlight": "Typescript",
+    "imaging": {
+      "name": "Typescript Presentation",
+      "type": ["Typescript Module"]
+    }
+  },
+  {
+    "id": "jpa_java",
+    "name": "JPA Data Access",
+    "description": "",
+    "categories": ["dao"],
+    "highlight": "Jpa",
+    "imaging": {
+      "name": "JPA Data Access",
+      "type": ["JPA Entity", "JPA Named Query", "JPA Embeddable"]
+    }
+  },
+  {
+    "id": "html",
+    "name": "HTML",
+    "description": "",
+    "categories": ["frontend"],
+    "highlight": "Html",
+    "imaging": {
+      "name": "HTML Presentation",
+      "type": ["HTML Pages", "eFile"]
+    }
+  },
+  {
+    "id": "jsp_java",
+    "name": "JSP Presentation",
+    "description": "",
+    "categories": ["frontend"],
+    "highlight": "Jsp",
+    "imaging": {
+      "name": "JPA Data Access",
+      "type": ["JSP Pages", "JSP Custom Tag Library", "Tiles Definition", "Tiles Configuration File"]
+    }
+  },
+  {
+    "id": "db2_database",
+    "name": "DB2 Database",
+    "description": "",
+    "categories": ["database"],
+    "highlight": "Db2",
+    "imaging": {
+      "name": "DB2 Database",
+      "type": ["DB2 Table", "DB2 View", "DB2 Function", "DB2 Trigger", "DB2 SQL Script", "DB2 Procedure"]
+    }
+  },
+  {
+    "id": "cobol",
+    "name": "Cobol",
+    "description": "",
+    "categories": ["mainframe"],
+    "highlight": "Cobol",
+    "imaging": {
+      "name": "Cobol",
+      "type": ["Cobol Program Batch", "Cobol Program", "Cobol CopyBook", "Cobol Program TP"]
+    }
+  },
+  {
+    "id": "aspx",
+    "name": "Aspx",
+    "description": "",
+    "categories": ["frontend"],
+    "highlight": "Aspx",
+    "imaging": {
+      "name": "Aspx",
+      "type": [
+        "ASP Pages",
+        "ASP Server eObject",
+        "Skin Source File",
+        "Aspx Source File",
+        "ASP.NET Web Service File",
+        "Master Source File",
+        "Active Server PageX",
+        "Web User Control"
+      ]
+    }
+  },
+  {
+    "id": "jcl",
+    "name": "Jcl",
+    "description": "",
+    "categories": ["mainframe"],
+    "highlight": "Jsp",
+    "imaging": {
+      "name": "JCL Batch Processing",
+      "type": ["JCL Job", "JCL External Procedure", "JCL Procedure"]
+    }
+  },
+  {
+    "id": "vb_net",
+    "name": "VB/.Net",
+    "description": "",
+    "categories": ["programming"],
+    "highlight": "Vb",
+    "imaging": {
+      "name": "VB .NET",
+      "type": ["VB.NET Class", "VB.NET Module", "VB.NET DataSet", "VB.NET Source File", "VB Form", "VB.NET Form"]
+    }
+  },
+  {
+    "id": "aspx",
+    "name": "Aspx",
+    "description": "",
+    "categories": ["frontend"],
+    "highlight": "Aspx",
+    "imaging": {
+      "name": "ASPX Presentation",
+      "type": ["Active Server PageX", "Web User Control", "HTML5 ASPX Content", "ASP.NET Web Service File"]
+    }
+  },
+  {
+    "id": "shell",
+    "name": "Shell",
+    "description": "",
+    "categories": ["script"],
+    "highlight": "Shell",
+    "imaging": {
+      "name": "Shell Scripts",
+      "type": ["Shell Program Call", "SHELL Program"]
+    }
+  },
+  {
+    "id": "cics",
+    "name": "Cics",
+    "description": "",
+    "categories": ["mainframe"],
+    "highlight": "CICS",
+    "imaging": {
+      "name": "CICS Transaction",
+      "type": [
+        "CICS Map",
+        "CICS Transaction",
+        "Cobol Transaction",
+        "Unknown CICS Transient Data",
+        "CICS DataSet",
+        "CICS Transient Data"
+      ]
+    }
+  },
+  {
+    "id": "jax_api",
+    "name": "JAX API",
+    "description": "",
+    "categories": ["api"],
+    "highlight": "Jax",
+    "imaging": {
+      "name": "REST API",
+      "type": ["JAX RS Post Operation", "JAX RS Get Operation", ".NET SOAP resource service", "JAX RS Put Operation"]
+    }
+  },
+  {
+    "id": "db_400",
+    "name": "DB400",
+    "description": "",
+    "categories": ["mainframe", "database"],
+    "highlight": "Db400",
+    "imaging": {
+      "name": "DB400 Database",
+      "type": ["DDS400 Physical File", "DDS400 Logical File", "DDS400 Printer File", "DDS400 Display File"]
+    }
+  },
+  {
+    "id": "java_struts",
+    "name": "Struts",
+    "description": "",
+    "categories": ["coordination"],
+    "highlight": "Struts",
+    "imaging": {
+      "name": "Struts Coordination",
+      "type": ["Java Class Struts", "Struts Action", "Struts Forward", "Struts Action Mapping"]
+    }
+  },
+  {
+    "id": "cpp",
+    "name": "C++",
+    "description": "",
+    "categories": ["programming"],
+    "highlight": "Cpp",
+    "imaging": {
+      "name": "C/C++",
+      "type": ["C/C++ File", "C/C++ Miscellaneous file"]
+    }
+  },
+  {
+    "id": "perl",
+    "name": "Perl",
+    "description": "",
+    "categories": ["programming", "script"],
+    "highlight": "Perl",
+    "imaging": {
+      "name": "Perl Script",
+      "type": ["Perl Program"]
+    }
+  },
+  {
+    "id": "node_js",
+    "name": "Node JS",
+    "description": "",
+    "categories": ["programming"],
+    "highlight": "NodeJs",
+    "imaging": {
+      "name": "Node JS",
+      "type": [
+        "NodeJS AWS Lambda POST Operation",
+        "NodeJS AWS Lambda PUT Operation",
+        "NodeJS AWS Lambda DELETE Operation",
+        "NodeJS AWS Lambda Function",
+        "NodeJS AWS Lambda GET Operation",
+        "NodeJS external library",
+        "NodeJS AWS Lambda POST Operation",
+        "NodeJS AWS Lambda PUT Operation",
+        "NodeJS AWS Lambda DELETE Operation",
+        "NodeJS AWS Lambda Function",
+        "NodeJS AWS Lambda GET Operation"
+      ]
+    }
+  },
+  {
+    "id": "powerbuilder",
+    "name": "Power Builder",
+    "description": "",
+    "categories": ["programming"],
+    "highlight": "PowerBuilder",
+    "imaging": {
+      "name": "PowerBuilder",
+      "type": [
+        "PB Window",
+        "PB Global Variable",
+        "PB Datawindow",
+        "PB Control",
+        "PB Proxyobject",
+        "PB Structure",
+        "PB Menu",
+        "PB Datastore",
+        "PB Event",
+        "PB Declare Cursor",
+        "PB Declare Proc",
+        "PB Method",
+        "PB Function",
+        "PB Userobject",
+        "PB Member Variable"
+      ]
+    }
+  }
+]

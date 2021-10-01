@@ -4,7 +4,7 @@ export enum ValidityServer {
   UNKNOWN = "Unknown",
   VALID = "Valid",
   ERROR = "Error",
-  LOADING = "Loading",
+  LOADING = "Loading"
 }
 
 /**

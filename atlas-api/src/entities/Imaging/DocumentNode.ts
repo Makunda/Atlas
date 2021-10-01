@@ -1,6 +1,6 @@
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import { int, Neo4jError } from "neo4j-driver";
-import { uuidv4 } from "src/utils/utils";
+import { uuidv4 } from "@utils/utils";
 
 /**
  * Create a document 
@@ -32,12 +32,7 @@ export default class DocumentNode {
    * @param description Description of the document
    * @param nodes List of node ID (AIP ID) linked to the document
    */
-  constructor(
-    application: string,
-    title: string,
-    description: string,
-    nodes: number[],
-  ) {
+  constructor(application: string, title: string, description: string, nodes: number[]) {
     this.application = application;
     this.title = title;
     this.description = description.replace("\n", "");
@@ -59,15 +54,11 @@ export default class DocumentNode {
     let results;
     for (const id of nodesId) {
       try {
-        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(
-          req,
-          {
-            idNode: id,
-          },
-        );
+        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
+          idNode: id,
+        });
 
-        if (results && results.records.length > 0)
-          idList.push(String(results.records[0].get("AipId")));
+        if (results && results.records.length > 0) idList.push(String(results.records[0].get("AipId")));
       } catch (ignored) {
         // ignored
       }
@@ -81,16 +72,16 @@ export default class DocumentNode {
    * @throws An exception if no nodes were specified
    */
   public async create() {
-    if (this.nodes.length == 0)
-      throw Error("Cannot  create a document without linked nodes.");
+    if (this.nodes.length == 0) throw Error("Cannot  create a document without linked nodes.");
 
     const nodeAIPList = await this.convertIDNodeToAIP(this.nodes);
 
     // Verify no document exists in the application with the same title
 
     // Create document
-    const req = `CREATE (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL})
-    SET o.Title=$title
+    const req = `MERGE (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL} {
+      Title: $title
+    })
     SET o.Description=$description
     SET o.Id=$id
     SET o.ViewType='Object'
@@ -105,14 +96,9 @@ export default class DocumentNode {
     const params: any = Object.assign({}, this);
     params.nodeAIPList = nodeAIPList;
     try {
-      results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(
-        req,
-        params,
-      );
+      results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, params);
     } catch (err) {
-      throw new Neo4jError(
-        "Failed to create a document. The request threw an exception : " + err,
-      );
+      throw new Neo4jError("Failed to create a document. The request threw an exception : " + err);
     }
 
     if (results && results.records.length > 0) {
@@ -129,21 +115,16 @@ export default class DocumentNode {
       // Node ID
       for (const nodeId of nodeAIPList) {
         try {
-          await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(
-            reqNodes,
-            {
-              idNode: nodeId,
-              idDoc: idDoc,
-            },
-          );
+          await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqNodes, {
+            idNode: nodeId,
+            idDoc: idDoc,
+          });
         } catch (err) {
           // ignored
         }
       }
     } else {
-      throw new Neo4jError(
-        "Failed to create a document. The request returned no results.",
-      );
+      throw new Neo4jError("Failed to create a document. The request returned no results.");
     }
   }
 }

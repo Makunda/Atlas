@@ -17,18 +17,12 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public getAllArchitectures = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public getAllArchitectures = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const application = String(req.params.application);
-      if (application === undefined)
-        throw new HttpException(400, "Application parameter is undefined");
+      if (application === undefined) throw new HttpException(400, "Application parameter is undefined");
 
-      const results: Archimodel[] =
-        await this.architectureService.getAllArchitectures(application);
+      const results: Archimodel[] = await this.architectureService.getAllArchitectures(application);
       res.status(200).json({ data: results, message: "All Architectures" });
     } catch (error) {
       next(error);
@@ -45,11 +39,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public deleteArchitectureByID = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public deleteArchitectureByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       checkBody(req, "application");
@@ -73,11 +63,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public deleteSubsetByID = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public deleteSubsetByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       checkBody(req, "application");
@@ -100,11 +86,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public hideArchitectureById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public hideArchitectureById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       const id = Number(req.body.id);
@@ -125,11 +107,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public displayArchitectureById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public displayArchitectureById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       const id = Number(req.body.id);
@@ -150,11 +128,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public displayCompleteArchitectureById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public displayCompleteArchitectureById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       const id = Number(req.body.id);
@@ -175,11 +149,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public displaySubsetById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public displaySubsetById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       const id = Number(req.body.id);
@@ -201,11 +171,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public duplicateArchitecture = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public duplicateArchitecture = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       checkBody(req, "name");
@@ -230,11 +196,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public groupUnassigned = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public groupUnassigned = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       checkBody(req, "application");
@@ -258,11 +220,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public duplicateCastTaxonomy = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public duplicateCastTaxonomy = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "name");
       checkBody(req, "application");
@@ -286,11 +244,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public hideSubsetById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public hideSubsetById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       const id = Number(req.body.id);
@@ -311,11 +265,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public updateArchitectureByID = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public updateArchitectureByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       const id = Number(req.body.id);
@@ -328,7 +278,7 @@ export default class ArchitectureController {
     }
   };
 
-   /**
+  /**
    * Generate a module from an architecture view
    * POST {
    *  id: number
@@ -337,22 +287,18 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-    public generateModuleFromArchitecture = async (
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ): Promise<void> => {
-      try {
-        checkBody(req, "id");
-        const id = Number(req.body.id);
-  
-        const results: string[] = await this.architectureService.generateModules(id);
-        res.status(200).json({ data: results, message: "Module generation" });
-      } catch (error) {
-        logger.error("Failed to generate the module definition.", error)
-        next(error);
-      }
-    };
+  public generateModuleFromArchitecture = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      checkBody(req, "id");
+      const id = Number(req.body.id);
+
+      const results: string[] = await this.architectureService.generateModules(id);
+      res.status(200).json({ data: results, message: "Module generation" });
+    } catch (error) {
+      logger.error("Failed to generate the module definition.", error);
+      next(error);
+    }
+  };
 
   /**
    * Update a Subset by its ID
@@ -363,11 +309,7 @@ export default class ArchitectureController {
    * @param res Response
    * @param next NextFunction
    */
-  public updateSubsetByID = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  public updateSubsetByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "id");
       const id = Number(req.body.id);

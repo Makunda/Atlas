@@ -20,8 +20,7 @@ export default class ArchitectureService {
     try {
       const req = `CALL demeter.get.architecture.hidden.label()`;
       const res: QueryResult = await ArchitectureService.NEO4JAL.execute(req);
-      if (!res || res.records.length == 0)
-        throw new Error("Failed to retrieve the hidden Architecture label");
+      if (!res || res.records.length == 0) throw new Error("Failed to retrieve the hidden Architecture label");
       return String(res.records[0].get(0));
     } catch (err) {
       logger.error(`Failed to get hidden architecture label.`, err);
@@ -37,15 +36,13 @@ export default class ArchitectureService {
     try {
       const req = `CALL demeter.get.subset.hidden.label()`;
       const res: QueryResult = await ArchitectureService.NEO4JAL.execute(req);
-      if (!res || res.records.length == 0)
-        throw new Error("Failed to retrieve the hidden Subset label");
+      if (!res || res.records.length == 0) throw new Error("Failed to retrieve the hidden Subset label");
       return String(res.records[0].get(0));
     } catch (err) {
       logger.error(`Failed to get hidden subset label.`, err);
       throw err;
     }
   }
-
 
   /**
    * Update an architecture view using its id
@@ -55,18 +52,17 @@ export default class ArchitectureService {
   public async updateArchitectureByID(architectureId: number, data: Archimodel) {
     try {
       const label = await ArchitectureService.getHiddenArchitectureLabel();
-      const params: any  = data;
+      const params: any = data;
       params.idArchiModel = architectureId;
-      
+
       const req = `MATCH (a) WHERE (a:ArchiModel OR a:${label}) AND ID(a)=$idArchiModel
       SET a.Name=$name
       SET a.Color=$color
       return a as node;
-      `
+      `;
       const res: QueryResult = await ArchitectureService.NEO4JAL.executeWithParameters(req, params);
       if (!res || res.records.length == 0)
         throw new Error(`Failed to update the architecture with id ${architectureId}.`);
-
     } catch (err) {
       logger.error(`Failed to update the architecture with id ${architectureId}.`, err);
       throw err;
@@ -78,12 +74,12 @@ export default class ArchitectureService {
    * @param {number} subsetID Id of the architecture view
    * @param {Subset} data new data for the architecture model
    */
-   public async updateSubsetByID(subsetID: number, data: Subset) {
+  public async updateSubsetByID(subsetID: number, data: Subset) {
     try {
       const label = await ArchitectureService.getHiddenSubsetLabel();
-      const params: any  = data;
+      const params: any = data;
       params.subsetID = subsetID;
-      
+
       const req = `MATCH (a) WHERE (a:Subset OR a:${label}) AND ID(a)=$subsetID
       WITH a, a.Name as OldName
       SET a.Name=$name
@@ -92,17 +88,14 @@ export default class ArchitectureService {
       MATCH (a)-[:Contains]->(o:Object)
       SET o.Subset = [ x in o.Subset WHERE NOT x=a.Name ] + OldName
       return a as node
-      `
+      `;
       const res: QueryResult = await ArchitectureService.NEO4JAL.executeWithParameters(req, params);
-      if (!res || res.records.length == 0)
-        throw new Error(`Failed to update the subsetID with id ${subsetID}.`);
-
+      if (!res || res.records.length == 0) throw new Error(`Failed to update the subsetID with id ${subsetID}.`);
     } catch (err) {
       logger.error(`Failed to update the architecture with id ${subsetID}.`, err);
       throw err;
     }
   }
-
 
   /**
    * Delete an Architecture using its Id
@@ -110,10 +103,7 @@ export default class ArchitectureService {
    * @param {number} architectureId Id of the architecture
    * @returns
    */
-  public async deleteArchitectureByID(
-    application: string,
-    architectureId: number
-  ): Promise<void> {
+  public async deleteArchitectureByID(application: string, architectureId: number): Promise<void> {
     try {
       const req = `CALL demeter.delete.architecture.view($application, $id)`;
       await ArchitectureService.NEO4JAL.executeWithParameters(req, {
@@ -121,10 +111,7 @@ export default class ArchitectureService {
         id: architectureId,
       });
     } catch (err) {
-      logger.error(
-        `Failed to delete architecture with id: '${architectureId}'.`,
-        err
-      );
+      logger.error(`Failed to delete architecture with id: '${architectureId}'.`, err);
       throw err;
     }
   }
@@ -135,10 +122,7 @@ export default class ArchitectureService {
    * @param {number} subsetId Id of the subset
    * @returns
    */
-  public async deleteSubset(
-    application: string,
-    subsetId: number
-  ): Promise<void> {
+  public async deleteSubset(application: string, subsetId: number): Promise<void> {
     try {
       const req = `CALL demeter.delete.architecture.subset($application, $id)`;
       await ArchitectureService.NEO4JAL.executeWithParameters(req, {
@@ -163,10 +147,7 @@ export default class ArchitectureService {
         id: architectureId,
       });
     } catch (err) {
-      logger.error(
-        `Failed to get delete architecture with id: '${architectureId}'.`,
-        err
-      );
+      logger.error(`Failed to get delete architecture with id: '${architectureId}'.`, err);
       throw err;
     }
   }
@@ -183,10 +164,7 @@ export default class ArchitectureService {
         id: architectureId,
       });
     } catch (err) {
-      logger.error(
-        `Failed to display architecture with id: '${architectureId}'.`,
-        err
-      );
+      logger.error(`Failed to display architecture with id: '${architectureId}'.`, err);
       throw err;
     }
   }
@@ -196,19 +174,14 @@ export default class ArchitectureService {
    * @param {number} architectureId Id of the architecture
    * @returns
    */
-  public async displayCompleteArchitectureById(
-    architectureId: number
-  ): Promise<void> {
+  public async displayCompleteArchitectureById(architectureId: number): Promise<void> {
     try {
       const req = `CALL demeter.architecture.display.children.byId($id)`;
       await ArchitectureService.NEO4JAL.executeWithParameters(req, {
         id: architectureId,
       });
     } catch (err) {
-      logger.error(
-        `Failed to display complete architecture with id: '${architectureId}'.`,
-        err
-      );
+      logger.error(`Failed to display complete architecture with id: '${architectureId}'.`, err);
       throw err;
     }
   }
@@ -230,20 +203,21 @@ export default class ArchitectureService {
     }
   }
 
-
   /**
    * Duplicate an architecture and give it a new name
    * @param {number} architectureId Id of the architecture
    * @param {string} name Name of the new Architecture
    * @returns
    */
-   public async duplicateArchitecture(architectureId: number, name: string ): Promise<void> {
+  public async duplicateArchitecture(architectureId: number, name: string): Promise<void> {
     try {
-      const tag = await (new TagService()).getCustomArchitectureTag();
+      const tag = await new TagService().getCustomArchitectureTag();
       const req = `MATCH (a:ArchiModel)-[]->(s:Subset)-[]->(o:Object) WHERE ID(a)=$architectureId 
       SET o.Tags = CASE WHEN o.Tags IS NULL THEN [($tag+$name+"$"+s.Name)] ELSE o.Tags + ($tag+$name+"$"+s.Name) END`;
       await ArchitectureService.NEO4JAL.executeWithParameters(req, {
-        architectureId: architectureId, name:name, tag:tag
+        architectureId: architectureId,
+        name: name,
+        tag: tag,
       });
     } catch (err) {
       logger.error(`Failed to duplicate architecture with id: '${architectureId}'.`, err);
@@ -251,23 +225,24 @@ export default class ArchitectureService {
     }
   }
 
-
   /**
    * Group all the nodes in the application not in one of the subset of the architecture
    * @param {string} application Name of the application
    * @param {number} architectureId Id of the architecture
    * @returns
    */
-   public async groupUnassigned(application: string, architectureId: number): Promise<void> {
+  public async groupUnassigned(application: string, architectureId: number): Promise<void> {
     try {
-      const tag = await (new TagService()).getCustomArchitectureTag();
+      const tag = await new TagService().getCustomArchitectureTag();
       const req = `
       MATCH (a:ArchiModel:\`${application}\`) WHERE ID(a)=$architectureId 
       WITH a 
       MATCH (o:Object:\`${application}\`) WHERE NOT (o)-[]->(:Subset)<-[]-(a)
       SET o.Tags = CASE WHEN o.Tags IS NULL THEN [($tag+a.Name+"$Unassigned")] ELSE o.Tags + ($tag+a.Name+"$Unassigned") END`;
       await ArchitectureService.NEO4JAL.executeWithParameters(req, {
-        architectureId: architectureId, tag:tag      });
+        architectureId: architectureId,
+        tag: tag,
+      });
     } catch (err) {
       logger.error(`Failed to create Unassigned subset for architecture with id: '${architectureId}'.`, err);
       throw err;
@@ -280,45 +255,49 @@ export default class ArchitectureService {
    * @param {string} name Name of the new Architecture
    * @returns
    */
-   public async duplicateCastTaxonomy(application: string, name: string ): Promise<void> {
+  public async duplicateCastTaxonomy(application: string, name: string): Promise<void> {
     try {
-      const tag = await (new TagService()).getCustomArchitectureTag();
+      const tag = await new TagService().getCustomArchitectureTag();
       const req = `
       MATCH (o:Object:\`${application}\`) WHERE EXISTS(o.Type)
       SET o.Tags = CASE WHEN (o.Tags IS NULL OR o.Tags="") THEN [($tag+$name+"$"+o.Type)] ELSE o.Tags + ($tag+$name+"$"+o.Type) END`;
       await ArchitectureService.NEO4JAL.executeWithParameters(req, {
-         name:name, tag:tag      });
+        name: name,
+        tag: tag,
+      });
     } catch (err) {
       logger.error(`Failed to recreate Cast Taxonomy.`, err);
       throw err;
     }
   }
-  
+
   /**
-   * Generate the explicit filter modules from the Architecture ID 
-   * @param {number} architectureId Id of the architecture 
+   * Generate the explicit filter modules from the Architecture ID
+   * @param {number} architectureId Id of the architecture
    */
-  public async generateModules(architectureId: number) : Promise<string[]> {
+  public async generateModules(architectureId: number): Promise<string[]> {
     const req = `MATCH (a:${ArchitectureService.ARCHITECTURE_LABEL})-[]->(s:${ArchitectureService.SUBSET_LABEL})
     WHERE ID(a)=$id
     RETURN DISTINCT ID(s) as subsetId, s.Name as subsetName;
     `;
     const result: QueryResult = await ArchitectureService.NEO4JAL.executeWithParameters(req, {
-      id: int(architectureId)});
+      id: int(architectureId),
+    });
     // Get subsets and store query results
     const queries = [] as string[];
     for (let index = 0; index < result.records.length; index++) {
       const subset = int(result.records[index].get("subsetId"));
       const subsetName = String(result.records[index].get("subsetName"));
-      
+
       // Get Objects' ID
       const reqObject = `MATCH (s:${ArchitectureService.SUBSET_LABEL})-[]->(o:Object)
         WHERE ID(s)=$id
         RETURN DISTINCT o.AipId as objectId;
       `;
       const objectResults: QueryResult = await ArchitectureService.NEO4JAL.executeWithParameters(reqObject, {
-        id: subset});
-      
+        id: subset,
+      });
+
       // Iterate and store Object's ID
       const objectList = [] as number[];
       for (let index2 = 0; index2 < objectResults.records.length; index2++) {
@@ -367,9 +346,7 @@ where object_id IN (${objectList.join(", ")});
     try {
       const request = `CALL demeter.api.group.architectures.views.all()`;
 
-      const results: QueryResult = await ArchitectureService.NEO4JAL.execute(
-        request
-      );
+      const results: QueryResult = await ArchitectureService.NEO4JAL.execute(request);
       return results.records.length || 0;
     } catch (err) {
       logger.error(`Failed to group the architecture views.`, err);
@@ -384,8 +361,7 @@ where object_id IN (${objectList.join(", ")});
    */
   public async getAllArchitectures(application: string): Promise<Archimodel[]> {
     try {
-      const hiddenLabel =
-        await ArchitectureService.getHiddenArchitectureLabel();
+      const hiddenLabel = await ArchitectureService.getHiddenArchitectureLabel();
       const req = `MATCH (a:\`${application}\`) WHERE a:ArchiModel or a:${hiddenLabel} RETURN a as node`;
 
       const archimodel: Archimodel[] = [];
@@ -397,20 +373,14 @@ where object_id IN (${objectList.join(", ")});
           try {
             archimodel.push(await ArchitectureNode.fromObj(node));
           } catch (err) {
-            logger.error(
-              `Architecture node with id ${node.identity.toNumber()} is not in a correct format.`,
-              err
-            );
+            logger.error(`Architecture node with id ${node.identity.toNumber()} is not in a correct format.`, err);
           }
         }
       }
 
       return archimodel;
     } catch (err) {
-      logger.error(
-        `Failed to retrieve the list of architecture in application : '${application}'.`,
-        err
-      );
+      logger.error(`Failed to retrieve the list of architecture in application : '${application}'.`, err);
       throw new Error("Failed to retrieve the list of Architectures");
     }
   }

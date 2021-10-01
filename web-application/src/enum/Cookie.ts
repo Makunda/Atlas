@@ -1,3 +1,3 @@
 export enum Cookie {
-  AUTH_COOKIE = "PythiaAuthJwt",
+  AUTH_COOKIE = "PythiaAuthJwt"
 }

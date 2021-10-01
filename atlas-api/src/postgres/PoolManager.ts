@@ -2,7 +2,7 @@ import { AipConfiguration } from "@interfaces/aip/AipConfiguration";
 import config from "config";
 
 import pg from "pg";
-import { uuidv4 } from "src/utils/utils";
+import { uuidv4 } from "@utils/utils";
 
 // Pool manager which end the pool connection after an expiration
 
@@ -40,9 +40,7 @@ export default class PoolManager {
    */
   private static processPoolMap() {
     const now = Date.now();
-    const expiration = config.has("postgres.pool.expiration")
-      ? Number(config.get("postgres.pool.expiration"))
-      : 30000;
+    const expiration = config.has("postgres.pool.expiration") ? Number(config.get("postgres.pool.expiration")) : 30000;
 
     this.poolMap.forEach((value: PoolWrapper, key: string) => {
       // Check expiration
@@ -59,14 +57,9 @@ export default class PoolManager {
    * @param query Query to execute
    * @param params  Parameters
    */
-  public static async queryPool(
-    id: string,
-    query: string,
-    params?: any[],
-  ): Promise<any[]> {
+  public static async queryPool(id: string, query: string, params?: any[]): Promise<any[]> {
     const poolWrap = this.getPool(id);
-    if (!poolWrap)
-      throw new Error(`The pool with id : ${id} doesn't not exist.`);
+    if (!poolWrap) throw new Error(`The pool with id : ${id} doesn't not exist.`);
     if (!poolWrap.open) poolWrap.pool = new pg.Pool(poolWrap.config);
 
     poolWrap.lastActivity = Date.now();
@@ -90,9 +83,7 @@ export default class PoolManager {
    * Find a similar configuration in the list of pool
    * @param configuration Configuration to search
    */
-  private static findSimilarPool(
-    configuration: AipConfiguration,
-  ): string | undefined {
+  private static findSimilarPool(configuration: AipConfiguration): string | undefined {
     for (const [key, value] of this.poolMap) {
       if (
         value.config.host == configuration.url &&
@@ -135,9 +126,7 @@ export default class PoolManager {
    * Test a connection to the Server
    * @param configuration Aip configuration to test
    */
-  public static async testConnection(
-    configuration: AipConfiguration,
-  ): Promise<boolean> {
+  public static async testConnection(configuration: AipConfiguration): Promise<boolean> {
     let pool: pg.Pool;
 
     try {

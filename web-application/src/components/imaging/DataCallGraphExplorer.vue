@@ -316,17 +316,17 @@
                 class="elevation-1 pt-3"
                 fixed-header
               >
-              <template v-slot:top class="my-5">
-                <v-text-field
-                  filled
-                  rounded
-                  clearable
-                  v-model="searchName"
-                  @change="dataCallGraphApiCall"
-                  label="Search DataCallGraph by Name"
-                  class="mx-4"
-                ></v-text-field>
-              </template>
+                <template v-slot:top class="my-5">
+                  <v-text-field
+                    filled
+                    rounded
+                    clearable
+                    v-model="searchName"
+                    @change="dataCallGraphApiCall"
+                    label="Search DataCallGraph by Name"
+                    class="mx-4"
+                  ></v-text-field>
+                </template>
 
                 <template v-slot:item.technologies="{ item }">
                   <v-chip-group active-class="primary--text" column>
@@ -462,7 +462,7 @@
 <script lang="ts">
 import Vue from "vue";
 import DataCallGraphController from "@/api/imaging/DataCallGraphController";
-import {DataCallGraph} from "@/api/interface/imaging/DataCallGraph";
+import { DataCallGraph } from "@/api/interface/imaging/DataCallGraph";
 import DataCallGraphInsights from "@/api/interface/imaging/DataCallGraphInsights";
 import { ApplicationController } from "@/api/applications/ApplicationController";
 
@@ -748,7 +748,6 @@ export default Vue.extend({
       if (Array.isArray(sortDesc) && sortDesc.length === 1)
         sortByDesccOption = sortDesc[0];
 
-
       const dataCallGraphs = await DataCallGraphController.getBatchDataCallGraph(
         this.application,
         (page - 1) * itemsPerPage,
@@ -768,14 +767,9 @@ export default Vue.extend({
       this.loadingMaskedDataCallGraph = true;
 
       await this.getNumberMaskedDataCallGraph();
-      const {
-        sortBy,
-        sortDesc,
-        page } = this.optionsMaskedDataCallGraph;
+      const { sortBy, sortDesc, page } = this.optionsMaskedDataCallGraph;
 
-      let {
-        itemsPerPage
-      } = this.optionsMaskedDataCallGraph;
+      let { itemsPerPage } = this.optionsMaskedDataCallGraph;
 
       if (itemsPerPage === -1) {
         itemsPerPage = this.numMaskedDataCallGraph;
@@ -802,7 +796,10 @@ export default Vue.extend({
     },
 
     async maskDataCallGraph(item: DataCallGraph) {
-      await DataCallGraphController.maskDataCallGraph(this.application, item._id);
+      await DataCallGraphController.maskDataCallGraph(
+        this.application,
+        item._id
+      );
       this.refresh();
     },
 
@@ -834,7 +831,10 @@ export default Vue.extend({
     },
 
     async unMaskDataCallGraph(item: DataCallGraph) {
-      await DataCallGraphController.unmaskDataCallGraph(this.application, item._id);
+      await DataCallGraphController.unmaskDataCallGraph(
+        this.application,
+        item._id
+      );
       this.refresh();
     },
 

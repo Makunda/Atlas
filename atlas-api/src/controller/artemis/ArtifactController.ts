@@ -1,61 +1,71 @@
-import {LaunchDetectionDto} from '@dtos/artemis/detection.dto';
-import {IArtifact} from '@interfaces/artemis/Artifact.interface';
-import ArtifactService from '@services/artemis/ArtifactService';
-import {NextFunction, Request, Response} from 'express';
-
+import { LaunchDetectionDto } from "@dtos/artemis/detection.dto";
+import { IArtifact } from "@interfaces/artemis/Artifact.interface";
+import ArtifactService from "@services/artemis/ArtifactService";
+import { NextFunction, Request, Response } from "express";
 
 class ArtifactController {
-    private artifactService = new ArtifactService();
+  private artifactService = new ArtifactService();
 
-    public getListArtifact = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const detectionParams: LaunchDetectionDto = req.body;
+  public getListArtifact = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const detectionParams: LaunchDetectionDto = req.body;
 
-            // TODO : Investigate on the Query's parameters
-            const external = (/true/i).test(String(req.query.external));
+      // TODO : Investigate on the Query's parameters
+      const external = /true/i.test(String(req.query.external));
 
-            const listArtifact: IArtifact[] = await this.artifactService.getArtifactsList(detectionParams.application, detectionParams.language, external);
-            res.status(200).json({data: listArtifact, message: 'Artifact'});
+      const listArtifact: IArtifact[] = await this.artifactService.getArtifactsList(
+        detectionParams.application,
+        detectionParams.language,
+        external
+      );
+      res.status(200).json({ data: listArtifact, message: "Artifact" });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-        } catch (error) {
-            next(error);
-        }
-    };
+  public getArtifactsAsTree = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const detectionParams: LaunchDetectionDto = req.body;
 
-    public getArtifactsAsTree = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const detectionParams: LaunchDetectionDto = req.body;
+      const external = /true/i.test(String(req.query.external));
 
-            const external = (/true/i).test(String(req.query.external));
+      const listArtifact: IArtifact[] = await this.artifactService.getArtifactAsTree(
+        detectionParams.application,
+        detectionParams.language,
+        external
+      );
+      res.status(200).json({ data: listArtifact, message: "Artifact Tree" });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-            const listArtifact: IArtifact[] = await this.artifactService.getArtifactAsTree(detectionParams.application, detectionParams.language, external);
-            res.status(200).json({data: listArtifact, message: 'Artifact Tree'});
+  public extractArtifacts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const artifactList: IArtifact[] = req.body.artifactList;
+      const extractionType = String(req.body.extractionType);
+      const groupType = String(req.body.groupType);
+      const application = String(req.body.application);
 
-        } catch (error) {
-            next(error);
-        }
-    };
+      const primaryGroupName = String(req.body.primaryGroupName) || "";
+      const secondaryGroupName = String(req.body.secondaryGroupName) || "";
 
-    public extractArtifacts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const artifactList: IArtifact[] = req.body.artifactList;
-            const extractionType = String(req.body.extractionType);
-            const groupType = String(req.body.groupType);
-            const application = String(req.body.application);
+      console.log("Received: ", req.body);
 
-            const primaryGroupName = String(req.body.primaryGroupName) || "";
-            const secondaryGroupName = String(req.body.secondaryGroupName) || "";
-
-            console.log("Received: ", req.body);
-
-            await this.artifactService.extractArtifacts(application, artifactList,
-                extractionType, groupType, primaryGroupName, secondaryGroupName);
-            res.status(200).json({data: "OK", message: 'Artifact extraction'});
-
-        } catch (error) {
-            next(error);
-        }
-    };
+      await this.artifactService.extractArtifacts(
+        application,
+        artifactList,
+        extractionType,
+        groupType,
+        primaryGroupName,
+        secondaryGroupName
+      );
+      res.status(200).json({ data: "OK", message: "Artifact extraction" });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default ArtifactController;

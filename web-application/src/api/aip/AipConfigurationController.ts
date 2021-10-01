@@ -1,9 +1,7 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import { Neo4JAccessLayer } from "../Neo4jAccessLayer";
 import { AipConfiguration } from "../interface/aip/Aipconfiguration";
-import { AipSchema } from "../interface/aip/AipSchema";
 
 export interface ApplicationRecord {
   name: string;
@@ -11,7 +9,6 @@ export interface ApplicationRecord {
 
 export class AipConfigurationController {
   private static API_BASE_URL = ApiComUtils.getUrl();
-  private static neo4jal: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   /**
    * Get the complete list of configuration
@@ -34,7 +31,7 @@ export class AipConfigurationController {
         }
       } else {
         console.warn(
-          `Failed to retrieve Aip Configuration list. Status (${res.status})`
+          `Failed to retrieve Aip Configuration list. Status (${res.status})`,
         );
       }
 
@@ -42,7 +39,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Aip Configuration list.`,
-        error
+        error,
       );
     }
   }
@@ -53,7 +50,7 @@ export class AipConfigurationController {
    * @returns A promise ending when the configuration is created
    */
   public static async createConfigurationNode(
-    configuration: AipConfiguration
+    configuration: AipConfiguration,
   ): Promise<void> {
     const url =
       AipConfigurationController.API_BASE_URL +
@@ -65,7 +62,7 @@ export class AipConfigurationController {
 
       if (res.status !== 200) {
         throw new Error(
-          `Failed to create the AIP configuration node. Status : ${res.status}.`
+          `Failed to create the AIP configuration node. Status : ${res.status}.`,
         );
       }
 
@@ -73,7 +70,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Aip Configuration list.`,
-        error
+        error,
       );
     }
   }
@@ -84,7 +81,7 @@ export class AipConfigurationController {
    * @returns A promise ending when the configuration is created
    */
   public static async deleteConfigurationNode(
-    configurationId: number
+    configurationId: number,
   ): Promise<void> {
     const url =
       AipConfigurationController.API_BASE_URL +
@@ -96,7 +93,7 @@ export class AipConfigurationController {
 
       if (res.status !== 200) {
         throw new Error(
-          `Failed to delete the AIP configuration. Status : ${res.status}.`
+          `Failed to delete the AIP configuration. Status : ${res.status}.`,
         );
       }
 
@@ -104,12 +101,10 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to configurationId Aip Configuration.`,
-        error
+        error,
       );
     }
   }
-
-  
 
   /**
    * Test a configuration of AIP
@@ -117,7 +112,7 @@ export class AipConfigurationController {
    * @returns
    */
   public static async testConnection(
-    configuration: AipConfiguration
+    configuration: AipConfiguration,
   ): Promise<boolean> {
     const url =
       AipConfigurationController.API_BASE_URL +
@@ -143,7 +138,7 @@ export class AipConfigurationController {
    * @returns
    */
   public static async getAllSchemaList(
-    idConfiguration: number
+    idConfiguration: number,
   ): Promise<string[]> {
     const url =
       AipConfigurationController.API_BASE_URL +
@@ -154,7 +149,7 @@ export class AipConfigurationController {
 
       if (res.status !== 200) {
         throw new Error(
-          `Failed to retrieve the schemas list. Status : ${res.status}.`
+          `Failed to retrieve the schemas list. Status : ${res.status}.`,
         );
       }
 
@@ -165,7 +160,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the schemas list.`,
-        error
+        error,
       );
     }
   }
@@ -189,7 +184,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete the server.`,
-        error
+        error,
       );
     }
   }

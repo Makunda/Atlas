@@ -87,7 +87,7 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.refresh()
+    this.refresh();
   },
 
   data() {
@@ -110,7 +110,6 @@ export default Vue.extend({
   },
 
   methods: {
-
     async refresh() {
       this.errorMerge = "";
       this.errorDestinationLevels = "";
@@ -120,7 +119,7 @@ export default Vue.extend({
      * Get the list of destination levels in the application
      */
     async getDestinationLevel5() {
-      if(this.application == "") return;
+      if (this.application == "") return;
       try {
         this.loadingDestinationLevels = true;
         this.destinationLevels = await LevelController.findLevelByDepth(
@@ -179,11 +178,11 @@ export default Vue.extend({
       val && val !== this.select && this.querySelections(val);
     },
 
-    application : function(newVal) {
+    application: function(newVal) {
       this.refresh();
     },
 
-    level : function(newVal) {
+    level: function(newVal) {
       this.refresh();
     }
   }

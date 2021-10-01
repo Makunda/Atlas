@@ -1,41 +1,39 @@
-import {IsArray, IsBoolean, IsDecimal, IsNumber, IsString} from "class-validator";
+import { IsArray, IsBoolean, IsDecimal, IsNumber, IsString } from "class-validator";
 
 export class CreateFrameworkDto {
-    @IsNumber()
-    public id = -1;
+  @IsNumber()
+  public id = -1;
 
-    @IsString()
-    public name: string;
+  @IsString()
+  public name: string;
 
-    @IsString()
-    public pattern: string;
+  @IsString()
+  public pattern: string;
 
-    @IsBoolean()
-    public isRegex: boolean;
+  @IsBoolean()
+  public isRegex: boolean;
 
-    @IsString()
-    public description: string;
+  @IsString()
+  public description: string;
 
-    @IsString()
-    public type: string;
+  @IsString()
+  public type: string;
 
-    @IsString()
-    public category: string | number;
+  @IsString()
+  public category: string | number;
 
-    @IsArray()
-    public internalType: string[];
+  @IsArray()
+  public internalType: string[];
 
-    @IsString()
-    public location: string;
+  @IsString()
+  public location: string;
 
-    @IsString()
-    public discoveryDate: string;
+  @IsString()
+  public discoveryDate: string;
 
-    @IsDecimal()
-    public percentageOfDetection = 0;
+  @IsDecimal()
+  public percentageOfDetection = 0;
 
-    @IsDecimal()
-    public numberOfDetection = 0;
-
-
+  @IsDecimal()
+  public numberOfDetection = 0;
 }

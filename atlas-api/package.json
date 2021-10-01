@@ -1,6 +1,6 @@
 {
   "name": "atlas-api",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "scripts": {
     "client:build": "npm run --prefix ../web-application build",
     "api:build": "ts-node build.ts",
@@ -8,6 +8,7 @@
     "lint": "eslint . --ext .ts",
     "start": "node ./dist --env=production",
     "start:dev": "nodemon --verbose",
+    "pretty": "prettier --print-width \"120\" --write \"./**/*.{ts,jsx,json}\"",
     "client:dev": "npm run --prefix ../web-application serve",
     "dev": "npm-run-all -p client:dev start:dev",
     "test": "nodemon --config ./spec/nodemon.json"
@@ -32,6 +33,8 @@
     "@controller": "dist/controller",
     "@services": "dist/services",
     "@dtos": "dist/dtos",
+    "@utils": "dist/utils",
+    "@postgres": "dist/postgres",
     "@database": "dist/database",
     "@interfaces": "dist/interfaces",
     "@exceptions": "dist/exceptions"
@@ -41,16 +44,19 @@
   },
   "pkg": {
     "scripts": [
-      "dist/**/*.js"
+      "dist/**/*.js",
+      "dist/**/*.ts",
+      "./prod-path.js"
     ],
     "assets": [
       "dist/**/*",
-      "dist/pre-start/env/production.env",
-      "dist/pre-start/env/development.env",
+      "dist/pre-start/*",
+      "dist/pre-start/*",
       "config/**/*",
       "profiles/**/*",
       "serialization/**/*",
-      "spec/**/*"
+      "spec/**/*",
+      "dist/pre-start/env/development.env"
     ],
     "targets": [
       "node14-win-x64"
