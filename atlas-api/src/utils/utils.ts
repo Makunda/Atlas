@@ -21,3 +21,15 @@ export function timeConverter(timestamp: number) {
   const time = date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
   return time;
 }
+
+/**
+ * Fixed length String 
+ * @param text Text to format
+ * @param length Length of text to format 
+ * @returns The formatted string 
+ */
+export function fixedLengthString(text: string, length: number) : string {
+  const toAdd: number = length - text.length;
+  if(toAdd < 0) return text;
+  return " ".repeat(toAdd) + text;
+}

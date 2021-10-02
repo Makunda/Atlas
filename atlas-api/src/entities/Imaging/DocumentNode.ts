@@ -74,9 +74,20 @@ export default class DocumentNode {
   public async create() {
     if (this.nodes.length == 0) throw Error("Cannot  create a document without linked nodes.");
 
+    let results;
+    const params: any = Object.assign({}, this);
     const nodeAIPList = await this.convertIDNodeToAIP(this.nodes);
 
     // Verify no document exists in the application with the same title
+    const reqFind =
+      `MATCH (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL}) ` +
+      "WHERE o.Title=$title RETURN o.Nodes as nodes";
+
+    try {
+      results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqFind, params);
+    } catch (err) {
+      throw new Neo4jError("Failed to find a similar document. The request threw an exception : " + err);
+    }
 
     // Create document
     const req = `MERGE (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL} {
@@ -92,8 +103,6 @@ export default class DocumentNode {
     SET o.Theme=12
     return ID(o) as idNode;`;
 
-    let results;
-    const params: any = Object.assign({}, this);
     params.nodeAIPList = nodeAIPList;
     try {
       results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, params);

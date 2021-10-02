@@ -1,4 +1,6 @@
+import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import { logger } from "@shared/Logger";
+import { fixedLengthString } from "@utils/utils";
 import glob from "glob";
 import Extension from "./Extension";
 
@@ -11,6 +13,7 @@ export default class ExtensionManager {
 
   // Path to the extension folder
   public static EXTENSION_FOLDER = __dirname + "\\root";
+  public plugins: Extension[] = [];
 
   /**
    * Register all the module in the ext
@@ -32,25 +35,44 @@ export default class ExtensionManager {
 
     let pTemp;
     let filePath;
-    let typeTemp;
     let tempClass;
-    const plugins: Extension[] = [];
     for (const file of resFiles) {
       try {
+        // Replace file extension in the path and import it
         filePath = file.replace(".ts", "");
         pTemp = await import(filePath);
 
-        if (pTemp.default) {
-          typeTemp = Object.getPrototypeOf(pTemp.default);
-          tempClass = new pTemp.default();
-          plugins.push(tempClass as Extension);
+        // Verify that the module is well formatted with a default export
+        // A module without a proper definition will be ignored
+        if (pTemp.default && new pTemp.default() instanceof Extension) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          tempClass = new pTemp.default(Neo4JAccessLayer.getInstance(), logger);
+          this.plugins.push(tempClass as Extension);
         }
       } catch (error) {
         logger.error(`Extension Manager: failed to load module found at '${file}'.`, error);
       }
     }
 
-    logger.info(`Extension Manager: ${plugins.length} modules were registered.`);
+    logger.info(`Extension Manager: ${this.plugins.length} modules were registered.`);
+
+    let toDisplay = "";
+    this.plugins.forEach((x: Extension) => {
+      try {
+        toDisplay += `Id: ${fixedLengthString(x.getId(), 30)} Name: ${fixedLengthString(x.getName(), 30)}.\n`;
+      } catch (error) {
+        logger.error("Failed to get", error);
+      }
+    });
+
+    logger.info(`Extension Manager:\n${toDisplay}`);
+  }
+
+  /**
+   * Get and return the plugin list discovered
+   */
+  public getPluginList(): Extension[] {
+    return this.plugins;
   }
 
   /**
