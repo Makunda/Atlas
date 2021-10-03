@@ -24,17 +24,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import CloudBockersUpload from "./steps/CloudBockersUpload.vue";
-import OSSUpload from "./steps/OSSUpload.vue";
-import ObsolescenceUpload from "./steps/ObsolescenceUpload.vue";
+import CloudExtensions from "./steps/CloudExtensions.vue";
 
 export default Vue.extend({
-  name: "Highlight",
+  name: "CloudRecommendations",
 
   components: {
-    CloudBockersUpload,
-    OSSUpload,
-    ObsolescenceUpload
+    CloudExtensions
   },
 
   computed: {
@@ -55,19 +51,9 @@ export default Vue.extend({
 
     items: [
       {
-        view: "CloudBockersUpload",
-        name: "Cloud Blockers",
-        icon: "mdi-cloud-search"
-      },
-      {
-        view: "OSSUpload",
-        name: "OSS Injection",
-        icon: "mdi-open-source-initiative"
-      },
-      {
-        view: "ObsolescenceUpload",
-        name: "Obsolescence Injection",
-        icon: "mdi-calendar-alert"
+        view: "CloudExtensions",
+        name: "Cloud Extensions",
+        icon: "mdi-cloud"
       }
     ]
   }),

@@ -29,10 +29,18 @@ export default abstract class Extension {
    */
   abstract getName(): string;
 
+  abstract getCreationDate(): string;
+  abstract getLastUpdate(): string;
+
   /**
    * Get a description associated to the Extension
    */
   abstract getDescription(): string;
+
+  /**
+   * Return a list of tags describing the extension
+   */
+  abstract getTags(): string[];
 
   /**
    * Execute action before start

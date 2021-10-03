@@ -12,6 +12,7 @@ import ParisRouter from "./paris/ParisRoute";
 import LoginRoute from "./login/LoginRoute";
 import AipRouter from "./aip/AipRoute";
 import HighlightIndexRoute from "./highlight/HighlightIndexRoute";
+import CloudRouter from "./cloud/CloudRoute";
 
 // Init router and path
 const router = Router();
@@ -21,18 +22,19 @@ const loginRoute = new LoginRoute();
 // Add sub-routes
 //router.use('/users', UserRouter);
 
-router.use("/demeter", DemeterRouter);
 router.use("/aip", AipRouter);
-router.use("/artemis", ArtemisRouter);
-router.use("/paris", ParisRouter);
-router.use("/imaging", ImagingRouter);
+router.use("/assistants", AssistantsRoute);
 router.use("/atlas", AtlasRouter);
+router.use("/artemis", ArtemisRouter);
+router.use("/cloud", CloudRouter);
 router.use("/configuration", ConfigurationRouter);
+router.use("/demeter", DemeterRouter);
 router.use("/highlight", HighlightIndexRoute);
+router.use("/login", loginRoute.router);
+router.use("/imaging", ImagingRouter);
+router.use("/paris", ParisRouter);
 router.use("/pythia", PythiaRouter);
 router.use("/utils", UtilsRoute);
-router.use("/assistants", AssistantsRoute);
-router.use("/login", loginRoute.router);
 
 // Export the base-router
 export default router;

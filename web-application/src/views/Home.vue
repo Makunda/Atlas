@@ -1,11 +1,11 @@
 <!-- Login modal -->
 <template>
-  <v-container fluid class="pa-10">
-    <v-row>
+  <v-container class="pa-10 mx-auto pt-15" >
+    <v-row >
       <v-card width="100%">
         <v-card-title
           ><h1 class="text-h4 mb-4">
-            Welcome back Consultant #{{ consultantId }}, start to work on
+            Welcome back , start to work on
             {{ application }}
           </h1></v-card-title
         >

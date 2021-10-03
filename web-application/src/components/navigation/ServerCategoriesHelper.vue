@@ -16,6 +16,7 @@
               width="344"
               :dark="hover"
               :color="hover ? 'persianGrey' : 'white'"
+              @click.stop="goTo('frameworks')"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
@@ -43,6 +44,7 @@
           <!--   Automation Card    -->
           <v-hover v-slot:default="{ hover }" open-delay="200">
             <v-card
+              @click.stop="goTo('automation')"
               :dark="hover"
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
@@ -79,6 +81,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              @click.stop="goTo('parameters')"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">

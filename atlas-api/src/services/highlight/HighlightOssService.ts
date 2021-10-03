@@ -1,12 +1,13 @@
 /* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
-import DocumentNode from "@entities/Imaging/DocumentNode";
+import DocumentNode from "@entities/Imaging/Documents/DocumentNode";
 import OssRecommendation from "@interfaces/highlight/recommendations/OssRecommendation";
 import { logger } from "@shared/Logger";
 import ExcelUtils from "@utils/Excel/ExcelUtils";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
 import fs from "fs";
+import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
 
 /**
  * Service in Charge of the processing of Open source service
@@ -242,7 +243,7 @@ export default class HighlightOssService {
     // Create the document
     const title = this.getBlockerTitle(blocker);
     const description = this.getDescription(blocker);
-    const doc = new DocumentNode(blocker.application, title, description, idNodes);
+    const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
 
     doc.create();
 

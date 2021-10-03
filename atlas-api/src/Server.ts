@@ -34,6 +34,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use(history());
+
 // No cache on the Server
 app.use(function (req, res, next) {
   res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
@@ -84,7 +86,7 @@ app.use("/api", BaseRouter);
 
 // Front-end
 app.get("/", (req, res) => {
-  res.redirect("/atlas/main");
+  res.redirect("/atlas/");
 });
 
 // Print API errors

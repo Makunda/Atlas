@@ -1,4 +1,6 @@
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import LevelDocumentNode from "@entities/Imaging/Documents/LevelDocumentNode";
+import { int } from "neo4j-driver";
 import Extension from "src/extensions/Extension";
 import SDKTechnology from "src/extensions/SDKTechnology";
 import { Logger } from "winston";
@@ -19,6 +21,17 @@ export default class EC2 extends Extension {
 
   getName(): string {
     return this.name;
+  }
+
+  getTags(): string[] {
+    return ["AWS", "EC2", "Amazon"];
+  }
+
+  getCreationDate(): string {
+    return "2011-10-05T14:48:00.000Z";
+  }
+  getLastUpdate(): string {
+    return "2011-10-05T14:48:00.000Z";
   }
 
   /**
@@ -71,6 +84,10 @@ export default class EC2 extends Extension {
         title = "Use the DB2 to SQL Server Extension";
         description = "Use the DB2 to SQL Server Extension";
       }
+
+      const nodesNames: number[] = nodesToFlag.map((x) => int(x.identity).toNumber());
+      const document = new LevelDocumentNode(application, title, description, nodesNames);
+      document.create();
     }
 
     // Verify compatible programming languages

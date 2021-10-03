@@ -83,30 +83,31 @@ import Vue from "vue/types/umd";
           class="ml-15 text--white top-toolbar"
           color="charcoal"
           dark
-          height="80px"
+          height="70px"
           min-width="50px"
         >
-          <v-toolbar-title class="ml-8 screen-title"> </v-toolbar-title>
-          <v-toolbar-title class="mt-2"
-            >Application selection :</v-toolbar-title
+          <v-toolbar-title class="ml-8 screen-title"
+            ><span style="color: #86A5B3; font-weight: 300">NASD</span> Atlas</v-toolbar-title
           >
+          <v-spacer></v-spacer>
+
           <v-autocomplete
+            style="max-width: 500px"
             v-model="applicationName"
             :items="applicationList"
             :loading="loadingApplication"
             cache-items
-            class="mx-4 mt-2"
-            flat
+            class="mx-4 mt-3"
             hide-details
-            hide-no-data
-            label="Pick an application"
+            hide-selected
             solo-inverted
-          ></v-autocomplete>
-
-          <v-spacer></v-spacer>
+            dense
+          >
+          </v-autocomplete>
 
           <!--  Panel Adminitration / Logout    -->
           <span class="mt-2 d-flex flex-row">
+            <v-divider class="mx-2" dark vertical></v-divider>
             <v-btn text @click="goTo('administration', true)">
               <p class="lighten-3 mr-2 pt-4">Administration</p>
               <v-icon>mdi-text</v-icon>
@@ -119,10 +120,14 @@ import Vue from "vue/types/umd";
           </span>
         </v-toolbar>
       </v-row>
-      <v-row no-gutters>
+      <v-row no-gutters style="background-color: #E0E0E0;">
         <router-view v-slot="{ Component }" style="margin-left: 50px;">
           <transition name="slide-fade">
-            <component class="" :is="Component" />
+            <component
+              class=""
+              :is="Component"
+              style="background-color: #F7F7F7 !important"
+            />
           </transition>
         </router-view>
       </v-row>
@@ -138,6 +143,8 @@ import { ApplicationController } from "@/api/applications/ApplicationController"
 import FlashMessage from "@/modules/flash/FlashMessage.vue";
 import { Configuration } from "@/Configuration";
 import { UtilsController } from "@/api/utils/utils.controller";
+import { Cookie } from "@/enum/Cookie";
+import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({
   name: "Application",
@@ -146,8 +153,25 @@ export default Vue.extend({
     FlashMessage
   },
 
-  mounted() {
-    this.getApplicationList();
+  async mounted() {
+    // Get correct view 
+    this.currentScreen = this.$store.state.currentView || "";
+    const path = this.$route.path as string;
+    const split = path.split("/");
+
+    this.updateViewTab(split.length > 0 ? split[split.length - 1] : "");
+
+    // Get the application list 
+    await this.getApplicationList();
+
+    // Verify if the user previously used an app
+    const appName: string | null = this.checkApplicationCookie();
+    if (!appName && this.applicationList.length > 0) {
+      this.changeApplication(this.applicationList[0]);
+    } else {
+      this.changeApplication(appName);
+    }
+
     this.healthcheck();
   },
 
@@ -159,7 +183,7 @@ export default Vue.extend({
 
   data: () => ({
     tab: 0,
-    currentScreen: "Reporting",
+    currentScreen: "Home",
 
     items: [
       { name: "Home", screen: "", icon: "mdi-home" },
@@ -175,37 +199,60 @@ export default Vue.extend({
         icon: "mdi-hexagon-multiple"
       },
       { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" },
-      { name: "Highlight Injection", screen: "highlight", icon: "mdi-fire" },
-      { name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" }
+      { name: "Highlight Injection", screen: "highlight", icon: "mdi-needle" },
+      //{ name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" },
+      { name: "Cloud Recommendation", screen: "cloudreco", icon: "mdi-fire" }
     ],
 
     loadingApplication: true as boolean,
     applicationName: "" as string,
     applicationList: [] as string[],
 
-    onlineDatabase: false
+    onlineDatabase: false,
+
+    // DropDown
+    disabledDropDown: true
   }),
 
   methods: {
+    /**
+     * Get the application cookie
+     */
+    checkApplicationCookie(): string | null {
+      if (!this.$cookies.isKey(Cookie.APPLICATION_COOKIE)) return null;
+      return this.$cookies.get(Cookie.APPLICATION_COOKIE) as string;
+    },
+
     /** Change the state of the application **/
     changeApplication(application: string) {
       this.applicationName = application;
+      this.$cookies.set(Cookie.APPLICATION_COOKIE, application, "3Od");
       // Update store properties
       this.$store.state.applicationName = application;
     },
 
-    getApplicationList() {
+    /**
+     * Get the application list from the API
+     */
+    async getApplicationList() {
       this.loadingApplication = true;
-      ApplicationController.getListApplications().then((res: string[]) => {
-        this.applicationList = res;
-        if (res && res.length != 0) {
-          this.changeApplication(res[0]);
-        } else {
+      try {
+        const res = await ApplicationController.getListApplications();
+        if (!res || res.length == 0) {
           this.applicationName = "No Application found";
+        } else {
+          this.applicationList = res;
         }
-
+      } catch (err) {
+        console.error("Failed to get the list of the applications.", err);
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to get applications.",
+          body: err
+        });
+      } finally {
         this.loadingApplication = false;
-      });
+      }
     },
 
     simpleHealthCheck() {
@@ -218,6 +265,9 @@ export default Vue.extend({
         });
     },
 
+    /**
+     * Regular healthchek to verify the connectivity to the API
+     */
     healthcheck() {
       UtilsController.healthCheck()
         .then((res: boolean) => {
@@ -250,14 +300,14 @@ export default Vue.extend({
     },
 
     updateViewTab(newView) {
+      console.debug("Looking for: ", newView);
+      
       for (let i = 0; i < this.items.length; i++) {
-        if (this.items[i].screen === newView) {
+        if (this.items[i].screen == newView || this.items[i].name == newView) {
           // Found a view with a matching name
           this.tab = i;
         }
       }
-
-      // Do nothing if the view wasn't found
     },
 
     logout() {
@@ -292,8 +342,6 @@ export default Vue.extend({
           this.tab = i;
         }
       }
-      console.log(`Not found ${newView}`);
-      // Do nothing if the view wasn't found
     }
   }
 });
@@ -336,6 +384,7 @@ export default Vue.extend({
 
 .main-application {
   position: relative;
+  background-color: #f7f7f7;
 }
 
 .top-toolbar {

@@ -16,6 +16,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              @click.stop="goTo('reports')"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
@@ -44,6 +45,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              @click.stop="goTo('analysis')"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
@@ -76,6 +78,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              @click.stop="goTo('tuning')"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
@@ -108,6 +111,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              @click.stop="goTo('reports')"
             >
               <v-card-text>
                 <span class="text-h4 text--primary d-flex flex-row">
@@ -127,6 +131,39 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text @click="goTo('reports')">
+                  Go to section
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
+
+          <!--   Cloud injection Card    -->
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              :dark="hover"
+              :color="hover ? 'persianGrey' : 'white'"
+              class="ma-2"
+              width="344"
+              @click.stop="goTo('highlight')"
+            >
+              <v-card-text>
+                <span class="text-h4 text--primary d-flex flex-row">
+                  <v-icon x-large>mdi-needle</v-icon>
+                  <p
+                    class="ml-4 mt-4"
+                    :class="hover ? 'white--text' : 'black--text'"
+                  >
+                    Highlight injection
+                  </p>
+                </span>
+                <p>
+                  Inject documents on Cloud readiness or Open source safety
+                  coming from CAST Highlight
+                </p>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="goTo('highlight')">
                   Go to section
                 </v-btn>
               </v-card-actions>

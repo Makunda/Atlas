@@ -4,7 +4,7 @@ import { logger } from "@shared/Logger";
 import HighlightOssService from "./HighlightOssService";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
-import DocumentNode from "@entities/Imaging/DocumentNode";
+import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
 
 export default class HighlightObsolescenceService extends HighlightOssService {
   /**
@@ -173,7 +173,7 @@ export default class HighlightObsolescenceService extends HighlightOssService {
       You should consider updating it to the latest version ( ${blocker.lastRelease} ) it may introduce a gap of ${gap}.
       `;
     }
-    const doc = new DocumentNode(blocker.application, title, description, idNodes);
+    const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
 
     doc.create();
 

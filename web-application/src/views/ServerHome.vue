@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-10">
+  <v-container class="pa-10 mx-auto">
     <v-row>
       <v-card width="100%">
         <v-card-title>

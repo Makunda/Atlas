@@ -123,7 +123,7 @@ import Vue from "vue/types/umd";
           </span>
         </v-toolbar>
       </v-row>
-      <v-row no-gutters>
+      <v-row no-gutters style="background-color: #E0E0E0;">
         <router-view v-slot="{ Component }" style="margin-left: 50px;">
           <transition name="fade" mode="out-in">
             <component class="" :is="Component" />

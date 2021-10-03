@@ -1,3 +1,4 @@
 export enum Cookie {
-  AUTH_COOKIE = "PythiaAuthJwt"
+  AUTH_COOKIE = "AtlasAuth",
+  APPLICATION_COOKIE = "AtlasWorkspace",
 }
