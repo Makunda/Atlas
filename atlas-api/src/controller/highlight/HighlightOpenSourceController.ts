@@ -74,8 +74,10 @@ export default class HighlightOpenSourceController implements HighlightControlle
         await this.highlightService.applyRecommendations(blockers, taggingType);
 
       res.status(200).json({
-        data: recommendations,
-        error: errors,
+        data: {
+          applied : recommendations,
+          notApplied: errors
+        },
         message: "Not Applied recommendations",
       });
     } catch (error) {

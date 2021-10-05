@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row class="mb-10">
+    <v-row class="mb-10 pt-3">
       <v-tabs
         v-model="tab"
         align-with-title
@@ -24,9 +24,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import CloudBockersUpload from "./steps/CloudBockersUpload.vue";
+import CloudBockersUpload from "./steps/CloudBlockersUpload.vue";
 import OSSUpload from "./steps/OSSUpload.vue";
 import ObsolescenceUpload from "./steps/ObsolescenceUpload.vue";
+import ContainerBlockersUpload from "./steps/ContainerBlockersUpload.vue";
 
 export default Vue.extend({
   name: "Highlight",
@@ -34,7 +35,8 @@ export default Vue.extend({
   components: {
     CloudBockersUpload,
     OSSUpload,
-    ObsolescenceUpload
+    ObsolescenceUpload,
+    ContainerBlockersUpload
   },
 
   computed: {
@@ -68,6 +70,11 @@ export default Vue.extend({
         view: "ObsolescenceUpload",
         name: "Obsolescence Injection",
         icon: "mdi-calendar-alert"
+      },
+      {
+        view: "ContainerBlockersUpload",
+        name: "Container Injection",
+        icon: "mdi-docker"
       }
     ]
   }),

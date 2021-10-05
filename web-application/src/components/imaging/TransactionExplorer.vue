@@ -1,7 +1,10 @@
 <template>
   <v-card>
     <v-card-title>
-      Review the transactions in the {{ application }} application.
+      <p class="text-h3 text--primary pb-3">
+        <span class="font-weight-light pr-1">Review the transactions in</span>
+        {{ application }}
+      </p>
       <v-spacer></v-spacer>
       <v-btn class="mr-5" icon color="green" @click="refresh">
         <v-icon>mdi-cached</v-icon>

@@ -1,15 +1,17 @@
 /* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
+import ContainerRecommendation from "@interfaces/highlight/recommendations/ContainerRecommendation";
 import { logger } from "@shared/Logger";
+import ExcelUtils from "@utils/Excel/ExcelUtils";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
 import CloudBlocker from "../../interfaces/highlight/recommendations/CloudBlocker";
 
-export default class HighlightService {
+export default class HighlightContainerService {
   private static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
-  private static CLOUD_WORKSHEET = "CloudReady Improvement";
-  private static INDEX_TABLE_COL_NAME = "Cloud Requirement";
+  private static CONTAINER_WORKSHEET = "Containerization Improvement";
+  private static INDEX_TABLE_COL_NAME = "Requirement";
 
   /**
    * Process the excel file and create recommendation
@@ -26,67 +28,57 @@ export default class HighlightService {
       throw new Error("Failed to open the excel file.");
     }
 
-    if (!workbook.worksheets.map((x) => x.name).includes(HighlightService.CLOUD_WORKSHEET)) {
-      throw new Error(`Excel report is not correct. Failed to find '${HighlightService.CLOUD_WORKSHEET}' tab.`);
-    }
-
-    const worksheet = workbook.getWorksheet(HighlightService.CLOUD_WORKSHEET);
-
-    let found = false;
-    let startingTableIndexR = 0;
-    let startingTableIndexC = 0;
-
-    // Search in the first 15 x 15 zone
-    search_loop: for (let indexR = 1; indexR < worksheet.actualRowCount; indexR++) {
-      for (let indexC = 1; indexC < worksheet.actualColumnCount; indexC++) {
-        const element = worksheet.getCell(indexR, indexC);
-        if (String(element.text) == HighlightService.INDEX_TABLE_COL_NAME) {
-          startingTableIndexC = indexC;
-          startingTableIndexR = indexR;
-          found = true;
-          break search_loop; // Break entire loop since index was found
-        }
-      }
-    }
-
-    if (!found) {
+    if (!workbook.worksheets.map((x) => x.name).includes(HighlightContainerService.CONTAINER_WORKSHEET)) {
       throw new Error(
-        `The excel file is not valid. Missing ${HighlightService.INDEX_TABLE_COL_NAME} table in worksheet ${HighlightService.CLOUD_WORKSHEET}`
+        `Excel report is not correct. Failed to find '${HighlightContainerService.CONTAINER_WORKSHEET}' tab.`
       );
     }
 
-    const blockerList: CloudBlocker[] = [];
-    // While values are found in the column
-    let valid = true;
-    do {
-      startingTableIndexR++;
-      const requirement = worksheet.getCell(startingTableIndexR, startingTableIndexC).text;
-      const blocker = worksheet.getCell(startingTableIndexR, startingTableIndexC + 1).text;
-      const technology = worksheet.getCell(startingTableIndexR, startingTableIndexC + 2).text;
-      const file = worksheet.getCell(startingTableIndexR, startingTableIndexC + 3).text;
+    const worksheet = workbook.getWorksheet(HighlightContainerService.CONTAINER_WORKSHEET);
 
-      // If end of the table is reached
-      if (requirement == "") {
-        valid = false;
-      } else {
-        blockerList.push({
-          application: application,
-          requirement: requirement,
-          blocker: blocker,
-          technology: technology,
-          file: file,
-        });
+    // Find origin value as starting point
+    const [row, col] = ExcelUtils.findStartCoord(worksheet, HighlightContainerService.INDEX_TABLE_COL_NAME);
+
+    // Launch discovery
+    const columnMapping: Map<string, number> = ExcelUtils.mapColumnTitle(worksheet, row, col);
+
+    // Component	Version	Description	Release Date	Url	License	License Change	Origin	CWEs	CVEs	Applications
+    const recommendation: ContainerRecommendation[] = [];
+    // Parse all the lines from the start
+    for (let indexR = row + 1; indexR < worksheet.actualRowCount; indexR++) {
+      // Requirements
+      const requirement = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Requirement", columnMapping);
+
+      let containerReq = "";
+      let blocker = "";
+
+      const split = requirement.split(":");
+      if (split.length > 1) {
+        containerReq = split[0].trim();
+        blocker = split[1].trim();
       }
-    } while (valid);
 
-    return blockerList;
+      const technology = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Technology", columnMapping);
+      const file = ExcelUtils.getValueOrEmpty(worksheet, indexR, "File", columnMapping);
+
+      // Push the reco
+      recommendation.push({
+        application: application,
+        requirement: containerReq,
+        blocker: blocker,
+        technology: technology,
+        file: file,
+      });
+    }
+
+    return recommendation;
   }
 
   /**
    * Apply a recommendation for an application as a tag
    * @param blocker Blocker to apply
    */
-  private async applyTag(blocker: CloudBlocker): Promise<boolean> {
+  private async applyTag(blocker: ContainerRecommendation): Promise<boolean> {
     try {
       const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
     WHERE p.Description='File' AND r.value ENDS WITH $file 
@@ -94,8 +86,8 @@ export default class HighlightService {
     SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE [ x in o.Tags WHERE NOT x=$tag ] + $tag END
     return o as node;`;
 
-      const params: any = { file: blocker.file, tag: `Cloud Blocker : ${blocker.blocker}` };
-      const res: QueryResult = await HighlightService.NEO4JAL.executeWithParameters(req, params);
+      const params: any = { file: blocker.file, tag: `Container Blocker : ${blocker.blocker}` };
+      const res: QueryResult = await HighlightContainerService.NEO4JAL.executeWithParameters(req, params);
       return res && res.records.length > 0;
     } catch (ignored) {
       return false;
@@ -106,14 +98,14 @@ export default class HighlightService {
    * Apply a recommendation for an application as a document
    * @param blocker Blocker to apply
    */
-  private async applyDocument(blocker: CloudBlocker): Promise<boolean> {
+  private async applyDocument(blocker: ContainerRecommendation): Promise<boolean> {
     const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
     WHERE p.Description='File' AND r.value ENDS WITH $file 
     WITH o as o LIMIT 1 
     return ID(o) as idNode;`;
 
     const params: any = { file: blocker.file, tag: blocker.blocker };
-    const res: QueryResult = await HighlightService.NEO4JAL.executeWithParameters(req, params);
+    const res: QueryResult = await HighlightContainerService.NEO4JAL.executeWithParameters(req, params);
 
     // Get nodes ID
     if (!res || res.records.length == 0) return false;
@@ -121,9 +113,9 @@ export default class HighlightService {
     const idNodes = res.records.map((x) => int(x.get("idNode")).toNumber());
 
     // Create the document
-    const title = `Cloud Blocker : ${blocker.blocker}`;
-    const description = `The implementation of these objects contains patterns that prevent the migration of the application to a PAAS platform. 
-    It is necessary to refactor these objects before a migration.
+    const title = `Container Blocker : ${blocker.blocker}`;
+    const description = `The implementation of these objects contains patterns that prevent the containerization of the application. 
+    It is necessary to refactor these objects before wrapping the app in a container.
     '${blocker.blocker}' is affecting the '${blocker.requirement}'`;
 
     try {
@@ -174,7 +166,7 @@ export default class HighlightService {
       return o as node LIMIT 1;`;
 
       const params: any = { file: blocker.file, tag: blocker.file };
-      const res: QueryResult = await HighlightService.NEO4JAL.executeWithParameters(req, params);
+      const res: QueryResult = await HighlightContainerService.NEO4JAL.executeWithParameters(req, params);
       if (!res || res.records.length == 0) return true;
       else return false;
     } catch (ignored) {

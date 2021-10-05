@@ -76,6 +76,31 @@ export default class ExtensionManager {
   }
 
   /**
+   * Find extensions by ID
+   * @param id The Id of the extension
+   * @returns The extension or null
+   */
+  public findExtensionById(id: string): Extension | null {
+    for (const ext of this.plugins) {
+      if (ext.getId() == id) return ext;
+    }
+    return null;
+  }
+
+  /**
+   * Execute a specific extension
+   * @param id If of the extension to execute
+   * @todo Refactor this code to return an operation ID and consume the results later
+   */
+  public async executeExtension(id: string, application: string): Promise<any> {
+    const extension = this.findExtensionById(id);
+    if (extension == null) throw new Error(`Failed to find an extension with id : '${id}'.`);
+
+    // The extension exist execute and add to the extension list
+    return await extension.execute(application);
+  }
+
+  /**
    * Get the instance of the class
    */
   public static getInstance(): ExtensionManager {

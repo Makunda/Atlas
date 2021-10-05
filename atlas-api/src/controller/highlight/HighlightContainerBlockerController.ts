@@ -2,14 +2,15 @@
 import { NextFunction, Request, Response } from "express";
 import { checkBody, checkParams, checkQuery } from "@shared/FunctionGlob";
 import HttpException from "@exceptions/HttpException";
-import HighlightService from "@services/highlight/HighlightService";
 import { logger } from "@shared/Logger";
 import * as fs from "fs";
 import CloudBlocker from "@interfaces/highlight/recommendations/CloudBlocker";
 import HighlightController from "./HighlightController";
+import HighlightContainerService from "@services/highlight/HighlightContainerService";
+import ContainerRecommendation from "@interfaces/highlight/recommendations/ContainerRecommendation";
 
 export default class HighlightCloudBlockerController implements HighlightController {
-  protected highlightService = new HighlightService();
+  protected highlightService = new HighlightContainerService();
 
   /**
    * Process an excel file for a specific application
@@ -32,7 +33,10 @@ export default class HighlightCloudBlockerController implements HighlightControl
       const application = String(req.params.application);
 
       // Launch the import
-      const recommendations: CloudBlocker[] = await this.highlightService.processExcel(application, file.path);
+      const recommendations: ContainerRecommendation[] = await this.highlightService.processExcel(
+        application,
+        file.path
+      );
 
       // Delete the file
       try {
@@ -42,9 +46,9 @@ export default class HighlightCloudBlockerController implements HighlightControl
         logger.error(`Failed to remove temporary file ${file.path}.`, err);
       }
 
-      res.status(200).json({ data: recommendations, message: "Blockers Found" });
+      res.status(200).json({ data: recommendations, message: "Container Blockers Found" });
     } catch (error) {
-      logger.error("Failed to process the Highlight File", error);
+      logger.error("Failed to process the Highlight Container File", error);
       next(error);
     }
   };
@@ -60,11 +64,11 @@ export default class HighlightCloudBlockerController implements HighlightControl
       checkBody(req, "blockers");
       checkBody(req, "type");
 
-      const blockers: CloudBlocker[] = req.body.blockers;
+      const blockers: ContainerRecommendation[] = req.body.blockers;
       const taggingType = String(req.body.type);
 
       // Launch the import
-      const [recommendations, errors]: [CloudBlocker[], CloudBlocker[]] =
+      const [recommendations, errors]: [ContainerRecommendation[], ContainerRecommendation[]] =
         await this.highlightService.applyRecommendations(blockers, taggingType);
 
       res.status(200).json({
@@ -88,7 +92,7 @@ export default class HighlightCloudBlockerController implements HighlightControl
   public testRecommendation = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       checkBody(req, "blocker");
-      const blocker: CloudBlocker = req.body.blocker;
+      const blocker: ContainerRecommendation = req.body.blocker;
 
       // Launch the import
       const success: boolean = await this.highlightService.testRecommendation(blocker);

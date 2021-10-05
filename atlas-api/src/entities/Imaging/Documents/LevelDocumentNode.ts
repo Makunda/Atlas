@@ -47,7 +47,7 @@ export default class LevelDocumentNode extends DocumentNode {
     // Verify no document exists in the application with the same title
     const reqFind =
       `MATCH (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL}) ` +
-      "WHERE o.Title=$title AND o.ViewType=$ViewType RETURN o.Nodes as nodes LIMIT 1";
+      "WHERE o.Title=$title AND o.ViewType=$viewType RETURN o.Nodes as nodes LIMIT 1";
 
     try {
       results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqFind, params);
@@ -64,10 +64,20 @@ export default class LevelDocumentNode extends DocumentNode {
 
     // We now have a set of unique values
     // Create the document
-    await this.createNode(
+    const idDoc = await this.createNode(
       Array.from(nodeAIPList).filter((n) => n),
       "Name"
     );
+
+    // Link the document to all the levels in the application
+    const reqLink =
+      `MATCH (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL}) ` +
+      "WHERE ID(o)=$idNode " +
+      "WITH o " +
+      `MATCH (l:Level5:\`${this.application}\`) ` +
+      `MERGE (l)-[:ContainsDocument]->(o)`;
+
+    await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqLink, { idNode: idDoc });
   }
 
   constructor(application: string, title: string, description: string, nodes: number[]) {

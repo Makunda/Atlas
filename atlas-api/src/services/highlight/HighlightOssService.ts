@@ -243,11 +243,17 @@ export default class HighlightOssService {
     // Create the document
     const title = this.getBlockerTitle(blocker);
     const description = this.getDescription(blocker);
-    const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
 
-    doc.create();
+    try {
+      const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
+      await doc.create();
 
-    return true;
+      return true;
+    } catch (error) {
+      logger.error("Failed to create a Document.", error);
+      return false;
+    }
+
   }
 
   /**
@@ -270,9 +276,9 @@ export default class HighlightOssService {
   protected getBlockerTitle(blocker: OssRecommendation): string {
     const baseTitle = blocker.component;
     if (blocker.vulnerabilityCritical.length > 0) return "OSS Critical Risk: " + baseTitle;
-    if (blocker.vulnerabilityHigh.length > 0) return "High Risk: " + baseTitle;
+    if (blocker.vulnerabilityHigh.length > 0) return "OSS High Risk: " + baseTitle;
     if (blocker.vulnerabilityMedium.length > 0) return "OSS Medium Risk: " + baseTitle;
-    if (blocker.vulnerabilityLow.length > 0) return "Low Risk: " + baseTitle;
+    if (blocker.vulnerabilityLow.length > 0) return "OSS Low Risk: " + baseTitle;
 
     return "Framework: " + baseTitle;
   }

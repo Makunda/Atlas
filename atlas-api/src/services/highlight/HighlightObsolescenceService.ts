@@ -106,7 +106,7 @@ export default class HighlightObsolescenceService extends HighlightOssService {
 
     // Filter by techno
     const pattern = this.patternByTechnology(blocker);
-    const tag = `Obsolescence ${this.getYearsAndMonthsAsString(new Date(blocker.release))} ${pattern}`;
+    const tag = `Obsolescence: ${this.getYearsAndMonthsAsString(new Date(blocker.release))} - ${pattern}`;
 
     const params: any = {
       Pattern: blocker.component,
@@ -173,10 +173,17 @@ export default class HighlightObsolescenceService extends HighlightOssService {
       You should consider updating it to the latest version ( ${blocker.lastRelease} ) it may introduce a gap of ${gap}.
       `;
     }
-    const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
+    
+    try {
+      const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
+      await doc.create();
 
-    doc.create();
+      return true;
+    } catch (error) {
+      logger.error("Failed to create a Document.", error);
+      return false;
+    }
 
-    return true;
+    
   }
 }

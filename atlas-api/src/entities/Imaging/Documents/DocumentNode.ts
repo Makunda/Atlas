@@ -59,7 +59,7 @@ export default abstract class DocumentNode {
    * @param property The property used to identify the type of nodes you need to merge ( for objects you need to provide "AipId" and for the levels "Name" )
    * @throws An exception if no nodes were specified
    */
-  protected async createNode(nodeList: any[], property: string) {
+  protected async createNode(nodeList: any[], property: string): Promise<number> {
     // Do not create empty documents
     if (nodeList.length == 0) throw Error("Cannot  create a document without linked nodes.");
 
@@ -69,12 +69,12 @@ export default abstract class DocumentNode {
     // Create document
     const req = `MERGE (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL} {
       Title: $title,
-      ViewType: $ViewType
+      ViewType: $viewType
     })
     SET o.Description=$description
     SET o.Id=$id
-    SET o.ViewID=$ViewID
-    SET o.ViewName=$ViewName
+    SET o.ViewID=$viewID
+    SET o.ViewName=$viewName
     SET o.Nodes=$nodeList
     SET o.Tags=[]
     SET o.Theme=12
@@ -114,6 +114,8 @@ export default abstract class DocumentNode {
           // ignored
         }
       }
+
+      return idDoc;
     } else {
       throw new Neo4jError("Failed to create a document. The request returned no results.");
     }

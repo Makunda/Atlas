@@ -2,14 +2,14 @@
 import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
 import { logger } from "@shared/Logger";
 import { Node } from "neo4j-driver";
+import Framework from "./Framework";
 import SDKResources from "./SDKResources";
 import SDKUtils from "./SDKUtils";
-import Technology from "./Technology";
 
 /**
  * Related to all the operations on the application
  */
-export default class SDKTechnology {
+export default class SDKFramework {
   private static neo4jAccessLayer = Neo4JAccessLayer.getInstance();
   private static sdkResources = SDKResources.getInstance();
 
@@ -19,11 +19,13 @@ export default class SDKTechnology {
    * @param technology Technology to search
    * @returns The list of levels matching the technology
    */
-  public static async getLevelsByTechnology(application: string, technology: Technology): Promise<Node[]> {
+  public static async getLevelsByFramework(application: string, framework: Framework): Promise<Node[]> {
     const req = `MATCH (o:Object:\`${application}\`)<-[:Aggregates]-(l:Level5) WHERE o.Type in $typeList RETURN l as node`;
 
     try {
-      const res = await this.neo4jAccessLayer.executeWithParameters(req, { typeList: technology.imaging.type });
+      logger.info("Req", req);
+      logger.info("Params", { typeList: framework.imaging.type });
+      const res = await this.neo4jAccessLayer.executeWithParameters(req, { typeList: framework.imaging.type });
       if (!res || res.records.length == 0) return [];
       return res.records.map((x) => x.get("node") as Node);
     } catch (err) {
@@ -39,43 +41,34 @@ export default class SDKTechnology {
    * @param category Category of the technology
    * @returns
    */
-  public static async getTechnologiesByCategory(application: string, category: string): Promise<Technology[]> {
+  public static async getFrameworksByCategory(application: string, category: string): Promise<Framework[]> {
     try {
-      const databasesList = this.sdkResources.getTechnologiesByCategories(category);
-      const matchedDatabase = [];
+      const catList = this.sdkResources.getFrameworksByCategories(category);
+      const matchedFrameworks = [];
 
       let res;
       // Parse database list in the application
-      for (const db of databasesList) {
-        res = await SDKUtils.getObjectsByType(application, db.imaging.type);
+      for (const el of catList) {
+        res = await SDKUtils.getObjectsByType(application, el.imaging.type);
         if (res && res.length > 0) {
-          matchedDatabase.push(db);
+          matchedFrameworks.push(el);
         }
       }
 
-      return matchedDatabase;
+      return matchedFrameworks;
     } catch (err) {
-      logger.error(`Failed to get the list of technologies flagged as '${category}''.`, err);
+      logger.error(`Failed to get the list of frameworks flagged as '${category}''.`, err);
       throw err;
     }
   }
 
   /**
-   * Get the id of the databases in the application
+   * Get the id of the logging frameworks in the application
    * Warning this is a costly operation
    * @param application Name of the application
-   * @returns The id of
+   * @returns The id of matching frameworks
    */
-  public static getDatabasesListAsString(application: string): Promise<Technology[]> {
-    return this.getTechnologiesByCategory(application, "database");
-  }
-
-  /**
-   * Get the id of the programming languages in the application
-   * @param application Name of the application
-   * @returns
-   */
-  public static getProgrammingLanguageListAsString(application: string): Promise<Technology[]> {
-    return this.getTechnologiesByCategory(application, "programming");
+  public static getLoggingFrameworks(application: string): Promise<Framework[]> {
+    return this.getFrameworksByCategory(application, "logging");
   }
 }

@@ -2,7 +2,9 @@
   <v-card>
     <v-card-title>
       <p class="text-h3 text--primary pb-3">
-        <span class="font-weight-light pr-1">Inject Obsolescence insights into</span>
+        <span class="font-weight-light pr-1"
+          >Inject Container blockers into</span
+        >
         {{ application }}
       </p>
       <v-spacer></v-spacer>
@@ -11,14 +13,15 @@
       </v-btn>
     </v-card-title>
     <v-card-subtitle>
-      Upload here the <strong>Open-source BOM (Bill of material)</strong> coming
-      from CAST Highlight
+      Upload here the
+      <strong>Excel sheet container Cloud blockers</strong> coming from Cast
+      Highlight
     </v-card-subtitle>
 
     <v-card-text>
-      <v-stepper v-model="e1" >
-        <v-stepper-header class="custom-stepper">
-          <v-stepper-step :complete="e1 > 1" step="1">
+      <v-stepper v-model="e1">
+        <v-stepper-header>
+          <v-stepper-step :complete="e1 > 1" step="1" class="white--text">
             <span class="white--text">Upload</span>
           </v-stepper-step>
 
@@ -42,6 +45,8 @@
                 <v-row>
                   <h4>Import the Cast Highlight Excel File</h4>
                 </v-row>
+
+                <!-- File input -->
                 <v-row class="mt-8">
                   <v-file-input
                     v-model="file"
@@ -100,15 +105,61 @@
                   <v-card-text>
                     <v-container>
                       <v-row> </v-row>
+                      <v-row>
+                        <v-col cols="12" md="3">
+                          <v-subheader
+                            >Modify file path by removing the beginning of the
+                            path:</v-subheader
+                          >
+                        </v-col>
+                        <v-col cols="10" md="7">
+                          <v-text-field
+                            v-model="defaultReplacement"
+                            label="Remove the beginnning of the file property"
+                            hint="C:\User\ABC\myApplication\..."
+                            multiple
+                            chips
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="2" md="2">
+                          <v-btn color="success" @click="removeBeginning" block
+                            >Remove beginnning</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+
+                      <!-- Replacement  -->
+                      <v-row>
+                        <v-col cols="12" md="3">
+                          <v-subheader
+                            >Modify file path using regular expression ( only
+                            one group is accepted ):
+                          </v-subheader>
+                        </v-col>
+                        <v-col cols="10" md="7">
+                          <v-text-field
+                            v-model="defaultRegex"
+                            label="Regular expression to modify file fields"
+                            multiple
+                            chips
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="2" md="2">
+                          <v-btn color="success" @click="processTags" block
+                            >Apply regex</v-btn
+                          >
+                        </v-col>
+                      </v-row>
 
                       <!-- Filter Technology -->
                       <v-row>
-                        <v-col cols="2">
-                          <p>
-                            <span class="subtitle-1">Filter</span>
-                          </p>
+                        <v-col cols="12" md="3">
+                          <v-subheader>
+                            Filter the cloud blockers based on their tehcnology
+                            or type of recommendation:
+                          </v-subheader>
                         </v-col>
-                        <v-col cols="5">
+                        <v-col cols="10" md="4">
                           <v-autocomplete
                             v-model="valuesTechnologies"
                             :items="itemsTechnologies"
@@ -120,82 +171,27 @@
                             multiple
                           ></v-autocomplete>
                         </v-col>
-                      </v-row>
-
-                      <!-- Fitler on actual version -->
-                      <v-row>
-                        <v-col cols="12" md="2">
-                          <v-subheader
-                            >Filter by age of the component:</v-subheader
-                          >
-                        </v-col>
-                        <v-col cols="12" md="10" class="d-flex flex-column">
-                          <h4 class="text-h6">
-                            Between
-                            <strong>{{ getDate(range[0]) }}</strong>
-                            {{ getYearDifference(range[0]) }} year{{
-                              getYearDifference(range[0]) > 1 ? "s" : ""
-                            }}
-                            and
-                            <strong>{{ getDate(range[1]) }}</strong> (
-                            {{ getYearDifference(range[1]) }} year{{
-                              getYearDifference(range[1]) > 1 ? "s" : ""
-                            }}
-                            gap )
-                          </h4>
-                          <v-range-slider
-                            v-model="range"
+                        <v-col cols="12" md="4">
+                          <v-autocomplete
+                            v-model="valuesRecommendations"
+                            :items="itemsRecommendations"
                             @change="filterItems"
-                            style="max-width: 80%"
-                            :max="maxDate"
-                            :min="minDate"
-                          >
-                          </v-range-slider>
-                        </v-col>
-                      </v-row>
-
-                      <!-- Fitler on latest version -->
-                      <!-- 
-                        minDateRelease: 0 as number,
-                        maxDateRelease: 0 as number,
-                        rangeRelease: [0, 0],
-                       -->
-                      <v-row>
-                        <v-col cols="12" md="2">
-                          <v-subheader>Filter on latest version:</v-subheader>
-                        </v-col>
-                        <v-col cols="12" md="10" class="d-flex flex-column">
-                          <h4 class="text-h6">
-                            Between
-                            <strong>{{ getDate(rangeRelease[0]) }}</strong>
-                            {{ getYearDifference(rangeRelease[0]) }} year{{
-                              getYearDifference(rangeRelease[0]) > 1 ? "s" : ""
-                            }}
-                            and
-                            <strong>{{ getDate(rangeRelease[1]) }}</strong> (
-                            {{ getYearDifference(rangeRelease[1]) }} year{{
-                              getYearDifference(rangeRelease[1]) > 1 ? "s" : ""
-                            }}
-                            gap )
-                          </h4>
-                          <v-range-slider
-                            v-model="rangeRelease"
-                            @change="filterItems"
-                            style="max-width: 80%"
-                            :max="maxDateRelease"
-                            :min="minDateRelease"
-                          >
-                          </v-range-slider>
+                            outlined
+                            chips
+                            small-chips
+                            label="Filter Recommendations"
+                            multiple
+                          ></v-autocomplete>
                         </v-col>
                       </v-row>
 
                       <!-- Type of creation  -->
                       <v-row>
-                        <v-col cols="12" md="2">
+                        <v-col cols="12" md="3">
                           <v-subheader>Choose the type of tagging</v-subheader>
                         </v-col>
-                        <v-col cols="12" md="10">
-                          <v-radio-group v-model="taggingType">
+                        <v-col cols="12" md="5">
+                          <v-radio-group v-model="taggingType" row>
                             <v-radio label="Regular Tag" value="tag"></v-radio>
                             <v-radio
                               label="Document"
@@ -238,11 +234,11 @@
                     :items="blockerDisplayedList"
                     :items-per-page="20"
                     :search="search"
-                    item-key="id"
                     show-select
+                    item-key="id"
                     class="elevation-1"
                   >
-                    <template v-slot:item.component="props">
+                    <template v-slot:item.file="props">
                       <v-edit-dialog
                         :return-value.sync="props.item.file"
                         large
@@ -252,13 +248,13 @@
                         @open="open"
                         @close="close"
                       >
-                        <div>{{ props.item.component }}</div>
+                        <div>{{ props.item.file }}</div>
                         <template v-slot:input>
                           <div class="mt-4 text-h6">
-                            Update detection pattern
+                            Update File
                           </div>
                           <v-text-field
-                            v-model="props.item.component"
+                            v-model="props.item.file"
                             label="Edit"
                             single-line
                             counter
@@ -266,29 +262,6 @@
                           ></v-text-field>
                         </template>
                       </v-edit-dialog>
-                    </template>
-
-                    <template v-slot:item.integration="{ item }">
-                      <v-container>
-                        <v-row
-                          v-if="
-                            !item.integration || item.integration.length == 0
-                          "
-                        >
-                          <p>No object matching this framework was found</p>
-                        </v-row>
-                        <v-row v-else>
-                          <v-col
-                            class="pa-0 ma-0"
-                            cols="12"
-                            v-for="(link, i) in item.integration"
-                            :key="i"
-                          >
-                            <strong>Type: </strong>{{ link.type }} -
-                            <strong>Count: </strong>{{ link.count }}
-                          </v-col>
-                        </v-row>
-                      </v-container>
                     </template>
 
                     <template v-slot:item.actions="{ item }">
@@ -312,7 +285,7 @@
             </v-btn>
           </v-stepper-content>
 
-          <!-- Step 3: Review -->
+          <!-- STEP 3 Review the blockers  -->
           <v-stepper-content step="3">
             <v-card class="mb-12 elevation-3">
               <v-card-text> </v-card-text>
@@ -322,11 +295,11 @@
                     <p class="text-h3">Applying {{ taggingType }}s on {{ application }}...</p>
                     <v-progress-linear
                       class="mt-4 mb-2"
-                      height="6"
                       :value="percentageTagsApplied"
+                      height="6"
                     ></v-progress-linear>
                     <p class="text-h5">
-                      {{ sizeSent }} {{ taggingType }}s applied on {{ sizeToSend }}
+                      {{ sizeSent }} {{ taggingType }}select-all="" applied on {{ sizeToSend }}
                     </p>
                     <p class="text-h5">{{ blockerNotApplied.length }} Errors</p>
                   </v-row>
@@ -347,7 +320,6 @@
                     </v-container>
                   </v-row>
 
-                  <!-- Error -->
                   <!-- Errors -->
                   <v-row
                     class="mt-3"
@@ -416,11 +388,12 @@
 
 <script lang="ts">
 import Vue from "vue";
-import OssRecommendation from "@/api/interface/highlight/OssRecommendation";
-import { ObsolescenceController } from "@/api/highlight/ObsolescenceController";
+import ContainerBlocker from "@/api/interface/highlight/ContainerBlocker";
+import ContainerBlockerController from "@/api/highlight/ContainerBlockerController";
+import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({
-  name: "ObsolescenceUpload",
+  name: "CloudBockersUpload",
 
   computed: {
     getApplicationName() {
@@ -434,6 +407,7 @@ export default Vue.extend({
     file: null,
 
     search: "",
+    taggingType: "tag",
 
     // filters
     valuesTechnologies: [] as string[],
@@ -441,14 +415,7 @@ export default Vue.extend({
     valuesRecommendations: [] as string[],
     itemsRecommendations: [] as string[],
 
-    violationFilter: {
-      critical: false,
-      high: false,
-      medium: false,
-      low: false
-    },
-
-    selected: [] as OssRecommendation[],
+    selected: [] as ContainerBlocker[],
 
     snack: false,
     snackColor: "",
@@ -459,7 +426,6 @@ export default Vue.extend({
     defaultReplacement: "",
 
     // Applying tags
-    taggingType: "tag",
     loadingApply: false,
     percentageTagsApplied: 0,
 
@@ -470,34 +436,20 @@ export default Vue.extend({
         sortable: false,
         value: "application"
       },
-      { text: "Pattern", value: "component" },
-      { text: "Origin", value: "origin" },
-      { text: "Description", value: "description" },
-      { text: "Version", value: "version" },
+      { text: "Requirement", value: "requirement" },
+      { text: "Block", value: "blocker" },
       { text: "Technology", value: "technology" },
-      { text: "Version date", value: "release" },
-      { text: "Latest Release", value: "lastRelease" },
-      { text: "Integration", value: "integration" },
+      { text: "File", value: "file" },
       { text: "Actions", value: "actions", sortable: false }
     ],
-    blockerList: [] as OssRecommendation[],
-    blockerUndoTable: [] as OssRecommendation[],
-    blockerDisplayedList: [] as OssRecommendation[],
-
-    // Date Filter Release
-    minDate: 0 as number,
-    maxDate: 0 as number,
-    range: [0, 0],
-
-    // Latest Release
-    minDateRelease: 0 as number,
-    maxDateRelease: 0 as number,
-    rangeRelease: [0, 0],
+    blockerList: [] as ContainerBlocker[],
+    blockerUndoTable: [] as ContainerBlocker[],
+    blockerDisplayedList: [] as ContainerBlocker[],
 
     // Review results
     appliedBlockers: 0,
     errorApplying: "",
-    blockerNotApplied: [] as OssRecommendation[],
+    blockerNotApplied: [] as ContainerBlocker[],
 
     // Progression
     sizeToSend: 0,
@@ -506,29 +458,11 @@ export default Vue.extend({
   }),
 
   methods: {
-    /**
-     * Return the timestamp as a date
-     */
-    getDate(timestamp: number) {
-      return new Date(timestamp).toDateString();
-    },
-
-    /**
-     * Get year difference
-     */
-    getYearDifference(enteredDate: number) {
-      return (
-        new Date(
-          new Date().getTime() - new Date(enteredDate).getTime()
-        ).getFullYear() - 1970
-      );
-    },
-
-    /**
-     * Apply tags on the application, by batch of tags
-     */
     async applyTags() {
       this.e1 = 3;
+      this.sizeSent = 0;
+      this.sizeToSend = 0;
+
       this.loadingApply = true;
       this.blockerNotApplied = [];
       this.errorApplying = "";
@@ -548,7 +482,10 @@ export default Vue.extend({
           const batch = this.blockerDisplayedList.slice(index, upBound);
 
           // Send batch
-          const [applied, notApplied] = await ObsolescenceController.applyBlockers(
+          const [
+            applied,
+            notApplied
+          ] = await ContainerBlockerController.applyBlockers(
             batch,
             this.taggingType
           );
@@ -571,43 +508,33 @@ export default Vue.extend({
     },
 
     filterItems() {
-      // Rearrange filter
-      if (this.rangeRelease[0] >= this.range[0])
-        this.range[0] = this.rangeRelease[0];
-      if (this.rangeRelease[1] <= this.range[1])
-        this.range[1] = this.rangeRelease[1];
-
       this.blockerDisplayedList = this.blockerList.filter(
-        (x: OssRecommendation) => {
-          const date = new Date(x.release);
-          const releaseDate = new Date(x.lastRelease);
-
+        (x: ContainerBlocker) => {
           return (
-            // Filter technologies
             this.valuesTechnologies.indexOf(x.technology) >= 0 &&
-            // Filter on Date
-            date >= this.range[0] &&
-            date <= this.range[1] &&
-            releaseDate >= this.rangeRelease[0] &&
-            releaseDate <= this.rangeRelease[1]
+            this.valuesRecommendations.indexOf(x.requirement) >= 0
           );
         }
       );
-
-      this.processTags();
     },
 
     refresh() {
       // pass
     },
 
-    deleteItem(item: OssRecommendation) {
+    /**
+     * Delete a selected item
+     */
+    deleteItem(item: ContainerBlocker) {
       const editedIndex = this.blockerList.indexOf(item);
       this.blockerList.splice(editedIndex, 1);
 
       this.filterItems();
     },
 
+    /**
+     * Delete all selected items in the list
+     */
     deleteSelectedItems() {
       this.selected.forEach(x => {
         const editedIndex = this.blockerList.indexOf(x);
@@ -618,6 +545,9 @@ export default Vue.extend({
       this.filterItems();
     },
 
+    /**
+     * Send the file to the API
+     */
     async sendFileToApi() {
       this.fileUploading = true;
 
@@ -625,39 +555,21 @@ export default Vue.extend({
         if (this.file == null) return;
         if (this.application == null) return;
 
-        this.blockerList = await ObsolescenceController.uploadFile(
+        this.blockerList = await ContainerBlockerController.uploadFile(
           this.file,
           this.application
         );
 
         for (const i in this.blockerList) this.blockerList[i].id = i;
 
-        // Get information on the date
-        const dateList = this.blockerList.map((x: OssRecommendation) =>
-          new Date(x.release).getTime()
-        );
-
-        const releaseList = this.blockerList.map((x: OssRecommendation) =>
-          new Date(x.lastRelease).getTime()
-        );
-
-        // Date
-        this.minDate = Math.min(...dateList);
-        this.maxDate = Math.max(...dateList);
-        this.range = [this.minDate, this.maxDate];
-
-        this.minDateRelease = Math.min(...releaseList);
-        this.maxDateRelease = Math.max(...releaseList);
-        this.rangeRelease = [this.minDateRelease, this.maxDateRelease];
-
         this.blockerDisplayedList = [...this.blockerList];
 
         // Get Filter items
         const tech = this.blockerList
-          .map((x: OssRecommendation) => x.technology)
+          .map((x: ContainerBlocker) => x.technology)
           .filter((v, i, a) => a.indexOf(v) === i);
         const reco = this.blockerList
-          .map((x: OssRecommendation) => x.component)
+          .map((x: ContainerBlocker) => x.requirement)
           .filter((v, i, a) => a.indexOf(v) === i);
 
         this.valuesTechnologies = [...tech] as string[];
@@ -668,6 +580,11 @@ export default Vue.extend({
         this.e1 = 2;
       } catch (err) {
         console.error("Failed to process the file.", err);
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to process the file.",
+          body: err
+        });
       } finally {
         this.fileUploading = false;
       }
@@ -707,10 +624,10 @@ export default Vue.extend({
 
     processTags() {
       this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
-      this.blockerDisplayedList.forEach((x: OssRecommendation) => {
-        const regexResult = x.component.match(this.defaultRegex);
+      this.blockerDisplayedList.forEach((x: ContainerBlocker) => {
+        const regexResult = x.file.match(this.defaultRegex);
         if (regexResult && regexResult.length > 0) {
-          x.component = regexResult[1];
+          x.file = regexResult[1];
         }
       });
     },
@@ -719,10 +636,10 @@ export default Vue.extend({
       const regex = new RegExp("", "gi");
 
       this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
-      this.blockerDisplayedList.forEach((x: OssRecommendation) => {
-        const regexResult = x.component.replace(regex, "");
+      this.blockerDisplayedList.forEach((x: ContainerBlocker) => {
+        const regexResult = x.file.replace(regex, "");
         if (regexResult && regexResult.length > 0) {
-          x.component = regexResult[1];
+          x.file = regexResult[1];
         }
       });
     }
@@ -742,7 +659,7 @@ export default Vue.extend({
 
 <style scoped>
 .v-stepper__header {
-  background-color: #425B66 !important;
+  background-color: #425b66 !important;
   border-bottom: 6px solid #2a9d8f;
   color: white !important;
 }
@@ -755,5 +672,4 @@ export default Vue.extend({
 .theme--light.v-stepper .v-stepper__label {
   color: white !important;
 }
-
 </style>

@@ -86,13 +86,16 @@
         <v-card-actions></v-card-actions>
       </v-card>
     </v-row>
-    <v-row class="mt-10">
-      <ActionsTile></ActionsTile>
-    </v-row>
 
     <v-row class="mt-10">
       <CategoriesHelper></CategoriesHelper>
     </v-row>
+    
+    <v-row class="mt-10">
+      <ActionsTile></ActionsTile>
+    </v-row>
+
+    
   </v-container>
 </template>
 

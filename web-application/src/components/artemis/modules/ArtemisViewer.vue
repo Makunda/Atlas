@@ -1,12 +1,17 @@
 <template>
   <v-card class="px-5 mb-5 pt-4" :disabled="disabledTile">
+
+    <v-card-title>
+      <p class="text-h3 text--primary">
+        <span class="font-weight-light pr-1"
+          >Automatic framework discovery on</span
+        >
+        {{ application }}
+      </p>
+    </v-card-title>
+
     <v-card-text>
-      <v-row>
-        <h5 class="text-h4 mb-3 black--text">
-          Automatic framework discovery on {{ application }} application
-        </h5>
-      </v-row>
-      <v-row class="my-5">
+      <v-row class="my-2">
         <p>
           The <i>Artemis : automatic framewok detector </i> your application and
           finds objects belonging to open-source components. It analyzes the

@@ -1,10 +1,13 @@
 <template>
   <v-card>
     <v-card-title>
-      <h3 class="text-h4">
-        Inject <strong>Open Source Safety</strong> into
-        {{ application }} application.
-      </h3>
+      <p class="text-h3 text--primary pb-3">
+        <span class="font-weight-light pr-1"
+          >Open Source Safety insights into</span
+        >
+        {{ application }}
+      </p>
+
       <v-spacer></v-spacer>
       <v-btn class="mr-5" icon color="green" @click="refresh">
         <v-icon>mdi-cached</v-icon>
@@ -312,13 +315,14 @@
               <v-card-text>
                 <v-container>
                   <v-row v-if="loadingApply" class="d-flex flex-column">
-                    <p class="text-h3">Applying tags on {{ application }}...</p>
+                    <p class="text-h3">Applying {{ taggingType }}s on {{ application }}...</p>
                     <v-progress-linear
-                      class="mt-4"
+                      class="mt-4 mb-2"
+                      height="6"
                       :value="percentageTagsApplied"
                     ></v-progress-linear>
                     <p class="text-h5">
-                      {{ sizeSent }} tags applied on {{ sizeToSend }}
+                      {{ sizeSent }} {{ taggingType }}s applied on {{ sizeToSend }}
                     </p>
                     <p class="text-h5">{{ blockerNotApplied.length }} Errors</p>
                   </v-row>
@@ -327,7 +331,7 @@
                     <v-container>
                       <v-row>
                         <p class="text-h3">
-                          {{ sizeSent - blockerNotApplied.length }} Tags were
+                          {{ sizeSent - blockerNotApplied.length }} {{ taggingType }}s were
                           applied
                         </p>
                       </v-row>
@@ -340,7 +344,43 @@
                   </v-row>
 
                   <!-- Error -->
-                  <v-row v-if="!loadingApply && errorApplying !== ''"> </v-row>
+                  <!-- Errors -->
+                  <v-row
+                    class="mt-3"
+                    v-if="blockerNotApplied && blockerNotApplied.length > 0"
+                  >
+                    <p>
+                      <span class="text-h5"
+                        >Review blockers that have not been applied</span
+                      ><br />
+                      There are several different reasons that can explain the
+                      errors here. <br />
+                      Some file types will be processed by CAST Highlight (such
+                      as configuration files) but will not exist in the in the
+                      CAST Imaging ecosystem. In addition, the path to these
+                      files files (for XML, Cobol, etc.) may be absolute and
+                      depend on where this application has been where this
+                      application was parsed. <br />
+                      To solve this To solve this problem, you can rerun this
+                      process and modify the path of these elements with a
+                      regular expression. these elements with a regular
+                      expression. You just have to remove the beginning of this
+                      absolute path so that it only matches the structure the
+                      structure of the application folder.
+                    </p>
+                    
+                      <!-- Data table to display the errors  -->
+                      <v-data-table
+                        max-height="500px"
+                        style="width: 100%;"
+                        :headers="headers"
+                        :items="blockerNotApplied"
+                        dense
+                        item-key="id"
+                        class="elevation-1"
+                      >
+                      </v-data-table>
+                  </v-row>
                 </v-container>
               </v-card-text>
             </v-card>
@@ -477,11 +517,11 @@ export default Vue.extend({
           const batch = this.blockerDisplayedList.slice(index, upBound);
 
           // Send batch
-          const noApplied = await OSSController.applyBlockers(
+          const [applied, notApplied] = await OSSController.applyBlockers(
             batch,
             this.taggingType
           );
-          this.blockerNotApplied = this.blockerNotApplied.concat(noApplied);
+          this.blockerNotApplied = this.blockerNotApplied.concat(notApplied);
 
           this.sizeSent = upBound;
           this.percentageTagsApplied = (100 * index) / this.sizeToSend;

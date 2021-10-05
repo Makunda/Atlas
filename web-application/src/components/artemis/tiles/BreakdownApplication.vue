@@ -2,9 +2,12 @@
   <!-- BREAKDOWN SECTION -->
   <v-card class="ma-2" width="100%">
     <v-card-title>
-      <h3 class="text-h4 mb-4">
-        Review the breakdown of the {{ application }} application
-      </h3>
+      <p class="text-h3 text--primary">
+        <span class="font-weight-light pr-1"
+          >Review the breakdown of</span
+        >
+        {{ applicationName }}
+      </p>
       <br />
       <v-spacer></v-spacer>
       <v-btn icon large color="green" class="px-4" @click="refresh()">

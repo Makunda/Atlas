@@ -13,6 +13,7 @@ class CloudExtensionRoute implements Route {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/extension/all`, this.recoController.getCloudExtensionList);
+    this.router.post(`${this.path}/extension/run`, this.recoController.executeExtension);
   }
 }
 

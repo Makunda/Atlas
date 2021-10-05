@@ -4,9 +4,9 @@
       <v-card width="100%">
         <v-card-text>
           <p class="text-h3 text--primary">
-            Cloud extensions
+            <span class="font-weight-light pr-1">Cloud extensions on</span> {{ application }}
           </p>
-          <div class="text--subtitle">
+          <div class="text--subtitle py-5">
             Get automatic recommendations on how to migrate an application to a
             specific cloud service
           </div>
@@ -27,7 +27,7 @@
           hide-default-footer
         >
           <template v-slot:header>
-            <v-toolbar dark color="charcoal" class="mb-1">
+            <v-toolbar dark color="charcoal" class="mb-4">
               <v-text-field
                 v-model="search"
                 clearable
@@ -93,8 +93,10 @@
                     <div class="text--primary">{{ item.description }}"</div>
                   </v-card-text>
 
-                  <v-card-actions  class="d-flex justify-center pa-5"> 
-                      <v-btn color="success">Analyze the application</v-btn>
+                  <v-card-actions class="d-flex justify-center pa-5">
+                    <v-btn color="success" @click="openModal(item)"
+                      >Analyze the application</v-btn
+                    >
                   </v-card-actions>
                 </v-card>
               </v-col>
@@ -160,17 +162,42 @@
         </v-data-iterator>
       </v-container>
     </v-row>
+
+    <!-- Modal section -->
+    <CloudExecutionModal
+      :dialog="showModal"
+      :application="application"
+      :title="selectedExtension.name"
+      :description="selectedExtension.fullDescription"
+      v-on:Close="showModal = false"
+      v-on:Run="runExtension"
+    />
+
+    <ProgressModal
+      :dialog="showProgressModal"
+      :title="selectedExtension.name"
+    />
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import CloudRecoController from "@/api/cloud/recommendations/CloudRecoController";
+import CloudExecutionModal from "../components/CloudExecutionModal.vue";
+import ProgressModal from "../components/ProgressModal.vue";
+import Extension from "@/api/interface/cloud/recommendations/Extension";
+import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({
   name: "CloudExtensions",
 
+  components: {
+    CloudExecutionModal,
+    ProgressModal
+  },
+
   mounted() {
+    this.application = this.$store.state.applicationName;
     this.getExtensions();
   },
 
@@ -180,6 +207,10 @@ export default Vue.extend({
     },
     filteredKeys() {
       return this.keys.filter(key => key !== "Name");
+    },
+
+    getApplicationName() {
+      return this.$store.state.applicationName;
     }
   },
   methods: {
@@ -205,10 +236,52 @@ export default Vue.extend({
       } finally {
         this.loadingExtensions = true;
       }
+    },
+
+    /** Modal  */
+
+    openModal(extension: Extension) {
+      this.selectedExtension = extension;
+      this.showModal = true;
+    },
+
+    async runExtension() {
+      this.showModal = false;
+
+      // Must select an extension
+      if (!this.selectedExtension.id) return;
+
+      this.showProgressModal = true;
+
+      try {
+        // Run the extension using the application and its Id
+        await CloudRecoController.runExtension(
+          this.selectedExtension.id,
+          this.application
+        );
+        flash.commit("add", {
+          type: FlashType.SUCCESS,
+          title: "Succesful operation.",
+          body: `The execution of the ${this.selectedExtension.name} is done.`
+        });
+      } catch (error) {
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to get cloud recommendations extensions.",
+          body: error
+        });
+        console.log("Failed to execute the extension.", error);
+      } finally {
+        this.showProgressModal = false;
+      }
     }
   },
 
   data: () => ({
+    // Default
+    application: "" as string,
+
+    // Data iterator
     itemsPerPageArray: [20, 40, 100],
     search: "",
     filter: {},
@@ -220,7 +293,20 @@ export default Vue.extend({
     extensions: [],
 
     loadingExtensions: false,
-    errorExtension: ""
-  })
+    errorExtension: "",
+
+    // Extension modal
+    showModal: false,
+    selectedExtension: {} as Extension,
+
+    // Progress bar modal
+    showProgressModal: false
+  }),
+
+  watch: {
+    getApplicationName(old, newApp) {
+      this.application = newApp;
+    }
+  }
 });
 </script>

@@ -63,7 +63,7 @@ export class ObsolescenceController {
   public static async applyBlockers(
     blockers: OssRecommendation[],
     taggingType: string
-  ): Promise<OssRecommendation[]> {
+  ): Promise<[OssRecommendation[], OssRecommendation[]]> {
     const url = this.apiBaseUrl + "apply/blockers";
 
     try {
@@ -76,9 +76,19 @@ export class ObsolescenceController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as OssRecommendation[];
+
+        let applied: OssRecommendation[] = [];
+        let notApplied: OssRecommendation[] = [];
+
+        if (apiResponse.data && Array.isArray(apiResponse.data.applied)) {
+          applied = apiResponse.data.applied as OssRecommendation[];
         }
+
+        if (apiResponse.data && Array.isArray(apiResponse.data.notApplied)) {
+          notApplied = apiResponse.data.notApplied as OssRecommendation[];
+        }
+
+        return [applied, notApplied];
       } else {
         throw new Error(
           `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`
@@ -103,7 +113,7 @@ export class ObsolescenceController {
    */
   public static async testBlocker(
     blocker: OssRecommendation
-  ): Promise<OssRecommendation[]> {
+  ): Promise<[OssRecommendation[], OssRecommendation[]]> {
     const url = this.apiBaseUrl + "test/blockers";
 
     try {
@@ -115,9 +125,19 @@ export class ObsolescenceController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as OssRecommendation[];
+
+        let applied: OssRecommendation[] = [];
+        let notApplied: OssRecommendation[] = [];
+
+        if (apiResponse.data && Array.isArray(apiResponse.data.applied)) {
+          applied = apiResponse.data.applied as OssRecommendation[];
         }
+
+        if (apiResponse.data && Array.isArray(apiResponse.data.notApplied)) {
+          notApplied = apiResponse.data.notApplied as OssRecommendation[];
+        }
+
+        return [applied, notApplied];
       } else {
         throw new Error(
           `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`

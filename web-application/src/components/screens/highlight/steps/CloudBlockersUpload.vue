@@ -1,10 +1,10 @@
 <template>
   <v-card>
     <v-card-title>
-      <h3 class="text-h4">
-        Inject <strong>Cloud blockers</strong> into
-        {{ application }} application.
-      </h3>
+      <p class="text-h3 text--primary pb-3">
+        <span class="font-weight-light pr-1">Inject Cloud blockers into</span>
+        {{ application }}
+      </p>
       <v-spacer></v-spacer>
       <v-btn class="mr-5" icon color="green" @click="refresh">
         <v-icon>mdi-cached</v-icon>
@@ -102,21 +102,23 @@
                     <v-container>
                       <v-row> </v-row>
                       <v-row>
-                        <v-col cols="2">
-                          <p>
-                            <span class="subtitle-1">Modify file path:</span>
-                          </p>
+                        <v-col  cols="12" md="3">
+                          <v-subheader
+                            >Modify file path by removing the beginning of the
+                            path:</v-subheader
+                          >
                         </v-col>
-                        <v-col cols="6">
+                        <v-col  cols="10" md="7">
                           <v-text-field
                             v-model="defaultReplacement"
-                            label="Regex to be removed"
+                            label="Remove the beginnning of the file property"
+                            hint="C:\User\ABC\myApplication\..."
                             multiple
                             chips
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="3">
-                          <v-btn color="success" @click="removeBeginning"
+                        <v-col cols="2" md="2">
+                          <v-btn color="success" @click="removeBeginning" block
                             >Remove beginnning</v-btn
                           >
                         </v-col>
@@ -124,12 +126,13 @@
 
                       <!-- Replacement  -->
                       <v-row>
-                        <v-col cols="2">
-                          <p>
-                            <span class="subtitle-1">Modify file path:</span>
-                          </p>
+                        <v-col  cols="12" md="3">
+                          <v-subheader
+                            >Modify file path using regular expression ( only
+                            one group is accepted ):
+                          </v-subheader>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col  cols="10" md="7">
                           <v-text-field
                             v-model="defaultRegex"
                             label="Regular expression to modify file fields"
@@ -137,8 +140,8 @@
                             chips
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="3">
-                          <v-btn color="success" @click="processTags"
+                        <v-col cols="2" md="2">
+                          <v-btn color="success" @click="processTags" block
                             >Apply regex</v-btn
                           >
                         </v-col>
@@ -146,12 +149,13 @@
 
                       <!-- Filter Technology -->
                       <v-row>
-                        <v-col cols="2">
-                          <p>
-                            <span class="subtitle-1">Filter</span>
-                          </p>
+                        <v-col cols="12" md="3">
+                          <v-subheader>
+                          Filter the cloud blockers based on their tehcnology or
+                          type of recommendation:
+                          </v-subheader>
                         </v-col>
-                        <v-col cols="5">
+                        <v-col cols="10" md="4">
                           <v-autocomplete
                             v-model="valuesTechnologies"
                             :items="itemsTechnologies"
@@ -163,7 +167,7 @@
                             multiple
                           ></v-autocomplete>
                         </v-col>
-                        <v-col cols="5">
+                        <v-col cols="12" md="4">
                           <v-autocomplete
                             v-model="valuesRecommendations"
                             :items="itemsRecommendations"
@@ -174,6 +178,22 @@
                             label="Filter Recommendations"
                             multiple
                           ></v-autocomplete>
+                        </v-col>
+                      </v-row>
+
+                      <!-- Type of creation  -->
+                      <v-row>
+                        <v-col cols="12" md="3">
+                          <v-subheader>Choose the type of tagging</v-subheader>
+                        </v-col>
+                        <v-col cols="12" md="5">
+                          <v-radio-group v-model="taggingType" row>
+                            <v-radio label="Regular Tag" value="tag"></v-radio>
+                            <v-radio
+                              label="Document"
+                              value="document"
+                            ></v-radio>
+                          </v-radio-group>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -267,13 +287,14 @@
               <v-card-text>
                 <v-container>
                   <v-row v-if="loadingApply" class="d-flex flex-column">
-                    <p class="text-h3">Applying tags on {{ application }}...</p>
+                    <p class="text-h3">Applying {{ taggingType }}s on {{ application }}...</p>
                     <v-progress-linear
-                      class="mt-4"
+                      class="mt-4 mb-2"
+                      height="6"
                       :value="percentageTagsApplied"
                     ></v-progress-linear>
                     <p class="text-h5">
-                      {{ sizeSent }} tags applied on {{ sizeToSend }}
+                      {{ sizeSent }} {{ taggingType }}s applied on {{ sizeToSend }}
                     </p>
                     <p class="text-h5">{{ blockerNotApplied.length }} Errors</p>
                   </v-row>
@@ -282,7 +303,7 @@
                     <v-container>
                       <v-row>
                         <p class="text-h3">
-                          {{ sizeSent - blockerNotApplied.length }} Tags were
+                          {{ sizeSent - blockerNotApplied.length }} {{ taggingType }}s were
                           applied
                         </p>
                       </v-row>
@@ -295,7 +316,43 @@
                   </v-row>
 
                   <!-- Error -->
-                  <v-row v-if="!loadingApply && errorApplying !== ''"> </v-row>
+                  <!-- Errors -->
+                  <v-row
+                    class="mt-3"
+                    v-if="blockerNotApplied && blockerNotApplied.length > 0"
+                  >
+                    <p>
+                      <span class="text-h5"
+                        >Review blockers that have not been applied</span
+                      ><br />
+                      There are several different reasons that can explain the
+                      errors here. <br />
+                      Some file types will be processed by CAST Highlight (such
+                      as configuration files) but will not exist in the in the
+                      CAST Imaging ecosystem. In addition, the path to these
+                      files files (for XML, Cobol, etc.) may be absolute and
+                      depend on where this application has been where this
+                      application was parsed. <br />
+                      To solve this To solve this problem, you can rerun this
+                      process and modify the path of these elements with a
+                      regular expression. these elements with a regular
+                      expression. You just have to remove the beginning of this
+                      absolute path so that it only matches the structure the
+                      structure of the application folder.
+                    </p>
+                    
+                      <!-- Data table to display the errors  -->
+                      <v-data-table
+                        max-height="500px"
+                        style="width: 100%;"
+                        :headers="headers"
+                        :items="blockerNotApplied"
+                        dense
+                        item-key="id"
+                        class="elevation-1"
+                      >
+                      </v-data-table>
+                  </v-row>
                 </v-container>
               </v-card-text>
             </v-card>
@@ -328,8 +385,8 @@
 <script lang="ts">
 import Vue from "vue";
 import CloudBlocker from "@/api/interface/highlight/CloudBlocker";
-import { HighlightController } from "@/api/highlight/HighlightController";
-import flash, { FlashType } from '@/modules/flash/Flash';
+import { CloudBlockersController } from "@/api/highlight/CloudBlockersController";
+import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({
   name: "CloudBockersUpload",
@@ -346,6 +403,7 @@ export default Vue.extend({
     file: null,
 
     search: "",
+    taggingType: "tag",
 
     // filters
     valuesTechnologies: [] as string[],
@@ -420,8 +478,11 @@ export default Vue.extend({
           const batch = this.blockerDisplayedList.slice(index, upBound);
 
           // Send batch
-          const noApplied = await HighlightController.applyBlockers(batch);
-          this.blockerNotApplied = this.blockerNotApplied.concat(noApplied);
+          const [applied, notApplied] = await CloudBlockersController.applyBlockers(
+            batch,
+            this.taggingType
+          );
+          this.blockerNotApplied = this.blockerNotApplied.concat(notApplied);
 
           this.sizeSent = upBound;
           this.percentageTagsApplied = (100 * index) / this.sizeToSend;
@@ -446,8 +507,6 @@ export default Vue.extend({
           this.valuesRecommendations.indexOf(x.requirement) >= 0
         );
       });
-
-      this.processTags();
     },
 
     refresh() {
@@ -478,7 +537,7 @@ export default Vue.extend({
         if (this.file == null) return;
         if (this.application == null) return;
 
-        this.blockerList = await HighlightController.uploadFile(
+        this.blockerList = await CloudBlockersController.uploadFile(
           this.file,
           this.application
         );
@@ -582,7 +641,7 @@ export default Vue.extend({
 
 <style scoped>
 .v-stepper__header {
-  background-color: #425B66 !important;
+  background-color: #425b66 !important;
   border-bottom: 6px solid #2a9d8f;
   color: white !important;
 }
@@ -594,6 +653,5 @@ export default Vue.extend({
 
 .theme--light.v-stepper .v-stepper__label {
   color: white !important;
-  
 }
 </style>

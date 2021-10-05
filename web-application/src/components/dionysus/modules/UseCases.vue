@@ -2,9 +2,9 @@
   <v-container>
     <v-card width="100%">
       <v-card-title>
-        <h3 class="text-h4 my-3">
-          Use Cases Manager
-        </h3>
+        <p class="text-h3 text--primary3 pb-3">
+        <span class="font-weight-light pr-1">Use Cases Manager </span>
+      </p>
         <v-spacer></v-spacer>
         <v-btn icon color="green" @click="refresh">
           <v-icon>mdi-cached</v-icon>

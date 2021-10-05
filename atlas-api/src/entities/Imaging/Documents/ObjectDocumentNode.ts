@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import { logger } from "@shared/Logger";
 import { Neo4jError } from "neo4j-driver";
 import DocumentNode, { DocumentType } from "./DocumentNode";
 
@@ -47,7 +48,7 @@ export default class ObjectDocumentNode extends DocumentNode {
     // Verify no document exists in the application with the same title
     const reqFind =
       `MATCH (o:\`${this.application}\`:${DocumentNode.DOCUMENT_LABEL}) ` +
-      "WHERE o.Title=$title AND o.ViewType=$ViewType RETURN o.Nodes as nodes LIMIT 1";
+      "WHERE o.Title=$title AND o.ViewType=$viewType RETURN o.Nodes as nodes LIMIT 1";
 
     try {
       results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqFind, params);

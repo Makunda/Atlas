@@ -51,7 +51,7 @@ import Vue from "vue/types/umd";
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item
                     v-bind="attrs"
-                    v-on="on && !onlineDatabase"
+                    v-on="on"
                     link
                     @click="simpleHealthCheck()"
                   >
@@ -83,11 +83,12 @@ import Vue from "vue/types/umd";
           class="ml-15 text--white top-toolbar"
           color="charcoal"
           dark
-          height="70px"
+          height="80px"
           min-width="50px"
         >
           <v-toolbar-title class="ml-8 screen-title"
-            ><span style="color: #86A5B3; font-weight: 300">NASD</span> Atlas</v-toolbar-title
+            ><span style="color: #86A5B3; font-weight: 300">NASD</span>
+            Atlas</v-toolbar-title
           >
           <v-spacer></v-spacer>
 
@@ -154,14 +155,14 @@ export default Vue.extend({
   },
 
   async mounted() {
-    // Get correct view 
+    // Get correct view
     this.currentScreen = this.$store.state.currentView || "";
     const path = this.$route.path as string;
     const split = path.split("/");
 
     this.updateViewTab(split.length > 0 ? split[split.length - 1] : "");
 
-    // Get the application list 
+    // Get the application list
     await this.getApplicationList();
 
     // Verify if the user previously used an app
@@ -201,7 +202,7 @@ export default Vue.extend({
       { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" },
       { name: "Highlight Injection", screen: "highlight", icon: "mdi-needle" },
       //{ name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" },
-      { name: "Cloud Recommendation", screen: "cloudreco", icon: "mdi-fire" }
+      { name: "Cloud Recommendation", screen: "cloudReco", icon: "mdi-cloud" }
     ],
 
     loadingApplication: true as boolean,
@@ -225,10 +226,17 @@ export default Vue.extend({
 
     /** Change the state of the application **/
     changeApplication(application: string) {
-      this.applicationName = application;
-      this.$cookies.set(Cookie.APPLICATION_COOKIE, application, "3Od");
       // Update store properties
       this.$store.state.applicationName = application;
+
+      // Update cookies
+      this.applicationName = application;
+
+      try {
+        this.$cookies.set(Cookie.APPLICATION_COOKIE, application, "3Od");
+      } catch (error) {
+        console.error(`Failed to set ${Cookie.APPLICATION_COOKIE}.`, error);
+      }
     },
 
     /**
@@ -287,10 +295,14 @@ export default Vue.extend({
     },
 
     goTo(section: string, absolute = false) {
-      if (!absolute) {
-        this.$router.replace("/atlas/" + section);
-      } else {
-        this.$router.replace("/" + section);
+      try {
+        if (!absolute) {
+          this.$router.replace("/atlas/" + section);
+        } else {
+          this.$router.replace("/" + section);
+        }
+      } catch (err) {
+        // Ignored
       }
     },
 
@@ -300,8 +312,6 @@ export default Vue.extend({
     },
 
     updateViewTab(newView) {
-      console.debug("Looking for: ", newView);
-      
       for (let i = 0; i < this.items.length; i++) {
         if (this.items[i].screen == newView || this.items[i].name == newView) {
           // Found a view with a matching name

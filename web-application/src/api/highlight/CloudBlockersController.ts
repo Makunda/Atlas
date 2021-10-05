@@ -1,24 +1,21 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import flash, { FlashType } from "@/modules/flash/Flash";
-import OssRecommendation from "../interface/highlight/OssRecommendation";
+import CloudBlocker from "../interface/highlight/CloudBlocker";
 
-export class OSSController {
-  protected static relativeUrl = "oss/";
-  private static apiBaseUrl =
-    ApiComUtils.getUrl() +
-    "/api/highlight/recommendations/" +
-    OSSController.relativeUrl;
+export class CloudBlockersController {
+  private static API_BASE_URL = ApiComUtils.getUrl();
 
   /**
    * Get the url to generate the Paris export
    */
   public static async uploadFile(
     file: any,
-    application: string
-  ): Promise<OssRecommendation[]> {
-    const url = this.apiBaseUrl + `file/upload/blockers/${application}`;
+    application: string,
+  ): Promise<CloudBlocker[]> {
+    const url =
+      CloudBlockersController.API_BASE_URL +
+      `/api/highlight/recommendations/cloud/file/upload/blockers/${application}`;
 
     try {
       const formData = new FormData();
@@ -26,29 +23,24 @@ export class OSSController {
       formData.append("application", application);
       const res = await axios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as OssRecommendation[];
+          return apiResponse.data as CloudBlocker[];
         }
       } else {
         throw new Error(
-          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
-      flash.commit("add", {
-        type: FlashType.ERROR,
-        title: "Failed to send the list of recommendation.",
-        body: error
-      });
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -58,15 +50,17 @@ export class OSSController {
    * Apply a list of recommendation on the application
    */
   public static async applyBlockers(
-    blockers: OssRecommendation[],
-    taggingType: string
-  ): Promise<[OssRecommendation[], OssRecommendation[]]> {
-    const url = this.apiBaseUrl + "apply/blockers";
+    blockers: CloudBlocker[],
+    type: string,
+  ): Promise<[CloudBlocker[], CloudBlocker[]]> {
+    const url =
+      CloudBlockersController.API_BASE_URL +
+      "/api/highlight/recommendations/cloud/apply/blockers";
 
     try {
       const body = {
         blockers: blockers,
-        taggingType: taggingType
+        type: type,
       };
 
       const res = await axios.post(url, body);
@@ -74,32 +68,27 @@ export class OSSController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
 
-        let applied: OssRecommendation[] = [];
-        let notApplied: OssRecommendation[] = [];
+        let applied: CloudBlocker[] = [];
+        let notApplied: CloudBlocker[] = [];
 
         if (apiResponse.data && Array.isArray(apiResponse.data.applied)) {
-          applied = apiResponse.data.applied as OssRecommendation[];
+          applied = apiResponse.data.applied as CloudBlocker[];
         }
 
         if (apiResponse.data && Array.isArray(apiResponse.data.notApplied)) {
-          notApplied = apiResponse.data.notApplied as OssRecommendation[];
+          notApplied = apiResponse.data.notApplied as CloudBlocker[];
         }
 
         return [applied, notApplied];
       } else {
         throw new Error(
-          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
-      flash.commit("add", {
-        type: FlashType.ERROR,
-        title: "Failed to apply the list of recommendation.",
-        body: error
-      });
       console.error(
         `Failed to reach the API : ${url}. Failed to apply the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -109,13 +98,15 @@ export class OSSController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: OssRecommendation
-  ): Promise<OssRecommendation[]> {
-    const url = this.apiBaseUrl + "test/blockers";
+    blocker: CloudBlocker,
+  ): Promise<CloudBlocker[]> {
+    const url =
+      CloudBlockersController.API_BASE_URL +
+      "/api/highlight/recommendations/cloud/test/blockers";
 
     try {
       const body = {
-        blocker: blocker
+        blocker: blocker,
       };
 
       const res = await axios.post(url, body);
@@ -123,22 +114,17 @@ export class OSSController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as OssRecommendation[];
+          return apiResponse.data as CloudBlocker[];
         }
       } else {
         throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
-      flash.commit("add", {
-        type: FlashType.ERROR,
-        title: "Failed to test the recommendations.",
-        body: error
-      });
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }

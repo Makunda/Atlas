@@ -7,8 +7,8 @@
     >
     <v-card-subtitle></v-card-subtitle>
     <v-card-text>
-      <v-container fluid class="d-flex flex-row justify-space-around">
-        <v-row>
+      <v-container fluid >
+        <v-row class="d-flex flex-row ">
           <!--   Report Card    -->
           <v-hover v-slot:default="{ hover }">
             <v-card
@@ -16,6 +16,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              elevation="6"
               @click.stop="goTo('reports')"
             >
               <v-card-text>
@@ -45,6 +46,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              elevation="6"
               @click.stop="goTo('analysis')"
             >
               <v-card-text>
@@ -78,10 +80,11 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              elevation="6"
               @click.stop="goTo('tuning')"
             >
               <v-card-text>
-                <span class="text-h4 text--primary d-flex flex-row">
+                <span class="text-h4 text--primary d-flex flex-row ">
                   <v-icon x-large>mdi-graphql</v-icon>
                   <p
                     class="ml-4 mt-4"
@@ -111,6 +114,7 @@
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
               width="344"
+              elevation="6"
               @click.stop="goTo('reports')"
             >
               <v-card-text>
@@ -143,7 +147,8 @@
               :dark="hover"
               :color="hover ? 'persianGrey' : 'white'"
               class="ma-2"
-              width="344"
+              width="400"
+              elevation="6"
               @click.stop="goTo('highlight')"
             >
               <v-card-text>
@@ -159,6 +164,38 @@
                 <p>
                   Inject documents on Cloud readiness or Open source safety
                   coming from CAST Highlight
+                </p>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="goTo('highlight')">
+                  Go to section
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
+
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              :dark="hover"
+              :color="hover ? 'persianGrey' : 'white'"
+              class="ma-2"
+              width="500"
+              elevation="6"
+              @click.stop="goTo('cloudReco')"
+            >
+              <v-card-text>
+                <span class="text-h4 text--primary d-flex flex-row">
+                  <v-icon x-large>mdi-cloud</v-icon>
+                  <p
+                    class="ml-4 mt-4"
+                    :class="hover ? 'white--text' : 'black--text'"
+                  >
+                    Cloud recommendations
+                  </p>
+                </span>
+                <p>
+                  Get specific recommendations for an application based on the selected cloud service.
                 </p>
               </v-card-text>
               <v-card-actions>

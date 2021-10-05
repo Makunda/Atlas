@@ -1,9 +1,9 @@
 import axios from "axios";
 import { ApiComUtils } from "../ApiComUtils";
 import { ApiResponse } from "../interface/ApiResponse.interface";
-import CloudBlocker from "../interface/highlight/CloudBlocker";
+import ContainerBlocker from "../interface/highlight/ContainerBlocker";
 
-export class HighlightController {
+export default class ContainerBlockerController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   /**
@@ -11,11 +11,11 @@ export class HighlightController {
    */
   public static async uploadFile(
     file: any,
-    application: string
-  ): Promise<CloudBlocker[]> {
+    application: string,
+  ): Promise<ContainerBlocker[]> {
     const url =
-      HighlightController.API_BASE_URL +
-      `/api/highlight/recommendations/cloud/file/upload/blockers/${application}`;
+      ContainerBlockerController.API_BASE_URL +
+      `/api/highlight/recommendations/container/file/upload/blockers/${application}`;
 
     try {
       const formData = new FormData();
@@ -23,24 +23,24 @@ export class HighlightController {
       formData.append("application", application);
       const res = await axios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as CloudBlocker[];
+          return apiResponse.data as ContainerBlocker[];
         }
       } else {
         throw new Error(
-          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to send the list of container recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -50,33 +50,45 @@ export class HighlightController {
    * Apply a list of recommendation on the application
    */
   public static async applyBlockers(
-    blockers: CloudBlocker[]
-  ): Promise<CloudBlocker[]> {
+    blockers: ContainerBlocker[],
+    type: string,
+  ): Promise<[ContainerBlocker[], ContainerBlocker[]]> {
     const url =
-      HighlightController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/apply/blockers";
+      ContainerBlockerController.API_BASE_URL +
+      "/api/highlight/recommendations/container/apply/blockers";
 
     try {
       const body = {
-        blockers: blockers
+        blockers: blockers,
+        type: type,
       };
 
       const res = await axios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as CloudBlocker[];
+
+        let applied: ContainerBlocker[] = [];
+        let notApplied: ContainerBlocker[] = [];
+
+        if (apiResponse.data && Array.isArray(apiResponse.data.applied)) {
+          applied = apiResponse.data.applied as ContainerBlocker[];
         }
+
+        if (apiResponse.data && Array.isArray(apiResponse.data.notApplied)) {
+          notApplied = apiResponse.data.notApplied as ContainerBlocker[];
+        }
+
+        return [applied, notApplied];
       } else {
         throw new Error(
-          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to apply the list of container recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
-        `Failed to reach the API : ${url}. Failed to apply the list of recommendation .`,
-        error
+        `Failed to reach the API : ${url}. Failed to apply the list of container recommendation .`,
+        error,
       );
       throw error;
     }
@@ -86,15 +98,15 @@ export class HighlightController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: CloudBlocker
-  ): Promise<CloudBlocker[]> {
+    blocker: ContainerBlocker,
+  ): Promise<ContainerBlocker[]> {
     const url =
-      HighlightController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/test/blockers";
+      ContainerBlockerController.API_BASE_URL +
+      "/api/highlight/recommendations/container/test/blockers";
 
     try {
       const body = {
-        blocker: blocker
+        blocker: blocker,
       };
 
       const res = await axios.post(url, body);
@@ -102,17 +114,17 @@ export class HighlightController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as CloudBlocker[];
+          return apiResponse.data as ContainerBlocker[];
         }
       } else {
         throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }
