@@ -1,7 +1,6 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import ILevel from "@/api/interface/imaging/Level.interface";
+import Level from "@/api/interface/imaging/Level.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class LevelController {
@@ -11,7 +10,7 @@ export default class LevelController {
    * Retrieve the list of root levels in the applications
    * @param application Name of the application
    */
-  public static async getRootLevels(application: string): Promise<ILevel[]> {
+  public static async getRootLevels(application: string): Promise<Level[]> {
     const url =
       LevelController.API_BASE_URL + `/api/imaging/levels/roots/${application}`;
 
@@ -21,7 +20,7 @@ export default class LevelController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as ILevel[];
+          return apiResponse.data as Level[];
         }
       } else {
         console.warn(`Failed to retrieve root levels. Status (${res.status})`);
@@ -45,7 +44,7 @@ export default class LevelController {
   public static async findLevelByDepth(
     application: string,
     depth: number
-  ): Promise<ILevel[]> {
+  ): Promise<Level[]> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/byDepth/${application}/${depth}`;
@@ -56,7 +55,7 @@ export default class LevelController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as ILevel[];
+          return apiResponse.data as Level[];
         }
       } else {
         console.warn(
@@ -119,7 +118,7 @@ export default class LevelController {
   public static async findLevelByName(
     application: string,
     name: string
-  ): Promise<ILevel[]> {
+  ): Promise<Level[]> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/find/${application}/name`;
@@ -131,7 +130,7 @@ export default class LevelController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as ILevel[];
+          return apiResponse.data as Level[];
         }
       } else {
         console.warn(`Failed to retrieve root levels. Status (${res.status})`);
@@ -154,8 +153,8 @@ export default class LevelController {
    */
   public static async fetchChildren(
     application: string,
-    level: ILevel
-  ): Promise<ILevel[]> {
+    level: Level
+  ): Promise<Level[]> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/attached/${application}/${level._id}`;
@@ -166,7 +165,7 @@ export default class LevelController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as ILevel[];
+          return apiResponse.data as Level[];
         }
       } else {
         console.warn(
@@ -191,8 +190,8 @@ export default class LevelController {
    */
   public static async fetchParent(
     application: string,
-    level: ILevel
-  ): Promise<ILevel> {
+    level: Level
+  ): Promise<Level> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/parent/${application}/${level._id}`;
@@ -202,7 +201,7 @@ export default class LevelController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ILevel;
+        return apiResponse.data as Level;
       } else {
         throw new Error("Failed to fetch the parent levels");
       }
@@ -224,8 +223,8 @@ export default class LevelController {
   public static async createLevel(
     application: string,
     parentLevelID: number,
-    level: ILevel
-  ): Promise<ILevel> {
+    level: Level
+  ): Promise<Level> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/create/${application}`;
@@ -238,7 +237,7 @@ export default class LevelController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ILevel;
+        return apiResponse.data as Level;
       } else {
         throw new Error("Failed to create new levels");
       }
@@ -253,8 +252,8 @@ export default class LevelController {
 
   public static async updateLevel(
     application: string,
-    level: ILevel
-  ): Promise<ILevel> {
+    level: Level
+  ): Promise<Level> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/update/${application}/${level._id}`;
@@ -266,7 +265,7 @@ export default class LevelController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ILevel;
+        return apiResponse.data as Level;
       } else {
         throw new Error("Failed to create new levels");
       }
@@ -287,7 +286,7 @@ export default class LevelController {
   public static async getHiddenLevelByDepth(
     application: string,
     depth: number
-  ): Promise<ILevel[]> {
+  ): Promise<Level[]> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/hidden/byDepth/${application}/${depth}`;
@@ -298,7 +297,7 @@ export default class LevelController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as ILevel[];
+          return apiResponse.data as Level[];
         }
       } else {
         console.warn(`Failed to retrieve root levels. Status (${res.status})`);
@@ -321,8 +320,8 @@ export default class LevelController {
    */
   public static async unhideLevel(
     application: string,
-    level: ILevel
-  ): Promise<ILevel> {
+    level: Level
+  ): Promise<Level> {
     const url =
       LevelController.API_BASE_URL +
       `/api/imaging/levels/unhide/${application}`;
@@ -336,7 +335,7 @@ export default class LevelController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ILevel;
+        return apiResponse.data as Level;
       } else {
         throw new Error(`The API returned status : ${res.status}. ${res.data}`);
       }
@@ -356,8 +355,8 @@ export default class LevelController {
    */
   public static async hideLevel(
     application: string,
-    level: ILevel
-  ): Promise<ILevel> {
+    level: Level
+  ): Promise<Level> {
     const url =
       LevelController.API_BASE_URL + `/api/imaging/levels/hide/${application}`;
 
@@ -370,7 +369,7 @@ export default class LevelController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ILevel;
+        return apiResponse.data as Level;
       } else {
         throw new Error(`The API returned status : ${res.status}. ${res.data}`);
       }

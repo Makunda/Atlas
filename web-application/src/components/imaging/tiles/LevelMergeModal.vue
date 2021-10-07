@@ -75,7 +75,7 @@
 <script lang="ts">
 import Vue from "vue";
 import LevelController from "@/api/controllers/imaging/LevelController";
-import ILevel from "@/api/interface/imaging/Level.interface";
+import Level from "@/api/interface/imaging/Level.interface";
 
 export default Vue.extend({
   name: "LevelMergeModal",
@@ -92,12 +92,12 @@ export default Vue.extend({
 
   data() {
     return {
-      sourceLevel: {} as ILevel,
-      destinationLevels: [] as ILevel[],
+      sourceLevel: {} as Level,
+      destinationLevels: [] as Level[],
 
       search: null,
       select: null,
-      item: [] as ILevel[],
+      item: [] as Level[],
 
       // errors & loading merge
       loadingMerge: false,

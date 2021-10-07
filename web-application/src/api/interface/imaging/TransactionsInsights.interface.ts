@@ -1,4 +1,4 @@
-export default interface ITransactionsInsights {
+export default interface TransactionsInsights {
   minObject: number;
   maxObject: number;
   minTechnology: number;

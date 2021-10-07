@@ -1,7 +1,6 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { IFrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
+import { FrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class FrameworkAssistants {
@@ -29,7 +28,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of actions .`,
-        error,
+        error
       );
       throw error;
     }
@@ -58,7 +57,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of categories .`,
-        error,
+        error
       );
       throw error;
     }
@@ -68,14 +67,14 @@ export class FrameworkAssistants {
    * Get the list of assistant
    * @returns List of assistant
    */
-  public static async getAllAssistants(): Promise<IFrameworkAssistant[]> {
+  public static async getAllAssistants(): Promise<FrameworkAssistant[]> {
     const url =
       FrameworkAssistants.API_BASE_URL + "/api/assistants/frameworks/all";
 
     try {
       const res = await ProxyAxios.get(url);
 
-      let assistants: IFrameworkAssistant[] = [];
+      let assistants: FrameworkAssistant[] = [];
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -84,7 +83,7 @@ export class FrameworkAssistants {
         }
       } else {
         console.warn(
-          `Failed to get all the assistants. Status (${res.status})`,
+          `Failed to get all the assistants. Status (${res.status})`
         );
       }
 
@@ -92,7 +91,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to all the assistants.`,
-        error,
+        error
       );
       throw error;
     }
@@ -100,7 +99,7 @@ export class FrameworkAssistants {
 
   public static async newAssistant(
     category: string,
-    actions: string[],
+    actions: string[]
   ): Promise<boolean> {
     const url =
       FrameworkAssistants.API_BASE_URL + "/api/assistants/frameworks/new";
@@ -119,7 +118,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to create the assistant.`,
-        error,
+        error
       );
       throw error;
     }
@@ -144,7 +143,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete the assistant.`,
-        error,
+        error
       );
       throw error;
     }

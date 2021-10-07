@@ -1,6 +1,6 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
+import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export interface ApplicationRecord {
@@ -45,7 +45,7 @@ export class ApplicationController {
    */
   public static async getApplicationInsights(
     application: string
-  ): Promise<IApplicationInsights> {
+  ): Promise<ApplicationInsights> {
     const url =
       ApplicationController.API_BASE_URL +
       "/api/imaging/applications/insights/" +
@@ -56,7 +56,7 @@ export class ApplicationController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as IApplicationInsights;
+        return apiResponse.data as ApplicationInsights;
       } else {
         throw new Error(
           `Failed to retrieve insights for application with name ${application}.`

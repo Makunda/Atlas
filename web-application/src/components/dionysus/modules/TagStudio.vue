@@ -374,8 +374,8 @@
 </template>
 
 <script lang="ts">
-import { IGroup } from "@/api/interface/paris/group.interface";
-import { IUseCase } from "@/api/interface/paris/useCase.interface";
+import { Group } from "@/api/interface/paris/group.interface";
+import { UseCase } from "@/api/interface/paris/useCase.interface";
 import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
 import { GroupController } from "@/api/controllers/extensions/paris/GroupController";
 import { Vue } from "vue-property-decorator";
@@ -389,7 +389,7 @@ export default Vue.extend({
 
   data: () => ({
     // Use case Tree
-    usecases: [] as IUseCase[],
+    usecases: [] as UseCase[],
     useCasesTree: [],
     tree: [],
     activeItems: [],
@@ -439,7 +439,7 @@ export default Vue.extend({
 
     editMode: false,
     editedIndex: -1,
-    group: {} as IGroup,
+    group: {} as Group,
     recoForm: {},
 
     // Validation
@@ -457,7 +457,7 @@ export default Vue.extend({
     close() {
       this.editMode = false;
       this.$nextTick(() => {
-        this.group = Object.assign({}, {} as IGroup);
+        this.group = Object.assign({}, {} as Group);
         this.editedIndex = -1;
       });
     },
@@ -466,7 +466,7 @@ export default Vue.extend({
       this.dialogDelete = false;
       this.editMode = false;
       this.$nextTick(() => {
-        this.group = Object.assign({}, {} as IGroup);
+        this.group = Object.assign({}, {} as Group);
         this.editedIndex = -1;
       });
     },
@@ -493,7 +493,7 @@ export default Vue.extend({
       this.closeDelete();
     },
 
-    editItem(item: IGroup) {
+    editItem(item: Group) {
       this.validRequest = false;
       this.editMode = true;
       this.editedIndex = item.id;
@@ -514,7 +514,7 @@ export default Vue.extend({
       this.group.idUseCase = this.selectedUseCaseId;
       if (this.editedIndex > -1) {
         GroupController.editUseCase(this.group)
-          .then((res: IGroup) => {
+          .then((res: Group) => {
             this.textSnackBar = "Successfully updated the group.";
             this.snackbarInfo = true;
             this.initialize();
@@ -530,7 +530,7 @@ export default Vue.extend({
           });
       } else {
         GroupController.addGroup(this.group)
-          .then((res: IGroup) => {
+          .then((res: Group) => {
             this.textSnackBar = "Successfully added the group.";
             this.snackbarInfo = true;
             this.initialize();
@@ -547,7 +547,7 @@ export default Vue.extend({
       }
     },
 
-    async getChildren(item): Promise<IUseCase> {
+    async getChildren(item): Promise<UseCase> {
       item.children = await UseCaseController.getAttachedUseCase(item.id);
       for (const i in item.children) {
         item.children[i] = await this.getChildren(item.children[i]);
@@ -561,7 +561,7 @@ export default Vue.extend({
 
     getRootUseCase() {
       UseCaseController.getRootUseCase()
-        .then(async (res: IUseCase[]) => {
+        .then(async (res: UseCase[]) => {
           if (res) {
             this.useCasesTree = [];
             for (const i in res) {
@@ -576,7 +576,7 @@ export default Vue.extend({
 
     loadUseCase() {
       UseCaseController.getAllUseCase()
-        .then((useCases: IUseCase[]) => {
+        .then((useCases: UseCase[]) => {
           this.usecases = useCases;
         })
         .catch(err => {

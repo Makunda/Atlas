@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { AipSchema } from "@/api/interface/aip/AipSchema";
 import ProxyAxios from "@/api/utils/ProxyAxios";
@@ -13,7 +12,7 @@ export class AipSchemaController {
    */
   public static async createSchemaNode(
     configurationId: number,
-    schema: AipSchema,
+    schema: AipSchema
   ): Promise<void> {
     const url =
       AipSchemaController.API_BASE_URL +
@@ -25,7 +24,7 @@ export class AipSchemaController {
 
       if (res.status !== 200) {
         throw new Error(
-          `Failed to create the AIP Schema. Status : ${res.status}.`,
+          `Failed to create the AIP Schema. Status : ${res.status}.`
         );
       }
 
@@ -33,7 +32,7 @@ export class AipSchemaController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to create the AIP Schema.`,
-        error,
+        error
       );
     }
   }

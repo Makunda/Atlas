@@ -66,9 +66,7 @@
 </template>
 
 <script lang="ts">
-import {
-  Level5Group
-} from "@/api/controllers/extensions/demeter/GroupingController";
+import { Level5Group } from "@/api/controllers/extensions/demeter/GroupingController";
 import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
 import Vue from "vue";
 

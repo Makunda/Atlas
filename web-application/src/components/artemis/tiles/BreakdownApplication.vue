@@ -408,7 +408,7 @@
 import Vue from "vue";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { Artifact } from "@/api/interface/artemis/Artifact";
-import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
+import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
 import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";
 import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
@@ -448,7 +448,7 @@ export default Vue.extend({
     // Application information
     applicationName: "" as string,
     applicationInformation: null,
-    insights: {} as IApplicationInsights,
+    insights: {} as ApplicationInsights,
 
     // Group Name
     primaryGroupName: "",
@@ -632,7 +632,7 @@ export default Vue.extend({
     getApplicationInsights() {
       this.loadingCandidates = true;
       ApplicationController.getApplicationInsights(this.applicationName)
-        .then((res: IApplicationInsights) => {
+        .then((res: ApplicationInsights) => {
           this.insights = res;
         })
         .catch(err => {

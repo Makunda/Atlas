@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";

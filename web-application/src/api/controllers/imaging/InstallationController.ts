@@ -1,5 +1,4 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
@@ -23,7 +22,7 @@ export default class InstallationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get Imaging path.`,
-        error,
+        error
       );
       throw error;
     }
@@ -39,7 +38,7 @@ export default class InstallationController {
 
     try {
       const body = {
-        path: path,
+        path: path
       };
       const res = await ProxyAxios.post(url, body);
 
@@ -53,7 +52,7 @@ export default class InstallationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to set Imaging path.`,
-        error,
+        error
       );
       throw error;
     }
@@ -73,14 +72,14 @@ export default class InstallationController {
         return String(apiResponse.data);
       } else {
         console.warn(
-          `Failed to get Demeter Status. API Status (${res.status})`,
+          `Failed to get Demeter Status. API Status (${res.status})`
         );
         return `The API returned status code : ${res.status}.`;
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get Demeter Status.`,
-        error,
+        error
       );
       throw error;
     }
@@ -100,14 +99,14 @@ export default class InstallationController {
         return String(apiResponse.data);
       } else {
         console.warn(
-          `Failed to get Artemis Status. API Status (${res.status})`,
+          `Failed to get Artemis Status. API Status (${res.status})`
         );
         return `The API returned status code : ${res.status}.`;
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get artemis Status.`,
-        error,
+        error
       );
       throw error;
     }

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
@@ -19,7 +18,7 @@ export default class ConfigurationController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to retrieve the URI of Pythia. Status (${res.status})`,
+          `Failed to retrieve the URI of Pythia. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -41,7 +40,7 @@ export default class ConfigurationController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to set the URL of Pythia. Status (${res.status})`,
+          `Failed to set the URL of Pythia. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -63,7 +62,7 @@ export default class ConfigurationController {
         return Boolean(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to set the Token of Pythia. Status (${res.status})`,
+          `Failed to set the Token of Pythia. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -85,7 +84,7 @@ export default class ConfigurationController {
         return Boolean(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to retrieve the Token presence of Pythia. Status (${res.status})`,
+          `Failed to retrieve the Token presence of Pythia. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -107,7 +106,7 @@ export default class ConfigurationController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to retrieve the workspace of Artemis. Status (${res.status})`,
+          `Failed to retrieve the workspace of Artemis. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -117,7 +116,7 @@ export default class ConfigurationController {
   }
 
   public static async setArtemisWorkspace(
-    newWorkspace: string,
+    newWorkspace: string
   ): Promise<string> {
     const url =
       ConfigurationController.API_BASE_URL +
@@ -131,7 +130,7 @@ export default class ConfigurationController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to set the workspace of Artemis. Status (${res.status})`,
+          `Failed to set the workspace of Artemis. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -153,7 +152,7 @@ export default class ConfigurationController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to retrieve the workspace of Demeter. Status (${res.status})`,
+          `Failed to retrieve the workspace of Demeter. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -175,7 +174,7 @@ export default class ConfigurationController {
         return Boolean(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to set the internalMode of Artemis. Status (${res.status})`,
+          `Failed to set the internalMode of Artemis. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -197,7 +196,7 @@ export default class ConfigurationController {
         return Boolean(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to retrieve the internalMode of Artemis. Status (${res.status})`,
+          `Failed to retrieve the internalMode of Artemis. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -207,7 +206,7 @@ export default class ConfigurationController {
   }
 
   public static async setDemeterWorkspace(
-    newWorkspace: string,
+    newWorkspace: string
   ): Promise<string> {
     const url =
       ConfigurationController.API_BASE_URL +
@@ -221,7 +220,7 @@ export default class ConfigurationController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to set the workspace of Demeter. Status (${res.status})`,
+          `Failed to set the workspace of Demeter. Status (${res.status})`
         );
       }
     } catch (error) {

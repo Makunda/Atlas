@@ -1,9 +1,7 @@
-import axios from "axios";
-import { use } from "vue/types/umd";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { IGroup } from "@/api/interface/paris/group.interface";
-import { IUseCase } from "@/api/interface/paris/useCase.interface";
+import { Group } from "@/api/interface/paris/group.interface";
+import { UseCase } from "@/api/interface/paris/useCase.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class UseCaseController {
@@ -13,7 +11,7 @@ export class UseCaseController {
    * Get the version of the Demeter extension.
    * Throw an error if the extension is not installed
    */
-  public static async getAllUseCase(): Promise<IUseCase[]> {
+  public static async getAllUseCase(): Promise<UseCase[]> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/all";
 
     try {
@@ -22,11 +20,11 @@ export class UseCaseController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as IUseCase[];
+          return apiResponse.data as UseCase[];
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -34,7 +32,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -43,7 +41,7 @@ export class UseCaseController {
   /**
    * Get all the root use cases ( not attached to another one )
    */
-  public static async getRootUseCase(): Promise<IUseCase[]> {
+  public static async getRootUseCase(): Promise<UseCase[]> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/roots";
 
     try {
@@ -52,11 +50,11 @@ export class UseCaseController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as IUseCase[];
+          return apiResponse.data as UseCase[];
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -64,7 +62,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -74,7 +72,7 @@ export class UseCaseController {
    * Get all the attached use cases
    * @param id Id of the use case
    */
-  public static async getAttachedUseCase(id: number): Promise<IUseCase[]> {
+  public static async getAttachedUseCase(id: number): Promise<UseCase[]> {
     const url =
       UseCaseController.API_BASE_URL +
       "/api/paris/useCases/attached/" +
@@ -87,11 +85,11 @@ export class UseCaseController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as IUseCase[];
+          return apiResponse.data as UseCase[];
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -99,13 +97,13 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
   }
 
-  public static async getAttachedGroups(id: number): Promise<IGroup[]> {
+  public static async getAttachedGroups(id: number): Promise<Group[]> {
     const url =
       UseCaseController.API_BASE_URL +
       "/api/paris/useCases/attached/" +
@@ -118,11 +116,11 @@ export class UseCaseController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as IGroup[];
+          return apiResponse.data as Group[];
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -130,7 +128,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -140,7 +138,7 @@ export class UseCaseController {
    * Add a use case
    * @param useCase Use Case to add
    */
-  public static async addUseCase(useCase: IUseCase): Promise<IUseCase> {
+  public static async addUseCase(useCase: UseCase): Promise<UseCase> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/add";
 
     try {
@@ -148,7 +146,7 @@ export class UseCaseController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as IUseCase;
+        return apiResponse.data as UseCase;
       } else {
         console.warn(`Failed to add a use cases. Status (${res.status})`);
       }
@@ -157,7 +155,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -167,7 +165,7 @@ export class UseCaseController {
    * Delete
    * @param useCase Delete a use case
    */
-  public static async deleteUseCase(useCase: IUseCase): Promise<boolean> {
+  public static async deleteUseCase(useCase: UseCase): Promise<boolean> {
     const url =
       UseCaseController.API_BASE_URL +
       "/api/paris/useCases/delete/" +
@@ -184,7 +182,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -196,9 +194,9 @@ export class UseCaseController {
    * @param idParent Id of the parent use case
    */
   public static async addUseCaseWithParent(
-    useCase: IUseCase,
-    idParent: number,
-  ): Promise<IUseCase> {
+    useCase: UseCase,
+    idParent: number
+  ): Promise<UseCase> {
     const url =
       UseCaseController.API_BASE_URL + "/api/paris/useCases/addWithParent";
 
@@ -209,7 +207,7 @@ export class UseCaseController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as IUseCase;
+        return apiResponse.data as UseCase;
       } else {
         console.warn(`Failed to add a use cases. Status (${res.status})`);
       }
@@ -218,7 +216,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -232,8 +230,8 @@ export class UseCaseController {
    */
 
   public static async checkValidity(
-    request: IUseCase,
-    awaitedResult: number,
+    request: UseCase,
+    awaitedResult: number
   ): Promise<boolean> {
     const url =
       UseCaseController.API_BASE_URL + "/api/paris/useCases/check/validity";
@@ -250,7 +248,7 @@ export class UseCaseController {
         return Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to verify the validity of the request. Status (${res.status})`,
+          `Failed to verify the validity of the request. Status (${res.status})`
         );
       }
 
@@ -258,7 +256,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to verify the validity of the request.`,
-        error,
+        error
       );
       throw error;
     }
@@ -270,9 +268,9 @@ export class UseCaseController {
    * @param parentId Id of the parent (-1 for a root component )
    */
   public static async editUseCase(
-    useCase: IUseCase,
-    parentId: number,
-  ): Promise<IUseCase> {
+    useCase: UseCase,
+    parentId: number
+  ): Promise<UseCase> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/update";
 
     try {
@@ -283,7 +281,7 @@ export class UseCaseController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as IUseCase;
+        return apiResponse.data as UseCase;
       } else {
         console.warn(`Failed to update a use cases. Status (${res.status})`);
       }
@@ -292,7 +290,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a use cases.`,
-        error,
+        error
       );
       throw error;
     }

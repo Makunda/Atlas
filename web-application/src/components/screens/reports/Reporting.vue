@@ -215,7 +215,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import IGroupResult from "@/api/interface/paris/groupResult.interface";
+import GroupResult from "@/api/interface/paris/groupResult.interface";
 import { ReportController } from "@/api/controllers/reports/ReportController";
 import { ReportInterface } from "@/api/interface/reports/report.interface";
 
@@ -302,7 +302,7 @@ export default Vue.extend({
       this.reportGenerated = false;
       this.reportLoading = false;
       this.groupResultLoading = false;
-      this.groupResult = [] as IGroupResult[];
+      this.groupResult = [] as GroupResult[];
       this.loadReports();
     }
   },

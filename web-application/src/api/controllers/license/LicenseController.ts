@@ -1,9 +1,8 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import {
   LicenseInterface,
-  LicenseStatus,
+  LicenseStatus
 } from "@/api/interface/license/License.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
@@ -23,7 +22,7 @@ export class LicenseController {
         const apiResponse: ApiResponse = res.data;
         return {
           license: String(apiResponse.data),
-          status: LicenseStatus.VALID,
+          status: LicenseStatus.VALID
         };
       } else {
         console.warn(`Failed to retrieve the license. Status (${res.status})`);
@@ -50,7 +49,7 @@ export class LicenseController {
       if (res.status == 200) {
         return {
           license: String(license),
-          status: LicenseStatus.VALID,
+          status: LicenseStatus.VALID
         };
       } else {
         console.warn(`Failed to apply a new license. Status (${res.status})`);

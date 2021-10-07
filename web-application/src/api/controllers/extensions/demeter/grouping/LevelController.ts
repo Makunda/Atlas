@@ -2,7 +2,6 @@ import { ApiComUtils, validStatus } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.interface";
 import { Level5Group } from "@/api/interface/demeter/ApiLevel.interface";
-import axios from "axios";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class LevelController {

@@ -258,7 +258,7 @@ import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
 import { Framework } from "@/api/interface/artemis/Framework";
 import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
-import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
+import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
 
 export default Vue.extend({
   name: "ArtemisConsole",
@@ -538,7 +538,7 @@ export default Vue.extend({
     getApplicationInsights() {
       this.loadingCandidates = true;
       ApplicationController.getApplicationInsights(this.application)
-        .then((res: IApplicationInsights) => {
+        .then((res: ApplicationInsights) => {
           console.log("Insights :", res);
         })
         .catch(err => {

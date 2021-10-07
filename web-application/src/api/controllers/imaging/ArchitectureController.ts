@@ -1,5 +1,4 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import Archimodel from "@/api/interface/imaging/ArchiModel";
 import ProxyAxios from "@/api/utils/ProxyAxios";
@@ -87,7 +86,10 @@ export default class ArchitectureController {
       `/api/imaging/architectures/${type}/delete`;
 
     try {
-      const res = await ProxyAxios.post(url, { id: id, application: application });
+      const res = await ProxyAxios.post(url, {
+        id: id,
+        application: application
+      });
 
       if (res.status != 200) {
         throw new Error(
@@ -289,7 +291,10 @@ export default class ArchitectureController {
       `/api/imaging/architectures/archimodel/group/unassigned`;
 
     try {
-      const res = await ProxyAxios.post(url, { id: id, application: application });
+      const res = await ProxyAxios.post(url, {
+        id: id,
+        application: application
+      });
 
       if (res.status != 200) {
         throw new Error(

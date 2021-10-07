@@ -284,7 +284,7 @@
 
 <script lang="ts">
 import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
-import { IUseCase } from "@/api/interface/paris/useCase.interface";
+import { UseCase } from "@/api/interface/paris/useCase.interface";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -292,9 +292,9 @@ export default Vue.extend({
 
   data: () => ({
     active: null,
-    items: [] as IUseCase[],
-    open: null as IUseCase,
-    selected: null as IUseCase,
+    items: [] as UseCase[],
+    open: null as UseCase,
+    selected: null as UseCase,
 
     // Files
     files: [],
@@ -306,7 +306,7 @@ export default Vue.extend({
       categories: [],
       active: false,
       selected: false
-    } as IUseCase,
+    } as UseCase,
 
     defaultItem: {
       title: "",
@@ -314,7 +314,7 @@ export default Vue.extend({
       categories: [],
       active: false,
       selected: false
-    } as IUseCase,
+    } as UseCase,
 
     titleEditBox: "",
     contentDeleteBox: "",
@@ -331,9 +331,9 @@ export default Vue.extend({
   }),
 
   methods: {
-    async getChildren(item: IUseCase): Promise<IUseCase> {
+    async getChildren(item: UseCase): Promise<UseCase> {
       return await UseCaseController.getAttachedUseCase(item.id)
-        .then(async (res: IUseCase[]) => {
+        .then(async (res: UseCase[]) => {
           item.children = res;
 
           // Treat childrent
@@ -355,7 +355,7 @@ export default Vue.extend({
 
     getRootUseCase() {
       UseCaseController.getRootUseCase()
-        .then(async (res: IUseCase[]) => {
+        .then(async (res: UseCase[]) => {
           if (res) {
             this.items = [];
             for (const i in res) {
@@ -389,7 +389,7 @@ export default Vue.extend({
       this.dialog = true;
     },
 
-    editItem(item: IUseCase) {
+    editItem(item: UseCase) {
       this.titleEditBox = `Edit the use case : ${item.title}`;
       this.editedIndex = this.items.indexOf(item);
       this.parentUseCaseId = -1;
@@ -447,7 +447,7 @@ export default Vue.extend({
     save() {
       if (this.editedItem.id && this.editedItem.id > 0) {
         UseCaseController.editUseCase(this.editedItem, this.editParentUseCaseId)
-          .then((res: IUseCase) => {
+          .then((res: UseCase) => {
             this.textSnackBar = "Successfully updated the use case.";
             this.snackbarInfo = true;
             this.refresh();
@@ -461,7 +461,7 @@ export default Vue.extend({
           this.editedItem,
           this.parentUseCaseId
         )
-          .then((res: IUseCase) => {
+          .then((res: UseCase) => {
             this.textSnackBar = "Successfully attached a new use case.";
             this.snackbarInfo = true;
             this.refresh();
@@ -475,7 +475,7 @@ export default Vue.extend({
           this.editedItem,
           this.editParentUseCaseId
         )
-          .then((res: IUseCase) => {
+          .then((res: UseCase) => {
             this.textSnackBar = "Successfully added the use case.";
             this.snackbarInfo = true;
             this.refresh();

@@ -266,8 +266,8 @@ import {
   TagController,
   TagResult
 } from "@/api/controllers/extensions/demeter/TagController";
-import { IUseCase } from "@/api/interface/paris/useCase.interface";
-import { IGroup } from "@/api/interface/paris/group.interface";
+import { UseCase } from "@/api/interface/paris/useCase.interface";
+import { Group } from "@/api/interface/paris/group.interface";
 import { GroupController } from "@/api/controllers/extensions/paris/GroupController";
 import { ExportController } from "@/api/controllers/extensions/paris/ExportController";
 
@@ -289,7 +289,7 @@ export default Vue.extend({
     snackbarInfo: false,
     textSnackBar: "",
 
-    tree: [] as (IUseCase | IGroup)[],
+    tree: [] as (UseCase | Group)[],
     items: [],
     singleSelect: false,
     selected: [],
@@ -301,7 +301,7 @@ export default Vue.extend({
     tagResultList: [] as TagResult[],
     errorState: null as unknown,
     search: "",
-    focusedGroup: null as IGroup | null,
+    focusedGroup: null as Group | null,
 
     // Loadings
     loadingApplication: true as boolean,
@@ -317,7 +317,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async getChildren(item): Promise<IUseCase> {
+    async getChildren(item): Promise<UseCase> {
       item.children = await UseCaseController.getAttachedUseCase(item.id);
 
       for (const i in item.children) {
@@ -330,7 +330,7 @@ export default Vue.extend({
       return item;
     },
 
-    focusGroup(item: IGroup) {
+    focusGroup(item: Group) {
       this.focusedGroup = item;
     },
 
@@ -340,7 +340,7 @@ export default Vue.extend({
 
     getRootUseCase() {
       UseCaseController.getRootUseCase()
-        .then(async (res: IUseCase[]) => {
+        .then(async (res: UseCase[]) => {
           if (res) {
             this.items = [];
             for (const i in res) {
@@ -383,9 +383,9 @@ export default Vue.extend({
       this.loadingQueries = true;
 
       // Get selection, and filter tags
-      const toExecute: IGroup[] = this.tree.filter(x => {
-        return x && (x as IGroup) !== undefined && !x.isUseCase;
-      }) as IGroup[];
+      const toExecute: Group[] = this.tree.filter(x => {
+        return x && (x as Group) !== undefined && !x.isUseCase;
+      }) as Group[];
 
       console.log("ToExecute", toExecute);
       console.log(
@@ -409,9 +409,9 @@ export default Vue.extend({
     },
 
     getToExecuteSize() {
-      const toExecute: IGroup[] = this.tree.filter(x => {
-        return x && (x as IGroup) !== undefined && !x.isUseCase;
-      }) as IGroup[];
+      const toExecute: Group[] = this.tree.filter(x => {
+        return x && (x as Group) !== undefined && !x.isUseCase;
+      }) as Group[];
       return toExecute.length;
     },
 

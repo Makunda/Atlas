@@ -1,4 +1,4 @@
-export interface IFrameworkAssistant {
+export interface FrameworkAssistant {
   id: number;
   started: boolean;
   category: string;

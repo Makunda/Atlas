@@ -1,4 +1,4 @@
-export default interface IGroupResult {
+export default interface GroupResult {
   idGroup: number;
   objectConcerned: number;
   name: string;

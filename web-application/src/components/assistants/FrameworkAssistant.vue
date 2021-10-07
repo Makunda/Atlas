@@ -111,7 +111,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { FrameworkAssistants } from "@/api/controllers/extensions/atlas/FrameworkAssistantsController";
-import { IFrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
+import { FrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
 
 export default Vue.extend({
   name: "FrameworkAssistant",
@@ -131,7 +131,7 @@ export default Vue.extend({
     loadingAssistantCreation: false,
 
     loadingAssistants: false,
-    assistantsList: [] as IFrameworkAssistant[]
+    assistantsList: [] as FrameworkAssistant[]
   }),
 
   methods: {
@@ -166,7 +166,7 @@ export default Vue.extend({
     getListAssistants() {
       this.loadingAssistants = true;
       FrameworkAssistants.getAllAssistants()
-        .then((res: IFrameworkAssistant[]) => {
+        .then((res: FrameworkAssistant[]) => {
           this.assistantsList = res;
         })
         .catch(err => {
@@ -177,7 +177,7 @@ export default Vue.extend({
         });
     },
 
-    removeAssistant(assistant: IFrameworkAssistant) {
+    removeAssistant(assistant: FrameworkAssistant) {
       FrameworkAssistants.removeAssistant(assistant.id)
         .then(res => {
           this.getListAssistants();

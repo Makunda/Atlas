@@ -1,8 +1,7 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { IGroup } from "@/api/interface/paris/group.interface";
-import IGroupResult from "@/api/interface/paris/groupResult.interface";
+import { Group } from "@/api/interface/paris/group.interface";
+import GroupResult from "@/api/interface/paris/groupResult.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class GroupController {
@@ -12,21 +11,20 @@ export class GroupController {
    * Get the version of the Demeter extension.
    * Throw an error if the extension is not installed
    */
-  public static async getAllGroups(): Promise<IGroup[]> {
+  public static async getAllGroups(): Promise<Group[]> {
     const url = GroupController.API_BASE_URL + "/api/paris/groups/all";
 
     try {
       const res = await ProxyAxios.get(url);
-      let version: string;
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as IGroup[];
+          return apiResponse.data as Group[];
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of groups. Status (${res.status})`,
+          `Failed to retrieve the list of groups. Status (${res.status})`
         );
       }
 
@@ -34,7 +32,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of groups.`,
-        error,
+        error
       );
       throw error;
     }
@@ -44,7 +42,7 @@ export class GroupController {
    * Add a group
    * @param group Group to add
    */
-  public static async addGroup(group: IGroup): Promise<IGroup> {
+  public static async addGroup(group: Group): Promise<Group> {
     const url =
       GroupController.API_BASE_URL + "/api/paris/groups/addWithUseCase";
 
@@ -59,7 +57,7 @@ export class GroupController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as IGroup;
+        return apiResponse.data as Group;
       } else {
         console.warn(`Failed to add a groups. Status (${res.status})`);
       }
@@ -68,7 +66,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a groups.`,
-        error,
+        error
       );
       throw error;
     }
@@ -78,7 +76,7 @@ export class GroupController {
    * Delete
    * @param useCase Delete a use case
    */
-  public static async deleteGroup(group: IGroup): Promise<boolean> {
+  public static async deleteGroup(group: Group): Promise<boolean> {
     console.log("Tags", group);
     const url =
       GroupController.API_BASE_URL + "/api/paris/groups/delete/" + group.id;
@@ -94,7 +92,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a group with id:${group.id}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -106,9 +104,9 @@ export class GroupController {
    * @param idParent Id of the parent use case
    */
   public static async addGroupWithUseCase(
-    group: IGroup,
-    idUseCase: number,
-  ): Promise<IGroup> {
+    group: Group,
+    idUseCase: number
+  ): Promise<Group> {
     const url =
       GroupController.API_BASE_URL + "/api/paris/groups/addWithUseCase";
 
@@ -119,7 +117,7 @@ export class GroupController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as IGroup;
+        return apiResponse.data as Group;
       } else {
         console.warn(`Failed to add a group. Status (${res.status})`);
       }
@@ -128,7 +126,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a group.`,
-        error,
+        error
       );
       throw error;
     }
@@ -138,7 +136,7 @@ export class GroupController {
    * Edit a use case
    * @param useCase Use Case to add
    */
-  public static async editUseCase(group: IGroup): Promise<IGroup> {
+  public static async editUseCase(group: Group): Promise<Group> {
     const url = GroupController.API_BASE_URL + "/api/paris/groups/update";
 
     try {
@@ -146,7 +144,7 @@ export class GroupController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as IGroup;
+        return apiResponse.data as Group;
       } else {
         console.warn(`Failed to update a group. Status (${res.status})`);
       }
@@ -155,7 +153,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a group.`,
-        error,
+        error
       );
       throw error;
     }
@@ -169,7 +167,7 @@ export class GroupController {
    */
   public static async executeListGroupAsTag(
     application,
-    idList: IGroup[],
+    idList: Group[]
   ): Promise<number> {
     const url = GroupController.API_BASE_URL + "/api/paris/groups/execute";
 
@@ -177,7 +175,7 @@ export class GroupController {
       const body = {
         application: application,
         idList: idList,
-        executionType: "Tag",
+        executionType: "Tag"
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -187,28 +185,26 @@ export class GroupController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to execute the list of group with Ids : ${idList.join(
-            ", ",
-          )}.`,
+          `Failed to execute the list of group with Ids : ${idList.join(", ")}.`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to execute the list of group with Ids : ${idList.join(
-          ", ",
+          ", "
         )}..`,
-        error,
+        error
       );
       throw error;
     }
   }
 
-  public static async forecastAllGroups(application): Promise<IGroupResult[]> {
+  public static async forecastAllGroups(application): Promise<GroupResult[]> {
     const url = GroupController.API_BASE_URL + "/api/paris/groups/forecast";
 
     try {
       const body = {
-        application: application,
+        application: application
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -216,7 +212,7 @@ export class GroupController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as IGroupResult[];
+          return apiResponse.data as GroupResult[];
         }
       } else {
         throw new Error(`Failed with status ${status}.`);

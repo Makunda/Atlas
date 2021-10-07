@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/interface/ApiResponse.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
@@ -28,7 +27,7 @@ export class DemeterController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error,
+        error
       );
       throw error;
     }

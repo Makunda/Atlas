@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
@@ -25,7 +24,7 @@ export default class PythiaController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -50,7 +49,7 @@ export default class PythiaController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -72,13 +71,13 @@ export default class PythiaController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to retrieve the last pull forecast. Status (${res.status})`,
+          `Failed to retrieve the last pull forecast. Status (${res.status})`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to last pull forecast.`,
-        error,
+        error
       );
       throw error;
     }
@@ -102,7 +101,7 @@ export default class PythiaController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error,
+        error
       );
       throw error;
     }

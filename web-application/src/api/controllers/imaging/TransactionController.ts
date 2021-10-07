@@ -1,10 +1,9 @@
 // http://localhost:3000/api/imaging/transactions/number/unmasked/ACA
 
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import ITransaction from "@/api/interface/imaging/Transaction.interface";
-import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
+import Transaction from "@/api/interface/imaging/Transaction.interface";
+import TransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class TransactionController {
@@ -72,7 +71,7 @@ export default class TransactionController {
    */
   public static async getInsightsUnmaskedTransaction(
     application: string
-  ): Promise<ITransactionsInsights> {
+  ): Promise<TransactionsInsights> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/insights/unmasked/${application}`;
@@ -82,7 +81,7 @@ export default class TransactionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ITransactionsInsights;
+        return apiResponse.data as TransactionsInsights;
       } else {
         throw new Error(
           `Failed to get transactions insights. Status (${res.status})`
@@ -136,7 +135,7 @@ export default class TransactionController {
     end: number,
     sort: string,
     sortDesc: string
-  ): Promise<ITransaction[]> {
+  ): Promise<Transaction[]> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/batch/masked/${application}`;
@@ -154,7 +153,7 @@ export default class TransactionController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as ITransaction[];
+          return apiResponse.data as Transaction[];
         }
       } else {
         throw new Error(
@@ -183,7 +182,7 @@ export default class TransactionController {
     sort: string,
     sortDesc: string,
     filter?: Record<string, number>
-  ): Promise<ITransaction[]> {
+  ): Promise<Transaction[]> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/batch/unmasked/${application}`;
@@ -202,7 +201,7 @@ export default class TransactionController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as ITransaction[];
+          return apiResponse.data as Transaction[];
         }
       } else {
         throw new Error(
@@ -223,7 +222,7 @@ export default class TransactionController {
   public static async maskTransaction(
     application: string,
     transactionID: number
-  ): Promise<ITransaction> {
+  ): Promise<Transaction> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/mask/single`;
@@ -236,7 +235,7 @@ export default class TransactionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ITransaction;
+        return apiResponse.data as Transaction;
       } else {
         throw new Error(
           `Failed to get a batch of masked transactions. Status (${res.status}). Error: ${res.data.message}`
@@ -258,7 +257,7 @@ export default class TransactionController {
     application: string,
     transactionID: number,
     prefix: string
-  ): Promise<ITransaction> {
+  ): Promise<Transaction> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/pin/single`;
@@ -273,7 +272,7 @@ export default class TransactionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ITransaction;
+        return apiResponse.data as Transaction;
       } else {
         throw new Error(
           `Failed to pin a transaction. Status (${res.status}). Error: ${res.data.message}`
@@ -295,7 +294,7 @@ export default class TransactionController {
     application: string,
     transactionID: number,
     prefix: string
-  ): Promise<ITransaction> {
+  ): Promise<Transaction> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/unpin/single`;
@@ -310,7 +309,7 @@ export default class TransactionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ITransaction;
+        return apiResponse.data as Transaction;
       } else {
         throw new Error(
           `Failed to unpin a transaction. Status (${res.status}). Error: ${res.data.message}.`
@@ -332,7 +331,7 @@ export default class TransactionController {
     application: string,
     transactionID: number,
     name: string
-  ): Promise<ITransaction> {
+  ): Promise<Transaction> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/rename/single`;
@@ -347,7 +346,7 @@ export default class TransactionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ITransaction;
+        return apiResponse.data as Transaction;
       } else {
         throw new Error(
           `Failed to rename a transaction. Status (${res.status}). Error: ${res.data.message}`
@@ -367,7 +366,7 @@ export default class TransactionController {
   public static async maskTransactionWithFilter(
     application: string,
     filter: Record<string, unknown>
-  ): Promise<ITransaction> {
+  ): Promise<Transaction> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/mask/filter`;
@@ -380,7 +379,7 @@ export default class TransactionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ITransaction;
+        return apiResponse.data as Transaction;
       } else {
         throw new Error(
           `Failed to mask transactions with filter. Status (${res.status}). Error: ${res.data.message}`
@@ -400,7 +399,7 @@ export default class TransactionController {
   public static async unmaskTransaction(
     application: string,
     transactionID: number
-  ): Promise<ITransaction> {
+  ): Promise<Transaction> {
     const url =
       TransactionController.API_BASE_URL +
       `/api/imaging/transactions/unmask/single`;
@@ -413,7 +412,7 @@ export default class TransactionController {
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ITransaction;
+        return apiResponse.data as Transaction;
       } else {
         throw new Error(
           `Failed to a batch of masked transactions. Status (${res.status}). Error: ${res.data.message}.`

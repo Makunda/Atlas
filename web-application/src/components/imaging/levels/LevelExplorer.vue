@@ -361,7 +361,7 @@
 <script lang="ts">
 import Vue from "vue";
 import LevelController from "@/api/controllers/imaging/LevelController";
-import ILevel from "@/api/interface/imaging/Level.interface";
+import Level from "@/api/interface/imaging/Level.interface";
 import DemeterTile from "../../screens/imagingTuning/tiles/DemeterTile.vue";
 import LevelMergeModal from "@/components/imaging/tiles/LevelMergeModal.vue";
 
@@ -409,8 +409,8 @@ export default Vue.extend({
     colorPicker: {},
     editionType: "",
     dialog: false,
-    parentItem: null as ILevel,
-    editItem: {} as ILevel,
+    parentItem: null as Level,
+    editItem: {} as Level,
 
     // Hiding level
     hidingLevel: false
@@ -443,7 +443,7 @@ export default Vue.extend({
       this.mergeDialog = false;
     },
 
-    async editLevel(item: ILevel) {
+    async editLevel(item: Level) {
       this.parentItem = await LevelController.fetchParent(
         this.application,
         item
@@ -455,7 +455,7 @@ export default Vue.extend({
       this.dialog = true;
     },
 
-    createLevel(parentItem: ILevel) {
+    createLevel(parentItem: Level) {
       this.editionType = "Create ";
       this.parentItem = parentItem;
       this.editItem = {};
@@ -477,7 +477,7 @@ export default Vue.extend({
 
       if (this.editItem._id != -1) {
         LevelController.updateLevel(this.application, this.editItem)
-          .then((res: ILevel) => {
+          .then((res: Level) => {
             this.snackbarInfo = true;
             this.textSnackBar = "Successfully updated level.";
           })
@@ -498,7 +498,7 @@ export default Vue.extend({
           this.parentItem._id,
           this.editItem
         )
-          .then((res: ILevel) => {
+          .then((res: Level) => {
             this.snackbarInfo = true;
             this.textSnackBar = "Creation of level is a success.";
           })
@@ -516,7 +516,7 @@ export default Vue.extend({
       }
     },
 
-    async hideLevel(level: ILevel) {
+    async hideLevel(level: Level) {
       this.hidingLevel = true;
       try {
         await LevelController.hideLevel(this.application, level);
@@ -530,7 +530,7 @@ export default Vue.extend({
       }
     },
 
-    async unhideLevel(level: ILevel) {
+    async unhideLevel(level: Level) {
       this.hidingLevel = true;
       try {
         await LevelController.unhideLevel(this.application, level);
@@ -553,7 +553,7 @@ export default Vue.extend({
       this.selected = item;
     },
 
-    getLevelColor(level: ILevel) {
+    getLevelColor(level: Level) {
       // If hidden return grey
       if (level.hidden) return "grey";
 

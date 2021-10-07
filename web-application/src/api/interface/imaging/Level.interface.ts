@@ -1,4 +1,4 @@
-export default interface ILevel {
+export default interface Level {
   _id?: number;
   hidden?: boolean;
   concept: boolean;
@@ -9,5 +9,5 @@ export default interface ILevel {
   fullName: string;
   name: string;
   shade: string;
-  children?: ILevel[];
+  children?: Level[];
 }

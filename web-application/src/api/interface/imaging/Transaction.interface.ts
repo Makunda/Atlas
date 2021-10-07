@@ -1,4 +1,4 @@
-export default interface ITransaction {
+export default interface Transaction {
   _id?: number;
   count?: number;
   name: string;

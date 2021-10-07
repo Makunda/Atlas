@@ -1,4 +1,4 @@
-export interface IUseCase {
+export interface UseCase {
   id: number;
   title: string;
   parentId?: number;
@@ -6,5 +6,5 @@ export interface IUseCase {
   categories: string[];
   active: boolean;
   selected: boolean;
-  children?: IUseCase[];
+  children?: UseCase[];
 }

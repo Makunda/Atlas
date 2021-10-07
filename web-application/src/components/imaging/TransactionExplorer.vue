@@ -465,8 +465,8 @@
 <script lang="ts">
 import Vue from "vue";
 import TransactionController from "@/api/controllers/imaging/TransactionController";
-import ITransaction from "@/api/interface/imaging/Transaction.interface";
-import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
+import Transaction from "@/api/interface/imaging/Transaction.interface";
+import TransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
 import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 
 export default Vue.extend({
@@ -525,8 +525,8 @@ export default Vue.extend({
     numMaskedTransaction: 0,
 
     // Transactions displayed
-    displayedTransaction: [] as ITransaction[],
-    displayedMaskedTransaction: [] as ITransaction[],
+    displayedTransaction: [] as Transaction[],
+    displayedMaskedTransaction: [] as Transaction[],
 
     startIndexTransaction: 0,
     endIndexTransaction: 0,
@@ -548,7 +548,7 @@ export default Vue.extend({
     unmaskAllActionLoading: false,
 
     // Transaction Insight
-    transactionInsights: {} as ITransactionsInsights,
+    transactionInsights: {} as TransactionsInsights,
     rangeObject: [0, 20],
     rangeTechnology: [0, 20],
     technologySearch: [] as string[],
@@ -558,14 +558,14 @@ export default Vue.extend({
     // Transaction Rename
     modalRename: false,
     loadingRename: false,
-    toEditTransaction: {} as ITransaction
+    toEditTransaction: {} as Transaction
   }),
 
   methods: {
     /**
      *  Open the Rename modal for the transactions
      **/
-    openRenameModal(item: ITransaction) {
+    openRenameModal(item: Transaction) {
       this.toEditTransaction = Object.assign({}, item);
       this.modalRename = true;
     },
@@ -596,7 +596,7 @@ export default Vue.extend({
      * Check if the prefix is present in the Transaction Name
      * @param item
      */
-    containsPrefix(item: ITransaction): boolean {
+    containsPrefix(item: Transaction): boolean {
       try {
         return item.name.indexOf(this.pinPrefix) == 0;
       } catch (err) {
@@ -798,12 +798,12 @@ export default Vue.extend({
       return transactions;
     },
 
-    async maskTransaction(item: ITransaction) {
+    async maskTransaction(item: Transaction) {
       await TransactionController.maskTransaction(this.application, item._id);
       this.refresh();
     },
 
-    async pinTransaction(item: ITransaction) {
+    async pinTransaction(item: Transaction) {
       await TransactionController.pinTransaction(
         this.application,
         item._id,
@@ -812,7 +812,7 @@ export default Vue.extend({
       await this.refresh();
     },
 
-    async unpinTransaction(item: ITransaction) {
+    async unpinTransaction(item: Transaction) {
       await TransactionController.unpinTransaction(
         this.application,
         item._id,
@@ -821,7 +821,7 @@ export default Vue.extend({
       await this.refresh();
     },
 
-    async renameTransaction(item: ITransaction) {
+    async renameTransaction(item: Transaction) {
       await TransactionController.renameTransaction(
         this.application,
         item._id,
@@ -830,7 +830,7 @@ export default Vue.extend({
       await this.refresh();
     },
 
-    async unMaskTransaction(item: ITransaction) {
+    async unMaskTransaction(item: Transaction) {
       await TransactionController.unmaskTransaction(this.application, item._id);
       this.refresh();
     },

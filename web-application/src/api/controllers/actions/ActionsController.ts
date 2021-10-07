@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 
@@ -24,7 +23,7 @@ export class ActionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of Actions. Status (${res.status})`,
+          `Failed to retrieve the list of Actions. Status (${res.status})`
         );
         throw new Error(res.data.error);
       }
@@ -41,23 +40,23 @@ export class ActionController {
    */
   public static async executeAction(
     actionId: number,
-    application: string,
+    application: string
   ): Promise<boolean> {
     const url = ActionController.API_BASE_URL + "/api/atlas/actions/execute";
     try {
       const body = {
         id: actionId,
-        application: application,
+        application: application
       };
       const res = await ProxyAxios.post(url, body, {
-        responseType: "arraybuffer",
+        responseType: "arraybuffer"
       });
 
       if (res.status == 200) {
         return true;
       } else {
         console.warn(
-          `Failed to retrieve the execute the action. Status (${res.status})`,
+          `Failed to retrieve the execute the action. Status (${res.status})`
         );
         throw new Error(res.data.error);
       }

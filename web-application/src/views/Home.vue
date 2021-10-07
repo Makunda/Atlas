@@ -100,7 +100,7 @@
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
 import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
-import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
+import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import ActionsTile from "@/components/actions/ActionsTile.vue";
 import StatisticsHelper from "@/components/screens/statistics/tiles/StatisticsHelper.vue";
 import StatisticsColumn from "@/components/screens/statistics/StatisticsColumn.vue";
@@ -154,7 +154,7 @@ export default Vue.extend({
       if (this.application == "") return;
       this.loadingCandidate = true;
       ApplicationController.getApplicationInsights(this.application)
-        .then((res: IApplicationInsights) => {
+        .then((res: ApplicationInsights) => {
           this.insights = res;
         })
         .catch(err => {

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import { ReportInterface } from "@/api/interface/reports/report.interface";
@@ -23,7 +22,7 @@ export class ReportController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of Reports. Status (${res.status})`,
+          `Failed to retrieve the list of Reports. Status (${res.status})`
         );
         throw new Error(res.data.error);
       }
@@ -60,17 +59,17 @@ export class ReportController {
     reportId: number,
     nickName: string,
     application: string,
-    params: any,
+    params: any
   ): Promise<void> {
     const url = ReportController.API_BASE_URL + "/api/atlas/reports/generate";
     try {
       const body = {
         id: reportId,
         application: application,
-        parameters: params,
+        parameters: params
       };
       const res = await ProxyAxios.post(url, body, {
-        responseType: "arraybuffer",
+        responseType: "arraybuffer"
       });
 
       if (res.status == 200) {
@@ -78,12 +77,12 @@ export class ReportController {
 
         const file = new Blob([res.data], {
           type:
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"
         });
         this.saveFile(file, `${nickName}_in_${application}.xlsx`);
       } else {
         console.warn(
-          `Failed to retrieve the generate the report. Status (${res.status})`,
+          `Failed to retrieve the generate the report. Status (${res.status})`
         );
         throw new Error(res.data.error);
       }

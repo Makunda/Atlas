@@ -1,4 +1,4 @@
-export interface IApplicationInsights {
+export interface ApplicationInsights {
   name: string;
   levels5: string[];
   modules: string[];
