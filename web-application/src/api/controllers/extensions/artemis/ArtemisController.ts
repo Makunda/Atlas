@@ -1,7 +1,6 @@
-import axios from "axios";
-import { QueryResult } from "neo4j-driver";
-import { ApiComUtils } from "../../../ApiComUtils";
-import { ApiResponse } from "../../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class ArtemisFrameworkResult {
   name: string;
@@ -20,7 +19,7 @@ export class ArtemisController {
     const url = ArtemisController.API_BASE_URL + "/api/artemis/languages";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       let languageList: string[] = [];
 
       if (res.status == 200) {
@@ -36,7 +35,7 @@ export class ArtemisController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve pending operations.`,
-        error
+        error,
       );
     }
   }
@@ -49,7 +48,7 @@ export class ArtemisController {
       ArtemisController.API_BASE_URL + "/api/artemis/utils/mode/online";
 
     try {
-      const res = await axios.post(url, { mode: value });
+      const res = await ProxyAxios.post(url, { mode: value });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -57,13 +56,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`
+          `API returned status code '${res.status}'. ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to change the online mode parameter.",
-        error
+        error,
       );
       throw error;
     }
@@ -77,7 +76,7 @@ export class ArtemisController {
       ArtemisController.API_BASE_URL + "/api/artemis/utils/mode/online";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -85,13 +84,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`
+          `API returned status code '${res.status}'. ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to get the online mode of Artemis.",
-        error
+        error,
       );
       throw error;
     }
@@ -105,7 +104,7 @@ export class ArtemisController {
       ArtemisController.API_BASE_URL + "/api/artemis/utils/mode/repository";
 
     try {
-      const res = await axios.post(url, { mode: value });
+      const res = await ProxyAxios.post(url, { mode: value });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -113,13 +112,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`
+          `API returned status code '${res.status}'. ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to change the repository mode parameter.",
-        error
+        error,
       );
       throw error;
     }
@@ -134,7 +133,7 @@ export class ArtemisController {
       ArtemisController.API_BASE_URL + "/api/artemis/utils/mode/repository";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -142,13 +141,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`
+          `API returned status code '${res.status}'. ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to get the repository mode of Artemis.",
-        error
+        error,
       );
       throw error;
     }
@@ -178,10 +177,10 @@ export class ArtemisController {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.post(url, formData, {
+      const res = await ProxyAxios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.status == 200) {
@@ -189,13 +188,13 @@ export class ArtemisController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`
+          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to extract the Artifact list.`,
-        error
+        error,
       );
       throw error;
     }

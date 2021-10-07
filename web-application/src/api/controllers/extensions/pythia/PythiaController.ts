@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ApiComUtils } from "@/api/ApiComUtils";
-import PrefixController from "../PrefixController";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class PythiaController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -14,7 +14,7 @@ export default class PythiaController {
       PythiaController.API_BASE_URL + `/api/pythia/artemis/local/lastUpdate`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -25,7 +25,7 @@ export default class PythiaController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -39,7 +39,7 @@ export default class PythiaController {
       PythiaController.API_BASE_URL + `/api/pythia/artemis/remote/lastUpdate`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -50,7 +50,7 @@ export default class PythiaController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -65,20 +65,20 @@ export default class PythiaController {
       `/api/pythia/artemis/remote/forecast/pull`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       if (res.status == 200) {
         console.log("Response of pull forecast :", res.data);
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to retrieve the last pull forecast. Status (${res.status})`
+          `Failed to retrieve the last pull forecast. Status (${res.status})`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to last pull forecast.`,
-        error
+        error,
       );
       throw error;
     }
@@ -92,7 +92,7 @@ export default class PythiaController {
       PythiaController.API_BASE_URL + `/api/pythia/artemis/remote/pull`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
@@ -102,7 +102,7 @@ export default class PythiaController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error
+        error,
       );
       throw error;
     }

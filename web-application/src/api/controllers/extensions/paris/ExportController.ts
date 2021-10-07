@@ -1,6 +1,4 @@
-import axios from "axios";
-import { use } from "vue/types/umd";
-import { ApiComUtils } from "../../../ApiComUtils";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 
 export class ExportController {
   private static API_BASE_URL = ApiComUtils.getUrl();

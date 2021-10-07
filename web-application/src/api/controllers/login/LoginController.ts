@@ -1,7 +1,8 @@
 import flash, { FlashType } from "@/modules/flash/Flash";
-import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import CookieManager from "@/utils/CookieManager";
+import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiResponseImpl, ApiResponse } from "@/api/utils/ApiResponse";
 
 /**
  * Controller handling the login on the platform
@@ -23,16 +24,17 @@ export default class LoginController {
         username: username,
         password: password
       };
-      const res = await axios.post(url, body);
-      const apiResponse: ApiResponse = res.data;
 
-      if (res.status == 200) {
+      const response = (await ProxyAxios.post(url, body)) as ApiResponse;
+      const apiResponse = new ApiResponseImpl<string>(response);
+
+      if (apiResponse.isSuccess()) {
         // Store the token
-
+        CookieManager.setAuthCookie(apiResponse.getData());
         return true;
       } else {
         // The request failed, popup + log
-        console.error("Failed to login", apiResponse.errors);
+        console.error("Failed to login", apiResponse.getErrors());
         flash.commit("add", {
           type: FlashType.ERROR,
           title: "Failed to login.",
@@ -41,7 +43,7 @@ export default class LoginController {
         return false;
       }
     } catch (error) {
-      console.warn(`Failed to login.`, error);
+      console.error(`Failed to login.`, error);
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to login.",

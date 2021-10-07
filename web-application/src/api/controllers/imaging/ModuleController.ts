@@ -1,7 +1,8 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
-import Module from "../../interface/imaging/Module";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import Module from "@/api/interface/imaging/Module";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class ModuleController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -15,7 +16,7 @@ export default class ModuleController {
       ModuleController.API_BASE_URL + `/api/imaging/modules/all/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -48,7 +49,7 @@ export default class ModuleController {
       `/api/imaging/modules/all/${application}/hidden`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -80,7 +81,7 @@ export default class ModuleController {
 
     try {
       const body = { id: id };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -110,7 +111,7 @@ export default class ModuleController {
 
     try {
       const body = { id: id };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -140,7 +141,7 @@ export default class ModuleController {
 
     try {
       const body = { id: id };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -172,7 +173,7 @@ export default class ModuleController {
       const body: any = data;
       body.id = id;
 
-      const res = await axios.put(url, body);
+      const res = await ProxyAxios.put(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -211,7 +212,7 @@ export default class ModuleController {
         idDest: idDest
       };
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;

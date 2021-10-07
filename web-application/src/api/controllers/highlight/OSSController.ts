@@ -1,8 +1,9 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import flash, { FlashType } from "@/modules/flash/Flash";
-import OssRecommendation from "../../interface/highlight/OssRecommendation";
+import OssRecommendation from "@/api/interface/highlight/OssRecommendation";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class OSSController {
   protected static relativeUrl = "oss/";
@@ -16,7 +17,7 @@ export class OSSController {
    */
   public static async uploadFile(
     file: any,
-    application: string
+    application: string,
   ): Promise<OssRecommendation[]> {
     const url = this.apiBaseUrl + `file/upload/blockers/${application}`;
 
@@ -24,10 +25,10 @@ export class OSSController {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("application", application);
-      const res = await axios.post(url, formData, {
+      const res = await ProxyAxios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.status == 200) {
@@ -37,18 +38,18 @@ export class OSSController {
         }
       } else {
         throw new Error(
-          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to send the list of recommendation.",
-        body: error
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -59,17 +60,17 @@ export class OSSController {
    */
   public static async applyBlockers(
     blockers: OssRecommendation[],
-    taggingType: string
+    taggingType: string,
   ): Promise<[OssRecommendation[], OssRecommendation[]]> {
     const url = this.apiBaseUrl + "apply/blockers";
 
     try {
       const body = {
         blockers: blockers,
-        taggingType: taggingType
+        taggingType: taggingType,
       };
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -88,18 +89,18 @@ export class OSSController {
         return [applied, notApplied];
       } else {
         throw new Error(
-          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to apply the list of recommendation.",
-        body: error
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to apply the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -109,16 +110,16 @@ export class OSSController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: OssRecommendation
+    blocker: OssRecommendation,
   ): Promise<OssRecommendation[]> {
     const url = this.apiBaseUrl + "test/blockers";
 
     try {
       const body = {
-        blocker: blocker
+        blocker: blocker,
       };
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -127,18 +128,18 @@ export class OSSController {
         }
       } else {
         throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to test the recommendations.",
-        body: error
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }

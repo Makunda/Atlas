@@ -1,8 +1,8 @@
 import axios from "axios";
-import { ApiComUtils } from "../../../ApiComUtils";
-import { Category } from "../../../interface/ApiCategory.interface";
-import { ApiRegexNode } from "../../../interface/ApiRegexNode.interface";
-import { ApiResponse } from "../../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { Category } from "@/api/interface/ApiCategory.interface";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class CategoryController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -11,20 +11,20 @@ export class CategoryController {
     const url = CategoryController.API_BASE_URL + "/api/artemis/category";
 
     try {
-      const res = await axios.post(url, item);
+      const res = await ProxyAxios.post(url, item);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as Category;
       } else {
         throw new Error(
-          `Failed to add a Category Node. Status (${res.status}) : Error : ${res.data}`
+          `Failed to add a Category Node. Status (${res.status}) : Error : ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a Category Node..`,
-        error
+        error,
       );
       throw error;
     }
@@ -38,20 +38,20 @@ export class CategoryController {
     const url = CategoryController.API_BASE_URL + "/api/artemis/category";
 
     try {
-      const res = await axios.put(url, item);
+      const res = await ProxyAxios.put(url, item);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as Category;
       } else {
         throw new Error(
-          `Failed to update a Category Node. Status (${res.status}) : Error : ${res.data}`
+          `Failed to update a Category Node. Status (${res.status}) : Error : ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a Category Node..`,
-        error
+        error,
       );
       throw error;
     }
@@ -66,20 +66,20 @@ export class CategoryController {
       CategoryController.API_BASE_URL + `/api/artemis/category/${item.id}`;
 
     try {
-      const res = await axios.delete(url);
+      const res = await ProxyAxios.delete(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to delete a Category Node. Status (${res.status}) : Error : ${res.data}`
+          `Failed to delete a Category Node. Status (${res.status}) : Error : ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a Category Node..`,
-        error
+        error,
       );
       throw error;
     }
@@ -92,7 +92,7 @@ export class CategoryController {
     const url = CategoryController.API_BASE_URL + "/api/artemis/category/all";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       let results: Category[] = [];
       if (res.status == 200) {
@@ -103,13 +103,13 @@ export class CategoryController {
         return results;
       } else {
         throw new Error(
-          `Failed to retrieve the list of Category Nodes. Status (${res.status}) : Error : ${res.data}`
+          `Failed to retrieve the list of Category Nodes. Status (${res.status}) : Error : ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of Category Nodes..`,
-        error
+        error,
       );
       throw error;
     }

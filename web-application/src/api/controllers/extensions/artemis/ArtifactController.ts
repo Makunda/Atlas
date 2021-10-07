@@ -1,7 +1,8 @@
 import axios from "axios";
-import { ApiComUtils } from "../../../ApiComUtils";
-import { ApiResponse } from "../../../interface/ApiResponse.interface";
-import { Artifact } from "../../../interface/artemis/Artifact";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import { Artifact } from "@/api/interface/artemis/Artifact";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class ArtifactController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -15,7 +16,7 @@ export class ArtifactController {
   public static async getArtifactList(
     application: string,
     language: string,
-    external: boolean
+    external: boolean,
   ): Promise<Artifact[]> {
     const url =
       ArtifactController.API_BASE_URL +
@@ -23,10 +24,10 @@ export class ArtifactController {
 
     const data = {
       application: application,
-      language: language
+      language: language,
     };
     try {
-      const res = await axios.post(url, data);
+      const res = await ProxyAxios.post(url, data);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -35,13 +36,13 @@ export class ArtifactController {
         }
       } else {
         throw new Error(
-          `Failed to launch the breakdown of the application. Status (${res.status}). Message: ${res.data}.`
+          `Failed to launch the breakdown of the application. Status (${res.status}). Message: ${res.data}.`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. The breakdown failed.`,
-        error
+        error,
       );
       throw error;
     }
@@ -56,7 +57,7 @@ export class ArtifactController {
   public static async getArtifactAsTree(
     application: string,
     language: string,
-    external: boolean
+    external: boolean,
   ): Promise<Artifact[]> {
     const url =
       ArtifactController.API_BASE_URL +
@@ -64,10 +65,10 @@ export class ArtifactController {
 
     const data = {
       application: application,
-      language: language
+      language: language,
     };
     try {
-      const res = await axios.post(url, data);
+      const res = await ProxyAxios.post(url, data);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -76,13 +77,13 @@ export class ArtifactController {
         }
       } else {
         throw new Error(
-          `Failed to get the Artifact tree of the application. Status (${res.status}). Message: ${res.data}`
+          `Failed to get the Artifact tree of the application. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the Artifact tree.`,
-        error
+        error,
       );
       throw error;
     }
@@ -97,7 +98,7 @@ export class ArtifactController {
   public static buildQuery(
     application: string,
     frameworkName: string,
-    regex: string
+    regex: string,
   ): string {
     const tag: string = "$l_" + frameworkName;
     return (
@@ -115,13 +116,13 @@ export class ArtifactController {
 
   public static getFullNameRec(
     item: Artifact,
-    listArtifact: Artifact[]
+    listArtifact: Artifact[],
   ): string {
     let fullName = item.name + item.delimiter;
     let prev = item.parentId;
     while (prev > 0) {
       // find in list the parent
-      const newItem = listArtifact.find(x => x.id == prev);
+      const newItem = listArtifact.find((x) => x.id == prev);
       if (newItem) {
         fullName = newItem.name + newItem.delimiter + fullName;
         prev = newItem.parentId;
@@ -144,18 +145,18 @@ export class ArtifactController {
     tree: Artifact[],
     application: string,
     language: string,
-    external: boolean
+    external: boolean,
   ): Promise<string> {
     const listArtifact: Artifact[] = await this.getArtifactList(
       application,
       language,
-      external
+      external,
     );
 
     for (const key in tree) {
       const element = ArtifactController.getFullNameRec(
         tree[key],
-        listArtifact
+        listArtifact,
       );
       tree[key].name = element;
     }
@@ -169,7 +170,7 @@ export class ArtifactController {
       setRequest += this.buildQuery(
         application,
         tree[key].customName || tree[key].name,
-        tree[key].name + "*"
+        tree[key].name + "*",
       );
       setRequest += "<br /><br />";
     }
@@ -190,7 +191,7 @@ export class ArtifactController {
     extractionType: string,
     groupType: string,
     primaryGroupName: string,
-    secondaryGroupName: string
+    secondaryGroupName: string,
   ) {
     const url =
       ArtifactController.API_BASE_URL + `/api/artemis/artifacts/extract`;
@@ -201,23 +202,23 @@ export class ArtifactController {
       extractionType: extractionType,
       groupType: groupType,
       primaryGroupName: primaryGroupName,
-      secondaryGroupName: secondaryGroupName
+      secondaryGroupName: secondaryGroupName,
     };
     try {
-      const res = await axios.post(url, data);
+      const res = await ProxyAxios.post(url, data);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data;
       } else {
         throw new Error(
-          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`
+          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to extract the Artifact list.`,
-        error
+        error,
       );
       throw error;
     }

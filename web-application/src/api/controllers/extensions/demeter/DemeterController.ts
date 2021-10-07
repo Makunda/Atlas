@@ -1,6 +1,7 @@
 import axios from "axios";
-import { ApiComUtils } from "@/api/ApiComUtils";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/interface/ApiResponse.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class DemeterController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -13,7 +14,7 @@ export class DemeterController {
     const url = DemeterController.API_BASE_URL + "/api/demeter/utils/version";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       let version: string;
 
       if (res.status == 200) {
@@ -27,7 +28,7 @@ export class DemeterController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error
+        error,
       );
       throw error;
     }

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { ApiComUtils } from "../../../ApiComUtils";
-import { ApiResponse } from "../../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class AtlasController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -14,7 +15,7 @@ export class AtlasController {
       AtlasController.API_BASE_URL + "/api/atlas/extensions/demeter/version";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       let version: string;
 
       if (res.status == 200) {
@@ -28,7 +29,7 @@ export class AtlasController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error
+        error,
       );
       throw error;
     }
@@ -43,7 +44,7 @@ export class AtlasController {
       AtlasController.API_BASE_URL + "/api/atlas/extensions/artemis/version";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       let version: string;
 
       if (res.status == 200) {
@@ -57,7 +58,7 @@ export class AtlasController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error
+        error,
       );
       throw error;
     }

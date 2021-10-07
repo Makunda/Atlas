@@ -1,8 +1,9 @@
 import axios from "axios";
-import { ApiComUtils } from "@/api/ApiComUtils";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import flash, { FlashType } from "@/modules/flash/Flash";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import Extension from "@/api/interface/cloud/recommendations/Extension";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 /**
  * Managing the API calls related to Open source obsolescence
@@ -18,7 +19,7 @@ export default class CloudRecoController {
     const url = this.apiBaseUrl + "/extension/all";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -27,18 +28,18 @@ export default class CloudRecoController {
         }
       } else {
         throw new Error(
-          `Failed to get the cloud recommendations extensions. Status (${res.status}). Message: ${res.data}`
+          `Failed to get the cloud recommendations extensions. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to get cloud recommendations extensions.",
-        body: error
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to get cloud recommendations extensions.`,
-        error
+        error,
       );
       throw error;
     }
@@ -49,16 +50,16 @@ export default class CloudRecoController {
    */
   public static async runExtension(
     id: string,
-    application: string
+    application: string,
   ): Promise<any> {
     const url = this.apiBaseUrl + "/extension/run";
 
     try {
       const body = {
         id: id,
-        application: application
+        application: application,
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -67,18 +68,18 @@ export default class CloudRecoController {
         }
       } else {
         throw new Error(
-          `Failed to run the cloud recommendations extension. Status (${res.status}). Message: ${res.data}`
+          `Failed to run the cloud recommendations extension. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to run cloud recommendations extension.",
-        body: error
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to run the cloud recommendations extension.`,
-        error
+        error,
       );
       throw error;
     }

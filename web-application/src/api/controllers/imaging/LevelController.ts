@@ -1,7 +1,8 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import ILevel from "@/api/interface/imaging/Level.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class LevelController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -15,7 +16,7 @@ export default class LevelController {
       LevelController.API_BASE_URL + `/api/imaging/levels/roots/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -50,7 +51,7 @@ export default class LevelController {
       `/api/imaging/levels/byDepth/${application}/${depth}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -88,7 +89,7 @@ export default class LevelController {
       LevelController.API_BASE_URL + `/api/imaging/levels/merge/${application}`;
 
     try {
-      const res = await axios.post(url, {
+      const res = await ProxyAxios.post(url, {
         sourceId: sourceId,
         destinationId: destinationId
       });
@@ -125,7 +126,7 @@ export default class LevelController {
 
     try {
       const body = { name: name };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -160,7 +161,7 @@ export default class LevelController {
       `/api/imaging/levels/attached/${application}/${level._id}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -197,7 +198,7 @@ export default class LevelController {
       `/api/imaging/levels/parent/${application}/${level._id}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -233,7 +234,7 @@ export default class LevelController {
       const body: any = level;
       body.parentId = parentLevelID;
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -261,7 +262,7 @@ export default class LevelController {
     try {
       const body: any = level;
 
-      const res = await axios.put(url, body);
+      const res = await ProxyAxios.put(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -292,7 +293,7 @@ export default class LevelController {
       `/api/imaging/levels/hidden/byDepth/${application}/${depth}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -331,7 +332,7 @@ export default class LevelController {
         levelId: level._id
       };
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -365,7 +366,7 @@ export default class LevelController {
         levelId: level._id
       };
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;

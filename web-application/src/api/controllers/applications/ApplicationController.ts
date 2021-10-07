@@ -1,8 +1,7 @@
-import axios from "axios";
-import { QueryResult } from "neo4j-driver";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export interface ApplicationRecord {
   name: string;
@@ -16,7 +15,7 @@ export class ApplicationController {
       ApplicationController.API_BASE_URL + "/api/imaging/applications/all";
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       let applications: string[] = [];
 
       if (res.status == 200) {
@@ -53,7 +52,7 @@ export class ApplicationController {
       application;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -82,7 +81,7 @@ export class ApplicationController {
       application;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -111,7 +110,7 @@ export class ApplicationController {
       `/api/imaging/applications/levels/${application}/${depthLevel}/name`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;

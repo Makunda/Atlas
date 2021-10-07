@@ -1,5 +1,5 @@
 import { int, QueryResult } from "neo4j-driver";
-import { ApiComUtils } from "@/api/ApiComUtils";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
 
 export interface GroupRecord {

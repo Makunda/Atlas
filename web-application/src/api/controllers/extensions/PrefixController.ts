@@ -1,6 +1,7 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class PrefixController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -10,7 +11,7 @@ export default class PrefixController {
       PrefixController.API_BASE_URL + `/api/configuration/tags/${name}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       let tag: string;
 
       if (res.status == 200) {
@@ -24,7 +25,7 @@ export default class PrefixController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error
+        error,
       );
       throw error;
     }

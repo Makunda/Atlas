@@ -1,7 +1,8 @@
-import { ApiComUtils } from "@/api/ApiComUtils";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import Archimodel from "../../interface/imaging/ArchiModel";
+import Archimodel from "@/api/interface/imaging/ArchiModel";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class ArchitectureController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -18,7 +19,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/all/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -55,7 +56,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/${type}/hide`;
 
     try {
-      const res = await axios.post(url, { id: id });
+      const res = await ProxyAxios.post(url, { id: id });
 
       if (res.status != 200) {
         console.warn(
@@ -86,7 +87,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/${type}/delete`;
 
     try {
-      const res = await axios.post(url, { id: id, application: application });
+      const res = await ProxyAxios.post(url, { id: id, application: application });
 
       if (res.status != 200) {
         throw new Error(
@@ -116,7 +117,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/archimodel/generate/modules`;
 
     try {
-      const res = await axios.post(url, { id: id });
+      const res = await ProxyAxios.post(url, { id: id });
 
       if (res.status != 200) {
         throw new Error(
@@ -166,7 +167,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/${type}/display`;
 
     try {
-      const res = await axios.post(url, { id: id });
+      const res = await ProxyAxios.post(url, { id: id });
 
       if (res.status != 200) {
         throw new Error(
@@ -200,7 +201,7 @@ export default class ArchitectureController {
       const params: any = data;
       params.id = id;
 
-      const res = await axios.post(url, params);
+      const res = await ProxyAxios.post(url, params);
 
       if (res.status != 200) {
         throw new Error(
@@ -228,7 +229,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/archimodel/display/complete`;
 
     try {
-      const res = await axios.post(url, { id: id });
+      const res = await ProxyAxios.post(url, { id: id });
 
       if (res.status != 200) {
         throw new Error(
@@ -258,7 +259,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/archimodel/duplicate/byId`;
 
     try {
-      const res = await axios.post(url, { id: id, name: name });
+      const res = await ProxyAxios.post(url, { id: id, name: name });
 
       if (res.status != 200) {
         throw new Error(
@@ -288,7 +289,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/archimodel/group/unassigned`;
 
     try {
-      const res = await axios.post(url, { id: id, application: application });
+      const res = await ProxyAxios.post(url, { id: id, application: application });
 
       if (res.status != 200) {
         throw new Error(
@@ -318,7 +319,7 @@ export default class ArchitectureController {
       `/api/imaging/architectures/archimodel/duplicate/taxonomy`;
 
     try {
-      const res = await axios.post(url, {
+      const res = await ProxyAxios.post(url, {
         name: name,
         application: application
       });

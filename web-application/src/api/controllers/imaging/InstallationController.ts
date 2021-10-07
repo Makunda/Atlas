@@ -1,6 +1,7 @@
-import { ApiComUtils } from "@/api/ApiComUtils";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class InstallationController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -10,7 +11,7 @@ export default class InstallationController {
       this.API_BASE_URL + `/api/imaging/installation/imaging/path/base`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -22,7 +23,7 @@ export default class InstallationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get Imaging path.`,
-        error
+        error,
       );
       throw error;
     }
@@ -38,9 +39,9 @@ export default class InstallationController {
 
     try {
       const body = {
-        path: path
+        path: path,
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -52,7 +53,7 @@ export default class InstallationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to set Imaging path.`,
-        error
+        error,
       );
       throw error;
     }
@@ -65,21 +66,21 @@ export default class InstallationController {
     const url = this.API_BASE_URL + `/api/atlas/extensions/demeter/version`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return String(apiResponse.data);
       } else {
         console.warn(
-          `Failed to get Demeter Status. API Status (${res.status})`
+          `Failed to get Demeter Status. API Status (${res.status})`,
         );
         return `The API returned status code : ${res.status}.`;
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get Demeter Status.`,
-        error
+        error,
       );
       throw error;
     }
@@ -92,21 +93,21 @@ export default class InstallationController {
     const url = this.API_BASE_URL + `/api/atlas/extensions/artemis/version`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return String(apiResponse.data);
       } else {
         console.warn(
-          `Failed to get Artemis Status. API Status (${res.status})`
+          `Failed to get Artemis Status. API Status (${res.status})`,
         );
         return `The API returned status code : ${res.status}.`;
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get artemis Status.`,
-        error
+        error,
       );
       throw error;
     }

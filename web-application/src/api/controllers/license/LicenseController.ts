@@ -1,10 +1,11 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import {
   LicenseInterface,
-  LicenseStatus
+  LicenseStatus,
 } from "@/api/interface/license/License.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class LicenseController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -16,13 +17,13 @@ export class LicenseController {
   public static async getLicense(): Promise<LicenseInterface> {
     const url = LicenseController.API_BASE_URL + "/api/license";
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return {
           license: String(apiResponse.data),
-          status: LicenseStatus.VALID
+          status: LicenseStatus.VALID,
         };
       } else {
         console.warn(`Failed to retrieve the license. Status (${res.status})`);
@@ -44,14 +45,12 @@ export class LicenseController {
     try {
       const body: any = {};
       body.license = license;
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
-      let returnMessage;
       if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
         return {
           license: String(license),
-          status: LicenseStatus.VALID
+          status: LicenseStatus.VALID,
         };
       } else {
         console.warn(`Failed to apply a new license. Status (${res.status})`);

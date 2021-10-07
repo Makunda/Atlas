@@ -1,8 +1,9 @@
-import { ApiComUtils, validStatus } from "@/api/ApiComUtils";
+import { ApiComUtils, validStatus } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.interface";
 import { Level5Group } from "@/api/interface/demeter/ApiLevel.interface";
 import axios from "axios";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class LevelController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -19,7 +20,7 @@ export class LevelController {
       `/api/demeter/levels/${applicationName}/group`;
 
     try {
-      const res = await axios.post(url);
+      const res = await ProxyAxios.post(url, {});
       if (validStatus(res.status)) {
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
@@ -47,7 +48,7 @@ export class LevelController {
       `/api/demeter/levels/${applicationName}/candidates`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       if (validStatus(res.status)) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
@@ -77,7 +78,7 @@ export class LevelController {
       `/api/demeter/levels/${applicationName}/all`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       if (validStatus(res.status)) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
@@ -109,7 +110,7 @@ export class LevelController {
       `/api/demeter/levels/${applicationName}/grouped`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
       if (validStatus(res.status)) {
         const apiResponse: ApiResponse = res.data;
         if (Array.isArray(apiResponse.data)) {
@@ -143,7 +144,7 @@ export class LevelController {
       `/api/demeter/levels/${applicationName}/undo`;
 
     try {
-      const res = await axios.post(url, { level: groupName });
+      const res = await ProxyAxios.post(url, { level: groupName });
       if (validStatus(res.status)) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
@@ -174,7 +175,7 @@ export class LevelController {
       `/api/demeter/levels/${applicationName}/undo/all`;
 
     try {
-      const res = await axios.post(url);
+      const res = await ProxyAxios.post(url, {});
       if (validStatus(res.status)) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
@@ -208,7 +209,7 @@ export class LevelController {
       `/api/demeter/levels/${applicationName}/rename`;
 
     try {
-      const res = await axios.post(url, {
+      const res = await ProxyAxios.post(url, {
         level: groupName,
         newLevel: newName
       });

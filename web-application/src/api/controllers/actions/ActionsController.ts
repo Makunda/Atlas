@@ -1,10 +1,9 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
-import { ReportInterface } from "@/api/interface/reports/report.interface";
-import ILevel from "@/api/interface/imaging/Level.interface";
-import { error } from "neo4j-driver";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+
 import ActionInterface from "@/api/interface/actions/Action.interface.fs";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class ActionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -15,7 +14,7 @@ export class ActionController {
   public static async getActionList(): Promise<ActionInterface[]> {
     const url = ActionController.API_BASE_URL + "/api/atlas/actions/find/all";
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -25,7 +24,7 @@ export class ActionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of Actions. Status (${res.status})`
+          `Failed to retrieve the list of Actions. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
@@ -42,21 +41,23 @@ export class ActionController {
    */
   public static async executeAction(
     actionId: number,
-    application: string
+    application: string,
   ): Promise<boolean> {
     const url = ActionController.API_BASE_URL + "/api/atlas/actions/execute";
     try {
       const body = {
         id: actionId,
-        application: application
+        application: application,
       };
-      const res = await axios.post(url, body, { responseType: "arraybuffer" });
+      const res = await ProxyAxios.post(url, body, {
+        responseType: "arraybuffer",
+      });
 
       if (res.status == 200) {
         return true;
       } else {
         console.warn(
-          `Failed to retrieve the execute the action. Status (${res.status})`
+          `Failed to retrieve the execute the action. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }

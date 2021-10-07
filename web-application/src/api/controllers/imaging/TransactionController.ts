@@ -1,10 +1,11 @@
 // http://localhost:3000/api/imaging/transactions/number/unmasked/ACA
 
-import { ApiComUtils } from "@/api/ApiComUtils";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import axios from "axios";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import ITransaction from "@/api/interface/imaging/Transaction.interface";
 import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class TransactionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -21,7 +22,7 @@ export default class TransactionController {
       `/api/imaging/transactions/unmask/all`;
 
     try {
-      const res = await axios.post(url, { application: application });
+      const res = await ProxyAxios.post(url, { application: application });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -49,7 +50,7 @@ export default class TransactionController {
       `/api/imaging/transactions/number/unmasked/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -77,7 +78,7 @@ export default class TransactionController {
       `/api/imaging/transactions/insights/unmasked/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -105,7 +106,7 @@ export default class TransactionController {
       `/api/imaging/transactions/number/masked/${application}`;
 
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -148,7 +149,7 @@ export default class TransactionController {
         sortDesc: sortDesc
       };
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -196,7 +197,7 @@ export default class TransactionController {
         filter: filter
       };
 
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -228,7 +229,7 @@ export default class TransactionController {
       `/api/imaging/transactions/mask/single`;
 
     try {
-      const res = await axios.post(url, {
+      const res = await ProxyAxios.post(url, {
         application: application,
         transactionID: transactionID
       });
@@ -268,7 +269,7 @@ export default class TransactionController {
         transactionID: transactionID,
         prefix: prefix
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -305,7 +306,7 @@ export default class TransactionController {
         transactionID: transactionID,
         prefix: prefix
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -342,7 +343,7 @@ export default class TransactionController {
         transactionID: transactionID,
         transactionName: name
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -372,7 +373,7 @@ export default class TransactionController {
       `/api/imaging/transactions/mask/filter`;
 
     try {
-      const res = await axios.post(url, {
+      const res = await ProxyAxios.post(url, {
         application: application,
         filter: filter
       });
@@ -405,7 +406,7 @@ export default class TransactionController {
       `/api/imaging/transactions/unmask/single`;
 
     try {
-      const res = await axios.post(url, {
+      const res = await ProxyAxios.post(url, {
         application: application,
         transactionID: transactionID
       });
@@ -436,7 +437,7 @@ export default class TransactionController {
       `/api/imaging/transactions/unmask/all`;
 
     try {
-      const res = await axios.post(url, { application: application });
+      const res = await ProxyAxios.post(url, { application: application });
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -470,7 +471,7 @@ export default class TransactionController {
         application: application,
         limit: limit
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -504,7 +505,7 @@ export default class TransactionController {
         application: application,
         limit: limit
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -538,7 +539,7 @@ export default class TransactionController {
         application: application,
         terms: terms
       };
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;

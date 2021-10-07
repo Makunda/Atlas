@@ -1,9 +1,8 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import { ReportInterface } from "@/api/interface/reports/report.interface";
-import ILevel from "@/api/interface/imaging/Level.interface";
-import { error } from "neo4j-driver";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class ReportController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -14,7 +13,7 @@ export class ReportController {
   public static async getReportList(): Promise<ReportInterface[]> {
     const url = ReportController.API_BASE_URL + "/api/atlas/reports/find/all";
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -24,7 +23,7 @@ export class ReportController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of Reports. Status (${res.status})`
+          `Failed to retrieve the list of Reports. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
@@ -61,28 +60,30 @@ export class ReportController {
     reportId: number,
     nickName: string,
     application: string,
-    params: any
+    params: any,
   ): Promise<void> {
     const url = ReportController.API_BASE_URL + "/api/atlas/reports/generate";
     try {
       const body = {
         id: reportId,
         application: application,
-        parameters: params
+        parameters: params,
       };
-      const res = await axios.post(url, body, { responseType: "arraybuffer" });
+      const res = await ProxyAxios.post(url, body, {
+        responseType: "arraybuffer",
+      });
 
       if (res.status == 200) {
         const a = document.createElement("a");
 
         const file = new Blob([res.data], {
           type:
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,",
         });
         this.saveFile(file, `${nickName}_in_${application}.xlsx`);
       } else {
         console.warn(
-          `Failed to retrieve the generate the report. Status (${res.status})`
+          `Failed to retrieve the generate the report. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }

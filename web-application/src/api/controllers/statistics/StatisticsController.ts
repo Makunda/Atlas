@@ -1,7 +1,8 @@
 import axios from "axios";
-import { ApiComUtils } from "../../ApiComUtils";
-import { ApiResponse } from "../../interface/ApiResponse.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import StatisticInterface from "@/api/interface/statistics/Statistic.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class StatisticsController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -13,16 +14,16 @@ export class StatisticsController {
    */
   public static async getStatisticsList(
     application: string,
-    category?: string
+    category?: string,
   ): Promise<StatisticInterface[]> {
     const url =
       StatisticsController.API_BASE_URL + "/api/atlas/statistics/find/all";
     try {
       const body: any = {
-        application: application
+        application: application,
       };
       if (category) body.category = category;
-      const res = await axios.post(url, body);
+      const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -32,7 +33,7 @@ export class StatisticsController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of statistics. Status (${res.status})`
+          `Failed to retrieve the list of statistics. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
@@ -49,7 +50,7 @@ export class StatisticsController {
     const url =
       StatisticsController.API_BASE_URL + "/api/atlas/statistics/categories";
     try {
-      const res = await axios.get(url);
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -58,7 +59,7 @@ export class StatisticsController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the execute the action. Status (${res.status})`
+          `Failed to retrieve the execute the action. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }

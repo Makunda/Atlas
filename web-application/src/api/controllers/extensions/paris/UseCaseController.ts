@@ -1,9 +1,10 @@
 import axios from "axios";
 import { use } from "vue/types/umd";
-import { ApiComUtils } from "../../../ApiComUtils";
-import { ApiResponse } from "../../../interface/ApiResponse.interface";
-import { IGroup } from "../../../interface/paris/group.interface";
-import { IUseCase } from "../../../interface/paris/useCase.interface";
+import { ApiComUtils } from "@/api/utils/ApiComUtils";
+import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import { IGroup } from "@/api/interface/paris/group.interface";
+import { IUseCase } from "@/api/interface/paris/useCase.interface";
+import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class UseCaseController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -16,8 +17,7 @@ export class UseCaseController {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/all";
 
     try {
-      const res = await axios.get(url);
-      let version: string;
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -26,7 +26,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`
+          `Failed to retrieve the list of use cases. Status (${res.status})`,
         );
       }
 
@@ -34,7 +34,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error
+        error,
       );
       throw error;
     }
@@ -47,8 +47,7 @@ export class UseCaseController {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/roots";
 
     try {
-      const res = await axios.get(url);
-      let version: string;
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -57,7 +56,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`
+          `Failed to retrieve the list of use cases. Status (${res.status})`,
         );
       }
 
@@ -65,7 +64,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error
+        error,
       );
       throw error;
     }
@@ -83,8 +82,7 @@ export class UseCaseController {
       "/useCases";
 
     try {
-      const res = await axios.get(url);
-      let version: string;
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -93,7 +91,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`
+          `Failed to retrieve the list of use cases. Status (${res.status})`,
         );
       }
 
@@ -101,7 +99,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error
+        error,
       );
       throw error;
     }
@@ -115,8 +113,7 @@ export class UseCaseController {
       "/groups";
 
     try {
-      const res = await axios.get(url);
-      let version: string;
+      const res = await ProxyAxios.get(url);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -125,7 +122,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`
+          `Failed to retrieve the list of use cases. Status (${res.status})`,
         );
       }
 
@@ -133,7 +130,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error
+        error,
       );
       throw error;
     }
@@ -147,7 +144,7 @@ export class UseCaseController {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/add";
 
     try {
-      const res = await axios.post(url, useCase);
+      const res = await ProxyAxios.post(url, useCase);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -160,7 +157,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a use cases.`,
-        error
+        error,
       );
       throw error;
     }
@@ -177,7 +174,7 @@ export class UseCaseController {
       useCase.id;
 
     try {
-      const res = await axios.delete(url);
+      const res = await ProxyAxios.delete(url);
 
       if (res.status == 200) {
         return true;
@@ -187,7 +184,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a use cases.`,
-        error
+        error,
       );
       throw error;
     }
@@ -200,7 +197,7 @@ export class UseCaseController {
    */
   public static async addUseCaseWithParent(
     useCase: IUseCase,
-    idParent: number
+    idParent: number,
   ): Promise<IUseCase> {
     const url =
       UseCaseController.API_BASE_URL + "/api/paris/useCases/addWithParent";
@@ -208,7 +205,7 @@ export class UseCaseController {
     try {
       const params: any = useCase;
       params.idParent = idParent;
-      const res = await axios.post(url, params);
+      const res = await ProxyAxios.post(url, params);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -221,7 +218,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a use cases.`,
-        error
+        error,
       );
       throw error;
     }
@@ -236,7 +233,7 @@ export class UseCaseController {
 
   public static async checkValidity(
     request: IUseCase,
-    awaitedResult: number
+    awaitedResult: number,
   ): Promise<boolean> {
     const url =
       UseCaseController.API_BASE_URL + "/api/paris/useCases/check/validity";
@@ -246,14 +243,14 @@ export class UseCaseController {
       params.request = request;
       params.awaitedResult = awaitedResult;
 
-      const res = await axios.post(url, params);
+      const res = await ProxyAxios.post(url, params);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to verify the validity of the request. Status (${res.status})`
+          `Failed to verify the validity of the request. Status (${res.status})`,
         );
       }
 
@@ -261,7 +258,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to verify the validity of the request.`,
-        error
+        error,
       );
       throw error;
     }
@@ -274,7 +271,7 @@ export class UseCaseController {
    */
   public static async editUseCase(
     useCase: IUseCase,
-    parentId: number
+    parentId: number,
   ): Promise<IUseCase> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/update";
 
@@ -282,7 +279,7 @@ export class UseCaseController {
       const body = useCase;
       body.parentId = parentId;
 
-      const res = await axios.put(url, body);
+      const res = await ProxyAxios.put(url, body);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
@@ -295,7 +292,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a use cases.`,
-        error
+        error,
       );
       throw error;
     }
