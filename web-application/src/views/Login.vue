@@ -3,93 +3,91 @@
   <v-app class="main-application">
     <v-container fluid fill-height class="pa-0">
       <v-row style="height: 100%">
-        <v-col md="6" id="color-background">
-          <v-container bg fill-height grid-list-md text-xs-center>
-            <img src="@/assets/svg/Globe_icon.svg" id="background-logo" />
-            <v-layout row wrap align-center justify-center>
-              <v-flex style="margin-left: 20%; z-index: 10">
-                <h2 class="white--text text-h1">Atlas</h2>
-                <h2 class="white--text text-h3">NASD Toolkit 2021</h2>
-                <h2 class="white--text text-subtitle-1">
-                  <i>Version 2.5.0</i>
-                </h2>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-col>
-        <v-col md="6">
-          <v-container bg fill-height grid-list-md text-xs-center>
-            <v-layout row wrap align-center justify-center>
-              <v-card
-                ref="form"
-                class="mx-auto"
-                min-width="500px"
-                v-if="onlineDatabase"
-              >
-                <v-card-text>
-                  <v-text-field
-                    ref="neo4jUser"
-                    v-model="credentials.user"
-                    label="Username"
-                    placeholder="Neo4j user"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="credentials.password"
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'"
-                    label="Password"
-                    name="input-10-1"
-                    @click:append="show1 = !show1"
-                  ></v-text-field>
-                  <p>Database bolt URI : {{ uri }}</p>
+        <v-card
+          class="mx-auto d-flex justify-content-between"
+          id="colored-tile"
+        >
+          <v-card-text fill-height height="100%" class="grow">
+            <v-container style="height: 100%">
+              <v-row fill-height style="height: 100%">
+                <!-- Image column -->
+                <v-col cols="12" md="5">
+                  <v-container bg fill-height grid-list-md text-xs-center>
+                    <img
+                      :src="`${publicPath}assets/svg/atlasBlack2.svg`"
+                      alt="Atlas logo"
+                      id="background-logo"
+                    />
+                  </v-container>
+                </v-col>
 
-                  <!-- Information on connection -->
-                  <div
-                    v-if="failedLogin"
-                    class="red darken-2 text-center pa-2"
-                    width="100%"
-                  >
-                    <span class="white--text"
-                      >Wrong credentials / URI. Contact your CAST Imaging
-                      administrator for more information.</span
-                    >
-                  </div>
-                  <v-divider></v-divider>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="save">
-                    Login
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-              <v-card
-                v-if="!onlineDatabase"
-                class="mx-auto"
-                min-width="500px"
-                min-height="250px"
-              >
-                <v-card-text
-                  class="d-flex flex-column"
-                  style="margin-top: 20px"
-                >
-                  <v-icon size="80" color="red" class="my-4"
-                    >mdi-database-remove</v-icon
-                  >
-                  <span>
-                    Oops, it seems that the database at
-                    <i color="#052C38">{{ uri }}</i> is unreachable.<br />
-                    Retry in few seconds or check your neo4j service.
-                  </span>
-                  <v-btn class="my-4" @click="simpleHealthCheck" text>
-                    <v-icon x-large color="#042732">mdi-refresh</v-icon>
-                  </v-btn>
-                </v-card-text>
-              </v-card>
-            </v-layout>
-          </v-container>
-        </v-col>
+                <!-- Title column -->
+                <v-col cols="12" md="7" id="form" style="height: 100%">
+                  <v-container style="height: 100%">
+                    <!-- Title & version -->
+                    <v-row class="pt-12 d-flex flex-column">
+                      <h2 class="white--text text-h1">NASD Atlas</h2>
+                      <i class="white--text text-h5 pl-2">Version 2.6.0</i>
+                    </v-row>
+
+                    <!-- Login -->
+                    <v-row class="pt-12 d-flex flex-column white--text">
+                      <v-text-field
+                        dark
+                        class="limited-size-input mt-10"
+                        color="white"
+                        ref="neo4jUser"
+                        v-model="username"
+                        label="Username"
+                        placeholder="User"
+                        :error-messages="loginError"
+                        required
+                      ></v-text-field>
+                      <v-text-field
+                        dark
+                        class="limited-size-input mt-3"
+                        v-model="password"
+                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="show1 ? 'text' : 'password'"
+                        label="Password"
+                        name="input-10-1"
+                        :error-messages="loginError"
+                        required
+                        @click:append="show1 = !show1"
+                      ></v-text-field>
+                      <p>Database bolt URI : {{ uri }}</p>
+
+                      <div
+                        v-show="failedLogin"
+                        class="red darken-2 text-center pa-2"
+                        width="100%"
+                      >
+                        <span class="white--text"
+                          >Wrong credentials / URI. Contact your CAST Imaging
+                          administrator for more information.</span
+                        >
+                      </div>
+
+                      <v-btn
+                        class="mt-12"
+                        color="white"
+                        style="max-width: 100px"
+                        @click="save"
+                      >
+                        Log In
+                      </v-btn>
+                    </v-row>
+                  </v-container>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <!-- Mentions -->
+          <div class="white--text pr-4 mentions">
+            <v-spacer></v-spacer>
+            <p>Powered by the North America Solutions Design Team - 2021</p>
+          </div>
+        </v-card>
       </v-row>
     </v-container>
   </v-app>
@@ -97,20 +95,23 @@
 
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import { Configuration, Credentials } from "@/Configuration";
-import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
-import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
+import { Configuration } from "@/Configuration";
 import { UtilsController } from "@/api/controllers/utils/UtilsController";
+import LoginController from "@/api/controllers/login/LoginController";
 
 export default Vue.extend({
   name: "Login",
 
   data: () => ({
+    // Path for the Images
+    publicPath: process.env.BASE_URL,
     failedLogin: false,
     showLogin: true,
     show1: false,
     uri: Configuration.getProperties().neo4jUri,
-    credentials: {} as Credentials,
+    username: "",
+    password: "",
+    loginError: [] as string[],
 
     onlineDatabase: true,
     healthcheckGoingon: false,
@@ -119,58 +120,28 @@ export default Vue.extend({
   }),
 
   mounted() {
-    this.getInternalMode();
     this.simpleHealthCheck();
   },
 
   methods: {
     // Check, save and redirect to the Main dashboard
-    save() {
+    async save() {
       // Save new URI
       const properties = Configuration.getProperties();
       properties.neo4jUri = this.uri;
       Configuration.saveProperties(properties);
 
-      // Connect to Neo4j
-      Neo4JAccessLayer.connectWithCredentials(this.credentials);
-      const neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
-
-      neo4jAl
-        .testConnection()
-        .then(() => {
-          // Successful connection , redirect to main
-          this.$router.replace("/atlas/");
-          window.location.reload();
-        })
-        .catch(err => {
-          // Cannot connect to the Neo4j instance
-          console.error("Cannot connect to Neo4j", err);
-          this.failedLogin = true;
-          this.simpleHealthCheck();
-        });
-    },
-
-    // Set Internal mode
-    async setInternalMode() {
-      await ConfigurationController.setInternalMode(!this.switchInternalUse)
-        .then(() => {
-          return;
-        })
-        .catch(err => {
-          console.error("Failed to set internal mode to ", err);
-        });
-    },
-
-    // Get Intrenal mode
-    getInternalMode() {
-      ConfigurationController.getInternalMode()
-        .then((res: boolean) => {
-          this.switchInternalUse = res;
-        })
-        .catch(err => {
-          console.log("Failed to change the value of internal mode.", err);
-          this.switchInternalUse = false;
-        });
+      const res: boolean = await LoginController.postLogin(
+        this.username,
+        this.password
+      );
+      if (res) {
+        this.$router.replace("/atlas/");
+        window.location.reload();
+      } else {
+        // Ignore & unvalidate the login form
+        this.loginError = ["Wrong Username/Password"];
+      }
     },
 
     async simpleHealthCheck() {
@@ -189,8 +160,28 @@ export default Vue.extend({
 </script>
 
 <style>
-#color-background {
-  height: 100%;
+.main-application {
+  background-color: #e2e2e2 !important;
+}
+
+.limited-size-input {
+  max-width: 450px !important;
+}
+
+.mentions {
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+}
+
+#colored-tile {
+  height: 80%;
+  width: 80%;
+  margin: auto;
+
+  max-height: 730px;
+  max-width: 1150px;
+
   position: relative;
   background: rgb(0, 36, 47);
   background: -moz-linear-gradient(
@@ -209,6 +200,10 @@ export default Vue.extend({
     rgba(15, 79, 99, 1) 100%
   );
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00242f",endColorstr="#0f4f63",GradientType=1);
+}
+
+#form {
+  z-index: 10;
 }
 
 #background-logo {

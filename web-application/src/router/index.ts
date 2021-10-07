@@ -18,6 +18,7 @@ import AipInjection from "@/components/screens/aip/injection/AipInjection.vue";
 import CloudRecommendations from "@/components/screens/cloud/recommendations/CloudRecommendations.vue";
 import Server from "@/views/Server.vue";
 import NotFound from "@/views/NotFound.vue";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -29,6 +30,12 @@ Vue.component("ServerHome", ServerHome);
 Vue.component("Server", Server);
 Vue.component("CloudRecommendations", CloudRecommendations);
 
+/** Middleware definition */
+const authMiddleware = (to, from, next) => {
+  if (!store.state.isAuthenticated) next({ name: "Login" });
+  else next();
+};
+
 const routes: Array<RouteConfig> = [
   {
     path: "",
@@ -37,6 +44,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/atlas",
     name: "Main",
+    beforeEnter: authMiddleware,
     component: Application,
     children: [
       {
@@ -76,6 +84,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/administration",
     name: "Administration",
+    beforeEnter: authMiddleware,
     component: Server,
     children: [
       {

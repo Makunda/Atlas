@@ -1,5 +1,5 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/interface/ApiResponse.interface";
+import { ApiResponse } from "@/api/utils/ApiResponse";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class DemeterController {

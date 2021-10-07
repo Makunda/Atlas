@@ -11,6 +11,7 @@ import VueCookies from "vue-cookies";
 import { Component } from "vue-router/types/router";
 import { LicenseController } from "@/api/controllers/license/LicenseController";
 import { LicenseStatus } from "@/api/interface/license/License.interface";
+import CookieManager from "./api/utils/CookieManager";
 
 Vue.config.productionTip = false;
 Vue.use(Vuex);
@@ -27,9 +28,18 @@ let el: Component;
 async function launch() {
   // Verify the license
   const license = await LicenseController.getLicense();
+  const authenticated = CookieManager.isAuthenticated();
+
   if (license.status == LicenseStatus.NOT_VALID) {
     el = License;
-    router.replace("/license");
+    await router.replace("/license").catch(() => {
+      /** Ignored */
+    });
+  } else if (!authenticated) {
+    el = Login;
+    await router.replace("/login").catch(() => {
+      /** Ignored */
+    });
   } else {
     el = Default;
   }

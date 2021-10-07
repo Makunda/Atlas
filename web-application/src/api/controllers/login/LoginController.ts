@@ -3,6 +3,9 @@ import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import CookieManager from "@/utils/CookieManager";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 import { ApiResponseImpl, ApiResponse } from "@/api/utils/ApiResponse";
+import store from "@/store";
+
+import Vue from "vue";
 
 /**
  * Controller handling the login on the platform
@@ -31,6 +34,8 @@ export default class LoginController {
       if (apiResponse.isSuccess()) {
         // Store the token
         CookieManager.setAuthCookie(apiResponse.getData());
+        store.state.isAuthenticated = true;
+
         return true;
       } else {
         // The request failed, popup + log
@@ -49,6 +54,24 @@ export default class LoginController {
         title: "Failed to login.",
         body: error
       });
+      return false;
+    }
+  }
+
+  /**
+   * Delete the Auth cookie, and redirect to the login
+   */
+  public static async logout() {
+    try {
+      CookieManager.deleteAuthCookie();
+    } catch (err) {
+      console.error("Failed to destroy the authentication cookie", err);
+      flash.commit("add", {
+        type: FlashType.ERROR,
+        title: "Failed to logout.",
+        body: err
+      });
+      throw err;
     }
   }
 }

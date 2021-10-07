@@ -1,5 +1,3 @@
-import Vue from "vue/types/umd";
-
 <template>
   <div class="main-application">
     <v-app>
@@ -87,7 +85,7 @@ import Vue from "vue/types/umd";
           min-width="50px"
         >
           <v-toolbar-title class="ml-8 screen-title"
-            ><span style="color: #86A5B3; font-weight: 300">NASD</span>
+            ><span style="color: #1E2A3A; font-weight: 300">NASD</span>
             Atlas</v-toolbar-title
           >
           <v-spacer></v-spacer>
@@ -146,6 +144,7 @@ import { Configuration } from "@/Configuration";
 import { UtilsController } from "@/api/controllers/utils/UtilsController";
 import { Cookie } from "@/enum/Cookie";
 import flash, { FlashType } from "@/modules/flash/Flash";
+import LoginController from "@/api/controllers/login/LoginController";
 
 export default Vue.extend({
   name: "Application",
@@ -321,7 +320,7 @@ export default Vue.extend({
     },
 
     logout() {
-      Configuration.deleteProperties();
+      LoginController.logout();
       document.location.reload();
     }
   },

@@ -347,7 +347,6 @@ export default Vue.extend({
               this.items.push(await this.getChildren(res[i]));
             }
           }
-          console.log("Tree", this.items);
         })
         .catch(err => {
           console.error("Failed to retrieve the root use cases", err);

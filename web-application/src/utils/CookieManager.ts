@@ -38,9 +38,10 @@ export default class CookieManager {
    * Destroy auth cookie
    */
   public static deleteAuthCookie(): void {
-    this.verified = false;
-    store.commit("setAuthentication", false);
     Vue.$cookies.remove(Cookie.AUTH_COOKIE);
+    this.verified = false;
+    store.state.isAuthenticated = false;
+    store.commit("setAuthentication", false);
   }
 
   /**

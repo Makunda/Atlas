@@ -34,18 +34,18 @@ export default class LoginController {
       const password = String(req.body.password);
 
       const user = this.localLoginService.getUser(username, password);
-      if (user) {
+      if(user) {
         // User is authenticated
-        // Generate Token
+        // Generate Token 
         const token = this.tokenService.createUserToken(user);
-        res.status(HttpCode.ACCEPTED).send({ data: token, message: "Successful login" });
+        res.status(HttpCode.ACCEPTED).send({ data: token, message: "Successful login"});
       } else {
         // Send error
-        res.status(HttpCode.ACCESS_REFUSED).send({ error: ["Bad username/password"], message: "Failed to login. Bad username/password" });
+        res.status(HttpCode.ACCESS_REFUSED).send({ error: ["Bad username/password"], message: "Failed to login. Bad username/password"});
       }
     } catch (error) {
       logger.error("Failed to log the user.", error);
-      res.status(HttpCode.ACCESS_REFUSED).send({ error: ["Internal error"], message: "Failed to login." });
+      res.status(HttpCode.ACCESS_REFUSED).send({ error: ["Internal error"], message: "Failed to login."});
     }
   };
 }

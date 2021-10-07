@@ -4,7 +4,8 @@ import "module-alias";
 import config from "config";
 import { logger } from "@shared/Logger";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import LoginService from "@services/security/login/LocalLoginService";
+import LocalLoginService from "@services/security/login/LocalLoginService";
+import TokenService from "@services/security/TokenService";
 
 // Start the server
 const port = Number(process.env.PORT || config.get("atlas.port"));
@@ -19,7 +20,8 @@ async function launch() {
     await Neo4JAccessLayer.connect();
 
     // Import the security Configuration
-    const loginService = LoginService.getInstance();
+    LocalLoginService.getInstance();
+    TokenService.initialize();
 
     const extensionModule = await import(__dirname + "/extensions/ExtensionManager");
     const extensionManager = extensionModule.default.getInstance();
