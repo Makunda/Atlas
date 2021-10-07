@@ -1,9 +1,9 @@
 import { logger } from "@shared/Logger";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
-import { RegexNode } from "@interfaces/artemis/RegexNode.interface";
 import { CreateRegexNodeDto } from "@dtos/artemis/regexNode.dto";
 import { int } from "neo4j-driver";
+import { RegexNode } from "@interfaces/artemis/RegexNode";
 
 function convertRecordToRegexNode(record: any): RegexNode {
   const regex: RegexNode = {

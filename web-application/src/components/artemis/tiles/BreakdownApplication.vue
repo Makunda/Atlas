@@ -3,9 +3,7 @@
   <v-card class="ma-2" width="100%">
     <v-card-title>
       <p class="text-h3 text--primary">
-        <span class="font-weight-light pr-1"
-          >Review the breakdown of</span
-        >
+        <span class="font-weight-light pr-1">Review the breakdown of</span>
         {{ applicationName }}
       </p>
       <br />
@@ -408,15 +406,15 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ArtifactController } from "@/api/artemis/artifact.controller";
-import { RegexNodeController } from "@/api/artemis/regexNode.controller";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
-import { ApplicationController } from "@/api/applications/ApplicationController";
-import { ArtemisController } from "@/api/artemis/artemis.controller";
 import { Artifact } from "@/api/interface/artemis/Artifact";
-import AgentController from "@/api/agents/agent.controller";
 import { IApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
+import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";
+import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
+import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
+import { ArtifactController } from '@/api/controllers/extensions/artemis/ArtifactController';
+import AgentController from '@/api/controllers/agents/AgentController';
 
 export default Vue.extend({
   name: "BreakdownApplication",

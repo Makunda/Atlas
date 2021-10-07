@@ -2,7 +2,7 @@
 import { checkBody } from "@shared/FunctionGlob";
 import { HttpCode } from "@utils/HttpCode";
 import { NextFunction, Request, Response } from "express";
-import ExtensionManager from "src/extensions/ExtensionManager";
+import ExtensionManager from "@extensions/ExtensionManager";
 
 /**
  * Controller managing the different extension declared and functional in the application

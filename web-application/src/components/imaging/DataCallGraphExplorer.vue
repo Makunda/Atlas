@@ -464,10 +464,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DataCallGraphController from "@/api/imaging/DataCallGraphController";
+import DataCallGraphController from "@/api/controllers/imaging/DataCallGraphController";
 import { DataCallGraph } from "@/api/interface/imaging/DataCallGraph";
 import DataCallGraphInsights from "@/api/interface/imaging/DataCallGraphInsights";
-import { ApplicationController } from "@/api/applications/ApplicationController";
+import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 
 export default Vue.extend({
   name: "DataCallGraphExplorer",

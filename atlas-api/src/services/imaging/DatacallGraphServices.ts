@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { logger } from "@shared/Logger";
 import { int } from "neo4j-driver";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import { DataCallGraph, dataCallGraphFromObj } from "@interfaces/imaging/DataCallGraph";
 

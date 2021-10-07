@@ -63,8 +63,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import AgentController from "@/api/agents/agent.controller";
-import PrefixController from "@/api/configuration/prefix.controller";
+import AgentController from "@/api/controllers/agents/AgentController";
+import PrefixController from "@/api/controllers/extensions/PrefixController";
 
 export default Vue.extend({
   name: "FrameworkAgent",

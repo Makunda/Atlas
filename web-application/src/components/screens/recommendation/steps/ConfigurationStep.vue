@@ -78,7 +78,7 @@
 import {
   StatisticPercentageResult,
   StatisticsController
-} from "@/api/demeter/statistics.controller";
+} from "@/api/controllers/extensions/demeter/StatisticsController";
 import Vue from "vue";
 import PercentageTile from "@/components/screens/recommendation/tiles/PercentageTile.vue";
 import ActionTileViewer from "@/components/screens/recommendation/components/ActionTileViewer.vue";

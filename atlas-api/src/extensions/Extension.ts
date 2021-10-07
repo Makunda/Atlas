@@ -1,4 +1,4 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { Logger } from "winston";
 
 export default abstract class Extension {
@@ -74,10 +74,7 @@ export default abstract class Extension {
       await this.executeExtension(application);
     } catch (err) {
       // eslint-disable-next-line max-len
-      this.logger.error(
-        `The extension with id: '${this.getId()}' - (${this.getName()}) produced an error during its execution.`,
-        err
-      );
+      this.logger.error(`The extension with id: '${this.getId()}' - (${this.getName()}) produced an error during its execution.`, err);
       throw err;
     } finally {
       this.isRunning = false;

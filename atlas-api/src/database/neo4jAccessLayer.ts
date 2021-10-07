@@ -28,7 +28,7 @@ export class Neo4JAccessLayer {
       logger.info(`Connection test successful. Rows returned in ${end - start} ms.`);
       return res.records && res.records.length > 0;
     } catch (err) {
-      logger.error(`The test failed trying to query the Neo4j database.`);
+      logger.error("The test failed trying to query the Neo4j database.");
       return false;
     }
   }

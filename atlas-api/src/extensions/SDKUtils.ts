@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { logger } from "@shared/Logger";
 import SDKResources from "./SDKResources";
 

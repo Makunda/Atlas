@@ -1,4 +1,4 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import path from "path";
 
 import { logger } from "@shared/Logger";
@@ -105,8 +105,8 @@ export default class StatisticsEngine {
    */
   public getCategories(): string[] {
     const categoriesSet = new Set();
-    this.statList.forEach((x) => {
-      x.categories.forEach((x) => categoriesSet.add(x));
+    this.statList.forEach(x => {
+      x.categories.forEach(x => categoriesSet.add(x));
     });
 
     return [...categoriesSet] as string[];
@@ -121,8 +121,7 @@ export default class StatisticsEngine {
     try {
       const req = stat.request.replace(StatisticsEngine.APPLICATION_NAME_PROP, application);
       const results: QueryResult = await StatisticsEngine.NEO4JAL.execute(req);
-      if (!results.records || results.records.length === 0)
-        throw new Error(`The statistic with title '${stat.title}', failed to return results.`);
+      if (!results.records || results.records.length === 0) throw new Error(`The statistic with title '${stat.title}', failed to return results.`);
 
       const result = StatisticsEngine.toNumber(results.records[0].get("percentage"));
       return {
@@ -156,7 +155,7 @@ export default class StatisticsEngine {
   private loadStatistics(): void {
     const fileList: string[] = glob.sync(`${this.statisticsFolder}/*.json`);
     let it = 0;
-    fileList.forEach((x) => {
+    fileList.forEach(x => {
       try {
         const sList: StatisticInterface[] = StatisticsEngine.processFile(x);
         for (let i = 0; i < sList.length; i++) {

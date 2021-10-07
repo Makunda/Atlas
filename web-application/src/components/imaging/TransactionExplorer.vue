@@ -464,10 +464,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import TransactionController from "@/api/imaging/TransactionController";
+import TransactionController from "@/api/controllers/imaging/TransactionController";
 import ITransaction from "@/api/interface/imaging/Transaction.interface";
 import ITransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
-import { ApplicationController } from "@/api/applications/ApplicationController";
+import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 
 export default Vue.extend({
   name: "TransactionExplorer",

@@ -385,7 +385,7 @@
 <script lang="ts">
 import Vue from "vue";
 import CloudBlocker from "@/api/interface/highlight/CloudBlocker";
-import { CloudBlockersController } from "@/api/highlight/CloudBlockersController";
+import { CloudBlockersController } from "@/api/controllers/highlight/CloudBlockersController";
 import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({

@@ -29,7 +29,7 @@
 <script lang="ts">
 import Vue from "vue";
 import StatisticInterface from "@/api/interface/statistics/Statistic.interface";
-import { StatisticsController } from "@/api/statistics/statistics.controller";
+import { StatisticsController } from "@/api/controllers/statistics/StatisticsController";
 import LinearStatisticTile from "@/components/screens/statistics/tiles/LinearStatisticTile.vue";
 
 export default Vue.extend({

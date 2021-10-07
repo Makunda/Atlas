@@ -182,7 +182,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import CloudRecoController from "@/api/cloud/recommendations/CloudRecoController";
+import CloudRecoController from "@/api/controllers/recommendations/cloud/CloudRecoController";
 import CloudExecutionModal from "../components/CloudExecutionModal.vue";
 import ProgressModal from "../components/ProgressModal.vue";
 import Extension from "@/api/interface/cloud/recommendations/Extension";

@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import AgentController from "@/api/agents/agent.controller";
+import AgentController from "@/api/controllers/agents/AgentController";
 
 export default Vue.extend({
   name: "ArchitectureAgent",

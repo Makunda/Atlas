@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import config from "config";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import TagService from "@services/configuration/TagService";
 import { logger } from "@shared/Logger";
 import { QueryResult } from "neo4j-driver";

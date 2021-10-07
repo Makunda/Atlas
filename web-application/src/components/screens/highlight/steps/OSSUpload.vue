@@ -413,7 +413,7 @@
 <script lang="ts">
 import Vue from "vue";
 import OssRecommendation from "@/api/interface/highlight/OssRecommendation";
-import { OSSController } from "@/api/highlight/OSSController";
+import { OSSController } from "@/api/controllers/highlight/OSSController";
 import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({

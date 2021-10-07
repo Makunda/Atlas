@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { AipConfiguration } from "@interfaces/aip/AipConfiguration";
 import { AipSchema } from "@interfaces/aip/AipSchema";
 import AipConfigurationNeo4jService from "@services/aip/AipConfigurationNeo4jService";
 import AipConfigurationPgService from "@services/aip/AipConfigurationPgService";
@@ -8,6 +7,7 @@ import { checkBody, checkParams, checkQuery } from "@shared/FunctionGlob";
 import { logger } from "@shared/Logger";
 import { NextFunction, Request, Response } from "express";
 import { HttpCode } from "@utils/HttpCode";
+import { AipConfiguration } from "@interfaces/aip/AipConfiguration";
 
 /**
  * Controller for the AIP service

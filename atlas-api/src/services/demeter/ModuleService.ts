@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import ModuleNode from "@entities/Imaging/ModuleNode";
 import HttpException from "@exceptions/HttpException";
 import IModule from "@interfaces/imaging/Module";

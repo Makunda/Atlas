@@ -59,7 +59,7 @@ export default class LevelDocumentNode extends DocumentNode {
         }
       }
     } catch (err) {
-      throw new Neo4jError("Failed to find a similar document. The request threw an exception : " + err);
+      throw new Error("Failed to find a similar document. The request threw an exception : " + err);
     }
 
     // We now have a set of unique values

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { LaunchDetectionDto } from "@dtos/artemis/detection.dto";
-import { CancellableDetectionPromise, Detection } from "@interfaces/artemis/DetectionStatus.interface";
+import { CancellableDetectionPromise, Detection } from "@interfaces/artemis/DetectionStatus";
 import DetectionService from "@services/artemis/DetectionService";
 import { logger } from "@shared/Logger";
 

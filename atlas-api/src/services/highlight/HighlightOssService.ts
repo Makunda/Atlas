@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import DocumentNode from "@entities/Imaging/Documents/DocumentNode";
 import OssRecommendation from "@interfaces/highlight/recommendations/OssRecommendation";
 import { logger } from "@shared/Logger";

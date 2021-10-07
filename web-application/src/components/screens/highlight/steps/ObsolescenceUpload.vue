@@ -417,7 +417,7 @@
 <script lang="ts">
 import Vue from "vue";
 import OssRecommendation from "@/api/interface/highlight/OssRecommendation";
-import { ObsolescenceController } from "@/api/highlight/ObsolescenceController";
+import { ObsolescenceController } from "@/api/controllers/highlight/ObsolescenceController";
 
 export default Vue.extend({
   name: "ObsolescenceUpload",

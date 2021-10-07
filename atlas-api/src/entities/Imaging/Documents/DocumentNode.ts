@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { int, Neo4jError } from "neo4j-driver";
 import { uuidv4 } from "@utils/utils";
 
@@ -89,7 +89,7 @@ export default abstract class DocumentNode {
     try {
       results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, params);
     } catch (err) {
-      throw new Neo4jError("Failed to create a document. The request threw an exception : " + err);
+      throw new Error("Failed to create a document. The request threw an exception : " + err);
     }
 
     if (results && results.records.length > 0) {
@@ -117,7 +117,7 @@ export default abstract class DocumentNode {
 
       return idDoc;
     } else {
-      throw new Neo4jError("Failed to create a document. The request returned no results.");
+      throw new Error("Failed to create a document. The request returned no results.");
     }
   }
 }

@@ -97,9 +97,9 @@
 </template>
 
 <script lang="ts">
-import ConfigurationController from "@/api/configuration/configuration.controller";
+import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
 import Vue from "vue";
-import { ArtemisController } from "@/api/artemis/artemis.controller";
+import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
 
 export default Vue.extend({
   name: "ArtemisParametersViewer",

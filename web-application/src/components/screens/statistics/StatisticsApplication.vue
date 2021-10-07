@@ -93,11 +93,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ApplicationRecord } from "@/api/applications/ApplicationController";
+import { ApplicationRecord } from "@/api/controllers/applications/ApplicationController";
 import {
   StatisticResult,
   StatisticsController
-} from "@/api/demeter/statistics.controller";
+} from "@/api/controllers/extensions/demeter/StatisticsController";
 import ErrorDialog from "@/components/error/ErrorDialog.vue";
 import StatisticTile from "@/components/screens/statistics/tiles/StatisticTile.vue";
 

@@ -126,11 +126,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { IArtifact } from "../../../../atlas-api/src/interfaces/artemis/Artifact.interface";
-import { CategoryController } from "@/api/artemis/category.controller";
+import { Artifact } from "@/api/interface/artemis/Artifact";
+import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
 import { Category } from "@/api/interface/ApiCategory.interface";
 import { Framework } from "@/api/interface/artemis/Framework";
-import { FrameworkController } from "@/api/artemis/framework.controller";
+import { FrameworkController } from "@/api/controllers/extensions/artemis/FrameworkController";
 
 export default Vue.extend({
   name: "FrameworkDispatch",
@@ -169,7 +169,7 @@ export default Vue.extend({
     error: "",
 
     choice: "",
-    frameworkArtifact: {} as IArtifact,
+    frameworkArtifact: {} as Artifact,
     authorizedType: [],
 
     category: null,

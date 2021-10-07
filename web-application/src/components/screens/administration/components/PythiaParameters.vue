@@ -108,8 +108,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import PythiaController from "@/api/pythia/pythia.controller";
-import ConfigurationController from "@/api/configuration/configuration.controller";
+import PythiaController from "@/api/controllers/extensions/pythia/PythiaController";
+import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
 
 export default Vue.extend({
   name: "PythiaParameters",

@@ -69,8 +69,8 @@
 import {
   GroupingController,
   Level5Group
-} from "@/api/demeter/grouping.controller";
-import { LevelController } from "@/api/demeter/grouping/level.controller";
+} from "@/api/controllers/extensions/demeter/GroupingController";
+import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
 import Vue from "vue";
 
 export default Vue.component("DemeterGroupTile", {

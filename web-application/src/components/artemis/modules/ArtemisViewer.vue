@@ -218,12 +218,12 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ArtemisController } from "@/api/artemis/artemis.controller";
-import { AtlasController } from "@/api/atlas/atlas.controller";
+import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
+import { AtlasController } from "@/api/controllers/extensions/atlas/AtlasController";
 
-import DetectionController from "@/api/artemis/detection.controller";
+import DetectionController from "@/api/controllers/extensions/artemis/DetectionController";
 
-import ConfigurationController from "@/api/configuration/configuration.controller";
+import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
 import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
 import { Framework } from "@/api/interface/artemis/Framework";

@@ -1,4 +1,4 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import path from "path";
 import * as fs from "fs";
 

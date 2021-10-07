@@ -485,10 +485,10 @@
 <script lang="ts">
 import Vue from "vue";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
-import { FrameworkController } from "@/api/artemis/framework.controller";
-import { RegexNodeController } from "@/api/artemis/regexNode.controller";
-import { CategoryController } from "@/api/artemis/category.controller";
 import { Category } from "@/api/interface/ApiCategory.interface";
+import { RegexNodeController } from '@/api/controllers/extensions/artemis/RegexNodeController';
+import { FrameworkController } from '@/api/controllers/extensions/artemis/FrameworkController';
+import { CategoryController } from '@/api/controllers/extensions/artemis/CategoryController';
 
 export default Vue.extend({
   name: "CustomsCreator",

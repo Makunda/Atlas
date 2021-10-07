@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ArchitectureController from "@/api/imaging/ArchitectureController";
+import ArchitectureController from "@/api/controllers/imaging/ArchitectureController";
 
 export default Vue.extend({
   name: "DuplicateArchitectureModal",

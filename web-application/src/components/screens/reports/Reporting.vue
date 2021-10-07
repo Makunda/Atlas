@@ -216,7 +216,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IGroupResult from "@/api/interface/paris/groupResult.interface";
-import { ReportController } from "@/api/reports/Report.controller";
+import { ReportController } from "@/api/controllers/reports/ReportController";
 import { ReportInterface } from "@/api/interface/reports/report.interface";
 
 export default Vue.extend({

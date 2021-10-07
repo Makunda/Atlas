@@ -1,4 +1,4 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import config from "config";
 import fs from "fs";
 import path from "path";
@@ -41,7 +41,7 @@ class ProfilService {
 
     try {
       const files: string[] = fs.readdirSync(directoryPath);
-      return files.filter((x) => x.endsWith(".json"));
+      return files.filter(x => x.endsWith(".json"));
     } catch (err) {
       if (err) {
         console.error("Unable to retrieve the list of profiles", err);

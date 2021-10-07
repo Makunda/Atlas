@@ -99,8 +99,8 @@
 import { Vue } from "vue-property-decorator";
 import { Configuration, Credentials } from "@/Configuration";
 import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
-import ConfigurationController from "../api/configuration/configuration.controller";
-import { UtilsController } from "@/api/utils/utils.controller";
+import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
+import { UtilsController } from "@/api/controllers/utils/UtilsController";
 
 export default Vue.extend({
   name: "Login",

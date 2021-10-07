@@ -248,7 +248,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ModuleController from "@/api/imaging/ModuleController";
+import ModuleController from "@/api/controllers/imaging/ModuleController";
 import ModuleMergeModal from "../tiles/modules/ModuleMergeModal.vue";
 import DeleteModuleModal from "../tiles/modules/DeleteModuleModal.vue";
 import ModifyModuleModal from "../tiles/modules/ModifyModuleModal.vue";

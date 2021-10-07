@@ -136,7 +136,7 @@
 
 <script>
 import Vue from "vue";
-import { LevelController } from "@/api/demeter/grouping/level.controller";
+import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
 
 export default Vue.extend({
   name: "DemeterTile",

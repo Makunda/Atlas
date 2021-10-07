@@ -86,7 +86,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Module from "@/api/interface/imaging/Module";
-import ModuleController from "@/api/imaging/ModuleController";
+import ModuleController from "@/api/controllers/imaging/ModuleController";
 
 export default Vue.extend({
   name: "ModuleMergeModal",

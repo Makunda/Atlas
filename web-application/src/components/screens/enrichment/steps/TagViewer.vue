@@ -260,14 +260,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ApplicationRecord } from "@/api/applications/ApplicationController";
-import { UseCaseController } from "@/api/paris/UseCase.controller";
-import { TagController, TagResult } from "@/api/demeter/tag.controller";
+import { ApplicationRecord } from "@/api/controllers/applications/ApplicationController";
+import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
+import { TagController, TagResult } from "@/api/controllers/extensions/demeter/TagController";
 import { IUseCase } from "@/api/interface/paris/useCase.interface";
 import { IGroup } from "@/api/interface/paris/group.interface";
-import { GroupController } from "@/api/paris/Group.controller";
-import DragAndDropTile from "@/components/tiles/DragAndDropTile.vue";
-import { ExportController } from "@/api/paris/Export.controller";
+import { GroupController } from "@/api/controllers/extensions/paris/GroupController";
+import { ExportController } from "@/api/controllers/extensions/paris/ExportController";
 
 export default Vue.extend({
   name: "TagViewer",

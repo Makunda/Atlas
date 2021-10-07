@@ -283,7 +283,7 @@
 </template>
 
 <script lang="ts">
-import { UseCaseController } from "@/api/paris/UseCase.controller";
+import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
 import { IUseCase } from "@/api/interface/paris/useCase.interface";
 import Vue from "vue";
 

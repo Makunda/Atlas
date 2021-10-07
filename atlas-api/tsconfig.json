@@ -67,6 +67,7 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "paths": {
       "@agents/*": ["src/agents/*"],
+      "@extensions/*": ["src/extensions/*"],
       "@daos/*": ["src/daos/*"],
       "@entities/*": ["src/entities/*"],
       "@shared/*": ["src/shared/*"],

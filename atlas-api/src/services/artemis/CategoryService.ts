@@ -1,8 +1,8 @@
 import { logger } from "@shared/Logger";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import { int, Record } from "neo4j-driver";
-import { Category } from "@interfaces/artemis/Category.interface";
+import { Category } from "@interfaces/artemis/Category";
 import { CreateCategoryDto } from "@dtos/artemis/category.dto";
 
 function convertRecordToCategoryNode(record: Record): Category {

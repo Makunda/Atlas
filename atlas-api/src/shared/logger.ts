@@ -10,12 +10,12 @@ const options = {
     json: true,
     maxsize: 5242880, // 5MB
     maxFiles: 5,
-    colorize: false,
+    colorize: true,
   },
   console: {
     level: "info",
     handleExceptions: true,
-    json: false,
+    json: true,
     colorize: true,
   },
 };
@@ -40,7 +40,7 @@ if (process && process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
       format: winston.format.simple(),
-    })
+    }),
   );
 }
 

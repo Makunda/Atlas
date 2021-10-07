@@ -520,12 +520,12 @@
 </template>
 
 <script lang="ts">
-import { FrameworkController } from "@/api/artemis/framework.controller";
 import Vue from "vue";
-import { CategoryController } from "@/api/artemis/category.controller";
+import { FrameworkController } from "@/api/controllers/extensions/artemis/FrameworkController";
+import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
+import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
 import { Category } from "@/api/interface/ApiCategory.interface";
 import { Framework } from "@/api/interface/artemis/Framework";
-import { ArtemisController } from "@/api/artemis/artemis.controller";
 
 export default Vue.component("FrameworkReviewer", {
   data: () => ({

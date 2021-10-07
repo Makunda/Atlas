@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ModuleController from "@/api/imaging/ModuleController";
+import ModuleController from "@/api/controllers/imaging/ModuleController";
 
 export default Vue.extend({
   name: "DeleteModuleModal",

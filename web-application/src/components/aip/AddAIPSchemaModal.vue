@@ -108,8 +108,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { AipSchema, SchemaType } from "@/api/interface/aip/AipSchema";
-import { AipConfigurationController } from "@/api/aip/AipConfigurationController";
-import { AipSchemaController } from "@/api/aip/AipSchemaController";
+import { AipConfigurationController } from "@/api/controllers/aip/AipConfigurationController";
+import { AipSchemaController } from "@/api/controllers/aip/AipSchemaController";
 
 export default Vue.extend({
   name: "AddAIPSchemaModal",

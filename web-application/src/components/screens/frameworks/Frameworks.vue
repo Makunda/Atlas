@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { AtlasController } from "@/api/atlas/atlas.controller";
+import { AtlasController } from "@/api/controllers/extensions/atlas/AtlasController";
 import ArtemisConsole from "@/components/artemis/modules/ArtemisConsole.vue";
 import DetectionExplorer from "@/components/artemis/modules/DetectionExplorer.vue";
 import FrameworkReviewer from "@/components/artemis/modules/FrameworkReviewer.vue";

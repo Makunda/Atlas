@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Framework } from "@interfaces/artemis/Framework.interface";
+import { Framework } from "@interfaces/artemis/FrameworkInterface";
 import FrameworksService from "@services/artemis/FrameworkService";
 import { CreateFrameworkDto } from "@dtos/artemis/frameworks.dto";
 

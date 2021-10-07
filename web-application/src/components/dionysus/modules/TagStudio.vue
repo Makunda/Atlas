@@ -376,8 +376,8 @@
 <script lang="ts">
 import { IGroup } from "@/api/interface/paris/group.interface";
 import { IUseCase } from "@/api/interface/paris/useCase.interface";
-import { UseCaseController } from "@/api/paris/UseCase.controller";
-import { GroupController } from "@/api/paris/Group.controller";
+import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
+import { GroupController } from "@/api/controllers/extensions/paris/GroupController";
 import { Vue } from "vue-property-decorator";
 
 export default Vue.extend({

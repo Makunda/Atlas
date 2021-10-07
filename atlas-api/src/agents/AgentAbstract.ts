@@ -1,4 +1,4 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import TagService from "@services/configuration/TagService";
 import { sleep } from "@shared/FunctionGlob";
 import { logger } from "@shared/Logger";
@@ -47,9 +47,7 @@ export default abstract class AAgent {
           logger.error(`The ${this.getAgentName()} agent failed to query the database on the presence of tags`, err);
         } else {
           logger.error(
-            `The ${this.getAgentName()} agent failed to query the database on the presence of tags. Retrying in ${
-              this.numRetry * 5
-            } seconds`
+            `The ${this.getAgentName()} agent failed to query the database on the presence of tags. Retrying in ${this.numRetry * 5} seconds`,
           );
         }
 

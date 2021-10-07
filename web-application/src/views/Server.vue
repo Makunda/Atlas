@@ -143,10 +143,10 @@ import Vue from "vue/types/umd";
 <script lang="ts">
 import Vue from "vue";
 
-import { ApplicationController } from "@/api/applications/ApplicationController";
+import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 
 import { Configuration } from "@/Configuration";
-import { UtilsController } from "@/api/utils/utils.controller";
+import { UtilsController } from "@/api/controllers/utils/UtilsController";
 
 export default Vue.extend({
   name: "Server",

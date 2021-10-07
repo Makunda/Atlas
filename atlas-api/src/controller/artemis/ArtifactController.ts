@@ -1,5 +1,5 @@
 import { LaunchDetectionDto } from "@dtos/artemis/detection.dto";
-import { IArtifact } from "@interfaces/artemis/Artifact.interface";
+import { IArtifact } from "@interfaces/artemis/Artifact";
 import ArtifactService from "@services/artemis/ArtifactService";
 import { NextFunction, Request, Response } from "express";
 

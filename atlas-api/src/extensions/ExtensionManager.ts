@@ -1,8 +1,8 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { logger } from "@shared/Logger";
 import { fixedLengthString } from "@utils/utils";
 import glob from "glob";
-import Extension from "./Extension";
+import Extension from "@extensions/Extension";
 
 /**
  * Manage all the extensions installed
@@ -22,9 +22,7 @@ export default class ExtensionManager {
     // Get the file extension to treat based on the mode of production
     const fileExtension = process.env.NODE_ENV == "development" ? ".ts" : ".js";
     // eslint-disable-next-line max-len
-    logger.info(
-      `Extension Manager: Launched in ${process.env.NODE_ENV} mode. Files with extension ${fileExtension} will be treat.`
-    );
+    logger.info(`Extension Manager: Launched in ${process.env.NODE_ENV} mode. Files with extension ${fileExtension} will be treat.`);
 
     // Get the path of the folder containing all the plugins
     const path = ExtensionManager.EXTENSION_FOLDER;
@@ -40,6 +38,8 @@ export default class ExtensionManager {
       try {
         // Replace file extension in the path and import it
         filePath = file.replace(".ts", "");
+        filePath = file.replace(".js", "");
+
         pTemp = await import(filePath);
 
         // Verify that the module is well formatted with a default export

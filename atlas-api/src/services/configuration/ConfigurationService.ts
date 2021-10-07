@@ -1,6 +1,6 @@
 import { logger } from "@shared/Logger";
 import { QueryResult } from "neo4j-driver";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 
 class ConfigurationService {

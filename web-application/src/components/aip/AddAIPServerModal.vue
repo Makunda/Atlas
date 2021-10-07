@@ -88,7 +88,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { AipConfiguration } from "@/api/interface/aip/Aipconfiguration";
-import { AipConfigurationController } from "@/api/aip/AipConfigurationController";
+import { AipConfigurationController } from "@/api/controllers/aip/AipConfigurationController";
 
 export default Vue.extend({
   name: "AddAIPServerModal",

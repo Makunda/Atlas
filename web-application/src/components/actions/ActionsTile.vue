@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ActionController } from "@/api/actions/Actions.controller";
+import { ActionController } from "@/api/controllers/actions/ActionsController";
 import ActionInterface from "@/api/interface/actions/Action.interface.fs";
 
 export default Vue.extend({

@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ArchitectureController from "@/api/imaging/ArchitectureController";
+import ArchitectureController from "@/api/controllers/imaging/ArchitectureController";
 import AddAIPServerModal from "@/components/aip/AddAIPServerModal.vue";
 
 export default Vue.extend({

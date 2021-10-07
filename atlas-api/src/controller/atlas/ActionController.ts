@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import ActionEngine from "@services/atlas/actions/ActionEngine";
-import ActionInterface from "@interfaces/actions/Action.interface";
+import ActionInterface from "@interfaces/actions/ActionInterface";
 
 export default class ActionController {
   private actionService: ActionEngine = ActionEngine.getInstance();
@@ -18,10 +18,10 @@ export default class ActionController {
       if ("category" in Object.keys(req.query)) {
         const category = String(req.query.category);
         const actions: ActionInterface[] = this.actionService.getActionsByCategory(category);
-        res.status(200).json({ data: actions, message: `Action list` });
+        res.status(200).json({ data: actions, message: "Action list" });
       } else {
         const actions: ActionInterface[] = this.actionService.getActions();
-        res.status(200).json({ data: actions, message: `Action list` });
+        res.status(200).json({ data: actions, message: "Action list" });
       }
     } catch (error) {
       next(error);
@@ -54,7 +54,7 @@ export default class ActionController {
   public getCategories = (req: Request, res: Response, next: NextFunction): void => {
     try {
       const categories: string[] = this.actionService.getCategories();
-      res.status(200).json({ data: categories, message: `Action Categories` });
+      res.status(200).json({ data: categories, message: "Action Categories" });
     } catch (error) {
       next(error);
     }
@@ -80,7 +80,7 @@ export default class ActionController {
         application = body.application;
 
       await this.actionService.executeAction(id, application);
-      res.status(200).json({ data: true, message: `Action executed` });
+      res.status(200).json({ data: true, message: "Action executed" });
     } catch (error) {
       next(error);
     }

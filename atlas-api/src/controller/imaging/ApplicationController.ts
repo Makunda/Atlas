@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 import { NextFunction, Request, Response } from "express";
 import ApplicationService from "@services/imaging/ApplicationService";
-import { IApplicationInsights } from "@interfaces/imaging/ApplicationInsights.interface";
 import { logger } from "@shared/Logger";
+import { ApplicationInsights } from "@interfaces/imaging/ApplicationInsights";
 
 class ApplicationController {
   private applicationService = new ApplicationService();
@@ -36,7 +37,7 @@ class ApplicationController {
     }
 
     try {
-      const insights: IApplicationInsights = await this.applicationService.getApplicationsInsights(applicationName);
+      const insights: ApplicationInsights = await this.applicationService.getApplicationsInsights(applicationName);
       res.status(200).json({ data: insights, message: "Insights" });
     } catch (error) {
       logger.error(`Failed to get the insights of application ${applicationName}.`, error);

@@ -110,7 +110,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { FrameworkAssistants } from "@/api/atlas/frameworkAssistants.controller";
+import { FrameworkAssistants } from "@/api/controllers/extensions/atlas/FrameworkAssistantsController";
 import { IFrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
 
 export default Vue.extend({

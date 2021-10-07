@@ -1,0 +1,13 @@
+[
+  {
+    "id": "apache_log4j",
+    "name": "Apache Log4j",
+    "description": "",
+    "categories": ["logging", "Apache"],
+    "highlight": "org.apache:log4j",
+    "imaging": {
+      "name": "Apache Log4j",
+      "type": ["API Apache Log4j"]
+    }
+  }
+]

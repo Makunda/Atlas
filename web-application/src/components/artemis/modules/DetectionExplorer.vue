@@ -141,11 +141,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DetectionController from "@/api/artemis/detection.controller";
 import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
 import ModalDetectionResults from "@/components/artemis/tiles/ModalDetectionResults.vue";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
 import DetectionInterface from "@/api/interface/artemis/Detection";
+import DetectionController from "@/api/controllers/extensions/artemis/DetectionController";
 
 export default Vue.extend({
   name: "DetectionExplorer",

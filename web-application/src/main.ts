@@ -9,7 +9,7 @@ import vuetify from "./plugins/vuetify";
 import store from "./store";
 import VueCookies from "vue-cookies";
 import { Component } from "vue-router/types/router";
-import { LicenseController } from "@/api/login/License.controller";
+import { LicenseController } from "@/api/controllers/license/LicenseController";
 import { LicenseStatus } from "@/api/interface/license/License.interface";
 
 Vue.config.productionTip = false;

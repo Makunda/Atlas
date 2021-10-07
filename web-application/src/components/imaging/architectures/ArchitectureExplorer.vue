@@ -375,7 +375,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ArchitectureController from "@/api/imaging/ArchitectureController";
+import ArchitectureController from "@/api/controllers/imaging/ArchitectureController";
 import Archimodel from "@/api/interface/imaging/ArchiModel";
 import DeleteArchitectureModal from "@/components/imaging/tiles/architectures/DeleteArchitectureModal.vue";
 import ModifyArchitectureModal from "@/components/imaging/tiles/architectures/ModifyArchitectureModal.vue";

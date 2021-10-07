@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import CategoryService from "@services/artemis/CategoryService";
-import { Category } from "@interfaces/artemis/Category.interface";
+import { Category } from "@interfaces/artemis/Category";
 import { CreateCategoryDto } from "@dtos/artemis/category.dto";
 
 class CategoryController {

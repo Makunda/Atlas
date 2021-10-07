@@ -52,7 +52,7 @@ import GroupOperationsTile from "@/components/screens/grouping/tiles/GroupOperat
 import {
   GroupAction,
   GroupActionController
-} from "@/api/demeter/groupAction.controller";
+} from "@/api/controllers/extensions/demeter/GroupActionController";
 
 export default Vue.extend({
   name: "ActionTileViewer",

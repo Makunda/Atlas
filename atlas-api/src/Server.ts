@@ -11,7 +11,7 @@ import history from "connect-history-api-fallback";
 
 import BaseRouter from "./routes";
 import { logger } from "@shared/Logger";
-import LoginService from "@services/login/LoginService";
+import LoginService from "@services/security/LicenseService";
 
 const app = express();
 const { BAD_REQUEST } = StatusCodes;

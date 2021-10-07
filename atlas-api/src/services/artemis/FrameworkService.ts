@@ -1,9 +1,9 @@
 import config from "config";
 import { CreateFrameworkDto } from "../../dtos/artemis/frameworks.dto";
 import HttpException from "../../exceptions/HttpException";
-import { Framework } from "@interfaces/artemis/Framework.interface";
+import { Framework } from "@interfaces/artemis/FrameworkInterface";
 import { logger } from "@shared/Logger";
-import { Neo4JAccessLayer } from "../../database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "../../database/Neo4JAccessLayer";
 import { int, QueryResult, Record } from "neo4j-driver";
 import CategoryService from "@services/artemis/CategoryService";
 

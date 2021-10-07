@@ -4,6 +4,7 @@ const tsConfigPaths = require("tsconfig-paths");
 const baseUrl = "./dist"; // Either absolute or relative path. If relative it's resolved to current working directory.
 const paths = {
   "@agents/*": ["dist/agents/*"],
+  "@extensions/*": ["dist/extensions/*"],
   "@daos/*": ["dist/daos/*"],
   "@entities/*": ["dist/entities/*"],
   "@shared/*": ["dist/shared/*"],

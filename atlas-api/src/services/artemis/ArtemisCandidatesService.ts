@@ -1,5 +1,5 @@
 import { Record } from "neo4j-driver";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { DetectionCandidate } from "@dtos/artemis/detectionCandidate.dto";
 import { logger } from "@shared/Logger";
 import HttpException from "@exceptions/HttpException";

@@ -60,7 +60,7 @@ export default class ObjectDocumentNode extends DocumentNode {
         }
       }
     } catch (err) {
-      throw new Neo4jError("Failed to find a similar document. The request threw an exception : " + err);
+      throw new Neo4jError("Failed to find a similar document. The request threw an exception." + err, "CreateDoc");
     }
 
     // We now have a set of unique values

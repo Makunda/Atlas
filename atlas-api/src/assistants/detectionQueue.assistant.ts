@@ -1,8 +1,8 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { DetectionCandidate } from "@dtos/artemis/detectionCandidate.dto";
 import DetectionService from "@services/artemis/DetectionService";
 import { logger } from "@shared/Logger";
-import { CancellableDetectionPromise } from "@interfaces/artemis/DetectionStatus.interface";
+import { CancellableDetectionPromise } from "@interfaces/artemis/DetectionStatus";
 
 export class DetectionQueueAssistant {
   private static INSTANCE: DetectionQueueAssistant;
@@ -40,7 +40,7 @@ export class DetectionQueueAssistant {
     // Search and merge
     for (i = 0; i < this.candidateList.length; i++) {
       if (this.candidateList[i].application === candidate.application) {
-        candidate.languages.forEach((x) => {
+        candidate.languages.forEach(x => {
           if (this.candidateList[i].languages.indexOf(x) == -1) {
             this.candidateList[i].languages.push(x);
           }
@@ -55,7 +55,7 @@ export class DetectionQueueAssistant {
   }
 
   public removeCandidateByName(name: string): void {
-    this.candidateList = this.candidateList.filter((x) => {
+    this.candidateList = this.candidateList.filter(x => {
       return x.application == name;
     });
   }
@@ -108,7 +108,7 @@ export class DetectionQueueAssistant {
       function () {
         that.checkQueue();
       }.bind(this),
-      5000
+      5000,
     );
   }
 }

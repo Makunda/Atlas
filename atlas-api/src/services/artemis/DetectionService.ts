@@ -1,6 +1,6 @@
 import config from "config";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
-import { CancellableDetectionPromise, Detection, DetectionStatus } from "@interfaces/artemis/DetectionStatus.interface";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
+import { CancellableDetectionPromise, Detection, DetectionStatus } from "@interfaces/artemis/DetectionStatus";
 import { logger } from "@shared/Logger";
 
 class DetectionService {

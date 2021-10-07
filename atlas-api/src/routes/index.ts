@@ -9,18 +9,24 @@ import PythiaRouter from "./pythia/PythiaIndexRoute";
 import UtilsRoute from "./utils/UtilsIndexRoute";
 import AssistantsRoute from "./assistants/AssistantsRoute";
 import ParisRouter from "./paris/ParisRoute";
-import LoginRoute from "./login/LoginRoute";
+import LicenseRoute from "./license/LicenseRoute";
 import AipRouter from "./aip/AipRoute";
 import HighlightIndexRoute from "./highlight/HighlightIndexRoute";
 import CloudRouter from "./cloud/CloudRoute";
+import LoginRoute from "./login/LoginRoute";
 
 // Init router and path
 const router = Router();
 
+const licenseRoute = new LicenseRoute();
 const loginRoute = new LoginRoute();
 
 // Add sub-routes
 //router.use('/users', UserRouter);
+router.use("/license", licenseRoute.router);
+router.use("/login", loginRoute.router);
+
+// Authenticated routes
 
 router.use("/aip", AipRouter);
 router.use("/assistants", AssistantsRoute);
@@ -30,7 +36,6 @@ router.use("/cloud", CloudRouter);
 router.use("/configuration", ConfigurationRouter);
 router.use("/demeter", DemeterRouter);
 router.use("/highlight", HighlightIndexRoute);
-router.use("/login", loginRoute.router);
 router.use("/imaging", ImagingRouter);
 router.use("/paris", ParisRouter);
 router.use("/pythia", PythiaRouter);

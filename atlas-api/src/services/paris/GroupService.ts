@@ -1,6 +1,6 @@
 import { logger } from "@shared/Logger";
 import { int, QueryResult } from "neo4j-driver";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import { IGroup } from "@interfaces/paris/group.interface";
 import { groupResultFromObj, IGroupResult } from "@interfaces/paris/groupResult.interface";

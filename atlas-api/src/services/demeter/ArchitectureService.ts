@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import ArchitectureNode from "@entities/Imaging/ArchitectureNode";
 import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";

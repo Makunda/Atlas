@@ -38,12 +38,11 @@
 
 <script lang="ts">
 import GroupingTile from "@/components/screens/automation/tiles/GroupingTile.vue";
-// import DemeterGroupTile from "@/components/steps/main/tiles/DemeterGroupTile.vue";
 import TagViewer from "@/components/screens/enrichment/steps/TagViewer.vue";
 import UseCases from "@/components/dionysus/modules/UseCases.vue";
 import TagStudio from "@/components/dionysus/modules/TagStudio.vue";
 import Vue from "vue";
-import { AtlasController } from "@/api/atlas/atlas.controller";
+import { AtlasController } from "@/api/controllers/extensions/atlas/AtlasController";
 
 export default Vue.extend({
   name: "Automation",

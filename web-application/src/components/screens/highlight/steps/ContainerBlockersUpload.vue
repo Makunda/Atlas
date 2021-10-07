@@ -389,7 +389,7 @@
 <script lang="ts">
 import Vue from "vue";
 import ContainerBlocker from "@/api/interface/highlight/ContainerBlocker";
-import ContainerBlockerController from "@/api/highlight/ContainerBlockerController";
+import ContainerBlockerController from "@/api/controllers/highlight/ContainerBlockerController";
 import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({

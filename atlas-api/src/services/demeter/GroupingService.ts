@@ -1,4 +1,4 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { DemeterGroup } from "@interfaces/demeter/demeterGroup.interface";
 import { CandidateResults } from "@interfaces/demeter/candidateResults.interface";
 import { int } from "neo4j-driver";

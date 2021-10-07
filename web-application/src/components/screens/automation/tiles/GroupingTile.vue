@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts">
-import { GroupingController } from "@/api/demeter/grouping.controller";
 import LevelAgent from "@/components/agents/LevelAgent.vue";
 import ModuleAgent from "@/components/agents/ModuleAgent.vue";
 import FrameworkAgent from "@/components/agents/FrameworkAgent.vue";
@@ -57,7 +56,7 @@ import ArchitectureAgent from "@/components/agents/ArchitectureAgent.vue";
 import AssistantsManager from "@/components/assistants/AssistantsManager.vue";
 
 import Vue from "vue";
-import { LevelController } from "@/api/demeter/grouping/level.controller";
+import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
 
 export default Vue.component("GroupingTile", {
   components: {

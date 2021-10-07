@@ -1,10 +1,10 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import path from "path";
 
 import { logger } from "@shared/Logger";
 import fs from "fs";
 import glob from "glob";
-import ActionInterface from "@interfaces/actions/Action.interface";
+import ActionInterface from "@interfaces/actions/ActionInterface";
 import TagService from "@services/configuration/TagService";
 
 export default class ActionEngine {
@@ -60,7 +60,7 @@ export default class ActionEngine {
    */
   public getActionsByCategory(category: string): ActionInterface[] {
     const actions: ActionInterface[] = [];
-    this.actionList.forEach((x) => {
+    this.actionList.forEach(x => {
       if (category in x.categories) actions.push(x);
     });
     return actions;
@@ -71,8 +71,8 @@ export default class ActionEngine {
    */
   public getCategories(): string[] {
     const categoriesSet = new Set();
-    this.actionList.forEach((x) => {
-      x.categories.forEach((x) => categoriesSet.add(x));
+    this.actionList.forEach(x => {
+      x.categories.forEach(x => categoriesSet.add(x));
     });
 
     return [...categoriesSet] as string[];
@@ -142,7 +142,7 @@ export default class ActionEngine {
   private loadActions(): void {
     const fileList: string[] = glob.sync(`${this.actionFolder}/*.json`);
     let it = 0;
-    fileList.forEach((x) => {
+    fileList.forEach(x => {
       try {
         const actionList: ActionInterface[] = this.processFile(x);
         for (let i = 0; i < actionList.length; i++) {

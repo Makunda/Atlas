@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { logger } from "@shared/Logger";
 import { QueryResult } from "neo4j-driver";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 
 import { ArtemisCandidates } from "@services/artemis/ArtemisCandidatesService";
-import { IApplicationInsights } from "@interfaces/imaging/ApplicationInsights.interface";
+import { ApplicationInsights } from "@interfaces/imaging/ApplicationInsights";
 
 class ApplicationService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
@@ -35,7 +36,7 @@ class ApplicationService {
   /**
    * Get the version of Artemis
    */
-  public async getApplicationsInsights(application: string): Promise<IApplicationInsights> {
+  public async getApplicationsInsights(application: string): Promise<ApplicationInsights> {
     try {
       const ac = new ArtemisCandidates();
       const info = await ac.getCandidateInformation(application);
@@ -66,7 +67,7 @@ class ApplicationService {
         modules: modules,
         architectures: architectures,
         technologies: supportedLanguages,
-      } as IApplicationInsights;
+      } as ApplicationInsights;
     } catch (err) {
       logger.error(`Failed to retrieve information about `, err);
       throw new HttpException(500, "Internal error");

@@ -127,7 +127,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { CategoryController } from "@/api/artemis/category.controller";
+import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
 import { Category } from "@/api/interface/ApiCategory.interface";
 
 export default Vue.extend({

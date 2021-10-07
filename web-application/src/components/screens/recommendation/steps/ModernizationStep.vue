@@ -157,7 +157,7 @@
 import {
   GroupAction,
   GroupActionController
-} from "@/api/demeter/groupAction.controller";
+} from "@/api/controllers/extensions/demeter/GroupActionController";
 import Vue from "vue";
 
 export default Vue.extend({

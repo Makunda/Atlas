@@ -1,6 +1,6 @@
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
-import { IArtifact } from "@interfaces/artemis/Artifact.interface";
+import { IArtifact } from "@interfaces/artemis/Artifact";
 import { logger } from "@shared/Logger";
 import { int, Record, Transaction } from "neo4j-driver";
 import TagService from "@services/configuration/TagService";
@@ -138,7 +138,7 @@ export default class ArtifactService {
     extractionType: string,
     groupType: string,
     primaryGroupName: string,
-    secondaryGroupName: string
+    secondaryGroupName: string,
   ): Promise<void> {
     try {
       const prefix: string = await ArtifactService.getExtractionPrefix(groupType);
@@ -194,7 +194,7 @@ export default class ArtifactService {
       try {
         tx = session.beginTransaction();
 
-        reqMap.forEach((x) => {
+        reqMap.forEach(x => {
           const req = x[0];
           const params = x[1];
           tx.run(req, params);

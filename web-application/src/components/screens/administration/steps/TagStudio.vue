@@ -235,11 +235,11 @@
 </template>
 
 <script lang="ts">
-import { Tag, TagController } from "@/api/demeter/tag.controller";
+import { Tag, TagController } from "@/api/controllers/extensions/demeter/TagController";
 import {
   UseCaseController,
   UseCaseResult
-} from "@/api/demeter/useCase.controller";
+} from "@/api/controllers/extensions/demeter/UseCaseController";
 import { Vue } from "vue-property-decorator";
 
 export default Vue.extend({

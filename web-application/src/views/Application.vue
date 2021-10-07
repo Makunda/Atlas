@@ -140,10 +140,10 @@ import Vue from "vue/types/umd";
 <script lang="ts">
 import Vue from "vue";
 
-import { ApplicationController } from "@/api/applications/ApplicationController";
+import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 import FlashMessage from "@/modules/flash/FlashMessage.vue";
 import { Configuration } from "@/Configuration";
-import { UtilsController } from "@/api/utils/utils.controller";
+import { UtilsController } from "@/api/controllers/utils/UtilsController";
 import { Cookie } from "@/enum/Cookie";
 import flash, { FlashType } from "@/modules/flash/Flash";
 

@@ -1,5 +1,5 @@
 import { QueryResult } from "neo4j-driver";
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 
 class UtilsService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();

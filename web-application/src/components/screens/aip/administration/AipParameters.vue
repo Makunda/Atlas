@@ -193,7 +193,7 @@
 import Vue from "vue";
 import AddAIPServerModal from "@/components/aip/AddAIPServerModal.vue";
 import AddAIPSchemaModal from "@/components/aip/AddAIPSchemaModal.vue";
-import { AipConfigurationController } from "@/api/aip/AipConfigurationController";
+import { AipConfigurationController } from "@/api/controllers/aip/AipConfigurationController";
 import {
   AipConfiguration,
   ValidityServer

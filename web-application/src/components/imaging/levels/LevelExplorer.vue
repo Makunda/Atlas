@@ -360,7 +360,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LevelController from "@/api/imaging/LevelController";
+import LevelController from "@/api/controllers/imaging/LevelController";
 import ILevel from "@/api/interface/imaging/Level.interface";
 import DemeterTile from "../../screens/imagingTuning/tiles/DemeterTile.vue";
 import LevelMergeModal from "@/components/imaging/tiles/LevelMergeModal.vue";

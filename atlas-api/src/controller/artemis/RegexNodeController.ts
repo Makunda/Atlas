@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import RegexNodesService from "@services/artemis/RegexNodesService";
-import { RegexNode } from "@interfaces/artemis/RegexNode.interface";
+import { RegexNode } from "@interfaces/artemis/RegexNode";
 import { CreateRegexNodeDto } from "@dtos/artemis/regexNode.dto";
 
 class RegexNodeController {

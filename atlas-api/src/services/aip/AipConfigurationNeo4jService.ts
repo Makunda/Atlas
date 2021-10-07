@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Neo4JAccessLayer } from "@database/Neo4jAccessLayer";
+import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import Neo4jNoResults from "@exceptions/Neo4jNoResults";
 import { AipConfiguration, aipConfigurationFromNode } from "@interfaces/aip/AipConfiguration";
 import { AipSchema, aipSchemaFromNode } from "@interfaces/aip/AipSchema";

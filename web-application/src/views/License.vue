@@ -48,7 +48,7 @@
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
 
-import { LicenseController } from "@/api/login/License.controller";
+import { LicenseController } from "@/api/controllers/license/LicenseController";
 import {
   LicenseInterface,
   LicenseStatus
