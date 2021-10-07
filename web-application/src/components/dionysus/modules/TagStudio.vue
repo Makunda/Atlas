@@ -4,8 +4,8 @@
       <!-- Introduction Section -->
       <v-card-title>
         <p class="text-h3 text--primary3 pb-3">
-        <span class="font-weight-light pr-1">Tag creator studio</span>
-      </p>
+          <span class="font-weight-light pr-1">Tag creator studio</span>
+        </p>
       </v-card-title>
       <v-card-subtitle class="ml-3"
         >In this creator studio you'll be able to create your own Demeter

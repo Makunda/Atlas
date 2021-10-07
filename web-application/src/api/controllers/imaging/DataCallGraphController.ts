@@ -12,7 +12,7 @@ export default class DataCallGraphController {
    * @param application
    */
   public static async unMaskAllDataCallGraph(
-    application: string,
+    application: string
   ): Promise<number> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -26,7 +26,7 @@ export default class DataCallGraphController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to unmask all dataCallGraph. Status (${res.status}). Error: ${res.data.message}`,
+          `Failed to unmask all dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -40,7 +40,7 @@ export default class DataCallGraphController {
    * @param application
    */
   public static async getNumberDataCallGraph(
-    application: string,
+    application: string
   ): Promise<number> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -54,7 +54,7 @@ export default class DataCallGraphController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to number of dataCallGraph. Status (${res.status})`,
+          `Failed to number of dataCallGraph. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -68,7 +68,7 @@ export default class DataCallGraphController {
    * @param application Name of the dataCallGraph
    */
   public static async getInsightsUnmaskedDataCallGraph(
-    application: string,
+    application: string
   ): Promise<DataCallGraphInsights> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -82,7 +82,7 @@ export default class DataCallGraphController {
         return apiResponse.data as DataCallGraphInsights;
       } else {
         throw new Error(
-          `Failed to get dataCallGraph insights. Status (${res.status})`,
+          `Failed to get dataCallGraph insights. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -96,7 +96,7 @@ export default class DataCallGraphController {
    * @param application
    */
   public static async getNumberMaskedDataCallGraph(
-    application: string,
+    application: string
   ): Promise<number> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -110,7 +110,7 @@ export default class DataCallGraphController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to number of masked dataCallGraph. Status (${res.status})`,
+          `Failed to number of masked dataCallGraph. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -132,7 +132,7 @@ export default class DataCallGraphController {
     start: number,
     end: number,
     sort: string,
-    sortDesc: string,
+    sortDesc: string
   ): Promise<DataCallGraph[]> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -143,7 +143,7 @@ export default class DataCallGraphController {
         start: start,
         end: end,
         sort: sort,
-        sortDesc: sortDesc,
+        sortDesc: sortDesc
       };
 
       const res = await axios.post(url, body);
@@ -155,7 +155,7 @@ export default class DataCallGraphController {
         }
       } else {
         throw new Error(
-          `Failed to a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`,
+          `Failed to a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -179,7 +179,7 @@ export default class DataCallGraphController {
     end: number,
     sort: string,
     sortDesc: string,
-    filter?: Record<string, number>,
+    filter?: Record<string, number>
   ): Promise<DataCallGraph[]> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -191,7 +191,7 @@ export default class DataCallGraphController {
         end: end,
         sort: sort,
         sortDesc: sortDesc,
-        filter: filter,
+        filter: filter
       };
 
       const res = await axios.post(url, body);
@@ -203,7 +203,7 @@ export default class DataCallGraphController {
         }
       } else {
         throw new Error(
-          `Failed to a batch of dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`,
+          `Failed to a batch of dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -219,7 +219,7 @@ export default class DataCallGraphController {
    */
   public static async maskDataCallGraph(
     application: string,
-    dataCallGraphID: number,
+    dataCallGraphID: number
   ): Promise<DataCallGraph> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -228,7 +228,7 @@ export default class DataCallGraphController {
     try {
       const res = await axios.post(url, {
         application: application,
-        dataCallGraphID: dataCallGraphID,
+        dataCallGraphID: dataCallGraphID
       });
 
       if (res.status == 200) {
@@ -236,7 +236,7 @@ export default class DataCallGraphController {
         return apiResponse.data as DataCallGraph;
       } else {
         throw new Error(
-          `Failed to get a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}`,
+          `Failed to get a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -254,7 +254,7 @@ export default class DataCallGraphController {
   public static async pinDataCallGraph(
     application: string,
     dataCallGraphID: number,
-    prefix: string,
+    prefix: string
   ): Promise<DataCallGraph> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -264,7 +264,7 @@ export default class DataCallGraphController {
       const body: any = {
         application: application,
         dataCallGraphID: dataCallGraphID,
-        prefix: prefix,
+        prefix: prefix
       };
       const res = await axios.post(url, body);
 
@@ -273,7 +273,7 @@ export default class DataCallGraphController {
         return apiResponse.data as DataCallGraph;
       } else {
         throw new Error(
-          `Failed to pin a dataCallGraph. Status (${res.status}). Error: ${res.data.message}`,
+          `Failed to pin a dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -291,7 +291,7 @@ export default class DataCallGraphController {
   public static async unpinDataCallGraph(
     application: string,
     dataCallGraphID: number,
-    prefix: string,
+    prefix: string
   ): Promise<DataCallGraph> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -301,7 +301,7 @@ export default class DataCallGraphController {
       const body: any = {
         application: application,
         dataCallGraphID: dataCallGraphID,
-        prefix: prefix,
+        prefix: prefix
       };
       const res = await axios.post(url, body);
 
@@ -310,7 +310,7 @@ export default class DataCallGraphController {
         return apiResponse.data as DataCallGraph;
       } else {
         throw new Error(
-          `Failed to unpin a dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`,
+          `Failed to unpin a dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -328,7 +328,7 @@ export default class DataCallGraphController {
   public static async renameDataCallGraph(
     application: string,
     dataCallGraphID: number,
-    name: string,
+    name: string
   ): Promise<DataCallGraph> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -338,7 +338,7 @@ export default class DataCallGraphController {
       const body: any = {
         application: application,
         dataCallGraphID: dataCallGraphID,
-        dataCallGraphName: name,
+        dataCallGraphName: name
       };
       const res = await axios.post(url, body);
 
@@ -347,7 +347,7 @@ export default class DataCallGraphController {
         return apiResponse.data as DataCallGraph;
       } else {
         throw new Error(
-          `Failed to rename a dataCallGraph. Status (${res.status}). Error: ${res.data.message}`,
+          `Failed to rename a dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -363,7 +363,7 @@ export default class DataCallGraphController {
    */
   public static async maskDataCallGraphWithFilter(
     application: string,
-    filter: Record<string, unknown>,
+    filter: Record<string, unknown>
   ): Promise<DataCallGraph> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -372,7 +372,7 @@ export default class DataCallGraphController {
     try {
       const res = await axios.post(url, {
         application: application,
-        filter: filter,
+        filter: filter
       });
 
       if (res.status == 200) {
@@ -380,7 +380,7 @@ export default class DataCallGraphController {
         return apiResponse.data as DataCallGraph;
       } else {
         throw new Error(
-          `Failed to mask dataCallGraph with filter. Status (${res.status}). Error: ${res.data.message}`,
+          `Failed to mask dataCallGraph with filter. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
@@ -396,7 +396,7 @@ export default class DataCallGraphController {
    */
   public static async unmaskDataCallGraph(
     application: string,
-    dataCallGraphID: number,
+    dataCallGraphID: number
   ): Promise<DataCallGraph> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -405,7 +405,7 @@ export default class DataCallGraphController {
     try {
       const res = await axios.post(url, {
         application: application,
-        dataCallGraphID: dataCallGraphID,
+        dataCallGraphID: dataCallGraphID
       });
 
       if (res.status == 200) {
@@ -413,7 +413,7 @@ export default class DataCallGraphController {
         return apiResponse.data as DataCallGraph;
       } else {
         throw new Error(
-          `Failed to a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`,
+          `Failed to a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -427,7 +427,7 @@ export default class DataCallGraphController {
    * @param application Name of the application
    */
   public static async unmaskAllDataCallGraph(
-    application: string,
+    application: string
   ): Promise<boolean> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -441,7 +441,7 @@ export default class DataCallGraphController {
         return Boolean(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to un-mask all dataCallGraph. Status (${res.status})`,
+          `Failed to un-mask all dataCallGraph. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -457,7 +457,7 @@ export default class DataCallGraphController {
    */
   public static async maskByCount(
     application: string,
-    limit: number,
+    limit: number
   ): Promise<number> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -466,7 +466,7 @@ export default class DataCallGraphController {
     try {
       const body = {
         application: application,
-        limit: limit,
+        limit: limit
       };
       const res = await axios.post(url, body);
 
@@ -475,7 +475,7 @@ export default class DataCallGraphController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to mask dataCallGraph by Number of objects. Status (${res.status})`,
+          `Failed to mask dataCallGraph by Number of objects. Status (${res.status})`
         );
       }
     } catch (error) {
@@ -491,7 +491,7 @@ export default class DataCallGraphController {
    */
   public static async maskByTechnology(
     application: string,
-    limit: number,
+    limit: number
   ): Promise<number> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -500,7 +500,7 @@ export default class DataCallGraphController {
     try {
       const body = {
         application: application,
-        limit: limit,
+        limit: limit
       };
       const res = await axios.post(url, body);
 
@@ -509,7 +509,7 @@ export default class DataCallGraphController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to mask dataCallGraph by Number of Technology. Status (${res.status}). Error: ${res.data.message}.`,
+          `Failed to mask dataCallGraph by Number of Technology. Status (${res.status}). Error: ${res.data.message}.`
         );
       }
     } catch (error) {
@@ -525,7 +525,7 @@ export default class DataCallGraphController {
    */
   public static async maskByTerms(
     application: string,
-    terms: string[],
+    terms: string[]
   ): Promise<number> {
     const url =
       DataCallGraphController.API_BASE_URL +
@@ -534,7 +534,7 @@ export default class DataCallGraphController {
     try {
       const body = {
         application: application,
-        terms: terms,
+        terms: terms
       };
       const res = await axios.post(url, body);
 
@@ -543,7 +543,7 @@ export default class DataCallGraphController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to mask dataCallGraph by terms. Status (${res.status})`,
+          `Failed to mask dataCallGraph by terms. Status (${res.status})`
         );
       }
     } catch (error) {

@@ -276,7 +276,7 @@ export default Vue.extend({
               ? ValidityServer.VALID
               : ValidityServer.ERROR;
           })
-          .catch(err => {
+          .catch(() => {
             console.error("Failed to to check configuration.");
           });
       }

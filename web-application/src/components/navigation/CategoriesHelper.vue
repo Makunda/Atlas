@@ -7,7 +7,7 @@
     >
     <v-card-subtitle></v-card-subtitle>
     <v-card-text>
-      <v-container fluid >
+      <v-container fluid>
         <v-row class="d-flex flex-row ">
           <!--   Report Card    -->
           <v-hover v-slot:default="{ hover }">
@@ -195,7 +195,8 @@
                   </p>
                 </span>
                 <p>
-                  Get specific recommendations for an application based on the selected cloud service.
+                  Get specific recommendations for an application based on the
+                  selected cloud service.
                 </p>
               </v-card-text>
               <v-card-actions>

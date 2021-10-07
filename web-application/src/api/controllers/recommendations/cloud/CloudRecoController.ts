@@ -27,18 +27,18 @@ export default class CloudRecoController {
         }
       } else {
         throw new Error(
-          `Failed to get the cloud recommendations extensions. Status (${res.status}). Message: ${res.data}`,
+          `Failed to get the cloud recommendations extensions. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to get cloud recommendations extensions.",
-        body: error,
+        body: error
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to get cloud recommendations extensions.`,
-        error,
+        error
       );
       throw error;
     }
@@ -49,14 +49,14 @@ export default class CloudRecoController {
    */
   public static async runExtension(
     id: string,
-    application: string,
+    application: string
   ): Promise<any> {
     const url = this.apiBaseUrl + "/extension/run";
 
     try {
       const body = {
         id: id,
-        application: application,
+        application: application
       };
       const res = await axios.post(url, body);
 
@@ -67,18 +67,18 @@ export default class CloudRecoController {
         }
       } else {
         throw new Error(
-          `Failed to run the cloud recommendations extension. Status (${res.status}). Message: ${res.data}`,
+          `Failed to run the cloud recommendations extension. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to run cloud recommendations extension.",
-        body: error,
+        body: error
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to run the cloud recommendations extension.`,
-        error,
+        error
       );
       throw error;
     }

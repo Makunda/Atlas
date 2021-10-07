@@ -315,14 +315,17 @@
               <v-card-text>
                 <v-container>
                   <v-row v-if="loadingApply" class="d-flex flex-column">
-                    <p class="text-h3">Applying {{ taggingType }}s on {{ application }}...</p>
+                    <p class="text-h3">
+                      Applying {{ taggingType }}s on {{ application }}...
+                    </p>
                     <v-progress-linear
                       class="mt-4 mb-2"
                       height="6"
                       :value="percentageTagsApplied"
                     ></v-progress-linear>
                     <p class="text-h5">
-                      {{ sizeSent }} {{ taggingType }}s applied on {{ sizeToSend }}
+                      {{ sizeSent }} {{ taggingType }}s applied on
+                      {{ sizeToSend }}
                     </p>
                     <p class="text-h5">{{ blockerNotApplied.length }} Errors</p>
                   </v-row>
@@ -331,8 +334,8 @@
                     <v-container>
                       <v-row>
                         <p class="text-h3">
-                          {{ sizeSent - blockerNotApplied.length }} {{ taggingType }}s were
-                          applied
+                          {{ sizeSent - blockerNotApplied.length }}
+                          {{ taggingType }}s were applied
                         </p>
                       </v-row>
                       <v-row>
@@ -368,18 +371,18 @@
                       absolute path so that it only matches the structure the
                       structure of the application folder.
                     </p>
-                    
-                      <!-- Data table to display the errors  -->
-                      <v-data-table
-                        max-height="500px"
-                        style="width: 100%;"
-                        :headers="headers"
-                        :items="blockerNotApplied"
-                        dense
-                        item-key="id"
-                        class="elevation-1"
-                      >
-                      </v-data-table>
+
+                    <!-- Data table to display the errors  -->
+                    <v-data-table
+                      max-height="500px"
+                      style="width: 100%;"
+                      :headers="headers"
+                      :items="blockerNotApplied"
+                      dense
+                      item-key="id"
+                      class="elevation-1"
+                    >
+                    </v-data-table>
                   </v-row>
                 </v-container>
               </v-card-text>

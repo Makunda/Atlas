@@ -235,7 +235,10 @@
 </template>
 
 <script lang="ts">
-import { Tag, TagController } from "@/api/controllers/extensions/demeter/TagController";
+import {
+  Tag,
+  TagController
+} from "@/api/controllers/extensions/demeter/TagController";
 import {
   UseCaseController,
   UseCaseResult

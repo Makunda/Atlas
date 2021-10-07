@@ -3,7 +3,7 @@ import { ApiComUtils } from "../../ApiComUtils";
 import { ApiResponse } from "../../interface/ApiResponse.interface";
 import {
   LicenseInterface,
-  LicenseStatus,
+  LicenseStatus
 } from "@/api/interface/license/License.interface";
 
 export class LicenseController {
@@ -22,7 +22,7 @@ export class LicenseController {
         const apiResponse: ApiResponse = res.data;
         return {
           license: String(apiResponse.data),
-          status: LicenseStatus.VALID,
+          status: LicenseStatus.VALID
         };
       } else {
         console.warn(`Failed to retrieve the license. Status (${res.status})`);
@@ -51,7 +51,7 @@ export class LicenseController {
         const apiResponse: ApiResponse = res.data;
         return {
           license: String(license),
-          status: LicenseStatus.VALID,
+          status: LicenseStatus.VALID
         };
       } else {
         console.warn(`Failed to apply a new license. Status (${res.status})`);

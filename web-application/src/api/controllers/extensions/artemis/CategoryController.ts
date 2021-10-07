@@ -18,13 +18,13 @@ export class CategoryController {
         return apiResponse.data as Category;
       } else {
         throw new Error(
-          `Failed to add a Category Node. Status (${res.status}) : Error : ${res.data}`,
+          `Failed to add a Category Node. Status (${res.status}) : Error : ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a Category Node..`,
-        error,
+        error
       );
       throw error;
     }
@@ -45,13 +45,13 @@ export class CategoryController {
         return apiResponse.data as Category;
       } else {
         throw new Error(
-          `Failed to update a Category Node. Status (${res.status}) : Error : ${res.data}`,
+          `Failed to update a Category Node. Status (${res.status}) : Error : ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a Category Node..`,
-        error,
+        error
       );
       throw error;
     }
@@ -73,13 +73,13 @@ export class CategoryController {
         return Boolean(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to delete a Category Node. Status (${res.status}) : Error : ${res.data}`,
+          `Failed to delete a Category Node. Status (${res.status}) : Error : ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a Category Node..`,
-        error,
+        error
       );
       throw error;
     }
@@ -103,13 +103,13 @@ export class CategoryController {
         return results;
       } else {
         throw new Error(
-          `Failed to retrieve the list of Category Nodes. Status (${res.status}) : Error : ${res.data}`,
+          `Failed to retrieve the list of Category Nodes. Status (${res.status}) : Error : ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of Category Nodes..`,
-        error,
+        error
       );
       throw error;
     }

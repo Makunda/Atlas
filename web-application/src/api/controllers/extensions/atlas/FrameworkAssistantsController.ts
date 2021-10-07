@@ -28,7 +28,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of actions .`,
-        error,
+        error
       );
       throw error;
     }
@@ -57,7 +57,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of categories .`,
-        error,
+        error
       );
       throw error;
     }
@@ -83,7 +83,7 @@ export class FrameworkAssistants {
         }
       } else {
         console.warn(
-          `Failed to get all the assistants. Status (${res.status})`,
+          `Failed to get all the assistants. Status (${res.status})`
         );
       }
 
@@ -91,7 +91,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to all the assistants.`,
-        error,
+        error
       );
       throw error;
     }
@@ -99,7 +99,7 @@ export class FrameworkAssistants {
 
   public static async newAssistant(
     category: string,
-    actions: string[],
+    actions: string[]
   ): Promise<boolean> {
     const url =
       FrameworkAssistants.API_BASE_URL + "/api/assistants/frameworks/new";
@@ -118,7 +118,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to create the assistant.`,
-        error,
+        error
       );
       throw error;
     }
@@ -143,7 +143,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete the assistant.`,
-        error,
+        error
       );
       throw error;
     }

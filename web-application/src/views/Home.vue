@@ -1,7 +1,7 @@
 <!-- Login modal -->
 <template>
-  <v-container class="pa-10 mx-auto pt-15" >
-    <v-row >
+  <v-container class="pa-10 mx-auto pt-15">
+    <v-row>
       <v-card width="100%">
         <v-card-title
           ><h1 class="text-h4 mb-4">
@@ -90,12 +90,10 @@
     <v-row class="mt-10">
       <CategoriesHelper></CategoriesHelper>
     </v-row>
-    
+
     <v-row class="mt-10">
       <ActionsTile></ActionsTile>
     </v-row>
-
-    
   </v-container>
 </template>
 

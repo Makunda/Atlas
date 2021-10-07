@@ -28,7 +28,7 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to change the status of agent ${agent}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -49,7 +49,7 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to get the prefix of agent ${agent}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -78,7 +78,7 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to change the status of agent ${agent}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -107,7 +107,7 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to change the status of agent ${agent}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -132,7 +132,7 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to force the action of the agent ${agent}.`,
-        error,
+        error
       );
       throw error;
     }

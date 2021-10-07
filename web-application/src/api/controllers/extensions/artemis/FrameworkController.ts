@@ -10,7 +10,7 @@ export class FrameworkController {
   // Find frameworks by name
   public static async findFramework(
     name: string,
-    internalType?: string,
+    internalType?: string
   ): Promise<DetectionResult[]> {
     let url =
       FrameworkController.API_BASE_URL + "/api/artemis/frameworks/find/";
@@ -35,7 +35,7 @@ export class FrameworkController {
         }
       } else {
         console.warn(
-          `Failed to retrieve frameworks by its name. Status (${res.status})`,
+          `Failed to retrieve frameworks by its name. Status (${res.status})`
         );
       }
 
@@ -43,7 +43,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve frameworks by its name.`,
-        error,
+        error
       );
       throw error;
     }
@@ -51,7 +51,7 @@ export class FrameworkController {
 
   // Get the number of Frameworks
   public static async getTotalFramework(
-    internalType?: string,
+    internalType?: string
   ): Promise<number> {
     let url =
       FrameworkController.API_BASE_URL + "/api/artemis/frameworks/total";
@@ -70,7 +70,7 @@ export class FrameworkController {
         num = Number(apiResponse.data);
       } else {
         console.warn(
-          `Failed to retrieve number of frameworks by internalType. Status (${res.status})`,
+          `Failed to retrieve number of frameworks by internalType. Status (${res.status})`
         );
       }
 
@@ -78,7 +78,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve frameworks by internalType.`,
-        error,
+        error
       );
       throw error;
     }
@@ -109,7 +109,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to search the frameworks.`,
-        error,
+        error
       );
       throw error;
     }
@@ -134,7 +134,7 @@ export class FrameworkController {
         }
       } else {
         console.warn(
-          `Failed to retrieve list of internal type. Status (${res.status})`,
+          `Failed to retrieve list of internal type. Status (${res.status})`
         );
       }
 
@@ -142,7 +142,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve list of internal type.`,
-        error,
+        error
       );
       throw error;
     }
@@ -162,13 +162,13 @@ export class FrameworkController {
         }
       } else {
         throw new Error(
-          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`,
+          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
         );
       }
     } catch (err) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a the list of frameworks to validate.`,
-        err,
+        err
       );
       throw err;
     }
@@ -188,13 +188,13 @@ export class FrameworkController {
         }
       } else {
         throw new Error(
-          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`,
+          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
         );
       }
     } catch (err) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a the list of duplicates frameworks.`,
-        err,
+        err
       );
       throw err;
     }
@@ -212,13 +212,13 @@ export class FrameworkController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`,
+          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
         );
       }
     } catch (err) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve execute the auto cleaning on the server.`,
-        err,
+        err
       );
       throw err;
     }
@@ -228,7 +228,7 @@ export class FrameworkController {
   public static async getFrameworkBatch(
     start: number,
     stop: number,
-    internalType?: string,
+    internalType?: string
   ): Promise<Framework[]> {
     let url =
       FrameworkController.API_BASE_URL + "/api/artemis/frameworks/batch";
@@ -254,7 +254,7 @@ export class FrameworkController {
         }
       } else {
         console.warn(
-          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`,
+          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`
         );
       }
 
@@ -262,7 +262,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a batch frameworks by internalType.`,
-        error,
+        error
       );
       throw error;
     }
@@ -277,7 +277,7 @@ export class FrameworkController {
   public static async updateFrameworks(
     oldName: string,
     oldInternalType: string,
-    framework: Framework,
+    framework: Framework
   ): Promise<boolean> {
     const url =
       FrameworkController.API_BASE_URL + "/api/artemis/frameworks/update";
@@ -296,7 +296,7 @@ export class FrameworkController {
         updateResutls = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`,
+          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`
         );
       }
 
@@ -304,14 +304,14 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a batch frameworks by internalType.`,
-        error,
+        error
       );
       throw error;
     }
   }
 
   public static async updateFrameworksById(
-    framework: Framework,
+    framework: Framework
   ): Promise<boolean> {
     const url =
       FrameworkController.API_BASE_URL + "/api/artemis/frameworks/updateByID";
@@ -328,7 +328,7 @@ export class FrameworkController {
         updateResutls = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to update a framework by its Id. Status (${res.status})`,
+          `Failed to update a framework by its Id. Status (${res.status})`
         );
       }
 
@@ -336,7 +336,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a framework by its Id.`,
-        error,
+        error
       );
       throw error;
     }
@@ -358,7 +358,7 @@ export class FrameworkController {
         updateResutls = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to add a framework by its Id. Status (${res.status})`,
+          `Failed to add a framework by its Id. Status (${res.status})`
         );
       }
 
@@ -366,7 +366,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a framework.`,
-        error,
+        error
       );
       throw error;
     }
@@ -391,7 +391,7 @@ export class FrameworkController {
         result = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to delete a framework by its Id. Status (${res.status})`,
+          `Failed to delete a framework by its Id. Status (${res.status})`
         );
       }
 
@@ -399,7 +399,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a framework.`,
-        error,
+        error
       );
       throw error;
     }
@@ -425,7 +425,7 @@ export class FrameworkController {
         result = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to toggle the type of a framework by its Id. Status (${res.status})`,
+          `Failed to toggle the type of a framework by its Id. Status (${res.status})`
         );
       }
 
@@ -433,7 +433,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to toggle the type of the API : ${url}. Failed to toggle a framework.`,
-        error,
+        error
       );
       throw error;
     }

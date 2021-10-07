@@ -24,7 +24,7 @@ export default class PrefixController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error,
+        error
       );
       throw error;
     }

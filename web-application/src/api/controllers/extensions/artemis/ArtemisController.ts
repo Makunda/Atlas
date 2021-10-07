@@ -36,7 +36,7 @@ export class ArtemisController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve pending operations.`,
-        error,
+        error
       );
     }
   }
@@ -57,13 +57,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`,
+          `API returned status code '${res.status}'. ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to change the online mode parameter.",
-        error,
+        error
       );
       throw error;
     }
@@ -85,13 +85,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`,
+          `API returned status code '${res.status}'. ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to get the online mode of Artemis.",
-        error,
+        error
       );
       throw error;
     }
@@ -113,13 +113,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`,
+          `API returned status code '${res.status}'. ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to change the repository mode parameter.",
-        error,
+        error
       );
       throw error;
     }
@@ -142,13 +142,13 @@ export class ArtemisController {
         return /true/i.test(val);
       } else {
         throw new Error(
-          `API returned status code '${res.status}'. ${res.data}`,
+          `API returned status code '${res.status}'. ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         "Something went wrong trying to get the repository mode of Artemis.",
-        error,
+        error
       );
       throw error;
     }
@@ -180,8 +180,8 @@ export class ArtemisController {
       formData.append("file", file);
       const res = await axios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
-        },
+          "Content-Type": "multipart/form-data"
+        }
       });
 
       if (res.status == 200) {
@@ -189,13 +189,13 @@ export class ArtemisController {
         return String(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`,
+          `Failed to perform the extraction of selected artifacts. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to extract the Artifact list.`,
-        error,
+        error
       );
       throw error;
     }

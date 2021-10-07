@@ -38,7 +38,7 @@ async function launch() {
     router: router,
     vuetify,
     store,
-    render: (h) => h(el),
+    render: h => h(el)
   }).$mount("#app");
 }
 

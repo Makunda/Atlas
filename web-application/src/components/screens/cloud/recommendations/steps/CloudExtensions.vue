@@ -4,7 +4,8 @@
       <v-card width="100%">
         <v-card-text>
           <p class="text-h3 text--primary">
-            <span class="font-weight-light pr-1">Cloud extensions on</span> {{ application }}
+            <span class="font-weight-light pr-1">Cloud extensions on</span>
+            {{ application }}
           </p>
           <div class="text--subtitle py-5">
             Get automatic recommendations on how to migrate an application to a

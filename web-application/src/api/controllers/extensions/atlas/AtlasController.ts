@@ -28,7 +28,7 @@ export class AtlasController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error,
+        error
       );
       throw error;
     }
@@ -57,7 +57,7 @@ export class AtlasController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error,
+        error
       );
       throw error;
     }

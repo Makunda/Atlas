@@ -486,9 +486,9 @@
 import Vue from "vue";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { Category } from "@/api/interface/ApiCategory.interface";
-import { RegexNodeController } from '@/api/controllers/extensions/artemis/RegexNodeController';
-import { FrameworkController } from '@/api/controllers/extensions/artemis/FrameworkController';
-import { CategoryController } from '@/api/controllers/extensions/artemis/CategoryController';
+import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";
+import { FrameworkController } from "@/api/controllers/extensions/artemis/FrameworkController";
+import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
 
 export default Vue.extend({
   name: "CustomsCreator",

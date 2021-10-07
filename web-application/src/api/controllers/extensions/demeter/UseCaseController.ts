@@ -2,7 +2,7 @@ import { int, QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "@/api/Neo4jAccessLayer";
 import {
   TagController,
-  TagResult,
+  TagResult
 } from "@/api/controllers/extensions/demeter/TagController";
 
 export interface UseCaseResult {
@@ -50,7 +50,7 @@ export class UseCaseController {
   private static recTree(
     useCase: UseCaseResult,
     candidates: UseCaseResult[],
-    tags: TagResult[],
+    tags: TagResult[]
   ): UseCaseResult {
     const index = candidates.indexOf(useCase);
     if (index != -1) {
@@ -84,8 +84,8 @@ export class UseCaseController {
     let returnList: UseCaseResult[] = [];
 
     returnList = useCases
-      .filter((x) => x.parentName == "ROOT")
-      .map((x) => UseCaseController.recTree(x, useCases, []));
+      .filter(x => x.parentName == "ROOT")
+      .map(x => UseCaseController.recTree(x, useCases, []));
 
     return returnList;
   }
@@ -100,14 +100,14 @@ export class UseCaseController {
 
     const tags: TagResult[] = await TagController.getTagResults(
       "Configuration_1",
-      appName,
+      appName
     );
 
     // Get root elements and add them to return list
     // From root implement
     returnList = useCases
-      .filter((x) => x.parentName == "ROOT")
-      .map((x) => UseCaseController.recTree(x, useCases, tags));
+      .filter(x => x.parentName == "ROOT")
+      .map(x => UseCaseController.recTree(x, useCases, tags));
 
     return returnList;
   }

@@ -13,13 +13,13 @@ export class StatisticsController {
    */
   public static async getStatisticsList(
     application: string,
-    category?: string,
+    category?: string
   ): Promise<StatisticInterface[]> {
     const url =
       StatisticsController.API_BASE_URL + "/api/atlas/statistics/find/all";
     try {
       const body: any = {
-        application: application,
+        application: application
       };
       if (category) body.category = category;
       const res = await axios.post(url, body);
@@ -32,7 +32,7 @@ export class StatisticsController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of statistics. Status (${res.status})`,
+          `Failed to retrieve the list of statistics. Status (${res.status})`
         );
         throw new Error(res.data.error);
       }
@@ -58,7 +58,7 @@ export class StatisticsController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the execute the action. Status (${res.status})`,
+          `Failed to retrieve the execute the action. Status (${res.status})`
         );
         throw new Error(res.data.error);
       }

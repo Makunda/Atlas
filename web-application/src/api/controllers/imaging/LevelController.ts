@@ -30,7 +30,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -43,7 +43,7 @@ export default class LevelController {
    */
   public static async findLevelByDepth(
     application: string,
-    depth: number,
+    depth: number
   ): Promise<ILevel[]> {
     const url =
       LevelController.API_BASE_URL +
@@ -59,7 +59,7 @@ export default class LevelController {
         }
       } else {
         console.warn(
-          `Failed to retrieve levels by depth. Status (${res.status})`,
+          `Failed to retrieve levels by depth. Status (${res.status})`
         );
       }
 
@@ -67,7 +67,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve dy depth levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -82,7 +82,7 @@ export default class LevelController {
   public static async mergeLevel(
     application: string,
     sourceId: number,
-    destinationId: number,
+    destinationId: number
   ): Promise<number> {
     const url =
       LevelController.API_BASE_URL + `/api/imaging/levels/merge/${application}`;
@@ -90,7 +90,7 @@ export default class LevelController {
     try {
       const res = await axios.post(url, {
         sourceId: sourceId,
-        destinationId: destinationId,
+        destinationId: destinationId
       });
 
       if (res.status == 200) {
@@ -98,13 +98,13 @@ export default class LevelController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to merge level. Status (${res.status}). Error: ${res.data.message}`,
+          `Failed to merge level. Status (${res.status}). Error: ${res.data.message}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to merge levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -117,7 +117,7 @@ export default class LevelController {
    */
   public static async findLevelByName(
     application: string,
-    name: string,
+    name: string
   ): Promise<ILevel[]> {
     const url =
       LevelController.API_BASE_URL +
@@ -140,7 +140,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -153,7 +153,7 @@ export default class LevelController {
    */
   public static async fetchChildren(
     application: string,
-    level: ILevel,
+    level: ILevel
   ): Promise<ILevel[]> {
     const url =
       LevelController.API_BASE_URL +
@@ -169,7 +169,7 @@ export default class LevelController {
         }
       } else {
         console.warn(
-          `Failed to retrieve attached levels. Status (${res.status})`,
+          `Failed to retrieve attached levels. Status (${res.status})`
         );
       }
 
@@ -177,7 +177,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve attached levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -190,7 +190,7 @@ export default class LevelController {
    */
   public static async fetchParent(
     application: string,
-    level: ILevel,
+    level: ILevel
   ): Promise<ILevel> {
     const url =
       LevelController.API_BASE_URL +
@@ -208,7 +208,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve attached levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -223,7 +223,7 @@ export default class LevelController {
   public static async createLevel(
     application: string,
     parentLevelID: number,
-    level: ILevel,
+    level: ILevel
   ): Promise<ILevel> {
     const url =
       LevelController.API_BASE_URL +
@@ -244,7 +244,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to create new levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -252,7 +252,7 @@ export default class LevelController {
 
   public static async updateLevel(
     application: string,
-    level: ILevel,
+    level: ILevel
   ): Promise<ILevel> {
     const url =
       LevelController.API_BASE_URL +
@@ -272,7 +272,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to create new levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -285,7 +285,7 @@ export default class LevelController {
    */
   public static async getHiddenLevelByDepth(
     application: string,
-    depth: number,
+    depth: number
   ): Promise<ILevel[]> {
     const url =
       LevelController.API_BASE_URL +
@@ -307,7 +307,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
-        error,
+        error
       );
       throw error;
     }
@@ -320,7 +320,7 @@ export default class LevelController {
    */
   public static async unhideLevel(
     application: string,
-    level: ILevel,
+    level: ILevel
   ): Promise<ILevel> {
     const url =
       LevelController.API_BASE_URL +
@@ -328,7 +328,7 @@ export default class LevelController {
 
     try {
       const body = {
-        levelId: level._id,
+        levelId: level._id
       };
 
       const res = await axios.post(url, body);
@@ -342,7 +342,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to unhide a level.`,
-        error,
+        error
       );
       throw error;
     }
@@ -355,14 +355,14 @@ export default class LevelController {
    */
   public static async hideLevel(
     application: string,
-    level: ILevel,
+    level: ILevel
   ): Promise<ILevel> {
     const url =
       LevelController.API_BASE_URL + `/api/imaging/levels/hide/${application}`;
 
     try {
       const body = {
-        levelId: level._id,
+        levelId: level._id
       };
 
       const res = await axios.post(url, body);
@@ -376,7 +376,7 @@ export default class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to hide a level.`,
-        error,
+        error
       );
       throw error;
     }

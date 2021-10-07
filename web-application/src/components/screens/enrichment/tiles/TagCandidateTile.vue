@@ -57,7 +57,10 @@
 </template>
 
 <script lang="ts">
-import { TagController, TagResult } from "@/api/controllers/extensions/demeter/TagController";
+import {
+  TagController,
+  TagResult
+} from "@/api/controllers/extensions/demeter/TagController";
 import Vue from "vue";
 
 export default Vue.component("TagCandidateTile", {

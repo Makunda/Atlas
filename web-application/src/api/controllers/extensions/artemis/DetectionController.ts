@@ -16,14 +16,14 @@ export default class DetectionController {
    */
   public static async launchDetection(
     application: string,
-    language: string,
+    language: string
   ): Promise<boolean> {
     const url =
       DetectionController.API_BASE_URL + "/api/artemis/detection/launch";
 
     const data = {
       application: application,
-      language: language,
+      language: language
     };
     try {
       const res = await axios.post(url, data);
@@ -38,7 +38,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the status of the application.`,
-        error,
+        error
       );
       throw error;
     }
@@ -51,14 +51,14 @@ export default class DetectionController {
    */
   public static async cancelDetection(
     application: string,
-    language: string,
+    language: string
   ): Promise<boolean> {
     const url =
       DetectionController.API_BASE_URL + "/api/artemis/detection/stop";
 
     const data = {
       application: application,
-      language: language,
+      language: language
     };
     try {
       const res = await axios.post(url, data);
@@ -73,7 +73,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. The detection was not stopped.`,
-        error,
+        error
       );
       throw error;
     }
@@ -97,7 +97,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve pending operations. Status (${res.status})`,
+          `Failed to retrieve pending operations. Status (${res.status})`
         );
       }
 
@@ -105,7 +105,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve pending operations.`,
-        error,
+        error
       );
       throw error;
     }
@@ -129,7 +129,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve successful operations. Status (${res.status})`,
+          `Failed to retrieve successful operations. Status (${res.status})`
         );
       }
 
@@ -137,7 +137,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve successful operations.`,
-        error,
+        error
       );
       throw error;
     }
@@ -161,7 +161,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve successful operations. Status (${res.status})`,
+          `Failed to retrieve successful operations. Status (${res.status})`
         );
       }
 
@@ -169,7 +169,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve successful operations.`,
-        error,
+        error
       );
       throw error;
     }
@@ -193,7 +193,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve failed operations. Status (${res.status})`,
+          `Failed to retrieve failed operations. Status (${res.status})`
         );
       }
 
@@ -201,7 +201,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve failed operations.`,
-        error,
+        error
       );
       throw error;
     }
@@ -214,7 +214,7 @@ export default class DetectionController {
    */
   public static async getApplicationStatus(
     application: string,
-    language: string,
+    language: string
   ): Promise<DetectionResult | null> {
     const url =
       DetectionController.API_BASE_URL +
@@ -234,14 +234,14 @@ export default class DetectionController {
         return DetectionResultDTO.fromRecord(apiResponse.data);
       } else {
         console.warn(
-          `Failed to retrieve the status of the application. Status (${res.status})`,
+          `Failed to retrieve the status of the application. Status (${res.status})`
         );
         throw new Error(res.data);
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve pending operations.`,
-        error,
+        error
       );
       throw error;
     }
@@ -265,7 +265,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the queue of detection. Status (${res.status})`,
+          `Failed to retrieve the queue of detection. Status (${res.status})`
         );
       }
 
@@ -273,7 +273,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the queue of detection..`,
-        error,
+        error
       );
       throw error;
     }
@@ -295,7 +295,7 @@ export default class DetectionController {
         return apiResponse.data as DetectionCandidate;
       } else {
         console.warn(
-          `Failed to retrieve the current detection. Status (${res.status})`,
+          `Failed to retrieve the current detection. Status (${res.status})`
         );
       }
 
@@ -303,7 +303,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the current detection.`,
-        error,
+        error
       );
       throw error;
     }
@@ -322,14 +322,14 @@ export default class DetectionController {
         return Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to retrieve the queue of detection. Status (${res.status})`,
+          `Failed to retrieve the queue of detection. Status (${res.status})`
         );
         return false;
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the queue of detection..`,
-        error,
+        error
       );
       throw error;
     }
@@ -340,7 +340,7 @@ export default class DetectionController {
    * @param candidates List of candidate to add
    */
   public static async addCandidatesToDetection(
-    candidates: DetectionCandidate[],
+    candidates: DetectionCandidate[]
   ): Promise<number> {
     const url =
       DetectionController.API_BASE_URL + "/api/artemis/detection/queue/add";
@@ -354,14 +354,14 @@ export default class DetectionController {
         return Number(apiResponse.data);
       } else {
         console.warn(
-          `Failed to add the list of candidates to the detection queue. Status (${res.status})`,
+          `Failed to add the list of candidates to the detection queue. Status (${res.status})`
         );
       }
       return 0;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add the list of candidates to the detection queue.`,
-        error,
+        error
       );
       throw error;
     }
@@ -384,7 +384,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to get the list of candidates. Status (${res.status})`,
+          `Failed to get the list of candidates. Status (${res.status})`
         );
       }
 
@@ -392,7 +392,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of candidates .`,
-        error,
+        error
       );
       throw error;
     }

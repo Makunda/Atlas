@@ -31,7 +31,7 @@ export class TagController {
    */
   public static async getTagResults(
     configuration: string,
-    applicationName: string,
+    applicationName: string
   ): Promise<TagResult[]> {
     const request = `CALL demeter.tag.getAsList('${configuration}', '${applicationName}')`;
 
@@ -56,7 +56,7 @@ export class TagController {
         description: description,
         numMatch: numMatch,
         categories: categories,
-        useCase: useCase,
+        useCase: useCase
       });
     }
 
@@ -70,7 +70,7 @@ export class TagController {
    */
   public static async executeTag(
     applicationName: string,
-    tagId: number,
+    tagId: number
   ): Promise<TagResult> {
     const request = `CALL demeter.tag.execute( ${tagId}, "${applicationName}");`;
 
@@ -92,7 +92,7 @@ export class TagController {
       description: description,
       numMatch: numMatch,
       categories: categories,
-      useCase: useCase,
+      useCase: useCase
     };
   }
 
@@ -123,7 +123,7 @@ export class TagController {
       activation: tag.activation,
       description: tag.description,
       categories: tag.categories,
-      parentId: tag.parentUseCasId,
+      parentId: tag.parentUseCasId
     };
 
     await this.neo4jal.executeWithParameters(forgedRequest, params);

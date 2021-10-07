@@ -26,7 +26,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -34,7 +34,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -57,7 +57,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -65,7 +65,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -93,7 +93,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -101,7 +101,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -125,7 +125,7 @@ export class UseCaseController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of use cases. Status (${res.status})`,
+          `Failed to retrieve the list of use cases. Status (${res.status})`
         );
       }
 
@@ -133,7 +133,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -160,7 +160,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -187,7 +187,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -200,7 +200,7 @@ export class UseCaseController {
    */
   public static async addUseCaseWithParent(
     useCase: IUseCase,
-    idParent: number,
+    idParent: number
   ): Promise<IUseCase> {
     const url =
       UseCaseController.API_BASE_URL + "/api/paris/useCases/addWithParent";
@@ -221,7 +221,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a use cases.`,
-        error,
+        error
       );
       throw error;
     }
@@ -236,7 +236,7 @@ export class UseCaseController {
 
   public static async checkValidity(
     request: IUseCase,
-    awaitedResult: number,
+    awaitedResult: number
   ): Promise<boolean> {
     const url =
       UseCaseController.API_BASE_URL + "/api/paris/useCases/check/validity";
@@ -253,7 +253,7 @@ export class UseCaseController {
         return Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to verify the validity of the request. Status (${res.status})`,
+          `Failed to verify the validity of the request. Status (${res.status})`
         );
       }
 
@@ -261,7 +261,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to verify the validity of the request.`,
-        error,
+        error
       );
       throw error;
     }
@@ -274,7 +274,7 @@ export class UseCaseController {
    */
   public static async editUseCase(
     useCase: IUseCase,
-    parentId: number,
+    parentId: number
   ): Promise<IUseCase> {
     const url = UseCaseController.API_BASE_URL + "/api/paris/useCases/update";
 
@@ -295,7 +295,7 @@ export class UseCaseController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a use cases.`,
-        error,
+        error
       );
       throw error;
     }

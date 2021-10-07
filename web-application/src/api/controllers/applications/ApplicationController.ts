@@ -27,7 +27,7 @@ export class ApplicationController {
         }
       } else {
         console.warn(
-          `Failed to retrieve application list. Status (${res.status})`,
+          `Failed to retrieve application list. Status (${res.status})`
         );
       }
 
@@ -35,7 +35,7 @@ export class ApplicationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve application list.`,
-        error,
+        error
       );
     }
   }
@@ -45,7 +45,7 @@ export class ApplicationController {
    * @param application
    */
   public static async getApplicationInsights(
-    application: string,
+    application: string
   ): Promise<IApplicationInsights> {
     const url =
       ApplicationController.API_BASE_URL +
@@ -60,13 +60,13 @@ export class ApplicationController {
         return apiResponse.data as IApplicationInsights;
       } else {
         throw new Error(
-          `Failed to retrieve insights for application with name ${application}.`,
+          `Failed to retrieve insights for application with name ${application}.`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the insights.`,
-        error,
+        error
       );
     }
   }
@@ -91,20 +91,20 @@ export class ApplicationController {
         }
       } else {
         throw new Error(
-          `Failed to retrieve technologies in application with name ${application}.`,
+          `Failed to retrieve technologies in application with name ${application}.`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the technologies.`,
-        error,
+        error
       );
     }
   }
 
   public static async getLevelsByDepth(
     application: string,
-    depthLevel: number,
+    depthLevel: number
   ): Promise<string[]> {
     const url =
       ApplicationController.API_BASE_URL +
@@ -120,13 +120,13 @@ export class ApplicationController {
         }
       } else {
         throw new Error(
-          `Failed to retrieve levels${depthLevel} in application with name ${application}.`,
+          `Failed to retrieve levels${depthLevel} in application with name ${application}.`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve levels${depthLevel} in application with name ${application}.`,
-        error,
+        error
       );
     }
   }

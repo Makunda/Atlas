@@ -2,7 +2,9 @@
   <v-card>
     <v-card-title>
       <p class="text-h3 text--primary pb-3">
-        <span class="font-weight-light pr-1">Review the Data Call Graphs in</span>
+        <span class="font-weight-light pr-1"
+          >Review the Data Call Graphs in</span
+        >
         {{ application }}
       </p>
       <v-spacer></v-spacer>

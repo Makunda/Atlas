@@ -25,7 +25,7 @@ export class GroupController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of groups. Status (${res.status})`,
+          `Failed to retrieve the list of groups. Status (${res.status})`
         );
       }
 
@@ -33,7 +33,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of groups.`,
-        error,
+        error
       );
       throw error;
     }
@@ -67,7 +67,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a groups.`,
-        error,
+        error
       );
       throw error;
     }
@@ -93,7 +93,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a group with id:${group.id}.`,
-        error,
+        error
       );
       throw error;
     }
@@ -106,7 +106,7 @@ export class GroupController {
    */
   public static async addGroupWithUseCase(
     group: IGroup,
-    idUseCase: number,
+    idUseCase: number
   ): Promise<IGroup> {
     const url =
       GroupController.API_BASE_URL + "/api/paris/groups/addWithUseCase";
@@ -127,7 +127,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a group.`,
-        error,
+        error
       );
       throw error;
     }
@@ -154,7 +154,7 @@ export class GroupController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a group.`,
-        error,
+        error
       );
       throw error;
     }
@@ -168,7 +168,7 @@ export class GroupController {
    */
   public static async executeListGroupAsTag(
     application,
-    idList: IGroup[],
+    idList: IGroup[]
   ): Promise<number> {
     const url = GroupController.API_BASE_URL + "/api/paris/groups/execute";
 
@@ -176,7 +176,7 @@ export class GroupController {
       const body = {
         application: application,
         idList: idList,
-        executionType: "Tag",
+        executionType: "Tag"
       };
 
       const res = await axios.post(url, body);
@@ -186,17 +186,15 @@ export class GroupController {
         return Number(apiResponse.data);
       } else {
         throw new Error(
-          `Failed to execute the list of group with Ids : ${idList.join(
-            ", ",
-          )}.`,
+          `Failed to execute the list of group with Ids : ${idList.join(", ")}.`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to execute the list of group with Ids : ${idList.join(
-          ", ",
+          ", "
         )}..`,
-        error,
+        error
       );
       throw error;
     }
@@ -207,7 +205,7 @@ export class GroupController {
 
     try {
       const body = {
-        application: application,
+        application: application
       };
 
       const res = await axios.post(url, body);

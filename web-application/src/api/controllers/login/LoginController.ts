@@ -15,13 +15,13 @@ export default class LoginController {
    */
   public static async postLogin(
     username: string,
-    password: string,
+    password: string
   ): Promise<boolean> {
     const url = LoginController.API_BASE_URL + "/api/login";
     try {
       const body = {
         username: username,
-        password: password,
+        password: password
       };
       const res = await axios.post(url, body);
       const apiResponse: ApiResponse = res.data;
@@ -36,7 +36,7 @@ export default class LoginController {
         flash.commit("add", {
           type: FlashType.ERROR,
           title: "Failed to login.",
-          body: "Bad username/password",
+          body: "Bad username/password"
         });
         return false;
       }
@@ -45,7 +45,7 @@ export default class LoginController {
       flash.commit("add", {
         type: FlashType.ERROR,
         title: "Failed to login.",
-        body: error,
+        body: error
       });
     }
   }

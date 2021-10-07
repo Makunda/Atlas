@@ -36,7 +36,7 @@ export class GroupingController {
    * Get Demeter Module in a specific application present in the Database
    */
   public static async getDemeterModules(
-    applicationName: string,
+    applicationName: string
   ): Promise<ModuleGroup[]> {
     const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
       WITH [app.Name] as appName  
@@ -58,7 +58,7 @@ export class GroupingController {
         name: groupName,
         application: applicationName,
         numObjects: numObjects,
-        demeterGroup: true,
+        demeterGroup: true
       });
     }
 

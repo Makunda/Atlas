@@ -102,13 +102,13 @@
                     <v-container>
                       <v-row> </v-row>
                       <v-row>
-                        <v-col  cols="12" md="3">
+                        <v-col cols="12" md="3">
                           <v-subheader
                             >Modify file path by removing the beginning of the
                             path:</v-subheader
                           >
                         </v-col>
-                        <v-col  cols="10" md="7">
+                        <v-col cols="10" md="7">
                           <v-text-field
                             v-model="defaultReplacement"
                             label="Remove the beginnning of the file property"
@@ -126,13 +126,13 @@
 
                       <!-- Replacement  -->
                       <v-row>
-                        <v-col  cols="12" md="3">
+                        <v-col cols="12" md="3">
                           <v-subheader
                             >Modify file path using regular expression ( only
                             one group is accepted ):
                           </v-subheader>
                         </v-col>
-                        <v-col  cols="10" md="7">
+                        <v-col cols="10" md="7">
                           <v-text-field
                             v-model="defaultRegex"
                             label="Regular expression to modify file fields"
@@ -151,8 +151,8 @@
                       <v-row>
                         <v-col cols="12" md="3">
                           <v-subheader>
-                          Filter the cloud blockers based on their tehcnology or
-                          type of recommendation:
+                            Filter the cloud blockers based on their tehcnology
+                            or type of recommendation:
                           </v-subheader>
                         </v-col>
                         <v-col cols="10" md="4">
@@ -287,14 +287,17 @@
               <v-card-text>
                 <v-container>
                   <v-row v-if="loadingApply" class="d-flex flex-column">
-                    <p class="text-h3">Applying {{ taggingType }}s on {{ application }}...</p>
+                    <p class="text-h3">
+                      Applying {{ taggingType }}s on {{ application }}...
+                    </p>
                     <v-progress-linear
                       class="mt-4 mb-2"
                       height="6"
                       :value="percentageTagsApplied"
                     ></v-progress-linear>
                     <p class="text-h5">
-                      {{ sizeSent }} {{ taggingType }}s applied on {{ sizeToSend }}
+                      {{ sizeSent }} {{ taggingType }}s applied on
+                      {{ sizeToSend }}
                     </p>
                     <p class="text-h5">{{ blockerNotApplied.length }} Errors</p>
                   </v-row>
@@ -303,8 +306,8 @@
                     <v-container>
                       <v-row>
                         <p class="text-h3">
-                          {{ sizeSent - blockerNotApplied.length }} {{ taggingType }}s were
-                          applied
+                          {{ sizeSent - blockerNotApplied.length }}
+                          {{ taggingType }}s were applied
                         </p>
                       </v-row>
                       <v-row>
@@ -340,18 +343,18 @@
                       absolute path so that it only matches the structure the
                       structure of the application folder.
                     </p>
-                    
-                      <!-- Data table to display the errors  -->
-                      <v-data-table
-                        max-height="500px"
-                        style="width: 100%;"
-                        :headers="headers"
-                        :items="blockerNotApplied"
-                        dense
-                        item-key="id"
-                        class="elevation-1"
-                      >
-                      </v-data-table>
+
+                    <!-- Data table to display the errors  -->
+                    <v-data-table
+                      max-height="500px"
+                      style="width: 100%;"
+                      :headers="headers"
+                      :items="blockerNotApplied"
+                      dense
+                      item-key="id"
+                      class="elevation-1"
+                    >
+                    </v-data-table>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -478,7 +481,10 @@ export default Vue.extend({
           const batch = this.blockerDisplayedList.slice(index, upBound);
 
           // Send batch
-          const [applied, notApplied] = await CloudBlockersController.applyBlockers(
+          const [
+            applied,
+            notApplied
+          ] = await CloudBlockersController.applyBlockers(
             batch,
             this.taggingType
           );

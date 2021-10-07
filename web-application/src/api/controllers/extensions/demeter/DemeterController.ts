@@ -27,7 +27,7 @@ export class DemeterController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error,
+        error
       );
       throw error;
     }

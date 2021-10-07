@@ -2,7 +2,9 @@
   <v-card>
     <v-card-title>
       <p class="text-h3 text--primary pb-3">
-        <span class="font-weight-light pr-1">Inject Obsolescence insights into</span>
+        <span class="font-weight-light pr-1"
+          >Inject Obsolescence insights into</span
+        >
         {{ application }}
       </p>
       <v-spacer></v-spacer>
@@ -16,7 +18,7 @@
     </v-card-subtitle>
 
     <v-card-text>
-      <v-stepper v-model="e1" >
+      <v-stepper v-model="e1">
         <v-stepper-header class="custom-stepper">
           <v-stepper-step :complete="e1 > 1" step="1">
             <span class="white--text">Upload</span>
@@ -319,14 +321,17 @@
               <v-card-text>
                 <v-container>
                   <v-row v-if="loadingApply" class="d-flex flex-column">
-                    <p class="text-h3">Applying {{ taggingType }}s on {{ application }}...</p>
+                    <p class="text-h3">
+                      Applying {{ taggingType }}s on {{ application }}...
+                    </p>
                     <v-progress-linear
                       class="mt-4 mb-2"
                       height="6"
                       :value="percentageTagsApplied"
                     ></v-progress-linear>
                     <p class="text-h5">
-                      {{ sizeSent }} {{ taggingType }}s applied on {{ sizeToSend }}
+                      {{ sizeSent }} {{ taggingType }}s applied on
+                      {{ sizeToSend }}
                     </p>
                     <p class="text-h5">{{ blockerNotApplied.length }} Errors</p>
                   </v-row>
@@ -335,8 +340,8 @@
                     <v-container>
                       <v-row>
                         <p class="text-h3">
-                          {{ sizeSent - blockerNotApplied.length }} {{ taggingType }}s were
-                          applied
+                          {{ sizeSent - blockerNotApplied.length }}
+                          {{ taggingType }}s were applied
                         </p>
                       </v-row>
                       <v-row>
@@ -372,18 +377,18 @@
                       absolute path so that it only matches the structure the
                       structure of the application folder.
                     </p>
-                    
-                      <!-- Data table to display the errors  -->
-                      <v-data-table
-                        max-height="500px"
-                        style="width: 100%;"
-                        :headers="headers"
-                        :items="blockerNotApplied"
-                        dense
-                        item-key="id"
-                        class="elevation-1"
-                      >
-                      </v-data-table>
+
+                    <!-- Data table to display the errors  -->
+                    <v-data-table
+                      max-height="500px"
+                      style="width: 100%;"
+                      :headers="headers"
+                      :items="blockerNotApplied"
+                      dense
+                      item-key="id"
+                      class="elevation-1"
+                    >
+                    </v-data-table>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -548,7 +553,10 @@ export default Vue.extend({
           const batch = this.blockerDisplayedList.slice(index, upBound);
 
           // Send batch
-          const [applied, notApplied] = await ObsolescenceController.applyBlockers(
+          const [
+            applied,
+            notApplied
+          ] = await ObsolescenceController.applyBlockers(
             batch,
             this.taggingType
           );
@@ -742,7 +750,7 @@ export default Vue.extend({
 
 <style scoped>
 .v-stepper__header {
-  background-color: #425B66 !important;
+  background-color: #425b66 !important;
   border-bottom: 6px solid #2a9d8f;
   color: white !important;
 }
@@ -755,5 +763,4 @@ export default Vue.extend({
 .theme--light.v-stepper .v-stepper__label {
   color: white !important;
 }
-
 </style>

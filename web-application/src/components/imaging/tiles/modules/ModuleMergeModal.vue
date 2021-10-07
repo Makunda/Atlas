@@ -188,11 +188,11 @@ export default Vue.extend({
       val && val !== this.select && this.querySelections(val);
     },
 
-    application: function(newVal) {
+    application: function() {
       this.refresh();
     },
 
-    module: function(newVal) {
+    module: function() {
       this.refresh();
     }
   }

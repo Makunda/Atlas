@@ -24,7 +24,7 @@ export default class ModuleController {
         }
       } else {
         console.warn(
-          `Failed to retrieve module. Status (${res.status}). Message: ${res.data}`,
+          `Failed to retrieve module. Status (${res.status}). Message: ${res.data}`
         );
       }
 
@@ -32,7 +32,7 @@ export default class ModuleController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve modules.`,
-        error,
+        error
       );
       throw error;
     }
@@ -57,7 +57,7 @@ export default class ModuleController {
         }
       } else {
         console.warn(
-          `Failed to retrieve hidden modules. Status (${res.status}). Message: ${res.data}`,
+          `Failed to retrieve hidden modules. Status (${res.status}). Message: ${res.data}`
         );
       }
 
@@ -65,7 +65,7 @@ export default class ModuleController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve modules.`,
-        error,
+        error
       );
       throw error;
     }
@@ -89,13 +89,13 @@ export default class ModuleController {
         }
       } else {
         throw new Error(
-          `Failed to hide module ${id}. Status (${res.status}). Message: ${res.data}`,
+          `Failed to hide module ${id}. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to hide the module.`,
-        error,
+        error
       );
       throw error;
     }
@@ -119,13 +119,13 @@ export default class ModuleController {
         }
       } else {
         throw new Error(
-          `Failed to unhide module ${id}. Status (${res.status}). Message: ${res.data}`,
+          `Failed to unhide module ${id}. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to unhide the module.`,
-        error,
+        error
       );
       throw error;
     }
@@ -149,13 +149,13 @@ export default class ModuleController {
         }
       } else {
         throw new Error(
-          `Failed to delete module ${id}. Status (${res.status}). Message: ${res.data}`,
+          `Failed to delete module ${id}. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete the module.`,
-        error,
+        error
       );
       throw error;
     }
@@ -179,13 +179,13 @@ export default class ModuleController {
         return apiResponse.data as Module | null;
       } else {
         throw new Error(
-          `Failed to update module ${id}. Status (${res.status}). Message: ${res.data}`,
+          `Failed to update module ${id}. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update the module.`,
-        error,
+        error
       );
       throw error;
     }
@@ -200,7 +200,7 @@ export default class ModuleController {
   public static async mergeModules(
     application: string,
     idSource: number,
-    idDest: number,
+    idDest: number
   ): Promise<Module> {
     const url = ModuleController.API_BASE_URL + `/api/imaging/modules/merge`;
 
@@ -208,7 +208,7 @@ export default class ModuleController {
       const body: any = {
         application: application,
         idSource: idSource,
-        idDest: idDest,
+        idDest: idDest
       };
 
       const res = await axios.post(url, body);
@@ -218,13 +218,13 @@ export default class ModuleController {
         return apiResponse.data as Module | null;
       } else {
         throw new Error(
-          `Failed to merge the two modules. Status (${res.status}). Message: ${res.data}`,
+          `Failed to merge the two modules. Status (${res.status}). Message: ${res.data}`
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to merge the module.`,
-        error,
+        error
       );
       throw error;
     }

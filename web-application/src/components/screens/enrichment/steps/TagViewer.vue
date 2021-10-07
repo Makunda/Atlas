@@ -262,7 +262,10 @@
 import Vue from "vue";
 import { ApplicationRecord } from "@/api/controllers/applications/ApplicationController";
 import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
-import { TagController, TagResult } from "@/api/controllers/extensions/demeter/TagController";
+import {
+  TagController,
+  TagResult
+} from "@/api/controllers/extensions/demeter/TagController";
 import { IUseCase } from "@/api/interface/paris/useCase.interface";
 import { IGroup } from "@/api/interface/paris/group.interface";
 import { GroupController } from "@/api/controllers/extensions/paris/GroupController";

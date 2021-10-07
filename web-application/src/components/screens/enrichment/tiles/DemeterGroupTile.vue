@@ -67,7 +67,6 @@
 
 <script lang="ts">
 import {
-  GroupingController,
   Level5Group
 } from "@/api/controllers/extensions/demeter/GroupingController";
 import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";

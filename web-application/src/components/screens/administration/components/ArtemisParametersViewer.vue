@@ -129,7 +129,7 @@ export default Vue.extend({
     updateWorkspace() {
       this.updatingWorkspace = true;
       ConfigurationController.setArtemisWorkspace(this.artemisWorkspace)
-        .then(async (res: string) => {
+        .then(async () => {
           await this.getArtemisWorkspace();
           this.updateSuccess = `Successfully updated the workspace`;
           setTimeout(

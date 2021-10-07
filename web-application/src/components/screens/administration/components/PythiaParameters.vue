@@ -257,7 +257,7 @@ export default Vue.extend({
 
       await new Promise<void>((resolve, reject) => {
         ConfigurationController.setPythiaURL(this.pythiaURI)
-          .then((res: string) => {
+          .then(() => {
             resolve();
           })
           .catch(err => {

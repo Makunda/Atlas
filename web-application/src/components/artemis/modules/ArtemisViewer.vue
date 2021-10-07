@@ -1,6 +1,5 @@
 <template>
   <v-card class="px-5 mb-5 pt-4" :disabled="disabledTile">
-
     <v-card-title>
       <p class="text-h3 text--primary">
         <span class="font-weight-light pr-1"
@@ -210,7 +209,8 @@
         >
           CAST Extend
         </a>
-        <br />or verify that the Artemis workspace has been correctly declared in the parameters.
+        <br />or verify that the Artemis workspace has been correctly declared
+        in the parameters.
       </h2>
     </div>
   </v-card>

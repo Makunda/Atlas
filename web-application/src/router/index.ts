@@ -32,7 +32,7 @@ Vue.component("CloudRecommendations", CloudRecommendations);
 const routes: Array<RouteConfig> = [
   {
     path: "",
-    redirect: "/atlas/",
+    redirect: "/atlas/"
   },
   {
     path: "/atlas",
@@ -41,37 +41,37 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "",
-        component: Home,
+        component: Home
       },
       {
         path: "reports",
-        component: Reporting,
+        component: Reporting
       },
       {
         path: "analysis",
-        component: AnalysisChecker,
+        component: AnalysisChecker
       },
       {
         path: "tags",
-        component: Enrichment,
+        component: Enrichment
       },
       {
         path: "tuning",
-        component: ImagingTuning,
+        component: ImagingTuning
       },
       {
         path: "highlight",
-        component: Highlight,
+        component: Highlight
       },
       {
         path: "aip",
-        component: AipInjection,
+        component: AipInjection
       },
       {
         path: "cloudreco",
-        component: CloudRecommendations,
-      },
-    ],
+        component: CloudRecommendations
+      }
+    ]
   },
   {
     path: "/administration",
@@ -80,35 +80,35 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "",
-        component: ServerHome,
+        component: ServerHome
       },
       {
         path: "automation",
-        component: Automation,
+        component: Automation
       },
       {
         path: "frameworks",
-        component: Frameworks,
+        component: Frameworks
       },
       {
         path: "aipAdministration",
-        component: AipAdministration,
+        component: AipAdministration
       },
       {
         path: "parameters",
-        component: Administration,
-      },
-    ],
+        component: Administration
+      }
+    ]
   },
   {
     path: "/login",
     name: "Login",
-    component: Login,
+    component: Login
   },
   {
     path: "/license",
     name: "License",
-    component: License,
+    component: License
   },
   {
     path: "/atlas/about",
@@ -117,14 +117,14 @@ const routes: Array<RouteConfig> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
   { path: "/api" }, // Ignore or pass on to server
   {
     path: "*",
     name: "404",
-    component: NotFound,
-  },
+    component: NotFound
+  }
 ];
 
 const router = new VueRouter({

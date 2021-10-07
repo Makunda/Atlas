@@ -413,8 +413,8 @@ import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
 import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";
 import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
-import { ArtifactController } from '@/api/controllers/extensions/artemis/ArtifactController';
-import AgentController from '@/api/controllers/agents/AgentController';
+import { ArtifactController } from "@/api/controllers/extensions/artemis/ArtifactController";
+import AgentController from "@/api/controllers/agents/AgentController";
 
 export default Vue.extend({
   name: "BreakdownApplication",

@@ -151,11 +151,11 @@ export default Vue.extend({
       val && val !== this.select && this.querySelections(val);
     },
 
-    application: function(newVal) {
+    application: function() {
       this.refresh();
     },
 
-    element: function(newVal) {
+    element: function() {
       this.editElement = Object.assign({}, this.element);
       this.refresh();
     }
