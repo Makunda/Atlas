@@ -85,7 +85,7 @@
           min-width="50px"
         >
           <v-toolbar-title class="ml-8 screen-title"
-            ><span style="color: #1E2A3A; font-weight: 300">NASD</span>
+            ><span style="color: ; font-weight: 300">NASD</span>
             Atlas</v-toolbar-title
           >
           <v-spacer></v-spacer>

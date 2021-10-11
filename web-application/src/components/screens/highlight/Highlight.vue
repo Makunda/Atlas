@@ -28,6 +28,7 @@ import CloudBockersUpload from "./steps/CloudBlockersUpload.vue";
 import OSSUpload from "./steps/OSSUpload.vue";
 import ObsolescenceUpload from "./steps/ObsolescenceUpload.vue";
 import ContainerBlockersUpload from "./steps/ContainerBlockersUpload.vue";
+import CloudServicesUpload from "./steps/CloudServicesUpload.vue";
 
 export default Vue.extend({
   name: "Highlight",
@@ -36,7 +37,8 @@ export default Vue.extend({
     CloudBockersUpload,
     OSSUpload,
     ObsolescenceUpload,
-    ContainerBlockersUpload
+    ContainerBlockersUpload,
+    CloudServicesUpload
   },
 
   computed: {
@@ -56,6 +58,11 @@ export default Vue.extend({
     tab: 0,
 
     items: [
+      {
+        view: "CloudServicesUpload",
+        name: "Cloud Service",
+        icon: "mdi-cloud"
+      },
       {
         view: "CloudBockersUpload",
         name: "Cloud Blockers",

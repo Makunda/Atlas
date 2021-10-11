@@ -6,7 +6,7 @@ import { logger } from "@shared/Logger";
 import * as fs from "fs";
 import CloudBlocker from "@interfaces/highlight/recommendations/CloudBlocker";
 import HighlightController from "./HighlightController";
-import HighlightContainerService from "@services/highlight/HighlightContainerService";
+import HighlightContainerService from "@services/highlight/file/HighlightContainerService";
 import ContainerRecommendation from "@interfaces/highlight/recommendations/ContainerRecommendation";
 
 export default class HighlightCloudBlockerController implements HighlightController {

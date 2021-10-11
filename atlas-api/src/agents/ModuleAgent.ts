@@ -1,4 +1,4 @@
-import ModuleService from "@services/demeter/ModuleService";
+import ModuleService from "@services/extensions/demeter/ModuleService";
 import { logger } from "@shared/Logger";
 import config from "config";
 import AAgent from "./AgentAbstract";

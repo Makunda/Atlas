@@ -1,5 +1,5 @@
 import Subset from "@interfaces/imaging/Subset";
-import ArchitectureService from "@services/demeter/ArchitectureService";
+import ArchitectureService from "@services/extensions/demeter/ArchitectureService";
 import { int, Node } from "neo4j-driver";
 
 export default class SubsetNode {

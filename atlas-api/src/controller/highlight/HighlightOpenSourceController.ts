@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import { checkBody, checkParams } from "@shared/FunctionGlob";
 import HttpException from "@exceptions/HttpException";
-import HighlightOssService from "@services/highlight/HighlightOssService";
+import HighlightOssService from "@services/highlight/file/HighlightOssService";
 import { logger } from "@shared/Logger";
 import * as fs from "fs";
 import OssRecommendation from "@interfaces/highlight/recommendations/OssRecommendation";

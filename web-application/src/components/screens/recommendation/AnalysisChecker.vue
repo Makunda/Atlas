@@ -25,7 +25,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ModernizationStep from "./steps/ModernizationStep.vue";
 import ConfigurationStep from "./steps/ConfigurationStep.vue";
 import ExplorationStep from "./steps/ExplorationStep.vue";
 import BreakdownStep from "@/components/screens/recommendation/steps/BreakdownStep.vue";

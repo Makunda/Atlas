@@ -1,4 +1,4 @@
-import LevelService from "@services/demeter/LevelService";
+import LevelService from "@services/extensions/demeter/LevelService";
 import { logger } from "@shared/Logger";
 import config from "config";
 import AAgent from "./AgentAbstract";

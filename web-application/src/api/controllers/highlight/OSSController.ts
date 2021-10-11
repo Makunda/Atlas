@@ -18,7 +18,7 @@ export class OSSController {
     file: any,
     application: string
   ): Promise<OssRecommendation[]> {
-    const url = this.apiBaseUrl + `file/upload/blockers/${application}`;
+    const url = this.apiBaseUrl + `file/upload/${application}`;
 
     try {
       const formData = new FormData();
@@ -61,7 +61,7 @@ export class OSSController {
     blockers: OssRecommendation[],
     taggingType: string
   ): Promise<[OssRecommendation[], OssRecommendation[]]> {
-    const url = this.apiBaseUrl + "apply/blockers";
+    const url = this.apiBaseUrl + "apply";
 
     try {
       const body = {
@@ -111,7 +111,7 @@ export class OSSController {
   public static async testBlocker(
     blocker: OssRecommendation
   ): Promise<OssRecommendation[]> {
-    const url = this.apiBaseUrl + "test/blockers";
+    const url = this.apiBaseUrl + "test";
 
     try {
       const body = {

@@ -16,4 +16,7 @@ export enum HttpCode {
 
   // Server
   INTERNAL_ERROR = 500,
+
+  // OTHERS
+  NOT_IMPLEMENTED = 501
 }

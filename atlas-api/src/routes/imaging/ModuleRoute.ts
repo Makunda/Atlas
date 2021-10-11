@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Route from "@interfaces/routes.interface";
-import ModuleController from "@controller/demeter/ModuleController";
+import ModuleController from "@controller/extensions/demeter/ModuleController";
 
 /**
  * Class handling the routes related to the modules

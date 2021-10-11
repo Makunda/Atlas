@@ -2,14 +2,14 @@
 import { NextFunction, Request, Response } from "express";
 import { checkBody, checkParams, checkQuery } from "@shared/FunctionGlob";
 import HttpException from "@exceptions/HttpException";
-import HighlightService from "@services/highlight/HighlightService";
+import HighlightCloudBlockerService from "@services/highlight/file/HighlightCloudBlockerService";
 import { logger } from "@shared/Logger";
 import * as fs from "fs";
 import CloudBlocker from "@interfaces/highlight/recommendations/CloudBlocker";
 import HighlightController from "./HighlightController";
 
 export default class HighlightCloudBlockerController implements HighlightController {
-  protected highlightService = new HighlightService();
+  protected highlightService = new HighlightCloudBlockerService();
 
   /**
    * Process an excel file for a specific application
@@ -64,13 +64,12 @@ export default class HighlightCloudBlockerController implements HighlightControl
       const taggingType = String(req.body.type);
 
       // Launch the import
-      const [recommendations, errors]: [CloudBlocker[], CloudBlocker[]] =
-        await this.highlightService.applyRecommendations(blockers, taggingType);
+      const [recommendations, errors]: [CloudBlocker[], CloudBlocker[]] = await this.highlightService.applyRecommendations(blockers, taggingType);
 
       res.status(200).json({
         data: {
-          applied : recommendations,
-          notApplied: errors
+          applied: recommendations,
+          notApplied: errors,
         },
         message: "Not Applied recommendations",
       });

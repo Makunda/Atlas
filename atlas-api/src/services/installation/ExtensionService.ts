@@ -1,7 +1,7 @@
-import DemeterService from "@services/demeter/DemeterService";
+import DemeterService from "@services/extensions/demeter/DemeterService";
 import config from "config";
 import { logger } from "@shared/Logger";
-import ArtemisService from "@services/artemis/ArtemisService";
+import ArtemisService from "@services/extensions/artemis/ArtemisService";
 
 class ExtensionService {
   public async verifyDemeterVersion(): Promise<boolean> {
@@ -13,9 +13,7 @@ class ExtensionService {
     const minVersionNum = Number(minVersionString);
 
     if (numVersion < minVersionNum) {
-      logger.warn(
-        `The detected version of Demeter is ${version}. The minimal version required to work properly is ${minVersionString}`
-      );
+      logger.warn(`The detected version of Demeter is ${version}. The minimal version required to work properly is ${minVersionString}`);
       return false;
     } else {
       return true;
@@ -31,9 +29,7 @@ class ExtensionService {
     const minVersionNum = Number(minVersionString);
 
     if (numVersion < minVersionNum) {
-      logger.warn(
-        `The detected version of Artemis is ${version}. The minimal version required to work properly is ${minVersionString}`
-      );
+      logger.warn(`The detected version of Artemis is ${version}. The minimal version required to work properly is ${minVersionString}`);
       return false;
     } else {
       return true;

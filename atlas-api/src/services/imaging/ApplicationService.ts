@@ -4,7 +4,7 @@ import { QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 
-import { ArtemisCandidates } from "@services/artemis/ArtemisCandidatesService";
+import { ArtemisCandidates } from "@services/extensions/artemis/ArtemisCandidatesService";
 import { ApplicationInsights } from "@interfaces/imaging/ApplicationInsights";
 
 class ApplicationService {

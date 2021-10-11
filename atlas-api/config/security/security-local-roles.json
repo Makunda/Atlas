@@ -1,6 +1,6 @@
 [
   {
     "name": "ADMIN",
-    "scope": ["*"]
+    "scope": [".*"]
   }
 ]

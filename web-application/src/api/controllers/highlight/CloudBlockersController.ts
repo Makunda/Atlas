@@ -15,7 +15,7 @@ export class CloudBlockersController {
   ): Promise<CloudBlocker[]> {
     const url =
       CloudBlockersController.API_BASE_URL +
-      `/api/highlight/recommendations/cloud/file/upload/blockers/${application}`;
+      `/api/highlight/recommendations/cloud/file/upload/${application}`;
 
     try {
       const formData = new FormData();
@@ -55,7 +55,7 @@ export class CloudBlockersController {
   ): Promise<[CloudBlocker[], CloudBlocker[]]> {
     const url =
       CloudBlockersController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/apply/blockers";
+      "/api/highlight/recommendations/cloud/apply";
 
     try {
       const body = {
@@ -102,7 +102,7 @@ export class CloudBlockersController {
   ): Promise<CloudBlocker[]> {
     const url =
       CloudBlockersController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/test/blockers";
+      "/api/highlight/recommendations/cloud/test";
 
     try {
       const body = {

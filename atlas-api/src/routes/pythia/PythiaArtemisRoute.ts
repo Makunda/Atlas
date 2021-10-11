@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Route from "@interfaces/routes.interface";
-import PythiaController from "@controller/artemis/PythiaController";
+import PythiaController from "@controller/extensions/artemis/PythiaController";
 
 class PythiasArtemisRoute implements Route {
   public path = "";

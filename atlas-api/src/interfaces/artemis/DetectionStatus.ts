@@ -1,7 +1,7 @@
 import { logger } from "@shared/Logger";
 import { QueryResult, Transaction } from "neo4j-driver";
 import { Framework } from "./FrameworkInterface";
-import FrameworksService from "@services/artemis/FrameworkService";
+import FrameworksService from "@services/extensions/artemis/FrameworkService";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { uuidv4 } from "../../utils/utils";
 

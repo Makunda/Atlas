@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import HighlightObsolescenceService from "@services/highlight/HighlightObsolescenceService";
+import HighlightObsolescenceService from "@services/highlight/file/HighlightObsolescenceService";
 import HighlightController from "./HighlightController";
 import HighlightOpenSourceController from "./HighlightOpenSourceController";
 

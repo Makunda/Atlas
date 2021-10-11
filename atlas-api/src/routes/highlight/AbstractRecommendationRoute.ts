@@ -45,13 +45,9 @@ abstract class AbstractRecommendationRoute implements Route {
   private initializeRoutes() {
     const controller = this.getController();
 
-    this.router.post(
-      `${this.path}/file/upload/blockers/:application`,
-      this.multerUpload.single("file"),
-      controller.processRecommendationFile
-    );
-    this.router.post(`${this.path}/apply/blockers`, controller.applyRecommendations);
-    this.router.post(`${this.path}/test/blockers`, controller.testRecommendation);
+    this.router.post(`${this.path}/file/upload/:application`, this.multerUpload.single("file"), controller.processRecommendationFile);
+    this.router.post(`${this.path}/apply`, controller.applyRecommendations);
+    this.router.post(`${this.path}/test`, controller.testRecommendation);
   }
 }
 

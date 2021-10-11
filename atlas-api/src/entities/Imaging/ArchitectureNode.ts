@@ -1,7 +1,7 @@
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";
-import ArchitectureService from "@services/demeter/ArchitectureService";
+import ArchitectureService from "@services/extensions/demeter/ArchitectureService";
 import { int, Node } from "neo4j-driver";
 import SubsetNode from "./SubsetNode";
 

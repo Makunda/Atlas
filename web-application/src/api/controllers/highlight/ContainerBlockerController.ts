@@ -15,7 +15,7 @@ export default class ContainerBlockerController {
   ): Promise<ContainerBlocker[]> {
     const url =
       ContainerBlockerController.API_BASE_URL +
-      `/api/highlight/recommendations/container/file/upload/blockers/${application}`;
+      `/api/highlight/recommendations/container/file/upload/${application}`;
 
     try {
       const formData = new FormData();
@@ -55,7 +55,7 @@ export default class ContainerBlockerController {
   ): Promise<[ContainerBlocker[], ContainerBlocker[]]> {
     const url =
       ContainerBlockerController.API_BASE_URL +
-      "/api/highlight/recommendations/container/apply/blockers";
+      "/api/highlight/recommendations/container/apply";
 
     try {
       const body = {
@@ -102,7 +102,7 @@ export default class ContainerBlockerController {
   ): Promise<ContainerBlocker[]> {
     const url =
       ContainerBlockerController.API_BASE_URL +
-      "/api/highlight/recommendations/container/test/blockers";
+      "/api/highlight/recommendations/container/test";
 
     try {
       const body = {

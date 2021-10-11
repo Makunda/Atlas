@@ -1,95 +1,87 @@
 <!-- Login modal -->
 <template>
   <v-app class="main-application">
-    <v-container fluid fill-height class="pa-0">
-      <v-row style="height: 100%">
-        <v-card
-          class="mx-auto d-flex justify-content-between"
-          id="colored-tile"
-        >
-          <v-card-text fill-height height="100%" class="grow">
-            <v-container style="height: 100%">
-              <v-row fill-height style="height: 100%">
-                <!-- Image column -->
-                <v-col cols="12" md="5">
-                  <v-container bg fill-height grid-list-md text-xs-center>
-                    <img
-                      :src="`${publicPath}assets/svg/atlasBlack2.svg`"
-                      alt="Atlas logo"
-                      id="background-logo"
-                    />
-                  </v-container>
-                </v-col>
+    <v-card class="mx-auto d-flex justify-content-between" id="colored-tile">
+      <!-- Bakcground Image  -->
+      <img
+        :src="`${publicPath}assets/svg/atlasBlack2.svg`"
+        alt="Atlas logo"
+        id="background-logo"
+      />
 
-                <!-- Title column -->
-                <v-col cols="12" md="7" id="form" style="height: 100%">
-                  <v-container style="height: 100%">
-                    <!-- Title & version -->
-                    <v-row class="pt-12 d-flex flex-column">
-                      <h2 class="white--text text-h1">NASD Atlas</h2>
-                      <i class="white--text text-h5 pl-2">Version 2.6.0</i>
-                    </v-row>
+      <v-card-text fill-height height="100%" class="grow">
+        <v-container style="height: 100%">
+          <v-row fill-height style="height: 100%">
+            <!-- Image column -->
+            <v-col cols="12" md="5"></v-col>
 
-                    <!-- Login -->
-                    <v-row class="pt-12 d-flex flex-column white--text">
-                      <v-text-field
-                        dark
-                        class="limited-size-input mt-10"
-                        color="white"
-                        ref="neo4jUser"
-                        v-model="username"
-                        label="Username"
-                        placeholder="User"
-                        :error-messages="loginError"
-                        required
-                      ></v-text-field>
-                      <v-text-field
-                        dark
-                        class="limited-size-input mt-3"
-                        v-model="password"
-                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                        :type="show1 ? 'text' : 'password'"
-                        label="Password"
-                        name="input-10-1"
-                        :error-messages="loginError"
-                        required
-                        @click:append="show1 = !show1"
-                      ></v-text-field>
-                      <p>Database bolt URI : {{ uri }}</p>
+            <!-- Title column -->
+            <v-col cols="12" md="7" id="form" style="height: 100%">
+              <v-container style="height: 100%">
+                <!-- Title & version -->
+                <v-row class="pt-12 d-flex flex-column">
+                  <h2 class="white--text text-h1">NASD Atlas</h2>
+                  <i class="white--text text-h5 pl-2">Version 2.6.0</i>
+                </v-row>
 
-                      <div
-                        v-show="failedLogin"
-                        class="red darken-2 text-center pa-2"
-                        width="100%"
-                      >
-                        <span class="white--text"
-                          >Wrong credentials / URI. Contact your CAST Imaging
-                          administrator for more information.</span
-                        >
-                      </div>
+                <!-- Login -->
+                <v-row class="pt-12 d-flex flex-column white--text">
+                  <v-text-field
+                    dark
+                    class="limited-size-input mt-10"
+                    color="white"
+                    ref="neo4jUser"
+                    v-model="username"
+                    label="Username"
+                    placeholder="User"
+                    :error-messages="loginError"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    dark
+                    class="limited-size-input mt-3"
+                    v-model="password"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
+                    label="Password"
+                    name="input-10-1"
+                    :error-messages="loginError"
+                    required
+                    @click:append="show1 = !show1"
+                  ></v-text-field>
+                  <p>Database bolt URI : {{ uri }}</p>
 
-                      <v-btn
-                        class="mt-12"
-                        color="white"
-                        style="max-width: 100px"
-                        @click="save"
-                      >
-                        Log In
-                      </v-btn>
-                    </v-row>
-                  </v-container>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <!-- Mentions -->
-          <div class="white--text pr-4 mentions">
-            <v-spacer></v-spacer>
-            <p>Powered by the North America Solutions Design Team - 2021</p>
-          </div>
-        </v-card>
-      </v-row>
-    </v-container>
+                  <div
+                    v-show="failedLogin"
+                    class="red darken-2 text-center pa-2"
+                    width="100%"
+                  >
+                    <span class="white--text"
+                      >Wrong credentials / URI. Contact your CAST Imaging
+                      administrator for more information.</span
+                    >
+                  </div>
+
+                  <v-btn
+                    class="mt-12"
+                    color="white"
+                    style="max-width: 100px"
+                    @click="save"
+                  >
+                    Log In
+                  </v-btn>
+                </v-row>
+              </v-container>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <!-- Mentions -->
+      <div class="white--text pr-4 mentions">
+        <v-spacer></v-spacer>
+        <p>Powered by the North America Solutions Design Team - 2021</p>
+      </div>
+    </v-card>
   </v-app>
 </template>
 
@@ -162,6 +154,7 @@ export default Vue.extend({
 <style>
 .main-application {
   background-color: #e2e2e2 !important;
+  position: relative;
 }
 
 .limited-size-input {
@@ -175,14 +168,15 @@ export default Vue.extend({
 }
 
 #colored-tile {
-  height: 80%;
-  width: 80%;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+
+  min-height: 640px;
+
   margin: auto;
-
-  max-height: 730px;
-  max-width: 1150px;
-
-  position: relative;
+  position: absolute;
   background: rgb(0, 36, 47);
   background: -moz-linear-gradient(
     28deg,
@@ -213,7 +207,10 @@ export default Vue.extend({
   margin-top: auto;
   margin-right: auto;
   color: white;
+  left: 5%;
+  top: 10%;
   opacity: 0.2;
+  height: 80%;
   fill: #0e4b5f;
 }
 

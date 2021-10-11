@@ -1,4 +1,4 @@
-import ArchitectureService from "@services/demeter/ArchitectureService";
+import ArchitectureService from "@services/extensions/demeter/ArchitectureService";
 import { logger } from "@shared/Logger";
 import config from "config";
 import AAgent from "./AgentAbstract";

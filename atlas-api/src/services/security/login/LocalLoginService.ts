@@ -112,6 +112,17 @@ export default class LocalLoginService {
   }
 
   /**
+   * Verify then existence of a Role
+   * @param role Role to check as a string
+   */
+  public getRole(role: string): Role | null {
+    for (const r of this.roles) {
+      if (role === r.name) return r;
+    }
+    return null;
+  }
+
+  /**
    * Verify if the login provided is correct
    * @param role Role to check
    */

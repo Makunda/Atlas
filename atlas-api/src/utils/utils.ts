@@ -33,3 +33,12 @@ export function fixedLengthString(text: string, length: number) : string {
   if(toAdd < 0) return text;
   return " ".repeat(toAdd) + text;
 }
+
+/**
+ * Get the value inside an enum 
+ * @param e Enum to parse
+ * @returns 
+ */
+export function enumKeys<E>(e: E): (keyof E)[] {
+  return Object.keys(e) as (keyof E)[];
+}

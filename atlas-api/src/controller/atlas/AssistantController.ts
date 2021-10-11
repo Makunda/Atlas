@@ -1,8 +1,8 @@
 import { DetectionCandidate } from "@dtos/artemis/detectionCandidate.dto";
-import { ArtemisCandidates } from "@services/artemis/ArtemisCandidatesService";
+import { ArtemisCandidates } from "@services/extensions/artemis/ArtemisCandidatesService";
 import { NextFunction, Request, Response } from "express";
-import { DemeterActions, FrameworkAssistant } from "@assistants/assistant";
-import { FrameworkAssistantManager } from "@assistants/framework.assistant";
+import { DemeterActions, FrameworkAssistant } from "@assistants/Assistant";
+import { FrameworkAssistantManager } from "@assistants/FrameworkAssistant";
 
 class AssistantController {
   private candidateService = new ArtemisCandidates();

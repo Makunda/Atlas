@@ -1,8 +1,8 @@
 import { Router } from "express";
 import Route from "@interfaces/routes.interface";
 import ExtensionController from "@controller/atlas/ExtensionController";
-import ArtemisController from "@controller/artemis/ArtemisController";
-import DemeterController from "@controller/demeter/DemeterController";
+import ArtemisController from "@controller/extensions/artemis/ArtemisController";
+import DemeterController from "@controller/extensions/demeter/DemeterController";
 
 class ExtensionRoute implements Route {
   public path = "";

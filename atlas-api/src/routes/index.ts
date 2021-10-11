@@ -1,14 +1,14 @@
 import { Router } from "express";
 
-import DemeterRouter from "./demeter/DemeterIndexRoute";
-import ArtemisRouter from "./artemis/ArtemisRouteIndex";
+import DemeterRouter from "./extensions/demeter/DemeterIndexRoute";
+import ArtemisRouter from "./extensions/artemis/ArtemisRouteIndex";
 import ImagingRouter from "./imaging/ImagingIndexRoute";
 import AtlasRouter from "./atlas/AtlasIndexRoute";
 import ConfigurationRouter from "./configuration/ConfigurationIndexRoute";
 import PythiaRouter from "./pythia/PythiaIndexRoute";
 import UtilsRoute from "./utils/UtilsIndexRoute";
 import AssistantsRoute from "./assistants/AssistantsRoute";
-import ParisRouter from "./paris/ParisRoute";
+import ParisRouter from "./extensions/paris/ParisRoute";
 import LicenseRoute from "./license/LicenseRoute";
 import AipRouter from "./aip/AipRoute";
 import HighlightIndexRoute from "./highlight/HighlightIndexRoute";

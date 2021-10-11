@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import { Router } from "express";
 import Route from "@interfaces/routes.interface";
-import ArchitectureController from "@controller/demeter/ArchitectureController";
+import ArchitectureController from "@controller/extensions/demeter/ArchitectureController";
 
 /**
  * Class handling the routes related to the modules

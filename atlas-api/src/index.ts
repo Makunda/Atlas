@@ -29,7 +29,7 @@ async function launch() {
 
     // Import autonomous modules and Cron operations
     const AgentModule: any = await import("@agents/AgentManager");
-    const FrameworkAssistantModule: any = await import("./assistants/framework.assistant");
+    const FrameworkAssistantModule: any = await import("./assistants/FrameworkAssistant");
 
     FrameworkAssistantModule.FrameworkAssistantManager.getInstance();
     const agentManager = AgentModule.AgentManager.getInstance();

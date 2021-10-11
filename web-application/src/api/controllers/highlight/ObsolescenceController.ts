@@ -21,7 +21,7 @@ export class ObsolescenceController {
     file: any,
     application: string
   ): Promise<OssRecommendation[]> {
-    const url = this.apiBaseUrl + `file/upload/blockers/${application}`;
+    const url = this.apiBaseUrl + `file/upload/${application}`;
 
     try {
       const formData = new FormData();
@@ -64,7 +64,7 @@ export class ObsolescenceController {
     blockers: OssRecommendation[],
     taggingType: string
   ): Promise<[OssRecommendation[], OssRecommendation[]]> {
-    const url = this.apiBaseUrl + "apply/blockers";
+    const url = this.apiBaseUrl + "apply";
 
     try {
       const body = {
@@ -114,7 +114,7 @@ export class ObsolescenceController {
   public static async testBlocker(
     blocker: OssRecommendation
   ): Promise<[OssRecommendation[], OssRecommendation[]]> {
-    const url = this.apiBaseUrl + "test/blockers";
+    const url = this.apiBaseUrl + "test";
 
     try {
       const body = {
