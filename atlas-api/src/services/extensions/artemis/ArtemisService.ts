@@ -10,7 +10,7 @@ class ArtemisService {
    * Get the version of Artemis
    */
   public static async getVersion(): Promise<string> {
-    const req = `CALL artemis.version()`;
+    const req = "CALL artemis.version()";
 
     try {
       const val = await this.neo4jAl.execute(req);
@@ -31,7 +31,7 @@ class ArtemisService {
    */
   public static async setOnlineMode(value: boolean): Promise<boolean> {
     try {
-      const request = `CALL artemis.set.onlineMode($value);`;
+      const request = "CALL artemis.set.onlineMode($value);";
 
       const results = await this.neo4jAl.executeWithParameters(request, {
         value: value,
@@ -50,7 +50,7 @@ class ArtemisService {
    * @returns A promise returning the new value of the repo
    */
   public static async getRepositoryMode(): Promise<boolean> {
-    const req = `CALL artemis.get.repositoryMode();`;
+    const req = "CALL artemis.get.repositoryMode();";
 
     try {
       const val = await this.neo4jAl.execute(req);
@@ -72,7 +72,7 @@ class ArtemisService {
    */
   public static async setRepositoryMode(value: boolean): Promise<boolean> {
     try {
-      const request = `CALL artemis.set.repositoryMode($value);`;
+      const request = "CALL artemis.set.repositoryMode($value);";
 
       const results = await this.neo4jAl.executeWithParameters(request, {
         value: value,
@@ -91,7 +91,7 @@ class ArtemisService {
    * Get the Online mode of artemis
    */
   public static async getOnlineMode(): Promise<boolean> {
-    const req = `CALL artemis.get.onlineMode();`;
+    const req = "CALL artemis.get.onlineMode();";
 
     try {
       const val = await this.neo4jAl.execute(req);

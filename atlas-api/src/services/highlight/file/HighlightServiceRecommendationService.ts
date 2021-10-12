@@ -1,17 +1,15 @@
 /* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
 import { logger } from "@shared/Logger";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
-import { CloudProvider } from "src/enum/highlight/CloudProvider";
+import { CloudProvider } from "@enum/highlight/CloudProvider";
 import ExcelUtils from "@utils/Excel/ExcelUtils";
 import CloudServiceRecommendation from "@interfaces/highlight/recommendations/CloudServiceRecommendation";
 import ArchitectureService from "@services/extensions/demeter/ArchitectureService";
 import SubsetDocumentNode from "@entities/Imaging/Documents/SubsetDocumentNode";
 import LevelDocumentNode from "@entities/Imaging/Documents/LevelDocumentNode";
 import AggregationService from "@services/extensions/demeter/AggregationService";
-import LevelService from "@services/extensions/demeter/LevelService";
 import AggregationDocumentNode from "@entities/Imaging/Documents/AggregationDocumentNode";
 
 export default class HighlightServiceRecommendationService {

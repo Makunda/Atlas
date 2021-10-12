@@ -76,6 +76,7 @@
       "@services/*": ["src/services/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@dtos/*": ["src/dtos/*"],
+      "@enum/*": ["src/enum/*"],
       "@database/*": ["src/database/*"],
       "@utils/*": ["src/utils/*"],
       "@postgres/*": ["src/postgres/*"],

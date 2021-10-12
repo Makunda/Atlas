@@ -27,6 +27,7 @@
     "@agents": "dist/agents",
     "@extensions": "dist/extensions",
     "@daos": "dist/daos",
+    "@enum": "dist/enum",
     "@entities": "dist/entities",
     "@shared": "dist/shared",
     "@assistants": "dist/assistants",

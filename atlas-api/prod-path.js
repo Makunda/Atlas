@@ -13,6 +13,7 @@ const paths = {
   "@services/*": ["dist/services/*"],
   "@interfaces/*": ["dist/interfaces/*"],
   "@dtos/*": ["dist/dtos/*"],
+  "@enum/*": ["dist/enum/*"],
   "@utils/*": ["dist/utils/*"],
   "@database/*": ["dist/database/*"],
   "@exceptions/*": ["dist/exceptions/*"],

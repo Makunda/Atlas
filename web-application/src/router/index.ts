@@ -37,6 +37,7 @@ const authMiddleware = (to, from, next) => {
 };
 
 const routes: Array<RouteConfig> = [
+  { path: "/api" }, // Ignore or pass on to server
   {
     path: "",
     redirect: "/atlas/"
@@ -128,7 +129,6 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
-  { path: "/api" }, // Ignore or pass on to server
   {
     path: "*",
     name: "404",
@@ -137,8 +137,8 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  mode: "history",
-  routes
+  routes: routes,
+  mode: "history"
 });
 
 export default router;
