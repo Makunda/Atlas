@@ -28,6 +28,10 @@
     "password": "imaging"
   },
 
+  "pythia": {
+    "url": "https://cast-pythia.herokuapp.com/"
+  },
+
   "artemis": {
     "frameworkNode": "ArtemisFramework"
   },

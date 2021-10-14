@@ -256,14 +256,62 @@ export default class ArchitectureService {
    */
   public async duplicateCastTaxonomy(application: string, name: string): Promise<void> {
     try {
-      const tag = await new TagService().getCustomArchitectureTag();
+      // Get the list of the Type in the CAST TAXONOMY
       const req = `
-      MATCH (o:Object:\`${application}\`) WHERE EXISTS(o.Type)
-      SET o.Tags = CASE WHEN (o.Tags IS NULL OR o.Tags="") THEN [($tag+$name+"$"+o.Type)] ELSE o.Tags + ($tag+$name+"$"+o.Type) END`;
-      await ArchitectureService.NEO4JAL.executeWithParameters(req, {
-        name: name,
-        tag: tag,
-      });
+      MATCH (o:Object:\`${application}\`) 
+      RETURN DISTINCT o.Type as type, ID(o) as nodeID`;
+      const res = await ArchitectureService.NEO4JAL.execute(req);
+
+      // If empty results, Stop
+      if (!res || res.records.length == 0) return;
+
+      // Aggregates results
+      let type: string;
+      let id: number;
+
+      // Categorize the objects to create
+      const levelMap = new Map<string, number[]>();
+      for (const record of res.records) {
+        type = String(record.get("type"));
+        id = int(record.get("nodeID")).toNumber();
+
+        if (levelMap.has(type)) levelMap.get(type).push(id);
+        // append to the list
+        else levelMap.set(type, [id]); // Create a list
+      }
+
+      logger.info(`Identified ${levelMap.size} groups to recreate as an architecture.`);
+
+      // Create architecture with the identified subset
+      const request = "CALL demeter.create.architecture($app, $archiName, $idList);";
+      for (const [key, value] of levelMap) {
+        try {
+          await ArchitectureService.NEO4JAL.executeWithParameters(request, {
+            app: application,
+            archiName: name + "$" + key,
+            idList: value,
+          });
+        } catch (err) {
+          logger.error(`Failed to create subset '${key} in architecture '${name}' for application '${application}'.`, err);
+        }
+      }
+
+      logger.info(`A new Architecture named ${name} has been successfully created in application ${application}. Refreshing it.`);
+
+      // Refresh the Architecture
+      try {
+        const requestRefresh = "demeter.api.refresh.architecture($app, $archiName)";
+        await ArchitectureService.NEO4JAL.executeWithParameters(requestRefresh, {
+          app: application,
+          archiName: name,
+        });
+        logger.info(`Refreshing the ${name} architecture in application ${application}.`);
+      } catch (err) {
+        logger.error(`Failed to refresh architecture ${name} in application ${application}.`, err);
+        throw new Error("Failed to refresh the architecture.");
+      }
+
+      logger.info(`Duplication of the CAST Taxonomy is a success in application ${application}.`);
     } catch (err) {
       logger.error("Failed to recreate Cast Taxonomy.", err);
       throw err;

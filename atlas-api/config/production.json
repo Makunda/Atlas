@@ -32,6 +32,10 @@
     "frameworkNode": "ArtemisFramework"
   },
 
+  "pythia": {
+    "url": "https://cast-pythia.herokuapp.com/"
+  },
+
   "postgres": {
     "pool": {
       "expiration": 30000

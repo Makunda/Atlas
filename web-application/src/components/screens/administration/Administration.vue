@@ -28,9 +28,9 @@ import Vue from "vue";
 import DemeterLevelsTile from "@/components/screens/administration/tiles/DemeterLevelsTile.vue";
 import DemeterModuleTile from "@/components/screens/administration/tiles/DemeterModuleTile.vue";
 import GlobalOperations from "@/components/screens/administration/tiles/GlobalOperations.vue";
-import DemeterParameters from "@/components/screens/administration/steps/DemeterParameters.vue";
 import ArtemisParameters from "@/components/screens/administration/steps/ArtemisParameters.vue";
 import GlobalParameters from "@/components/screens/administration/steps/GlobalParameters.vue";
+import PythiaParameters from "@/components/screens/administration/steps/PythiaParameters.vue";
 
 export default Vue.extend({
   name: "Administration",
@@ -39,9 +39,9 @@ export default Vue.extend({
     DemeterLevelsTile,
     GlobalOperations,
     DemeterModuleTile,
-    DemeterParameters,
     GlobalParameters,
-    ArtemisParameters
+    ArtemisParameters,
+    PythiaParameters
   },
 
   data: () => ({
@@ -56,13 +56,13 @@ export default Vue.extend({
         icon: "mdi-cogs"
       },
       {
-        view: "DemeterParameters",
-        name: "Demeter Parameters",
+        view: "ArtemisParameters",
+        name: "Artemis Parameters",
         icon: "mdi-cogs"
       },
       {
-        view: "ArtemisParameters",
-        name: "Artemis Parameters",
+        view: "PythiaParameters",
+        name: "Pythia Parameters",
         icon: "mdi-cogs"
       }
     ]

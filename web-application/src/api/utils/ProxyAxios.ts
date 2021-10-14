@@ -46,7 +46,6 @@ export default class ProxyAxios {
       requestConfiguration.headers["Authorization"] =
         "Bearer " + String(Vue.$cookies.get(Cookie.AUTH_COOKIE));
     }
-
     try {
       return axios.post(url, data, requestConfiguration);
     } catch (error) {

@@ -129,12 +129,6 @@ import Vue from "vue/types/umd";
             <component class="" :is="Component" />
           </transition>
         </router-view>
-
-        <!--      <component-->
-        <!--          :is="currentScreen"-->
-        <!--          v-model="applicationName"-->
-        <!--          class="custom-container"-->
-        <!--      ></component>-->
       </v-row>
     </v-app>
   </div>

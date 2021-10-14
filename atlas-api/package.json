@@ -1,6 +1,8 @@
 {
   "name": "atlas-api",
   "version": "2.5.0",
+  "author": "Hugo JOBY",
+  "license": "LGPL v3",
   "scripts": {
     "client:build": "npm run --prefix ../web-application build",
     "api:build": "ts-node build.ts",
@@ -27,6 +29,7 @@
     "@agents": "dist/agents",
     "@extensions": "dist/extensions",
     "@daos": "dist/daos",
+    "@modules": "dist/modules",
     "@enum": "dist/enum",
     "@entities": "dist/entities",
     "@shared": "dist/shared",

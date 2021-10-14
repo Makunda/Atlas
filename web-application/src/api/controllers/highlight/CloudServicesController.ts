@@ -1,7 +1,7 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import CloudBlocker from "@/api/interface/highlight/CloudBlocker";
 import ProxyAxios from "@/api/utils/ProxyAxios";
-import { ApiResponse, ApiResponseImpl } from "@/api/utils/ApiResponse";
+import ApiResponseImpl from "@/api/utils/ApiResponse";
 import CloudServiceRecommendation from "@/api/interface/highlight/CloudServiceRecommendation";
 
 export class CloudServicesController {
@@ -29,11 +29,7 @@ export class CloudServicesController {
       };
 
       // Post the file
-      const response = (await ProxyAxios.post(
-        url,
-        formData,
-        config
-      )) as ApiResponse;
+      const response = await ProxyAxios.post(url, formData, config);
 
       const apiResponse = new ApiResponseImpl<CloudServiceRecommendation[]>(
         response
@@ -43,9 +39,9 @@ export class CloudServicesController {
         return apiResponse.getData();
       } else {
         throw new Error(
-          `Failed to send the list of recommendation. Status (${
-            apiResponse.status
-          }). Error: ${apiResponse.getErrors().join(", ")}`
+          `Failed to send the list of recommendation. Status (${apiResponse.getStatus()}). Error: ${apiResponse
+            .getErrors()
+            .join(", ")}`
         );
       }
     } catch (error) {
@@ -75,7 +71,7 @@ export class CloudServicesController {
       };
 
       // Post the blockers to apply
-      const response = (await ProxyAxios.post(url, body)) as ApiResponse;
+      const response = await ProxyAxios.post(url, body);
       const apiResponse = new ApiResponseImpl(response);
 
       if (apiResponse.isSuccess()) {
@@ -83,9 +79,9 @@ export class CloudServicesController {
         return [data.applied, data.notApplied];
       } else {
         throw new Error(
-          `Failed to apply the list of recommendation. Status (${
-            apiResponse.status
-          }). Errors: ${apiResponse.getErrors().join(", ")}`
+          `Failed to apply the list of recommendation. Status (${apiResponse.getStatus()}). Errors: ${apiResponse
+            .getErrors()
+            .join(", ")}`
         );
       }
     } catch (error) {
@@ -113,15 +109,13 @@ export class CloudServicesController {
       };
 
       const res = await ProxyAxios.post(url, body);
+      const apiResponse = new ApiResponseImpl<CloudBlocker[]>(res);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as CloudBlocker[];
-        }
+      if (apiResponse.isSuccess()) {
+        return apiResponse.getData();
       } else {
         throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          `Failed to test the recommendations. Status (${apiResponse.getStatus()}). Message: ${apiResponse.getMessage()}`
         );
       }
     } catch (error) {

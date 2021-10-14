@@ -69,6 +69,7 @@
       "@agents/*": ["src/agents/*"],
       "@extensions/*": ["src/extensions/*"],
       "@daos/*": ["src/daos/*"],
+      "@modules/*": ["src/modules/*"],
       "@entities/*": ["src/entities/*"],
       "@shared/*": ["src/shared/*"],
       "@assistants/*": ["src/assistants/*"],

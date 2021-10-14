@@ -185,7 +185,6 @@ This recommendation has been triggered because '${block.rule}' was detected.`;
             // Create an architecture and replicate the architecture there
             logger.info(`Failed to find ${archi}. Creating the architecture.`);
             await archiController.duplicateCastTaxonomy(app, archi);
-            await archiController.executeGroupingInApplication(app);
           }
 
           // Select all the subsets in the architecture to create the document
@@ -271,7 +270,7 @@ This recommendation has been triggered because '${block.rule}' was detected.`;
           if (!res || res.records.length == 0) continue;
           const idNodes = res.records.map(x => int(x.get("idNode")).toNumber());
 
-          // filter the blockers to create for the actual architecture
+          // filter the blockers to create  the actual architecture
           const filtered = applicationBlockers.filter(x => x.cloudProvider == aggregation);
 
           // Apply documents for each blockers

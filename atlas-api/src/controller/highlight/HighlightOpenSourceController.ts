@@ -7,6 +7,7 @@ import { logger } from "@shared/Logger";
 import * as fs from "fs";
 import OssRecommendation from "@interfaces/highlight/recommendations/OssRecommendation";
 import HighlightController from "./HighlightController";
+import Pythia from "@modules/pythia/Pythia";
 
 export default class HighlightOpenSourceController implements HighlightController {
   protected highlightService = new HighlightOssService();
@@ -51,6 +52,24 @@ export default class HighlightOpenSourceController implements HighlightControlle
       }
 
       res.status(200).json({ data: recommendations, message: "OSS Recommendation Found" });
+
+      // Send recommendation to Pythia
+      const pythia = new Pythia();
+      let sent = 0;
+      for (const reco of recommendations) {
+        try {
+          await pythia.createHighlightFramework({
+            name: reco.component,
+            language: reco.technology,
+            component: reco.component,
+            link: reco.link,
+          });
+          sent++;
+        } catch (ignored) {
+          // Ignored
+        }
+      }
+      logger.info(`Sent ${sent} recommendations to pythia.`);
     } catch (error) {
       logger.error("Failed to process the Highlight File", error);
       next(error);
@@ -70,13 +89,15 @@ export default class HighlightOpenSourceController implements HighlightControlle
       const taggingType: string = req.body.taggingType ? String(req.body.taggingType) : "tag";
 
       // Launch the import
-      const [recommendations, errors]: [OssRecommendation[], OssRecommendation[]] =
-        await this.highlightService.applyRecommendations(blockers, taggingType);
+      const [recommendations, errors]: [OssRecommendation[], OssRecommendation[]] = await this.highlightService.applyRecommendations(
+        blockers,
+        taggingType,
+      );
 
       res.status(200).json({
         data: {
-          applied : recommendations,
-          notApplied: errors
+          applied: recommendations,
+          notApplied: errors,
         },
         message: "Not Applied recommendations",
       });

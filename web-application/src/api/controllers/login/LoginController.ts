@@ -2,10 +2,8 @@ import flash, { FlashType } from "@/modules/flash/Flash";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import CookieManager from "@/utils/CookieManager";
 import ProxyAxios from "@/api/utils/ProxyAxios";
-import { ApiResponseImpl, ApiResponse } from "@/api/utils/ApiResponse";
+import ApiResponseImpl from "@/api/utils/ApiResponse";
 import store from "@/store";
-
-import Vue from "vue";
 
 /**
  * Controller handling the login on the platform
@@ -14,8 +12,7 @@ export default class LoginController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   /**
-   * Get the version of the Demeter extension.
-   * Throw an error if the extension is not installed
+   * POST the login, to retrieve the JWT and store it
    */
   public static async postLogin(
     username: string,
@@ -28,7 +25,7 @@ export default class LoginController {
         password: password
       };
 
-      const response = (await ProxyAxios.post(url, body)) as ApiResponse;
+      const response = await ProxyAxios.post(url, body);
       const apiResponse = new ApiResponseImpl<string>(response);
 
       if (apiResponse.isSuccess()) {

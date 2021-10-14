@@ -466,7 +466,7 @@ export default Vue.extend({
         ) {
           const upBound =
             index + batchSize > this.blockerDisplayedList.length
-              ? this.blockerDisplayedList.length - 1
+              ? this.blockerDisplayedList.length
               : index + batchSize;
           const batch = this.blockerDisplayedList.slice(index, upBound);
 

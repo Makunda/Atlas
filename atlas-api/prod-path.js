@@ -6,6 +6,7 @@ const paths = {
   "@agents/*": ["dist/agents/*"],
   "@extensions/*": ["dist/extensions/*"],
   "@daos/*": ["dist/daos/*"],
+  "@modules/*": ["dist/modules/*"],
   "@entities/*": ["dist/entities/*"],
   "@shared/*": ["dist/shared/*"],
   "@assistants/*": ["dist/assistants/*"],

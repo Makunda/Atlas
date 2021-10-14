@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-export interface ApiResponse {
+export interface PythiaApiResponse {
   data?: any;
   errors?: string[];
   message: string;
@@ -9,12 +9,12 @@ export interface ApiResponse {
 /***
  * Class handling the response from the API
  */
-export default class ApiResponseImpl<T> {
+export default class PythiaApiResponseImpl<T> {
   private message = "";
   private status: number;
   private config: any;
   private data: T = {} as any;
-  private response = {} as ApiResponse;
+  private response = {} as PythiaApiResponse;
   private errors: string[] = [];
   private success: boolean;
 
@@ -31,7 +31,7 @@ export default class ApiResponseImpl<T> {
       this.errors = [`Request failed with status : ${response.status}.`];
     } else {
       // Response contains data; check for errors
-      this.response = response.data as ApiResponse;
+      this.response = response.data as PythiaApiResponse;
 
       this.message = response.data.message;
       this.errors = response.data.errors || [];
@@ -50,7 +50,7 @@ export default class ApiResponseImpl<T> {
    * @returns True if the query was successfully executed
    */
   public isSuccess(): boolean {
-    return this.status.toString().startsWith("2");
+    return this.success;
   }
 
   /**
@@ -80,7 +80,7 @@ export default class ApiResponseImpl<T> {
    * Get the response from the API
    * @returns The raw response
    */
-  public getRawResponse(): ApiResponse {
+  public getRawResponse(): PythiaApiResponse {
     return this.response;
   }
 
@@ -97,7 +97,7 @@ export default class ApiResponseImpl<T> {
    * @param joiner (Optional) The string to join the elements. By default ", "
    * @returns The list of errors joined
    */
-  public getErrorsAsString(joiner = ", "): string {
+  public getErrorsAsString(joiner: string = ", "): string {
     return this.errors.join(joiner);
   }
 
