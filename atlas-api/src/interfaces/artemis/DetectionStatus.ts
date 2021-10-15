@@ -4,6 +4,7 @@ import { Framework } from "./FrameworkInterface";
 import FrameworksService from "@services/extensions/artemis/FrameworkService";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { uuidv4 } from "../../utils/utils";
+import ArtemisParameters from "@entities/extensions/artemis/ArtemisParameters";
 
 export enum DetectionStatus {
   NotStarted,
@@ -20,16 +21,24 @@ export class Detection {
   // Attribute must be public
   public readonly id: string;
   public readonly application: string;
+  public readonly parameters: ArtemisParameters;
   public timestampStart: number;
   public timestampFinish = 0;
   public readonly language: string;
   public status: DetectionStatus;
   public data: Framework[] = [];
 
-  constructor(application: string, language: string) {
+  /**
+   * Constructor  of the detection class
+   * @param application Name of the application to analyze
+   * @param language Language of the detection
+   * @param parameters  List of parameters
+   */
+  constructor(application: string, language: string, parameters: ArtemisParameters) {
     this.id = uuidv4();
     this.application = application;
     this.language = language;
+    this.parameters = parameters;
     this.status = DetectionStatus.NotStarted;
     this.timestampStart = Date.now();
   }
@@ -79,6 +88,7 @@ export class Detection {
  */
 export class CancellableDetectionPromise {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+  private id: string;
 
   private cancel: CallableFunction;
   private promise: Promise<Framework[]>;
@@ -87,12 +97,13 @@ export class CancellableDetectionPromise {
   private transaction: Transaction;
   private detection: Detection;
 
-  constructor(application: string, language: string, onError: () => void, onComplete: (data: Detection) => void) {
+  constructor(application: string, language: string, parameters: ArtemisParameters, onError: () => void, onComplete: (data: Detection) => void) {
     try {
+      this.id = uuidv4();
       const session = this.neo4jAl.getSession();
       this.transaction = session.beginTransaction();
-      this.detection = new Detection(application, language); // Declare a new detection
-      this.wrappedPromise = this.buildWrapPromise(application, language);
+      this.detection = new Detection(application, language, parameters); // Declare a new detection
+      this.wrappedPromise = this.buildWrapPromise(application, language, parameters);
 
       this.promise = new Promise((resolve, reject) => {
         this.cancel = reject;
@@ -107,7 +118,7 @@ export class CancellableDetectionPromise {
           })
           .catch(err => {
             this.transaction.rollback().then(r => {
-              logger.error(`The transaction has been rolled backed.`, err);
+              logger.error(`The transaction has been rolled backed in detection with id [${this.id}].`, err);
             });
             logger.error(`The detection for application ${this.detection.getApplication()} was cancelled.`);
             this.detection.markAsFailed();
@@ -128,6 +139,9 @@ export class CancellableDetectionPromise {
     return application + "+" + language;
   }
 
+  /**
+   * Cancel the promise when called
+   */
   public cancelPromise() {
     this.cancel();
   }
@@ -159,16 +173,20 @@ export class CancellableDetectionPromise {
   }
 
   /**
-   * Build the wrap promise
+   * Wrap the function around a promise
+   * @param application Name of the application to launch the detection on
+   * @param language Language of the detection
+   * @param parameters Parameters of the detection
+   * @returns A promise returning the list of detected frameworks
    */
-  private buildWrapPromise(application: string, language: string): Promise<Framework[]> {
+  private buildWrapPromise(application: string, language: string, parameters: ArtemisParameters): Promise<Framework[]> {
+    logger.info(`Building detection promise for application '${application}/${language} with ID [${this.id}].`);
     return new Promise((resolve, reject) => {
-      const request = `CALL artemis.launch.detection($applicationName, $language);`;
+      const request = "CALL artemis.launch.detection($applicationName, $language, $params);";
 
       this.transaction
-        .run(request, { applicationName: application, language: language })
+        .run(request, { applicationName: application, language: language, params: parameters.toJSON() })
         .then((res: QueryResult) => {
-          console.log(`The query ${request} ended.`);
           const resultList: Framework[] = [];
           let framework: Framework;
 
@@ -176,13 +194,12 @@ export class CancellableDetectionPromise {
             framework = FrameworksService.convertRecordToFramework(res.records[i]);
             resultList.push(framework);
           }
-          console.log(`Detection successful ${resultList.length}`);
+          logger.info(`The detection promise with ID [${this.id}] ended. It returned ${resultList.length} records.`);
           resolve(resultList);
         })
         .catch(err => {
           // Add to failed detections
-          logger.error(`The analysis of the ${application} failed.`, err);
-          console.error(`The query ${request} failed.`, err);
+          logger.error(`The analysis of the ${application} with id [${this.id}]failed.`, err);
           reject(err);
         });
     });

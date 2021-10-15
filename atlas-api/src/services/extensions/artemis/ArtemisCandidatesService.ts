@@ -4,14 +4,18 @@ import { DetectionCandidate } from "@dtos/artemis/detectionCandidate.dto";
 import { logger } from "@shared/Logger";
 import HttpException from "@exceptions/HttpException";
 
+/**
+ * Controller handling the Candidates for the detection
+ */
 export class ArtemisCandidates {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   /**
    * Get the complete list of artemis candidates, and the technologies covered
+   * @returns A promise returning the list of Detection candidate
    */
   public async getCandidateList(): Promise<DetectionCandidate[]> {
-    const req = `CALL artemis.api.application.get.all.candidate.languages()`;
+    const req = "CALL artemis.api.application.get.all.candidate.languages()";
     try {
       const val = await this.neo4jAl.execute(req);
 
@@ -32,10 +36,11 @@ export class ArtemisCandidates {
 
   /**
    * Get information about the technologies covered by Artemis
-   * @param applicationName
+   * @param applicationName Name of the application to analyze
+   * @returns A promise returning the detection candidate associated to the application
    */
   public async getCandidateInformation(applicationName: string): Promise<DetectionCandidate> {
-    const req = `CALL artemis.api.application.get.candidate.languages($ApplicationName)`;
+    const req = "CALL artemis.api.application.get.candidate.languages($ApplicationName)";
     const params = { ApplicationName: applicationName };
 
     try {
@@ -49,6 +54,11 @@ export class ArtemisCandidates {
     }
   }
 
+  /**
+   * Convert record to Detection candidate
+   * @param res Record
+   * @returns A detection candidate
+   */
   private convertRecordToDetectionCandidate(res: Record): DetectionCandidate {
     const candidate: DetectionCandidate = {
       application: res.get("application"),

@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsBoolean, IsString } from "class-validator";
 
 export class LaunchDetectionDto {
   @IsString()
@@ -6,4 +6,13 @@ export class LaunchDetectionDto {
 
   @IsString()
   public language: string;
+
+  @IsBoolean()
+  public onlineMode: boolean;
+
+  @IsBoolean()
+  public repositoryMode: boolean;
+
+  @IsBoolean()
+  public pythiaMode: boolean;
 }

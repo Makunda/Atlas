@@ -13,17 +13,22 @@ export default class DetectionController {
    * Launch the detection for an application
    * @param application Name of the application
    * @param language Language for the detection
+   * @param dataSources List of data sources to use ["pythia", "repository", "online"]
    */
   public static async launchDetection(
     application: string,
-    language: string
+    language: string,
+    dataSources: string[]
   ): Promise<boolean> {
     const url =
       DetectionController.API_BASE_URL + "/api/artemis/detection/launch";
 
     const data = {
       application: application,
-      language: language
+      language: language,
+      onlineMode: dataSources.includes("online"),
+      repositoryMode: dataSources.includes("repository"),
+      pythiaMode: dataSources.includes("pythia")
     };
     try {
       const res = await ProxyAxios.post(url, data);

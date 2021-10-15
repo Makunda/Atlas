@@ -22,6 +22,14 @@ export default class Pythia {
   }
 
   /**
+   * Return the Pythia token to be used
+   * @returns The String
+   */
+  public async getToken(): Promise<string | null> {
+    return this.pythiaTokenManager.getToken();
+  }
+
+  /**
    * Create a pythia token and store it in the database
    * @param token Token to create
    */

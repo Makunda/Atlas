@@ -1,4 +1,4 @@
-import { IsArray, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsString } from "class-validator";
 
 export class DetectionCandidate {
   @IsString()
@@ -6,4 +6,16 @@ export class DetectionCandidate {
 
   @IsArray()
   public languages: string[];
+
+  @IsBoolean()
+  public onlineMode?: boolean;
+
+  @IsBoolean()
+  public repositoryMode?: boolean;
+
+  @IsString()
+  public pythiaURL?: string;
+
+  @IsString()
+  public pythiaToken?: string;
 }

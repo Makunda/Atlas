@@ -20,7 +20,7 @@ class CategoryService {
    * Get the list of supported languages
    */
   public async getAllNodes(): Promise<Category[]> {
-    const req = `CALL artemis.api.category.get.all.nodes()`;
+    const req = "CALL artemis.api.category.get.all.nodes()";
 
     try {
       const val = await this.neo4jAl.execute(req);
@@ -45,7 +45,7 @@ class CategoryService {
    * @return The Category node or Null if none was found
    */
   public async getNodeById(id: number): Promise<Category> {
-    const req = `CALL artemis.api.category.get.node.byId($id)`;
+    const req = "CALL artemis.api.category.get.node.byId($id)";
 
     try {
       const val = await this.neo4jAl.executeWithParameters(req, { id: id });

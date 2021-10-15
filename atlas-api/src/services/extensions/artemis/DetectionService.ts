@@ -2,6 +2,7 @@ import config from "config";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { CancellableDetectionPromise, Detection, DetectionStatus } from "@interfaces/artemis/DetectionStatus";
 import { logger } from "@shared/Logger";
+import ArtemisParameters from "@entities/extensions/artemis/ArtemisParameters";
 
 class DetectionService {
   private static INSTANCE: DetectionService;
@@ -16,7 +17,9 @@ class DetectionService {
    * Singleton
    * @private
    */
-  private constructor() {}
+  private constructor() {
+    /** Empty */
+  }
 
   /**
    * Get the instance of the Detection Service
@@ -115,21 +118,21 @@ class DetectionService {
    * Get on-going detections
    */
   public getPendingDetections(): Detection[] {
-    return this.detectionList.filter((x) => x.getStatus() == DetectionStatus.Pending).map((x) => x.getDetection());
+    return this.detectionList.filter(x => x.getStatus() == DetectionStatus.Pending).map(x => x.getDetection());
   }
 
   /**
    * Get successful detections
    */
   public getSuccessfulDetections(): Detection[] {
-    return this.detectionList.filter((x) => x.getStatus() == DetectionStatus.Success).map((x) => x.getDetection());
+    return this.detectionList.filter(x => x.getStatus() == DetectionStatus.Success).map(x => x.getDetection());
   }
 
   /**
    * Get failed detections
    */
   public getFailedDetections(): Detection[] {
-    return this.detectionList.filter((x) => x.getStatus() == DetectionStatus.Failure).map((x) => x.getDetection());
+    return this.detectionList.filter(x => x.getStatus() == DetectionStatus.Failure).map(x => x.getDetection());
   }
 
   /**
@@ -137,7 +140,7 @@ class DetectionService {
    * @param uuid
    */
   public getDetectionByID(uuid: string): Detection | null {
-    const indexPending: number = this.detectionList.findIndex((i) => i.getDetection().getId() == uuid);
+    const indexPending: number = this.detectionList.findIndex(i => i.getDetection().getId() == uuid);
 
     if (indexPending != -1) {
       return null;
@@ -151,10 +154,10 @@ class DetectionService {
    * @param appName Name of the application concerned by the detection
    * @param language Language for the detection
    */
-  public launchDetection(appName: string, language: string): CancellableDetectionPromise {
+  public launchDetection(appName: string, language: string, parameters: ArtemisParameters): CancellableDetectionPromise {
     // If still pending do not launch the detection
     const indexPending: number = this.detectionList.findIndex(
-      (i) => i.getDetectionPk() == CancellableDetectionPromise.generateDetectionPk(appName, language)
+      i => i.getDetectionPk() == CancellableDetectionPromise.generateDetectionPk(appName, language),
     );
 
     if (indexPending != -1) {
@@ -166,12 +169,13 @@ class DetectionService {
     const cancellablePromise: CancellableDetectionPromise = new CancellableDetectionPromise(
       appName,
       language,
+      parameters,
       () => {
         this.removeCancellablePromise(cancellablePromise);
       },
       (data: Detection) => {
         this.addToResult(data);
-      }
+      },
     );
     this.detectionList.push(cancellablePromise);
 
@@ -220,9 +224,7 @@ class DetectionService {
    * @private
    */
   private removeCancellablePromise(cancellablePromise: CancellableDetectionPromise) {
-    const indexPending: number = this.detectionList.findIndex(
-      (i) => i.getDetectionPk() == cancellablePromise.getDetectionPk()
-    );
+    const indexPending: number = this.detectionList.findIndex(i => i.getDetectionPk() == cancellablePromise.getDetectionPk());
 
     if (indexPending != -1) {
       this.detectionList[indexPending].cancelPromise();

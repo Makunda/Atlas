@@ -85,8 +85,15 @@ export default class ArtifactService {
     }
   }
 
+  /**
+   * Get a flat list of Artifacts in the application
+   * @param appName Name of the application
+   * @param language Language of the application
+   * @param externality  Externality of the classes
+   * @returns The list of detected artifacts
+   */
   public async getArtifactsList(appName: string, language: string, externality: boolean): Promise<IArtifact[]> {
-    const req = `CALL artemis.api.breakdown.get($appName, $language, $externality)`;
+    const req = "CALL artemis.api.breakdown.get($appName, $language, $externality)";
     try {
       const val = await this.neo4jAl.executeWithParameters(req, {
         appName: appName,
@@ -108,7 +115,13 @@ export default class ArtifactService {
     }
   }
 
-  // Get Artifacts as a Tree
+  /**
+   * Return the list of Artifacts as a Tree
+   * @param appName Name of the application
+   * @param language  Language of the detection
+   * @param externality Externality og the classes
+   * @returns
+   */
   public async getArtifactAsTree(appName: string, language: string, externality: boolean): Promise<IArtifact[]> {
     const allArtifacts: IArtifact[] = await this.getArtifactsList(appName, language, externality);
     const tree: IArtifact[] = [];
@@ -186,8 +199,6 @@ export default class ArtifactService {
           logger.error(`Failed to extract the artifact : ${String(a)}`, err);
         }
       }
-
-      console.log("To execute :", reqMap);
 
       const session = this.neo4jAl.getSession();
       let tx: Transaction = null;

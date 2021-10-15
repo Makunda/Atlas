@@ -9,64 +9,134 @@
       </p>
     </v-card-title>
 
-    <v-card-text>
-      <v-row class="my-2">
-        <p>
-          The <i>Artemis : automatic framewok detector </i> your application and
-          finds objects belonging to open-source components. It analyzes the
-          most popular online repositories and Google, and thanks to its
-          built-in automatic learning algorithm, it finds the best matches.
-          <br />
-          You can choose to activate or not these options. If no option is
-          activated, the <i>Artemis : automatic framewok detector </i> will rely
-          on it's own database to discover frameworks.
-        </p>
-      </v-row>
+    <v-card-subtitle class="text-subtitle-1">
+      <p>
+        The <i>Artemis : automatic framewok detector </i> your application and
+        finds objects belonging to open-source components. It analyzes the most
+        popular online repositories and Google, and thanks to its built-in
+        automatic learning algorithm, it finds the best matches.
+        <br />
+        You can choose to activate or not these options. If no option is
+        activated, the <i>Artemis : automatic framewok detector </i> will rely
+        on it's own database to discover frameworks.
+      </p>
+      <p>
+        <b
+          ><v-icon color="persianGrey">mdi-information</v-icon> The current
+          workspace of the framework detector is located under : </b
+        >{{ workspacePath }}
+        <br />
+        You can change the workspace in the Administration section
+      </p>
+      <p>
+        <b
+          ><v-icon color="persianGrey">mdi-information</v-icon> The current
+          version of Artemis is : </b
+        >{{ version }}
+      </p>
+    </v-card-subtitle>
 
-      <v-row class="mt-5">
-        <h3>Actions:</h3>
+    <v-card-text>
+      <v-row class="mt-2 text-subtitle-1"> </v-row>
+      <v-row class="mt-3"> </v-row>
+
+      <v-row class="mt-5 mb-6 ml-1 mb-4">
+        <h2>
+          1 - Select one or more data sources for the framework detection:
+        </h2>
       </v-row>
-      <v-row class="d-flex flex-column">
-        <v-switch
-          class="mx-5"
-          v-model="onlineMode"
-          label="Online search : The framewok detection will parse Google, to discover frameworks. The frameworks detected are added to the configuration for future usages."
-          color="persianGrey"
-          :loading="loadingConfiguration || loadingOnlineMode"
-          :disabled="loadingOnlineMode"
-          @click="setOnlineMode()"
-          hide-details
-        ></v-switch>
-        <v-switch
-          class="mx-5"
-          v-model="repositoryMode"
-          label="Repository search : Parse most populars repositories as Github, Maven, etc.. "
-          color="persianGrey"
-          :loading="loadingConfiguration || loadingRepositoryMode"
-          :disabled="loadingRepositoryMode"
-          @click="setRepositoryMode()"
-          hide-details
-        ></v-switch>
-        <v-switch
-          class="mx-5"
-          label="Interaction detection : Discover your own internals frameworks by detecting the pieces of code used by multiple applications. (Coming soon)"
-          color="persianGrey"
-          hide-details
-          disabled
-        ></v-switch>
-        <v-checkbox
-          class="mx-5"
-          label="Send the results of this detection by mail. (Configure mails addresses in the admistration panel) (Coming soon)"
-          disabled
-        ></v-checkbox>
-        <v-row align="center">
-          <v-col cols="2">
-            <v-subheader>
-              <h3>Pick a language for discovery :</h3>
+      <v-row class="d-flex flex-column ml-3">
+        <!-- Selection of the detection mode -->
+        <v-btn-toggle
+          class="my-3"
+          multiple
+          v-model="dataSources"
+          :value="dataSources"
+        >
+          <v-btn x-large value="local" disabled>
+            <v-icon class="mr-2">mdi-database</v-icon>
+            Local Database
+          </v-btn>
+          <v-btn x-large value="pythia">
+            <v-icon class="mr-2">mdi-cloud-search</v-icon>
+            Pythia Repository
+          </v-btn>
+          <v-btn x-large value="online">
+            <v-icon class="mr-2">mdi-google</v-icon>
+            Online Detection (Google)
+          </v-btn>
+          <v-btn x-large value="repository">
+            <v-icon class="mr-2">mdi-git</v-icon>
+            Online repository (Maven, etc..)
+          </v-btn>
+        </v-btn-toggle>
+
+        <!-- Display infos and activation status  -->
+        <div class="d-flex flex-column mt-3 text-h6">
+          <p class="ma-0">
+            <v-icon class="mr-2 mb-1" color="green">mdi-check-circle</v-icon>
+            <strong>Local Database</strong> : Use the results stored in the
+            local Neo4j database (activated by default)
+          </p>
+          <p class="ma-0">
+            <v-icon
+              class="mr-2 mb-1"
+              :color="dataSources.includes('pythia') ? 'green' : 'grey'"
+              >{{
+                dataSources.includes("pythia")
+                  ? "mdi-check-circle"
+                  : "mdi-close-circle"
+              }}</v-icon
+            >
+            <strong>Pythia Repository</strong> : Query the NASD Pythia Framework
+            repository to automatically flag known frameworks. Status of Pythia
+            :
+            <i>{{ pythiaStatus }}</i>
+          </p>
+          <p class="ma-0">
+            <v-icon
+              class="mr-2 mb-1"
+              :color="dataSources.includes('online') ? 'green' : 'grey'"
+              >{{
+                dataSources.includes("online")
+                  ? "mdi-check-circle"
+                  : "mdi-close-circle"
+              }}</v-icon
+            >
+            <strong>Online Search</strong> The framewok detection will parse
+            Google, to discover frameworks. The frameworks detected are added to
+            the configuration for future usages.
+          </p>
+          <p class="ma-0">
+            <v-icon
+              class="mr-2 mb-1"
+              :color="dataSources.includes('repository') ? 'green' : 'grey'"
+              >{{
+                dataSources.includes("repository")
+                  ? "mdi-check-circle"
+                  : "mdi-close-circle"
+              }}</v-icon
+            >
+            <strong>Online Repository search</strong> : Parse most populars
+            repositories as Github, Maven, etc..
+          </p>
+          <p></p>
+        </div>
+
+        <!-- Diplay summary type of detection  -->
+        <div>
+          <h3>1 - Select the source of data for the framework exploration:</h3>
+        </div>
+
+        <!-- Language selection -->
+        <v-row class="my-6 pa-0 ml-0" align="center">
+          <v-col class="px-0" cols="12" md="4">
+            <v-subheader class="px-0">
+              <h2>2 - Pick a language for discovery :</h2>
             </v-subheader>
           </v-col>
 
-          <v-col cols="2">
+          <v-col cols="12" md="4">
             <v-select
               v-model="selectedLanguage"
               :items="availableLanguages"
@@ -74,32 +144,25 @@
               persistent-hint
               return-object
               single-line
+              large
             ></v-select>
           </v-col>
         </v-row>
+
+        <!-- Review the parameters and launch -->
+        <div class="mb-3">
+          <h2>3 - Review the parameters:</h2>
+        </div>
+        <div class="text-h6  d-flex flex-row">
+          <p class="mx-2"><strong>Application : </strong>{{ application }}</p>
+          <p class="mx-2"><strong>Language : </strong>{{ selectedLanguage }}</p>
+          <p class="mx-2">
+            <strong>Data Sources: </strong>
+            {{ "local database, " + dataSources.join(", ") }}
+          </p>
+        </div>
       </v-row>
-      <v-row class="mt-3">
-        <p class="ml-5">
-          <b
-            ><i
-              ><v-icon color="persianGrey">mdi-information</v-icon> The current
-              workspace of the framework detector is located under :
-            </i></b
-          >{{ workspacePath }}
-          <br />
-          You can change the workspace in the Administration section
-        </p>
-      </v-row>
-      <v-row class="mt-3">
-        <p class="ml-5">
-          <b
-            ><i
-              ><v-icon color="persianGrey">mdi-information</v-icon> The current
-              version of Artemis is :
-            </i></b
-          >{{ version }}
-        </p>
-      </v-row>
+
       <v-row class="my-5">
         <v-btn
           :loading="runningArtemis"
@@ -227,6 +290,8 @@ import ConfigurationController from "@/api/controllers/configuration/Configurati
 import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
 import { Framework } from "@/api/interface/artemis/Framework";
+import { Cookie } from "@/enum/Cookie";
+import PythiaController from "@/api/controllers/pythia/PythiaUtilController";
 
 export default Vue.extend({
   name: "ActionTileViewer",
@@ -293,9 +358,15 @@ export default Vue.extend({
 
     application: "" as string,
 
+    // Parameters
+    dataSources: [] as string[],
     onlineMode: true as boolean,
     repositoryMode: true as boolean,
     workspacePath: "" as string,
+
+    // Pythia
+    pythiaStatus: "Unknown",
+    pythiaLoadingStatus: false,
 
     // On destroy
     flaggedAsToDestroy: false
@@ -322,48 +393,6 @@ export default Vue.extend({
         });
 
       this.loadingConfiguration = false;
-    },
-
-    /**
-     *  Set a new mode for the online parameter
-     */
-    setOnlineMode() {
-      this.loadingOnlineMode = true;
-      ArtemisController.setOnlineMode(this.onlineMode)
-        .then((res: boolean) => {
-          this.onlineMode = res;
-        })
-        .catch(err => {
-          this.errorOnlineMode = true;
-          console.error(
-            "Failed to change online mode of Artemis Framework detector.",
-            err
-          );
-        })
-        .then(() => {
-          this.loadingOnlineMode = false;
-        });
-    },
-
-    /**
-     * Change the mode of the repository
-     */
-    setRepositoryMode() {
-      this.loadingOnlineMode = true;
-      ArtemisController.setRepositoryMode(this.repositoryMode)
-        .then((res: boolean) => {
-          this.repositoryMode = res;
-        })
-        .catch(err => {
-          console.error(
-            "Failed to change the repository setting of Artemis.",
-            err
-          );
-          this.errorRepositoryMode = true;
-        })
-        .then(() => {
-          this.loadingOnlineMode = false;
-        });
     },
 
     milisecondsToDhms(miliseconds) {
@@ -449,11 +478,15 @@ export default Vue.extend({
         });
     },
 
+    /**
+     * Launch a detection for a specific application
+     */
     launchDetection() {
       this.displayErrorDetection = false;
       DetectionController.launchDetection(
         this.application,
-        this.selectedLanguage
+        this.selectedLanguage,
+        this.dataSources
       )
         .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
@@ -474,6 +507,9 @@ export default Vue.extend({
         });
     },
 
+    /**
+     * Stop the detection of an ongoing application
+     */
     stopDetection() {
       this.displayErrorDetection = false;
       DetectionController.cancelDetection(
@@ -507,13 +543,41 @@ export default Vue.extend({
 
     cancelDetection() {
       // Todo
+    },
+
+    /**
+     * Get the status of the pythia repository
+     */
+    async getPythiaStatus() {
+      this.pythiaLoadingStatus = true;
+
+      try {
+        this.pythiaStatus = await PythiaController.getAuthenticationStatus();
+      } catch (err) {
+        this.pythiaStatus = "Unreachable";
+      } finally {
+        this.pythiaLoadingStatus = false;
+      }
     }
   },
 
   mounted() {
     this.disabledTile = true;
-    this.resultDetection = [];
+    this.resultDetection = []; // Reinitialized the detection results
 
+    // Check for preference cookies stored as a string
+    if (Vue.$cookies.isKey(Cookie.DETECTION_PREFERENCES)) {
+      const arrAsString = String(
+        Vue.$cookies.get(Cookie.DETECTION_PREFERENCES)
+      );
+      this.dataSources = arrAsString.split(",");
+      this.dataSources = this.dataSources.filter(x => x != "null");
+    }
+
+    // Get status
+    this.getPythiaStatus();
+
+    // Get the Artemis Version
     AtlasController.getArtemisVersion()
       .then(async (version: string) => {
         this.version = version;
@@ -542,6 +606,14 @@ export default Vue.extend({
       this.resultDetection = [];
       this.runningArtemis = false;
       this.checkStatus();
+    },
+
+    dataSources: function() {
+      // Save in cookies the selection to be reused
+      Vue.$cookies.set(
+        Cookie.DETECTION_PREFERENCES,
+        this.dataSources.join(",")
+      );
     }
   }
 });

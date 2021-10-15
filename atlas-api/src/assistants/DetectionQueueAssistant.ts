@@ -3,6 +3,7 @@ import { DetectionCandidate } from "@dtos/artemis/detectionCandidate.dto";
 import DetectionService from "@services/extensions/artemis/DetectionService";
 import { logger } from "@shared/Logger";
 import { CancellableDetectionPromise } from "@interfaces/artemis/DetectionStatus";
+import ArtemisParameters from "@entities/extensions/artemis/ArtemisParameters";
 
 export class DetectionQueueAssistant {
   private static INSTANCE: DetectionQueueAssistant;
@@ -26,12 +27,20 @@ export class DetectionQueueAssistant {
     return DetectionQueueAssistant.INSTANCE;
   }
 
+  /**
+   *
+   * @returns The current item in the pipeline
+   */
   public getCurrent(): DetectionCandidate {
     if (this.onGoingDetection == null) return null;
-
+    const detection = this.onGoingDetection.getDetection();
     return {
-      application: this.onGoingDetection.getDetection().getApplication(),
-      languages: [this.onGoingDetection.getDetection().getLanguage()],
+      application: detection.getApplication(),
+      languages: [detection.getLanguage()],
+      onlineMode: detection.parameters.getOnlineMode(),
+      repositoryMode: detection.parameters.getRepositoryMode(),
+      pythiaURL: detection.parameters.getPythiaUrl(),
+      pythiaToken: detection.parameters.getPythiaToken(),
     };
   }
 
@@ -85,20 +94,27 @@ export class DetectionQueueAssistant {
     if (this.candidateList.length > 0 && (this.onGoingDetection == null || this.onGoingDetection.isDone())) {
       let appName = "";
       let language = "";
-
+      let parameters: ArtemisParameters;
+      let elem;
       try {
-        // Process the next one
+        // Process the next one and verify the number of languages to analyze
 
         if (this.candidateList[0].languages.length > 1) {
-          appName = this.candidateList[0].application;
-          language = this.candidateList[0].languages.pop();
+          // Pop the language that will be analyzed
+          elem = this.candidateList[0];
         } else {
-          const element = this.candidateList.shift();
-          appName = element.application;
-          language = element.languages[0];
+          // Everything will be analyzed, we can remove it from the list
+          elem = this.candidateList.shift();
         }
 
-        this.onGoingDetection = this.detectionService.launchDetection(appName, language);
+        language = elem.languages.pop();
+        appName = elem.application;
+        parameters = new ArtemisParameters()
+          .setOnlineMode(elem.onlineMode)
+          .setRepositoryMode(elem.repositoryMode)
+          .setPythiaParameters(elem.pythiaURL, elem.pythiaToken);
+
+        this.onGoingDetection = this.detectionService.launchDetection(appName, language, parameters);
       } catch (err) {
         logger.error(`Failed to launch the detection on application ${appName}. Reason : ${err}`);
       }
