@@ -23,7 +23,7 @@ export default class PythiaApiService {
         return PythiaApiStatus.ERROR;
       }
 
-      switch (response.getData()) {
+      switch (response.getMessage()) {
         case "Running":
           return PythiaApiStatus.RUNNING;
         case "Maintenance":
@@ -43,7 +43,7 @@ export default class PythiaApiService {
   public static async getAuthenticationStatus(): Promise<PythiaAuthenticationStatus> {
     try {
       const response = await PythiaAxiosProxy.get<string>("authentication/status");
-
+      logger.info("Response ", response);
       // If status 404
       if (response.getStatus() == 404) {
         return PythiaAuthenticationStatus.UNREACHABLE;

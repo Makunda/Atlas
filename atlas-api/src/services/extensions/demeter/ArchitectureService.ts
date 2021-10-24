@@ -323,7 +323,7 @@ export default class ArchitectureService {
    * @param {number} architectureId Id of the architecture
    */
   public async generateModules(architectureId: number): Promise<string[]> {
-    const req = `MATCH (a:${ArchitectureService.ARCHITECTURE_LABEL})-[]->(s:${ArchitectureService.SUBSET_LABEL})
+    const req = `MATCH (a:\`${ArchitectureService.ARCHITECTURE_LABEL}\`)-[]->(s:\`${ArchitectureService.SUBSET_LABEL}\`)
     WHERE ID(a)=$id
     RETURN DISTINCT ID(s) as subsetId, s.Name as subsetName;
     `;
@@ -337,7 +337,7 @@ export default class ArchitectureService {
       const subsetName = String(result.records[index].get("subsetName"));
 
       // Get Objects' ID
-      const reqObject = `MATCH (s:${ArchitectureService.SUBSET_LABEL})-[]->(o:Object)
+      const reqObject = `MATCH (s:\`${ArchitectureService.SUBSET_LABEL}\`)-[]->(o:Object)
         WHERE ID(s)=$id
         RETURN DISTINCT o.AipId as objectId;
       `;
@@ -424,7 +424,7 @@ where object_id IN (${objectList.join(", ")});
   public async getAllArchitectures(application: string): Promise<Archimodel[]> {
     try {
       const hiddenLabel = await ArchitectureService.getHiddenArchitectureLabel();
-      const req = `MATCH (a:\`${application}\`) WHERE a:ArchiModel or a:${hiddenLabel} RETURN a as node`;
+      const req = `MATCH (a:\`${application}\`) WHERE a:ArchiModel or a:\`${hiddenLabel}\` RETURN a as node`;
 
       const archimodel: Archimodel[] = [];
       const res = await ArchitectureService.NEO4JAL.execute(req);

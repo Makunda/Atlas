@@ -5,19 +5,19 @@ export enum DemeterActions {
 }
 
 export interface IFrameworkAssistant {
-  id: number;
+  id: string;
   started: boolean;
   category: string;
   actions: DemeterActions[];
 }
 
 export class FrameworkAssistant {
-  private id: number;
+  private id: string;
   private started: boolean;
   private category: string;
   private actions: DemeterActions[];
 
-  constructor(id: number, category: string, actions: DemeterActions[]) {
+  constructor(id: string, category: string, actions: DemeterActions[]) {
     this.id = id;
     this.started = true;
     this.category = category;
@@ -33,7 +33,7 @@ export class FrameworkAssistant {
     return assistant;
   }
 
-  public getId(): number {
+  public getId(): string {
     return this.id;
   }
 
@@ -69,7 +69,6 @@ export class FrameworkAssistant {
    * Serialize the object
    */
   public serialize(): IFrameworkAssistant {
-    if (this.id == null) this.id = 0;
     return {
       id: this.id,
       started: this.started,

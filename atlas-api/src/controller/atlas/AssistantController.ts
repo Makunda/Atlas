@@ -31,7 +31,7 @@ class AssistantController {
 
       FrameworkAssistantManager.getInstance().addAssistant(
         category,
-        actions.map((x) => x as DemeterActions)
+        actions.map(x => x as DemeterActions),
       );
 
       res.status(200).json({
@@ -49,7 +49,7 @@ class AssistantController {
       const assistants: FrameworkAssistant[] = FrameworkAssistantManager.getInstance().getAssistants();
 
       res.status(200).json({
-        data: assistants.map((x) => x.serialize()),
+        data: assistants.map(x => x.serialize()),
         message: "Assistants",
       });
     } catch (error) {
@@ -60,7 +60,7 @@ class AssistantController {
   /** Start the assistant */
   public startWithId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const id = Number(req.params.id);
+      const id = String(req.params.id);
 
       const status = FrameworkAssistantManager.getInstance().starAssistantById(id);
 
@@ -75,7 +75,7 @@ class AssistantController {
 
   public deleteWithId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const id = Number(req.params.id);
+      const id = String(req.params.id);
 
       FrameworkAssistantManager.getInstance().removeAssistant(id);
 

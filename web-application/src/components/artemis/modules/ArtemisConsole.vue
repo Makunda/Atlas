@@ -608,7 +608,8 @@ export default Vue.extend({
       this.displayErrorDetection = false;
       DetectionController.launchDetection(
         this.application,
-        this.selectedLanguage
+        this.selectedLanguage,
+        ["pythia", "online", "repository"]
       )
         .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response

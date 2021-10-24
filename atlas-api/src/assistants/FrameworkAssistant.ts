@@ -6,6 +6,7 @@ import { logger } from "@shared/Logger";
 import { QueryResult } from "neo4j-driver";
 import { DemeterActions, FrameworkAssistant, IFrameworkAssistant } from "./Assistant";
 import fs from "fs";
+import { uuidv4 } from "@utils/utils";
 
 export class FrameworkAssistantManager {
   private static INSTANCE: FrameworkAssistantManager;
@@ -247,23 +248,9 @@ export class FrameworkAssistantManager {
    */
   public addAssistant(category: string, actions: DemeterActions[]): void {
     // Find a gap in the id or get the n + 1
-    let id: number = null;
-    const maxId = Math.max.apply(
-      Math,
-      this.assistants.map(function (o) {
-        return o.getId();
-      }),
-    );
-    for (let i = 0; i < maxId; i++) {
-      if (this.assistants.find(x => x.getId() === i) == undefined) {
-        id = i;
-        break;
-      }
-    }
-
-    if (!id) id = maxId + 1;
-
-    this.assistants.push(new FrameworkAssistant(id, category, actions));
+    const uuid = uuidv4();
+    const assistant = new FrameworkAssistant(uuid, category, actions);
+    this.assistants.push(assistant);
     this.dumpAssistantList();
   }
 
@@ -272,11 +259,9 @@ export class FrameworkAssistantManager {
    * @param id Id of the assistant to remove
    * @returns true if the assistant was removed successfully, false otherwise
    */
-  public removeAssistant(id: number) {
+  public removeAssistant(id: string) {
     logger.info("Removing assistants with id ", id);
-    logger.info("Before", this.assistants);
     this.assistants = this.assistants.filter(x => x.getId() != id);
-    logger.info("After", this.assistants);
     this.dumpAssistantList();
   }
 
@@ -285,7 +270,7 @@ export class FrameworkAssistantManager {
    * @param id Id of the assistant to start
    * @returns true if the assistant was stopped successfully, false otherwise.
    */
-  public stopAssistantById(id: number): boolean {
+  public stopAssistantById(id: string): boolean {
     const assistant = this.assistants.find(x => x.getId() === id);
     if (!assistant) return false;
 
@@ -298,7 +283,7 @@ export class FrameworkAssistantManager {
    * @param id Id of the assistant to start
    * @returns true if the assistant was started successfully, false otherwise.
    */
-  public starAssistantById(id: number): boolean {
+  public starAssistantById(id: string): boolean {
     const assistant = this.assistants.find(x => x.getId() === id);
     if (!assistant) return false;
 
@@ -342,7 +327,7 @@ export class FrameworkAssistantManager {
         this.artemisDetectionProperty = await this.getCategoryProperty();
       if (!this.artemisCategoryProperty || this.artemisCategoryProperty.length == 0) this.artemisCategoryProperty = await this.getDetectionProperty();
     } catch (err) {
-      logger.error(`Failed to fetch resources`, err);
+      logger.error("Failed to fetch resources", err);
     }
   }
 

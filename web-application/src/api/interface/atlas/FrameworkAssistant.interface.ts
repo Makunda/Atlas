@@ -1,5 +1,5 @@
 export interface FrameworkAssistant {
-  id: number;
+  id: string;
   started: boolean;
   category: string;
   actions: string[];

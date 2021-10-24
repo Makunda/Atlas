@@ -478,7 +478,6 @@ export default Vue.extend({
             batch,
             this.taggingType
           );
-          this.blockerNotApplied = this.blockerNotApplied.concat(notApplied);
 
           this.sizeSent = upBound;
           this.percentageTagsApplied = (100 * index) / this.sizeToSend;

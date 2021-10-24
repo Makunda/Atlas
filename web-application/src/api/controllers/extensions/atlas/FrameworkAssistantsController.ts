@@ -124,7 +124,7 @@ export class FrameworkAssistants {
     }
   }
 
-  public static async removeAssistant(id: number): Promise<boolean> {
+  public static async removeAssistant(id: string): Promise<boolean> {
     const url =
       FrameworkAssistants.API_BASE_URL +
       "/api/assistants/frameworks/remove/" +

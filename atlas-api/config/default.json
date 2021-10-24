@@ -29,7 +29,8 @@
   },
 
   "pythia": {
-    "url": "https://cast-pythia.herokuapp.com/"
+    "url_prod": "https://cast-pythia.herokuapp.com/",
+    "url": "http://localhost:3003/"
   },
 
   "artemis": {

@@ -3,6 +3,7 @@ import morgan from "morgan";
 import path from "path";
 import helmet from "helmet";
 import cors from "cors";
+import nocache from "nocache";
 
 import express, { Express, NextFunction, Request, Response } from "express";
 import StatusCodes from "http-status-codes";
@@ -29,7 +30,7 @@ try {
 /************************************************************************************
  *                              Set basic express settings
  ***********************************************************************************/
-
+app.use(nocache());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -59,7 +60,7 @@ if (process.env.NODE_ENV === "production") {
 app.use(function (req, res, next) {
   res.setHeader(
     "Content-Security-Policy",
-    "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';"
+    "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';",
   );
   next();
 });

@@ -63,7 +63,7 @@ class CategoryService {
    * @param node Node to add
    */
   public async addNode(node: CreateCategoryDto): Promise<Category> {
-    const req = `CALL artemis.api.category.create.node($name, $iconUrl)`;
+    const req = "CALL artemis.api.category.create.node($name, $iconUrl)";
 
     try {
       const val = await this.neo4jAl.executeWithParameters(req, node);
@@ -81,7 +81,7 @@ class CategoryService {
    * @param node Updated node
    */
   public async updateNode(node: CreateCategoryDto): Promise<Category> {
-    const req = `CALL artemis.api.category.update.node($id, $name, $iconUrl)`;
+    const req = "CALL artemis.api.category.update.node($id, $name, $iconUrl)";
 
     try {
       const val = await this.neo4jAl.executeWithParameters(req, node);
@@ -95,7 +95,7 @@ class CategoryService {
   }
 
   public async removeNode(idNode: number): Promise<boolean> {
-    const req = `CALL artemis.api.category.remove.node($idNode)`;
+    const req = "CALL artemis.api.category.remove.node($idNode)";
     try {
       const val = await this.neo4jAl.executeWithParameters(req, {
         idNode: idNode,

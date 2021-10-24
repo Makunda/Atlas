@@ -96,12 +96,12 @@ export default class LevelService {
    * @param applicationName Name of the application
    */
   public async getAllLevels(applicationName: string): Promise<Level5Group[]> {
-    const request = `MATCH (app:Application) WHERE app.Name='${applicationName}' 
+    const request = `MATCH (app:Application) WHERE app.Name=$appName
       WITH [app.Name] as appName  
-      MATCH (l:Level5:${applicationName})-[:Aggregates]->(o:Object) 
+      MATCH (l:Level5:\`${applicationName}\`)-[:Aggregates]->(o:Object) 
       RETURN ID(l) as id, l.Name as groupName, l.FullName as fullName, COUNT(o) as numObjects ;`;
 
-    const results: QueryResult = await this.neo4jAl.execute(request);
+    const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { appName: applicationName });
 
     const appNames: Level5Group[] = [];
     for (let i = 0; i < results.records.length; i++) {
