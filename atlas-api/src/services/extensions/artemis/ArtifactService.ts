@@ -137,6 +137,7 @@ export default class ArtifactService {
   }
 
   /**
+   * @TODO : Please God refactor this piece of god and use a "Type" to pass the info on the type of extraction
    * Extract a list of artifact to the selected location
    * @param application Name of the application
    * @param artifactList List of the artifact to extract
@@ -150,6 +151,7 @@ export default class ArtifactService {
     artifactList: IArtifact[],
     extractionType: string,
     groupType: string,
+    externality: boolean,
     primaryGroupName: string,
     secondaryGroupName: string,
   ): Promise<void> {
@@ -184,7 +186,7 @@ export default class ArtifactService {
 
           // eslint-disable-next-line max-len
           const req = `MATCH (o:Object:\`${application}\`) WHERE o.InternalType IN $listInternalType 
-                    AND o.FullName STARTS WITH $fullName 
+                    AND o.FullName STARTS WITH $fullName AND o.External=$externality
                     SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tagName] 
                     ELSE o.Tags + $tagName END`;
 
@@ -192,6 +194,7 @@ export default class ArtifactService {
             listInternalType: a.objectTypes,
             fullName: a.fullName,
             tagName: tagName,
+            externality: externality,
           };
 
           reqMap.push([req, params]);

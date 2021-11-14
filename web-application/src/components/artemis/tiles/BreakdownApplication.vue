@@ -680,6 +680,7 @@ export default Vue.extend({
         this.artifactTree,
         this.selectedLocation,
         this.selectedTarget,
+        this.classExternality,
         this.primaryGroupName,
         this.secondaryGroupName
       )

@@ -4,6 +4,8 @@ import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import { Level, LevelNode } from "@interfaces/imaging/Level";
 import TagService from "@services/configuration/TagService";
+import { Node } from "neo4j-driver";
+import { level } from "winston";
 
 class LevelService {
   private static HIDDEN_LEVEL_LABEL_PREFIX = "HiddenL";
@@ -51,7 +53,7 @@ class LevelService {
 
       return levelObj;
     } catch (err) {
-      logger.error(`Failed to create level.`, err);
+      logger.error("LEVEL SERVICE :: Failed to create level.", err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -84,7 +86,7 @@ class LevelService {
 
       return levels;
     } catch (err) {
-      logger.error(`Failed to get the levels with depth :${depth} of application ${application}.`, err);
+      logger.error(`LEVEL SERVICE :: Failed to get the levels with depth :${depth} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -117,7 +119,7 @@ class LevelService {
 
       return LevelNode.fromObj(results.records[0].get("node")).getRecord();
     } catch (err) {
-      logger.error(`Failed to get the levels with id :${levelID} of application ${application}.`, err);
+      logger.error(`LEVEL SERVICE :: Failed to get the levels with id :${levelID} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -157,7 +159,7 @@ class LevelService {
 
       return levels;
     } catch (err) {
-      logger.error(`Failed to get the levels with name containing ${name} in application ${application}.`, err);
+      logger.error(`LEVEL SERVICE :: Failed to get the levels with name containing ${name} in application ${application}.`, err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -193,7 +195,7 @@ class LevelService {
 
       return int(res.records[0].get("count")).toNumber();
     } catch (err) {
-      logger.error(`Failed to merge levels into another.`, err);
+      logger.error("LEVEL SERVICE :: Failed to merge levels into another.", err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -229,10 +231,7 @@ class LevelService {
       }
       return levels;
     } catch (err) {
-      logger.error(
-        `Failed to get the children levels of level with id : ${levelID} of application ${application}.`,
-        err
-      );
+      logger.error(`LEVEL SERVICE :: Failed to get the children levels of level with id : ${levelID} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -259,7 +258,7 @@ class LevelService {
       if (!results || results.records.length == 0) return null;
       return LevelNode.fromObj(results.records[0].get("node")).getRecord();
     } catch (err) {
-      logger.error(`Failed to get the parent level of level with id : ${levelID} of application ${application}.`, err);
+      logger.error(`LEVEL SERVICE :: Failed to get the parent level of level with id : ${levelID} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -340,10 +339,7 @@ class LevelService {
 
       return levelUpdate;
     } catch (err) {
-      logger.error(
-        `Failed to get the children levels of level with id : ${level._id} of application ${application}.`,
-        err
-      );
+      logger.error(`LEVEL SERVICE :: Failed to get the children levels of level with id : ${level._id} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -356,7 +352,7 @@ class LevelService {
     try {
       return this.getLevelsByDepth(application, 1);
     } catch (err) {
-      logger.error(`Failed to get the root levels of application ${application}.`, err);
+      logger.error(`LEVEL SERVICE :: Failed to get the root levels of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
     }
   }
@@ -563,6 +559,109 @@ class LevelService {
     } catch (err) {
       logger.error(`Failed to hide the level with id :${levelID} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
+    }
+  }
+
+  /**
+   * Create level
+   * @param depth Depth of the level
+   * @param application  Name of the application
+   * @param fullName  FullName of the level
+   * @param name  Name of the level
+   */
+  public async createNamedLevel(depth: number, application: string, fullName: string, name: string): Promise<Node> {
+    try {
+      const reqCreateLevel3 = `MERGE (level:Level${depth}:\`${application}\` { 
+        Concept: false,
+        Color: "rgb(176,196,222)",
+        FullName: $fullName,
+        Level: $depth,
+        Count: 0,
+        Shade: "rgb(105,105,105)##rgb(0,0,128)##rgb(176,196,222)",
+        Name: $name"
+      }) RETURN level as node`;
+      const mergeLevel3 = await this.neo4jAl.executeWithParameters(reqCreateLevel3, { name: name, fullName: fullName, depth: depth });
+      if (mergeLevel3 && mergeLevel3.records.length > 0) {
+        return mergeLevel3.records[0].get("node") as Node;
+      } else {
+        throw new Error(`Failed to create a level ${depth} node. No results`);
+      }
+    } catch (err) {
+      logger.error(`Failed to create a level ${depth} node.`, err);
+      throw new Error(`Failed to create a level ${depth} node`);
+    }
+  }
+
+  /**
+   *
+   * @param depth Depth of the level
+   * @param application  Name of the application
+   * @param name Name of the level
+   */
+  public async findLevelByNameAndDepth(depth: number, application: string, name: string): Promise<Node | null> {
+    try {
+      const reqLevel3 = `MATCH (level:Level${depth}:\`${application}\`) WHERE level.Name=$name RETURN level as node LIMIT 1;`;
+      const resultsLevel3 = await this.neo4jAl.executeWithParameters(reqLevel3, { name: name });
+      if (resultsLevel3 && resultsLevel3.records.length > 0) {
+        return resultsLevel3.records[0].get("node");
+      } else {
+        return null;
+      }
+    } catch (err) {
+      logger.error(`Failed to find a level ${depth} node by name.`, err);
+      throw new Error(`Failed to find a level ${depth} node by name`);
+    }
+  }
+
+  /**
+   * Group objects with a  category
+   * @param application Name of the application
+   * @param category Name of the category ( Level 3 )
+   * @param name Name of the levels 4 & 5
+   * @param idList List of objects
+   */
+  public async groupWithCategory(application: string, category: string, name: string, idList: number[]): Promise<void> {
+    try {
+      const req = "CALL demeter.group.with.category($application, $category, $name, $idList)";
+      this.neo4jAl.executeWithParameters(req, { application: application, category: category, name: name, idList: idList });
+    } catch (err) {
+      logger.error("Failed to find group the objects by category.", err);
+      throw new Error("Failed to find group the objects by category");
+    }
+  }
+
+  /**
+   * Group  a list of node following a CAST Taxonomy
+   * @param application Application to process
+   * @param taxonomy CAST Taxonomy to create
+   * @param idList List of node ID to group
+   */
+  public async groupWithTaxonomy(application: string, taxonomy: string, idList: number[]): Promise<void> {
+    // Check cast taxonomy
+    const splitTax = taxonomy.split("##");
+    if (splitTax.length < 5) throw new Error("Cast Taxonomy isn't valid");
+
+    // Make sure the array does not contain any empty element
+    for (let i = 0; i < splitTax.length; i++) {
+      if (splitTax[i] === "") {
+        throw new Error("Cast Taxonomy isn't valid. Cannot contains null element ");
+      }
+    }
+
+    try {
+      const req = "CALL demeter.group.with.taxonomy($application, $level1, $level2, $level3, $level4, $level5, $idList)";
+      await this.neo4jAl.executeWithParameters(req, {
+        application: application,
+        level1: splitTax[0],
+        level2: splitTax[1],
+        level3: splitTax[2],
+        level4: splitTax[3],
+        level5: splitTax[4],
+        idList: idList,
+      });
+    } catch (err) {
+      logger.error("Failed to group the objects by taxonomy.", err);
+      throw new Error("Failed to  group the objects by taxonomy");
     }
   }
 }

@@ -3,14 +3,17 @@ import config from "config";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import TagService from "@services/configuration/TagService";
 import { logger } from "@shared/Logger";
-import { QueryResult } from "neo4j-driver";
+import { int, QueryResult } from "neo4j-driver";
 import { DemeterActions, FrameworkAssistant, IFrameworkAssistant } from "./Assistant";
 import fs from "fs";
 import { uuidv4 } from "@utils/utils";
+import LevelService from "@services/imaging/LevelService";
+import ObjectUtils from "@utils/Imaging/ObjectUtils";
 
 export class FrameworkAssistantManager {
   private static INSTANCE: FrameworkAssistantManager;
 
+  private static MIGRATION_FLAG = "ModifiedTaxonomy";
   private static RESOURCE_DIR = "serialization/";
   private static ASSISTANTS_FILE = "assistants.json";
 
@@ -23,9 +26,14 @@ export class FrameworkAssistantManager {
 
   private artemisDetectionProperty: string;
   private artemisCategoryProperty: string;
+  private artemisNameProperty: string;
+  private artemisTaxonomyProperty: string;
 
   private assistants: FrameworkAssistant[];
 
+  /**
+   * Singleton, loading the Assistant file // Creating it
+   */
   private constructor() {
     this.assistants = [];
     this.fetchResources();
@@ -111,21 +119,67 @@ export class FrameworkAssistantManager {
   }
 
   /**
+   * Get the property of the Artemis Detection on the nodes
+   */
+  public async getTaxonomyProperty(): Promise<string> {
+    const req = "CALL artemis.api.configuration.get.taxonomy.property()";
+    const res: QueryResult = await this.neo4jAl.execute(req);
+
+    if (res.records.length == 0) throw new Error("Failed to get Artemis node taxonomy property");
+
+    return String(res.records[0].get(0));
+  }
+
+  public async getNameProperty(): Promise<string> {
+    const req = "CALL artemis.api.configuration.get.name.property()";
+    const res: QueryResult = await this.neo4jAl.execute(req);
+
+    if (res.records.length == 0) throw new Error("Failed to get Artemis node name property");
+
+    return String(res.records[0].get(0));
+  }
+
+  /**
    * Apply tags on levels
    * @param category Category to  extract
    */
   public async applyLevelTagOnObjects(category: string) {
-    // Check if the group doesn't exist before taking action
+    const levelService = new LevelService();
+
+    logger.info("DEBUG : Launching the framework manager using Taxonomy");
 
     const params = { tag: this.levelTag, category: category };
-    const req =
-      "MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND NOT obj.Level CONTAINS obj.ArtemisCategory " +
-      "SET obj.Level=obj.ArtemisCategory SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag + obj.ArtemisCategory] " +
-      "ELSE [ x IN obj.Tags WHERE NOT x CONTAINS obj.ArtemisCategory ] + ( $tag + obj.ArtemisCategory )  END RETURN COUNT(obj) as count;";
-    const res: QueryResult = await this.neo4jAl.executeWithParameters(req, params);
 
-    if (res.records.length > 0 && res.records[0].get("count") != 0) {
-      logger.info(`The assistant regrouped ${res.records[0].get("count")} nodes under their level for category ${category}`);
+    // Todo : Add verification  if already extracted ( cf: category )
+    const req = `MATCH (obj:Object) 
+      WHERE obj.${this.artemisCategoryProperty}=$category
+      AND (  NOT EXISTS(obj.ModifiedTaxonomy) OR NOT obj.${this.artemisTaxonomyProperty}=obj.${FrameworkAssistantManager.MIGRATION_FLAG} ) 
+      RETURN DISTINCT LABELS(obj) as labels, obj.${this.artemisTaxonomyProperty} as taxonomy, COLLECT(DISTINCT ID(obj)) as idList`;
+
+    const res: QueryResult = await this.neo4jAl.executeWithParameters(req, params);
+    for (const rec of res.records) {
+      try {
+        // Get application name
+        const labels = rec.get("labels");
+        if (!Array.isArray(labels) || labels.length < 2) continue; // Skip invalid labels
+
+        const idList = rec.get("idList"); // List of Id to be converted to number
+        if (!Array.isArray(idList)) continue; // Skip invalid idList
+        const objectIdList = idList.map(x => int(x).toNumber());
+
+        const applicationName = labels.filter(x => x != "Object")[0];
+        const taxonomy = String(rec.get("taxonomy"));
+
+        // Verify that the taxonomy is correct // or assign a flag
+        logger.info(`DEbug Found taxonomy : ${taxonomy}`);
+
+        await levelService.groupWithTaxonomy(applicationName, taxonomy, objectIdList);
+
+        // If the operation is a success apply the migration flag on it
+        ObjectUtils.flagListObjects(applicationName, objectIdList, FrameworkAssistantManager.MIGRATION_FLAG, taxonomy);
+      } catch (err) {
+        logger.error("FRAMEWORK ASSISTANT :: Failed to group frameworks with level option", err);
+      }
     }
   }
 
@@ -137,7 +191,7 @@ export class FrameworkAssistantManager {
     // Check if the group doesn't exist before taking action
     const params = { tag: this.moduleTag + category, category: category };
     const req =
-      "MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND NOT EXISTS { " +
+      "MATCH (obj:Object) WHERE obj.FrameworkDetection=$category AND NOT EXISTS { " +
       "(obj)<-[:Contains]-(m:Module) WHERE NOT m.Name CONTAINS $category " +
       "} SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [$tag] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS $category ] + $tag END RETURN COUNT(obj) as count;";
     const res: QueryResult = await this.neo4jAl.executeWithParameters(req, params);
@@ -159,12 +213,12 @@ export class FrameworkAssistantManager {
       category: category,
     };
     const req = `
-    MATCH (obj:Object) WHERE obj.ArtemisDetection=$category AND EXISTS(obj.ArtemisCategory)
+    MATCH (obj:Object) WHERE obj.FrameworkDetection=$category AND EXISTS(obj.ArtemisCategory)
     AND NOT EXISTS { 
       MATCH (obj)<-[:Contains]-(m:Subset)<-[]-(a:ArchiModel) 
-      WHERE a.Name=$prefix+obj.ArtemisDetection AND m.Name=obj.ArtemisCategory 
+      WHERE a.Name=$prefix+obj.FrameworkDetection AND m.Name=obj.ArtemisCategory 
       }
-    SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [($tag + $prefix + obj.ArtemisDetection+"$"+obj.ArtemisCategory)] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS obj.ArtemisCategory ] + ($tag + $prefix + obj.ArtemisDetection+"$"+obj.ArtemisCategory) END
+    SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [($tag + $prefix + obj.FrameworkDetection+"$"+obj.ArtemisCategory)] ELSE [ x IN obj.Tags WHERE NOT x CONTAINS obj.ArtemisCategory ] + ($tag + $prefix + obj.FrameworkDetection+"$"+obj.ArtemisCategory) END
     WITH obj as obj, COLLECT(obj) as allFlagged
     MATCH (obj)-[]-(other:Object) 
     WHERE NOT other in allFlagged 
@@ -172,7 +226,7 @@ export class FrameworkAssistantManager {
       MATCH (other)<-[:Contains]-(m:Subset)<-[]-(a:ArchiModel) 
       WHERE a.Name=$prefix+obj.ArtemisCategory AND m.Name=other.Level 
       }
-    SET other.Tags = CASE WHEN other.Tags IS NULL THEN [($tag + $prefix + obj.ArtemisDetection+"$"+other.Level)] ELSE [ x IN other.Tags WHERE NOT x CONTAINS other.Level  ] + ($tag + $prefix +obj.ArtemisDetection+ "$" +other.Level) END
+    SET other.Tags = CASE WHEN other.Tags IS NULL THEN [($tag + $prefix + obj.FrameworkDetection+"$"+other.Level)] ELSE [ x IN other.Tags WHERE NOT x CONTAINS other.Level  ] + ($tag + $prefix +obj.FrameworkDetection+ "$" +other.Level) END
     RETURN COUNT(DISTINCT obj) as countObj, COUNT(DISTINCT  other) as countOther;
     `;
     const res: QueryResult = await this.neo4jAl.executeWithParameters(req, params);
@@ -213,7 +267,7 @@ export class FrameworkAssistantManager {
             continue;
         }
       } catch (err) {
-        logger.error(`Failed to execute the agent : [${actions[i]}].`);
+        logger.error(`Failed to execute the agent : [${actions[i]}].`, err);
       }
     }
   }
@@ -259,8 +313,7 @@ export class FrameworkAssistantManager {
    * @param id Id of the assistant to remove
    * @returns true if the assistant was removed successfully, false otherwise
    */
-  public removeAssistant(id: string) {
-    logger.info("Removing assistants with id ", id);
+  public removeAssistant(id: string): void {
     this.assistants = this.assistants.filter(x => x.getId() != id);
     this.dumpAssistantList();
   }
@@ -318,16 +371,17 @@ export class FrameworkAssistantManager {
    */
   private async fetchResources() {
     try {
-      // Populate the tags
-      if (!this.levelTag || this.levelTag.length == 0) this.levelTag = await this.getDemeterLevelTag();
-      if (!this.moduleTag || this.moduleTag.length == 0) this.moduleTag = await this.getDemeterModuleTag();
-      if (!this.architectureTag || this.architectureTag.length == 0) this.architectureTag = await this.getDemeterArchitectureTag();
+      // Populate the tags if not already the case
+      if (!this.levelTag) this.levelTag = await this.getDemeterLevelTag();
+      if (!this.moduleTag) this.moduleTag = await this.getDemeterModuleTag();
+      if (!this.architectureTag) this.architectureTag = await this.getDemeterArchitectureTag();
 
-      if (!this.artemisDetectionProperty || this.artemisDetectionProperty.length == 0)
-        this.artemisDetectionProperty = await this.getCategoryProperty();
-      if (!this.artemisCategoryProperty || this.artemisCategoryProperty.length == 0) this.artemisCategoryProperty = await this.getDetectionProperty();
+      if (!this.artemisDetectionProperty) this.artemisDetectionProperty = await this.getCategoryProperty();
+      if (!this.artemisCategoryProperty) this.artemisCategoryProperty = await this.getDetectionProperty();
+      if (!this.artemisNameProperty) this.artemisNameProperty = await this.getNameProperty();
+      if (!this.artemisTaxonomyProperty) this.artemisTaxonomyProperty = await this.getTaxonomyProperty();
     } catch (err) {
-      logger.error("Failed to fetch resources", err);
+      logger.error("FRAMEWORK ASSISTANT :: Failed to fetch resources", err);
     }
   }
 
@@ -345,7 +399,7 @@ export class FrameworkAssistantManager {
 
       fs.writeFileSync(filePath, JSON.stringify(data));
     } catch (err) {
-      logger.error("Failed to dump the assistants to their file.", err);
+      logger.error("FRAMEWORK ASSISTANT ::  Failed to dump the assistants to their file.", err);
     }
   }
 }

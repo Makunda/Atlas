@@ -188,6 +188,7 @@ export class ArtifactController {
     artifactList: Artifact[],
     extractionType: string,
     groupType: string,
+    externality: boolean,
     primaryGroupName: string,
     secondaryGroupName: string
   ) {
@@ -199,6 +200,7 @@ export class ArtifactController {
       artifactList: artifactList,
       extractionType: extractionType,
       groupType: groupType,
+      externality: externality,
       primaryGroupName: primaryGroupName,
       secondaryGroupName: secondaryGroupName
     };
