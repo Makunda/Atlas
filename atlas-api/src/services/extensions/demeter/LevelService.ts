@@ -150,7 +150,7 @@ export default class LevelService {
   }
 
   /**
-   * Rename
+   * Rename a level in the application
    * @param applicationName Name of the application
    * @param groupName Old name of the group
    * @param newName New name of the module

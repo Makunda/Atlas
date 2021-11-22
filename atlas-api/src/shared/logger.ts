@@ -44,4 +44,25 @@ if (process && process.env.NODE_ENV !== "production") {
   );
 }
 
-export { logger, stream };
+/**
+ * Create a wrapper around a winston logger
+ * @param prefix Prefix to assign to the logger
+ * @returns
+ */
+function wrapLogger(prefix: string): winston.Logger {
+  const wrapped: winston.Logger = Object.assign({}, logger); // Deep copy
+
+  // Wrap info method
+  wrapped.info = (message: any) => {
+    return logger.info(`${prefix} :: ${message}`);
+  };
+
+  // Wrap error method
+  wrapped.error = (message: any, ...meta: any[]) => {
+    return logger.error(`${prefix} :: ${message}`, meta);
+  };
+
+  return wrapped;
+}
+
+export { logger, stream, wrapLogger };

@@ -171,8 +171,6 @@ export class FrameworkAssistantManager {
         const taxonomy = String(rec.get("taxonomy"));
 
         // Verify that the taxonomy is correct // or assign a flag
-        logger.info(`DEbug Found taxonomy : ${taxonomy}`);
-
         await levelService.groupWithTaxonomy(applicationName, taxonomy, objectIdList);
 
         // If the operation is a success apply the migration flag on it

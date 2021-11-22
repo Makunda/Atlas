@@ -1,4 +1,4 @@
-import { logger } from "@shared/Logger";
+import { wrapLogger } from "@shared/Logger";
 import config from "config";
 
 import neo4j, { AuthToken, Driver, QueryResult, ServerInfo, Session } from "neo4j-driver";
@@ -9,6 +9,8 @@ export class Neo4JAccessLayer {
   private driver: Driver;
   private token: AuthToken;
   private connected: boolean;
+
+  private logger = wrapLogger("Neo4j Access Layer");
 
   private constructor() {
     this.uri = config.get("neo4j.uri");
@@ -25,10 +27,10 @@ export class Neo4JAccessLayer {
     try {
       const res = await this.execute(req);
       const end = Date.now();
-      logger.info(`Connection test successful. Rows returned in ${end - start} ms.`);
+      this.logger.info(`Connection test successful. Rows returned in ${end - start} ms.`);
       return res.records && res.records.length > 0;
     } catch (err) {
-      logger.error("The test failed trying to query the Neo4j database.");
+      this.logger.error("The test failed trying to query the Neo4j database.");
       return false;
     }
   }
@@ -53,11 +55,11 @@ export class Neo4JAccessLayer {
 
       // Test
       await this.testConnection();
-      logger.info("Connection to Neo4j with encryption: Successful");
+      this.logger.info("Connection to Neo4j with encryption: Successful");
       this.connected = true;
       return;
     } catch (error) {
-      logger.error(`Cannot connect to the remote Neo4j database using encryption ${this.uri}`);
+      this.logger.error(`Cannot connect to the remote Neo4j database using encryption ${this.uri}`);
     }
 
     // Try without encryption
@@ -66,7 +68,7 @@ export class Neo4JAccessLayer {
 
       // Test
       await this.testConnection();
-      logger.info("Connection to Neo4j without encryption: Successful");
+      this.logger.info("Connection to Neo4j without encryption: Successful");
       this.connected = true;
       return;
     } catch (error) {
@@ -105,11 +107,15 @@ export class Neo4JAccessLayer {
    * Execute an async query
    * @param request The request you wan to execute
    */
-  public async execute(request: string): Promise<QueryResult> {
+  public async execute(request: string, parameters?: any): Promise<QueryResult> {
     const session: Session = this.driver.session();
     try {
-      const results: QueryResult = await session.run(request);
+      const results: QueryResult = await session.run(request, parameters);
       return results;
+    } catch (err) {
+      const sanitized = request.replaceAll("\n", " ");
+      const wParams = parameters ? `With parameters ${String(parameters)}.` : "";
+      this.logger.error(`Failed to execute query [${sanitized}]. ${wParams}`, err);
     } finally {
       session.close();
     }
