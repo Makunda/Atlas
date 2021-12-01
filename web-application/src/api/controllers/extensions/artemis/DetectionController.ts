@@ -230,7 +230,6 @@ export default class DetectionController {
 
     try {
       const res = await ProxyAxios.get(url);
-      console.log("REs Detection", res);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;

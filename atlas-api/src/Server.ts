@@ -13,6 +13,7 @@ import history from "connect-history-api-fallback";
 import BaseRouter from "./routes";
 import { logger } from "@shared/Logger";
 import LoginService from "@services/security/LicenseService";
+import ExpressUtils from "@utils/ExpressUtils";
 
 const app = express();
 const { BAD_REQUEST } = StatusCodes;
@@ -114,6 +115,14 @@ app.get("/atlas/*", (req: Request, res: Response) => {
 app.get("", (req: Request, res: Response) => {
   res.redirect("/atlas/");
 });
+
+// Debug
+if (process.env.NODE_ENV !== "production") {
+  console.log("Declared routes: ");
+  console.log("-".repeat(50));
+  app._router.stack.forEach(ExpressUtils.printRoute.bind(null, []));
+  console.log("-".repeat(50));
+}
 
 // Export express instance
 export default app;

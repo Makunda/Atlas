@@ -208,14 +208,7 @@
     "highlight": "Typescript",
     "imaging": {
       "name": "Typescript Presentation",
-      "type": [
-        "Typescript Class",
-        "Typescript Function",
-        "Typescript Interface",
-        "Typescript Method",
-        "Typescript Module",
-        "Typescript Namespace"
-      ]
+      "type": ["Typescript Class", "Typescript Function", "Typescript Interface", "Typescript Method", "Typescript Module", "Typescript Namespace"]
     }
   },
   {

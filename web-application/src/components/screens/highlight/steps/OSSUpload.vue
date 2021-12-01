@@ -177,7 +177,7 @@
                             class="mr-2"
                             @change="filterItems"
                             v-model="violationFilter.critical"
-                            label="Critical criticality"
+                            label="Severe criticality"
                             color="black"
                             hide-details
                           ></v-checkbox>
@@ -185,7 +185,7 @@
                             class="mr-2"
                             @change="filterItems"
                             v-model="violationFilter.high"
-                            label="Critical criticality"
+                            label="High criticality"
                             color="red"
                             hide-details
                           ></v-checkbox>
@@ -471,6 +471,7 @@ export default Vue.extend({
         value: "application"
       },
       { text: "Component", value: "component" },
+      { text: "Patterns", value: "patterns" },
       { text: "Origin", value: "origin" },
       { text: "Description", value: "description" },
       { text: "Version", value: "version" },

@@ -4,10 +4,10 @@ import Application from "../views/Application.vue";
 import Login from "../views/Login.vue";
 import License from "@/views/License.vue";
 import Home from "@/views/Home.vue";
+import ApplicationSelection from "@/views/ApplicationSelection.vue";
 import ServerHome from "@/views/ServerHome.vue";
 import Reporting from "@/components/screens/reports/Reporting.vue";
 import AnalysisChecker from "@/components/screens/recommendation/AnalysisChecker.vue";
-import Enrichment from "@/components/screens/enrichment/Enrichment.vue";
 import Frameworks from "@/components/screens/frameworks/Frameworks.vue";
 import Highlight from "@/components/screens/highlight/Highlight.vue";
 import ImagingTuning from "@/components/screens/imagingTuning/ImagingTuning.vue";
@@ -23,6 +23,7 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 Vue.component("Login", Login);
+Vue.component("ApplicationSelection", ApplicationSelection);
 Vue.component("License", License);
 Vue.component("Application", Application);
 Vue.component("Home", Home);
@@ -59,10 +60,6 @@ const routes: Array<RouteConfig> = [
       {
         path: "analysis",
         component: AnalysisChecker
-      },
-      {
-        path: "tags",
-        component: Enrichment
       },
       {
         path: "tuning",
@@ -114,6 +111,11 @@ const routes: Array<RouteConfig> = [
     path: "/login",
     name: "Login",
     component: Login
+  },
+  {
+    path: "/applications",
+    name: "ApplicationSelection",
+    component: ApplicationSelection
   },
   {
     path: "/license",

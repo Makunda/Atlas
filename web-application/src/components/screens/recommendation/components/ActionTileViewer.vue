@@ -38,7 +38,6 @@
             v-for="(n, index) in filteredPopularOperations"
             :key="index"
           >
-            <GroupOperationsTile :groupAction="n"> </GroupOperationsTile>
           </v-slide-item>
         </v-slide-group>
       </v-row>
@@ -48,18 +47,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import GroupOperationsTile from "@/components/screens/grouping/tiles/GroupOperationsTile.vue";
-import {
-  GroupAction,
-  GroupActionController
-} from "@/api/controllers/extensions/demeter/GroupActionController";
+import GroupAction from "@/api/interface/demeter/GroupAction";
 
 export default Vue.extend({
   name: "ActionTileViewer",
-
-  components: {
-    GroupOperationsTile
-  },
 
   data: () => ({
     // Loadings
@@ -75,14 +66,8 @@ export default Vue.extend({
 
   methods: {
     getActionList() {
-      GroupActionController.getConfigurationActions(this.application)
-        .then((res: GroupAction[]) => {
-          this.popularOperations = res;
-          this.filteredPopularOperations = res;
-        })
-        .catch(err => {
-          console.error("Failed to retrieve the grouping actions", err);
-        });
+      // Do nothing
+      return;
     }
   },
 

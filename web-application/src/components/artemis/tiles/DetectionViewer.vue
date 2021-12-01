@@ -64,7 +64,6 @@ export default Vue.component("DetectionViewer", {
     }
 
     this.detectionObj = this.detection as DetectionInterface;
-    console.log("Detection", this.detectionObj);
 
     if (this.detectionObj.status == DetectionStatus.Pending) {
       this.numResults = "Pending detection";

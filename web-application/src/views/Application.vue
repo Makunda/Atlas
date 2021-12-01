@@ -34,9 +34,9 @@
           >
             <v-list-item v-for="(v, i) in items" v-bind:key="i" link>
               <v-list-item-icon>
-                <v-icon color="#ffffff" class="pl-1">{{ v.icon }} </v-icon>
+                <v-icon class="pl-1" color="#ffffff">{{ v.icon }}</v-icon>
               </v-list-item-icon>
-              <v-list-item-title color="#ffffff" class="text-uppercase"
+              <v-list-item-title class="text-uppercase" color="#ffffff"
                 >{{ v.name }}
               </v-list-item-title>
             </v-list-item>
@@ -48,10 +48,10 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item
-                    v-bind="attrs"
-                    v-on="on"
                     link
+                    v-bind="attrs"
                     @click="simpleHealthCheck()"
+                    v-on="on"
                   >
                     <v-list-item-icon>
                       <v-icon v-if="onlineDatabase" color="green"
@@ -85,22 +85,22 @@
           min-width="50px"
         >
           <v-toolbar-title class="ml-8 screen-title"
-            ><span style="color: ; font-weight: 300">NASD</span>
-            Atlas</v-toolbar-title
-          >
+            ><span style="color: white; font-weight: 300">NASD</span>
+            Atlas
+          </v-toolbar-title>
           <v-spacer></v-spacer>
 
           <v-autocomplete
-            style="max-width: 500px"
             v-model="applicationName"
             :items="applicationList"
             :loading="loadingApplication"
             cache-items
             class="mx-4 mt-3"
+            dense
             hide-details
             hide-selected
             solo-inverted
-            dense
+            style="max-width: 500px"
           >
           </v-autocomplete>
 
@@ -123,8 +123,8 @@
         <router-view v-slot="{ Component }" style="margin-left: 50px;">
           <transition name="slide-fade">
             <component
-              class=""
               :is="Component"
+              class=""
               style="background-color: #F7F7F7 !important"
             />
           </transition>
@@ -138,13 +138,13 @@
 <script lang="ts">
 import Vue from "vue";
 
-import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 import FlashMessage from "@/modules/flash/FlashMessage.vue";
-import { Configuration } from "@/Configuration";
 import { UtilsController } from "@/api/controllers/utils/UtilsController";
 import { Cookie } from "@/enum/Cookie";
 import flash, { FlashType } from "@/modules/flash/Flash";
 import LoginController from "@/api/controllers/login/LoginController";
+import Logger from "@/utils/Logger";
+import ApplicationController from "@/api/controllers/imaging/ApplicationController";
 
 export default Vue.extend({
   name: "Application",
@@ -193,15 +193,9 @@ export default Vue.extend({
         screen: "analysis",
         icon: "mdi-magnify"
       },
-      {
-        name: "Tags",
-        screen: "tags",
-        icon: "mdi-hexagon-multiple"
-      },
       { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" },
-      { name: "Highlight Injection", screen: "highlight", icon: "mdi-needle" },
+      { name: "Highlight Injection", screen: "highlight", icon: "mdi-needle" }
       //{ name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" },
-      { name: "Cloud Recommendation", screen: "cloudReco", icon: "mdi-cloud" }
     ],
 
     loadingApplication: true as boolean,
@@ -244,14 +238,9 @@ export default Vue.extend({
     async getApplicationList() {
       this.loadingApplication = true;
       try {
-        const res = await ApplicationController.getListApplications();
-        if (!res || res.length == 0) {
-          this.applicationName = "No Application found";
-        } else {
-          this.applicationList = res;
-        }
+        this.applicationList = await ApplicationController.getListApplication();
       } catch (err) {
-        console.error("Failed to get the list of the applications.", err);
+        Logger.error("Failed to get the list of the applications.", err);
         flash.commit("add", {
           type: FlashType.ERROR,
           title: "Failed to get applications.",
@@ -370,11 +359,14 @@ export default Vue.extend({
 .slide-fade-enter-active {
   transition: all 0.3s ease;
 }
+
 .slide-fade-leave-active {
   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }
+
 .slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active below version 2.1.8 */ {
+  /* .slide-fade-leave-active below version 2.1.8 */
+ {
   transform: translateX(10px);
   opacity: 0;
 }

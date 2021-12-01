@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import DocumentNode from "@entities/Imaging/Documents/DocumentNode";
 import OssRecommendation from "@interfaces/highlight/recommendations/OssRecommendation";
 import { logger } from "@shared/Logger";
 import ExcelUtils from "@utils/Excel/ExcelUtils";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
-import fs from "fs";
-import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
+import { getHighlightLanguage } from "../technology/HighlightLanguage";
+import PatternExtractorFactory from "../technology/pattern/PatternExtractorFactory";
+import BinderFactor from "../technology/binders/BinderFactory";
 
 /**
  * Service in Charge of the processing of Open source service
@@ -60,17 +60,20 @@ export default class HighlightOssService {
       const component = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Component", columnMapping);
       const technology = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Technologies", columnMapping);
 
-      const [componentName, info] = this.sanitizeComponentName(component, technology);
-      let description = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Description", columnMapping);
+      const language = getHighlightLanguage(technology);
+      const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+      const componentName = patternExtractor.getName(component);
+      const patterns = patternExtractor.getPatterns(component);
 
-      if (info) {
-        description = `Additional component's info: ${info}. ` + componentName;
-      }
+      logger.info(`Language ${language} - ${componentName}`);
+
+      const description = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Description", columnMapping);
 
       recommendation.push({
         application: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Applications", columnMapping),
         origin: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Origin", columnMapping),
         component: componentName,
+        patterns: patterns,
         description: description,
         version: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Version", columnMapping),
         status: "",
@@ -121,18 +124,18 @@ export default class HighlightOssService {
 
       const technology = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Technologies", columnMapping);
 
-      const [componentName, info] = this.sanitizeComponentName(component, technology);
+      const language = getHighlightLanguage(technology);
+      const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
 
-      let description = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Description", columnMapping);
-
-      if (info) {
-        description = `Additional component's info: ${info}. ` + description;
-      }
+      const patterns = patternExtractor.getPatterns(component);
+      const componentName = patternExtractor.getName(component);
+      const description = ExcelUtils.getValueOrEmpty(worksheet, indexR, "Description", columnMapping);
 
       recommendation.push({
         application: application,
         origin: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Origin", columnMapping),
         component: componentName,
+        patterns: patterns,
         description: description,
         version: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Version", columnMapping),
         status: ExcelUtils.getValueOrEmpty(worksheet, indexR, "Status", columnMapping),
@@ -170,7 +173,7 @@ export default class HighlightOssService {
     }
 
     // Verify that the file can be processed
-    const tabs = workbook.worksheets.map((x) => x.name);
+    const tabs = workbook.worksheets.map(x => x.name);
 
     if (tabs.includes(HighlightOssService.PORTFOLIO_LEVEL_TAB)) {
       logger.info("Treating a portfolio level Excel.");
@@ -181,7 +184,7 @@ export default class HighlightOssService {
     } else {
       // No worksheet has been identified, so throw an error
       throw new Error(
-        `Excel report is not correct. Failed to find '${HighlightOssService.APPLICATION_LEVEL_TAB}' or '${HighlightOssService.PORTFOLIO_LEVEL_TAB}'.`
+        `Excel report is not correct. Failed to find '${HighlightOssService.APPLICATION_LEVEL_TAB}' or '${HighlightOssService.PORTFOLIO_LEVEL_TAB}'.`,
       );
     }
   }
@@ -192,10 +195,7 @@ export default class HighlightOssService {
    * @param {OssRecommendation[]} blockers List of blockers to apply
    * @return {Promise<OssRecommendation[]>} List of blockers not applied
    */
-  public async applyRecommendations(
-    blockers: OssRecommendation[],
-    taggingType: string
-  ): Promise<[OssRecommendation[], OssRecommendation[]]> {
+  public async applyRecommendations(blockers: OssRecommendation[], taggingType: string): Promise<[OssRecommendation[], OssRecommendation[]]> {
     const returnList: OssRecommendation[] = [];
     const errorList: OssRecommendation[] = [];
     for (const blocker of blockers) {
@@ -225,48 +225,16 @@ export default class HighlightOssService {
    * @returns True if the document creation
    */
   protected async createDocumentContains(blocker: OssRecommendation): Promise<boolean> {
-    const req = `MATCH (o:\`${blocker.application}\`:Object)
-    WHERE o.FullName CONTAINS $Pattern
-    return ID(o) as idNode;`;
+    const language = getHighlightLanguage(blocker.technology);
+    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+    const binderFactory = BinderFactor.getBinder(language, blocker.application);
 
-    // Filter by technos
+    const patterns = patternExtractor.getPatterns(blocker.component);
 
-    const pattern = this.patternByTechnology(blocker);
-    const params: any = { Pattern: pattern };
-    const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
-
-    // Get nodes ID
-    if (!res || res.records.length == 0) return false;
-
-    const idNodes = res.records.map((x) => int(x.get("idNode")).toNumber());
-
-    // Create the document
     const title = this.getBlockerTitle(blocker);
     const description = this.getDescription(blocker);
 
-    try {
-      const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
-      await doc.create();
-
-      return true;
-    } catch (error) {
-      logger.error("Failed to create a Document.", error);
-      return false;
-    }
-
-  }
-
-  /**
-   * Create a pattern based on the component names and the technology
-   * @param blocker Blocker
-   */
-  protected patternByTechnology(blocker: OssRecommendation): string {
-    switch (blocker.technology) {
-      case "java":
-        return blocker.component + ".";
-      case "C#":
-        return (blocker.component.includes("/") ? blocker.component.split("/")[1] : blocker.component) + ".";
-    }
+    return binderFactory.createDocument(patterns, title, description);
   }
 
   /**
@@ -290,28 +258,17 @@ export default class HighlightOssService {
    */
   private getDescription(blocker: OssRecommendation): string {
     const total =
-      blocker.vulnerabilityCritical.length +
-      blocker.vulnerabilityHigh.length +
-      blocker.vulnerabilityMedium.length +
-      blocker.vulnerabilityLow.length;
+      blocker.vulnerabilityCritical.length + blocker.vulnerabilityHigh.length + blocker.vulnerabilityMedium.length + blocker.vulnerabilityLow.length;
     let description = `This open-source component contains ${total} well known vulnerabilities.\n`;
 
     if (blocker.vulnerabilityCritical.length > 0)
-      description +=
-        `${blocker.vulnerabilityCritical.length} CVEs with a critical risk : ` +
-        blocker.vulnerabilityCritical.join(", ") +
-        ".\n";
+      description += `${blocker.vulnerabilityCritical.length} CVEs with a critical risk : ` + blocker.vulnerabilityCritical.join(", ") + ".\n";
     if (blocker.vulnerabilityHigh.length > 0)
-      description +=
-        `${blocker.vulnerabilityHigh.length} CVEs with a high risk : ` + blocker.vulnerabilityHigh.join(", ") + ".\n";
+      description += `${blocker.vulnerabilityHigh.length} CVEs with a high risk : ` + blocker.vulnerabilityHigh.join(", ") + ".\n";
     if (blocker.vulnerabilityMedium.length > 0)
-      description +=
-        `${blocker.vulnerabilityMedium.length} CVEs with a medium risk : ` +
-        blocker.vulnerabilityMedium.join(", ") +
-        ".\n";
+      description += `${blocker.vulnerabilityMedium.length} CVEs with a medium risk : ` + blocker.vulnerabilityMedium.join(", ") + ".\n";
     if (blocker.vulnerabilityLow.length > 0)
-      description +=
-        `${blocker.vulnerabilityLow.length} CVEs with a low risk : ` + blocker.vulnerabilityLow.join(", ") + ".\n";
+      description += `${blocker.vulnerabilityLow.length} CVEs with a low risk : ` + blocker.vulnerabilityLow.join(", ") + ".\n";
 
     return description;
   }
@@ -322,28 +279,15 @@ export default class HighlightOssService {
    * @returns True if the tag creation worked
    */
   protected async createTagContains(blocker: OssRecommendation): Promise<boolean> {
-    const req = `MATCH (o:\`${blocker.application}\`:Object)
-    WHERE o.FullName CONTAINS $Pattern
-    SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE [ x in o.Tags WHERE NOT x=$tag ] + $tag END
-    return o as node;`;
+    const language = getHighlightLanguage(blocker.technology);
+    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+    const binderFactory = BinderFactor.getBinder(language, blocker.application);
 
-    // Filter by techno
-    const pattern = this.patternByTechnology(blocker);
-    const params: any = {
-      Pattern: pattern,
-      tag: this.getBlockerTitle(blocker),
-    };
+    const patterns = patternExtractor.getPatterns(blocker.component);
 
-    // Create file
     const tag = this.getBlockerTitle(blocker);
-    const reqWrite = `MATCH (o:\`${blocker.application}\`:Object)
-    WHERE o.FullName CONTAINS ${pattern} 
-    SET o.Tags = CASE WHEN o.Tags IS NULL THEN ['${tag}'] ELSE [ x in o.Tags WHERE NOT x='${tag}' ] + '${tag}' END
-    return o as node;`;
 
-    const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
-
-    return res && res.records.length > 0;
+    return binderFactory.createTag(patterns, tag);
   }
 
   /**

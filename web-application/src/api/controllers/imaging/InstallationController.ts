@@ -1,29 +1,17 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import ProxyAxios from "@/utils/axios/ProxyAxios";
+import Logger from "@/utils/Logger";
 
 export default class InstallationController {
-  private static API_BASE_URL = ApiComUtils.getUrl();
-
   public static async getImagingPath(): Promise<string> {
-    const url =
-      this.API_BASE_URL + `/api/imaging/installation/imaging/path/base`;
+    const url = `/api/imaging/installation/imaging/path/base`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<string>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return String(apiResponse.data);
-      } else {
-        console.warn(`Failed to retrieve imaging path. Status (${res.status})`);
-        return `The API returned status code : ${res.status}.`;
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to get Imaging path.`,
-        error
-      );
+      Logger.error(`Failed to get the imaging path.`, error);
       throw error;
     }
   }
@@ -33,27 +21,18 @@ export default class InstallationController {
    * @param path new path
    */
   public static async setImagingPath(path: string): Promise<string> {
-    const url =
-      this.API_BASE_URL + `/api/imaging/installation/imaging/path/base`;
+    const url = `/api/imaging/installation/imaging/path/base`;
 
     try {
       const body = {
         path: path
       };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<string>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return String(apiResponse.data);
-      } else {
-        console.warn(`Failed to set imaging path. Status (${res.status})`);
-        return `The API returned status code : ${res.status}. ${res.data}`;
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to set Imaging path.`,
-        error
-      );
+      Logger.error(`Failed to set Imaging path.`, error);
       throw error;
     }
   }
@@ -62,25 +41,15 @@ export default class InstallationController {
    * Get the status of the demeter extension (version)
    */
   public static async getDemeterStatus(): Promise<string> {
-    const url = this.API_BASE_URL + `/api/atlas/extensions/demeter/version`;
+    const url = `/api/atlas/extensions/demeter/version`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<string>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return String(apiResponse.data);
-      } else {
-        console.warn(
-          `Failed to get Demeter Status. API Status (${res.status})`
-        );
-        return `The API returned status code : ${res.status}.`;
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to get Demeter Status.`,
-        error
-      );
+      Logger.error(`Failed to get Demeter Status.`, error);
       throw error;
     }
   }
@@ -89,25 +58,15 @@ export default class InstallationController {
    * Get the status of the Artemis extension
    */
   public static async getArtemisStatus(): Promise<string> {
-    const url = this.API_BASE_URL + `/api/atlas/extensions/artemis/version`;
+    const url = `/api/atlas/extensions/artemis/version`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<string>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return String(apiResponse.data);
-      } else {
-        console.warn(
-          `Failed to get Artemis Status. API Status (${res.status})`
-        );
-        return `The API returned status code : ${res.status}.`;
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to get artemis Status.`,
-        error
-      );
+      Logger.error(`Failed to get artemis Status.`, error);
       throw error;
     }
   }

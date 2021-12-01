@@ -6,10 +6,10 @@ export default class ProxyAxios {
   /**
    * Get with Authentication
    * @param url Url to query
-   *  @param config configuration of the request
+   * @param config configuration of the request
    * @returns A promise ending when the query is completed
    */
-  public static async get(url: string, config?: any): Promise<any> {
+  public static async get<T>(url: string, config?: any): Promise<any> {
     // Authenticated user
     const requestConfiguration: any = config || {};
     if (!requestConfiguration.headers) requestConfiguration.headers = {};
@@ -20,7 +20,7 @@ export default class ProxyAxios {
     }
 
     try {
-      return await axios.get(url, requestConfiguration);
+      return await axios.get(this.getURL(url), requestConfiguration);
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
@@ -47,7 +47,7 @@ export default class ProxyAxios {
         "Bearer " + String(Vue.$cookies.get(Cookie.AUTH_COOKIE));
     }
     try {
-      return axios.post(url, data, requestConfiguration);
+      return axios.post(this.getURL(url), data, requestConfiguration);
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
@@ -74,7 +74,7 @@ export default class ProxyAxios {
     }
 
     try {
-      return await axios.delete(url, requestConfiguration);
+      return await axios.delete(this.getURL(url), requestConfiguration);
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
@@ -102,7 +102,7 @@ export default class ProxyAxios {
     }
 
     try {
-      return await axios.put(url, data, requestConfiguration);
+      return await axios.put(this.getURL(url), data, requestConfiguration);
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
@@ -110,5 +110,13 @@ export default class ProxyAxios {
         throw error;
       }
     }
+  }
+
+  /**
+   * Get the url joined with the location of the server
+   * @private
+   */
+  private static getURL(url: string): string {
+    return new URL(url, "http://localhost:3000").href;
   }
 }

@@ -113,7 +113,7 @@ export class Neo4JAccessLayer {
       const results: QueryResult = await session.run(request, parameters);
       return results;
     } catch (err) {
-      const sanitized = request.replaceAll("\n", " ");
+      const sanitized = request.replace("\\n", " ");
       const wParams = parameters ? `With parameters ${String(parameters)}.` : "";
       this.logger.error(`Failed to execute query [${sanitized}]. ${wParams}`, err);
     } finally {

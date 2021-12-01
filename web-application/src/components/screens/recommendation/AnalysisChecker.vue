@@ -2,15 +2,15 @@
   <v-container fluid>
     <v-row>
       <v-tabs
-        class="pt-3"
         v-model="tab"
         align-with-title
-        fixed-tabs
         background-color="deepcharcoal"
+        class="pt-3"
         dark
+        fixed-tabs
       >
         <v-tab v-for="item in items" :key="item.name">
-          <v-icon class="mr-3" v-if="item.icon">{{ item.icon }}</v-icon>
+          <v-icon v-if="item.icon" class="mr-3">{{ item.icon }}</v-icon>
           {{ item.name }}
         </v-tab>
       </v-tabs>
@@ -25,7 +25,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ConfigurationStep from "./steps/ConfigurationStep.vue";
 import ExplorationStep from "./steps/ExplorationStep.vue";
 import BreakdownStep from "@/components/screens/recommendation/steps/BreakdownStep.vue";
 
@@ -34,7 +33,6 @@ export default Vue.extend({
 
   components: {
     BreakdownStep,
-    ConfigurationStep,
     ExplorationStep
   },
 
@@ -55,12 +53,6 @@ export default Vue.extend({
     tab: 0,
 
     items: [
-      {
-        view: "ConfigurationStep",
-        name: "Configuration",
-        title: "Review the configuration of the ",
-        icon: "mdi-folder-cog"
-      },
       {
         view: "ExplorationStep",
         name: "Frameworks",

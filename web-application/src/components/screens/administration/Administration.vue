@@ -25,9 +25,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DemeterLevelsTile from "@/components/screens/administration/tiles/DemeterLevelsTile.vue";
-import DemeterModuleTile from "@/components/screens/administration/tiles/DemeterModuleTile.vue";
-import GlobalOperations from "@/components/screens/administration/tiles/GlobalOperations.vue";
 import ArtemisParameters from "@/components/screens/administration/steps/ArtemisParameters.vue";
 import GlobalParameters from "@/components/screens/administration/steps/GlobalParameters.vue";
 import PythiaParameters from "@/components/screens/administration/steps/PythiaParameters.vue";
@@ -36,9 +33,6 @@ export default Vue.extend({
   name: "Administration",
 
   components: {
-    DemeterLevelsTile,
-    GlobalOperations,
-    DemeterModuleTile,
     GlobalParameters,
     ArtemisParameters,
     PythiaParameters

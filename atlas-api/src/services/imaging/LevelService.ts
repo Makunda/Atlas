@@ -32,8 +32,8 @@ class LevelService {
       }
 
       const singleRecord = results.records[0];
-      const row = singleRecord.get("node");
-      const levelObj = LevelNode.fromObj(row).getRecord();
+      const nodeObj = singleRecord.get("node") as Node;
+      const levelObj = LevelNode.fromNode(nodeObj);
 
       // Merge relationship with parent only if valid
       const levelName = `Level${level.level}`;
@@ -44,7 +44,7 @@ class LevelService {
                 MERGE (p)-[:Aggregates]->(c)
                 SET c.FullName = p.FullName + "##" + c.Name
                 SET c.Shade = p.Shade + "##" + c.Color
-                RETURN p as parent`;
+                RETURN DISTINCT p as parent`;
 
       await this.neo4jAl.executeWithParameters(mergeReq, {
         parentID: int(parentId),
@@ -71,17 +71,24 @@ class LevelService {
       // Retrieve level and hidden levels
       const request = `MATCH (n:\`${application}\`) 
             WHERE n:${levelName} OR n:${hiddenLevelName} 
-            RETURN n as node , 
+            RETURN DISTINCT n as node , 
             CASE WHEN n:${levelName} THEN false ELSE true END as hidden ORDER BY n.Name;`;
 
       const results: QueryResult = await this.neo4jAl.execute(request);
 
       const levels: Level[] = [];
-      for (let i = 0; i < results.records.length; i++) {
-        const singleRecord = results.records[i];
-        const level = singleRecord.get("node");
-        const hidden = Boolean(singleRecord.get("hidden"));
-        levels.push(LevelNode.fromObj(level, hidden).getRecord());
+      for (const singleRecord of results.records) {
+        try {
+          const level = singleRecord.get("node");
+          const hidden = Boolean(singleRecord.get("hidden"));
+
+          const nodeObj = singleRecord.get("node") as Node;
+          const levelObj = LevelNode.fromNode(nodeObj, hidden);
+
+          levels.push(levelObj);
+        } catch (e) {
+          logger.error(`Failed to convert record to level. Record [${String(singleRecord.get("node"))}]`, e);
+        }
       }
 
       return levels;
@@ -90,6 +97,7 @@ class LevelService {
       throw new HttpException(500, "Internal error");
     }
   }
+
 
   /**
    * Fetch a level using its ID
@@ -117,7 +125,8 @@ class LevelService {
       const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { idLevel: int(levelID) });
       if (!results.records || results.records.length == 0) return null;
 
-      return LevelNode.fromObj(results.records[0].get("node")).getRecord();
+      const node = results.records[0].get("node") as Node;
+      return LevelNode.fromNode(node);
     } catch (err) {
       logger.error(`LEVEL SERVICE :: Failed to get the levels with id :${levelID} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
@@ -153,8 +162,11 @@ class LevelService {
       const levels: Level[] = [];
       for (let i = 0; i < results.records.length; i++) {
         const singleRecord = results.records[i];
-        const level = singleRecord.get("node");
-        levels.push(LevelNode.fromObj(level).getRecord());
+
+        const nodeObj = singleRecord.get("node") as Node;
+        const levelObj = LevelNode.fromNode(nodeObj);
+
+        levels.push(levelObj);
       }
 
       return levels;
@@ -225,9 +237,13 @@ class LevelService {
       const levels: Level[] = [];
       for (let i = 0; i < results.records.length; i++) {
         const singleRecord = results.records[i];
-        const level = singleRecord.get("node");
+
         const hidden = Boolean(singleRecord.get("hidden"));
-        levels.push(LevelNode.fromObj(level, hidden).getRecord());
+
+        const nodeObj = singleRecord.get("node") as Node;
+        const levelObj = LevelNode.fromNode(nodeObj, hidden);
+
+        levels.push(levelObj);
       }
       return levels;
     } catch (err) {
@@ -256,7 +272,11 @@ class LevelService {
       const results: QueryResult = await this.neo4jAl.executeWithParameters(request, { idLevel: levelID });
 
       if (!results || results.records.length == 0) return null;
-      return LevelNode.fromObj(results.records[0].get("node")).getRecord();
+
+      const nodeObj = results.records[0].get("node") as Node;
+      const levelObj = LevelNode.fromNode(nodeObj);
+
+      return levelObj;
     } catch (err) {
       logger.error(`LEVEL SERVICE :: Failed to get the parent level of level with id : ${levelID} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
@@ -334,10 +354,12 @@ class LevelService {
 
       if (!results || results.records.length == 0) return null;
 
-      const levelUpdate = LevelNode.fromObj(results.records[0].get("node")).getRecord();
-      await this.refreshLevel(application, levelUpdate);
+      const nodeObj = results.records[0].get("node") as Node;
+      const levelObj = LevelNode.fromNode(nodeObj);
 
-      return levelUpdate;
+      await this.refreshLevel(application, levelObj);
+
+      return levelObj;
     } catch (err) {
       logger.error(`LEVEL SERVICE :: Failed to get the children levels of level with id : ${level._id} of application ${application}.`, err);
       throw new HttpException(500, "Internal error");
@@ -405,8 +427,11 @@ class LevelService {
     const levels: Level[] = [];
     for (let i = 0; i < results.records.length; i++) {
       const singleRecord = results.records[i];
-      const level = singleRecord.get("node");
-      levels.push(LevelNode.fromObj(level).getRecord());
+
+      const nodeObj = results.records[0].get("node") as Node;
+      const levelObj = LevelNode.fromNode(nodeObj);
+
+      levels.push(levelObj);
     }
     return levels;
   }
@@ -418,15 +443,14 @@ class LevelService {
    */
   public async findHiddenLevelById(application: string, id: number): Promise<Level> {
     // Search application
-    const req = `MATCH (l:\`${application}\`) WHERE ID(l)=$idLevel RETURN l as node;`;
+    const req = `MATCH (l:\`${application}\`) WHERE ID(l)=$idLevel RETURN DISTINCT l as node;`;
     const results: QueryResult = await this.neo4jAl.executeWithParameters(req, { idLevel: id });
 
     if (results.records && results.records.length) return null;
 
     // Return the level
-    const singleRecord = results.records[0];
-    const level = singleRecord.get("node");
-    return LevelNode.fromObj(level).getRecord();
+    const nodeObj = results.records[0].get("node") as Node;
+    return LevelNode.fromNode(nodeObj);
   }
 
   /**
@@ -480,9 +504,8 @@ class LevelService {
     if (results.records && results.records.length) return null;
 
     // Return the level
-    const singleRecord = results.records[0];
-    const levelUnhidden = singleRecord.get("node");
-    return LevelNode.fromObj(levelUnhidden).getRecord();
+    const nodeObj = results.records[0].get("node") as Node;
+    return LevelNode.fromNode(nodeObj);
   }
 
   /**
@@ -523,7 +546,9 @@ class LevelService {
 
     // refresh the levels
     if (!results.records || results.records.length == 0) return null;
-    return LevelNode.fromObj(results.records[0].get("node")).getRecord();
+
+    const nodeObj = results.records[0].get("node") as Node;
+    return LevelNode.fromNode(nodeObj);
   }
 
   /**
@@ -623,7 +648,12 @@ class LevelService {
   public async groupWithCategory(application: string, category: string, name: string, idList: number[]): Promise<void> {
     try {
       const req = "CALL demeter.group.with.category($application, $category, $name, $idList)";
-      this.neo4jAl.executeWithParameters(req, { application: application, category: category, name: name, idList: idList });
+      await this.neo4jAl.executeWithParameters(req, {
+        application: application,
+        category: category,
+        name: name,
+        idList: idList
+      });
     } catch (err) {
       logger.error("Failed to find group the objects by category.", err);
       throw new Error("Failed to find group the objects by category");

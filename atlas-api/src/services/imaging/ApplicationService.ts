@@ -1,77 +1,127 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { logger } from "@shared/Logger";
-import { QueryResult } from "neo4j-driver";
+import { wrapLogger } from "@shared/Logger";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import HttpException from "@exceptions/HttpException";
 
-import { ArtemisCandidates } from "@services/extensions/artemis/ArtemisCandidatesService";
 import { ApplicationInsights } from "@interfaces/imaging/ApplicationInsights";
+import TechnologiesService from "@services/data/technologies/TechnologiesService";
 
 class ApplicationService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
+  private logger = wrapLogger("Application Service");
 
   /**
-   * Get the version of Artemis
+   * Get the list of the application on the server
    */
-  public async getApplications(): Promise<string[]> {
+  public async getApplicationList(): Promise<string[]> {
+    // Get the list of application
+    const request = "MATCH (n:Application) RETURN COLLECT( n.Name ) as name ORDER BY name";
+    const response = await this.neo4jAl.execute(request);
+
+    if (response.records && response.records.length != 0) return response.records[0].get("name");
+    else return [];
+  }
+
+  /**
+   * Get the list of technologies
+   * @param application Name of the application
+   * @private
+   */
+  private async getTechnologies(application: string): Promise<string[]> {
+    // Technology service
+    const techService = TechnologiesService.getInstance();
+
+    // Get the list of object type
+    const request = `MATCH (o:Object:\`${application}\`) 
+    WHERE EXISTS(o.Type) 
+    RETURN COLLECT(DISTINCT o.Type) as types;`;
+
+    const response = await this.neo4jAl.execute(request);
+
+    let types: string[] = [];
+    if (response.records && response.records.length != 0) types = response.records[0].get("types");
+    else return [];
+
+    // Compare the list of technologies to the binding
+    return techService.getTechnologiesFromType(types);
+  }
+
+  /**
+   * Get the list of levels 5
+   * @param application Name of the application
+   * @private
+   */
+  private async getLevels5(application: string): Promise<string[]> {
+    const levelRequest = `MATCH (n:Level5:\`${application}\`) RETURN COLLECT(DISTINCT n.Name) as levels5;`;
+    const levelRes = await this.neo4jAl.execute(levelRequest);
+
+    if (levelRes.records && levelRes.records.length != 0) return levelRes.records[0].get("levels5");
+    else return [];
+  }
+
+  /**
+   * Get the list modules in the application
+   * @param application Name of the application
+   * @private
+   */
+  private async getModules(application: string): Promise<string[]> {
+    const levelRequest = `MATCH (n:Module:\`${application}\`) RETURN COLLECT(DISTINCT n.Name) as modules;`;
+    const levelRes = await this.neo4jAl.execute(levelRequest);
+
+    if (levelRes.records && levelRes.records.length != 0) return levelRes.records[0].get("modules");
+    else return [];
+  }
+
+  /**
+   * Get the list architecture in the application
+   * @param application Name of the application
+   * @private
+   */
+  private async getArchitectures(application: string): Promise<string[]> {
+    // Get the list of archimodels
+    const architecturesRequest = `MATCH (n:ArchiModel:\`${application}\`) RETURN COLLECT(n.Name) as archiModels;`;
+    const archiRes = await this.neo4jAl.execute(architecturesRequest);
+
+    // Get results
+    if (archiRes.records && archiRes.records.length != 0) return archiRes.records[0].get("archiModels");
+    else return [];
+  }
+
+  /**
+   * Get the application insights
+   * @param app Name of the application
+   */
+  public async getApplicationInsights(app: string): Promise<ApplicationInsights> {
     try {
-      const request = "MATCH (n:Application) RETURN n.Name as name ORDER BY name";
-
-      const results: QueryResult = await this.neo4jAl.execute(request);
-
-      const appNames: string[] = [];
-      for (let i = 0; i < results.records.length; i++) {
-        const singleRecord = results.records[i];
-        const name = singleRecord.get("name");
-        appNames.push(name);
-      }
-
-      return appNames;
+      return {
+        name: app,
+        technologies: await this.getTechnologies(app),
+        levels5: await this.getLevels5(app),
+        architectures: await this.getArchitectures(app),
+        modules: await this.getModules(app),
+      };
     } catch (err) {
-      logger.error("Failed to verify the installation of artemis...", err);
-      throw new HttpException(500, "Internal error");
+      this.logger.error(`Failed to get the insights for application [${app}]`, err);
+      throw new Error("Failed to get the application insights");
     }
   }
 
   /**
-   * Get the version of Artemis
+   * Get the list of application with insights on the server
    */
-  public async getApplicationsInsights(application: string): Promise<ApplicationInsights> {
-    try {
-      const ac = new ArtemisCandidates();
-      const info = await ac.getCandidateInformation(application);
+  public async getAllApplicationsInsights(): Promise<ApplicationInsights[]> {
+      try {
+        const applications = await this.getApplicationList();
+        const insights: ApplicationInsights[] = [];
 
-      if (info == null) throw new Error(`No application with name ${application} was found.`);
+        for(const app of applications) {
+          insights.push(await this.getApplicationInsights(app));
+        }
 
-      const supportedLanguages = info.languages;
-      let levels = [];
-      let modules = [];
-      let architectures = [];
-
-      // Retrieve application infos
-      const levelRequest = `MATCH (n:Level5:\`${application}\`) RETURN COLLECT(n.Name) as levels5;`;
-      const levelRes = await this.neo4jAl.execute(levelRequest);
-      if (levelRes.records && levelRes.records.length != 0) levels = levelRes.records[0].get("levels5");
-
-      const moduleRequest = `MATCH (n:Module:\`${application}\`) RETURN COLLECT(n.Name) as modules;`;
-      const moduleRes = await this.neo4jAl.execute(moduleRequest);
-      if (moduleRes.records && moduleRes.records.length != 0) modules = moduleRes.records[0].get("modules");
-
-      const architecturesRequest = `MATCH (n:ArchiModel:\`${application}\`) RETURN COLLECT(n.Name) as archiModels;`;
-      const archiRes = await this.neo4jAl.execute(architecturesRequest);
-      if (archiRes.records && archiRes.records.length != 0) architectures = archiRes.records[0].get("archiModels");
-
-      return {
-        name: application,
-        levels5: levels,
-        modules: modules,
-        architectures: architectures,
-        technologies: supportedLanguages,
-      } as ApplicationInsights;
-    } catch (err) {
-      logger.error(`Failed to retrieve information about `, err);
-      throw new HttpException(500, "Internal error");
-    }
+        return insights;
+      } catch (err) {
+        this.logger.error("Failed to get the list of insights.");
+        throw new Error("Failed to get the list of application insights");
+      }
   }
 
   /**

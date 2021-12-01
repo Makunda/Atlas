@@ -140,6 +140,29 @@ export class FrameworkAssistantManager {
   }
 
   /**
+   * Reset the Artemis property on a list of nodes
+   * @param idList List of nodes to reset
+   */
+  private async resetArtemisProperty(idList: number[]) {
+    const request = `UNWIND $idList as id 
+    MATCH (o:Object) WHERE ID(o)=id 
+    REMOVE o.${this.artemisTaxonomyProperty}
+    REMOVE o.${this.artemisCategoryProperty}
+    RETURN COUNT(o) as removed`;
+
+    try {
+      const results = await this.neo4jAl.execute(request, { idList: idList });
+      if (results.records.length > 0) {
+        logger.info(`Artemis property removed on ${results.records[0].get("removed")} nodes.`);
+      } else {
+        logger.info(`Failed to remove Artemis on ${idList.length} nodes.`);
+      }
+    } catch (err) {
+      logger.error(`Failed to delete the ${this.artemisTaxonomyProperty} property.`);
+    }
+  }
+
+  /**
    * Apply tags on levels
    * @param category Category to  extract
    */
@@ -158,25 +181,25 @@ export class FrameworkAssistantManager {
 
     const res: QueryResult = await this.neo4jAl.executeWithParameters(req, params);
     for (const rec of res.records) {
+      // Get application name
+      const labels = rec.get("labels");
+      if (!Array.isArray(labels) || labels.length < 2) continue; // Skip invalid labels
+
+      const idList = rec.get("idList"); // List of Id to be converted to number
+      if (!Array.isArray(idList)) continue; // Skip invalid idList
+      const objectIdList = idList.map(x => int(x).toNumber());
+
+      const applicationName = labels.filter(x => x != "Object")[0];
+      const taxonomy = String(rec.get("taxonomy"));
       try {
-        // Get application name
-        const labels = rec.get("labels");
-        if (!Array.isArray(labels) || labels.length < 2) continue; // Skip invalid labels
-
-        const idList = rec.get("idList"); // List of Id to be converted to number
-        if (!Array.isArray(idList)) continue; // Skip invalid idList
-        const objectIdList = idList.map(x => int(x).toNumber());
-
-        const applicationName = labels.filter(x => x != "Object")[0];
-        const taxonomy = String(rec.get("taxonomy"));
-
         // Verify that the taxonomy is correct // or assign a flag
         await levelService.groupWithTaxonomy(applicationName, taxonomy, objectIdList);
 
         // If the operation is a success apply the migration flag on it
         ObjectUtils.flagListObjects(applicationName, objectIdList, FrameworkAssistantManager.MIGRATION_FLAG, taxonomy);
       } catch (err) {
-        logger.error("FRAMEWORK ASSISTANT :: Failed to group frameworks with level option", err);
+        logger.error("FRAMEWORK ASSISTANT :: Failed to group frameworks with level option. Property will be removed.");
+        await this.resetArtemisProperty(idList);
       }
     }
   }
@@ -279,7 +302,7 @@ export class FrameworkAssistantManager {
         try {
           await this.runAssistant(this.assistants[i]);
         } catch (err) {
-          logger.error(`Failed to execute assistant [${this.assistants[i].serialize().category}]`, err);
+          logger.error(`Failed to execute assistant [${this.assistants[i].serialize().category}]`);
         }
       }
     } catch (err) {

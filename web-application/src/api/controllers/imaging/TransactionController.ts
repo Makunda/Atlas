@@ -1,5 +1,3 @@
-// http://localhost:3000/api/imaging/transactions/number/unmasked/ACA
-
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import Transaction from "@/api/interface/imaging/Transaction.interface";

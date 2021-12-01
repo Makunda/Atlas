@@ -1,37 +1,22 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import Level from "@/api/interface/imaging/Level.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import ProxyAxios from "@/utils/axios/ProxyAxios";
+import Logger from "@/utils/Logger";
 
 export default class LevelController {
-  private static API_BASE_URL = ApiComUtils.getUrl();
-
   /**
    * Retrieve the list of root levels in the applications
    * @param application Name of the application
    */
   public static async getRootLevels(application: string): Promise<Level[]> {
-    const url =
-      LevelController.API_BASE_URL + `/api/imaging/levels/roots/${application}`;
+    const url = `/api/imaging/levels/roots/${application}`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<Level[]>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as Level[];
-        }
-      } else {
-        console.warn(`Failed to retrieve root levels. Status (${res.status})`);
-      }
-
-      return [];
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
-        error
-      );
+      Logger.error(` Failed to retrieve root levels.`, error);
       throw error;
     }
   }
@@ -45,30 +30,15 @@ export default class LevelController {
     application: string,
     depth: number
   ): Promise<Level[]> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/byDepth/${application}/${depth}`;
+    const url = `/api/imaging/levels/byDepth/${application}/${depth}`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<Level[]>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as Level[];
-        }
-      } else {
-        console.warn(
-          `Failed to retrieve levels by depth. Status (${res.status})`
-        );
-      }
-
-      return [];
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve dy depth levels.`,
-        error
-      );
+      Logger.error(`Failed to retrieve dy depth levels.`, error);
       throw error;
     }
   }
@@ -84,28 +54,17 @@ export default class LevelController {
     sourceId: number,
     destinationId: number
   ): Promise<number> {
-    const url =
-      LevelController.API_BASE_URL + `/api/imaging/levels/merge/${application}`;
+    const url = `/api/imaging/levels/merge/${application}`;
 
     try {
-      const res = await ProxyAxios.post(url, {
+      const res = await ProxyAxios.post<number>(url, {
         sourceId: sourceId,
         destinationId: destinationId
       });
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to merge level. Status (${res.status}). Error: ${res.data.message}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to merge levels.`,
-        error
-      );
+      Logger.error(`Failed to merge levels.`, error);
       throw error;
     }
   }
@@ -119,29 +78,16 @@ export default class LevelController {
     application: string,
     name: string
   ): Promise<Level[]> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/find/${application}/name`;
+    const url = `/api/imaging/levels/find/${application}/name`;
 
     try {
       const body = { name: name };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<Level[]>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as Level[];
-        }
-      } else {
-        console.warn(`Failed to retrieve root levels. Status (${res.status})`);
-      }
-
-      return [];
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
-        error
-      );
+      Logger.error(`Failed to retrieve root levels.`, error);
       throw error;
     }
   }
@@ -155,30 +101,15 @@ export default class LevelController {
     application: string,
     level: Level
   ): Promise<Level[]> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/attached/${application}/${level._id}`;
+    const url = `/api/imaging/levels/attached/${application}/${level._id}`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<Level[]>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as Level[];
-        }
-      } else {
-        console.warn(
-          `Failed to retrieve attached levels. Status (${res.status})`
-        );
-      }
-
-      return [];
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve attached levels.`,
-        error
-      );
+      Logger.error(`Failed to retrieve attached levels.`, error);
       throw error;
     }
   }
@@ -192,24 +123,15 @@ export default class LevelController {
     application: string,
     level: Level
   ): Promise<Level> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/parent/${application}/${level._id}`;
+    const url = `/api/imaging/levels/parent/${application}/${level._id}`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<Level>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as Level;
-      } else {
-        throw new Error("Failed to fetch the parent levels");
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve attached levels.`,
-        error
-      );
+      Logger.error(`Failed to retrieve attached levels.`, error);
       throw error;
     }
   }
@@ -225,27 +147,18 @@ export default class LevelController {
     parentLevelID: number,
     level: Level
   ): Promise<Level> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/create/${application}`;
+    const url = `/api/imaging/levels/create/${application}`;
 
     try {
       const body: any = level;
       body.parentId = parentLevelID;
 
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<Level>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as Level;
-      } else {
-        throw new Error("Failed to create new levels");
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to create new levels.`,
-        error
-      );
+      Logger.error(`Failed to create new levels.`, error);
       throw error;
     }
   }
@@ -254,26 +167,17 @@ export default class LevelController {
     application: string,
     level: Level
   ): Promise<Level> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/update/${application}/${level._id}`;
+    const url = `/api/imaging/levels/update/${application}/${level._id}`;
 
     try {
       const body: any = level;
 
-      const res = await ProxyAxios.put(url, body);
+      const res = await ProxyAxios.put<Level>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as Level;
-      } else {
-        throw new Error("Failed to create new levels");
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to create new levels.`,
-        error
-      );
+      Logger.error(`Failed to create new levels.`, error);
       throw error;
     }
   }
@@ -287,28 +191,15 @@ export default class LevelController {
     application: string,
     depth: number
   ): Promise<Level[]> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/hidden/byDepth/${application}/${depth}`;
+    const url = `/api/imaging/levels/hidden/byDepth/${application}/${depth}`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<Level[]>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as Level[];
-        }
-      } else {
-        console.warn(`Failed to retrieve root levels. Status (${res.status})`);
-      }
-
-      return [];
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve root levels.`,
-        error
-      );
+      Logger.error(`Failed to retrieve root levels.`, error);
       throw error;
     }
   }
@@ -322,28 +213,19 @@ export default class LevelController {
     application: string,
     level: Level
   ): Promise<Level> {
-    const url =
-      LevelController.API_BASE_URL +
-      `/api/imaging/levels/unhide/${application}`;
+    const url = `/api/imaging/levels/unhide/${application}`;
 
     try {
       const body = {
         levelId: level._id
       };
 
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<Level>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as Level;
-      } else {
-        throw new Error(`The API returned status : ${res.status}. ${res.data}`);
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to unhide a level.`,
-        error
-      );
+      Logger.error(`Failed to unhide a level.`, error);
       throw error;
     }
   }
@@ -357,27 +239,19 @@ export default class LevelController {
     application: string,
     level: Level
   ): Promise<Level> {
-    const url =
-      LevelController.API_BASE_URL + `/api/imaging/levels/hide/${application}`;
+    const url = `/api/imaging/levels/hide/${application}`;
 
     try {
       const body = {
         levelId: level._id
       };
 
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<Level>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as Level;
-      } else {
-        throw new Error(`The API returned status : ${res.status}. ${res.data}`);
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to hide a level.`,
-        error
-      );
+      Logger.error(`Failed to hide a level.`, error);
       throw error;
     }
   }

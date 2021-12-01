@@ -75,13 +75,10 @@
 </template>
 
 <script lang="ts">
-import {
-  StatisticPercentageResult,
-  StatisticsController
-} from "@/api/controllers/extensions/demeter/StatisticsController";
 import Vue from "vue";
 import PercentageTile from "@/components/screens/recommendation/tiles/PercentageTile.vue";
 import ActionTileViewer from "@/components/screens/recommendation/components/ActionTileViewer.vue";
+import { DemeterStatisticPercentageResult } from "@/api/interface/demeter/DemeterStatistic";
 
 export default Vue.extend({
   name: "ConfigurationStep",
@@ -104,34 +101,13 @@ export default Vue.extend({
 
   data: () => ({
     application: "",
-    statistics: [] as StatisticPercentageResult[],
+    statistics: [] as DemeterStatisticPercentageResult[],
     loadingStatistics: false
   }),
-
-  methods: {
-    getConfigurationStatistics() {
-      this.loadingStatistics = true;
-      this.statistics = [];
-      StatisticsController.getConfigurationStatistics(this.application)
-        .then((res: StatisticPercentageResult[]) => {
-          this.statistics = res;
-        })
-        .catch(err => {
-          console.error(
-            "An error occured while retrieving configuration statistics...",
-            err
-          );
-        })
-        .finally(() => {
-          this.loadingStatistics = false;
-        });
-    }
-  },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-      this.getConfigurationStatistics();
     }
   }
 });

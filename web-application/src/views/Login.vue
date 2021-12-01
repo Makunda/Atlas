@@ -1,79 +1,86 @@
 <!-- Login modal -->
 <template>
   <v-app class="main-application">
-    <v-card class="mx-auto d-flex justify-content-between" id="colored-tile">
+    <v-card
+      id="colored-tile"
+      class="mx-auto d-flex justify-content-between rounded-lg"
+    >
       <!-- Bakcground Image  -->
       <img
+        id="background-logo"
         :src="`${publicPath}assets/svg/atlasBlack2.svg`"
         alt="Atlas logo"
-        id="background-logo"
       />
 
-      <v-card-text fill-height height="100%" class="grow">
-        <v-container style="height: 100%">
-          <v-row fill-height style="height: 100%">
-            <!-- Image column -->
-            <v-col cols="12" md="5"></v-col>
+      <v-card-text class="grow" fill-height height="100%">
+        <v-container style="height: 100%; display: grid">
+          <v-container style="margin: auto;">
+            <v-row fill-height style="height: 100%">
+              <!-- Image column -->
+              <v-col cols="12" md="5"></v-col>
 
-            <!-- Title column -->
-            <v-col cols="12" md="7" id="form" style="height: 100%">
-              <v-container style="height: 100%">
-                <!-- Title & version -->
-                <v-row class="pt-12 d-flex flex-column">
-                  <h2 class="white--text text-h1">NASD Atlas</h2>
-                  <i class="white--text text-h5 pl-2">Version 2.6.0</i>
-                </v-row>
+              <!-- Title column -->
+              <v-col id="form" cols="12" md="7" style="height: 100%">
+                <v-container style="height: 100%">
+                  <!-- Title & version -->
+                  <v-row class="pt-12 d-flex flex-column">
+                    <h2 class="white--text text-h1">NASD Atlas</h2>
+                    <i class="white--text text-h5 pl-2">Version 2.6.0</i>
+                  </v-row>
 
-                <!-- Login -->
-                <v-row class="pt-12 d-flex flex-column white--text">
-                  <v-text-field
-                    dark
-                    class="limited-size-input mt-10"
-                    color="white"
-                    ref="neo4jUser"
-                    v-model="username"
-                    label="Username"
-                    placeholder="User"
-                    :error-messages="loginError"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    dark
-                    class="limited-size-input mt-3"
-                    v-model="password"
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'"
-                    label="Password"
-                    name="input-10-1"
-                    :error-messages="loginError"
-                    required
-                    @click:append="show1 = !show1"
-                  ></v-text-field>
-                  <p>Database bolt URI : {{ uri }}</p>
+                  <!-- Login -->
+                  <v-row class="pt-12 d-flex flex-column white--text">
+                    <v-text-field
+                      ref="neo4jUser"
+                      v-model="username"
+                      :error-messages="loginError"
+                      class="limited-size-input mt-10"
+                      color="white"
+                      dark
+                      label="Username"
+                      placeholder="User"
+                      required
+                      v-on:keyup.enter="onEnter"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="password"
+                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                      :error-messages="loginError"
+                      :type="show1 ? 'text' : 'password'"
+                      class="limited-size-input mt-3"
+                      dark
+                      label="Password"
+                      name="input-10-1"
+                      required
+                      v-on:keyup.enter="onEnter"
+                      @click:append="show1 = !show1"
+                    ></v-text-field>
+                    <p>Database bolt URI : {{ uri }}</p>
 
-                  <div
-                    v-show="failedLogin"
-                    class="red darken-2 text-center pa-2"
-                    width="100%"
-                  >
-                    <span class="white--text"
-                      >Wrong credentials / URI. Contact your CAST Imaging
-                      administrator for more information.</span
+                    <div
+                      v-show="failedLogin"
+                      class="red darken-2 text-center pa-2"
+                      width="100%"
                     >
-                  </div>
+                      <span class="white--text"
+                        >Wrong credentials / URI. Contact your CAST Imaging
+                        administrator for more information.</span
+                      >
+                    </div>
 
-                  <v-btn
-                    class="mt-12"
-                    color="white"
-                    style="max-width: 100px"
-                    @click="save"
-                  >
-                    Log In
-                  </v-btn>
-                </v-row>
-              </v-container>
-            </v-col>
-          </v-row>
+                    <v-btn
+                      class="mt-12"
+                      color="white"
+                      style="max-width: 100px"
+                      @click="save"
+                    >
+                      Log In
+                    </v-btn>
+                  </v-row>
+                </v-container>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-container>
       </v-card-text>
       <!-- Mentions -->
@@ -116,6 +123,10 @@ export default Vue.extend({
   },
 
   methods: {
+    onEnter: function() {
+      this.save();
+    },
+
     // Check, save and redirect to the Main dashboard
     async save() {
       // Save new URI
@@ -128,7 +139,7 @@ export default Vue.extend({
         this.password
       );
       if (res) {
-        this.$router.replace("/atlas/");
+        this.$router.replace("/applications");
         window.location.reload();
       } else {
         // Ignore & unvalidate the login form
@@ -193,7 +204,7 @@ export default Vue.extend({
     rgba(0, 36, 47, 1) 0%,
     rgba(15, 79, 99, 1) 100%
   );
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00242f",endColorstr="#0f4f63",GradientType=1);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00242f", endColorstr="#0f4f63", GradientType=1);
 }
 
 #form {

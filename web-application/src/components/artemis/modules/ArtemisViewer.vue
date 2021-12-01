@@ -1,5 +1,5 @@
 <template>
-  <v-card class="px-5 mb-5 pt-4" :disabled="disabledTile">
+  <v-card :disabled="disabledTile" class="px-5 mb-5 pt-4">
     <v-card-title>
       <p class="text-h3 text--primary">
         <span class="font-weight-light pr-1"
@@ -7,38 +7,51 @@
         >
         {{ application }}
       </p>
+      <v-chip
+        v-if="analysisStatus"
+        :color="analysisStatus == 'Analyzed' ? 'primary' : 'red'"
+        class="ml-4 mb-4"
+        dark
+      >
+        {{ analysisStatus }}
+      </v-chip>
     </v-card-title>
 
     <v-card-subtitle class="text-subtitle-1">
+      <v-chip-group active-class="primary--text" column>
+        <v-chip v-for="tag in applicationsInsights.technologies" :key="tag">
+          {{ tag }}
+        </v-chip>
+      </v-chip-group>
       <p>
-        The <i>Artemis : automatic framewok detector </i> your application and
+        The <i>Artemis : automatic framework detector </i> your application and
         finds objects belonging to open-source components. It analyzes the most
         popular online repositories and Google, and thanks to its built-in
         automatic learning algorithm, it finds the best matches.
         <br />
         You can choose to activate or not these options. If no option is
-        activated, the <i>Artemis : automatic framewok detector </i> will rely
+        activated, the <i>Artemis : automatic framework detector </i> will rely
         on it's own database to discover frameworks.
       </p>
       <p>
-        <b
-          ><v-icon color="persianGrey">mdi-information</v-icon> The current
-          workspace of the framework detector is located under : </b
+        <b>
+          <v-icon color="persianGrey">mdi-information</v-icon>
+          The current workspace of the framework detector is located under : </b
         >{{ workspacePath }}
         <br />
         You can change the workspace in the Administration section
       </p>
       <p>
-        <b
-          ><v-icon color="persianGrey">mdi-information</v-icon> The current
-          version of Artemis is : </b
+        <b>
+          <v-icon color="persianGrey">mdi-information</v-icon>
+          The current version of Artemis is : </b
         >{{ version }}
       </p>
     </v-card-subtitle>
 
     <v-card-text>
-      <v-row class="mt-2 text-subtitle-1"> </v-row>
-      <v-row class="mt-3"> </v-row>
+      <v-row class="mt-2 text-subtitle-1"></v-row>
+      <v-row class="mt-3"></v-row>
 
       <v-row class="mt-5 mb-6 ml-1 mb-4">
         <h2>
@@ -48,24 +61,24 @@
       <v-row class="d-flex flex-column ml-3">
         <!-- Selection of the detection mode -->
         <v-btn-toggle
-          class="my-3"
-          multiple
           v-model="dataSources"
           :value="dataSources"
+          class="my-3"
+          multiple
         >
-          <v-btn x-large value="local" disabled>
+          <v-btn disabled value="local" x-large>
             <v-icon class="mr-2">mdi-database</v-icon>
             Local Database
           </v-btn>
-          <v-btn x-large value="pythia">
+          <v-btn value="pythia" x-large>
             <v-icon class="mr-2">mdi-cloud-search</v-icon>
             Pythia Repository
           </v-btn>
-          <v-btn x-large value="online">
+          <v-btn value="online" x-large>
             <v-icon class="mr-2">mdi-google</v-icon>
             Online Detection (Google)
           </v-btn>
-          <v-btn x-large value="repository">
+          <v-btn value="repository" x-large>
             <v-icon class="mr-2">mdi-git</v-icon>
             Online repository (Maven, etc..)
           </v-btn>
@@ -80,14 +93,14 @@
           </p>
           <p class="ma-0">
             <v-icon
-              class="mr-2 mb-1"
               :color="dataSources.includes('pythia') ? 'green' : 'grey'"
+              class="mr-2 mb-1"
               >{{
                 dataSources.includes("pythia")
                   ? "mdi-check-circle"
                   : "mdi-close-circle"
-              }}</v-icon
-            >
+              }}
+            </v-icon>
             <strong>Pythia Repository</strong> : Query the NASD Pythia Framework
             repository to automatically flag known frameworks. Status of Pythia
             :
@@ -95,28 +108,28 @@
           </p>
           <p class="ma-0">
             <v-icon
-              class="mr-2 mb-1"
               :color="dataSources.includes('online') ? 'green' : 'grey'"
+              class="mr-2 mb-1"
               >{{
                 dataSources.includes("online")
                   ? "mdi-check-circle"
                   : "mdi-close-circle"
-              }}</v-icon
-            >
+              }}
+            </v-icon>
             <strong>Online Search</strong> The framewok detection will parse
             Google, to discover frameworks. The frameworks detected are added to
             the configuration for future usages.
           </p>
           <p class="ma-0">
             <v-icon
-              class="mr-2 mb-1"
               :color="dataSources.includes('repository') ? 'green' : 'grey'"
+              class="mr-2 mb-1"
               >{{
                 dataSources.includes("repository")
                   ? "mdi-check-circle"
                   : "mdi-close-circle"
-              }}</v-icon
-            >
+              }}
+            </v-icon>
             <strong>Online Repository search</strong> : Parse most populars
             repositories as Github, Maven, etc..
           </p>
@@ -129,7 +142,7 @@
         </div>
 
         <!-- Language selection -->
-        <v-row class="my-6 pa-0 ml-0" align="center">
+        <v-row align="center" class="my-6 pa-0 ml-0">
           <v-col class="px-0" cols="12" md="4">
             <v-subheader class="px-0">
               <h2>2 - Pick a language for discovery :</h2>
@@ -141,10 +154,10 @@
               v-model="selectedLanguage"
               :items="availableLanguages"
               label="Language"
+              large
               persistent-hint
               return-object
               single-line
-              large
             ></v-select>
           </v-col>
         </v-row>
@@ -165,44 +178,44 @@
 
       <v-row class="my-5">
         <v-btn
-          :loading="runningArtemis"
-          color="charcoal"
-          class="ma-2 white--text"
-          @click="launchDetection()"
           :disabled="ongoingDetection != ''"
+          :loading="runningArtemis"
+          class="ma-2 white--text"
+          color="charcoal"
+          @click="launchDetection()"
         >
           Launch detection
-          <v-icon right dark>
+          <v-icon dark right>
             mdi-play
           </v-icon>
         </v-btn>
         <v-btn
           :disabled="!runningArtemis"
-          color="brown"
           class="ma-2 white--text"
+          color="brown"
           @click="stopDetection()"
         >
           Stop detection
-          <v-icon right dark>
+          <v-icon dark right>
             mdi-stop
           </v-icon>
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="brown" class="ma-2 white--text" @click="checkStatus()">
+        <v-btn class="ma-2 white--text" color="brown" @click="checkStatus()">
           Reload status
-          <v-icon right dark>
+          <v-icon dark right>
             mdi-reload
           </v-icon>
         </v-btn>
       </v-row>
       <v-row>
         <v-alert
-          class="ma-2"
-          width="100%"
+          v-if="ongoingDetection && ongoingDetection != ''"
           border="left"
+          class="ma-2"
           dense
           type="info"
-          v-if="ongoingDetection && ongoingDetection != ''"
+          width="100%"
         >
           <p>
             {{ ongoingDetection }} <strong class="mx-2">Time Elapsed</strong
@@ -210,22 +223,22 @@
           </p>
         </v-alert>
         <v-alert
-          class="ma-2"
-          width="100%"
+          v-if="errorDetection && errorDetection !== ''"
           border="left"
+          class="ma-2"
           dense
           type="error"
-          v-if="errorDetection && errorDetection !== ''"
+          width="100%"
         >
           {{ errorDetection }}
         </v-alert>
         <v-alert
-          class="ma-2"
-          width="100%"
+          v-if="message && message !== ''"
           border="left"
+          class="ma-2"
           dense
           type="success"
-          v-if="message && message !== ''"
+          width="100%"
         >
           {{ message }}
         </v-alert>
@@ -238,9 +251,9 @@
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
+            hide-details
             label="Search"
             single-line
-            hide-details
           ></v-text-field>
         </v-card-title>
         <v-card-subtitle class="d-flex justify-end">
@@ -251,20 +264,20 @@
         </v-card-subtitle>
 
         <v-data-table
-          :loading="runningArtemis"
           :headers="headers"
           :items="filteredFrameworks"
           :items-per-page="20"
+          :loading="runningArtemis"
           :search="search"
-          item-key="nema"
           class="elevation-3"
+          item-key="nema"
           style="width: 100%"
         >
         </v-data-table>
       </v-card>
     </v-card-text>
     <div v-if="diplayNotInstalled" id="NotInstalledArtemis">
-      <h2 class="ma-auto text--h2" id="Message">
+      <h2 id="Message" class="ma-auto text--h2">
         The Artemis extension is not installed on this instance.<br />
         Please install the extension from
         <a
@@ -292,6 +305,9 @@ import { DetectionResult } from "@/api/interface/artemis/detectionResult.interfa
 import { Framework } from "@/api/interface/artemis/Framework";
 import { Cookie } from "@/enum/Cookie";
 import PythiaController from "@/api/controllers/pythia/PythiaUtilController";
+import { ApplicationInsights } from "@/api/interface/imaging/ApplicationInsights";
+import ApplicationController from "@/api/controllers/imaging/ApplicationController";
+import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({
   name: "ActionTileViewer",
@@ -314,6 +330,12 @@ export default Vue.extend({
 
   data: () => ({
     // Result table
+    // Application
+    applicationsInsights: {} as ApplicationInsights,
+    loadingApplication: false,
+    analysisStatus: "",
+
+    // Table
     headers: [
       {
         text: "Framework",
@@ -432,6 +454,7 @@ export default Vue.extend({
         .then((res: DetectionResult) => {
           // If res is null, the application has no status
           if (res == null) {
+            this.analysisStatus = "No detection launched";
             this.message = `No detection was launched for ${this.application}`;
             this.ongoingDetection = "";
             this.errorDetection = "";
@@ -443,18 +466,21 @@ export default Vue.extend({
           // If the detection is successfully launched, set a timeout and wait for the response
           switch (res.status) {
             case DetectionStatus.Pending:
+              this.analysisStatus = "On-going detection";
               this.ongoingDetection = `On-going detection for the ${this.application} application.`;
               this.runningArtemis = true;
               this.errorDetection = "";
               this.countDownTimer();
               break;
             case DetectionStatus.Success:
+              this.analysisStatus = "Analyzed";
               this.resultDetection = res.data;
               this.runningArtemis = false;
               this.errorDetection = "";
               this.ongoingDetection = "";
               break;
             case DetectionStatus.Failure:
+              this.analysisStatus = "Detection failed";
               this.errorDetection =
                 "An error occurred during the detection. Please check the logs";
               this.ongoingDetection = "";
@@ -558,10 +584,30 @@ export default Vue.extend({
       } finally {
         this.pythiaLoadingStatus = false;
       }
+    },
+
+    /**
+     * Get insights for this applications
+     */
+    async getApplicationInsights() {
+      try {
+        this.loadingApplication = true;
+        this.applicationsInsights = await ApplicationController.getApplicationInsights(
+          this.application
+        );
+      } catch (error) {
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to get the application insights.",
+          body: error
+        });
+      } finally {
+        this.loadingApplication = false;
+      }
     }
   },
 
-  mounted() {
+  async mounted() {
     this.disabledTile = true;
     this.resultDetection = []; // Reinitialized the detection results
 
@@ -578,22 +624,22 @@ export default Vue.extend({
     this.getPythiaStatus();
 
     // Get the Artemis Version
-    AtlasController.getArtemisVersion()
-      .then(async (version: string) => {
-        this.version = version;
-        this.disabledTile = false;
-        this.application = this.$store.state.applicationName;
-        await this.getConfiguration();
-      })
-      .catch(err => {
-        console.error(
-          "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
-          err
-        );
-        this.diplayNotInstalled = true;
-      });
+    try {
+      const version = await AtlasController.getArtemisVersion();
+      this.version = version;
+      this.disabledTile = false;
+      this.application = this.$store.state.applicationName;
+      await this.getConfiguration();
+    } catch (e) {
+      console.error(
+        "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
+        e
+      );
+      this.diplayNotInstalled = true;
+    }
 
-    this.constantStatusCheck();
+    await this.constantStatusCheck();
+    await this.getApplicationInsights();
   },
 
   beforeDestroy() {
@@ -605,6 +651,7 @@ export default Vue.extend({
       this.application = newApp;
       this.resultDetection = [];
       this.runningArtemis = false;
+      this.getApplicationInsights();
       this.checkStatus();
     },
 

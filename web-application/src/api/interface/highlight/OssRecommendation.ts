@@ -8,6 +8,7 @@ export default interface OssRecommendation {
   description: string;
   version: string;
   component: string;
+  patterns: string[];
   status: string;
   technology: string;
   link: string;

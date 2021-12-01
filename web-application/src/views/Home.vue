@@ -20,7 +20,7 @@
                   </h3>
                 </v-row>
                 <v-row class="mx-4 w-100" style="width: 100%">
-                  <v-col cols="12" md="6">Number of levels: </v-col>
+                  <v-col cols="12" md="6">Number of levels:</v-col>
                   <v-col cols="12" md="6"
                     ><strong>{{
                       insights && insights.levels5 != null
@@ -30,7 +30,7 @@
                   >
                 </v-row>
                 <v-row class="mx-4" style="width: 100%">
-                  <v-col cols="12" md="6">Number of modules: </v-col>
+                  <v-col cols="12" md="6">Number of modules:</v-col>
                   <v-col cols="12" md="6"
                     ><strong>{{
                       insights && insights.modules != null
@@ -40,7 +40,7 @@
                   >
                 </v-row>
                 <v-row class="mx-4" style="width: 100%">
-                  <v-col cols="12" md="6">Number of architectures: </v-col>
+                  <v-col cols="12" md="6">Number of architectures:</v-col>
                   <v-col cols="12" md="6"
                     ><strong>{{
                       insights && insights.architectures != null
@@ -59,7 +59,7 @@
                 <v-row>
                   <v-chip-group active-class="primary--text" column>
                     <v-chip
-                      v-for="technology in technologies"
+                      v-for="technology in insights.technologies"
                       :key="technology"
                     >
                       {{ technology }}
@@ -99,12 +99,12 @@
 
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
-import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import ActionsTile from "@/components/actions/ActionsTile.vue";
 import StatisticsHelper from "@/components/screens/statistics/tiles/StatisticsHelper.vue";
 import StatisticsColumn from "@/components/screens/statistics/StatisticsColumn.vue";
 import CategoriesHelper from "@/components/navigation/CategoriesHelper.vue";
+import ApplicationController from "@/api/controllers/imaging/ApplicationController";
+import Logger from "@/utils/Logger";
 
 export default Vue.extend({
   name: "Home",
@@ -125,7 +125,6 @@ export default Vue.extend({
     switchInternalUse: false,
     loadingCandidate: false,
     insights: {},
-    technologies: [] as string[],
 
     // Default parameters
     application: "",
@@ -135,34 +134,26 @@ export default Vue.extend({
   mounted() {
     this.application = this.$store.state.applicationName;
     this.getApplicationInsights();
-    this.getApplicationTechnologies();
   },
 
   methods: {
-    async getApplicationTechnologies() {
-      if (this.application == "") return;
-      this.technologies = await ApplicationController.getTechnologies(
-        this.application
-      );
-    },
-
     goTo(section: string) {
       this.$router.replace("/atlas/" + section);
     },
 
-    getApplicationInsights() {
+    async getApplicationInsights() {
       if (this.application == "") return;
-      this.loadingCandidate = true;
-      ApplicationController.getApplicationInsights(this.application)
-        .then((res: ApplicationInsights) => {
-          this.insights = res;
-        })
-        .catch(err => {
-          console.error("Failed to get the insights of the application", err);
-        })
-        .finally(() => {
-          this.loadingCandidate = false;
-        });
+
+      try {
+        this.loadingCandidate = true;
+        this.insights = await ApplicationController.getApplicationInsights(
+          this.application
+        );
+      } catch (e) {
+        Logger.error("Failed to get the insights of the application", e);
+      } finally {
+        this.loadingCandidate = false;
+      }
     }
   },
 

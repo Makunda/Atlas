@@ -8,13 +8,14 @@
       </p>
       <br />
       <v-spacer></v-spacer>
-      <v-btn icon large color="green" class="px-4" @click="refresh()">
+      <v-btn class="px-4" color="green" icon large @click="refresh()">
         <v-icon>mdi-cached</v-icon>
       </v-btn>
     </v-card-title>
     <v-card-subtitle>
-      <v-icon color="red">mdi-message-alert-outline</v-icon> Make sure the agent
-      are running if you planned to extract the artifacts from the breakdown.
+      <v-icon color="red">mdi-message-alert-outline</v-icon>
+      Make sure the agent are running if you planned to extract the artifacts
+      from the breakdown.
     </v-card-subtitle>
     <v-card-text>
       <v-container>
@@ -24,21 +25,27 @@
           </h3>
         </v-row>
         <v-row class="mx-4">
-          <v-col cols="12" md="4">Number of levels: </v-col>
+          <v-col cols="12" md="4">Number of levels:</v-col>
           <v-col cols="12" md="8"
-            ><strong>{{ insights.levels5.length || 0 }}</strong></v-col
+            ><strong>{{
+              insights.levels5 ? insights.levels5.length : 0
+            }}</strong></v-col
           >
         </v-row>
         <v-row class="mx-4">
-          <v-col cols="12" md="4">Number of modules: </v-col>
+          <v-col cols="12" md="4">Number of modules:</v-col>
           <v-col cols="12" md="8"
-            ><strong>{{ insights.modules.length || 0 }}</strong></v-col
+            ><strong>{{
+              insights.modules ? insights.modules.length : 0
+            }}</strong></v-col
           >
         </v-row>
         <v-row class="mx-4">
-          <v-col cols="12" md="4">Number of architectures: </v-col>
+          <v-col cols="12" md="4">Number of architectures:</v-col>
           <v-col cols="12" md="8"
-            ><strong>{{ insights.architectures.length || 0 }}</strong></v-col
+            ><strong>{{
+              insights.architectures ? insights.architectures.length : 0
+            }}</strong></v-col
           >
         </v-row>
         <v-row class="mx-4">
@@ -57,12 +64,12 @@
         </v-row>
         <v-row class="mx-4 mb-6">
           <v-btn
-            class="mx-2"
             v-for="target in targetList"
             v-bind:key="target.value"
-            @click="selectedTarget = target.value"
             :color="selectedTarget !== target.value ? 'grey' : 'persianGrey'"
+            class="mx-2"
             dark
+            @click="selectedTarget = target.value"
           >
             {{ target.text }}
           </v-btn>
@@ -93,9 +100,9 @@
         <v-row class="mx-4 mb-2">
           <v-switch
             v-model="classExternality"
+            :disabled="loadingArtifacts"
             :label="classExternality ? 'External class' : 'Internal classes'"
             :loading="loadingArtifacts"
-            :disabled="loadingArtifacts"
             color="primary"
           ></v-switch>
         </v-row>
@@ -107,14 +114,14 @@
           <v-col cols="12">
             <v-row class="pa-4">
               <v-select
-                class="mx-2"
                 v-model="defaultLanguage"
+                :disabled="loadingArtifacts"
                 :items="languageItems"
                 :loading="loadingArtifacts"
-                :disabled="loadingArtifacts"
+                class="mx-2"
                 label="Language"
-                @change="getArtifactTree()"
                 outlined
+                @change="getArtifactTree()"
               ></v-select>
             </v-row>
 
@@ -123,21 +130,21 @@
             </v-row>
             <v-row class="mb-4">
               <v-progress-circular
-                class="ma-12"
                 v-if="loadingArtifacts"
                 :size="50"
                 :width="7"
+                class="ma-12"
                 color="persianGrey"
                 indeterminate
               ></v-progress-circular>
 
               <v-treeview
                 v-if="!loadingArtifacts"
-                selectable
                 v-model="artifactTree"
                 :items="artifactItems"
-                selection-type="independent"
                 return-object
+                selectable
+                selection-type="independent"
               >
                 <template v-slot:label="{ item }">
                   <v-container>
@@ -147,8 +154,8 @@
                           <p
                             class="my-2"
                             style="word-break: break-word"
-                            v-on="on"
                             v-bind="attrs"
+                            v-on="on"
                           >
                             <strong>{{ item.customName || item.name }} </strong>
                             <i class="text--persianGrey"
@@ -224,39 +231,39 @@
                       </v-tooltip>
 
                       <v-text-field
-                        class="mx-1"
-                        v-model="item.customName"
                         v-if="item === editItem"
+                        v-model="item.customName"
+                        class="mx-1"
                         dense
                         label="Custom Name"
                       ></v-text-field>
                       <v-icon
                         v-if="item !== editItem"
+                        class="ma-2"
                         small
                         @click="editArtifact(item)"
-                        class="ma-2"
-                        >mdi-pencil</v-icon
-                      >
+                        >mdi-pencil
+                      </v-icon>
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon
-                            @click="selectFramework(item)"
                             class="ma-2"
                             v-bind="attrs"
+                            @click="selectFramework(item)"
                             v-on="on"
-                            >mdi-keyboard-caps</v-icon
-                          >
+                            >mdi-keyboard-caps
+                          </v-icon>
                         </template>
                         <span>Extract as a Framework</span>
                       </v-tooltip>
 
                       <v-icon
                         v-if="item === editItem"
+                        class="ma-2"
                         small
                         @click="editItem = null"
-                        class="ma-2"
-                        >mdi-close</v-icon
-                      >
+                        >mdi-close
+                      </v-icon>
                     </v-row>
                     <v-row>
                       <p class="text-wrap">{{ toDisplayProperty(item) }}</p>
@@ -265,7 +272,7 @@
                 </template>
               </v-treeview>
 
-              <p class="pa-4" v-if="artifactItems.length === 0">
+              <p v-if="artifactItems.length === 0" class="pa-4">
                 <i>No object found for this language in the application.</i>
               </p>
             </v-row>
@@ -285,9 +292,9 @@
             </v-row>
             <v-row class="mx-4 mb-2">
               <v-select
-                class="mx-2"
                 v-model="selectedLocation"
                 :items="locationList"
+                class="mx-2"
                 item-text="text"
                 item-value="value"
                 label="Target"
@@ -307,20 +314,20 @@
               </h3>
             </v-row>
             <v-row
-              class="mx-4 mb-2"
               v-if="
                 selectedTarget === 'architecture' ||
                   selectedTarget === 'module' ||
                   (selectedTarget === 'level' &&
                     selectedLocation === 'together')
               "
+              class="mx-4 mb-2"
             >
               <v-text-field
-                class="mx-2"
                 v-model="primaryGroupName"
                 :label="selectedTarget"
-                outlined
+                class="mx-2"
                 clearable
+                outlined
               ></v-text-field>
             </v-row>
             <v-row
@@ -345,18 +352,18 @@
               </h3>
             </v-row>
             <v-row
-              class="mx-4 mb-2"
               v-if="
                 selectedTarget === 'architecture' &&
                   selectedLocation === 'together'
               "
+              class="mx-4 mb-2"
             >
               <v-text-field
-                class="mx-2"
                 v-model="secondaryGroupName"
+                class="mx-2"
+                clearable
                 label="subset"
                 outlined
-                clearable
               ></v-text-field>
             </v-row>
 
@@ -369,9 +376,9 @@
               <v-col cols="6" md="6">
                 <v-btn
                   color="persianGrey"
-                  width="100%"
                   dark
                   large
+                  width="100%"
                   @click="extractArtifacts()"
                 >
                   Extract selected nodes
@@ -396,8 +403,8 @@
 
     <!--  Framework Modal  -->
     <FrameworkDispatch
-      v-bind:model="showFrameworkModal"
       v-bind:artifact="selectedArtifact"
+      v-bind:model="showFrameworkModal"
       v-on:close="showFrameworkModal = false"
     >
     </FrameworkDispatch>
@@ -408,13 +415,14 @@
 import Vue from "vue";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
 import { Artifact } from "@/api/interface/artemis/Artifact";
-import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
+import { ApplicationInsights } from "@/api/interface/imaging/ApplicationInsights";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
 import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";
-import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
 import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
 import { ArtifactController } from "@/api/controllers/extensions/artemis/ArtifactController";
 import AgentController from "@/api/controllers/agents/AgentController";
+import ApplicationController from "@/api/controllers/imaging/ApplicationController";
+import Logger from "@/utils/Logger";
 
 export default Vue.extend({
   name: "BreakdownApplication",
@@ -581,7 +589,7 @@ export default Vue.extend({
      */
     async getApplicationAndLanguages() {
       try {
-        this.applicationItems = await ApplicationController.getListApplications();
+        this.applicationItems = await ApplicationController.getListApplication();
         this.defaultApplication = this.applicationItems[0];
       } catch (err) {
         console.error("Failed to get the list of the application", err);
@@ -629,18 +637,19 @@ export default Vue.extend({
         });
     },
 
-    getApplicationInsights() {
+    async getApplicationInsights() {
       this.loadingCandidates = true;
-      ApplicationController.getApplicationInsights(this.applicationName)
-        .then((res: ApplicationInsights) => {
-          this.insights = res;
-        })
-        .catch(err => {
-          console.error("Failed to get the insights of the application", err);
-        })
-        .finally(() => {
-          this.loadingCandidates = false;
-        });
+
+      try {
+        this.loadingCandidate = true;
+        this.insights = await ApplicationController.getApplicationInsights(
+          this.applicationName
+        );
+      } catch (e) {
+        Logger.error("Failed to get the insights of the application", e);
+      } finally {
+        this.loadingCandidate = false;
+      }
     },
 
     // Build the list this.treeExport
@@ -696,9 +705,9 @@ export default Vue.extend({
     },
 
     async refresh() {
-      this.getApplicationInsights();
+      await this.getApplicationInsights();
       await this.getApplicationAndLanguages();
-      this.getArtifactTree();
+      await this.getArtifactTree();
     }
   },
 

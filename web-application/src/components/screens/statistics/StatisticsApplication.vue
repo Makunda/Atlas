@@ -94,12 +94,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { ApplicationRecord } from "@/api/controllers/applications/ApplicationController";
-import {
-  StatisticResult,
-  StatisticsController
-} from "@/api/controllers/extensions/demeter/StatisticsController";
 import ErrorDialog from "@/components/error/ErrorDialog.vue";
 import StatisticTile from "@/components/screens/statistics/tiles/StatisticTile.vue";
+import { DemeterStatisticResult } from "@/api/interface/demeter/DemeterStatistic";
 
 export default Vue.extend({
   name: "StatisticsApplication",
@@ -115,9 +112,9 @@ export default Vue.extend({
     loading: false as boolean,
     numberOfApplication: 0 as number,
     applicationList: [] as ApplicationRecord[],
-    statisticsList: [] as StatisticResult[],
-    leftStats: [] as StatisticResult[],
-    rightStats: [] as StatisticResult[],
+    statisticsList: [] as DemeterStatisticResult[],
+    leftStats: [] as DemeterStatisticResult[],
+    rightStats: [] as DemeterStatisticResult[],
     errorState: null as unknown
   }),
 
@@ -129,25 +126,7 @@ export default Vue.extend({
       this.loading = true;
       console.log(`Loading statistics for application with name ${this.value}`);
 
-      StatisticsController.getStatisticResults("Configuration_1", this.value)
-        .then((res: StatisticResult[]) => {
-          this.loading = false;
-          console.log(
-            "Statistics were loaded for application with name : " + this.value
-          );
-          this.statisticsList = res;
-
-          const pivotPoint: number = Math.floor(res.length / 2);
-          this.leftStats = res.splice(0, pivotPoint);
-          this.rightStats = res;
-
-          this.generated = true;
-        })
-        .catch(err => {
-          this.loading = false;
-          this.errorState = { title: "Neo4j error", description: err };
-          console.error("Error trying to retrieve statistics", err);
-        });
+      // Todo implement statistics
     },
 
     launchGenerate: function() {

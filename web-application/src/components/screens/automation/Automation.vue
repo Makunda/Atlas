@@ -38,7 +38,6 @@
 
 <script lang="ts">
 import GroupingTile from "@/components/screens/automation/tiles/GroupingTile.vue";
-import TagViewer from "@/components/screens/enrichment/steps/TagViewer.vue";
 import UseCases from "@/components/dionysus/modules/UseCases.vue";
 import TagStudio from "@/components/dionysus/modules/TagStudio.vue";
 import Vue from "vue";
@@ -49,10 +48,8 @@ export default Vue.extend({
 
   components: {
     GroupingTile,
-    // DemeterGroupTile,
     TagStudio,
-    UseCases,
-    TagViewer
+    UseCases
   },
 
   computed: {

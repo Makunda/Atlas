@@ -1,5 +1,5 @@
 <template>
-  <v-card class="px-5 mb-5 pt-4" :disabled="disabledTile">
+  <v-card :disabled="disabledTile" class="px-5 mb-5 pt-4">
     <v-card-text>
       <v-row>
         <h5 class="text-h4 black--text">
@@ -24,45 +24,45 @@
       </v-row>
       <v-row class="d-flex flex-column">
         <v-switch
-          class="mx-5"
           v-model="onlineMode"
-          label="Online search : The framewok detection will parse Google, to discover frameworks. The frameworks detected are added to the configuration for future usages."
-          color="persianGrey"
-          :loading="loadingConfiguration || loadingOnlineMode"
           :disabled="loadingOnlineMode"
+          :loading="loadingConfiguration || loadingOnlineMode"
+          class="mx-5"
+          color="persianGrey"
+          hide-details
+          label="Online search : The framewok detection will parse Google, to discover frameworks. The frameworks detected are added to the configuration for future usages."
           @click="setOnlineMode()"
-          hide-details
         ></v-switch>
         <v-switch
-          class="mx-5"
           v-model="repositoryMode"
-          label="Repository search : Parse most populars repositories as Github, Maven, etc.. "
-          color="persianGrey"
-          :loading="loadingConfiguration || loadingRepositoryMode"
           :disabled="loadingRepositoryMode"
-          @click="setRepositoryMode()"
+          :loading="loadingConfiguration || loadingRepositoryMode"
+          class="mx-5"
+          color="persianGrey"
           hide-details
+          label="Repository search : Parse most populars repositories as Github, Maven, etc.. "
+          @click="setRepositoryMode()"
         ></v-switch>
         <v-switch
           class="mx-5"
-          label="Interaction detection : Discover your own internals frameworks by detecting the pieces of code used by multiple applications. (Coming soon)"
           color="persianGrey"
-          hide-details
           disabled
+          hide-details
+          label="Interaction detection : Discover your own internals frameworks by detecting the pieces of code used by multiple applications. (Coming soon)"
         ></v-switch>
         <v-checkbox
           class="mx-5"
-          label="Send the results of this detection by mail. (Configure mails addresses in the admistration panel) (Coming soon)"
           disabled
+          label="Send the results of this detection by mail. (Configure mails addresses in the admistration panel) (Coming soon)"
         ></v-checkbox>
       </v-row>
 
       <v-row class="mt-3">
         <p class="ml-5">
           <b
-            ><i
-              ><v-icon color="persianGrey">mdi-information</v-icon> The current
-              version of Artemis is :
+            ><i>
+              <v-icon color="persianGrey">mdi-information</v-icon>
+              The current version of Artemis is :
             </i></b
           >{{ version }}
         </p>
@@ -71,9 +71,9 @@
       <v-row class="mt-3">
         <p class="ml-5">
           <b
-            ><i
-              ><v-icon color="persianGrey">mdi-information</v-icon> The current
-              workspace of the framework detector is located under :
+            ><i>
+              <v-icon color="persianGrey">mdi-information</v-icon>
+              The current workspace of the framework detector is located under :
             </i></b
           >{{ workspacePath }}
           <br />
@@ -86,10 +86,10 @@
       </v-row>
       <v-row class="mt-5">
         <v-card
-          width="100%"
+          :loading="loadingCandidates"
           max-height="500px"
           style="overflow-y: scroll"
-          :loading="loadingCandidates"
+          width="100%"
         >
           <v-card-text>
             <v-container>
@@ -110,17 +110,17 @@
                     <strong>{{ can.application }}</strong>
                   </v-col>
                   <v-col
-                    class="mb-2"
                     v-for="(lang, y) in can.languages"
                     :key="y"
+                    class="mb-2"
                     cols="2"
                   >
                     <v-checkbox
                       v-model="selected[`option-${i}-${y}`]"
                       :label="lang"
                       color="indigo"
-                      value="indigo"
                       hide-details
+                      value="indigo"
                       @click="
                         toPreQueue(
                           can.application,
@@ -150,7 +150,7 @@
               </v-chip>
             </v-chip-group>
             <v-spacer></v-spacer>
-            <v-btn depressed color="primary" @click="sendtoQueue">
+            <v-btn color="primary" depressed @click="sendtoQueue">
               Send {{ preQueue.length }} applications to the queue
             </v-btn>
           </v-card-text>
@@ -164,9 +164,9 @@
           </v-row>
           <v-row class="mt-5 mb-8">
             <v-card
+              :loading="loadingOngoingQueue"
               min-height="80px"
               width="100%"
-              :loading="loadingOngoingQueue"
             >
               <v-card-text>
                 <v-chip-group active-class="primary--text" column>
@@ -188,9 +188,9 @@
           </v-row>
           <v-row class="mt-5 mb-8">
             <v-card
+              :loading="loadingOngoingQueue"
               min-height="80px"
               width="100%"
-              :loading="loadingOngoingQueue"
             >
               <v-card-text>
                 <v-chip-group active-class="primary--text" column>
@@ -210,12 +210,12 @@
           </v-row>
           <v-row class="mt-5 mb-8">
             <v-card
+              :loading="loadingOngoingQueue"
               min-height="80px"
               width="100%"
-              :loading="loadingOngoingQueue"
             >
               <v-card-text>
-                <v-btn small tile color="error" @click="flushQueue">
+                <v-btn color="error" small tile @click="flushQueue">
                   <v-icon left>
                     mdi-eraser-variant
                   </v-icon>
@@ -230,7 +230,7 @@
       <v-divider></v-divider>
     </v-card-text>
     <div v-if="diplayNotInstalled" id="NotInstalledArtemis">
-      <h2 class="ma-auto text--h2" id="Message">
+      <h2 id="Message" class="ma-auto text--h2">
         The Artemis extension is not installed on this instance.<br />
         Please install the extension from
         <a
@@ -253,12 +253,11 @@ import DetectionController from "@/api/controllers/extensions/artemis/DetectionC
 
 import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
 import { DetectionCandidate } from "@/api/interface/artemis/DetectionCandidate";
-import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.interface";
 import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
 import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
 import { Framework } from "@/api/interface/artemis/Framework";
-import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
-import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
+import ApplicationController from "@/api/controllers/imaging/ApplicationController";
+import Logger from "@/utils/Logger";
 
 export default Vue.extend({
   name: "ArtemisConsole",
@@ -535,18 +534,18 @@ export default Vue.extend({
         });
     },
 
-    getApplicationInsights() {
+    async getApplicationInsights() {
       this.loadingCandidates = true;
-      ApplicationController.getApplicationInsights(this.application)
-        .then((res: ApplicationInsights) => {
-          console.log("Insights :", res);
-        })
-        .catch(err => {
-          console.error("Failed to get the insights of the application", err);
-        })
-        .finally(() => {
-          this.loadingCandidates = false;
-        });
+      try {
+        this.loadingCandidate = true;
+        this.insights = await ApplicationController.getApplicationInsights(
+          this.application
+        );
+      } catch (e) {
+        Logger.error("Failed to get the insights of the application", e);
+      } finally {
+        this.loadingCandidate = false;
+      }
     },
 
     async loadQueue() {

@@ -1,6 +1,5 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { ApplicationInsights } from "@/api/interface/imaging/Application.interface";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export interface ApplicationRecord {
@@ -10,12 +9,15 @@ export interface ApplicationRecord {
 export class ApplicationController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
+  /**
+   * Get the list of application as string
+   */
   public static async getListApplications(): Promise<string[]> {
     const url =
       ApplicationController.API_BASE_URL + "/api/imaging/applications/all";
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<string[]>(url);
       let applications: string[] = [];
 
       if (res.status == 200) {
@@ -34,68 +36,6 @@ export class ApplicationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve application list.`,
-        error
-      );
-    }
-  }
-
-  /**
-   * Retrieve insights in an application ( Modules, Levels, Technologies supported by Artemis etc.. )
-   * @param application
-   */
-  public static async getApplicationInsights(
-    application: string
-  ): Promise<ApplicationInsights> {
-    const url =
-      ApplicationController.API_BASE_URL +
-      "/api/imaging/applications/insights/" +
-      application;
-
-    try {
-      const res = await ProxyAxios.get(url);
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as ApplicationInsights;
-      } else {
-        throw new Error(
-          `Failed to retrieve insights for application with name ${application}.`
-        );
-      }
-    } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve the insights.`,
-        error
-      );
-    }
-  }
-
-  /**
-   * Get the technology in one application
-   * @param application Name of the application
-   */
-  public static async getTechnologies(application: string): Promise<string[]> {
-    const url =
-      ApplicationController.API_BASE_URL +
-      "/api/imaging/applications/technologies/" +
-      application;
-
-    try {
-      const res = await ProxyAxios.get(url);
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as string[];
-        }
-      } else {
-        throw new Error(
-          `Failed to retrieve technologies in application with name ${application}.`
-        );
-      }
-    } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve the technologies.`,
         error
       );
     }

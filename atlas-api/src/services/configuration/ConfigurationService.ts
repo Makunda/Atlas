@@ -166,14 +166,12 @@ class ConfigurationService {
       const requestPythia = "CALL artemis.get.pythiaMode()";
 
       const results = await this.neo4jAl.execute(requestOnline);
-      if (!results.records || results.records.length == 0)
-        throw new Error("Results not correctly formatted for CALL artemis.get.onlineMode()");
+      if (!results.records || results.records.length == 0) throw new Error("Results not correctly formatted for CALL artemis.get.onlineMode()");
 
       if (Boolean(results.records[0].get(0))) return false;
 
       const results2 = await this.neo4jAl.execute(requestPythia);
-      if (!results2.records || results2.records.length == 0)
-        throw new Error("Results not correctly formatted for CALL artemis.get.pythiaMode()");
+      if (!results2.records || results2.records.length == 0) throw new Error("Results not correctly formatted for CALL artemis.get.pythiaMode()");
 
       if (Boolean(results2.records[0].get(0))) return false;
 

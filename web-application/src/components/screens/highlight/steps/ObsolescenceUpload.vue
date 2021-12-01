@@ -475,7 +475,8 @@ export default Vue.extend({
         sortable: false,
         value: "application"
       },
-      { text: "Pattern", value: "component" },
+      { text: "Component", value: "component" },
+      { text: "Patterns", value: "patterns" },
       { text: "Origin", value: "origin" },
       { text: "Description", value: "description" },
       { text: "Version", value: "version" },

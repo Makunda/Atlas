@@ -1,39 +1,22 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import Module from "@/api/interface/imaging/Module";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import ProxyAxios from "@/utils/axios/ProxyAxios";
+import Logger from "@/utils/Logger";
 
 export default class ModuleController {
-  private static API_BASE_URL = ApiComUtils.getUrl();
-
   /**
    * Retrieve the list of modules in the applications
    * @param application Name of the application
    */
   public static async getModules(application: string): Promise<Module[]> {
-    const url =
-      ModuleController.API_BASE_URL + `/api/imaging/modules/all/${application}`;
+    const url = `/api/imaging/modules/all/${application}`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<Module[]>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as Module[];
-        }
-      } else {
-        console.warn(
-          `Failed to retrieve module. Status (${res.status}). Message: ${res.data}`
-        );
-      }
-
-      return [];
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve modules.`,
-        error
-      );
+      Logger.error(`Failed to retrieve modules.`, error);
       throw error;
     }
   }
@@ -43,30 +26,15 @@ export default class ModuleController {
    * @param application Name of the application
    */
   public static async getHiddenModules(application: string): Promise<Module[]> {
-    const url =
-      ModuleController.API_BASE_URL +
-      `/api/imaging/modules/all/${application}/hidden`;
+    const url = `/api/imaging/modules/all/${application}/hidden`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<Module[]>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as Module[];
-        }
-      } else {
-        console.warn(
-          `Failed to retrieve hidden modules. Status (${res.status}). Message: ${res.data}`
-        );
-      }
-
-      return [];
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to retrieve modules.`,
-        error
-      );
+      Logger.error(`Failed to retrieve modules.`, error);
       throw error;
     }
   }
@@ -76,27 +44,16 @@ export default class ModuleController {
    * @param id Id of the module to hide
    */
   public static async hideById(id: number): Promise<boolean> {
-    const url = ModuleController.API_BASE_URL + `/api/imaging/modules/hide`;
+    const url = `/api/imaging/modules/hide`;
 
     try {
       const body = { id: id };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<boolean>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return true;
-        }
-      } else {
-        throw new Error(
-          `Failed to hide module ${id}. Status (${res.status}). Message: ${res.data}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to hide the module.`,
-        error
-      );
+      Logger.error(`Failed to hide the module.`, error);
       throw error;
     }
   }
@@ -106,28 +63,18 @@ export default class ModuleController {
    * @param id Id of the module to hide
    */
   public static async unHideById(id: number): Promise<boolean> {
-    const url = ModuleController.API_BASE_URL + `/api/imaging/modules/unhide`;
+    const url = `/api/imaging/modules/unhide`;
 
     try {
       const body = { id: id };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<boolean>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return true;
-        }
-      } else {
-        throw new Error(
-          `Failed to unhide module ${id}. Status (${res.status}). Message: ${res.data}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to unhide the module.`,
-        error
-      );
-      throw error;
+      const message = `Failed to unhide the module.`;
+      Logger.error(message, error);
+      throw new Error(message);
     }
   }
 
@@ -136,58 +83,40 @@ export default class ModuleController {
    * @param id Id of the module to hide
    */
   public static async deleteById(id: number): Promise<boolean> {
-    const url = ModuleController.API_BASE_URL + `/api/imaging/modules/delete`;
+    const url = `/api/imaging/modules/delete`;
 
     try {
       const body = { id: id };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<boolean>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return true;
-        }
-      } else {
-        throw new Error(
-          `Failed to delete module ${id}. Status (${res.status}). Message: ${res.data}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to delete the module.`,
-        error
-      );
-      throw error;
+      const message = " Failed to delete the module";
+      Logger.error(message, error);
+      throw new Error(message);
     }
   }
 
   /**
    * Update a module by its ID
    * @param id Id of the module to hide
+   * @param data Module data to update
    */
   public static async updateById(id: number, data: Module): Promise<Module> {
-    const url = ModuleController.API_BASE_URL + `/api/imaging/modules/update`;
+    const url = `/api/imaging/modules/update`;
 
     try {
       const body: any = data;
       body.id = id;
 
-      const res = await ProxyAxios.put(url, body);
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as Module | null;
-      } else {
-        throw new Error(
-          `Failed to update module ${id}. Status (${res.status}). Message: ${res.data}`
-        );
-      }
+      const res = await ProxyAxios.put<Module>(url, body);
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to update the module.`,
-        error
-      );
-      throw error;
+      const message = " Failed to update the module";
+      Logger.error(message, error);
+      throw new Error(message);
     }
   }
 
@@ -202,7 +131,7 @@ export default class ModuleController {
     idSource: number,
     idDest: number
   ): Promise<Module> {
-    const url = ModuleController.API_BASE_URL + `/api/imaging/modules/merge`;
+    const url = `/api/imaging/modules/merge`;
 
     try {
       const body: any = {
@@ -211,22 +140,14 @@ export default class ModuleController {
         idDest: idDest
       };
 
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<Module>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as Module | null;
-      } else {
-        throw new Error(
-          `Failed to merge the two modules. Status (${res.status}). Message: ${res.data}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(
-        `Failed to reach the API : ${url}. Failed to merge the module.`,
-        error
-      );
-      throw error;
+      const message = " Failed to merge the module";
+      Logger.error(message, error);
+      throw new Error(message);
     }
   }
 }

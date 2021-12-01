@@ -32,10 +32,10 @@
 </template>
 
 <script lang="ts">
-import { Level5Group } from "@/api/controllers/extensions/demeter/GroupingController";
 import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
 import GroupTile from "@/components/screens/grouping/tiles/GroupTile.vue";
 import Vue from "vue";
+import { Level5Group } from "@/api/interface/demeter/ApiLevel.interface";
 
 export default Vue.component("LevelViewer", {
   components: {

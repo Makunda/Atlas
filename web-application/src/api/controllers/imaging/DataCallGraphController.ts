@@ -1,12 +1,12 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import { DataCallGraph } from "@/api/interface/imaging/DataCallGraph";
 import DataCallGraphInsights from "../../interface/imaging/DataCallGraphInsights";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import ProxyAxios from "@/utils/axios/ProxyAxios";
+import Logger from "@/utils/Logger";
 
+/**
+ * Data Call graph for controller
+ */
 export default class DataCallGraphController {
-  private static API_BASE_URL = ApiComUtils.getUrl();
-
   /**
    * Unmask all the dataCallGraph in an application
    * @param application
@@ -14,23 +14,20 @@ export default class DataCallGraphController {
   public static async unMaskAllDataCallGraph(
     application: string
   ): Promise<number> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/unmask/all`;
+    const url = `/api/imaging/dataCallGraph/unmask/all`;
 
     try {
-      const res = await ProxyAxios.post(url, { application: application });
+      const res = await ProxyAxios.post<number>(url, {
+        application: application
+      });
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to unmask all dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(
+        `Failed to unmask all dataCallGraph in application ${application}.`,
+        error
+      );
       throw error;
     }
   }
@@ -42,23 +39,17 @@ export default class DataCallGraphController {
   public static async getNumberDataCallGraph(
     application: string
   ): Promise<number> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/number/unmasked/${application}`;
+    const url = `/api/imaging/dataCallGraph/number/unmasked/${application}`;
 
     try {
-      const res = await ProxyAxios.get(url);
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to number of dataCallGraph. Status (${res.status})`
-        );
-      }
+      const res = await ProxyAxios.get<number>(url);
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(
+        `Failed to get the number of dataCallGraph in application ${application}.`,
+        error
+      );
       throw error;
     }
   }
@@ -70,23 +61,18 @@ export default class DataCallGraphController {
   public static async getInsightsUnmaskedDataCallGraph(
     application: string
   ): Promise<DataCallGraphInsights> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/insights/unmasked/${application}`;
+    const url = `/api/imaging/dataCallGraph/insights/unmasked/${application}`;
 
     try {
-      const res = await ProxyAxios.get(url);
+      const res = await ProxyAxios.get<DataCallGraphInsights>(url);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as DataCallGraphInsights;
-      } else {
-        throw new Error(
-          `Failed to get dataCallGraph insights. Status (${res.status})`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to get dataCallGraph insights : ${url}.`, error);
+      console.error(
+        `Failed to get dataCallGraph insights in application ${application}.`,
+        error
+      );
       throw error;
     }
   }
@@ -98,23 +84,17 @@ export default class DataCallGraphController {
   public static async getNumberMaskedDataCallGraph(
     application: string
   ): Promise<number> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/number/masked/${application}`;
+    const url = `/api/imaging/dataCallGraph/number/masked/${application}`;
 
     try {
-      const res = await ProxyAxios.get(url);
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to number of masked dataCallGraph. Status (${res.status})`
-        );
-      }
+      const res = await ProxyAxios.get<number>(url);
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(
+        `Failed to get the number of masked dataCallGraph ${application}.`,
+        error
+      );
       throw error;
     }
   }
@@ -134,9 +114,7 @@ export default class DataCallGraphController {
     sort: string,
     sortDesc: string
   ): Promise<DataCallGraph[]> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/batch/masked/${application}`;
+    const url = `/api/imaging/dataCallGraph/batch/masked/${application}`;
 
     try {
       const body = {
@@ -146,20 +124,11 @@ export default class DataCallGraphController {
         sortDesc: sortDesc
       };
 
-      const res = await ProxyAxios.post(url, body);
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as DataCallGraph[];
-        }
-      } else {
-        throw new Error(
-          `Failed to a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
-        );
-      }
+      const res = await ProxyAxios.post<DataCallGraph[]>(url, body);
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to get the list of masked datacall graph.`, error);
       throw error;
     }
   }
@@ -181,9 +150,7 @@ export default class DataCallGraphController {
     sortDesc: string,
     filter?: Record<string, number>
   ): Promise<DataCallGraph[]> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/batch/unmasked/${application}`;
+    const url = `/api/imaging/dataCallGraph/batch/unmasked/${application}`;
 
     try {
       const body = {
@@ -194,20 +161,11 @@ export default class DataCallGraphController {
         filter: filter
       };
 
-      const res = await ProxyAxios.post(url, body);
-
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        if (Array.isArray(apiResponse.data)) {
-          return apiResponse.data as DataCallGraph[];
-        }
-      } else {
-        throw new Error(
-          `Failed to a batch of dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
-        );
-      }
+      const res = await ProxyAxios.post<DataCallGraph[]>(url, body);
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      console.error(`Failed to get the batch of Datacall graph.`, error);
       throw error;
     }
   }
@@ -221,26 +179,18 @@ export default class DataCallGraphController {
     application: string,
     dataCallGraphID: number
   ): Promise<DataCallGraph> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/mask/single`;
+    const url = `/api/imaging/dataCallGraph/mask/single`;
 
     try {
-      const res = await ProxyAxios.post(url, {
+      const res = await ProxyAxios.post<DataCallGraph>(url, {
         application: application,
         dataCallGraphID: dataCallGraphID
       });
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as DataCallGraph;
-      } else {
-        throw new Error(
-          `Failed to get a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      console.error(`Failed to get the list of data call graph.`, error);
       throw error;
     }
   }
@@ -256,9 +206,7 @@ export default class DataCallGraphController {
     dataCallGraphID: number,
     prefix: string
   ): Promise<DataCallGraph> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/pin/single`;
+    const url = `/api/imaging/dataCallGraph/pin/single`;
 
     try {
       const body: any = {
@@ -266,18 +214,12 @@ export default class DataCallGraphController {
         dataCallGraphID: dataCallGraphID,
         prefix: prefix
       };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<DataCallGraph>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as DataCallGraph;
-      } else {
-        throw new Error(
-          `Failed to pin a dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to pin datacall graph.`, error);
       throw error;
     }
   }
@@ -293,9 +235,7 @@ export default class DataCallGraphController {
     dataCallGraphID: number,
     prefix: string
   ): Promise<DataCallGraph> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/unpin/single`;
+    const url = `/api/imaging/dataCallGraph/unpin/single`;
 
     try {
       const body: any = {
@@ -303,18 +243,12 @@ export default class DataCallGraphController {
         dataCallGraphID: dataCallGraphID,
         prefix: prefix
       };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<DataCallGraph>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as DataCallGraph;
-      } else {
-        throw new Error(
-          `Failed to unpin a dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to unpin a datacall graph`, error);
       throw error;
     }
   }
@@ -330,9 +264,7 @@ export default class DataCallGraphController {
     dataCallGraphID: number,
     name: string
   ): Promise<DataCallGraph> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/rename/single`;
+    const url = `/api/imaging/dataCallGraph/rename/single`;
 
     try {
       const body: any = {
@@ -340,18 +272,12 @@ export default class DataCallGraphController {
         dataCallGraphID: dataCallGraphID,
         dataCallGraphName: name
       };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<DataCallGraph>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as DataCallGraph;
-      } else {
-        throw new Error(
-          `Failed to rename a dataCallGraph. Status (${res.status}). Error: ${res.data.message}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to rename a datacall graph.`, error);
       throw error;
     }
   }
@@ -365,26 +291,18 @@ export default class DataCallGraphController {
     application: string,
     filter: Record<string, unknown>
   ): Promise<DataCallGraph> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/mask/filter`;
+    const url = `/api/imaging/dataCallGraph/mask/filter`;
 
     try {
-      const res = await ProxyAxios.post(url, {
+      const res = await ProxyAxios.post<DataCallGraph>(url, {
         application: application,
         filter: filter
       });
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as DataCallGraph;
-      } else {
-        throw new Error(
-          `Failed to mask dataCallGraph with filter. Status (${res.status}). Error: ${res.data.message}`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to mask datacall graph with filter.`, error);
       throw error;
     }
   }
@@ -398,26 +316,18 @@ export default class DataCallGraphController {
     application: string,
     dataCallGraphID: number
   ): Promise<DataCallGraph> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/unmask/single`;
+    const url = `/api/imaging/dataCallGraph/unmask/single`;
 
     try {
-      const res = await ProxyAxios.post(url, {
+      const res = await ProxyAxios.post<DataCallGraph>(url, {
         application: application,
         dataCallGraphID: dataCallGraphID
       });
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return apiResponse.data as DataCallGraph;
-      } else {
-        throw new Error(
-          `Failed to a batch of masked dataCallGraph. Status (${res.status}). Error: ${res.data.message}.`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to unmask a datacall graph.`, error);
       throw error;
     }
   }
@@ -429,23 +339,17 @@ export default class DataCallGraphController {
   public static async unmaskAllDataCallGraph(
     application: string
   ): Promise<boolean> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/unmask/all`;
+    const url = `/api/imaging/dataCallGraph/unmask/all`;
 
     try {
-      const res = await ProxyAxios.post(url, { application: application });
+      const res = await ProxyAxios.post<boolean>(url, {
+        application: application
+      });
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Boolean(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to un-mask all dataCallGraph. Status (${res.status})`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to unmask all data call graph.`, error);
       throw error;
     }
   }
@@ -459,27 +363,19 @@ export default class DataCallGraphController {
     application: string,
     limit: number
   ): Promise<number> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/mask/byCount`;
+    const url = `/api/imaging/dataCallGraph/mask/byCount`;
 
     try {
       const body = {
         application: application,
         limit: limit
       };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<number>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to mask dataCallGraph by Number of objects. Status (${res.status})`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to mask datacall graph using a count filter`, error);
       throw error;
     }
   }
@@ -493,27 +389,22 @@ export default class DataCallGraphController {
     application: string,
     limit: number
   ): Promise<number> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/mask/byTechnologies`;
+    const url = `/api/imaging/dataCallGraph/mask/byTechnologies`;
 
     try {
       const body = {
         application: application,
         limit: limit
       };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<number>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to mask dataCallGraph by Number of Technology. Status (${res.status}). Error: ${res.data.message}.`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(
+        `Failed to mask datacall graph using a technology filter`,
+        error
+      );
       throw error;
     }
   }
@@ -527,27 +418,19 @@ export default class DataCallGraphController {
     application: string,
     terms: string[]
   ): Promise<number> {
-    const url =
-      DataCallGraphController.API_BASE_URL +
-      `/api/imaging/dataCallGraph/mask/byTerms`;
+    const url = `/api/imaging/dataCallGraph/mask/byTerms`;
 
     try {
       const body = {
         application: application,
         terms: terms
       };
-      const res = await ProxyAxios.post(url, body);
+      const res = await ProxyAxios.post<number>(url, body);
 
-      if (res.status == 200) {
-        const apiResponse: ApiResponse = res.data;
-        return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to mask dataCallGraph by terms. Status (${res.status})`
-        );
-      }
+      if (res.isError()) throw res.getErrorsAsString();
+      return res.getData();
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to mask datacall graph using a term filter.`, error);
       throw error;
     }
   }

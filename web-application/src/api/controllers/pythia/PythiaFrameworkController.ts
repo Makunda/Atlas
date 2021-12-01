@@ -1,7 +1,6 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import ApiResponseImpl from "@/api/utils/ApiResponse";
-import ProxyAxios from "@/utils/ProxyAxios";
-import PythiaUtilController from "./PythiaUtilController";
+import ProxyAxios from "@/utils/axios/ProxyAxios";
+import Logger from "@/utils/Logger";
 
 /**
  * Pythia Framework Controller
@@ -17,16 +16,12 @@ export default class PythiaFrameworkController {
     const url =
       PythiaFrameworkController.API_BASE_URL + "/authentication/status";
     try {
-      const response = await ProxyAxios.get(url);
-      const apiResponse = new ApiResponseImpl<string>(response);
+      const response = await ProxyAxios.get<string>(url);
 
-      if (apiResponse.isSuccess()) {
-        return apiResponse.getData();
-      } else {
-        throw apiResponse.getErrorsAsString();
-      }
+      if (response.isError()) throw response.getErrorsAsString();
+      return response.getData();
     } catch (error) {
-      console.error(`Failed to get Pythia Authentication Status.`, error);
+      Logger.error(`Failed to get Pythia Authentication Status.`, error);
       throw error;
     }
   }

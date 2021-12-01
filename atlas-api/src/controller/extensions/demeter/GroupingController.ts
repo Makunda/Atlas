@@ -16,7 +16,7 @@ class GroupingController {
    */
 
   // Get Module candidates
-  public getCandidateModulesApplication = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getCandidateModulesApplication = async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
     await param("name", "Must specify an application name").isString().run(req);
 
     const errors = validationResult(req);
@@ -37,7 +37,7 @@ class GroupingController {
   };
 
   // Get Demeter Modules
-  public getDemeterModulesApplication = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getDemeterModulesApplication = async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
     await param("name", "Must specify an application name").isString().run(req);
 
     const errors = validationResult(req);

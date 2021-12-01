@@ -15,6 +15,20 @@ export default class CookieManager {
   }
 
   /**
+   * Get the authentication cookie
+   */
+  public static getAuthCookie(): string {
+    return Vue.$cookies.get(Cookie.AUTH_COOKIE);
+  }
+
+  /**
+   * Check of the authorization cookie exists
+   */
+  public static isSetAuthCookie(): boolean {
+    return Vue.$cookies.isKey(Cookie.AUTH_COOKIE);
+  }
+
+  /**
    * Check if an authenticated cookie has been set
    * @returns True if an authentication cookie has been setup
    */

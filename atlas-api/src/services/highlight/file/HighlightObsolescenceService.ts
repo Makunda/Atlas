@@ -5,6 +5,10 @@ import HighlightOssService from "./HighlightOssService";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
 import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
+import BinderFactory from "../technology/binders/BinderFactory";
+import { getHighlightLanguage } from "../technology/HighlightLanguage";
+import PatternExtractorFactory from "../technology/pattern/PatternExtractorFactory";
+import BinderFactor from "../technology/binders/BinderFactory";
 
 export default class HighlightObsolescenceService extends HighlightOssService {
   /**
@@ -17,14 +21,17 @@ export default class HighlightObsolescenceService extends HighlightOssService {
 
     try {
       const request = `MATCH (o:Object:\`${application}\`)-[r]-(ot:Object) 
-      WHERE o.FullName CONTAINS $root 
+      WHERE ANY ( x in $Patterns WHERE o.FullName CONTAINS x )  
       AND NOT ot.FullName CONTAINS $root
       RETURN DISTINCT TYPE(r) as type, COUNT(DISTINCT r) as num_rel`;
 
       // Filter by techno
-      const pattern = this.patternByTechnology(recommendation);
+      const language = getHighlightLanguage(recommendation.technology);
+      const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+
+      const patterns = patternExtractor.getPatterns(recommendation.component);
       const params: any = {
-        root: pattern,
+        Patterns: patterns,
       };
 
       const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(request, params);
@@ -64,7 +71,7 @@ export default class HighlightObsolescenceService extends HighlightOssService {
 
     // Verify that the file can be processed
     let obsolescence: OssRecommendation[] = [];
-    const tabs = workbook.worksheets.map((x) => x.name);
+    const tabs = workbook.worksheets.map(x => x.name);
     if (tabs.includes(HighlightObsolescenceService.PORTFOLIO_LEVEL_TAB)) {
       obsolescence = this.treatPortfolioLevel(workbook);
     } else if (tabs.includes(HighlightObsolescenceService.APPLICATION_LEVEL_TAB)) {
@@ -72,7 +79,7 @@ export default class HighlightObsolescenceService extends HighlightOssService {
     } else {
       // No worksheet has been identified, so throw an error
       throw new Error(
-        `Excel report is not correct. Failed to find '${HighlightOssService.APPLICATION_LEVEL_TAB}' or '${HighlightOssService.PORTFOLIO_LEVEL_TAB}'.`
+        `Excel report is not correct. Failed to find '${HighlightOssService.APPLICATION_LEVEL_TAB}' or '${HighlightOssService.PORTFOLIO_LEVEL_TAB}'.`,
       );
     }
 
@@ -98,24 +105,22 @@ export default class HighlightObsolescenceService extends HighlightOssService {
     return months <= 0 ? 0 : months;
   }
 
+  /**
+   * Create a tag for Open source safety
+   * @param blocker Blocker to apply
+   * @returns
+   */
   protected async createTagContains(blocker: OssRecommendation): Promise<boolean> {
-    const req = `MATCH (o:\`${blocker.application}\`:Object)
-    WHERE o.FullName CONTAINS $Pattern
-    SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE [ x in o.Tags WHERE NOT x=$tag ] + $tag END
-    return o as node;`;
+    const language = getHighlightLanguage(blocker.technology);
+    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+    const binderFactory = BinderFactor.getBinder(language, blocker.application);
 
-    // Filter by techno
-    const pattern = this.patternByTechnology(blocker);
-    const tag = `Obsolescence: ${this.getYearsAndMonthsAsString(new Date(blocker.release))} - ${pattern}`;
+    const patterns = patternExtractor.getPatterns(blocker.component);
+    const name = patternExtractor.getName(blocker.component);
 
-    const params: any = {
-      Pattern: blocker.component,
-      tag: tag,
-    };
+    const tag = `Obsolescence: ${this.getYearsAndMonthsAsString(new Date(blocker.release))} - ${name}`;
 
-    const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
-
-    return res && res.records.length > 0;
+    return binderFactory.createTag(patterns, tag);
   }
 
   /**
@@ -141,24 +146,13 @@ export default class HighlightObsolescenceService extends HighlightOssService {
    * @returns True if the document creation
    */
   protected async createDocumentContains(blocker: OssRecommendation): Promise<boolean> {
-    const req = `MATCH (o:\`${blocker.application}\`:Object)
-    WHERE o.FullName CONTAINS $Pattern
-    return ID(o) as idNode;`;
+    const language = getHighlightLanguage(blocker.technology);
+    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+    const binderFactory = BinderFactor.getBinder(language, blocker.application);
 
-    // Filter by technos
-
-    const pattern = this.patternByTechnology(blocker);
-    const params: any = { Pattern: pattern };
-    const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
-
-    // Get nodes ID
-    if (!res || res.records.length == 0) return false;
-
-    const idNodes = res.records.map((x) => int(x.get("idNode")).toNumber());
-
-    // Create the document
-    const title = `Obsolescence ${this.getYearsAndMonthsAsString(new Date(blocker.release))} ${pattern}`;
-
+    const basedTitle = patternExtractor.getName(blocker.component);
+    const title = `Obsolescence ${this.getYearsAndMonthsAsString(new Date(blocker.release))} ${basedTitle}`;
+    const patterns = patternExtractor.getPatterns(blocker.component);
     const gap = this.getYearsAndMonthsAsString(new Date(blocker.release));
 
     let description = "";
@@ -173,17 +167,7 @@ export default class HighlightObsolescenceService extends HighlightOssService {
       You should consider updating it to the latest version ( ${blocker.lastRelease} ) it may introduce a gap of ${gap}.
       `;
     }
-    
-    try {
-      const doc = new ObjectDocumentNode(blocker.application, title, description, idNodes);
-      await doc.create();
 
-      return true;
-    } catch (error) {
-      logger.error("Failed to create a Document.", error);
-      return false;
-    }
-
-    
+    return binderFactory.createDocument(patterns, title, description);
   }
 }
