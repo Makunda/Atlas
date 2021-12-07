@@ -19,7 +19,10 @@ class DemeterController {
       res.status(200).json({ data: version, message: "version" });
     } catch (error) {
       this.logger.error("Failed to get the version of demeter.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: "Failed to get the version of demeter." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal error"],
+        message: "Failed to get the version of demeter.",
+      } as ApiResponse);
     }
   };
 }

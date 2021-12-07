@@ -23,11 +23,11 @@ class ArtemisRoute implements Route {
     }
 
     const storage = multer.diskStorage({
-      destination: function (req: Request, file: any, cb: CallbackFunction) {
+      destination: function(req: Request, file: any, cb: CallbackFunction) {
         cb(null, tempDirectory);
       },
 
-      filename: function (req: Request, file: any, cb: CallbackFunction) {
+      filename: function(req: Request, file: any, cb: CallbackFunction) {
         cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
       },
     });
@@ -42,7 +42,7 @@ class ArtemisRoute implements Route {
     this.router.post(
       `${this.path}/import/frameworks`,
       this.multerUpload.single("file"),
-      this.artemisController.importFrameworks
+      this.artemisController.importFrameworks,
     );
 
     /** Artemis mode */

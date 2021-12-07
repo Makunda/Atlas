@@ -59,7 +59,7 @@ export default abstract class AAgent {
     }
 
     const that = this;
-    setTimeout(function () {
+    setTimeout(function() {
       that.run();
     }, this.getDelay());
   }

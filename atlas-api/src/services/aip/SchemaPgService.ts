@@ -15,7 +15,7 @@ export default class SchemaPgService {
     const pool: string = PoolManager.openPool(configuration);
     const row = await PoolManager.queryPool(
       pool,
-      "select nspname as schema_name from pg_catalog.pg_namespace WHERE NOT nspname LIKE 'pg_%';"
+      "select nspname as schema_name from pg_catalog.pg_namespace WHERE NOT nspname LIKE 'pg_%';",
     );
     const results = row.map((x) => String(x.schema_name));
     return results;

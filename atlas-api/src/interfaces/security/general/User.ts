@@ -1,9 +1,8 @@
-
 /**
- * User interface 
+ * User interface
  */
 export default interface User {
-    username: string;
-    password: string;
-    role: string;
+  username: string;
+  password: string;
+  role: string;
 }

@@ -4,56 +4,11 @@ import { logger } from "@shared/Logger";
 import HighlightOssService from "./HighlightOssService";
 import Excel from "exceljs";
 import { int, QueryResult } from "neo4j-driver";
-import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
-import BinderFactory from "../technology/binders/BinderFactory";
+import BinderFactor from "../technology/binders/BinderFactory";
 import { getHighlightLanguage } from "../technology/HighlightLanguage";
 import PatternExtractorFactory from "../technology/pattern/PatternExtractorFactory";
-import BinderFactor from "../technology/binders/BinderFactory";
 
 export default class HighlightObsolescenceService extends HighlightOssService {
-  /**
-   * Treat and enrich a list of recommendations
-   * @param recommendation List of recommendations
-   * @returns Enriched recommendations with the number of links
-   */
-  private async getInsights(recommendation: OssRecommendation, application: string): Promise<OssRecommendation> {
-    recommendation.integration = [];
-
-    try {
-      const request = `MATCH (o:Object:\`${application}\`)-[r]-(ot:Object) 
-      WHERE ANY ( x in $Patterns WHERE o.FullName CONTAINS x )  
-      AND NOT ot.FullName CONTAINS $root
-      RETURN DISTINCT TYPE(r) as type, COUNT(DISTINCT r) as num_rel`;
-
-      // Filter by techno
-      const language = getHighlightLanguage(recommendation.technology);
-      const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
-
-      const patterns = patternExtractor.getPatterns(recommendation.component);
-      const params: any = {
-        Patterns: patterns,
-      };
-
-      const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(request, params);
-
-      let relType = "";
-      let count = 0;
-      for (const record of res.records) {
-        relType = String(record.get("type"));
-        count = int(record.get("num_rel")).toNumber();
-
-        recommendation.integration.push({
-          type: relType,
-          count: count,
-        });
-      }
-    } catch (err) {
-      logger.error(`Failed to get the insights for the recommendation with root : ${recommendation.component}`);
-    }
-
-    return recommendation;
-  }
-
   /**
    * Process the excel file and create recommendation
    * @param application Name of the application
@@ -169,5 +124,48 @@ export default class HighlightObsolescenceService extends HighlightOssService {
     }
 
     return binderFactory.createDocument(patterns, title, description);
+  }
+
+  /**
+   * Treat and enrich a list of recommendations
+   * @param recommendation List of recommendations
+   * @returns Enriched recommendations with the number of links
+   */
+  private async getInsights(recommendation: OssRecommendation, application: string): Promise<OssRecommendation> {
+    recommendation.integration = [];
+
+    try {
+      const request = `MATCH (o:Object:\`${application}\`)-[r]-(ot:Object) 
+      WHERE ANY ( x in $Patterns WHERE o.FullName CONTAINS x )  
+      AND NOT ot.FullName CONTAINS $root
+      RETURN DISTINCT TYPE(r) as type, COUNT(DISTINCT r) as num_rel`;
+
+      // Filter by techno
+      const language = getHighlightLanguage(recommendation.technology);
+      const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+
+      const patterns = patternExtractor.getPatterns(recommendation.component);
+      const params: any = {
+        Patterns: patterns,
+      };
+
+      const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(request, params);
+
+      let relType = "";
+      let count = 0;
+      for (const record of res.records) {
+        relType = String(record.get("type"));
+        count = int(record.get("num_rel")).toNumber();
+
+        recommendation.integration.push({
+          type: relType,
+          count: count,
+        });
+      }
+    } catch (err) {
+      logger.error(`Failed to get the insights for the recommendation with root : ${recommendation.component}`);
+    }
+
+    return recommendation;
   }
 }

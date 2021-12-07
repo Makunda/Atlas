@@ -1,5 +1,7 @@
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { wrapLogger } from "@shared/Logger";
+import BackupNodeImpl from "@entities/extensions/demeter/BackupNodeImpl";
+import BackupNode from "@interfaces/extensions/demeter/BackupNode";
 
 /**
  * Communication between Atlas and Demeter / backup module
@@ -11,11 +13,25 @@ export default class BackupService {
   /**
    * Backup an application with a specific name
    * @param application Name of the application
-   * @param save Name of the save
+   * @param name Name of the backup
+   * @param description Description
+   * @param timestamp Timestamp as a string
+   * @param picture Picture
    */
-  public async backupApplication(application: string, save: string): Promise<void> {
-    const req = "CALL demeter.backup.application($appName, $save);";
-    const params = { appName: application, save: save };
+  public async backupApplication(application: string,
+                                 name: string,
+                                 description: string,
+                                 timestamp: number,
+                                 picture: string,
+  ): Promise<void> {
+    const req = "CALL demeter.backup.application($application, $name, $description, $timestamp, $picture);";
+    const params = {
+      application: application,
+      name: name,
+      description: description,
+      timestamp: timestamp,
+      picture: picture
+    };
 
     try {
       await this.neo4jAl.execute(req, params);
@@ -47,9 +63,9 @@ export default class BackupService {
    * @param application Name of the application
    * @param save Name of the save
    */
-  public async deleteBackup(application: string, save: string): Promise<void> {
-    const req = "CALL demeter.backup.delete($appName, $save);";
-    const params = { appName: application, save: save };
+  public async deleteBackup(application: string, id: number): Promise<void> {
+    const req = "CALL demeter.backup.delete($appName, $id);";
+    const params = { appName: application, id: id };
 
     try {
       await this.neo4jAl.execute(req, params);
@@ -63,16 +79,16 @@ export default class BackupService {
    * Get the list of save for an application
    * @param application Name of the application
    */
-  public async getSaveList(application: string): Promise<string[]> {
+  public async getSaveList(application: string): Promise<BackupNode[]> {
     const req = "CALL demeter.backup.get.list($appName);";
     const params = { appName: application };
 
-    const returnList: string[] = [];
+    const returnList: BackupNode[] = [];
 
     try {
       const results = await this.neo4jAl.execute(req, params);
       for (const record of results.records) {
-        returnList.push(String(record.get(0)));
+        returnList.push(BackupNodeImpl.fromRecord(record));
       }
 
       return returnList;

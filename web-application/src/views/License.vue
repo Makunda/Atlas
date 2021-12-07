@@ -7,8 +7,8 @@
           class="mt-3 mb-8 d-flex flex-column justify-center text-center"
         >
           <h2>
-            <v-icon large class="pr-2">mdi-file-key-outline</v-icon>Enter a
-            license
+            <v-icon class="pr-2" large>mdi-file-key-outline</v-icon>
+            Enter a license
           </h2>
           <p class="subtitle-2">Ping HJO in case you don't have a license</p>
         </v-card-title>
@@ -23,10 +23,10 @@
             </v-row>
             <v-row>
               <v-textarea
-                outlined
-                name="input-7-4"
-                label="License"
                 v-model="license"
+                label="License"
+                name="input-7-4"
+                outlined
               ></v-textarea>
             </v-row>
             <v-row v-if="errorMessage" class="red--text">
@@ -36,7 +36,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="save" :loading="loadingLicense">
+          <v-btn :loading="loadingLicense" color="primary" text @click="save">
             Apply new license
           </v-btn>
         </v-card-actions>
@@ -49,10 +49,7 @@
 import { Vue } from "vue-property-decorator";
 
 import { LicenseController } from "@/api/controllers/license/LicenseController";
-import {
-  LicenseInterface,
-  LicenseStatus
-} from "@/api/interface/license/License.interface";
+import { License, LicenseStatus } from "@/api/interface/license/License";
 
 export default Vue.extend({
   name: "License",
@@ -68,7 +65,7 @@ export default Vue.extend({
     async save() {
       try {
         this.loadingLicense = true;
-        const results: LicenseInterface = await LicenseController.applyLicense(
+        const results: License = await LicenseController.applyLicense(
           this.license
         );
         if (results.status == LicenseStatus.NOT_VALID) {

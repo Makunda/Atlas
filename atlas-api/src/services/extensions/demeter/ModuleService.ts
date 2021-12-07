@@ -5,7 +5,7 @@ import HttpException from "@exceptions/HttpException";
 import IModule from "@interfaces/imaging/Module";
 import TagService from "@services/configuration/TagService";
 import { logger } from "@shared/Logger";
-import { QueryResult, Node, int } from "neo4j-driver";
+import { int, Node, QueryResult } from "neo4j-driver";
 
 /**
  * Class managing the different action linked to the Modules

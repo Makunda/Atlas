@@ -1,9 +1,9 @@
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import { DetectionResultDTO } from "@/api/dto/ApiArtemis.dto";
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { DetectionCandidate } from "@/api/interface/artemis/DetectionCandidate";
-import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
-import DetectionInterface from "@/api/interface/artemis/Detection";
+import { DetectionCandidate } from "@/api/interface/extensions/artemis/DetectionCandidate";
+import { DetectionResult } from "@/api/interface/extensions/artemis/detectionResult.interface";
+import DetectionInterface from "@/api/interface/extensions/artemis/Detection";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export default class DetectionController {

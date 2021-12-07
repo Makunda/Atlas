@@ -14,7 +14,7 @@
       </p>
     </v-row>
     <v-row class="mx-10 my-8">
-      <v-toolbar dark color="#1D5D6B">
+      <v-toolbar color="#1D5D6B" dark>
         <v-toolbar-title>Popular grouping operations</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
@@ -22,15 +22,15 @@
           cache-items
           class="mx-4"
           flat
-          hide-no-data
           hide-details
+          hide-no-data
           label="Filter the operations.."
           solo-inverted
         ></v-autocomplete>
       </v-toolbar>
     </v-row>
     <v-row class="mx-10">
-      <v-slide-group class="pa-4" active-class="success" show-arrows>
+      <v-slide-group active-class="success" class="pa-4" show-arrows>
         <v-slide-item
           v-for="(n, index) in filteredPopularOperations"
           :key="index"
@@ -40,7 +40,7 @@
     </v-row>
 
     <v-row class="mx-10 my-8">
-      <LevelViewer> </LevelViewer>
+      <LevelViewer></LevelViewer>
     </v-row>
   </v-container>
 </template>
@@ -48,7 +48,7 @@
 <script lang="ts">
 import Vue from "vue";
 import LevelViewer from "@/components/screens/grouping/components/LevelViewer.vue";
-import GroupAction from "@/api/interface/demeter/GroupAction";
+import GroupAction from "@/api/interface/extensions/demeter/GroupAction";
 
 export default Vue.extend({
   name: "GroupingApplication",

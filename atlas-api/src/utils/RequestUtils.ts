@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Request, Response } from "express";
 import User from "@interfaces/security/general/User";
 import Role from "@interfaces/security/general/Role";
 import LocalLoginService from "@services/security/login/LocalLoginService";

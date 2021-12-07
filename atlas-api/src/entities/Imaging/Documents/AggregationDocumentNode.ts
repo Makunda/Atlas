@@ -8,34 +8,9 @@ import DocumentNode, { DocumentType } from "./DocumentNode";
 export default class AggregationDocumentNode extends DocumentNode {
   private aggregationName: string;
 
-  /**
-   * Convert Neo4j ID to Level Name
-   * @param nodesId Node ID to convert to Level 5 Name
-   */
-  private async convertIDNodeToName(nodesId: number[]): Promise<string[]> {
-    // Labels
-    const aggregationLabel = AggregationService.getAggregationLabel();
-
-    const idList = [];
-    const req = `MATCH (a:${aggregationLabel})-[:HAS]->(o:\`${this.application}\`) 
-      WHERE a.Name=$aggregationName AND ID(o)=$idNode AND EXISTS(o.Name)  
-      RETURN o.Name as name`;
-
-    let results;
-    for (const id of nodesId) {
-      try {
-        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
-          idNode: id,
-          aggregationName: this.aggregationName,
-        });
-
-        if (results && results.records.length > 0) idList.push(String(results.records[0].get("name")));
-      } catch (ignored) {
-        // ignored errors
-      }
-    }
-
-    return idList;
+  constructor(application: string, aggregationName: string, title: string, description: string, nodes: number[]) {
+    super(application, title, description, nodes, DocumentType.LEVEL);
+    this.aggregationName = aggregationName;
   }
 
   /**
@@ -87,11 +62,39 @@ export default class AggregationDocumentNode extends DocumentNode {
       `MATCH (a:${aggregationLabel}:\`${this.application}\`)-[:HAS]->(o:\`${this.application}\`) WHERE a.Name=$aggregationName ` +
       "MERGE (l)-[:ContainsDocument]->(o)";
 
-    await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqLink, { idNode: idDoc, aggregationName: this.aggregationName });
+    await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqLink, {
+      idNode: idDoc,
+      aggregationName: this.aggregationName,
+    });
   }
 
-  constructor(application: string, aggregationName: string, title: string, description: string, nodes: number[]) {
-    super(application, title, description, nodes, DocumentType.LEVEL);
-    this.aggregationName = aggregationName;
+  /**
+   * Convert Neo4j ID to Level Name
+   * @param nodesId Node ID to convert to Level 5 Name
+   */
+  private async convertIDNodeToName(nodesId: number[]): Promise<string[]> {
+    // Labels
+    const aggregationLabel = AggregationService.getAggregationLabel();
+
+    const idList = [];
+    const req = `MATCH (a:${aggregationLabel})-[:HAS]->(o:\`${this.application}\`) 
+      WHERE a.Name=$aggregationName AND ID(o)=$idNode AND EXISTS(o.Name)  
+      RETURN o.Name as name`;
+
+    let results;
+    for (const id of nodesId) {
+      try {
+        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
+          idNode: id,
+          aggregationName: this.aggregationName,
+        });
+
+        if (results && results.records.length > 0) idList.push(String(results.records[0].get("name")));
+      } catch (ignored) {
+        // ignored errors
+      }
+    }
+
+    return idList;
   }
 }

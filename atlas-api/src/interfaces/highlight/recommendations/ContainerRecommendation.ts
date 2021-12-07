@@ -1,5 +1,5 @@
 /**
- * Recommendation for container 
+ * Recommendation for container
  */
 export default interface ContainerRecommendation {
   application: string;

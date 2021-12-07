@@ -1,5 +1,4 @@
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import LevelService from "@services/imaging/LevelService";
 import { logger } from "@shared/Logger";
 import { int } from "neo4j-driver";
 
@@ -100,7 +99,10 @@ export default class AggregationService {
 
       // Refresh the aggregation
       const refreshReq = "CALL demeter.api.refresh.aggregation($application, $idAggregation);";
-      await AggregationService.NEO4JAL.executeWithParameters(refreshReq, { application: application, idAggregation: aggregationId });
+      await AggregationService.NEO4JAL.executeWithParameters(refreshReq, {
+        application: application,
+        idAggregation: aggregationId,
+      });
     } catch (err) {
       logger.error("Failed to duplicate Cast Taxonomy to an aggregation.", err);
       throw err;

@@ -12,6 +12,10 @@ import { body, validationResult } from "express-validator";
 export default class PythiaController {
   private pythia: Pythia;
 
+  public constructor() {
+    this.pythia = new Pythia();
+  }
+
   /**
    * Create a new Token for Pythia
    */
@@ -49,7 +53,10 @@ export default class PythiaController {
       res.status(HttpCode.SUCCESS).send({ data: url, message: "Pythia URL" });
     } catch (error) {
       logger.error("Failed to get Pythia URL.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to retrieve Pythia URL." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        error: ["Internal error"],
+        message: "Failed to retrieve Pythia URL.",
+      } as ApiResponse);
     }
   };
 
@@ -62,7 +69,10 @@ export default class PythiaController {
       res.status(HttpCode.SUCCESS).send({ data: tokenSet, message: "Pythia Token Status" });
     } catch (error) {
       logger.error("Failed to get Pythia Token Status.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to retrieve Pythia Token Status." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        error: ["Internal error"],
+        message: "Failed to retrieve Pythia Token Status.",
+      } as ApiResponse);
     }
   };
 
@@ -75,7 +85,10 @@ export default class PythiaController {
       res.status(HttpCode.SUCCESS).send({ data: status.toString(), message: "Pythia Status" });
     } catch (error) {
       logger.error("Failed to get Pythia Status.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to retrieve Pythia Status." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        error: ["Internal error"],
+        message: "Failed to retrieve Pythia Status.",
+      } as ApiResponse);
     }
   };
 
@@ -90,11 +103,10 @@ export default class PythiaController {
       logger.error("Failed to get Pythia Authentication Status.", error);
       res
         .status(HttpCode.INTERNAL_ERROR)
-        .send({ error: ["Internal error"], message: "Failed to retrieve Pythia Authentication Status." } as ApiResponse);
+        .send({
+          error: ["Internal error"],
+          message: "Failed to retrieve Pythia Authentication Status.",
+        } as ApiResponse);
     }
   };
-
-  public constructor() {
-    this.pythia = new Pythia();
-  }
 }

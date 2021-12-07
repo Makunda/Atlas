@@ -54,7 +54,10 @@ class ArtifactController {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        res.status(HttpCode.BAD_REQUEST).send({ errors: errors.array().map(x => x.msg), message: "Failed to get frameworks" } as ApiResponse);
+        res.status(HttpCode.BAD_REQUEST).send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to get frameworks",
+        } as ApiResponse);
         return;
       }
 

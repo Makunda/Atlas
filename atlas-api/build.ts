@@ -29,7 +29,8 @@ const WEB_APP_DIST_PATH = "../web-application/dist";
         try {
           if (fs.existsSync(`./src/public/${dir}/`)) fs.rmdirSync(`./src/public/${dir}/`, { recursive: true });
           await copy(`${WEB_APP_DIST_PATH}/${dir}/`, `./src/public/${dir}/`);
-        } catch (ignored) {}
+        } catch (ignored) {
+        }
       }
 
       console.log("Views were updated");

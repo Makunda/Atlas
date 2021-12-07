@@ -3,7 +3,10 @@
     "id": "t_sql",
     "name": "SQL Server",
     "description": "",
-    "categories": ["database", "SQL"],
+    "categories": [
+      "database",
+      "SQL"
+    ],
     "highlight": "T/Sql",
     "imaging": {
       "name": "T/Sql",
@@ -26,18 +29,31 @@
     "id": "my_sql",
     "name": "MySQL",
     "description": "",
-    "categories": ["database", "SQL"],
+    "categories": [
+      "database",
+      "SQL"
+    ],
     "highlight": "Use_MySQL_Database",
     "imaging": {
       "name": "MySQL",
-      "type": ["MySQL SQL Script", "MySQL Trigger", "MySQL Procedure", "MySQL View", "MySQL Function", "MySQL Table"]
+      "type": [
+        "MySQL SQL Script",
+        "MySQL Trigger",
+        "MySQL Procedure",
+        "MySQL View",
+        "MySQL Function",
+        "MySQL Table"
+      ]
     }
   },
   {
     "id": "oracle_db",
     "name": "Oracle",
     "description": "",
-    "categories": ["database", "SQL"],
+    "categories": [
+      "database",
+      "SQL"
+    ],
     "highlight": "PlSql",
     "imaging": {
       "name": "Oracle Database",
@@ -65,51 +81,82 @@
     "id": "oracle_reporting",
     "name": "Oracle Reporting",
     "description": "",
-    "categories": ["database", "SQL"],
+    "categories": [
+      "database",
+      "SQL"
+    ],
     "highlight": "Oracle Reports",
     "imaging": {
       "name": "Oracle Reporting",
-      "type": ["Oracle Report Data Link", "Oracle Report Group", "Oracle Report Query"]
+      "type": [
+        "Oracle Report Data Link",
+        "Oracle Report Group",
+        "Oracle Report Query"
+      ]
     }
   },
   {
     "id": "ansi_db",
     "name": "ANSI Database",
     "description": "",
-    "categories": ["database", "SQL"],
+    "categories": [
+      "database",
+      "SQL"
+    ],
     "highlight": "SQL",
     "imaging": {
       "name": "Ansi Database",
-      "type": ["ANSI Table", "ANSI Procedure", "ANSI SQL Script", "ANSI Function", "ANSI Trigger"]
+      "type": [
+        "ANSI Table",
+        "ANSI Procedure",
+        "ANSI SQL Script",
+        "ANSI Function",
+        "ANSI Trigger"
+      ]
     }
   },
   {
     "id": "postgres_db",
     "name": "Postgresql Database",
     "description": "",
-    "categories": ["database", "SQL"],
+    "categories": [
+      "database",
+      "SQL"
+    ],
     "highlight": "Postgresql",
     "imaging": {
       "name": "Postgresql Database",
-      "type": ["Postgresql Table", "Postgresql Function", "Postgresql SQL Script"]
+      "type": [
+        "Postgresql Table",
+        "Postgresql Function",
+        "Postgresql SQL Script"
+      ]
     }
   },
   {
     "id": "pl1",
     "name": "PL1",
     "description": "",
-    "categories": ["mainframe"],
+    "categories": [
+      "mainframe"
+    ],
     "highlight": "PL1",
     "imaging": {
       "name": "PL1",
-      "type": ["PLC Include", "PLI Procedure", "PLI MainProcedure"]
+      "type": [
+        "PLC Include",
+        "PLI Procedure",
+        "PLI MainProcedure"
+      ]
     }
   },
   {
     "id": "c_sharp",
     "name": "C#",
     "description": "",
-    "categories": ["programming"],
+    "categories": [
+      "programming"
+    ],
     "highlight": "CS",
     "imaging": {
       "name": "C# Business Logic",
@@ -140,18 +187,28 @@
     "id": "python",
     "name": "Python",
     "description": "",
-    "categories": ["programming", "script", "bigdata"],
+    "categories": [
+      "programming",
+      "script",
+      "bigdata"
+    ],
     "highlight": "Python",
     "imaging": {
       "name": "Python Coordination",
-      "type": ["Python Module", "Python main"]
+      "type": [
+        "Python Module",
+        "Python main"
+      ]
     }
   },
   {
     "id": "net",
     "name": ".NET",
     "description": "",
-    "categories": ["programming", "microsoft"],
+    "categories": [
+      "programming",
+      "microsoft"
+    ],
     "highlight": "net",
     "imaging": {
       "name": ".NET Business Logic",
@@ -172,7 +229,10 @@
     "id": "java",
     "name": "Java",
     "description": "",
-    "categories": ["programming", "microsoft"],
+    "categories": [
+      "programming",
+      "microsoft"
+    ],
     "highlight": "Java",
     "imaging": {
       "name": "Java Business Logic",
@@ -193,62 +253,100 @@
     "id": "javascript",
     "name": "Javascript",
     "description": "",
-    "categories": ["programming", "script", "frontend"],
+    "categories": [
+      "programming",
+      "script",
+      "frontend"
+    ],
     "highlight": "Javascript",
     "imaging": {
       "name": "Javascript Presentation",
-      "type": ["JavaScript Files", "HTML5 JavaScript source code fragment"]
+      "type": [
+        "JavaScript Files",
+        "HTML5 JavaScript source code fragment"
+      ]
     }
   },
   {
     "id": "typescript",
     "name": "Typescript",
     "description": "",
-    "categories": ["programming", "script", "frontend"],
+    "categories": [
+      "programming",
+      "script",
+      "frontend"
+    ],
     "highlight": "Typescript",
     "imaging": {
       "name": "Typescript Presentation",
-      "type": ["Typescript Class", "Typescript Function", "Typescript Interface", "Typescript Method", "Typescript Module", "Typescript Namespace"]
+      "type": [
+        "Typescript Class",
+        "Typescript Function",
+        "Typescript Interface",
+        "Typescript Method",
+        "Typescript Module",
+        "Typescript Namespace"
+      ]
     }
   },
   {
     "id": "jpa_java",
     "name": "JPA Data Access",
     "description": "",
-    "categories": ["dao"],
+    "categories": [
+      "dao"
+    ],
     "highlight": "Jpa",
     "imaging": {
       "name": "JPA Data Access",
-      "type": ["JPA Entity", "JPA Named Query", "JPA Embeddable"]
+      "type": [
+        "JPA Entity",
+        "JPA Named Query",
+        "JPA Embeddable"
+      ]
     }
   },
   {
     "id": "html",
     "name": "HTML",
     "description": "",
-    "categories": ["frontend"],
+    "categories": [
+      "frontend"
+    ],
     "highlight": "Html",
     "imaging": {
       "name": "HTML Presentation",
-      "type": ["HTML Pages", "eFile"]
+      "type": [
+        "HTML Pages",
+        "eFile"
+      ]
     }
   },
   {
     "id": "jsp_java",
     "name": "JSP Presentation",
     "description": "",
-    "categories": ["frontend"],
+    "categories": [
+      "frontend"
+    ],
     "highlight": "Jsp",
     "imaging": {
       "name": "JPA Data Access",
-      "type": ["JSP Pages", "JSP Custom Tag Library", "Tiles Definition", "Tiles Configuration File"]
+      "type": [
+        "JSP Pages",
+        "JSP Custom Tag Library",
+        "Tiles Definition",
+        "Tiles Configuration File"
+      ]
     }
   },
   {
     "id": "db2_database",
     "name": "DB2 Database",
     "description": "",
-    "categories": ["database"],
+    "categories": [
+      "database"
+    ],
     "highlight": "Db2",
     "imaging": {
       "name": "DB2 Database",
@@ -284,7 +382,9 @@
     "id": "cobol",
     "name": "Cobol",
     "description": "",
-    "categories": ["mainframe"],
+    "categories": [
+      "mainframe"
+    ],
     "highlight": "Cobol",
     "imaging": {
       "name": "Cobol",
@@ -318,7 +418,9 @@
     "id": "aspx",
     "name": "Aspx",
     "description": "",
-    "categories": ["frontend"],
+    "categories": [
+      "frontend"
+    ],
     "highlight": "Aspx",
     "imaging": {
       "name": "Aspx",
@@ -338,18 +440,27 @@
     "id": "jcl",
     "name": "Jcl",
     "description": "",
-    "categories": ["mainframe"],
+    "categories": [
+      "mainframe"
+    ],
     "highlight": "Jsp",
     "imaging": {
       "name": "JCL Batch Processing",
-      "type": ["JCL Job", "JCL External Procedure", "JCL Procedure"]
+      "type": [
+        "JCL Job",
+        "JCL External Procedure",
+        "JCL Procedure"
+      ]
     }
   },
   {
     "id": "php",
     "name": "PHP",
     "description": "",
-    "categories": ["programming", "web"],
+    "categories": [
+      "programming",
+      "web"
+    ],
     "highlight": "PHP",
     "imaging": {
       "name": "PHP",
@@ -375,18 +486,27 @@
     "id": "ios",
     "name": "iOs",
     "description": "",
-    "categories": ["mobile"],
+    "categories": [
+      "mobile"
+    ],
     "highlight": "ios",
     "imaging": {
       "name": "iOS Presentation",
-      "type": ["iOS Get Resource Service", "iOS Application Object", "iOS UI ApplicationDelegate", "StoryBoard File"]
+      "type": [
+        "iOS Get Resource Service",
+        "iOS Application Object",
+        "iOS UI ApplicationDelegate",
+        "StoryBoard File"
+      ]
     }
   },
   {
     "id": "android",
     "name": "Android",
     "description": "",
-    "categories": ["mobile"],
+    "categories": [
+      "mobile"
+    ],
     "highlight": "Android",
     "imaging": {
       "name": "Android",
@@ -425,18 +545,29 @@
     "id": "vb_net",
     "name": "VB/.Net",
     "description": "",
-    "categories": ["programming"],
+    "categories": [
+      "programming"
+    ],
     "highlight": "Vb",
     "imaging": {
       "name": "VB .NET",
-      "type": ["VB.NET Class", "VB.NET Module", "VB.NET DataSet", "VB.NET Source File", "VB Form", "VB.NET Form"]
+      "type": [
+        "VB.NET Class",
+        "VB.NET Module",
+        "VB.NET DataSet",
+        "VB.NET Source File",
+        "VB Form",
+        "VB.NET Form"
+      ]
     }
   },
   {
     "id": "aspx",
     "name": "Aspx",
     "description": "",
-    "categories": ["frontend"],
+    "categories": [
+      "frontend"
+    ],
     "highlight": "Aspx",
     "imaging": {
       "name": "ASPX Presentation",
@@ -460,18 +591,25 @@
     "id": "shell",
     "name": "Shell",
     "description": "",
-    "categories": ["script"],
+    "categories": [
+      "script"
+    ],
     "highlight": "Shell",
     "imaging": {
       "name": "Shell Scripts",
-      "type": ["Shell Program Call", "SHELL Program"]
+      "type": [
+        "Shell Program Call",
+        "SHELL Program"
+      ]
     }
   },
   {
     "id": "cics",
     "name": "Cics",
     "description": "",
-    "categories": ["mainframe"],
+    "categories": [
+      "mainframe"
+    ],
     "highlight": "CICS",
     "imaging": {
       "name": "CICS Transaction",
@@ -497,40 +635,64 @@
     "id": "jax_api",
     "name": "JAX API",
     "description": "",
-    "categories": ["api"],
+    "categories": [
+      "api"
+    ],
     "highlight": "Jax",
     "imaging": {
       "name": "REST API",
-      "type": ["JAX RS Post Operation", "JAX RS Get Operation", ".NET SOAP resource service", "JAX RS Put Operation"]
+      "type": [
+        "JAX RS Post Operation",
+        "JAX RS Get Operation",
+        ".NET SOAP resource service",
+        "JAX RS Put Operation"
+      ]
     }
   },
   {
     "id": "db_400",
     "name": "DB400",
     "description": "",
-    "categories": ["mainframe", "database"],
+    "categories": [
+      "mainframe",
+      "database"
+    ],
     "highlight": "Db400",
     "imaging": {
       "name": "DB400 Database",
-      "type": ["DDS400 Physical File", "DDS400 Logical File", "DDS400 Printer File", "DDS400 Display File"]
+      "type": [
+        "DDS400 Physical File",
+        "DDS400 Logical File",
+        "DDS400 Printer File",
+        "DDS400 Display File"
+      ]
     }
   },
   {
     "id": "java_struts",
     "name": "Struts",
     "description": "",
-    "categories": ["coordination"],
+    "categories": [
+      "coordination"
+    ],
     "highlight": "Struts",
     "imaging": {
       "name": "Struts Coordination",
-      "type": ["Java Class Struts", "Struts Action", "Struts Forward", "Struts Action Mapping"]
+      "type": [
+        "Java Class Struts",
+        "Struts Action",
+        "Struts Forward",
+        "Struts Action Mapping"
+      ]
     }
   },
   {
     "id": "cpp",
     "name": "C++",
     "description": "",
-    "categories": ["programming"],
+    "categories": [
+      "programming"
+    ],
     "highlight": "Cpp",
     "imaging": {
       "name": "C/C++",
@@ -599,18 +761,28 @@
     "id": "perl",
     "name": "Perl",
     "description": "",
-    "categories": ["programming", "script"],
+    "categories": [
+      "programming",
+      "script"
+    ],
     "highlight": "Perl",
     "imaging": {
       "name": "Perl Script",
-      "type": ["Perl Program", "Perl Project", "Perl Function"]
+      "type": [
+        "Perl Program",
+        "Perl Project",
+        "Perl Function"
+      ]
     }
   },
   {
     "id": "node_js",
     "name": "Node JS",
     "description": "",
-    "categories": ["programming", "frontend"],
+    "categories": [
+      "programming",
+      "frontend"
+    ],
     "highlight": "NodeJs",
     "imaging": {
       "name": "Node JS",
@@ -658,7 +830,9 @@
     "id": "powerbuilder",
     "name": "Power Builder",
     "description": "",
-    "categories": ["programming"],
+    "categories": [
+      "programming"
+    ],
     "highlight": "PowerBuilder",
     "imaging": {
       "name": "PowerBuilder",
@@ -685,7 +859,10 @@
     "id": "abap",
     "name": "ABAP",
     "description": "",
-    "categories": ["programming", "sap"],
+    "categories": [
+      "programming",
+      "sap"
+    ],
     "highlight": "ABAP",
     "imaging": {
       "name": "ABAP Logic",
@@ -732,51 +909,79 @@
     "id": "abap_storage",
     "name": "SAP ABAP Storage",
     "description": "",
-    "categories": ["database", "sap"],
+    "categories": [
+      "database",
+      "sap"
+    ],
     "highlight": "ABAP Storage",
     "imaging": {
       "name": "SAP ABAP Storage",
-      "type": ["SAP Table", "SAP View", "SAP unresolved Table"]
+      "type": [
+        "SAP Table",
+        "SAP View",
+        "SAP unresolved Table"
+      ]
     }
   },
   {
     "id": "ibm_mq",
     "name": "IBM MQ",
     "description": "",
-    "categories": ["MQ", "ibm"],
+    "categories": [
+      "MQ",
+      "ibm"
+    ],
     "highlight": "IBM MQ",
     "imaging": {
       "name": "IBM MQ",
-      "type": ["IBMMQ Java QueueCall", "IBMMQ Java QueueReceive", "API IBM MQ", "Publisher IBM MQ"]
+      "type": [
+        "IBMMQ Java QueueCall",
+        "IBMMQ Java QueueReceive",
+        "API IBM MQ",
+        "Publisher IBM MQ"
+      ]
     }
   },
   {
     "id": "java_mq",
     "name": "Java MQ",
     "description": "",
-    "categories": ["MQ"],
+    "categories": [
+      "MQ"
+    ],
     "highlight": "Java MQ",
     "imaging": {
       "name": "Java MQ",
-      "type": ["Java Class Message Queue", "API Apache ActiveMQ"]
+      "type": [
+        "Java Class Message Queue",
+        "API Apache ActiveMQ"
+      ]
     }
   },
   {
     "id": "active_mq",
     "name": "Active MQ",
     "description": "",
-    "categories": ["MQ"],
+    "categories": [
+      "MQ"
+    ],
     "highlight": "Active MQ",
     "imaging": {
       "name": "Active MQ",
-      "type": ["ActiveMQ Java QueueCall", "ActiveMQ Java QueueReceive", "ActiveMQ Python QueueCall"]
+      "type": [
+        "ActiveMQ Java QueueCall",
+        "ActiveMQ Java QueueReceive",
+        "ActiveMQ Python QueueCall"
+      ]
     }
   },
   {
     "id": "rabbit_mq",
     "name": "Rabbit MQ",
     "description": "",
-    "categories": ["MQ"],
+    "categories": [
+      "MQ"
+    ],
     "highlight": "Rabbit MQ",
     "imaging": {
       "name": "Rabbit MQ",
@@ -794,7 +999,9 @@
     "id": "sybase_db",
     "name": "Sybase Database",
     "description": "",
-    "categories": ["database"],
+    "categories": [
+      "database"
+    ],
     "highlight": "Sybase Database",
     "imaging": {
       "name": "Sybase Database",

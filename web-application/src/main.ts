@@ -10,7 +10,7 @@ import store from "./store";
 import VueCookies from "vue-cookies";
 import { Component } from "vue-router/types/router";
 import { LicenseController } from "@/api/controllers/license/LicenseController";
-import { LicenseStatus } from "@/api/interface/license/License.interface";
+import { LicenseStatus } from "@/api/interface/license/License";
 import CookieManager from "./api/utils/CookieManager";
 
 Vue.config.productionTip = false;

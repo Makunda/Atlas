@@ -11,40 +11,40 @@
             <v-spacer></v-spacer>
             <v-text-field
               class="pt-1"
+              dense
+              filled
               label="Search Reports"
               placeholder="Search in reports"
-              filled
               rounded
-              dense
             ></v-text-field>
-            <v-btn icon color="green" @click="refresh" x-large class="pb-5">
+            <v-btn class="pb-5" color="green" icon x-large @click="refresh">
               <v-icon>mdi-cached</v-icon>
-            </v-btn></v-card-title
-          >
+            </v-btn>
+          </v-card-title>
           <!-- Subtitle containing the different insights -->
-          <v-card-subtitle> </v-card-subtitle>
+          <v-card-subtitle></v-card-subtitle>
           <v-card-text>
             <v-container fluid>
               <v-row
                 v-if="loadingReports"
-                md="12"
                 class="d-flex justify-center"
+                md="12"
               >
                 <v-progress-circular
-                  class="ma-10"
                   :size="50"
+                  class="ma-10"
                   color="primary"
                   indeterminate
                 ></v-progress-circular>
               </v-row>
               <v-row
                 v-if="errorReports"
-                md="12"
                 class="d-flex flex-column justify-center"
+                md="12"
               >
                 <h3>Failed to retrieve the reports</h3>
                 <p class="subtitle-2 red--text">{{ errorReports }}</p>
-                <v-btn @click="loadReports" depressed color="primary">
+                <v-btn color="primary" depressed @click="loadReports">
                   Retry
                 </v-btn>
               </v-row>
@@ -53,40 +53,40 @@
                 <v-card
                   v-for="report in reportList"
                   v-bind:key="report.id"
-                  class="mx-auto ma-2"
-                  max-width="450"
                   :class="
                     focusReport.id === report.id ? 'selectedCard' : 'normalCard'
                   "
+                  class="mx-auto ma-2"
+                  max-width="450"
                   outlined
                 >
                   <v-container>
-                    <v-row
-                      ><v-list-item three-line>
+                    <v-row>
+                      <v-list-item three-line>
                         <v-list-item-content>
                           <div
-                            class="text-overline mb-4 d-flex flex-row"
                             :class="
                               focusReport.id === report.id
                                 ? 'white--text'
                                 : 'black--text'
                             "
+                            class="text-overline mb-4 d-flex flex-row"
                           >
                             {{ report.categories }}
                             <v-spacer></v-spacer>
                             <v-progress-circular
-                              indeterminate
-                              color="primary"
                               v-if="loadingReport === report.id"
+                              color="primary"
+                              indeterminate
                             ></v-progress-circular>
                           </div>
                           <v-list-item-title
-                            class="text-h5 mb-1"
                             :class="
                               focusReport.id === report.id
                                 ? 'white--text'
                                 : 'black--text'
                             "
+                            class="text-h5 mb-1"
                           >
                             {{ report.name }}
                           </v-list-item-title>
@@ -96,33 +96,33 @@
                                 ? 'white--text'
                                 : 'black--text'
                             "
-                            >{{ report.description }}</v-list-item-subtitle
-                          >
+                            >{{ report.description }}
+                          </v-list-item-subtitle>
                         </v-list-item-content>
-                      </v-list-item></v-row
-                    >
+                      </v-list-item>
+                    </v-row>
                     <v-row>
                       <v-expand-transition>
                         <!--   Card listing the different parameters of the query -->
                         <v-card
-                          class="my-4"
                           v-show="
                             focusReport.id === report.id &&
                               report.parameters &&
                               report.parameters.length > 0
                           "
-                          width="100%"
+                          class="my-4"
                           color="#E0E0E0"
                           style="background: white; color: black !important;"
+                          width="100%"
                         >
                           <v-card-subtitle>
                             Query Options
                           </v-card-subtitle>
                           <v-container>
                             <v-row
-                              class="pa-2"
                               v-for="(p, i) in report.parameters"
                               v-bind:key="i"
+                              class="pa-2"
                             >
                               <v-container>
                                 <v-row>
@@ -162,33 +162,33 @@
                   <v-card-actions class="mt-4">
                     <v-btn
                       v-if="focusReport.id !== report.id"
-                      @click="focusReport = report"
                       :loading="loadingReport === report.id"
                       outlined
                       rounded
                       text
+                      @click="focusReport = report"
                     >
                       Customize
                     </v-btn>
 
                     <v-btn
                       v-if="focusReport.id === report.id"
-                      @click="generateReports"
                       :loading="loadingReport === report.id"
                       class="white--text"
                       outlined
                       rounded
                       text
+                      @click="generateReports"
                     >
                       Generate
                     </v-btn>
                     <v-btn
                       v-if="focusReport.id === report.id"
-                      @click="focusReport = { id: -1 }"
                       class="white--text"
                       outlined
                       rounded
                       text
+                      @click="focusReport = { id: -1 }"
                     >
                       Cancel
                     </v-btn>
@@ -215,7 +215,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import GroupResult from "@/api/interface/paris/groupResult.interface";
+import GroupResult from "@/api/interface/extensions/paris/GroupResult";
 import { ReportController } from "@/api/controllers/reports/ReportController";
 import { ReportInterface } from "@/api/interface/reports/report.interface";
 

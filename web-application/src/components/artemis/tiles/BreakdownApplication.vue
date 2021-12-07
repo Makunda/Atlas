@@ -414,7 +414,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
-import { Artifact } from "@/api/interface/artemis/Artifact";
+import { Artifact } from "@/api/interface/extensions/artemis/Artifact";
 import { ApplicationInsights } from "@/api/interface/imaging/ApplicationInsights";
 import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
 import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";

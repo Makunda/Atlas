@@ -4,6 +4,12 @@ import ABinder from "./ABinder";
 
 export default class FullNameBinder extends ABinder {
   public type: string;
+
+  public constructor(application: string) {
+    super(application);
+    this.type = "FullName";
+  }
+
   /**
    * Create a pattern based on the full name of the objects
    * @param patterns Pattern matching the full name
@@ -61,10 +67,5 @@ export default class FullNameBinder extends ABinder {
       this.logError(`[Document] Failed to bind patterns [${patterns.join(", ")}].`, err);
       return false;
     }
-  }
-
-  public constructor(application: string) {
-    super(application);
-    this.type = "FullName";
   }
 }

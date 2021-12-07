@@ -22,6 +22,83 @@ class ApplicationService {
   }
 
   /**
+   * Get the application insights
+   * @param app Name of the application
+   */
+  public async getApplicationInsights(app: string): Promise<ApplicationInsights> {
+    try {
+      return {
+        name: app,
+        technologies: await this.getTechnologies(app),
+        levels5: await this.getLevels5(app),
+        architectures: await this.getArchitectures(app),
+        modules: await this.getModules(app),
+      };
+    } catch (err) {
+      this.logger.error(`Failed to get the insights for application [${app}]`, err);
+      throw new Error("Failed to get the application insights");
+    }
+  }
+
+  /**
+   * Get the list of application with insights on the server
+   */
+  public async getAllApplicationsInsights(): Promise<ApplicationInsights[]> {
+    try {
+      const applications = await this.getApplicationList();
+      const insights: ApplicationInsights[] = [];
+
+      for (const app of applications) {
+        insights.push(await this.getApplicationInsights(app));
+      }
+
+      return insights;
+    } catch (err) {
+      this.logger.error("Failed to get the list of insights.");
+      throw new Error("Failed to get the list of application insights");
+    }
+  }
+
+  /**
+   * Get the technologies (Level 4) in one application
+   * @param application
+   */
+  public async getTechnology(application: string): Promise<string[]> {
+    const req = `MATCH (l:\`${application}\`:Level4) RETURN DISTINCT l.Name as name`;
+    const res = await this.neo4jAl.execute(req);
+
+    const types: string[] = [];
+    if (!res.records) return types;
+
+    for (let i = 0; i < res.records.length; i++) {
+      const type = String(res.records[i].get("name"));
+      types.push(type);
+    }
+
+    return types;
+  }
+
+  /**
+   * Get the Level5 in one application
+   * @param application Name of the application
+   * @param numLevel Level depth
+   */
+  public async getLevels(application: string, numLevel: number): Promise<string[]> {
+    const req = `MATCH (l:\`${application}\`:Level${numLevel}) RETURN DISTINCT l.Name as name`;
+    const res = await this.neo4jAl.execute(req);
+
+    const types: string[] = [];
+    if (!res.records) return types;
+
+    for (let i = 0; i < res.records.length; i++) {
+      const type = String(res.records[i].get("name"));
+      types.push(type);
+    }
+
+    return types;
+  }
+
+  /**
    * Get the list of technologies
    * @param application Name of the application
    * @private
@@ -84,83 +161,6 @@ class ApplicationService {
     // Get results
     if (archiRes.records && archiRes.records.length != 0) return archiRes.records[0].get("archiModels");
     else return [];
-  }
-
-  /**
-   * Get the application insights
-   * @param app Name of the application
-   */
-  public async getApplicationInsights(app: string): Promise<ApplicationInsights> {
-    try {
-      return {
-        name: app,
-        technologies: await this.getTechnologies(app),
-        levels5: await this.getLevels5(app),
-        architectures: await this.getArchitectures(app),
-        modules: await this.getModules(app),
-      };
-    } catch (err) {
-      this.logger.error(`Failed to get the insights for application [${app}]`, err);
-      throw new Error("Failed to get the application insights");
-    }
-  }
-
-  /**
-   * Get the list of application with insights on the server
-   */
-  public async getAllApplicationsInsights(): Promise<ApplicationInsights[]> {
-      try {
-        const applications = await this.getApplicationList();
-        const insights: ApplicationInsights[] = [];
-
-        for(const app of applications) {
-          insights.push(await this.getApplicationInsights(app));
-        }
-
-        return insights;
-      } catch (err) {
-        this.logger.error("Failed to get the list of insights.");
-        throw new Error("Failed to get the list of application insights");
-      }
-  }
-
-  /**
-   * Get the technologies (Level 4) in one application
-   * @param application
-   */
-  public async getTechnology(application: string): Promise<string[]> {
-    const req = `MATCH (l:\`${application}\`:Level4) RETURN DISTINCT l.Name as name`;
-    const res = await this.neo4jAl.execute(req);
-
-    const types: string[] = [];
-    if (!res.records) return types;
-
-    for (let i = 0; i < res.records.length; i++) {
-      const type = String(res.records[i].get("name"));
-      types.push(type);
-    }
-
-    return types;
-  }
-
-  /**
-   * Get the Level5 in one application
-   * @param application Name of the application
-   * @param numLevel Level depth
-   */
-  public async getLevels(application: string, numLevel: number): Promise<string[]> {
-    const req = `MATCH (l:\`${application}\`:Level${numLevel}) RETURN DISTINCT l.Name as name`;
-    const res = await this.neo4jAl.execute(req);
-
-    const types: string[] = [];
-    if (!res.records) return types;
-
-    for (let i = 0; i < res.records.length; i++) {
-      const type = String(res.records[i].get("name"));
-      types.push(type);
-    }
-
-    return types;
   }
 }
 

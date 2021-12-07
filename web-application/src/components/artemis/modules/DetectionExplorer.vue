@@ -6,14 +6,14 @@
       </h3>
       <v-spacer></v-spacer>
       <v-btn
-        text
-        rounded
-        color="green"
         class="ma-2 white--text"
-        @click="reload()"
+        color="green"
         dark
+        rounded
+        text
+        @click="reload()"
       >
-        <v-icon right dark>
+        <v-icon dark right>
           mdi-reload
         </v-icon>
       </v-btn>
@@ -24,10 +24,10 @@
         <v-container>
           <v-row>
             <v-alert
-              dense
-              border="left"
-              type="error"
               v-if="getOperationErrors != ''"
+              border="left"
+              dense
+              type="error"
               width="100%"
             >
               {{ getOperationErrors }}
@@ -49,32 +49,32 @@
                 <v-expansion-panel-header expand-icon="mdi-menu-down">
                   <h3>{{ item.application }}</h3>
                   <v-spacer></v-spacer>
-                  <span style="max-width: 100px" class="text-body-1"
+                  <span class="text-body-1" style="max-width: 100px"
                     >Status :
                     <v-progress-circular
-                      indeterminate
-                      :width="3"
                       :size="20"
+                      :width="3"
                       color="teal"
+                      indeterminate
                     ></v-progress-circular
                   ></span>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <div class="d-flex flex-column">
-                    <DetectionViewer v-bind:detection="item"> </DetectionViewer>
+                    <DetectionViewer v-bind:detection="item"></DetectionViewer>
                     <div class="d-flex flex-row">
                       <v-btn
-                        style="width: 150px"
                         class="float-right ma-3"
                         color="charcoal"
                         dark
+                        style="width: 150px"
                       >
                         Go to results
                       </v-btn>
                       <v-btn
-                        style="width: 150px"
                         class="float-right my-3"
                         color="orange"
+                        style="width: 150px"
                         @click="stopDetection(item)"
                       >
                         Stop detection
@@ -104,20 +104,20 @@
                 <v-expansion-panel-header expand-icon="mdi-menu-down">
                   <h3>{{ item.application }}</h3>
                   <v-spacer></v-spacer>
-                  <span style="max-width: 100px" class="text-body-1"
+                  <span class="text-body-1" style="max-width: 100px"
                     >Status :
                     <v-icon class="mx-1" color="teal"> mdi-check </v-icon></span
                   >
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <div class="d-flex flex-column">
-                    <DetectionViewer v-bind:detection="item"> </DetectionViewer>
+                    <DetectionViewer v-bind:detection="item"></DetectionViewer>
                     <div class="d-flex flex-row">
                       <v-btn
-                        style="width: 150px"
                         class="float-right my-3"
                         color="charcoal"
                         dark
+                        style="width: 150px"
                         @click="openResultModal(item)"
                       >
                         Display results
@@ -143,8 +143,8 @@
 import Vue from "vue";
 import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
 import ModalDetectionResults from "@/components/artemis/tiles/ModalDetectionResults.vue";
-import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
-import DetectionInterface from "@/api/interface/artemis/Detection";
+import { DetectionResult } from "@/api/interface/extensions/artemis/detectionResult.interface";
+import DetectionInterface from "@/api/interface/extensions/artemis/Detection";
 import DetectionController from "@/api/controllers/extensions/artemis/DetectionController";
 
 export default Vue.extend({

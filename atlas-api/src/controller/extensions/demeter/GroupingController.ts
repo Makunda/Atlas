@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { CandidateResults } from "@interfaces/demeter/candidateResults.interface";
-import { DemeterGroup } from "@interfaces/demeter/demeterGroup.interface";
+import { CandidateResults } from "@interfaces/extensions/demeter/CandidateResults";
+import { DemeterGroup } from "@interfaces/extensions/demeter/DemeterGroup";
 import GroupingService from "@services/extensions/demeter/GroupingService";
-import { check, param, validationResult } from "express-validator";
+import { param, validationResult } from "express-validator";
 import { HttpCode } from "@utils/HttpCode";
 import ApiResponse from "@interfaces/api/ApiResponse";
 import { logger, wrapLogger } from "@shared/Logger";
@@ -22,7 +22,10 @@ class GroupingController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(HttpCode.BAD_REQUEST).send({ errors: errors.array().map(x => x.msg), message: "Failed to get candidate modules" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to get candidate modules",
+      } as ApiResponse);
       return;
     }
 
@@ -32,7 +35,10 @@ class GroupingController {
       res.status(HttpCode.SUCCESS).json({ data: results, message: "candidates" });
     } catch (error) {
       logger.error("Failed to get the list of candidate modules.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to get candidate modules" } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to get candidate modules",
+      } as ApiResponse);
     }
   };
 
@@ -43,7 +49,10 @@ class GroupingController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(HttpCode.BAD_REQUEST).send({ errors: errors.array().map(x => x.msg), message: "Failed to get demeter modules" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to get demeter modules",
+      } as ApiResponse);
       return;
     }
 
@@ -53,7 +62,10 @@ class GroupingController {
       res.status(HttpCode.SUCCESS).json({ data: results, message: "Demeter groups" });
     } catch (error) {
       logger.error("Failed to get the list of demeter modules.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to get the list of demeter modules." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to get the list of demeter modules.",
+      } as ApiResponse);
     }
   };
 }

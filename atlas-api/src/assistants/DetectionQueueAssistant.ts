@@ -121,7 +121,7 @@ export class DetectionQueueAssistant {
     }
     const that = this;
     setTimeout(
-      function () {
+      function() {
         that.checkQueue();
       }.bind(this),
       5000,

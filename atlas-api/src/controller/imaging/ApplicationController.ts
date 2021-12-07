@@ -22,7 +22,10 @@ export default class ApplicationController {
       res.status(HttpCode.SUCCESS).json({ data: applications, message: "Applications" } as ApiResponse);
     } catch (error) {
       logger.error("Failed to get the list of application.", error);
-      res.status(HttpCode.INTERNAL_ERROR).json({ errors: ["Internal error"], message: "Failed to get the list of application" } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).json({
+        errors: ["Internal error"],
+        message: "Failed to get the list of application",
+      } as ApiResponse);
     }
   };
 
@@ -37,7 +40,10 @@ export default class ApplicationController {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(HttpCode.BAD_REQUEST).send({ errors: errors.array().map(x => x.msg), message: "Failed get application insights" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed get application insights",
+      } as ApiResponse);
       return;
     }
 
@@ -48,7 +54,10 @@ export default class ApplicationController {
       res.status(HttpCode.SUCCESS).json({ data: insights, message: "Application Insights" } as ApiResponse);
     } catch (error) {
       logger.error(`Failed to get the insights of application ${applicationName}.`, error);
-      res.status(HttpCode.BAD_REQUEST).send({ errors: ["Internal error"], message: "Failed get application insights" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: ["Internal error"],
+        message: "Failed get application insights",
+      } as ApiResponse);
     }
   };
 
@@ -60,11 +69,14 @@ export default class ApplicationController {
    */
   public getAllApplicationsInsights = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const insights  = await this.applicationService.getAllApplicationsInsights();
+      const insights = await this.applicationService.getAllApplicationsInsights();
       res.status(HttpCode.SUCCESS).json({ data: insights, message: "All Insights" } as ApiResponse);
     } catch (error) {
       logger.error("Failed to get the insights of applications.", error);
-      res.status(HttpCode.BAD_REQUEST).send({ errors: ["Internal error"], message: "Failed get application insights" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: ["Internal error"],
+        message: "Failed get application insights",
+      } as ApiResponse);
     }
   };
 
@@ -79,7 +91,10 @@ export default class ApplicationController {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(HttpCode.BAD_REQUEST).send({ errors: errors.array().map(x => x.msg), message: "Failed get the list of technologies" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed get the list of technologies",
+      } as ApiResponse);
       return;
     }
 
@@ -90,7 +105,10 @@ export default class ApplicationController {
       res.status(HttpCode.SUCCESS).json({ data: insights, message: "Technologies" } as ApiResponse);
     } catch (error) {
       logger.error(`Failed to get Level4 in application ${applicationName}.`, error);
-      res.status(HttpCode.BAD_REQUEST).send({ errors: ["Internal error"], message: "Failed the list of technologies" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: ["Internal error"],
+        message: "Failed the list of technologies",
+      } as ApiResponse);
     }
   };
 
@@ -106,7 +124,10 @@ export default class ApplicationController {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(HttpCode.BAD_REQUEST).send({ errors: errors.array().map(x => x.msg), message: "Failed get the list of levels " } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed get the list of levels ",
+      } as ApiResponse);
       return;
     }
 
@@ -118,7 +139,10 @@ export default class ApplicationController {
       res.status(HttpCode.SUCCESS).json({ data: insights, message: `Level${numLevel}` } as ApiResponse);
     } catch (error) {
       logger.error(`Failed to get Level5 in application ${applicationName}.`, error);
-      res.status(HttpCode.BAD_REQUEST).send({ errors: ["Internal error"], message: "Failed the list of levels" } as ApiResponse);
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: ["Internal error"],
+        message: "Failed the list of levels",
+      } as ApiResponse);
     }
   };
 }

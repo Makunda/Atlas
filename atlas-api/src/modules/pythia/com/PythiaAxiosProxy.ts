@@ -2,7 +2,6 @@ import axios from "axios";
 import PythiaTokenManager from "@modules/pythia/config/PythiaTokenManager";
 import PythiaApiResponseImpl from "./PythiaApiResponse";
 import config from "config";
-import { logger } from "@shared/Logger";
 
 /**
  * Axios proxy appending the auth token
@@ -18,26 +17,6 @@ export default class PythiaAxiosProxy {
    */
   public static getUrl(): string {
     return this.BASE_URL;
-  }
-
-  /**
-   * *Build and return a config containing the header file
-   * @param config The existing config
-   * @returns Enriched configuration
-   */
-  private static async buildConfig(config?: any): Promise<any> {
-    if (!config) config = {}; // Make sure the config isn't null
-
-    // Check if the token  has been set up for pythia
-    if (await this.pythiaLogin.existsToken()) {
-      config = {
-        headers: {
-          Authorization: `Bearer ${String(await this.pythiaLogin.getToken())}`,
-        },
-      };
-    }
-
-    return config;
   }
 
   /**
@@ -125,5 +104,25 @@ export default class PythiaAxiosProxy {
         throw error;
       }
     }
+  }
+
+  /**
+   * *Build and return a config containing the header file
+   * @param config The existing config
+   * @returns Enriched configuration
+   */
+  private static async buildConfig(config?: any): Promise<any> {
+    if (!config) config = {}; // Make sure the config isn't null
+
+    // Check if the token  has been set up for pythia
+    if (await this.pythiaLogin.existsToken()) {
+      config = {
+        headers: {
+          Authorization: `Bearer ${String(await this.pythiaLogin.getToken())}`,
+        },
+      };
+    }
+
+    return config;
   }
 }

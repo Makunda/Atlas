@@ -115,7 +115,7 @@ class DataCallGraphService {
     end: number,
     filter?: Record<string, unknown>,
     sort?: string,
-    sortDesc?: boolean
+    sortDesc?: boolean,
   ): Promise<DataCallGraph[]> {
     try {
       const filterArray = this.buildFilter(filter);
@@ -127,7 +127,7 @@ class DataCallGraphService {
             ${filterArray[0]} 
             RETURN tran, count, technologies, countTechnology
             ORDER BY ${DataCallGraphService.getSortParameter("tran", sort)} ${DataCallGraphService.getSortDesc(
-        sortDesc
+        sortDesc,
       )} 
             SKIP $toSkip LIMIT $toGet;`;
 
@@ -234,7 +234,7 @@ class DataCallGraphService {
     start: number,
     end: number,
     sort?: string,
-    sortDesc?: boolean
+    sortDesc?: boolean,
   ): Promise<DataCallGraph[]> {
     try {
       const req = `MATCH (t:${DataCallGraphService.MASKED_DATACALLGRAPH_LABEL}:\`${application}\`)

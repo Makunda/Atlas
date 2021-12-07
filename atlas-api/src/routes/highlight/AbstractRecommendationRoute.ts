@@ -13,8 +13,6 @@ abstract class AbstractRecommendationRoute implements Route {
   public router = Router();
   private multerUpload: Multer;
 
-  protected abstract getController(): HighlightController;
-
   constructor() {
     // Multer
     type CallbackFunction = (...args: any) => void;
@@ -26,11 +24,11 @@ abstract class AbstractRecommendationRoute implements Route {
     }
 
     const storage = multer.diskStorage({
-      destination: function (req: Request, file: any, cb: CallbackFunction) {
+      destination: function(req: Request, file: any, cb: CallbackFunction) {
         cb(null, tempDirectory);
       },
 
-      filename: function (req: Request, file: any, cb: CallbackFunction) {
+      filename: function(req: Request, file: any, cb: CallbackFunction) {
         cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
       },
     });
@@ -38,6 +36,8 @@ abstract class AbstractRecommendationRoute implements Route {
 
     this.initializeRoutes();
   }
+
+  protected abstract getController(): HighlightController;
 
   /**
    * Initialize the Routes

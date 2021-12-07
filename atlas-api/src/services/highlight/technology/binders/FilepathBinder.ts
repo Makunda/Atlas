@@ -4,6 +4,16 @@ import ABinder from "./ABinder";
 
 export default class FilepathBinder extends ABinder {
   public type: string;
+
+  /**
+   * Constructor
+   * @param application Name of the application
+   */
+  public constructor(application: string) {
+    super(application);
+    this.type = "Filepath";
+  }
+
   /**
    * Create a pattern based on the file path of the objects
    * @param patterns Pattern matching the full name
@@ -61,14 +71,5 @@ export default class FilepathBinder extends ABinder {
       this.logError(`[Document] Failed to bind the pattern [${patterns.join(", ")}].`, err);
       return false;
     }
-  }
-
-  /**
-   * Constructor
-   * @param application Name of the application
-   */
-  public constructor(application: string) {
-    super(application);
-    this.type = "Filepath";
   }
 }

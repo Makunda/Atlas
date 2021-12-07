@@ -1,35 +1,12 @@
 /* eslint-disable max-len */
-import { Neo4jError } from "neo4j-driver";
 import DocumentNode, { DocumentType } from "./DocumentNode";
 
 /**
  * Document for levels in the application
  */
 export default class LevelDocumentNode extends DocumentNode {
-  /**
-   * Convert Neo4j ID to Level Name
-   * @param nodesId Node ID to convert to Level 5 Name
-   */
-  private async convertIDNodeToName(nodesId: number[]): Promise<string[]> {
-    const idList = [];
-    const req = `MATCH (o:\`${this.application}\`:Level5) 
-      WHERE ID(o)=$idNode 
-      RETURN o.Name as name`;
-
-    let results;
-    for (const id of nodesId) {
-      try {
-        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
-          idNode: id,
-        });
-
-        if (results && results.records.length > 0) idList.push(String(results.records[0].get("name")));
-      } catch (ignored) {
-        // ignored
-      }
-    }
-
-    return idList;
+  constructor(application: string, title: string, description: string, nodes: number[]) {
+    super(application, title, description, nodes, DocumentType.LEVEL);
   }
 
   /**
@@ -66,7 +43,7 @@ export default class LevelDocumentNode extends DocumentNode {
     // Create the document
     const idDoc = await this.createNode(
       Array.from(nodeAIPList).filter((n) => n),
-      "Name"
+      "Name",
     );
 
     // Link the document to all the levels in the application
@@ -80,7 +57,29 @@ export default class LevelDocumentNode extends DocumentNode {
     await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqLink, { idNode: idDoc });
   }
 
-  constructor(application: string, title: string, description: string, nodes: number[]) {
-    super(application, title, description, nodes, DocumentType.LEVEL);
+  /**
+   * Convert Neo4j ID to Level Name
+   * @param nodesId Node ID to convert to Level 5 Name
+   */
+  private async convertIDNodeToName(nodesId: number[]): Promise<string[]> {
+    const idList = [];
+    const req = `MATCH (o:\`${this.application}\`:Level5) 
+      WHERE ID(o)=$idNode 
+      RETURN o.Name as name`;
+
+    let results;
+    for (const id of nodesId) {
+      try {
+        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
+          idNode: id,
+        });
+
+        if (results && results.records.length > 0) idList.push(String(results.records[0].get("name")));
+      } catch (ignored) {
+        // ignored
+      }
+    }
+
+    return idList;
   }
 }

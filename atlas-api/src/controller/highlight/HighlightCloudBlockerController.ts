@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { NextFunction, Request, Response } from "express";
-import { checkBody, checkParams, checkQuery } from "@shared/FunctionGlob";
+import { checkBody, checkParams } from "@shared/FunctionGlob";
 import HttpException from "@exceptions/HttpException";
 import HighlightCloudBlockerService from "@services/highlight/file/HighlightCloudBlockerService";
 import { logger } from "@shared/Logger";

@@ -1,7 +1,7 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { Group } from "@/api/interface/paris/group.interface";
-import GroupResult from "@/api/interface/paris/groupResult.interface";
+import { Group } from "@/api/interface/extensions/paris/Group";
+import GroupResult from "@/api/interface/extensions/paris/GroupResult";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class GroupController {

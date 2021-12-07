@@ -2,7 +2,10 @@
   "nickname": "MostUsedObject",
   "name": " Most used Object",
   "description": "List the most used Cobol programs in the application.\nYou'll need to enter the Imaging object type.",
-  "categories": ["maintenance", "modernization"],
+  "categories": [
+    "maintenance",
+    "modernization"
+  ],
   "parameters": [
     {
       "name": "Type",
@@ -16,5 +19,10 @@
     }
   ],
   "request": "MATCH (o:Object:`%APPLICATION_NAME%`)-[]-(oth:Object) WHERE o.Type=$Type RETURN DISTINCT o.Type as `Object Type`, o.Name as `Object Name`, o.External as `External Object`, COUNT(DISTINCT oth) as `Number of Calls` ORDER BY COUNT(DISTINCT oth) DESC  LIMIT $Limit",
-  "returnValues": ["Object Type", "Object Name", "External Object", "Number of Calls"]
+  "returnValues": [
+    "Object Type",
+    "Object Name",
+    "External Object",
+    "Number of Calls"
+  ]
 }

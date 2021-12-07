@@ -23,7 +23,7 @@ export default class StatisticsController {
         const category = String(req.query.category);
         const stats: StatisticResultInterface[] = await this.statisticEngine.getStatisticsByCategory(
           category,
-          body.application
+          body.application,
         );
         res.status(200).json({ data: stats, message: `Result list` });
       } else {

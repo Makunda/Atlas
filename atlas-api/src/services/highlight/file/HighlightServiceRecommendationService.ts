@@ -16,6 +16,58 @@ export default class HighlightServiceRecommendationService {
   private static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   /**
+   * Process the excel file and create recommendation
+   * @param application Name of the application
+   * @param path Path to the Excel report
+   */
+  public async processExcel(application: string, path: string): Promise<CloudServiceRecommendation[]> {
+    // Read the cloud blocker file
+    const workbook = new Excel.Workbook();
+
+    try {
+      await workbook.xlsx.readFile(path);
+    } catch (err) {
+      logger.error(`Failed to process the file at: ${path}.`, err);
+      throw new Error("Failed to open the excel file.");
+    }
+
+    // Process all the tabs
+    const serviceReco: CloudServiceRecommendation[] = [];
+
+    Object.values(CloudProvider).forEach(x => {
+      try {
+        serviceReco.push(...this.processTab(application, workbook, x));
+      } catch (ignored) {
+        logger.error(`Failed to process the ${x} tab in the excel file.`);
+      }
+    });
+
+    return serviceReco;
+  }
+
+  /**
+   * Apply a list of blocker as recommendation in cast imaging
+   * @param {string} application Name of the application
+   * @param {CloudServiceRecommendation[]} blockers List of blockers to apply
+   * @return {Promise<[CloudServiceRecommendation[], CloudServiceRecommendation[]]>} List of recommendations not applied
+   */
+  public async applyRecommendations(
+    blockers: CloudServiceRecommendation[],
+    taggingType: string,
+  ): Promise<[CloudServiceRecommendation[], CloudServiceRecommendation[]]> {
+    switch (taggingType) {
+      case "level5":
+        return this.applyOnLevel5(blockers);
+      case "architecture":
+        return this.applyOnArchitecture(blockers);
+      case "aggregation":
+        return this.applyOnAggregation(blockers);
+      default:
+        throw new Error(`Cannot apply cloud service recommendations for '${taggingType}'`);
+    }
+  }
+
+  /**
    * Treat a specific tab of the excel for the services
    * @param application Name of the application
    * @param path Path to the excel file to treat
@@ -69,36 +121,6 @@ export default class HighlightServiceRecommendationService {
     }
 
     return recommendation;
-  }
-
-  /**
-   * Process the excel file and create recommendation
-   * @param application Name of the application
-   * @param path Path to the Excel report
-   */
-  public async processExcel(application: string, path: string): Promise<CloudServiceRecommendation[]> {
-    // Read the cloud blocker file
-    const workbook = new Excel.Workbook();
-
-    try {
-      await workbook.xlsx.readFile(path);
-    } catch (err) {
-      logger.error(`Failed to process the file at: ${path}.`, err);
-      throw new Error("Failed to open the excel file.");
-    }
-
-    // Process all the tabs
-    const serviceReco: CloudServiceRecommendation[] = [];
-
-    Object.values(CloudProvider).forEach(x => {
-      try {
-        serviceReco.push(...this.processTab(application, workbook, x));
-      } catch (ignored) {
-        logger.error(`Failed to process the ${x} tab in the excel file.`);
-      }
-    });
-
-    return serviceReco;
   }
 
   /**
@@ -296,28 +318,6 @@ This recommendation has been triggered because '${block.rule}' was detected.`;
       return [returnList, errorList];
     } catch (err) {
       logger.error("Failed to apply a service recommendation on architectures", err);
-    }
-  }
-
-  /**
-   * Apply a list of blocker as recommendation in cast imaging
-   * @param {string} application Name of the application
-   * @param {CloudServiceRecommendation[]} blockers List of blockers to apply
-   * @return {Promise<[CloudServiceRecommendation[], CloudServiceRecommendation[]]>} List of recommendations not applied
-   */
-  public async applyRecommendations(
-    blockers: CloudServiceRecommendation[],
-    taggingType: string,
-  ): Promise<[CloudServiceRecommendation[], CloudServiceRecommendation[]]> {
-    switch (taggingType) {
-      case "level5":
-        return this.applyOnLevel5(blockers);
-      case "architecture":
-        return this.applyOnArchitecture(blockers);
-      case "aggregation":
-        return this.applyOnAggregation(blockers);
-      default:
-        throw new Error(`Cannot apply cloud service recommendations for '${taggingType}'`);
     }
   }
 }

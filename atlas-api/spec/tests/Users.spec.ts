@@ -1,6 +1,5 @@
-import supertest from "supertest";
+import supertest, { SuperTest, Test } from "supertest";
 import StatusCodes from "http-status-codes";
-import { SuperTest, Test } from "supertest";
 
 import app from "@server";
 import UserDao from "@daos/User/UserDao.mock";

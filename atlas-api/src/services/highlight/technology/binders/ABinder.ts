@@ -11,20 +11,11 @@ export default abstract class ABinder {
   protected abstract type: string;
 
   /**
-   * Log info message
-   * @param message Message to log
+   * Super constructor to force the application declaration
+   * @param application Name of the application
    */
-  protected logInfo(message: string, ...meta: any[]): void {
-    logger.info(`Highlight Tech Binder ( Type : ${this.getType()}) :: ${message}`, meta);
-  }
-
-  /**
-   * Log error message
-   * @param message Message to log
-   * @param meta Meta data
-   */
-  protected logError(message: string, ...meta: any[]): void {
-    logger.error(`Highlight Tech Binder ( Type : ${this.getType()}) :: ${message}`, meta);
+  public constructor(application: string) {
+    this.application = application;
   }
 
   /**
@@ -51,10 +42,19 @@ export default abstract class ABinder {
   public abstract createDocument(patterns: string[], title: string, description: string): Promise<boolean>;
 
   /**
-   * Super constructor to force the application declaration
-   * @param application Name of the application
+   * Log info message
+   * @param message Message to log
    */
-  public constructor(application: string) {
-    this.application = application;
+  protected logInfo(message: string, ...meta: any[]): void {
+    logger.info(`Highlight Tech Binder ( Type : ${this.getType()}) :: ${message}`, meta);
+  }
+
+  /**
+   * Log error message
+   * @param message Message to log
+   * @param meta Meta data
+   */
+  protected logError(message: string, ...meta: any[]): void {
+    logger.error(`Highlight Tech Binder ( Type : ${this.getType()}) :: ${message}`, meta);
   }
 }

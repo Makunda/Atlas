@@ -132,7 +132,7 @@ class LevelController {
     } catch (error) {
       logger.error(
         `Failed to find hidden level with depth:'${depthLevel}' in application '${applicationName}.'`,
-        error
+        error,
       );
       next(error);
     }
@@ -187,7 +187,7 @@ class LevelController {
     } catch (error) {
       logger.error(
         `Failed to merge level with ID:'${sourceId}' into level with ID:'${destinationId}' in application '${applicationName}.'`,
-        error
+        error,
       );
       next(error);
     }

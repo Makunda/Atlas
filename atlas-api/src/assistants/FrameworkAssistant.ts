@@ -140,29 +140,6 @@ export class FrameworkAssistantManager {
   }
 
   /**
-   * Reset the Artemis property on a list of nodes
-   * @param idList List of nodes to reset
-   */
-  private async resetArtemisProperty(idList: number[]) {
-    const request = `UNWIND $idList as id 
-    MATCH (o:Object) WHERE ID(o)=id 
-    REMOVE o.${this.artemisTaxonomyProperty}
-    REMOVE o.${this.artemisCategoryProperty}
-    RETURN COUNT(o) as removed`;
-
-    try {
-      const results = await this.neo4jAl.execute(request, { idList: idList });
-      if (results.records.length > 0) {
-        logger.info(`Artemis property removed on ${results.records[0].get("removed")} nodes.`);
-      } else {
-        logger.info(`Failed to remove Artemis on ${idList.length} nodes.`);
-      }
-    } catch (err) {
-      logger.error(`Failed to delete the ${this.artemisTaxonomyProperty} property.`);
-    }
-  }
-
-  /**
    * Apply tags on levels
    * @param category Category to  extract
    */
@@ -311,7 +288,7 @@ export class FrameworkAssistantManager {
 
     const delay = Number(config.get("assistant.reload")) || 10000;
     const that = this;
-    setTimeout(function () {
+    setTimeout(function() {
       that.iterateOverAssistants();
     }, delay);
   }
@@ -385,6 +362,29 @@ export class FrameworkAssistantManager {
    */
   public getDemeterActions(): string[] {
     return Object.keys(DemeterActions);
+  }
+
+  /**
+   * Reset the Artemis property on a list of nodes
+   * @param idList List of nodes to reset
+   */
+  private async resetArtemisProperty(idList: number[]) {
+    const request = `UNWIND $idList as id 
+    MATCH (o:Object) WHERE ID(o)=id 
+    REMOVE o.${this.artemisTaxonomyProperty}
+    REMOVE o.${this.artemisCategoryProperty}
+    RETURN COUNT(o) as removed`;
+
+    try {
+      const results = await this.neo4jAl.execute(request, { idList: idList });
+      if (results.records.length > 0) {
+        logger.info(`Artemis property removed on ${results.records[0].get("removed")} nodes.`);
+      } else {
+        logger.info(`Failed to remove Artemis on ${idList.length} nodes.`);
+      }
+    } catch (err) {
+      logger.error(`Failed to delete the ${this.artemisTaxonomyProperty} property.`);
+    }
   }
 
   /**

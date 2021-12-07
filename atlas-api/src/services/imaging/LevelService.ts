@@ -1,11 +1,9 @@
 import { logger } from "@shared/Logger";
-import { int, QueryResult } from "neo4j-driver";
+import { int, Node, QueryResult } from "neo4j-driver";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import { Level, LevelNode } from "@interfaces/imaging/Level";
 import TagService from "@services/configuration/TagService";
-import { Node } from "neo4j-driver";
-import { level } from "winston";
 
 class LevelService {
   private static HIDDEN_LEVEL_LABEL_PREFIX = "HiddenL";
@@ -605,7 +603,11 @@ class LevelService {
         Shade: "rgb(105,105,105)##rgb(0,0,128)##rgb(176,196,222)",
         Name: $name"
       }) RETURN level as node`;
-      const mergeLevel3 = await this.neo4jAl.executeWithParameters(reqCreateLevel3, { name: name, fullName: fullName, depth: depth });
+      const mergeLevel3 = await this.neo4jAl.executeWithParameters(reqCreateLevel3, {
+        name: name,
+        fullName: fullName,
+        depth: depth,
+      });
       if (mergeLevel3 && mergeLevel3.records.length > 0) {
         return mergeLevel3.records[0].get("node") as Node;
       } else {
@@ -652,7 +654,7 @@ class LevelService {
         application: application,
         category: category,
         name: name,
-        idList: idList
+        idList: idList,
       });
     } catch (err) {
       logger.error("Failed to find group the objects by category.", err);

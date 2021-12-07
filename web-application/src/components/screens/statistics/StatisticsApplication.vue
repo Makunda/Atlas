@@ -6,39 +6,39 @@
       </h2>
       <v-spacer></v-spacer>
       <v-btn
-        class="ma-2"
-        :loading="loading"
         :disabled="loading"
+        :loading="loading"
+        class="ma-2"
         color="secondary"
         v-on:click="launchGenerate"
       >
         Generate
-        <v-icon right dark>
+        <v-icon dark right>
           mdi-chart-box
         </v-icon>
       </v-btn>
 
       <v-btn
         :disabled="!generated"
-        color="blue-grey"
         class="ma-2 white--text"
+        color="blue-grey"
         @click="loader = 'loading3'"
       >
         Download
-        <v-icon right dark>
+        <v-icon dark right>
           mdi-archive-arrow-down
         </v-icon>
       </v-btn>
     </v-row>
     <v-row
-      min-width="80%"
+      v-if="loading"
       class="d-flex flex-column text-center mx-auto my-10"
       fill-height
-      v-if="loading"
+      min-width="80%"
     >
       <v-progress-circular
-        class="mx-auto"
         :size="70"
+        class="mx-auto"
         color="primary"
         indeterminate
       ></v-progress-circular>
@@ -47,15 +47,15 @@
         application
       </p>
     </v-row>
-    <v-row fluid ma-0 pa-0 fill-height v-if="!loading" class="px-6">
+    <v-row v-if="!loading" class="px-6" fill-height fluid ma-0 pa-0>
       <v-col cols="6">
         <v-row>
           <StatisticTile
             v-for="n in leftStats"
             :key="n.title"
-            :title="n.title"
             :description="n.description"
             :results="n.result"
+            :title="n.title"
           ></StatisticTile>
         </v-row>
       </v-col>
@@ -64,28 +64,28 @@
           <StatisticTile
             v-for="m in rightStats"
             :key="m.title"
-            :title="m.title"
             :description="m.description"
             :results="m.result"
+            :title="m.title"
           ></StatisticTile>
         </v-row>
       </v-col>
     </v-row>
-    <v-row fill-height v-if="!loading" class="hidden-md-and-up">
-      <v-col ma-0 pa-2 cols="12">
+    <v-row v-if="!loading" class="hidden-md-and-up" fill-height>
+      <v-col cols="12" ma-0 pa-2>
         <v-row>
           <StatisticTile
             v-for="n in statisticsList"
             :key="n.title"
-            :title="n.title"
             :description="n.description"
             :results="n.result"
+            :title="n.title"
           ></StatisticTile>
         </v-row>
       </v-col>
     </v-row>
     <v-row v-if="errorState != null">
-      <ErrorDialog :title="errorState.title" :text="errorState.text">
+      <ErrorDialog :text="errorState.text" :title="errorState.title">
       </ErrorDialog>
     </v-row>
   </v-container>
@@ -96,7 +96,7 @@ import Vue from "vue";
 import { ApplicationRecord } from "@/api/controllers/applications/ApplicationController";
 import ErrorDialog from "@/components/error/ErrorDialog.vue";
 import StatisticTile from "@/components/screens/statistics/tiles/StatisticTile.vue";
-import { DemeterStatisticResult } from "@/api/interface/demeter/DemeterStatistic";
+import { DemeterStatisticResult } from "@/api/interface/extensions/demeter/DemeterStatistic";
 
 export default Vue.extend({
   name: "StatisticsApplication",

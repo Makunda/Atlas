@@ -6,7 +6,7 @@
           <span class="font-weight-light pr-1">Use Cases Manager </span>
         </p>
         <v-spacer></v-spacer>
-        <v-btn icon color="green" @click="refresh">
+        <v-btn color="green" icon @click="refresh">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-card-title>
@@ -16,7 +16,7 @@
           <v-row>
             <v-treeview :items="items" activatable open-on-click transition>
               <template v-slot:prepend="{}">
-                <v-icon> mdi-folder-open-outline </v-icon>
+                <v-icon> mdi-folder-open-outline</v-icon>
               </template>
 
               <template slot="label" slot-scope="{ item }" @click="selected">
@@ -34,13 +34,13 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
                           class="ma-2"
-                          text
-                          small
-                          icon
-                          v-on:click="editItem(item)"
                           color="blue lighten-2"
+                          icon
+                          small
+                          text
                           v-bind="attrs"
                           v-on="on"
+                          v-on:click="editItem(item)"
                         >
                           <v-icon>mdi-pencil</v-icon>
                         </v-btn>
@@ -51,13 +51,13 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
                           class="ma-2"
-                          text
-                          small
-                          icon
                           color="red lighten-2"
-                          v-on:click="deleteItem(item)"
+                          icon
+                          small
+                          text
                           v-bind="attrs"
                           v-on="on"
+                          v-on:click="deleteItem(item)"
                         >
                           <v-icon>mdi-timeline-remove-outline</v-icon>
                         </v-btn>
@@ -68,13 +68,13 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
                           class="ma-2"
-                          text
-                          small
-                          icon
                           color="green lighten-2"
-                          v-on:click="createItemUnderParent(item)"
+                          icon
+                          small
+                          text
                           v-bind="attrs"
                           v-on="on"
+                          v-on:click="createItemUnderParent(item)"
                         >
                           <v-icon>mdi-folder-plus</v-icon>
                         </v-btn>
@@ -93,13 +93,13 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     class="mx-2"
-                    small
-                    fab
-                    dark
                     color="indigo"
+                    dark
+                    fab
+                    small
+                    v-bind="attrs"
                     @click="createItem"
                     v-on="on"
-                    v-bind="attrs"
                   >
                     <v-icon dark>
                       mdi-plus
@@ -107,8 +107,8 @@
                   </v-btn>
                 </template>
                 <span>Add a new use case</span>
-              </v-tooltip></v-col
-            >
+              </v-tooltip>
+            </v-col>
 
             <v-col cols="3"><p class="mt-3">Add a new use case</p></v-col>
           </v-row>
@@ -142,7 +142,7 @@
       </v-row>
 
       <!-- Create / Edit Dialog  -->
-      <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-dialog v-model="dialog" max-width="600px" persistent>
         <v-card>
           <v-card-title>
             <span class="headline">{{ titleEditBox }}</span>
@@ -153,8 +153,8 @@
                 <v-col cols="12">
                   <v-text-field
                     v-model="editedItem.title"
-                    label="Title*"
                     hint="Title of the use case ( displayed in the tree )"
+                    label="Title*"
                     persistent-hint
                     required
                   ></v-text-field>
@@ -162,8 +162,8 @@
                 <v-col cols="12">
                   <v-text-field
                     v-model="editedItem.description"
-                    label="Description*"
                     hint="Brief description of the use case"
+                    label="Description*"
                     persistent-hint
                     required
                   ></v-text-field>
@@ -172,14 +172,14 @@
                   <v-autocomplete
                     v-model="editedItem.categories"
                     :items="['Cloud', 'Pilot', 'SQL']"
-                    outlined
-                    dense
                     chips
-                    label="Categories*"
+                    dense
                     hint="Apply a categories used for search"
-                    small-chips
-                    required
+                    label="Categories*"
                     multiple
+                    outlined
+                    required
+                    small-chips
                   ></v-autocomplete>
                 </v-col>
                 <v-col cols="12">
@@ -187,14 +187,14 @@
                   <v-radio-group v-model="editParentUseCaseId">
                     <v-radio
                       :key="-1"
-                      label="No parent (Root use case)"
                       :value="-1"
+                      label="No parent (Root use case)"
                     ></v-radio>
 
                     <v-treeview
+                      :items="items"
                       return-object
                       selection-type="independent"
-                      :items="items"
                     >
                       <template slot="label" slot-scope="{ item }">
                         <v-container>
@@ -213,8 +213,8 @@
                 <v-col cols="12">
                   <v-row class="mr-6">
                     <v-checkbox
-                      class="mr-2"
                       v-model="editedItem.active"
+                      class="mr-2"
                       label="Active"
                     ></v-checkbox>
 
@@ -241,7 +241,7 @@
       </v-dialog>
 
       <!-- Delete Dialog  -->
-      <v-dialog v-model="dialogDelete" persistent max-width="600px">
+      <v-dialog v-model="dialogDelete" max-width="600px" persistent>
         <v-card>
           <v-card-title>
             <span class="headline">Delete a use case</span>
@@ -254,10 +254,10 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
+              :loading="loadingDelete"
               color="blue darken-1"
               text
               @click="closeDelete"
-              :loading="loadingDelete"
             >
               Close
             </v-btn>
@@ -284,7 +284,7 @@
 
 <script lang="ts">
 import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
-import { UseCase } from "@/api/interface/paris/useCase.interface";
+import { UseCase } from "@/api/interface/extensions/paris/UseCase";
 import Vue from "vue";
 
 export default Vue.extend({

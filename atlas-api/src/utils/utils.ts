@@ -2,7 +2,7 @@
  * Generate a pseudo-unique token
  */
 export const uuidv4 = (): string => {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
     const r = (Math.random() * 16) | 0,
       v = c == "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -23,21 +23,21 @@ export function timeConverter(timestamp: number) {
 }
 
 /**
- * Fixed length String 
+ * Fixed length String
  * @param text Text to format
- * @param length Length of text to format 
- * @returns The formatted string 
+ * @param length Length of text to format
+ * @returns The formatted string
  */
-export function fixedLengthString(text: string, length: number) : string {
+export function fixedLengthString(text: string, length: number): string {
   const toAdd: number = length - text.length;
-  if(toAdd < 0) return text;
+  if (toAdd < 0) return text;
   return " ".repeat(toAdd) + text;
 }
 
 /**
- * Get the value inside an enum 
+ * Get the value inside an enum
  * @param e Enum to parse
- * @returns 
+ * @returns
  */
 export function enumKeys<E>(e: E): (keyof E)[] {
   return Object.keys(e) as (keyof E)[];

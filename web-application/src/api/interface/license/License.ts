@@ -3,7 +3,7 @@ export enum LicenseStatus {
   NOT_VALID
 }
 
-export interface LicenseInterface {
+export interface License {
   license: string;
   status: LicenseStatus;
 }

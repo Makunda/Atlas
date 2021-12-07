@@ -15,9 +15,16 @@ export default class TokenService {
   private algorithm = "HS512";
 
   /**
+   * Singleton private constructor
+   */
+  private constructor() {
+    // pass
+  }
+
+  /**
    * Get the instance of the Token service
    */
-  public static getInstance() : TokenService {
+  public static getInstance(): TokenService {
     return this.INSTANCE;
   }
 
@@ -60,30 +67,6 @@ export default class TokenService {
   }
 
   /**
-   * Create a token based on a user
-   * @param {User} user User
-   * @return {string} Token for the user
-   */
-  public createUserToken(user: User): EncodeResult {
-    const issued = Date.now();
-    const oneHourInMs = 60 * 60 * 1000;
-    const expires = issued + oneHourInMs;
-
-    const session: Session = {
-      issued: issued,
-      expires: expires,
-      role: user.role,
-      name: user.username,
-    };
-
-    return {
-      token: jwt.sign(session, this.privateKey, { algorithm: "RS512", expiresIn: oneHourInMs }),
-      issued: issued,
-      expires: expires,
-    };
-  }
-
-  /**
    * Convert a encoded
    * @param {EncodeResult} session Session to convert to base 64
    * @return {string} Base64 string of the token serialize
@@ -106,6 +89,30 @@ export default class TokenService {
     } catch (err) {
       throw new Error("Invalid token");
     }
+  }
+
+  /**
+   * Create a token based on a user
+   * @param {User} user User
+   * @return {string} Token for the user
+   */
+  public createUserToken(user: User): EncodeResult {
+    const issued = Date.now();
+    const oneHourInMs = 60 * 60 * 1000;
+    const expires = issued + oneHourInMs;
+
+    const session: Session = {
+      issued: issued,
+      expires: expires,
+      role: user.role,
+      name: user.username,
+    };
+
+    return {
+      token: jwt.sign(session, this.privateKey, { algorithm: "RS512", expiresIn: oneHourInMs }),
+      issued: issued,
+      expires: expires,
+    };
   }
 
   /**
@@ -153,12 +160,5 @@ export default class TokenService {
       type: "valid",
       session: result,
     };
-  }
-
-  /**
-   * Singleton private constructor
-   */
-  private constructor() {
-    // pass
   }
 }

@@ -5,7 +5,7 @@ import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";
 import TagService from "@services/configuration/TagService";
 import { logger } from "@shared/Logger";
-import { QueryResult, Node, int } from "neo4j-driver";
+import { int, Node, QueryResult } from "neo4j-driver";
 
 export default class ArchitectureService {
   private static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();

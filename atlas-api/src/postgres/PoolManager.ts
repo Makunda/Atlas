@@ -36,22 +36,6 @@ export default class PoolManager {
   private static backgroundTimeout: NodeJS.Timeout;
 
   /**
-   * Process the list of pool map
-   */
-  private static processPoolMap() {
-    const now = Date.now();
-    const expiration = config.has("postgres.pool.expiration") ? Number(config.get("postgres.pool.expiration")) : 30000;
-
-    this.poolMap.forEach((value: PoolWrapper, key: string) => {
-      // Check expiration
-      if (value.open && now >= value.lastActivity + expiration) {
-        value.pool.end(); // End
-        value.open = false;
-      }
-    });
-  }
-
-  /**
    * Query a specific pool
    * @param id Id of the pool to query
    * @param query Query to execute
@@ -69,48 +53,6 @@ export default class PoolManager {
     else resp = await poolWrap.pool.query(query);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return resp.rows;
-  }
-
-  /**
-   * Launch a background job to monitor the Pools.
-   * This job ends if there is no pool in the list or all the pool are ended
-   */
-  private static startBackgroundJob() {
-    this.backgroundTimeout = setInterval(this.processPoolMap.bind(this), 5000);
-  }
-
-  /**
-   * Find a similar configuration in the list of pool
-   * @param configuration Configuration to search
-   */
-  private static findSimilarPool(configuration: AipConfiguration): string | undefined {
-    for (const [key, value] of this.poolMap) {
-      if (
-        value.config.host == configuration.url &&
-        value.config.database == configuration.database &&
-        value.config.port == configuration.port &&
-        value.config.user == configuration.user
-      ) {
-        // Return the key if found
-        return key;
-      }
-    }
-
-    return undefined;
-  }
-
-  /**
-   * Build a PoolConfig configuration
-   * @param configuration Configuration of AIP
-   */
-  private static getConfig(configuration: AipConfiguration): pg.PoolConfig {
-    const configPool: pg.PoolConfig = Object.assign({}, poolConfig);
-    configPool.host = configuration.url;
-    configPool.user = configuration.user;
-    configPool.password = configuration.password;
-    configPool.database = configuration.database;
-    configPool.port = configuration.port;
-    return configPool;
   }
 
   /**
@@ -187,5 +129,63 @@ export default class PoolManager {
       this.startBackgroundJob();
     }
     return id;
+  }
+
+  /**
+   * Process the list of pool map
+   */
+  private static processPoolMap() {
+    const now = Date.now();
+    const expiration = config.has("postgres.pool.expiration") ? Number(config.get("postgres.pool.expiration")) : 30000;
+
+    this.poolMap.forEach((value: PoolWrapper, key: string) => {
+      // Check expiration
+      if (value.open && now >= value.lastActivity + expiration) {
+        value.pool.end(); // End
+        value.open = false;
+      }
+    });
+  }
+
+  /**
+   * Launch a background job to monitor the Pools.
+   * This job ends if there is no pool in the list or all the pool are ended
+   */
+  private static startBackgroundJob() {
+    this.backgroundTimeout = setInterval(this.processPoolMap.bind(this), 5000);
+  }
+
+  /**
+   * Find a similar configuration in the list of pool
+   * @param configuration Configuration to search
+   */
+  private static findSimilarPool(configuration: AipConfiguration): string | undefined {
+    for (const [key, value] of this.poolMap) {
+      if (
+        value.config.host == configuration.url &&
+        value.config.database == configuration.database &&
+        value.config.port == configuration.port &&
+        value.config.user == configuration.user
+      ) {
+        // Return the key if found
+        return key;
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Build a PoolConfig configuration
+   * @param configuration Configuration of AIP
+   */
+  private static getConfig(configuration: AipConfiguration): pg.PoolConfig {
+    const configPool: pg.PoolConfig = Object.assign({}, poolConfig);
+    configPool.host = configuration.url;
+    configPool.user = configuration.user;
+    configPool.password = configuration.password;
+    configPool.database = configuration.database;
+    configPool.port = configuration.port;
+    return configPool;
   }
 }

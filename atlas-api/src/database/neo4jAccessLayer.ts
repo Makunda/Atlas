@@ -18,65 +18,6 @@ export class Neo4JAccessLayer {
   }
 
   /**
-   * Launch a request to test the connectivity
-   */
-  private async launchDummyRequest(): Promise<boolean> {
-    const req = "Match () Return 1 Limit 1";
-    const start = Date.now();
-
-    try {
-      const res = await this.execute(req);
-      const end = Date.now();
-      this.logger.info(`Connection test successful. Rows returned in ${end - start} ms.`);
-      return res.records && res.records.length > 0;
-    } catch (err) {
-      this.logger.error("The test failed trying to query the Neo4j database.");
-      return false;
-    }
-  }
-
-  /**
-   * Find the correct encryption mode of neo4j
-   * @param token Token containing the credentials
-   */
-  private async findEncryptionMode(): Promise<void> {
-    // Verify the connection
-    const test = await this.launchDummyRequest();
-    if (test) {
-      this.connected = true;
-      return;
-    }
-
-    // Try with encryption
-    try {
-      this.driver = neo4j.driver(this.uri, this.token, {
-        encrypted: "ENCRYPTION_ON",
-      });
-
-      // Test
-      await this.testConnection();
-      this.logger.info("Connection to Neo4j with encryption: Successful");
-      this.connected = true;
-      return;
-    } catch (error) {
-      this.logger.error(`Cannot connect to the remote Neo4j database using encryption ${this.uri}`);
-    }
-
-    // Try without encryption
-    try {
-      this.driver = neo4j.driver(this.uri, this.token);
-
-      // Test
-      await this.testConnection();
-      this.logger.info("Connection to Neo4j without encryption: Successful");
-      this.connected = true;
-      return;
-    } catch (error) {
-      throw new Error(`Cannot connect to the remote Neo4j database without using encryption ${this.uri}`);
-    }
-  }
-
-  /**
    * Get the actual instance of the Neo4J connection
    */
   public static getInstance() {
@@ -149,5 +90,64 @@ export class Neo4JAccessLayer {
    */
   public async testConnection(): Promise<ServerInfo> {
     return this.driver.verifyConnectivity();
+  }
+
+  /**
+   * Launch a request to test the connectivity
+   */
+  private async launchDummyRequest(): Promise<boolean> {
+    const req = "Match () Return 1 Limit 1";
+    const start = Date.now();
+
+    try {
+      const res = await this.execute(req);
+      const end = Date.now();
+      this.logger.info(`Connection test successful. Rows returned in ${end - start} ms.`);
+      return res.records && res.records.length > 0;
+    } catch (err) {
+      this.logger.error("The test failed trying to query the Neo4j database.");
+      return false;
+    }
+  }
+
+  /**
+   * Find the correct encryption mode of neo4j
+   * @param token Token containing the credentials
+   */
+  private async findEncryptionMode(): Promise<void> {
+    // Verify the connection
+    const test = await this.launchDummyRequest();
+    if (test) {
+      this.connected = true;
+      return;
+    }
+
+    // Try with encryption
+    try {
+      this.driver = neo4j.driver(this.uri, this.token, {
+        encrypted: "ENCRYPTION_ON",
+      });
+
+      // Test
+      await this.testConnection();
+      this.logger.info("Connection to Neo4j with encryption: Successful");
+      this.connected = true;
+      return;
+    } catch (error) {
+      this.logger.error(`Cannot connect to the remote Neo4j database using encryption ${this.uri}`);
+    }
+
+    // Try without encryption
+    try {
+      this.driver = neo4j.driver(this.uri, this.token);
+
+      // Test
+      await this.testConnection();
+      this.logger.info("Connection to Neo4j without encryption: Successful");
+      this.connected = true;
+      return;
+    } catch (error) {
+      throw new Error(`Cannot connect to the remote Neo4j database without using encryption ${this.uri}`);
+    }
   }
 }

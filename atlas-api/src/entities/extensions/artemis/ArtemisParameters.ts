@@ -11,6 +11,13 @@ export default class ArtemisParameters {
     regexObjectType: string;
   };
 
+  /**
+   * Empty constructor
+   */
+  public constructor() {
+    /** Empty */
+  }
+
   public getOnlineMode(): boolean {
     return this.onlineMode;
   }
@@ -67,12 +74,5 @@ export default class ArtemisParameters {
             "PythiaURL": "${this.pythiaURL}",
             "PythiaToken": "${this.pythiaToken}"
         }`;
-  }
-
-  /**
-   * Empty constructor
-   */
-  public constructor() {
-    /** Empty */
   }
 }

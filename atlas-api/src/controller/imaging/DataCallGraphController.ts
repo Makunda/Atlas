@@ -44,7 +44,7 @@ class DataCallGraphController {
     try {
       const applicationName = String(req.params.application);
       const insights: Record<string, unknown> = await this.dataCallGraphService.getInsightsUnmaskedDataGraph(
-        applicationName
+        applicationName,
       );
       res.status(200).json({ data: insights, message: "Insights" });
     } catch (error) {
@@ -69,7 +69,7 @@ class DataCallGraphController {
         endIndex,
         filter,
         sort,
-        sortDesc
+        sortDesc,
       );
       res.status(200).json({ data: dataGraphs, message: "Batch" });
     } catch (error) {
@@ -92,7 +92,7 @@ class DataCallGraphController {
         startIndex,
         endIndex,
         sort,
-        sortDesc
+        sortDesc,
       );
       res.status(200).json({ data: dataGraphs, message: "Batch" });
     } catch (error) {
@@ -124,7 +124,7 @@ class DataCallGraphController {
       const datagraph: DataCallGraph = await this.dataCallGraphService.pinDataGraph(
         applicationName,
         dataCallGraphID,
-        prefix
+        prefix,
       );
       res.status(200).json({ data: datagraph, message: "Renamed DataGraph" });
     } catch (error) {
@@ -164,7 +164,7 @@ class DataCallGraphController {
       const datagraph: DataCallGraph = await this.dataCallGraphService.unpinDataGraph(
         applicationName,
         dataCallGraphID,
-        prefix
+        prefix,
       );
       res.status(200).json({ data: datagraph, message: "Renamed DataGraph" });
     } catch (error) {
@@ -197,7 +197,7 @@ class DataCallGraphController {
       const datagraph: DataCallGraph = await this.dataCallGraphService.renameDataGraph(
         applicationName,
         dataCallGraphID,
-        datagraphName
+        datagraphName,
       );
       res.status(200).json({ data: datagraph, message: "Renamed DataGraph" });
     } catch (error) {
@@ -294,13 +294,13 @@ class DataCallGraphController {
     try {
       const datagraph: DataCallGraph = await this.dataCallGraphService.unmaskDataGraph(
         applicationName,
-        dataCallGraphID
+        dataCallGraphID,
       );
       res.status(200).json({ data: datagraph, message: "DataGraph" });
     } catch (error) {
       logger.error(
         `Failed to unmask datagraph with id:'${dataCallGraphID}' in application with name '${applicationName}.`,
-        error
+        error,
       );
       next(error);
     }
@@ -369,7 +369,7 @@ class DataCallGraphController {
     } catch (error) {
       logger.error(
         `Failed to mask DataGraph with certain terms inside it in application with name ${applicationName}.`,
-        error
+        error,
       );
       next(error);
     }

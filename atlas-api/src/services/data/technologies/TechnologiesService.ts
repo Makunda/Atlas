@@ -4,34 +4,9 @@ import Technology from "@extensions/Technology";
 import { wrapLogger } from "@shared/Logger";
 
 export default class TechnologiesService {
+  private static INSTANCE: TechnologiesService;
   private logger = wrapLogger("Technologies Service");
   private technologies: Technology[];
-  private static INSTANCE : TechnologiesService;
-
-  /**
-   * Get the instance of the Technology service
-   */
-  public static getInstance() : TechnologiesService {
-    if(!this.INSTANCE) {
-      this.INSTANCE = new TechnologiesService();
-    }
-
-    return this.INSTANCE;
-  }
-
-  /**
-   * Get the list of technologies
-   * @param objectType List of object type
-   */
-  public getTechnologiesFromType(objectType: string[]) {
-    const matchedTechnologies: string[] = [];
-    for(const tech of this.technologies) {
-      if(!tech.imaging) continue;
-      if(tech.imaging.type.some(r=> objectType.includes(r))) matchedTechnologies.push(tech.name);
-    }
-
-    return matchedTechnologies;
-  }
 
   /**
    * Singleton constructor, reading the data file
@@ -50,5 +25,30 @@ export default class TechnologiesService {
       this.logger.warn(`Technologies file not found at path '${technologyFilePath}'.`);
       throw new Error("Failed to read the technologies.json file");
     }
+  }
+
+  /**
+   * Get the instance of the Technology service
+   */
+  public static getInstance(): TechnologiesService {
+    if (!this.INSTANCE) {
+      this.INSTANCE = new TechnologiesService();
+    }
+
+    return this.INSTANCE;
+  }
+
+  /**
+   * Get the list of technologies
+   * @param objectType List of object type
+   */
+  public getTechnologiesFromType(objectType: string[]) {
+    const matchedTechnologies: string[] = [];
+    for (const tech of this.technologies) {
+      if (!tech.imaging) continue;
+      if (tech.imaging.type.some(r => objectType.includes(r))) matchedTechnologies.push(tech.name);
+    }
+
+    return matchedTechnologies;
   }
 }

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { CandidateResults } from "@interfaces/demeter/candidateResults.interface";
+import { CandidateResults } from "@interfaces/extensions/demeter/CandidateResults";
 import LevelService from "@services/extensions/demeter/LevelService";
-import { Level5Group } from "@interfaces/demeter/level.interface";
+import { Level5Group } from "@interfaces/extensions/demeter/Level";
 import { body, param, validationResult } from "express-validator";
 import { HttpCode } from "@utils/HttpCode";
 import ApiResponse from "@interfaces/api/ApiResponse";
@@ -30,7 +30,10 @@ export default class LevelController {
     if (!errors.isEmpty()) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({ errors: errors.array().map(x => x.msg), message: "Failed to get list of candidate levels." } as ApiResponse);
+        .send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to get list of candidate levels.",
+        } as ApiResponse);
       return;
     }
 
@@ -42,7 +45,10 @@ export default class LevelController {
       this.logger.error("Failed to get the list of levels in the application.", error);
       res
         .status(HttpCode.INTERNAL_ERROR)
-        .send({ errors: ["Internal error"], message: "Failed to get the list of levels in the application." } as ApiResponse);
+        .send({
+          errors: ["Internal error"],
+          message: "Failed to get the list of levels in the application.",
+        } as ApiResponse);
     }
   };
 
@@ -61,7 +67,10 @@ export default class LevelController {
     if (!errors.isEmpty()) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({ errors: errors.array().map(x => x.msg), message: "Failed to get grouped levels in the application" } as ApiResponse);
+        .send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to get grouped levels in the application",
+        } as ApiResponse);
       return;
     }
 
@@ -73,7 +82,10 @@ export default class LevelController {
       this.logger.error("Failed to get the list of grouped levels in the application.", error);
       res
         .status(HttpCode.INTERNAL_ERROR)
-        .send({ errors: ["Internal error"], message: "Failed to get the list of grouped levels in the application." } as ApiResponse);
+        .send({
+          errors: ["Internal error"],
+          message: "Failed to get the list of grouped levels in the application.",
+        } as ApiResponse);
     }
   };
 
@@ -92,7 +104,10 @@ export default class LevelController {
     if (!errors.isEmpty()) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({ errors: errors.array().map(x => x.msg), message: "Failed to execute grouping in the application." } as ApiResponse);
+        .send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to execute grouping in the application.",
+        } as ApiResponse);
       return;
     }
 
@@ -123,7 +138,10 @@ export default class LevelController {
     if (!errors.isEmpty()) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({ errors: errors.array().map(x => x.msg), message: "Failed to get the list of level 5 in the application." } as ApiResponse);
+        .send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to get the list of level 5 in the application.",
+        } as ApiResponse);
       return;
     }
 
@@ -153,7 +171,10 @@ export default class LevelController {
     if (!errors.isEmpty()) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({ errors: errors.array().map(x => x.msg), message: "Failed to undo one level in the application." } as ApiResponse);
+        .send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to undo one level in the application.",
+        } as ApiResponse);
       return;
     }
 
@@ -184,7 +205,10 @@ export default class LevelController {
     if (!errors.isEmpty()) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({ errors: errors.array().map(x => x.msg), message: "Failed to undo all the level in the application." } as ApiResponse);
+        .send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to undo all the level in the application.",
+        } as ApiResponse);
       return;
     }
 
@@ -216,7 +240,10 @@ export default class LevelController {
     if (!errors.isEmpty()) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({ errors: errors.array().map(x => x.msg), message: "Failed to rename a level in the application." } as ApiResponse);
+        .send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to rename a level in the application.",
+        } as ApiResponse);
       return;
     }
 

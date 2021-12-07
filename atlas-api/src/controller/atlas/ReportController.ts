@@ -84,7 +84,7 @@ export class ReportController {
         application = body.application;
 
       const filePath: string = await this.reportService.generateReportAndExport(id, application, parameters);
-      res.sendFile(filePath, function (err) {
+      res.sendFile(filePath, function(err) {
         if (err) {
           next(err);
         } else {

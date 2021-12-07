@@ -1,5 +1,5 @@
-import { CandidateResults } from "@/api/interface/demeter/ApiCandidateResults.interface";
-import { Level5Group } from "@/api/interface/demeter/ApiLevel.interface";
+import { CandidateResults } from "@/api/interface/extensions/demeter/CandidateResults";
+import { Level5Group } from "@/api/interface/extensions/demeter/Level";
 import ProxyAxios from "@/utils/axios/ProxyAxios";
 import Logger from "@/utils/Logger";
 

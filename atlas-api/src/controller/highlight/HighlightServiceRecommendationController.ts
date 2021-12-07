@@ -27,7 +27,10 @@ export default class HighlightServiceRecommendationController implements Highlig
       if (!file) {
         res
           .status(HttpCode.BAD_REQUEST)
-          .json({ errors: ["No file was detected during the upload"], message: "Recommendations Found" } as ApiResponse);
+          .json({
+            errors: ["No file was detected during the upload"],
+            message: "Recommendations Found",
+          } as ApiResponse);
         return;
       }
 
@@ -37,7 +40,10 @@ export default class HighlightServiceRecommendationController implements Highlig
       if (!errors.isEmpty()) {
         res
           .status(HttpCode.BAD_REQUEST)
-          .send({ errors: errors.array().map(x => x.msg), message: "Failed to login. Incorrect parameters" } as ApiResponse);
+          .send({
+            errors: errors.array().map(x => x.msg),
+            message: "Failed to login. Incorrect parameters",
+          } as ApiResponse);
         return;
       }
 
@@ -65,7 +71,10 @@ export default class HighlightServiceRecommendationController implements Highlig
       res.status(200).json({ data: recommendations, message: "Service Recommendation Found" } as ApiResponse);
     } catch (error) {
       logger.error("Failed to process the Highlight File", error);
-      res.status(HttpCode.INTERNAL_ERROR).json({ errors: ["Failed to process the file"], message: "Recommendations Found" } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).json({
+        errors: ["Failed to process the file"],
+        message: "Recommendations Found",
+      } as ApiResponse);
     }
   };
 
@@ -83,7 +92,10 @@ export default class HighlightServiceRecommendationController implements Highlig
 
       if (!errors.isEmpty()) {
         logger.error("Failed to apply recommendations", errors);
-        res.status(HttpCode.BAD_REQUEST).send({ errors: errors.array().map(x => x.msg), message: "Failed to apply recommendations" } as ApiResponse);
+        res.status(HttpCode.BAD_REQUEST).send({
+          errors: errors.array().map(x => x.msg),
+          message: "Failed to apply recommendations",
+        } as ApiResponse);
         return;
       }
 
@@ -105,7 +117,10 @@ export default class HighlightServiceRecommendationController implements Highlig
       } as ApiResponse);
     } catch (error) {
       logger.error("Failed to apply recommendations.", error);
-      res.status(HttpCode.INTERNAL_ERROR).json({ errors: ["Failed to process the file"], message: "Recommendations Found" } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).json({
+        errors: ["Failed to process the file"],
+        message: "Recommendations Found",
+      } as ApiResponse);
     }
   };
 

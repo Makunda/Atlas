@@ -48,18 +48,18 @@
             v-if="loadingStatistics"
             :size="60"
             :width="7"
-            color="persianGrey"
             class="ma-auto"
+            color="persianGrey"
             indeterminate
           ></v-progress-circular>
 
           <PercentageTile
             v-for="(item, i) in statistics"
             v-bind:key="i"
-            :title="item.title"
             :description="item.description"
-            :percentage="item.percentage"
             :inverted="item.inverseResult"
+            :percentage="item.percentage"
+            :title="item.title"
           ></PercentageTile>
         </v-row>
       </v-card-text>
@@ -67,7 +67,7 @@
     <v-divider></v-divider>
     <v-card class="mx-3">
       <v-row class="mt-5">
-        <ActionTileViewer> </ActionTileViewer>
+        <ActionTileViewer></ActionTileViewer>
       </v-row>
       <v-row class="mb-5"></v-row>
     </v-card>
@@ -78,7 +78,7 @@
 import Vue from "vue";
 import PercentageTile from "@/components/screens/recommendation/tiles/PercentageTile.vue";
 import ActionTileViewer from "@/components/screens/recommendation/components/ActionTileViewer.vue";
-import { DemeterStatisticPercentageResult } from "@/api/interface/demeter/DemeterStatistic";
+import { DemeterStatisticPercentageResult } from "@/api/interface/extensions/demeter/DemeterStatistic";
 
 export default Vue.extend({
   name: "ConfigurationStep",

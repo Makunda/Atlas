@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import ModuleService from "@services/extensions/demeter/ModuleService";
 import IModule from "@interfaces/imaging/Module";
-import { checkBody, checkParams } from "@shared/FunctionGlob";
+import { checkBody } from "@shared/FunctionGlob";
 import HttpException from "@exceptions/HttpException";
 
 export default class ModuleController {

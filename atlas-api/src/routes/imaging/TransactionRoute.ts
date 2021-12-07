@@ -24,7 +24,7 @@ class TransactionRoute implements Route {
 
     this.router.get(
       `${this.path}/insights/unmasked/:application`,
-      this.transactionController.getInsightsUnmaskedTransactions
+      this.transactionController.getInsightsUnmaskedTransactions,
     );
 
     this.router.post(`${this.path}/mask/single`, this.transactionController.maskTransaction);

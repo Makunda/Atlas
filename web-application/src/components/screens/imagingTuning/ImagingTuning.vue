@@ -2,15 +2,15 @@
   <v-container fluid>
     <v-row class="mb-10">
       <v-tabs
-        class="pt-3"
         v-model="tab"
         align-with-title
-        fixed-tabs
         background-color="deepcharcoal"
+        class="pt-3"
         dark
+        fixed-tabs
       >
         <v-tab v-for="item in items" :key="item.name">
-          <v-icon class="mr-3" v-if="item.icon">{{ item.icon }}</v-icon>
+          <v-icon v-if="item.icon" class="mr-3">{{ item.icon }}</v-icon>
           {{ item.name }}
         </v-tab>
       </v-tabs>
@@ -31,6 +31,8 @@ import ArchitectureExplorer from "@/components/imaging/architectures/Architectur
 import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
 import DataCallGraphExplorer from "@/components/imaging/DataCallGraphExplorer.vue";
 import IconManager from "@/components/imaging/IconManager.vue";
+import Backup from "@/components/imaging/backup/Backup.vue";
+
 export default Vue.extend({
   name: "ImagingTuning",
 
@@ -40,6 +42,7 @@ export default Vue.extend({
     ArchitectureExplorer,
     TransactionExplorer,
     DataCallGraphExplorer,
+    Backup,
     IconManager
   },
 
@@ -89,6 +92,12 @@ export default Vue.extend({
         name: "Data Call Graph",
         title: "Explore the DataCallGraph",
         icon: "mdi-apple-safari"
+      },
+      {
+        view: "Backup",
+        name: "Backup",
+        title: "Backup management",
+        icon: "mdi-backup-restore"
       }
     ]
   }),

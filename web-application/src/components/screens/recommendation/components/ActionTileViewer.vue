@@ -15,25 +15,25 @@
 
       <v-divider></v-divider>
       <v-row class="px-4 my-5">
-        <v-toolbar dark color="#1D5D6B">
+        <v-toolbar color="#1D5D6B" dark>
           <v-toolbar-title
-            >Grouping operations: Check the configuration</v-toolbar-title
-          >
+            >Grouping operations: Check the configuration
+          </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-autocomplete
             :search-input.sync="searchActions"
             cache-items
             class="mx-4"
             flat
-            hide-no-data
             hide-details
+            hide-no-data
             label="Lookup for specific operations"
             solo-inverted
           ></v-autocomplete>
         </v-toolbar>
       </v-row>
       <v-row>
-        <v-slide-group class="pa-4" active-class="success" show-arrows>
+        <v-slide-group active-class="success" class="pa-4" show-arrows>
           <v-slide-item
             v-for="(n, index) in filteredPopularOperations"
             :key="index"
@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import GroupAction from "@/api/interface/demeter/GroupAction";
+import GroupAction from "@/api/interface/extensions/demeter/GroupAction";
 
 export default Vue.extend({
   name: "ActionTileViewer",

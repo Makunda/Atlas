@@ -9,8 +9,7 @@ import HighlightOpenSourceController from "./HighlightOpenSourceController";
  */
 export default class HighlightObsolescenceController
   extends HighlightOpenSourceController
-  implements HighlightController
-{
+  implements HighlightController {
   /**
    * Invoke super and override the Parent Service
    */

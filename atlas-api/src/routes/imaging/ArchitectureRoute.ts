@@ -38,7 +38,7 @@ export default class ArchitectureRoute implements Route {
     this.router.post(`${this.path}/archimodel/update`, this.architectureController.updateArchitectureByID);
     this.router.post(
       `${this.path}/archimodel/generate/modules`,
-      this.architectureController.generateModuleFromArchitecture
+      this.architectureController.generateModuleFromArchitecture,
     );
     this.router.post(`${this.path}/subset/update`, this.architectureController.updateSubsetByID);
 
@@ -46,7 +46,7 @@ export default class ArchitectureRoute implements Route {
     this.router.post(`${this.path}/archimodel/display`, this.architectureController.displayArchitectureById);
     this.router.post(
       `${this.path}/archimodel/display/complete`,
-      this.architectureController.displayCompleteArchitectureById
+      this.architectureController.displayCompleteArchitectureById,
     );
     this.router.post(`${this.path}/subset/display`, this.architectureController.displaySubsetById);
 

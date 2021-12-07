@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { logger } from "@shared/Logger";
-import SDKResources from "./SDKResources";
 
 export default class SDKUtils {
   private static neo4jAccessLayer = Neo4JAccessLayer.getInstance();

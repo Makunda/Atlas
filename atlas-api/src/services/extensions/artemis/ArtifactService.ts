@@ -15,7 +15,7 @@ export default class ArtifactService {
       }
     }
 
-    root.children.sort(function (a, b) {
+    root.children.sort(function(a, b) {
       return b.count - a.count;
     });
 

@@ -16,13 +16,6 @@ export default class SDKResources {
   private frameworks: Framework[] = [];
 
   /**
-   *
-   */
-  public static getInstance() {
-    return this.INSTANCE;
-  }
-
-  /**
    * Constructor
    */
   private constructor() {
@@ -52,6 +45,13 @@ export default class SDKResources {
     }
 
     logger.info(`SDK Resources : ${this.frameworks.length} Frameworks have been loaded.`);
+  }
+
+  /**
+   *
+   */
+  public static getInstance() {
+    return this.INSTANCE;
   }
 
   /**

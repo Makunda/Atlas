@@ -1,47 +1,55 @@
 [
   {
     "title": "Split external objects",
-    "categories": ["Configuration"],
+    "categories": [
+      "Configuration"
+    ],
     "description": "Split all the external objects in the application and regroup them under they own Level5 nodes",
     "request": "MATCH (l:Level5:`%APPLICATION_NAME%`)-[:Aggregates]->(obj:Object:`%APPLICATION_NAME%`) WHERE obj.External=true SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [('%TAG%External '+l.Name)] ELSE obj.Tags + ('%TAG%External ' +l.Name) END",
     "recommendedRequest": "",
     "color": "#2A9D8F",
     "tag": "level"
   },
-
   {
     "title": "Split external objects (COBOL Only)",
-    "categories": ["Configuration", "Cobol"],
+    "categories": [
+      "Configuration",
+      "Cobol"
+    ],
     "description": "Split all the external objects in the application and regroup them under they own Level5 nodes. Cobol programs Only ",
     "request": "MATCH (l:Level5:`%APPLICATION_NAME%`)-[:Aggregates]->(obj:Object:`%APPLICATION_NAME%`) WHERE obj.External=true and obj.Type CONTAINS 'Cobol' SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [('%TAG%External '+l.Name)] ELSE obj.Tags + ('%TAG%External ' +l.Name) END",
     "recommendedRequest": "",
     "color": "#2A9D8F",
     "tag": "level"
   },
-
   {
     "title": "Extract Unknowns (COBOL)",
-    "categories": ["Configuration", "Cobol"],
+    "categories": [
+      "Configuration",
+      "Cobol"
+    ],
     "description": "Extract all the unknowns programs to a levels.",
     "request": "MATCH (l:Level5:`%APPLICATION_NAME%`)-[:Aggregates]->(obj:Object:`%APPLICATION_NAME%`) WHERE obj.Type CONTAINS 'Cobol' and obj.FullName CONTAINS 'Unknown' SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [('%TAG%Unknown '+l.Name)] ELSE obj.Tags + ('%TAG%Unknown ' +l.Name) END",
     "recommendedRequest": "",
     "color": "#2A9D8F",
     "tag": "level"
   },
-
   {
     "title": "Extract Isolated Objects",
-    "categories": ["Configuration"],
+    "categories": [
+      "Configuration"
+    ],
     "description": "Extract all the isolated nodes in the application and group them into their specific levels. An object is considered as isolated if it has no relationships to other objects.",
     "request": "MATCH (l:Level5:`%APPLICATION_NAME%`)-[:Aggregates]->(obj:Object:`%APPLICATION_NAME%`) WHERE NOT (obj)-[]-(:Object) SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [('%TAG%Isolated '+l.Name)] ELSE obj.Tags + ('%TAG%Isolated ' +l.Name) END",
     "recommendedRequest": "",
     "color": "#2A9D8F",
     "tag": "level"
   },
-
   {
     "title": "Extract not in Transactions",
-    "categories": ["Configuration"],
+    "categories": [
+      "Configuration"
+    ],
     "description": "Extract all the unknowns programs to a levels",
     "request": "MATCH (l:Level5:`%APPLICATION_NAME%`)-[:Aggregates]->(obj:Object:`%APPLICATION_NAME%`) WHERE NOT (obj)-[]-(:Transaction) SET obj.Tags = CASE WHEN obj.Tags IS NULL THEN [('%TAG%Not in Transaction '+l.Name)] ELSE obj.Tags + ('%TAG%Not in Transaction ' +l.Name) END",
     "recommendedRequest": "",

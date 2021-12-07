@@ -82,7 +82,7 @@ export default class AipController {
 
       const configuration = req.body.configuration;
       const configNode: AipConfiguration = await this.aipConfigurationNeo4jService.createConfigurationNode(
-        configuration
+        configuration,
       );
 
       res.status(200).json({ data: configNode, message: "Aip Configuration" });

@@ -1,12 +1,12 @@
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import { CandidateResults } from "@interfaces/demeter/candidateResults.interface";
-import { Level5Group } from "@interfaces/demeter/level.interface";
+import { CandidateResults } from "@interfaces/extensions/demeter/CandidateResults";
+import { Level5Group } from "@interfaces/extensions/demeter/Level";
 import { logger } from "@shared/Logger";
 import { int, QueryResult } from "neo4j-driver";
 
 export default class LevelService {
-  private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
   private static LEVEL_5_LABEL = "Level5";
+  private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
 
   /**
    * Get the label of the level 5

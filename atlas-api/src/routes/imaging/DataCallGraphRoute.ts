@@ -24,7 +24,7 @@ class DataCallGraphRoute implements Route {
 
     this.router.get(
       `${this.path}/insights/unmasked/:application`,
-      this.dataCallGraphController.getInsightsUnmaskedDataGraphs
+      this.dataCallGraphController.getInsightsUnmaskedDataGraphs,
     );
 
     this.router.post(`${this.path}/mask/single`, this.dataCallGraphController.maskDataGraph);

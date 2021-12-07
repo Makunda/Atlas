@@ -7,7 +7,7 @@
         </h3>
 
         <v-spacer></v-spacer>
-        <v-btn icon large color="green" class="px-4" @click="refresh()">
+        <v-btn class="px-4" color="green" icon large @click="refresh()">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-card-title>
@@ -41,20 +41,20 @@
           <p class="d-flex flex-row ">
             <v-checkbox
               v-model="showOnly"
-              value="ToValidate"
               label="Filter frameworks to validate"
-              type="checkbox"
-              @change="refresh()"
               required
+              type="checkbox"
+              value="ToValidate"
+              @change="refresh()"
             ></v-checkbox>
             <v-checkbox
-              class="ml-5"
               v-model="showOnly"
-              value="Duplicates"
+              class="ml-5"
               label="Filter duplicates frameworks"
-              type="checkbox"
-              @change="refresh()"
               required
+              type="checkbox"
+              value="Duplicates"
+              @change="refresh()"
             ></v-checkbox>
           </p>
         </v-row>
@@ -63,15 +63,15 @@
             :headers="headers"
             :items="items"
             :items-per-page.sync="itemsPerPage"
+            :loading="loadingTable"
             :page.sync="page"
             :search="search"
             :single-expand="true"
-            show-expand
             :sort-by="sortBy.toLowerCase()"
             :sort-desc="sortDesc"
-            :loading="loadingTable"
-            hide-default-footer
             class="elevation-1"
+            hide-default-footer
+            show-expand
             style="min-height: 300px; min-width: 100%"
           >
             <template v-slot:top>
@@ -81,18 +81,18 @@
                 <v-text-field
                   v-model="toSearch"
                   append-icon="mdi-magnify"
+                  hide-details
                   label="Search"
                   single-line
-                  hide-details
                   @change="searchFrameworks"
                 ></v-text-field>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="750px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
+                      class="mb-2"
                       color="primary"
                       dark
-                      class="mb-2"
                       v-bind="attrs"
                       v-on="on"
                     >
@@ -172,10 +172,10 @@
                             <v-select
                               v-model="editedItem.type"
                               :items="frameworkTypes"
+                              hint="Type of the object ( Framework or not Framework )"
                               item-text="name"
                               item-value="value"
                               label="Select type"
-                              hint="Type of the object ( Framework or not Framework )"
                               persistent-hint
                               single-line
                             ></v-select>
@@ -193,10 +193,10 @@
                             <v-combobox
                               v-model="editedItem.category"
                               :items="frameworkCategories"
+                              :return-object="false"
                               item-text="name"
                               item-value="name"
                               label="Select a category"
-                              :return-object="false"
                             ></v-combobox>
                           </v-col>
                         </v-row>
@@ -211,11 +211,11 @@
                             <v-autocomplete
                               v-model="editedItem.internalType"
                               :items="internalTypes"
-                              label="Select the internal types"
-                              outlined
                               chips
-                              small-chips
+                              label="Select the internal types"
                               multiple
+                              outlined
+                              small-chips
                             ></v-autocomplete>
                           </v-col>
                         </v-row>
@@ -238,18 +238,18 @@
                         <v-row class="px-3">
                           <v-textarea
                             v-model="editedItem.description"
-                            outlined
-                            clearable
-                            clear-icon="mdi-close-circle"
-                            label="Description of the framework"
                             :value="editedItem.description"
+                            clear-icon="mdi-close-circle"
+                            clearable
+                            label="Description of the framework"
+                            outlined
                           ></v-textarea>
                         </v-row>
                         <v-row
-                          class="red--darken--text"
                           v-if="editItemError && editItemError != ''"
-                          >{{ editItemError }}</v-row
-                        >
+                          class="red--darken--text"
+                          >{{ editItemError }}
+                        </v-row>
                       </v-container>
                     </v-card-text>
 
@@ -259,11 +259,11 @@
                         Cancel
                       </v-btn>
                       <v-btn
+                        :disabled="editedItem == focusedFramework"
+                        :loading="editItemLoading"
                         class="ma-1"
                         color="green"
                         plain
-                        :disabled="editedItem == focusedFramework"
-                        :loading="editItemLoading"
                         @click="save"
                       >
                         Save the Framework
@@ -273,24 +273,24 @@
                 </v-dialog>
                 <v-dialog v-model="dialogDelete" max-width="500px">
                   <v-card>
-                    <v-card-title class="headline"
-                      ><v-container>
+                    <v-card-title class="headline">
+                      <v-container>
                         <v-row
                           >Are you sure you want to delete this
-                          <strong>{{ editedItem.name }}</strong> item?</v-row
-                        >
+                          <strong>{{ editedItem.name }}</strong> item?
+                        </v-row>
                         <v-row
-                          class="red--darken--text"
                           v-if="editItemError && editItemError != ''"
-                          >{{ editItemError }}</v-row
-                        >
-                      </v-container></v-card-title
-                    >
+                          class="red--darken--text"
+                          >{{ editItemError }}
+                        </v-row>
+                      </v-container>
+                    </v-card-title>
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="closeDelete"
-                        >Cancel</v-btn
-                      >
+                        >Cancel
+                      </v-btn>
                       <v-btn
                         v-if="editedItem != null"
                         class="ma-1"
@@ -308,34 +308,34 @@
             </template>
             <template v-slot:item.validation="{ item }">
               <v-icon
-                color="green"
                 v-if="item.type == 'Framework' && item.description != ''"
+                color="green"
               >
                 mdi-check-circle
               </v-icon>
               <v-icon
-                color="orange"
                 v-if="item.type == 'Framework' && item.description == ''"
+                color="orange"
               >
                 mdi-check-circle
               </v-icon>
-              <v-icon color="red" v-if="item.type != 'Framework'">
+              <v-icon v-if="item.type != 'Framework'" color="red">
                 mdi-checkbox-blank-circle
               </v-icon>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">
+              <v-icon class="mr-2" small @click="editItem(item)">
                 mdi-pencil
               </v-icon>
-              <v-icon small class="mr-2" @click="deleteItem(item)">
+              <v-icon class="mr-2" small @click="deleteItem(item)">
                 mdi-delete
               </v-icon>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
-                    @click="toggleFramework(item)"
                     small
                     v-bind="attrs"
+                    @click="toggleFramework(item)"
                     v-on="on"
                   >
                     mdi-check-underline-circle-outline
@@ -371,24 +371,24 @@
                   <v-row class="mb-4"
                     >This rules currently match the following obejct types:
                     <v-chip-group column>
-                      <v-chip small v-for="tag in item.internalType" :key="tag">
+                      <v-chip v-for="tag in item.internalType" :key="tag" small>
                         {{ tag }}
                       </v-chip>
-                    </v-chip-group></v-row
-                  >
+                    </v-chip-group>
+                  </v-row>
                 </v-container>
               </td>
             </template>
             <template v-slot:footer>
-              <v-row class="mt-2 pa-4" align="center" justify="center">
+              <v-row align="center" class="mt-2 pa-4" justify="center">
                 <span class="grey--text">Items per page</span>
                 <v-menu offset-y>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
+                      class="ml-2"
+                      color="primary"
                       dark
                       text
-                      color="primary"
-                      class="ml-2"
                       v-bind="attrs"
                       v-on="on"
                     >
@@ -417,19 +417,19 @@
                   {{ numberOfPages() }}
                 </span>
                 <v-btn
-                  fab
-                  dark
-                  color="persianGrey"
                   class="mr-1"
+                  color="persianGrey"
+                  dark
+                  fab
                   @click="formerPage()"
                 >
                   <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
                 <v-btn
-                  fab
-                  dark
-                  color="persianGrey"
                   class="ml-1"
+                  color="persianGrey"
+                  dark
+                  fab
                   @click="nextPage()"
                 >
                   <v-icon>mdi-chevron-right</v-icon>
@@ -448,9 +448,9 @@
 
     <v-card>
       <v-card-title>
-        <v-icon class="mr-2" color="teal"> mdi-cogs </v-icon> Action on the
-        configuration</v-card-title
-      >
+        <v-icon class="mr-2" color="teal"> mdi-cogs</v-icon>
+        Action on the configuration
+      </v-card-title>
       <v-card-text>
         <v-container>
           <v-row class="mb-4">
@@ -462,9 +462,9 @@
             </v-col>
             <v-col cols="6">
               <v-btn
-                class="ma-2"
-                :loading="loadingAutoClean"
                 :disabled="loadingAutoClean"
+                :loading="loadingAutoClean"
+                class="ma-2"
                 color="teal"
                 dark
                 @click="launchAutoClean"
@@ -480,9 +480,9 @@
             </v-col>
             <v-col cols="6">
               <v-btn
-                class="ma-2"
-                :loading="generatingDownload"
                 :disabled="generatingDownload"
+                :loading="generatingDownload"
+                class="ma-2"
                 color="teal"
                 dark
                 @click="launchExport"
@@ -525,7 +525,7 @@ import { FrameworkController } from "@/api/controllers/extensions/artemis/Framew
 import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
 import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
 import { Category } from "@/api/interface/ApiCategory.interface";
-import { Framework } from "@/api/interface/artemis/Framework";
+import { Framework } from "@/api/interface/extensions/artemis/Framework";
 
 export default Vue.component("FrameworkReviewer", {
   data: () => ({

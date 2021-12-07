@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-toolbar dark color="charcoal">
+      <v-toolbar color="charcoal" dark>
         <v-toolbar-title>Levels detected in the application</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
@@ -9,21 +9,21 @@
           cache-items
           class="mx-4"
           flat
-          hide-no-data
           hide-details
+          hide-no-data
           label="Filter the levels ..."
           solo-inverted
         ></v-autocomplete>
       </v-toolbar>
     </v-row>
     <v-row>
-      <v-col cols="4" lg="3" md="4" v-for="(n, index) in levels" :key="index">
+      <v-col v-for="(n, index) in levels" :key="index" cols="4" lg="3" md="4">
         <GroupTile
           :id="n.id"
-          :name="n.name"
           :application="n.application"
-          :numObjects="n.numObjects"
           :demeterGroup="n.demeterGroup"
+          :name="n.name"
+          :numObjects="n.numObjects"
         >
         </GroupTile>
       </v-col>
@@ -35,7 +35,7 @@
 import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
 import GroupTile from "@/components/screens/grouping/tiles/GroupTile.vue";
 import Vue from "vue";
-import { Level5Group } from "@/api/interface/demeter/ApiLevel.interface";
+import { Level5Group } from "@/api/interface/extensions/demeter/Level";
 
 export default Vue.component("LevelViewer", {
   components: {

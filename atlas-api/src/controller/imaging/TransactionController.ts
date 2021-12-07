@@ -43,7 +43,7 @@ class TransactionController {
     try {
       const applicationName = String(req.params.application);
       const insights: Record<string, unknown> = await this.transactionService.getInsightsUnmaskedTransaction(
-        applicationName
+        applicationName,
       );
       res.status(200).json({ data: insights, message: "Insights" });
     } catch (error) {
@@ -68,7 +68,7 @@ class TransactionController {
         endIndex,
         filter,
         sort,
-        sortDesc
+        sortDesc,
       );
       res.status(200).json({ data: transactions, message: "Batch" });
     } catch (error) {
@@ -91,7 +91,7 @@ class TransactionController {
         startIndex,
         endIndex,
         sort,
-        sortDesc
+        sortDesc,
       );
       res.status(200).json({ data: transactions, message: "Batch" });
     } catch (error) {
@@ -148,7 +148,7 @@ class TransactionController {
       const transaction: ITransaction = await this.transactionService.pinTransaction(
         applicationName,
         transactionID,
-        prefix
+        prefix,
       );
       res.status(200).json({ data: transaction, message: "Renamed Transaction" });
     } catch (error) {
@@ -206,7 +206,7 @@ class TransactionController {
       const transaction: ITransaction = await this.transactionService.unpinTransaction(
         applicationName,
         transactionID,
-        prefix
+        prefix,
       );
       res.status(200).json({ data: transaction, message: "Renamed Transaction" });
     } catch (error) {
@@ -263,13 +263,13 @@ class TransactionController {
       const transaction: ITransaction = await this.transactionService.renameTransaction(
         applicationName,
         transactionID,
-        transactionName
+        transactionName,
       );
       res.status(200).json({ data: transaction, message: "Renamed Transaction" });
     } catch (error) {
       logger.error(
         `Failed to rename a transaction with name ${transactionName} in application ${applicationName}.`,
-        error
+        error,
       );
       next(error);
     }
@@ -355,7 +355,7 @@ class TransactionController {
     try {
       const transactionMasked: number = await this.transactionService.maskTransactionWithFilter(
         applicationName,
-        filter
+        filter,
       );
       res.status(200).json({ data: transactionMasked, message: "Transaction Masked" });
     } catch (error) {
@@ -404,7 +404,7 @@ class TransactionController {
     } catch (error) {
       logger.error(
         `Failed to unmask transaction with id:'${transactionID}' in application with name '${applicationName}.`,
-        error
+        error,
       );
       next(error);
     }
@@ -485,7 +485,7 @@ class TransactionController {
     } catch (error) {
       logger.error(
         `Failed to mask Transaction with certain terms inside it in application with name ${applicationName}.`,
-        error
+        error,
       );
       next(error);
     }

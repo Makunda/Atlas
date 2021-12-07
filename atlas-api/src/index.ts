@@ -49,5 +49,5 @@ async function launch() {
     logger.error("\n\nFailed to start the application. Please check the logs.\n\n");
   }
 }
- 
+
 launch();

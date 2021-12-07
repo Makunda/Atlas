@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import { int, Neo4jError } from "neo4j-driver";
+import { int } from "neo4j-driver";
 import { uuidv4 } from "@utils/utils";
 
 /**
@@ -12,12 +12,12 @@ export enum DocumentType {
 }
 
 /**
- * Create a document 
- * 
+ * Create a document
+ *
  * Structure in Neo4j
- *   
+ *
 
-  }
+ }
  */
 export default abstract class DocumentNode {
   protected static NEO4J_ACCESS_LAYER = Neo4JAccessLayer.getInstance();

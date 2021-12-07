@@ -36,8 +36,8 @@ interface Level {
 }
 
 class LevelNode {
-  private levelObj: Level;
   private static HIDDEN_LEVEL_LABEL_PREFIX = "HiddenL";
+  private levelObj: Level;
 
   constructor(level: Level) {
     this.levelObj = level;
@@ -47,38 +47,14 @@ class LevelNode {
    * Get the level depth based on its label
    * @param node
    */
-  public static getLevelDepth(node: Node) : number {
+  public static getLevelDepth(node: Node): number {
     const labels = node.labels;
     if (labels.includes("Level5") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}5`)) return 5;
-    else if(labels.includes("Level4") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}4`)) return 4;
-    else if(labels.includes("Level3") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}3`)) return 3;
-    else if(labels.includes("Level2") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}2`)) return 2;
-    else if(labels.includes("Level1") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}1`)) return 1;
+    else if (labels.includes("Level4") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}4`)) return 4;
+    else if (labels.includes("Level3") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}3`)) return 3;
+    else if (labels.includes("Level2") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}2`)) return 2;
+    else if (labels.includes("Level1") || labels.includes(`${this.HIDDEN_LEVEL_LABEL_PREFIX}1`)) return 1;
     else throw new Error(`Failed to get the level of the node with id [${node.identity.toNumber()}]`);
-  }
-
-  /**
-   * Get default value
-   * @param node Node to explore
-   * @param property Property to get
-   * @param defaultVal Default value, if no value is provided, throw an Exception
-   * @private
-   */
-  private static getPropertyOrDefault<T>(node: Node, property: string, defaultVal ?: T) : T {
-    if(!(property in node.properties) && typeof defaultVal === "undefined") throw new Error(`Property ${property} doesn't exist in node [${node.identity.toNumber()}].`);
-    return (node.properties[property] || defaultVal) as T;
-  }
-
-  /**
-   * Get the property as a number
-   * @param node Node to treat
-   * @param property Property to get
-   * @param defaultVal Default value, if no value is provided, throw an Exception
-   * @private
-   */
-  private static getPropertyAsNumberOrDefault(node: Node, property: string, defaultVal ?: number) : number {
-    if(!(property in node.properties) && !defaultVal) throw new Error(`Property ${property} doesn't exist in node [${node.identity.toNumber()}].`);
-    return (int(node.properties[property]).toNumber() || defaultVal);
   }
 
   /**
@@ -86,7 +62,7 @@ class LevelNode {
    * @param node Node to convert
    * @param hidden Choose if the node is hidden or not
    */
-  public static fromNode(node: Node, hidden: boolean = false) : Level{
+  public static fromNode(node: Node, hidden: boolean = false): Level {
 
     const level = this.getLevelDepth(node); // Get the level from label
     return {
@@ -102,6 +78,30 @@ class LevelNode {
       count: this.getPropertyAsNumberOrDefault(node, "Count", 0),
       shade: this.getPropertyOrDefault<string>(node, "Shade"),
     } as Level;
+  }
+
+  /**
+   * Get default value
+   * @param node Node to explore
+   * @param property Property to get
+   * @param defaultVal Default value, if no value is provided, throw an Exception
+   * @private
+   */
+  private static getPropertyOrDefault<T>(node: Node, property: string, defaultVal ?: T): T {
+    if (!(property in node.properties) && typeof defaultVal === "undefined") throw new Error(`Property ${property} doesn't exist in node [${node.identity.toNumber()}].`);
+    return (node.properties[property] || defaultVal) as T;
+  }
+
+  /**
+   * Get the property as a number
+   * @param node Node to treat
+   * @param property Property to get
+   * @param defaultVal Default value, if no value is provided, throw an Exception
+   * @private
+   */
+  private static getPropertyAsNumberOrDefault(node: Node, property: string, defaultVal ?: number): number {
+    if (!(property in node.properties) && !defaultVal) throw new Error(`Property ${property} doesn't exist in node [${node.identity.toNumber()}].`);
+    return (int(node.properties[property]).toNumber() || defaultVal);
   }
 
   public getRecord(): Level {

@@ -1,6 +1,6 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { Artifact } from "@/api/interface/artemis/Artifact";
+import { Artifact } from "@/api/interface/extensions/artemis/Artifact";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class ArtifactController {

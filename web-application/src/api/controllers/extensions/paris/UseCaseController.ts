@@ -1,7 +1,7 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { Group } from "@/api/interface/paris/group.interface";
-import { UseCase } from "@/api/interface/paris/useCase.interface";
+import { Group } from "@/api/interface/extensions/paris/Group";
+import { UseCase } from "@/api/interface/extensions/paris/UseCase";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class UseCaseController {

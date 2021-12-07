@@ -28,7 +28,10 @@ export default class DetectionController {
       if (!errors.isEmpty()) {
         res
           .status(HttpCode.BAD_REQUEST)
-          .send({ errors: errors.array().map(x => x.msg), message: "Failed to get the Detection status" } as ApiResponse);
+          .send({
+            errors: errors.array().map(x => x.msg),
+            message: "Failed to get the Detection status",
+          } as ApiResponse);
         return;
       }
 
@@ -41,7 +44,10 @@ export default class DetectionController {
       logger.error("DetectionController :  Failed to retrieve the status of the application.", error);
       res
         .status(HttpCode.INTERNAL_ERROR)
-        .send({ errors: ["Internal Error"], message: " Failed to retrieve the status of the application." } as ApiResponse);
+        .send({
+          errors: ["Internal Error"],
+          message: " Failed to retrieve the status of the application.",
+        } as ApiResponse);
     }
   };
 
@@ -59,7 +65,10 @@ export default class DetectionController {
       logger.error("DetectionController :  Failed to retrieve the results of the detection.", error);
       res
         .status(HttpCode.INTERNAL_ERROR)
-        .send({ errors: ["Internal Error"], message: "Failed to retrieve the results of the detection" } as ApiResponse);
+        .send({
+          errors: ["Internal Error"],
+          message: "Failed to retrieve the results of the detection",
+        } as ApiResponse);
     }
   };
 
@@ -78,7 +87,10 @@ export default class DetectionController {
       if (!errors.isEmpty()) {
         res
           .status(HttpCode.BAD_REQUEST)
-          .send({ errors: errors.array().map(x => x.msg), message: "Failed to find the results of the detection" } as ApiResponse);
+          .send({
+            errors: errors.array().map(x => x.msg),
+            message: "Failed to find the results of the detection",
+          } as ApiResponse);
         return;
       }
 
@@ -87,7 +99,10 @@ export default class DetectionController {
       res.status(HttpCode.SUCCESS).send({ data: results, message: `Result for detection with id ${idDetection}.` });
     } catch (error) {
       logger.error("DetectionController :  Failed to find the results of the detection.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to find the results of the detection" } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to find the results of the detection",
+      } as ApiResponse);
     }
   };
 
@@ -103,7 +118,10 @@ export default class DetectionController {
       res.status(HttpCode.SUCCESS).send({ data: true, message: "Results Flushed" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionController : Failed to flush the results.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to flush the results." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to flush the results.",
+      } as ApiResponse);
     }
   };
 
@@ -120,7 +138,10 @@ export default class DetectionController {
       res.status(HttpCode.SUCCESS).send({ data: results, message: "Successful Detections" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionController : Failed to retrieve successful detections.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to retrieve successful detections." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to retrieve successful detections.",
+      } as ApiResponse);
       next(error);
     }
   };
@@ -137,7 +158,10 @@ export default class DetectionController {
       res.status(HttpCode.SUCCESS).send({ data: results, message: "Pending Detections" });
     } catch (error) {
       logger.error("DetectionController : Failed to retrieve pending detections.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to retrieve pending detections." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to retrieve pending detections.",
+      } as ApiResponse);
     }
   };
 
@@ -153,7 +177,10 @@ export default class DetectionController {
       res.status(HttpCode.SUCCESS).send({ data: results, message: "Failed Detections" });
     } catch (error) {
       logger.error("DetectionController : Failed to retrieve failed detections.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to retrieve failed detections." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to retrieve failed detections.",
+      } as ApiResponse);
     }
   };
 
@@ -194,7 +221,10 @@ export default class DetectionController {
       res.status(HttpCode.SUCCESS).send({ data: b, message: "Detection launched" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionController : Failed to launch a detection.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to launch detection." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to launch detection.",
+      } as ApiResponse);
     }
   };
 
@@ -212,7 +242,10 @@ export default class DetectionController {
       res.status(HttpCode.SUCCESS).send({ data: true, message: "Detection Cancelled" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionController : Failed to launch a detection.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to launch detection." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to launch detection.",
+      } as ApiResponse);
     }
   };
 }

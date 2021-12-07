@@ -15,30 +15,17 @@ export default class PythiaTokenManager {
   private token: string = null;
 
   /**
+   * Singleton constructor
+   */
+  private constructor() {
+    // Singleton
+  }
+
+  /**
    * Get the instance of the singleton
    */
   public static getInstance(): PythiaTokenManager {
     return PythiaTokenManager.INSTANCE;
-  }
-
-  /**
-   * Get the token stored in database
-   */
-  private async getTokenFromDatabase(): Promise<string | null> {
-    const req = `MATCH (o:${PythiaTokenManager.PYTHIA_LOGIN_LABEL}) 
-        RETURN o.Token as token`;
-
-    try {
-      const res = await PythiaTokenManager.NEO4JAL.execute(req);
-      if (!res || res.records.length == 0) {
-        return null; // No token in the database
-      }
-
-      return String(res.records[0].get("token"));
-    } catch (err) {
-      logger.error("Failed to retrieve the token from pythia", err);
-      throw new Error("Failed to retrieve the pythia token in the database.");
-    }
   }
 
   /**
@@ -80,9 +67,22 @@ export default class PythiaTokenManager {
   }
 
   /**
-   * Singleton constructor
+   * Get the token stored in database
    */
-  private constructor() {
-    // Singleton
+  private async getTokenFromDatabase(): Promise<string | null> {
+    const req = `MATCH (o:${PythiaTokenManager.PYTHIA_LOGIN_LABEL}) 
+        RETURN o.Token as token`;
+
+    try {
+      const res = await PythiaTokenManager.NEO4JAL.execute(req);
+      if (!res || res.records.length == 0) {
+        return null; // No token in the database
+      }
+
+      return String(res.records[0].get("token"));
+    } catch (err) {
+      logger.error("Failed to retrieve the token from pythia", err);
+      throw new Error("Failed to retrieve the pythia token in the database.");
+    }
   }
 }

@@ -10,15 +10,14 @@ export default abstract class Extension {
   private application: string;
 
   /**
-   * Log info message from the extension
-   * @param text Text to log
+   * Constructor of the extension
+   * @param neo4jAccessLayer Neo4j Access Layer to query the Neo4j database
+   * @param logger Logger
+   * @todo Add the postgres connection layer
    */
-  protected logInfo(text: string) {
-    this.logger.info(`Extension - ${this.getName()} :: ${text}.`);
-  }
-
-  protected logError(text: string, error: any) {
-    this.logger.error(`Extension - ${this.getName()} :: ${text}.`, error);
+  constructor(neo4jAccessLayer: Neo4JAccessLayer, logger: Logger) {
+    this.neo4jAccesLayer = neo4jAccessLayer;
+    this.logger = logger;
   }
 
   /**
@@ -34,6 +33,7 @@ export default abstract class Extension {
   abstract getName(): string;
 
   abstract getCreationDate(): string;
+
   abstract getLastUpdate(): string;
 
   /**
@@ -46,6 +46,7 @@ export default abstract class Extension {
    * @todo Store this information in a JSON file, along the code
    */
   abstract getFullDescription(): string;
+
   /**
    * Return a list of tags describing the extension
    */
@@ -80,20 +81,23 @@ export default abstract class Extension {
       this.isRunning = false;
     }
   }
-  protected abstract executeExtension(application: string): Promise<any>;
+
   /**
    * Execute action after the execution
    */
   abstract afterExecution(): Promise<any>;
 
   /**
-   * Constructor of the extension
-   * @param neo4jAccessLayer Neo4j Access Layer to query the Neo4j database
-   * @param logger Logger
-   * @todo Add the postgres connection layer
+   * Log info message from the extension
+   * @param text Text to log
    */
-  constructor(neo4jAccessLayer: Neo4JAccessLayer, logger: Logger) {
-    this.neo4jAccesLayer = neo4jAccessLayer;
-    this.logger = logger;
+  protected logInfo(text: string) {
+    this.logger.info(`Extension - ${this.getName()} :: ${text}.`);
   }
+
+  protected logError(text: string, error: any) {
+    this.logger.error(`Extension - ${this.getName()} :: ${text}.`, error);
+  }
+
+  protected abstract executeExtension(application: string): Promise<any>;
 }

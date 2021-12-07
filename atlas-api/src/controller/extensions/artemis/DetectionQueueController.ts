@@ -4,7 +4,6 @@ import { DetectionCandidate } from "@dtos/artemis/detectionCandidate.dto";
 import { HttpCode } from "@utils/HttpCode";
 import ApiResponse from "@interfaces/api/ApiResponse";
 import { logger } from "@shared/Logger";
-import { Http } from "winston/lib/winston/transports";
 import { body, validationResult } from "express-validator";
 
 class DetectionQueueController {
@@ -24,7 +23,10 @@ class DetectionQueueController {
       if (!errors.isEmpty()) {
         res
           .status(HttpCode.BAD_REQUEST)
-          .send({ errors: errors.array().map(x => x.msg), message: "Failed to add candidates to the detection queue" } as ApiResponse);
+          .send({
+            errors: errors.array().map(x => x.msg),
+            message: "Failed to add candidates to the detection queue",
+          } as ApiResponse);
         return;
       }
 
@@ -41,7 +43,10 @@ class DetectionQueueController {
       res.status(HttpCode.SUCCESS).send({ data: toAdd.length, message: "Number in Queue" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionQueueController : Failed to add candidates to the detection queue.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to add the candidates." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to add the candidates.",
+      } as ApiResponse);
     }
   };
 
@@ -57,7 +62,10 @@ class DetectionQueueController {
       res.status(HttpCode.SUCCESS).send({ data: true, message: "Queue Flushed" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionQueueController : Failed to flush the detection queue.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to flush the Queue." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to flush the Queue.",
+      } as ApiResponse);
     }
   };
 
@@ -73,7 +81,10 @@ class DetectionQueueController {
       res.status(HttpCode.SUCCESS).send({ data: current, message: "Current candidate" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionQueueController : Failed to get candidate being processed.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: "Failed to get candidate being processed." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: "Failed to get candidate being processed.",
+      } as ApiResponse);
     }
   };
 
@@ -90,7 +101,10 @@ class DetectionQueueController {
       res.status(200).send({ data: results, message: "Candidate queue" } as ApiResponse);
     } catch (error) {
       logger.error("DetectionQueueController : Failed to get the candidate queue.", error);
-      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal Error"], message: " Failed to get the candidate queue." } as ApiResponse);
+      res.status(HttpCode.INTERNAL_ERROR).send({
+        errors: ["Internal Error"],
+        message: " Failed to get the candidate queue.",
+      } as ApiResponse);
     }
   };
 }

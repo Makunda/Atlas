@@ -5,7 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 import nocache from "nocache";
 
-import express, { Express, NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import StatusCodes from "http-status-codes";
 import "express-async-errors";
 import history from "connect-history-api-fallback";
@@ -39,7 +39,7 @@ app.use(cookieParser());
 app.use(history());
 
 // No cache on the Server
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
   res.header("Expires", "-1");
   res.header("Pragma", "no-cache");
@@ -58,7 +58,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(helmet());
 }
 
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.setHeader(
     "Content-Security-Policy",
     "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';",

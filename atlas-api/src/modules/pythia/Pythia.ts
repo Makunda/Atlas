@@ -14,6 +14,13 @@ export default class Pythia {
   private pythiaTokenManager: PythiaTokenManager;
 
   /**
+   * No arg constructor
+   */
+  public constructor() {
+    this.pythiaTokenManager = PythiaTokenManager.getInstance(); // declare token manager
+  }
+
+  /**
    * Create a pythia token and store it in the database
    * @param token Token to create
    */
@@ -37,6 +44,10 @@ export default class Pythia {
     return this.pythiaTokenManager.createToken(token);
   }
 
+  /** ---------------------------------------------------------------------------------- **
+   ** API FUNCTIONS : UTILS                                                              **
+   ** ---------------------------------------------------------------------------------- **/
+
   /**
    * Check if a pythia token is set
    * @return True if it is, false otherwise
@@ -44,10 +55,6 @@ export default class Pythia {
   public async isTokenSet(): Promise<boolean> {
     return this.pythiaTokenManager.existsToken();
   }
-
-  /** ---------------------------------------------------------------------------------- **
-   ** API FUNCTIONS : UTILS                                                              **
-   ** ---------------------------------------------------------------------------------- **/
 
   /**
    * Get the status of pythia
@@ -57,6 +64,10 @@ export default class Pythia {
     return PythiaApiService.getStatus();
   }
 
+  /** ---------------------------------------------------------------------------------- **
+   ** Highlight framework                                                                **
+   ** ---------------------------------------------------------------------------------- **/
+
   /**
    * Get the authentication status
    * @returns Authentication Status
@@ -64,10 +75,6 @@ export default class Pythia {
   public async getAuthenticationStatus(): Promise<PythiaAuthenticationStatus> {
     return PythiaApiService.getAuthenticationStatus();
   }
-
-  /** ---------------------------------------------------------------------------------- **
-   ** Highlight framework                                                                **
-   ** ---------------------------------------------------------------------------------- **/
 
   /**
    * Create a new Highlight Framework.
@@ -86,13 +93,6 @@ export default class Pythia {
    */
   public async bulkCreateHighlightFramework(frameworks: HighlightFramework[]): Promise<PythiaApiResponseImpl<HighlightFramework[]>> {
     return PythiaHighlightFrameworkService.bulkCreateHighlightFramework(frameworks);
-  }
-
-  /**
-   * No arg constructor
-   */
-  public constructor() {
-    this.pythiaTokenManager = PythiaTokenManager.getInstance(); // declare token manager
   }
 }
 

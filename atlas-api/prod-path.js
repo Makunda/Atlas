@@ -26,24 +26,24 @@ const paths = {
 
 /**
  * "@agents": "dist/agents",
-    "@daos": "dist/daos",
-    "@entities": "dist/entities",
-    "@shared": "dist/shared",
-    "@assistants": "dist/assistants",
-    "@server": "dist/Server",
-    "@controller": "dist/controller",
-    "@services": "dist/services",
-    "@dtos": "dist/dtos",
-    "@utils": "dist/utils",
-    "@postgres": "dist/postgres",
-    "@database": "dist/database",
-    "@interfaces": "dist/interfaces",
-    "@exceptions": "dist/exceptions"
+ "@daos": "dist/daos",
+ "@entities": "dist/entities",
+ "@shared": "dist/shared",
+ "@assistants": "dist/assistants",
+ "@server": "dist/Server",
+ "@controller": "dist/controller",
+ "@services": "dist/services",
+ "@dtos": "dist/dtos",
+ "@utils": "dist/utils",
+ "@postgres": "dist/postgres",
+ "@database": "dist/database",
+ "@interfaces": "dist/interfaces",
+ "@exceptions": "dist/exceptions"
  */
 
 const cleanup = tsConfigPaths.register({
-    baseUrl,
-    paths: paths
+  baseUrl,
+  paths: paths,
 });
 
-cleanup()
+cleanup();

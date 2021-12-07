@@ -1,4 +1,3 @@
-import { logger } from "@shared/Logger";
 import Excel from "exceljs";
 
 export default class ExcelUtils {
@@ -44,7 +43,7 @@ export default class ExcelUtils {
     worksheet: Excel.Worksheet,
     row: number,
     colName: string,
-    colMapping: Map<string, number>
+    colMapping: Map<string, number>,
   ): string {
     // Verification on the mapping
     if (!colMapping.has(colName)) return "";
@@ -64,7 +63,7 @@ export default class ExcelUtils {
     worksheet: Excel.Worksheet,
     row: number,
     colName: string,
-    colMapping: Map<string, number>
+    colMapping: Map<string, number>,
   ): string[] {
     // Verification on the mapping
     if (!colMapping.has(colName)) return [];

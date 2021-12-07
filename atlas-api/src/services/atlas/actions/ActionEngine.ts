@@ -150,7 +150,8 @@ export default class ActionEngine {
             actionList[i].id = it;
             it = it + 1;
             this.actionList.push(actionList[i]);
-          } catch (ignored) {}
+          } catch (ignored) {
+          }
         }
 
         this.filesLoaded.push(x);

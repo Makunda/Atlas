@@ -12,24 +12,24 @@
         recommendations ,in order to enrich your configuration, and display more
         information on CAST Imaging System.<br />
         For more information on tags and documents, please refer to the official
-        <a href="#">CAST Imaging documentation</a>.</v-card-subtitle
-      >
+        <a href="#">CAST Imaging documentation</a>.
+      </v-card-subtitle>
       <v-card-text>
         <v-container>
           <v-row>
             <v-expand-x-transition>
               <v-col
-                :cols="editMode ? 0 : 6"
                 v-show="!editMode"
+                :cols="editMode ? 0 : 6"
                 transition="scale-transition"
               >
                 <v-treeview
                   v-model="tree"
                   :items="useCasesTree"
-                  selected-color="indigo"
+                  expand-icon="mdi-chevron-down"
                   open-on-click
                   return-object
-                  expand-icon="mdi-chevron-down"
+                  selected-color="indigo"
                 >
                   <template v-slot:prepend="{ item }">
                     <v-icon v-if="!item.isUseCase">
@@ -38,7 +38,7 @@
                   </template>
 
                   <template slot="label" slot-scope="{ item }">
-                    <p class="pt-4" v-if="item.isUseCase">{{ item.title }}</p>
+                    <p v-if="item.isUseCase" class="pt-4">{{ item.title }}</p>
                     <!-- Diplay a group with actions -->
                     <div v-else>
                       <v-row class="px-8">
@@ -50,13 +50,13 @@
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
                               class="ma-2"
-                              text
-                              small
-                              icon
-                              v-on:click="editItem(item)"
                               color="blue lighten-2"
+                              icon
+                              small
+                              text
                               v-bind="attrs"
                               v-on="on"
+                              v-on:click="editItem(item)"
                             >
                               <v-icon>mdi-pencil</v-icon>
                             </v-btn>
@@ -67,13 +67,13 @@
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
                               class="ma-2"
-                              text
-                              small
-                              icon
                               color="red lighten-2"
-                              v-on:click="removeItem(item)"
+                              icon
+                              small
+                              text
                               v-bind="attrs"
                               v-on="on"
+                              v-on:click="removeItem(item)"
                             >
                               <v-icon>mdi-timeline-remove-outline</v-icon>
                             </v-btn>
@@ -103,12 +103,13 @@
                           <v-spacer></v-spacer>
                           <v-btn
                             v-show="editMode"
-                            @click="close"
                             class="ma-2 mr-5"
-                            small
                             dark
+                            small
+                            @click="close"
                           >
-                            <v-icon dark left> mdi-minus-circle </v-icon>Close
+                            <v-icon dark left> mdi-minus-circle</v-icon>
+                            Close
                           </v-btn>
                         </v-row>
                         <div class="text--primary">
@@ -120,70 +121,70 @@
                         <v-expand-x-transition>
                           <v-form
                             v-show="editMode"
-                            class="pa-4"
                             ref="form"
+                            class="pa-4"
                             lazy-validation
                           >
                             <v-text-field
-                              outlined
                               v-model="group.name"
                               :rules="[v => !!v || 'Name is required']"
                               label="Name of the rule"
+                              outlined
                               required
                             ></v-text-field>
                             <v-textarea
-                              outlined
-                              name="associatedDescription"
                               v-model="group.description"
                               label="Associated description"
+                              name="associatedDescription"
+                              outlined
                               placeholder="Type here the descirption assoicated to your tag..."
                             ></v-textarea>
                             <v-text-field
-                              outlined
                               v-model="group.groupName"
                               :rules="[v => !!v || 'Group is required']"
                               label="Name of the group that will be created"
+                              outlined
                               required
                             ></v-text-field>
                             <v-textarea
-                              outlined
-                              name="cypherRequest"
                               v-model="group.cypherRequest"
-                              label="Associated Request"
                               :rules="[
                                 v => !!v || 'Associated request is required'
                               ]"
+                              label="Associated Request"
+                              name="cypherRequest"
+                              outlined
                               placeholder="Type here your neo4j Cypher request..."
                               @change="validRequest = false"
                             ></v-textarea>
                             <v-text-field
-                              outlined
                               v-model="group.cypherRequestReturn"
                               :rules="[v => !!v || 'Return value is required']"
                               label="Name of the returned value"
-                              @change="validRequest = false"
+                              outlined
                               required
+                              @change="validRequest = false"
                             ></v-text-field>
                             <v-select
                               v-model="selectedUseCaseId"
                               :items="usecases"
-                              item-text="title"
-                              item-value="id"
-                              label="Select the parent use case"
                               :rules="[
                                 v => !!v || 'You must select a parent use case'
                               ]"
+                              item-text="title"
+                              item-value="id"
+                              label="Select the parent use case"
                               persistent-hint
                               single-line
                             ></v-select>
                             <v-checkbox
-                              class="pl-5"
                               v-model="group.active"
+                              class="pl-5"
                               label="Set recommendation as active"
                             ></v-checkbox>
                             <v-checkbox
-                              class="pl-5"
                               v-model="group.selected"
+                              class="pl-5"
                               label="Set recommendation as selected"
                             ></v-checkbox>
                             <v-btn
@@ -202,9 +203,9 @@
                             Please select a tag or
                             <v-btn
                               class="ml-3"
-                              small
                               color="primary"
                               dark
+                              small
                               @click="createItem"
                             >
                               Create a new recommendation
@@ -216,8 +217,8 @@
 
                         <!-- Request validity -->
                         <v-row
-                          class="pa-5"
                           v-if="validityError && validityError.length != 0"
+                          class="pa-5"
                         >
                           <p class="red--text">
                             {{ validityError }}
@@ -226,16 +227,16 @@
 
                         <!-- Creation Error -->
                         <v-row
-                          class="pa-5"
                           v-if="creationError && creationError.length != 0"
+                          class="pa-5"
                         >
                           <v-alert
                             :value="creationError.length != 0"
+                            border="top"
                             color="pink"
                             dark
-                            border="top"
-                            type="error"
                             transition="scale-transition"
+                            type="error"
                           >
                             {{ creationError }}
                           </v-alert>
@@ -244,9 +245,9 @@
 
                       <v-card-actions v-show="editMode">
                         <v-btn
-                          class="ma-2"
-                          :loading="loadingValidity"
                           :disabled="loadingValidity"
+                          :loading="loadingValidity"
+                          class="ma-2"
                           color="success"
                           @click="checkValidity()"
                         >
@@ -256,9 +257,9 @@
                           </template>
                         </v-btn>
                         <v-btn
-                          class="ma-2"
-                          :loading="loadingCreation"
                           :disabled="loadingCreation || !validRequest"
+                          :loading="loadingCreation"
+                          class="ma-2"
                           color="info"
                           @click="save"
                         >
@@ -282,12 +283,13 @@
                 Tag creator assistant
                 <v-spacer></v-spacer>
                 <v-btn
-                  @click="showAssistant = false"
                   class="ma-2 mr-5"
-                  small
                   dark
+                  small
+                  @click="showAssistant = false"
                 >
-                  <v-icon dark left> mdi-minus-circle </v-icon>Close
+                  <v-icon dark left> mdi-minus-circle</v-icon>
+                  Close
                 </v-btn>
               </v-card-title>
               <v-card-text>
@@ -317,15 +319,15 @@
                     <!-- Tag template description -->
                     <v-col cols="9">
                       <v-textarea
+                        :value="tagAssistsItems[selectedTagAssist].template"
                         class="pa-2"
                         height="200px"
                         label="Template"
-                        :value="tagAssistsItems[selectedTagAssist].template"
                         outlined
                       ></v-textarea>
                       <v-row
-                        class="px-4"
                         v-if="tagAssistsItems[selectedTagAssist].explanation"
+                        class="px-4"
                       >
                         <p>How this request works :</p>
                         <i
@@ -347,14 +349,14 @@
     <v-dialog v-model="dialogDelete" max-width="500px">
       <v-card>
         <v-card-title class="headline"
-          >Are you sure you want to delete this item?</v-card-title
-        >
+          >Are you sure you want to delete this item?
+        </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
           <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-            >OK</v-btn
-          >
+            >OK
+          </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -374,8 +376,8 @@
 </template>
 
 <script lang="ts">
-import { Group } from "@/api/interface/paris/group.interface";
-import { UseCase } from "@/api/interface/paris/useCase.interface";
+import { Group } from "@/api/interface/extensions/paris/Group";
+import { UseCase } from "@/api/interface/extensions/paris/UseCase";
 import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
 import { GroupController } from "@/api/controllers/extensions/paris/GroupController";
 import { Vue } from "vue-property-decorator";

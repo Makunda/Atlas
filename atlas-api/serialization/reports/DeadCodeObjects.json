@@ -2,8 +2,14 @@
   "nickname": "DeadCodeObjects",
   "name": "Dead code in the application (Objects)",
   "description": "List the different objects having no relationship with the rest of the application",
-  "categories": ["maintenance"],
+  "categories": [
+    "maintenance"
+  ],
   "parameters": [],
   "request": "MATCH (o:Object:`%APPLICATION_NAME%`) WHERE NOt (o)-[]-(:Object) RETURN DISTINCT o.Type as Type, o.FullName as `Object FullName`, o.Name as `Object Name`;",
-  "returnValues": ["Type", "Object FullName", "Object Name"]
+  "returnValues": [
+    "Type",
+    "Object FullName",
+    "Object Name"
+  ]
 }

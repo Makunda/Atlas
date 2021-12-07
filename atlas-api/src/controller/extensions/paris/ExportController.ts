@@ -10,7 +10,7 @@ export default class ExportController {
     try {
       const filePath = await this.exportService.exportParisData();
 
-      res.sendFile(filePath, function (err) {
+      res.sendFile(filePath, function(err) {
         if (err) {
           next(err);
         } else {

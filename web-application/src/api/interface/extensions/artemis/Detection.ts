@@ -1,5 +1,5 @@
-import { Framework } from "@/api/interface/artemis/Framework";
-import { DetectionStatus } from "@/api/interface/artemis/detectionStatus.enum";
+import { Framework } from "@/api/interface/extensions/artemis/Framework";
+import { DetectionStatus } from "@/api/interface/extensions/artemis/detectionStatus.enum";
 
 /**
  * Detection interface

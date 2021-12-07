@@ -114,7 +114,7 @@ class TransactionService {
     end: number,
     filter?: Record<string, unknown>,
     sort?: string,
-    sortDesc?: boolean
+    sortDesc?: boolean,
   ): Promise<ITransaction[]> {
     try {
       const filterArray = this.buildFilter(filter);
@@ -237,7 +237,7 @@ class TransactionService {
     start: number,
     end: number,
     sort?: string,
-    sortDesc?: boolean
+    sortDesc?: boolean,
   ): Promise<ITransaction[]> {
     try {
       const req = `MATCH (t:${TransactionService.MASKED_TRANSACTION_LABEL}:\`${application}\`)

@@ -1,4 +1,4 @@
-import { Node, int } from "neo4j-driver";
+import { int, Node } from "neo4j-driver";
 
 /**
  * Different types of schema that can be

@@ -1,4 +1,4 @@
-export interface ModuleGroup {
+export interface Module {
   id: number;
   name: string;
   application: string;

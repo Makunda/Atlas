@@ -8,12 +8,22 @@ import Extension from "@extensions/Extension";
  * Manage all the extensions installed
  */
 export default class ExtensionManager {
-  // Singleton
-  private static INSTANCE = new ExtensionManager();
-
   // Path to the extension folder
   public static EXTENSION_FOLDER = __dirname + "\\root";
+  // Singleton
+  private static INSTANCE = new ExtensionManager();
   public plugins: Extension[] = [];
+
+  private constructor() {
+    // Empty constructor
+  }
+
+  /**
+   * Get the instance of the class
+   */
+  public static getInstance(): ExtensionManager {
+    return this.INSTANCE;
+  }
 
   /**
    * Register all the module in the ext
@@ -98,16 +108,5 @@ export default class ExtensionManager {
 
     // The extension exist execute and add to the extension list
     return await extension.execute(application);
-  }
-
-  /**
-   * Get the instance of the class
-   */
-  public static getInstance(): ExtensionManager {
-    return this.INSTANCE;
-  }
-
-  private constructor() {
-    // Empty constructor
   }
 }

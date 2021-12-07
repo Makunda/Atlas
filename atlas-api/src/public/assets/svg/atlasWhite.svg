@@ -1,620 +1,619 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="118.40234mm"
-   height="118.40235mm"
-   viewBox="0 0 118.40234 118.40235"
-   version="1.1"
-   id="svg8"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="atlas.svg">
-  <defs
-     id="defs2">
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect1336"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect176"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect172"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect168"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect164"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect160"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect156"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect152"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect148"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect144"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect140"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect132"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect128"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect120"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect116"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect112"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect108"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect104"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect100"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect96"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect92"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect88"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect84"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect80"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect76"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect72"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect68"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect64"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect60"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect56"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect52"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect48"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect44"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect40"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1.7604153"
-     inkscape:cx="87.453843"
-     inkscape:cy="262.27028"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     inkscape:object-paths="false"
-     inkscape:window-width="2560"
-     inkscape:window-height="1377"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0" />
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Layer 2"
-     style="display:inline"
-     transform="translate(-40.166016,-73.732422)">
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        xmlns="http://www.w3.org/2000/svg"
+        width="118.40234mm"
+        height="118.40235mm"
+        viewBox="0 0 118.40234 118.40235"
+        version="1.1"
+        id="svg8"
+        inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+        sodipodi:docname="atlas.svg">
+    <defs
+            id="defs2">
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect1336"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect176"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect172"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect168"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect164"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect160"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect156"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect152"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect148"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect144"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect140"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect132"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect128"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect120"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect116"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect112"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect108"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect104"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect100"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect96"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect92"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect88"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect84"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect80"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect76"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect72"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect68"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect64"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect60"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect56"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect52"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect48"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect44"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+        <inkscape:path-effect
+                effect="bspline"
+                id="path-effect40"
+                is_visible="true"
+                lpeversion="1"
+                weight="33.333333"
+                steps="2"
+                helper_size="0"
+                apply_no_weight="true"
+                apply_with_weight="true"
+                only_selected="false"/>
+    </defs>
+    <sodipodi:namedview
+            id="base"
+            pagecolor="#ffffff"
+            bordercolor="#666666"
+            borderopacity="1.0"
+            inkscape:pageopacity="0.0"
+            inkscape:pageshadow="2"
+            inkscape:zoom="1.7604153"
+            inkscape:cx="87.453843"
+            inkscape:cy="262.27028"
+            inkscape:document-units="mm"
+            inkscape:current-layer="layer2"
+            inkscape:document-rotation="0"
+            showgrid="false"
+            inkscape:object-paths="false"
+            inkscape:window-width="2560"
+            inkscape:window-height="1377"
+            inkscape:window-x="1912"
+            inkscape:window-y="-8"
+            inkscape:window-maximized="1"
+            fit-margin-top="0"
+            fit-margin-left="0"
+            fit-margin-right="0"
+            fit-margin-bottom="0"/>
+    <metadata
+            id="metadata5">
+        <rdf:RDF>
+            <cc:Work
+                    rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type
+                        rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                <dc:title></dc:title>
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
     <g
-       id="g1328"
-       style="opacity:1"
-       transform="translate(66.960938,-24.287109)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
-      <path
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.669999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
-         d="m 32.40625,98.019531 c -32.69190349,10e-7 -59.201173,26.509269 -59.201172,59.201169 1e-6,32.69191 26.50927008,59.20117 59.201172,59.20118 32.691902,0 59.201171,-26.50927 59.201172,-59.20118 10e-7,-32.6919 -26.509268,-59.201169 -59.201172,-59.201169 z m 0,0.669922 c 32.32981,0 58.531251,26.201437 58.53125,58.531247 -10e-7,32.32981 -26.201442,58.53125 -58.53125,58.53125 -32.32980759,0 -58.531249,-26.20144 -58.53125,-58.53125 -1e-6,-32.32981 26.20144085,-58.531246 58.53125,-58.531247 z"
-         id="path1332" />
+            inkscape:groupmode="layer"
+            id="layer2"
+            inkscape:label="Layer 2"
+            style="display:inline"
+            transform="translate(-40.166016,-73.732422)">
+        <g
+                id="g1328"
+                style="opacity:1"
+                transform="translate(66.960938,-24.287109)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96">
+            <path
+                    style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.669999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+                    d="m 32.40625,98.019531 c -32.69190349,10e-7 -59.201173,26.509269 -59.201172,59.201169 1e-6,32.69191 26.50927008,59.20117 59.201172,59.20118 32.691902,0 59.201171,-26.50927 59.201172,-59.20118 10e-7,-32.6919 -26.509268,-59.201169 -59.201172,-59.201169 z m 0,0.669922 c 32.32981,0 58.531251,26.201437 58.53125,58.531247 -10e-7,32.32981 -26.201442,58.53125 -58.53125,58.53125 -32.32980759,0 -58.531249,-26.20144 -58.53125,-58.53125 -1e-6,-32.32981 26.20144085,-58.531246 58.53125,-58.531247 z"
+                    id="path1332"/>
+        </g>
+        <path
+                style="fill:#ffffff;stroke:#ffffff;stroke-width:0.254286;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="m 377.5678,722.39957 c -13.65963,-0.16021 -27.93486,-1.19834 -39.26328,-2.85532 -2.10595,-0.30803 -5.04714,-0.78761 -5.08938,-0.82985 -0.013,-0.0129 -0.17981,-0.42835 -0.3708,-0.92312 -1.02189,-2.64725 -1.03484,-4.46109 -0.0362,-5.06841 0.90802,-0.5522 1.83635,-0.49888 6.19928,0.35604 6.20556,1.216 10.17807,1.71228 15.71536,1.96329 7.09215,0.32151 15.3921,-0.53774 22.9004,-2.37074 2.27328,-0.55497 4.1323,-1.14937 6.82321,-2.18162 1.28966,-0.49472 2.3113,-0.82707 2.63017,-0.85563 0.50291,-0.045 0.52897,-0.0347 0.73508,0.29162 0.203,0.32141 0.21058,0.42109 0.15177,1.9952 -0.0708,1.89567 0.0338,2.45966 0.5698,3.07007 1.28235,1.46052 4.99233,1.35695 6.53161,-0.18233 0.53199,-0.53199 0.90932,-1.3781 1.28406,-2.87937 0.32422,-1.29882 0.54718,-1.84771 0.86864,-2.13841 0.83927,-0.75897 2.94482,-0.60863 4.78053,0.34132 1.08242,0.56014 2.11307,1.54653 2.28121,2.18325 0.22546,0.8538 -0.13074,2.0998 -1.20621,4.21933 -1.09875,2.16542 -2.66701,4.39241 -3.61423,5.13234 -0.34804,0.27188 -0.37393,0.27565 -2.66106,0.3866 -5.28764,0.25653 -13.79508,0.40949 -19.22998,0.34574 z"
+                id="path1338"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
     </g>
-    <path
-       style="fill:#ffffff;stroke:#ffffff;stroke-width:0.254286;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 377.5678,722.39957 c -13.65963,-0.16021 -27.93486,-1.19834 -39.26328,-2.85532 -2.10595,-0.30803 -5.04714,-0.78761 -5.08938,-0.82985 -0.013,-0.0129 -0.17981,-0.42835 -0.3708,-0.92312 -1.02189,-2.64725 -1.03484,-4.46109 -0.0362,-5.06841 0.90802,-0.5522 1.83635,-0.49888 6.19928,0.35604 6.20556,1.216 10.17807,1.71228 15.71536,1.96329 7.09215,0.32151 15.3921,-0.53774 22.9004,-2.37074 2.27328,-0.55497 4.1323,-1.14937 6.82321,-2.18162 1.28966,-0.49472 2.3113,-0.82707 2.63017,-0.85563 0.50291,-0.045 0.52897,-0.0347 0.73508,0.29162 0.203,0.32141 0.21058,0.42109 0.15177,1.9952 -0.0708,1.89567 0.0338,2.45966 0.5698,3.07007 1.28235,1.46052 4.99233,1.35695 6.53161,-0.18233 0.53199,-0.53199 0.90932,-1.3781 1.28406,-2.87937 0.32422,-1.29882 0.54718,-1.84771 0.86864,-2.13841 0.83927,-0.75897 2.94482,-0.60863 4.78053,0.34132 1.08242,0.56014 2.11307,1.54653 2.28121,2.18325 0.22546,0.8538 -0.13074,2.0998 -1.20621,4.21933 -1.09875,2.16542 -2.66701,4.39241 -3.61423,5.13234 -0.34804,0.27188 -0.37393,0.27565 -2.66106,0.3866 -5.28764,0.25653 -13.79508,0.40949 -19.22998,0.34574 z"
-       id="path1338"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-  </g>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     style="display:inline"
-     transform="translate(-40.166016,-73.732422)">
-    <path
-       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.999067;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
-       d="m 99.367188,74.402344 c -2.474421,0.0498 -4.945645,0.208563 -7.386719,0.425781 l 0.01172,0.128906 -0.02148,-0.128906 C 79.651093,76.784115 68.897118,84.501924 61.4336,94.251953 53.92309,102.80039 51.219036,114.81783 53.056647,125.90625 l 0.259765,-0.043 c -1.826245,-11.01985 0.867274,-22.96322 8.322266,-31.443358 l 0.002,-0.0039 0.0039,-0.0039 c 7.427895,-9.703492 18.1268,-17.374925 30.359375,-19.320312 6.32e-4,-1.01e-4 0.0013,1e-4 0.002,0 9.746307,-0.867141 19.929177,-0.798496 28.939447,3.427734 5.17798,2.541072 10.27608,5.503178 14.57617,9.341797 5.46372,5.637242 10.55303,12.083965 12.48243,19.816399 l 0.002,0.004 0.002,0.004 c 2.07236,6.45849 2.74277,13.33689 1.49805,20.02929 v 0.002 0.004 c -0.74787,5.30421 -3.11321,10.13727 -5.05274,15.10547 l 0.2461,0.0977 c 1.93339,-4.95249 4.30994,-9.80413 5.0664,-15.16016 1.25331,-6.7386 0.57815,-13.65792 -1.5039,-20.15039 l -0.002,-0.008 c -1.94965,-7.804149 -7.07769,-14.283479 -12.55469,-19.933592 l -0.004,-0.0039 -0.002,-0.0039 c -4.32779,-3.863338 -9.44853,-6.835911 -14.63867,-9.382812 h -0.002 v -0.002 c -6.80941,-3.193926 -14.26814,-4.02636 -21.691398,-3.876953 z"
-       id="path219"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:0.67;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 68.602677,167.91592 c -0.377934,-2.62979 -0.755909,-5.25987 -1.02357,-6.7009 -0.26766,-1.44103 -0.425148,-1.69301 -0.889698,-2.09467 -0.46455,-0.40165 -1.236233,-0.95285 -2.362342,-2.2285 -1.126108,-1.27565 -2.606484,-3.27573 -3.543594,-4.71676 -0.93711,-1.44103 -1.330829,-2.32296 -2.220636,-3.87427 -0.889808,-1.5513 -2.275689,-3.77187 -3.134032,-5.22078 -0.858342,-1.44891 -1.189064,-2.1261 -1.480439,-2.77969 -0.291375,-0.65359 -0.543351,-1.28354 -0.519817,-1.99234 0.02353,-0.7088 0.322761,-1.49624 0.992104,-3.02393 0.669342,-1.52769 1.708756,-3.7955 3.000192,-6.3705 1.291435,-2.575 2.834806,-5.45701 3.66163,-7.07126 0.826825,-1.61424 0.937066,-1.96071 0.795462,-2.378 -0.141604,-0.41729 -0.535316,-0.9055 -0.909394,-1.49214 -0.374078,-0.58665 -0.728423,-1.27172 -1.000152,-2.17731 -0.271729,-0.90558 -0.460714,-2.03161 -0.783526,-3.10255 -0.322812,-1.07093 -0.779524,-2.08672 -1.106273,-2.7167 -0.32675,-0.62997 -0.523607,-0.87408 -0.630028,-1.22844 -0.10642,-0.35437 -0.12217,-0.81895 0.0078,-1.14197 0.12996,-0.32301 0.405562,-0.50413 0.9057,-0.59466 0.500138,-0.0905 1.224577,-0.0905 1.725349,-0.0279 0.500772,0.0626 0.777787,0.18763 1.484139,1.23802 0.706352,1.05038 1.842139,3.02589 2.977759,5.00111"
-       id="path42"
-       inkscape:path-effect="#path-effect44"
-       inkscape:original-d="m 68.602677,167.91592 c -0.377712,-2.62982 -0.755687,-5.2599 -1.133928,-7.89025 -0.157228,-0.25173 -0.314716,-0.50371 -0.472469,-0.75595 -0.771454,-0.55097 -1.54314,-1.10217 -2.315104,-1.65365 -1.480172,-1.9999 -2.96055,-3.99998 -4.441222,-6.00037 -0.393467,-0.8817 -0.787185,-1.76363 -1.181174,-2.64583 -1.385676,-2.2204 -2.771561,-4.44096 -4.157739,-6.66184 -0.33047,-0.67695 -0.661194,-1.35414 -0.992188,-2.03162 -0.251724,-0.62971 -0.503703,-1.25965 -0.755951,-1.88988 0.2995,-0.7872 0.598725,-1.57464 0.897691,-2.36235 1.03972,-2.26764 2.079136,-4.53545 3.118305,-6.80357 1.543699,-2.88186 3.087071,-5.76387 4.630209,-8.64621 0.110508,-0.34622 0.22075,-0.69269 0.330729,-1.03943 -0.39347,-0.48797 -0.787186,-0.97617 -1.181177,-1.46466 -0.354094,-0.68483 -0.70844,-1.3699 -1.063056,-2.05525 -0.188727,-1.12581 -0.377714,-2.25184 -0.566965,-3.37816 -0.456467,-1.01556 -0.913178,-2.03135 -1.370163,-3.04743 -0.196602,-0.24385 -0.393462,-0.48795 -0.59059,-0.73233 -0.01548,-0.46434 -0.03123,-0.92892 -0.04725,-1.39378 0.275879,-0.18086 0.551482,-0.36197 0.826823,-0.54335 0.724734,2.7e-4 1.449173,2.7e-4 2.173365,0 0.277296,0.12531 0.554314,0.25034 0.831078,0.37512 1.136078,1.97582 2.271865,3.95133 3.4074,5.9266"
-       sodipodi:nodetypes="ccccccccccccccccccccccc"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:0.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 136.26041,124.35417 c -1.2598,0.61415 -2.51972,1.22836 -3.55134,1.91348 -1.03163,0.68511 -1.83481,1.44105 -2.72455,1.96075 -0.88975,0.51969 -1.86617,0.80317 -2.70881,1.20478 -0.84265,0.40162 -1.55134,0.92133 -2.22072,1.7876 -0.66939,0.86627 -1.29934,2.07892 -1.58276,2.81924 -0.28342,0.74031 -0.22042,1.00804 -0.3307,1.26773 -0.11027,0.2597 -0.39375,0.51168 -0.63001,0.77157 -0.23626,0.2599 -0.42525,0.52763 -0.53548,1.0002 -0.11023,0.47258 -0.14173,1.14978 -0.0157,1.8034 0.12607,0.65362 0.40954,1.28356 1.11834,1.93709 0.7088,0.65353 1.84271,1.33072 2.97633,2.00774"
-       id="path70"
-       inkscape:original-d="m 136.26041,124.35417 c -1.25965,0.61447 -2.51957,1.22868 -3.77976,1.84263 -0.80295,0.75623 -1.60613,1.51217 -2.4096,2.26786 -0.97619,0.28375 -1.95261,0.56722 -2.92931,0.85044 -0.70846,0.52 -1.41715,1.0397 -2.12612,1.55916 -0.6297,1.21296 -1.25965,2.42561 -1.88988,3.63802 0.0633,0.268 0.12626,0.53573 0.18899,0.80319 -0.28322,0.25226 -0.5667,0.50424 -0.85045,0.75596 -0.18872,0.268 -0.37771,0.53573 -0.56696,0.8032 -0.0312,0.67748 -0.0627,1.35468 -0.0945,2.03162 0.28375,0.63024 0.56722,1.26018 0.85044,1.88988 1.13422,0.67748 2.26812,1.35468 3.40179,2.03162"
-       inkscape:path-effect="#path-effect72"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:0.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 136.26041,124.35417 c 0.63025,0.0473 1.26021,0.0945 1.89807,0.24418 0.63785,0.14967 1.28355,0.40165 1.70868,0.79548 0.42513,0.39383 0.62986,0.92928 0.55893,1.3701 -0.0709,0.44081 -0.41741,0.78729 -0.93709,1.14949 -0.51968,0.36221 -1.21262,0.74017 -1.92138,1.31505 -0.70876,0.57487 -1.43321,1.34656 -2.05532,2.16555 -0.6221,0.81899 -1.14181,1.68517 -1.39378,2.70109 -0.25196,1.01592 -0.23623,2.18132 0.20488,3.14201 0.44111,0.96068 1.3073,1.71662 2.46487,2.66156 1.15757,0.94495 2.60645,2.07885 3.97658,3.69319 1.37013,1.61434 2.66151,3.70891 3.315,4.92944 0.65349,1.22054 0.66922,1.56701 0.55106,2.00003 -0.11816,0.43301 -0.37014,0.95272 -0.71662,1.66144 -0.34649,0.70871 -0.78745,1.60639 -2.01588,3.26002 -1.22842,1.65362 -3.24425,4.06317 -6.23654,6.29951 -2.99229,2.23635 -6.96096,4.29942 -9.18947,5.48848 -2.22851,1.18906 -2.71672,1.50403 -3.14988,2.13409 -0.43317,0.63006 -0.81114,1.57498 -1.12611,3.04758 -0.31497,1.4726 -0.56695,3.47268 -1.43316,5.73262 -0.86622,2.25994 -2.3466,4.77973 -3.82696,7.29949"
-       id="path74"
-       inkscape:path-effect="#path-effect76"
-       inkscape:original-d="m 136.26041,124.35417 c 0.63023,0.0475 1.26019,0.0948 1.88989,0.14174 0.64598,0.25225 1.29168,0.50423 1.93712,0.75595 0.20501,0.53574 0.40974,1.0712 0.61422,1.6064 -0.34622,0.34675 -0.6927,0.69322 -1.03944,1.03943 -0.69271,0.37825 -1.38565,0.75622 -2.07887,1.13393 -0.7242,0.77198 -1.44864,1.54367 -2.17336,2.3151 -0.51946,0.86648 -1.03917,1.73266 -1.55915,2.59859 0.016,1.16572 0.0318,2.33112 0.0472,3.49628 0.86648,0.75623 1.73266,1.51217 2.59859,2.26786 1.4492,1.13421 2.89808,2.26812 4.34673,3.40178 1.29171,2.09493 2.5831,4.1895 3.87425,6.28386 0.016,0.34675 0.0318,0.69322 0.0472,1.03943 -0.25172,0.51999 -0.5037,1.0397 -0.75595,1.55915 -0.44072,0.89798 -0.88168,1.79566 -1.32292,2.69308 -2.01565,2.40991 -4.03148,4.81946 -6.04762,7.2288 -3.96856,2.06342 -7.93723,4.1265 -11.90625,6.18936 -0.48796,0.31525 -0.97617,0.63022 -1.46466,0.94494 -0.37771,0.94522 -0.75568,1.89014 -1.13393,2.83482 -0.25172,2.00043 -0.5037,4.00051 -0.75595,6.00037 -1.48017,2.52016 -2.96055,5.03995 -4.44122,7.55953"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:0.565;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 68.602677,167.91592 c 0.236316,0.92951 0.472552,1.8587 1.189211,3.17375 0.71666,1.31505 1.913561,3.01591 2.700995,4.20498 0.787433,1.18906 1.1654,1.86625 1.488189,3.23643 0.322789,1.37017 0.590517,3.43325 0.700732,4.81127 0.110216,1.37802 0.06297,2.07095 2.165673,3.3466 2.102702,1.27564 6.354764,3.13395 13.174193,4.06309 6.819429,0.92914 16.20565,0.92913 21.11917,-0.1102 4.91352,-1.03934 5.35447,-3.11821 5.79545,-5.19727"
-       id="path102"
-       inkscape:path-effect="#path-effect104"
-       inkscape:original-d="m 68.602677,167.91592 c 0.2365,0.92946 0.472736,1.85865 0.708707,2.78757 1.197213,1.7012 2.394114,3.40206 3.590772,5.10268 0.378248,0.67749 0.756219,1.35468 1.13393,2.03163 0.268002,2.06342 0.535731,4.1265 0.803198,6.18936 -0.04698,0.69323 -0.09423,1.38616 -0.14174,2.07887 4.252582,1.85868 8.504644,3.71699 12.756697,5.57515 9.386858,2.6e-4 18.773079,2.6e-4 28.159219,-1e-5 0.44121,-2.0786 0.88215,-4.15748 1.32283,-6.2366"
-       sodipodi:nodetypes="ccccccccc"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:0.47625;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 109.96745,151.97005 c -0.008,0.54361 -0.0157,1.08695 -0.063,1.79959 -0.0473,0.71264 -0.13387,1.59456 -0.50791,2.40947 -0.37405,0.81491 -1.03549,1.56297 -1.74808,2.12203 -0.71258,0.55905 -1.4764,0.92915 -2.37013,1.22839 -0.89372,0.29924 -1.91738,0.5276 -2.75214,0.83077 -0.83476,0.30316 -1.48046,0.68114 -2.13802,1.15363 -0.657554,0.47249 -1.326873,1.03944 -1.751959,1.27969 -0.425087,0.24025 -0.606182,0.15364 -0.984186,-0.16523 -0.378003,-0.31887 -0.952833,-0.87007 -1.303354,-1.45671 -0.35052,-0.58663 -0.47651,-1.2087 -0.645745,-1.68511 -0.169236,-0.47641 -0.381846,-0.80714 -0.621961,-1.04737 -0.240115,-0.24024 -0.507844,-0.38986 -0.633998,-0.65362 -0.126154,-0.26376 -0.110405,-0.64173 0.07471,-0.91356 0.185119,-0.27182 0.539465,-0.43718 0.799241,-0.77568 0.259776,-0.3385 0.425136,-0.85033 0.606266,-1.22838 0.181129,-0.37804 0.377986,-0.62215 0.571049,-0.63383 0.193063,-0.0117 0.382047,0.2088 0.228467,-0.0707 -0.15358,-0.27954 -0.649668,-1.05911 -0.893876,-1.78359 -0.244207,-0.72448 -0.236331,-1.3938 -0.322919,-2.19305 -0.08659,-0.79925 -0.267698,-1.72842 -0.267753,-2.42147 -5.5e-5,-0.69305 0.181054,-1.14976 0.42123,-1.67343 0.240176,-0.52368 0.539398,-1.11425 0.755953,-1.71268 0.216555,-0.59842 0.35042,-1.20475 0.759937,-1.79151 0.409516,-0.58677 1.094583,-1.15372 1.779815,-1.34659 0.685233,-0.19287 1.370309,-0.0118 1.964789,0.0354 0.59449,0.0472 1.09843,-0.0394 1.59458,0.0552 0.49615,0.0946 0.98436,0.3702 1.47227,0.64563"
-       id="path118"
-       inkscape:path-effect="#path-effect120"
-       inkscape:original-d="m 109.96745,151.97005 c -0.008,0.54361 -0.0155,1.08695 -0.0236,1.63002 -0.0864,0.88223 -0.17298,1.76416 -0.25986,2.64584 -0.66121,0.74835 -1.32265,1.49642 -1.98438,2.24423 -0.76357,0.37037 -1.52739,0.74047 -2.29148,1.11031 -1.02344,0.22862 -2.0471,0.45698 -3.07105,0.68508 -0.64546,0.37824 -1.29116,0.75621 -1.93713,1.13393 -0.669083,0.56724 -1.338403,1.13419 -2.007999,1.70089 -0.180854,-0.0864 -0.361964,-0.17298 -0.543341,-0.25986 -0.574585,-0.55096 -1.149413,-1.10217 -1.724517,-1.65365 -0.12573,-0.62183 -0.251719,-1.2439 -0.377976,-1.86625 -0.212352,-0.33047 -0.424958,-0.6612 -0.637833,-0.99219 -0.267476,-0.14935 -0.535202,-0.29897 -0.803201,-0.44885 0.01601,-0.37772 0.03176,-0.75569 0.04725,-1.13393 0.354627,-0.1651 0.708973,-0.33046 1.063059,-0.49609 0.165632,-0.51159 0.330994,-1.02342 0.496094,-1.53553 0.19713,-0.24385 0.393991,-0.48795 0.590587,-0.73233 0.189256,0.22076 0.378243,0.44124 0.566965,0.66146 -0.49584,-0.77932 -0.991923,-1.55889 -1.488281,-2.33873 0.0081,-0.66908 0.01601,-1.3384 0.02363,-2.008 -0.180853,-0.92894 -0.361963,-1.85811 -0.54334,-2.78757 0.181379,-0.45647 0.362489,-0.91318 0.54334,-1.37016 0.2995,-0.59034 0.598726,-1.18091 0.897692,-1.77177 0.134135,-0.60608 0.267999,-1.21241 0.4016,-1.81901 0.685361,-0.56671 1.370428,-1.13366 2.055246,-1.70089 0.685361,0.18138 1.370435,0.36249 2.055245,0.54334 0.50425,-0.0864 1.0082,-0.17297 1.51191,-0.25986 0.48849,0.27588 0.9767,0.55148 1.46466,0.82682"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.133635"
-       d="m 114.14713,151.33597 c 0,-0.72945 1.89002,-2.81267 3.04087,-3.3517 l 0.66849,-0.3131 0.0862,-1.48814 c 0.0474,-0.81848 0.14948,-1.99929 0.2268,-2.62403 0.0773,-0.62475 0.12098,-1.64705 0.097,-2.27179 l -0.0435,-1.1359 h -0.52658 -0.52659 l -0.24057,0.80181 c -0.13232,0.44099 -0.33213,1.27867 -0.44403,1.86151 -0.1119,0.58283 -0.23605,1.09229 -0.27589,1.13214 -0.0398,0.0398 -0.37083,-0.0953 -0.73552,-0.3003 -0.80733,-0.45382 -1.20471,-0.42772 -1.34182,0.0881 -0.10736,0.40392 -0.35284,0.75986 -0.52404,0.75986 -0.0581,0 -0.55762,-0.62032 -1.11014,-1.37848 -0.55252,-0.75817 -1.23432,-1.53716 -1.51511,-1.7311 -0.56858,-0.39272 -1.83785,-0.76583 -2.60524,-0.76583 -0.80028,0 -0.87576,0.3284 -0.32037,1.39392 l 0.45758,0.87787 h -0.64032 c -0.70204,0 -2.29069,-0.69787 -2.75395,-1.20977 -0.24722,-0.27317 -0.24639,-0.29397 0.0443,-1.10453 0.39589,-1.104 0.37661,-1.32316 -0.16712,-1.89969 l -0.4633,-0.49124 -0.90645,0.0851 c -0.70769,0.0664 -1.09364,0.027 -1.76008,-0.17977 l -0.85363,-0.26487 -0.54955,0.56472 c -0.30224,0.3106 -1.004425,0.81418 -1.560415,1.11907 -0.55599,0.3049 -1.08954,0.64913 -1.18567,0.76496 -0.23156,0.27902 -0.51193,0.26758 -0.57025,-0.0233 -0.0848,-0.42299 0.15189,-1.94262 0.4352,-2.79397 0.34355,-1.03236 1.49705,-2.39656 3.860865,-4.56607 1.56142,-1.43307 1.8976,-1.65294 2.07888,-1.35963 0.13325,0.2156 1.06649,0.1537 1.69277,-0.11226 0.31846,-0.13525 0.76192,-0.28158 0.98546,-0.32518 0.3961,-0.0772 0.40508,-0.0676 0.35311,0.37753 -0.0345,0.2952 0.0403,0.61541 0.21121,0.90515 l 0.26453,0.44835 -0.32408,0.52251 c -1.25849,2.02903 -1.51651,3.06544 -0.93226,3.74467 0.41863,0.4867 0.69923,0.35788 1.04787,-0.48104 l 0.27835,-0.66978 h 1.32272 c 1.10813,0 1.33651,-0.0359 1.40769,-0.22141 0.0861,-0.22436 0.051,-0.29428 -0.73399,-1.46225 -0.2421,-0.36022 -0.41073,-0.74515 -0.37472,-0.8554 0.32195,-0.98579 0.54282,-1.56339 0.65153,-1.70384 0.0711,-0.0919 0.3775,-0.16648 0.68087,-0.16579 0.67119,0.002 1.59424,0.50267 2.61564,1.4201 l 0.72364,0.64998 -1.65961,0.0668 c -1.46631,0.059 -1.66501,0.0951 -1.70596,0.30917 -0.029,0.15142 0.14171,0.40213 0.45485,0.66817 1.0163,0.86345 1.25892,1.14558 1.25892,1.46391 0,0.62693 -0.37816,0.78283 -2.29839,0.94758 -1.75382,0.15046 -1.77799,0.15697 -1.81679,0.48932 -0.075,0.64242 1.20928,1.49712 2.90723,1.93478 0.99922,0.25756 1.43859,0.53583 1.88807,1.1958 0.17718,0.26014 0.42887,0.4734 0.55931,0.4739 0.52338,0.002 0.65582,-1.30839 0.22762,-2.25206 -0.14538,-0.3204 -0.26433,-0.60685 -0.26433,-0.63656 0,-0.10287 0.9935,0.3616 1.22865,0.5744 0.1299,0.11756 0.31438,0.49065 0.40998,0.8291 0.34139,1.20873 1.0947,0.62874 1.09868,-0.8459 0.002,-0.75815 -0.0411,-0.87426 -0.63257,-1.70361 -0.34912,-0.48951 -0.63476,-0.95441 -0.63476,-1.03311 0,-0.0787 0.19867,-0.1431 0.4415,-0.1431 0.81646,0 1.64203,1.16224 1.8982,2.67228 0.10533,0.62089 0.20969,0.88024 0.36637,0.91041 0.34332,0.0661 0.5344,-0.89957 0.53703,-2.71406 0.003,-1.81643 -0.16067,-2.575 -0.71772,-3.33379 -0.21297,-0.2901 -0.38723,-0.61375 -0.38723,-0.71922 0,-0.37056 -0.5268,-1.03837 -1.05194,-1.33351 -0.29183,-0.16402 -1.14928,-0.78308 -1.90545,-1.3757 -1.69421,-1.32777 -1.83482,-1.39984 -2.96021,-1.51744 -0.49846,-0.0521 -1.25015,-0.23426 -1.67043,-0.40483 -1.08236,-0.43927 -1.81638,-0.50936 -2.83548,-0.27074 -0.47774,0.11186 -1.55,0.29456 -2.38279,0.406 -1.86736,0.24987 -2.28202,0.45229 -3.831235,1.87021 -0.66149,0.60543 -1.83413,1.5081 -2.60587,2.00593 -1.60689,1.03656 -2.18994,1.5115 -2.6993,2.19877 -0.73538,0.99221 -1.30481,3.46579 -1.78313,7.74567 -0.2982,2.66829 -0.74379,3.87261 -1.88374,5.09131 -1.28514,1.37392 -1.81858,1.38274 -4.42541,0.0732 -3.02432,-1.51923 -4.86899,-2.01514 -8.24203,-2.21575 -1.650323,-0.0981 -2.037993,-0.1599 -2.147504,-0.34205 -0.570148,-0.94833 -1.752968,-2.04362 -2.959653,-2.74064 -0.713724,-0.41226 -2.468925,-0.92795 -3.158405,-0.92795 -0.3872,0 -0.390986,-0.007 -0.173744,-0.30068 0.480962,-0.65117 1.266068,-2.49641 1.520965,-3.57473 0.416319,-1.76119 0.523489,-2.54291 1.023998,-7.46945 0.509305,-5.01308 0.760802,-6.72677 1.155623,-7.87434 0.141904,-0.41245 0.864881,-1.6711 1.606614,-2.79699 1.551316,-2.35478 1.913186,-3.24445 2.139986,-5.2613 l 0.156,-1.38717 0.98086,-1.36543 c 1.26976,-1.7676 2.69352,-4.07443 2.93214,-4.75073 0.21865,-0.61973 0.25121,-2.53605 0.0495,-2.91297 -0.0761,-0.14216 -0.21469,-0.25848 -0.30801,-0.25848 -0.0933,0 -0.98768,0.89398 -1.98746,1.98662 -0.99978,1.09264 -2.01347,2.12596 -2.252631,2.29625 l -0.43484,0.30964 0.08481,-1.12695 c 0.04664,-0.61983 0.297489,-1.99892 0.557431,-3.06466 0.70792,-2.90241 0.8739,-5.092298 0.44821,-5.913325 -0.0837,-0.161411 -0.28111,-0.233862 -0.637256,-0.233862 -0.669875,0 -1.153012,0.531468 -1.714604,1.886123 -0.225049,0.542857 -0.611396,1.476524 -0.858551,2.074804 l -0.449371,1.0878 0.05224,-2.654477 c 0.07422,-3.770988 0.0046,-3.997866 -1.226878,-3.997866 -0.808723,0 -1.499365,0.391898 -1.936168,1.098661 -0.264083,0.427294 -0.330642,0.73437 -0.756012,3.488002 -0.172506,1.11672 -0.932064,3.41451 -1.079847,3.26673 -0.02469,-0.0247 0.01823,-0.67427 0.09538,-1.4435 0.211918,-2.11292 0.111979,-4.225228 -0.227391,-4.806277 -0.301395,-0.51602 -0.774568,-0.661972 -1.27603,-0.393597 -0.261429,0.139914 -0.283736,0.129683 -0.200575,-0.09199 0.05146,-0.137173 0.286088,-0.569211 0.521393,-0.96008 l 0.427826,-0.710676 0.751784,0.0871 c 0.604661,0.07006 0.85311,0.03543 1.269532,-0.176919 0.28476,-0.145211 1.007351,-0.452784 1.605759,-0.683498 1.559465,-0.601241 4.913598,-2.922614 5.460089,-3.778885 0.2205,-0.345487 0.49132,-0.660548 0.60184,-0.700137 0.11051,-0.03959 0.71263,-0.123844 1.33806,-0.187235 2.26601,-0.229683 2.98429,-1.136624 2.25071,-2.841871 -0.33086,-0.769118 -0.2396,-1.146583 0.37449,-1.548869 0.31707,-0.207708 0.62203,-0.236114 2.21172,-0.206004 2.35639,0.04463 2.58734,-0.04058 3.19381,-1.178438 0.50632,-0.94995 1.07638,-1.423842 2.15297,-1.789788 0.81357,-0.276539 1.17306,-0.219382 1.17306,0.186513 0,0.431115 0.55922,0.680482 1.82453,0.813594 0.65024,0.06841 1.22306,0.125444 1.27293,0.126751 0.0499,0.0013 0.18518,0.09687 0.30068,0.212371 0.33679,0.33679 0.25012,0.901536 -0.23657,1.541446 -0.67808,0.891561 -0.75614,1.100516 -0.75614,2.024108 0,1.047128 0.25384,1.930582 1.01116,3.519082 1.15761,2.42814 2.17226,3.258635 3.98436,3.261207 0.87471,0.0013 0.94075,-0.02106 1.35106,-0.456113 0.27274,-0.289181 0.57344,-0.866693 0.817585,-1.570207 l 0.3862,-1.112789 1.21711,-0.133636 c 0.66942,-0.0735 1.3129,-0.213694 1.42996,-0.311542 0.11705,-0.09785 0.39524,-0.501129 0.61819,-0.896175 0.22295,-0.395047 0.52266,-0.78104 0.66602,-0.857761 0.14335,-0.07672 0.83379,-0.139496 1.53431,-0.139496 1.2156,0 1.29384,-0.0177 1.71616,-0.38852 0.4896,-0.429873 1.03679,-1.417269 1.03679,-1.870879 0,-0.160832 -0.16538,-0.445823 -0.3675,-0.633309 -0.34899,-0.323729 -0.3652,-0.39238 -0.32196,-1.363811 0.0424,-0.952791 0.0135,-1.084429 -0.4221,-1.920089 -0.2572,-0.493443 -0.5653,-1.191204 -0.68466,-1.55058 -0.21154,-0.636868 -0.53397,-1.037357 -1.07693,-1.337662 -0.21737,-0.120221 -0.22589,-0.148579 -0.0457,-0.151884 0.61562,-0.0113 3.67038,0.461264 4.74983,0.734772 1.53887,0.389914 2.05428,0.633738 2.32348,1.09915 0.22021,0.380725 3.12732,2.215425 3.76328,2.375043 0.18848,0.04731 0.46856,0.01865 0.6224,-0.06369 0.23587,-0.126236 0.27972,-0.274646 0.27972,-0.946807 0,-0.51196 0.055,-0.797107 0.15379,-0.797107 0.53403,0 7.10791,3.679828 9.84695,5.51198 1.32428,0.885812 1.74207,1.313669 0.80269,0.822026 -0.4714,-0.246719 -2.37,-0.420119 -2.96496,-0.270796 -0.47749,0.119846 -0.62211,0.694873 -0.62269,2.475947 -5.3e-4,1.453425 -0.0255,1.600356 -0.4004,2.352077 -0.21995,0.440994 -0.40014,0.967182 -0.40041,1.169305 -0.001,0.691928 0.79983,1.198102 2.15313,1.360993 0.60105,0.07234 0.8272,0.17227 1.1359,0.501885 0.21199,0.226357 0.79534,0.679553 1.29635,1.007108 0.501,0.327554 0.94706,0.689731 0.99123,0.804841 0.11875,0.309457 -0.46828,0.74918 -1.55401,1.164057 -1.12152,0.42856 -1.41226,0.737627 -2.23505,2.375881 -0.646,1.28626 -0.61593,1.2621 -2.36588,1.90067 -0.35457,0.12938 -0.67701,0.31954 -0.71654,0.42256 -0.11054,0.28806 0.20088,0.56847 0.73984,0.66618 1.02774,0.18633 2.29178,1.1669 2.29178,1.77783 0,0.4604 -0.33365,0.5512 -2.34454,0.63805 -2.4075,0.10399 -2.46631,0.13854 -2.46631,1.44929 0,1.42278 0.73288,2.72759 1.9118,3.40373 0.57166,0.32785 0.84572,0.39828 1.55391,0.39931 1.65856,0.002 2.45781,-0.71851 3.16094,-2.85124 0.72393,-2.19582 1.16548,-2.70373 2.24113,-2.57797 0.35709,0.0418 0.97257,0.25838 1.36774,0.4814 0.39516,0.22302 0.8763,0.40549 1.06921,0.40549 0.37172,0 0.3683,0.0232 0.16531,-1.11741 -0.058,-0.32586 0.29713,-0.54689 0.71155,-0.44288 0.94889,0.23816 2.34817,1.75804 3.93112,4.26994 0.67108,1.0649 1.01986,1.49984 1.20272,1.49984 0.28823,0 0.31487,-0.33674 0.13213,-1.67043 l -0.1007,-0.735 0.4709,-0.2497 c 0.8035,-0.42608 0.86971,-0.87639 0.55276,-3.75934 l -0.0735,-0.66817 0.33741,0.62557 c 0.1856,0.34407 0.40371,0.66654 0.48472,0.71661 0.081,0.0501 0.35051,-0.10594 0.59888,-0.34667 l 0.45159,-0.4377 0.25576,0.58972 c 0.14067,0.32434 0.41334,0.94298 0.60594,1.37475 0.1926,0.43176 0.35019,0.79878 0.35019,0.8156 0,0.0168 -0.29544,0.002 -0.65653,-0.0325 -0.63474,-0.061 -0.66426,-0.0481 -0.88933,0.38711 -0.12804,0.24761 -0.35253,0.61213 -0.49885,0.81005 -0.21965,0.29709 -0.2525,0.49121 -0.18834,1.11284 0.12636,1.22431 0.42952,1.52786 1.75315,1.7554 0.61111,0.10506 0.66862,0.14935 0.8403,0.64731 0.10136,0.294 0.21982,0.87249 0.26325,1.28552 l 0.0789,0.75099 -0.66082,0.68559 c -0.93836,0.97353 -1.15913,0.94506 -2.45568,-0.31667 -0.61065,-0.59425 -1.14278,-1.00226 -1.30717,-1.00226 -0.28439,0 -0.38961,0.24707 -0.65448,1.5368 -0.20339,0.99034 -0.84281,0.78805 -3.37922,-1.06908 l -1.46012,-1.06908 -0.003,-0.89333 c -0.004,-1.05966 -0.15414,-1.52405 -0.53337,-1.64442 -0.16906,-0.0536 -0.74491,0.0731 -1.46565,0.32265 -0.65295,0.22607 -1.41809,0.41128 -1.70031,0.41157 -0.68799,8e-4 -2.87568,0.35649 -3.78718,0.61589 -0.40424,0.11504 -0.9333,0.3594 -1.17569,0.54303 -0.60285,0.45672 -1.30167,1.56081 -1.55848,2.4623 -0.2481,0.87095 -0.45476,1.08369 -1.80941,1.86265 -1.14286,0.65718 -2.54393,1.93428 -3.02925,2.76124 -0.41912,0.71413 -0.52862,1.75473 -0.32045,3.04517 l 0.16191,1.00368 -0.57209,1.23607 c -0.50751,1.09654 -0.5711,1.34167 -0.5633,2.17152 0.005,0.51449 0.0986,1.14592 0.20827,1.40316 0.56454,1.32361 3.93073,5.07812 4.55291,5.07812 0.43712,0 0.66518,-0.21401 1.88357,-1.7676 0.56068,-0.71493 1.33511,-1.55032 1.72094,-1.85641 0.96529,-0.76577 3.11632,-1.79427 4.30631,-2.05902 1.74156,-0.38746 2.15534,-0.0933 -0.0623,0.98811 -1.7165,0.83705 -2.79873,1.08589 -3.37328,1.67038 -0.83124,0.84561 -1.72836,2.36018 -2.19813,3.71101 -0.18529,0.53282 -0.58636,1.3227 -0.89126,1.7553 l -0.55435,0.78653 0.002,1.29241 c 0.001,1.06672 0.052,1.38575 0.28965,1.82694 0.39683,0.73669 1.23704,1.50942 2.59922,2.39047 l 1.15333,0.74597 -0.0588,1.50538 c -0.086,2.20111 -0.21486,2.64908 -1.01373,3.52318 -0.79641,0.8714 -2.05214,1.79551 -3.05467,2.24799 -1.147,0.51768 -6.08856,1.54733 -7.42606,1.54733 -0.59447,0 -0.70921,-0.039 -0.70921,-0.24111 z m -23.456875,-5.50702 c 0.41266,-0.41298 0.63041,-1.73552 0.92825,-5.63774 0.14567,-1.90857 0.31405,-3.1138 0.61214,-4.38141 0.35686,-1.51757 0.38847,-1.79654 0.2392,-2.11124 -0.25193,-0.53113 -0.96266,-0.8148 -2.94658,-1.17608 -2.52183,-0.45922 -2.74005,-0.56287 -4.27222,-2.02905 l -1.32414,-1.26711 -0.62538,0.10552 c -0.34396,0.058 -1.22674,0.0908 -1.96173,0.0728 -1.28383,-0.0314 -1.34908,-0.0191 -1.66032,0.31226 -0.43721,0.46555 -0.61218,0.43523 -0.90115,-0.15616 -0.36065,-0.73809 -0.73545,-0.70799 -2.583473,0.20752 -1.838209,0.91066 -1.890284,1.01494 -1.000821,2.00424 0.773163,0.85995 0.865113,1.19358 0.651854,2.36523 -0.09365,0.5145 -0.238173,1.38647 -0.321167,1.93771 -0.130363,0.86586 -0.21557,1.06906 -0.626079,1.4931 -0.378055,0.39051 -0.457869,0.55981 -0.390482,0.82829 0.198882,0.79242 2.890248,3.67288 4.624908,4.94987 0.96827,0.7128 1.73702,1.01514 3.91159,1.53841 0.8998,0.21652 1.90661,0.49541 2.23736,0.61974 1.39589,0.52475 2.45988,0.71921 3.77241,0.68947 1.19053,-0.027 1.32848,-0.0578 1.63583,-0.36538 z"
-       id="path189"
-       sodipodi:nodetypes="cscssccccsssssssssscssssccscssssssssccccssscssssscscssssssssssssscssssscsssssssssssssscssscssssscsssssscsssssscsssssssssscsssssssssssssssssscsscsssssssssssssssssssssscscssssssssssssscscssssssscsccssscssscsssssccssssscccscsssssscsccssssssssccsscssssccssssssccccsssssssssssss"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.133635"
-       d="m 62.721006,150.6791 c -0.392499,-0.18272 -1.207638,-0.65423 -1.811419,-1.04779 l -1.097786,-0.71558 -1.032195,-2.01828 c -2.026071,-3.96165 -2.154171,-6.03161 -0.612053,-9.89009 1.402501,-3.50914 4.544383,-9.99105 7.1374,-14.72491 0.42273,-0.77174 0.797841,-1.61888 0.833578,-1.88254 0.08224,-0.60673 -0.05482,-0.8704 -1.800188,-3.46285 -1.611013,-2.3929 -2.327063,-3.80558 -2.635147,-5.19882 -0.254455,-1.15071 -0.337193,-1.32815 -1.025776,-2.1999 -0.282459,-0.3576 -0.476433,-0.71025 -0.431051,-0.78367 0.13608,-0.22019 1.100169,-0.0159 1.653643,0.35033 0.284678,0.18839 0.678677,0.62952 0.875554,0.98029 0.424587,0.75647 1.408353,2.22743 1.830588,2.73716 0.178573,0.21557 0.364501,0.32228 0.459375,0.26365 0.118706,-0.0734 0.07106,-0.3875 -0.186677,-1.23078 -0.277833,-0.90904 -0.348117,-1.42209 -0.356494,-2.60226 -0.0094,-1.33127 0.05087,-1.71587 0.639215,-4.07586 0.49235,-1.97491 0.672145,-2.97798 0.74255,-4.14267 0.122804,-2.031481 0.393232,-2.535554 1.716789,-3.200071 0.713224,-0.35809 0.884153,-0.251357 1.083101,0.676307 0.190336,0.887505 0.178062,1.796354 -0.05664,4.194194 -0.213352,2.17966 -0.151862,3.67496 0.15112,3.67496 0.124462,0 0.181999,-0.17608 0.181999,-0.55699 0,-0.38604 0.201461,-0.99096 0.65646,-1.97111 0.784117,-1.68913 1.024797,-2.5943 1.139957,-4.28728 0.10531,-1.548127 0.403239,-2.269162 1.03636,-2.508139 0.362686,-0.136898 0.466077,-0.130199 0.637535,0.04131 0.403587,0.403707 0.151117,3.402769 -0.61087,7.256429 -0.449276,2.27217 -0.663861,2.64796 -1.6871,2.95453 -0.864838,0.25911 -1.041363,0.8706 -1.043546,3.61483 -0.0019,2.47326 0.124553,3.23387 0.832448,5.0046 0.295397,0.73891 0.56692,1.67367 0.603615,2.07804 0.152623,1.68194 -0.86905,4.21832 -4.413996,10.95805 -2.933565,5.57736 -4.780774,9.56686 -5.23232,11.30046 -0.412176,1.58245 -0.178324,4.21121 0.556209,6.25241 0.480624,1.33562 1.289241,3.05699 1.772127,3.77249 0.588227,0.87159 0.565938,0.88873 -0.50636,0.38955 z"
-       id="path191"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 284.09143,657.28222 c -0.41542,-0.57482 -2.14248,-2.83311 -3.83791,-5.01842 -3.72996,-4.8077 -4.9598,-7.14061 -5.68914,-10.79183 -0.6926,-3.46727 -3.09871,-22.55022 -3.09429,-24.54095 0.004,-1.90174 3.64025,-6.27076 5.21307,-6.26396 1.45679,0.006 5.72262,2.5101 7.86837,4.61832 2.4704,2.42719 4.65995,7.3892 4.97112,11.2657 0.21942,2.73348 0.02,3.86365 -1.34959,7.6487 -1.35072,3.73289 -1.68978,5.61368 -2.12571,11.79139 -0.28526,4.04255 -0.6721,8.47196 -0.85963,9.84313 -0.32419,2.37033 -0.37815,2.44159 -1.09629,1.44792 z"
-       id="path193"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 284.90864,590.68279 c -8.37245,-5.04454 -20.14849,-15.1047 -25.68425,-21.9418 -1.9118,-2.36124 -4.37325,-6.08462 -5.46988,-8.27418 -2.54089,-5.07323 -4.80827,-12.33875 -4.07838,-13.06864 0.72596,-0.72596 9.63584,2.10414 15.49058,4.92036 7.96526,3.83142 11.60327,8.48718 16.9369,21.6751 3.08159,7.61952 6.22827,17.1376 5.94507,17.98262 -0.0918,0.27386 -1.5048,-0.3082 -3.14004,-1.29346 z"
-       id="path195"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.133635"
-       d="m 83.141013,180.16056 c -0.496729,-0.59852 1.2892,-2.96261 2.741789,-3.6294 0.370023,-0.16985 1.272059,-0.40365 2.004523,-0.51956 0.732462,-0.11591 1.890155,-0.2995 2.572645,-0.40799 1.737373,-0.27617 3.204993,-0.76435 4.843989,-1.6113 1.646277,-0.8507 2.263386,-1.30052 2.064149,-1.50457 -0.09465,-0.0969 -0.360206,-0.079 -0.868627,0.0587 -1.882278,0.50984 -4.133543,0.33072 -5.831821,-0.464 -2.321576,-1.0864 -5.153216,-4.18046 -6.667823,-7.28578 -1.416759,-2.9047 -3.132934,-9.08566 -3.132934,-11.28356 0,-0.71092 0.04002,-0.83736 0.323855,-1.02334 0.268502,-0.17593 0.450271,-0.18883 1.06348,-0.0755 0.862904,0.15952 1.101669,0.27377 4.292145,2.05393 3.65344,2.03848 4.902488,2.80536 5.166439,3.17206 0.132263,0.18375 0.33378,0.78308 0.447818,1.33185 0.274595,1.3214 0.55967,1.76001 2.478304,3.81309 1.782429,1.90733 2.712133,3.07871 3.018817,3.80355 0.110016,0.26002 0.343667,1.11763 0.519223,1.9058 0.363572,1.6323 0.630217,2.24192 0.980602,2.24192 0.57745,0 0.902554,-0.76017 1.410024,-3.29693 0.52266,-2.61267 0.44616,-2.45231 1.42652,-2.99023 1.45588,-0.79884 3.52429,-1.67009 6.6688,-2.80903 2.31995,-0.84029 8.71893,-3.2701 9.70437,-3.68494 0.22312,-0.0939 0.31458,0.41657 0.31466,1.75626 1.3e-4,2.45652 -0.74193,4.71421 -2.29786,6.99112 -0.93131,1.36287 -4.3152,4.75133 -5.51619,5.52366 -2.99184,1.92397 -5.63068,2.31295 -8.64023,1.27363 -1.63427,-0.56438 -1.85011,-0.59162 -1.85011,-0.23343 0,0.35742 0.94861,1.10033 2.12466,1.66393 0.90677,0.43456 1.63655,0.63479 4.42474,1.21406 1.8616,0.38677 2.3263,0.97859 1.40413,1.78827 -1.02275,0.89799 -3.77413,1.3321 -5.71129,0.90112 -0.97836,-0.21766 -2.44545,-0.85272 -3.244491,-1.40445 -0.220498,-0.15224 -0.530968,-0.27721 -0.689935,-0.27769 -0.158967,-5.3e-4 -0.881396,0.30158 -1.605391,0.67124 -1.662745,0.84899 -3.042949,1.14613 -6.19048,1.33276 -2.800766,0.16606 -3.578998,0.28933 -5.099537,0.80777 -1.280525,0.43659 -2.382089,0.51849 -2.648963,0.19692 z"
-       id="path197"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 329.14121,703.22293 -0.97514,-2.19492 0.40539,-1.87853 c 1.90424,-8.82401 5.39651,-8.65797 14.86873,-9.94866 11.0821,-1.51006 16.74275,-2.9614 24.8214,-6.36401 l 4.61835,-1.94518 3.71541,1.27585 c 2.04348,0.70172 8.36452,2.4208 14.04676,3.82018 10.97506,2.70286 14.26172,4.00312 16.32911,6.46008 1.3725,1.63113 2.17538,4.19525 1.6034,5.12073 -0.65713,1.06325 -3.96878,-0.066 -13.02305,-4.4408 -8.51592,-4.11467 -9.21255,-4.3603 -12.87945,-4.54125 -6.32595,-0.31216 -8.23669,1.47911 -4.78998,4.4905 3.76315,3.28785 5.73833,5.55496 6.98767,8.02042 l 1.26635,2.49901 -27.09323,2.93706 c -14.84909,1.60972 -26.81981,-2.00283 -29.90172,-3.31045 z"
-       id="path199"
-       transform="scale(0.26458333)"
-       sodipodi:nodetypes="ccssscsssssssscscc"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 420.71253,682.95642 c -2.33621,-1.06132 -5.48088,-4.39053 -4.98303,-5.27547 1.15977,-2.06152 2.89996,-3.8841 3.7085,-3.8841 1.73716,0 5.37111,1.88827 6.72075,3.49222 1.37877,1.63857 2.21383,4.51024 1.70053,5.84789 -0.41423,1.07946 -4.60629,0.97356 -7.14675,-0.18054 z"
-       id="path201"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 430.69212,667.02507 c -1.93156,-0.91999 -2.65165,-1.54543 -2.65165,-2.30311 0,-0.64521 2.44506,-3.58551 6.43972,-7.74407 6.27139,-6.52869 10.34848,-11.79816 13.01729,-16.82433 l 1.31135,-2.46966 -0.2457,5.55584 c -0.13513,3.05571 -0.61346,6.91954 -1.06295,8.58629 -1.02913,3.8161 -6.64329,14.24722 -8.22629,15.28444 -2.08892,1.36871 -5.60221,1.33375 -8.58177,-0.0854 z"
-       id="path203"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.133635"
-       d="m 100.4892,151.47772 c -0.24081,-0.16904 -0.47701,-0.19615 -1.089561,-0.12505 -0.833644,0.0967 -1.106938,0.0121 -1.787054,-0.55368 -0.497615,-0.41395 -1.033897,-0.40295 -1.466938,0.0301 l -0.344331,0.34434 -0.06651,-0.44456 c -0.448379,-2.99713 -0.448075,-3.9449 0.0016,-4.98814 0.190087,-0.441 0.564507,-1.36205 0.832046,-2.04679 0.548629,-1.40417 1.119275,-2.17062 1.920354,-2.5793 0.504491,-0.25737 0.682424,-0.27185 2.295994,-0.18681 1.4043,0.074 1.88084,0.1524 2.41729,0.39768 1.06533,0.48708 1.75397,1.0577 1.84882,1.53198 0.0459,0.22944 0.235,0.6402 0.42025,0.91282 0.4355,0.64089 0.42443,0.92368 -0.0651,1.66269 -0.22103,0.33369 -0.50029,1.0055 -0.62056,1.49289 -0.12028,0.4874 -0.27995,0.88618 -0.35483,0.88618 -0.0749,0 -0.42489,-0.18529 -0.77781,-0.41176 -0.71746,-0.46039 -0.91853,-0.42601 -0.91853,0.15704 0,0.94182 -1.30398,4.0185 -1.73725,4.09897 -0.11025,0.0205 -0.33881,-0.0599 -0.50792,-0.17859 z m 0.81705,-5.02833 c 0.64785,-0.3242 0.60485,-0.5926 -0.15972,-0.99684 -0.32208,-0.17029 -0.87846,-0.58356 -1.236414,-0.91837 l -0.65081,-0.60876 -1.024665,0.039 c -0.652483,0.0249 -1.044091,0.0978 -1.078142,0.20069 -0.02941,0.0889 0.186983,0.32946 0.480877,0.53454 0.293894,0.20508 0.636487,0.59508 0.76132,0.86667 0.56837,1.23655 1.58448,1.54515 2.907554,0.88305 z"
-       id="path205"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 408.84757,560.88352 c -0.41669,-0.0903 -2.51907,-0.31059 -4.67195,-0.48958 -2.6951,-0.22407 -3.91434,-0.52873 -3.91434,-0.97811 0,-1.37772 1.49679,-1.86574 5.65542,-1.84389 3.8766,0.0204 4.28,0.12156 5.3372,1.33894 1.65543,1.90626 0.74231,2.65481 -2.40633,1.97264 z"
-       id="path207"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 465.15087,600.21691 c 1.65676,-11.04807 10.10685,-24.34711 18.16907,-28.5951 2.29795,-1.21079 7.48863,-1.44461 14.49238,-0.65282 3.58775,0.4056 3.89763,0.36487 4.40266,-0.57879 1.05758,-1.97612 0.3488,-3.4653 -7.15539,-15.03374 -14.57216,-22.46441 -18.13145,-29.70924 -18.86623,-38.40168 -0.35444,-4.19297 0.45002,-9.52058 1.90496,-12.61584 1.70863,-3.63495 4.25743,-5.71955 10.91168,-8.92438 7.26501,-3.499 9.61743,-5.18927 15.05039,-10.81411 4.40895,-4.56465 7.27073,-6.23906 10.69405,-6.25702 2.49019,-0.0131 4.86162,0.78125 4.60759,1.54333 -0.0986,0.29593 -1.64762,1.72283 -3.44217,3.17088 -3.99371,3.22259 -6.29404,6.2028 -8.95334,11.59956 -3.5708,7.24656 -4.79597,11.85952 -5.05437,19.03047 -0.32156,8.92377 0.24284,10.2767 7.50734,17.99582 9.21235,9.78885 16.24637,17.77338 18.20843,20.66893 2.2756,3.35826 4.05594,7.97054 3.85242,9.98032 -0.13848,1.36749 -0.44727,1.59421 -3.52589,2.58875 -3.26155,1.05363 -3.63001,1.35493 -11.044,9.031 -12.45922,12.89966 -17.49604,16.12113 -33.31159,21.30555 -4.86136,1.59358 -10.97441,3.89319 -13.58457,5.11024 -2.61015,1.21705 -4.85198,2.21282 -4.98184,2.21282 -0.12986,0 -0.0766,-1.06389 0.11842,-2.36419 z"
-       id="path209"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.505076"
-       d="m 470.71942,619.77622 c 4.40288,-4.63809 18.96533,-13.15933 27.23005,-15.9337 2.16671,-0.72734 4.04474,-1.21718 4.1734,-1.08852 0.34122,0.34122 -8.23194,6.19805 -15.24101,10.41204 -6.6626,4.00568 -14.30787,7.85558 -16.66752,8.39319 l -1.51523,0.34522 z"
-       id="path211"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke:#ffffff;stroke-width:1.90717;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 300.01881,666.99661 c -1.69128,-2.03787 -1.9358,-17.82218 -0.33542,-21.65242 1.80285,-4.31483 1.80927,-4.31473 5.52485,0.0882 4.30107,5.09676 6.91723,8.99922 6.91723,10.31828 0,0.58705 -1.38378,2.51805 -3.15673,4.40509 -1.7362,1.84793 -4.0118,4.30943 -5.05689,5.47001 -2.02331,2.2469 -2.90755,2.55826 -3.89304,1.37082 z"
-       id="path1320"
-       transform="scale(0.26458333)"
-       inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-  </g>
+    <g
+            inkscape:label="Layer 1"
+            inkscape:groupmode="layer"
+            id="layer1"
+            style="display:inline"
+            transform="translate(-40.166016,-73.732422)">
+        <path
+                style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.999067;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+                d="m 99.367188,74.402344 c -2.474421,0.0498 -4.945645,0.208563 -7.386719,0.425781 l 0.01172,0.128906 -0.02148,-0.128906 C 79.651093,76.784115 68.897118,84.501924 61.4336,94.251953 53.92309,102.80039 51.219036,114.81783 53.056647,125.90625 l 0.259765,-0.043 c -1.826245,-11.01985 0.867274,-22.96322 8.322266,-31.443358 l 0.002,-0.0039 0.0039,-0.0039 c 7.427895,-9.703492 18.1268,-17.374925 30.359375,-19.320312 6.32e-4,-1.01e-4 0.0013,1e-4 0.002,0 9.746307,-0.867141 19.929177,-0.798496 28.939447,3.427734 5.17798,2.541072 10.27608,5.503178 14.57617,9.341797 5.46372,5.637242 10.55303,12.083965 12.48243,19.816399 l 0.002,0.004 0.002,0.004 c 2.07236,6.45849 2.74277,13.33689 1.49805,20.02929 v 0.002 0.004 c -0.74787,5.30421 -3.11321,10.13727 -5.05274,15.10547 l 0.2461,0.0977 c 1.93339,-4.95249 4.30994,-9.80413 5.0664,-15.16016 1.25331,-6.7386 0.57815,-13.65792 -1.5039,-20.15039 l -0.002,-0.008 c -1.94965,-7.804149 -7.07769,-14.283479 -12.55469,-19.933592 l -0.004,-0.0039 -0.002,-0.0039 c -4.32779,-3.863338 -9.44853,-6.835911 -14.63867,-9.382812 h -0.002 v -0.002 c -6.80941,-3.193926 -14.26814,-4.02636 -21.691398,-3.876953 z"
+                id="path219"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:none;stroke:#ffffff;stroke-width:0.67;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="m 68.602677,167.91592 c -0.377934,-2.62979 -0.755909,-5.25987 -1.02357,-6.7009 -0.26766,-1.44103 -0.425148,-1.69301 -0.889698,-2.09467 -0.46455,-0.40165 -1.236233,-0.95285 -2.362342,-2.2285 -1.126108,-1.27565 -2.606484,-3.27573 -3.543594,-4.71676 -0.93711,-1.44103 -1.330829,-2.32296 -2.220636,-3.87427 -0.889808,-1.5513 -2.275689,-3.77187 -3.134032,-5.22078 -0.858342,-1.44891 -1.189064,-2.1261 -1.480439,-2.77969 -0.291375,-0.65359 -0.543351,-1.28354 -0.519817,-1.99234 0.02353,-0.7088 0.322761,-1.49624 0.992104,-3.02393 0.669342,-1.52769 1.708756,-3.7955 3.000192,-6.3705 1.291435,-2.575 2.834806,-5.45701 3.66163,-7.07126 0.826825,-1.61424 0.937066,-1.96071 0.795462,-2.378 -0.141604,-0.41729 -0.535316,-0.9055 -0.909394,-1.49214 -0.374078,-0.58665 -0.728423,-1.27172 -1.000152,-2.17731 -0.271729,-0.90558 -0.460714,-2.03161 -0.783526,-3.10255 -0.322812,-1.07093 -0.779524,-2.08672 -1.106273,-2.7167 -0.32675,-0.62997 -0.523607,-0.87408 -0.630028,-1.22844 -0.10642,-0.35437 -0.12217,-0.81895 0.0078,-1.14197 0.12996,-0.32301 0.405562,-0.50413 0.9057,-0.59466 0.500138,-0.0905 1.224577,-0.0905 1.725349,-0.0279 0.500772,0.0626 0.777787,0.18763 1.484139,1.23802 0.706352,1.05038 1.842139,3.02589 2.977759,5.00111"
+                id="path42"
+                inkscape:path-effect="#path-effect44"
+                inkscape:original-d="m 68.602677,167.91592 c -0.377712,-2.62982 -0.755687,-5.2599 -1.133928,-7.89025 -0.157228,-0.25173 -0.314716,-0.50371 -0.472469,-0.75595 -0.771454,-0.55097 -1.54314,-1.10217 -2.315104,-1.65365 -1.480172,-1.9999 -2.96055,-3.99998 -4.441222,-6.00037 -0.393467,-0.8817 -0.787185,-1.76363 -1.181174,-2.64583 -1.385676,-2.2204 -2.771561,-4.44096 -4.157739,-6.66184 -0.33047,-0.67695 -0.661194,-1.35414 -0.992188,-2.03162 -0.251724,-0.62971 -0.503703,-1.25965 -0.755951,-1.88988 0.2995,-0.7872 0.598725,-1.57464 0.897691,-2.36235 1.03972,-2.26764 2.079136,-4.53545 3.118305,-6.80357 1.543699,-2.88186 3.087071,-5.76387 4.630209,-8.64621 0.110508,-0.34622 0.22075,-0.69269 0.330729,-1.03943 -0.39347,-0.48797 -0.787186,-0.97617 -1.181177,-1.46466 -0.354094,-0.68483 -0.70844,-1.3699 -1.063056,-2.05525 -0.188727,-1.12581 -0.377714,-2.25184 -0.566965,-3.37816 -0.456467,-1.01556 -0.913178,-2.03135 -1.370163,-3.04743 -0.196602,-0.24385 -0.393462,-0.48795 -0.59059,-0.73233 -0.01548,-0.46434 -0.03123,-0.92892 -0.04725,-1.39378 0.275879,-0.18086 0.551482,-0.36197 0.826823,-0.54335 0.724734,2.7e-4 1.449173,2.7e-4 2.173365,0 0.277296,0.12531 0.554314,0.25034 0.831078,0.37512 1.136078,1.97582 2.271865,3.95133 3.4074,5.9266"
+                sodipodi:nodetypes="ccccccccccccccccccccccc"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:none;stroke:#ffffff;stroke-width:0.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="m 136.26041,124.35417 c -1.2598,0.61415 -2.51972,1.22836 -3.55134,1.91348 -1.03163,0.68511 -1.83481,1.44105 -2.72455,1.96075 -0.88975,0.51969 -1.86617,0.80317 -2.70881,1.20478 -0.84265,0.40162 -1.55134,0.92133 -2.22072,1.7876 -0.66939,0.86627 -1.29934,2.07892 -1.58276,2.81924 -0.28342,0.74031 -0.22042,1.00804 -0.3307,1.26773 -0.11027,0.2597 -0.39375,0.51168 -0.63001,0.77157 -0.23626,0.2599 -0.42525,0.52763 -0.53548,1.0002 -0.11023,0.47258 -0.14173,1.14978 -0.0157,1.8034 0.12607,0.65362 0.40954,1.28356 1.11834,1.93709 0.7088,0.65353 1.84271,1.33072 2.97633,2.00774"
+                id="path70"
+                inkscape:original-d="m 136.26041,124.35417 c -1.25965,0.61447 -2.51957,1.22868 -3.77976,1.84263 -0.80295,0.75623 -1.60613,1.51217 -2.4096,2.26786 -0.97619,0.28375 -1.95261,0.56722 -2.92931,0.85044 -0.70846,0.52 -1.41715,1.0397 -2.12612,1.55916 -0.6297,1.21296 -1.25965,2.42561 -1.88988,3.63802 0.0633,0.268 0.12626,0.53573 0.18899,0.80319 -0.28322,0.25226 -0.5667,0.50424 -0.85045,0.75596 -0.18872,0.268 -0.37771,0.53573 -0.56696,0.8032 -0.0312,0.67748 -0.0627,1.35468 -0.0945,2.03162 0.28375,0.63024 0.56722,1.26018 0.85044,1.88988 1.13422,0.67748 2.26812,1.35468 3.40179,2.03162"
+                inkscape:path-effect="#path-effect72"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:none;stroke:#ffffff;stroke-width:0.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="m 136.26041,124.35417 c 0.63025,0.0473 1.26021,0.0945 1.89807,0.24418 0.63785,0.14967 1.28355,0.40165 1.70868,0.79548 0.42513,0.39383 0.62986,0.92928 0.55893,1.3701 -0.0709,0.44081 -0.41741,0.78729 -0.93709,1.14949 -0.51968,0.36221 -1.21262,0.74017 -1.92138,1.31505 -0.70876,0.57487 -1.43321,1.34656 -2.05532,2.16555 -0.6221,0.81899 -1.14181,1.68517 -1.39378,2.70109 -0.25196,1.01592 -0.23623,2.18132 0.20488,3.14201 0.44111,0.96068 1.3073,1.71662 2.46487,2.66156 1.15757,0.94495 2.60645,2.07885 3.97658,3.69319 1.37013,1.61434 2.66151,3.70891 3.315,4.92944 0.65349,1.22054 0.66922,1.56701 0.55106,2.00003 -0.11816,0.43301 -0.37014,0.95272 -0.71662,1.66144 -0.34649,0.70871 -0.78745,1.60639 -2.01588,3.26002 -1.22842,1.65362 -3.24425,4.06317 -6.23654,6.29951 -2.99229,2.23635 -6.96096,4.29942 -9.18947,5.48848 -2.22851,1.18906 -2.71672,1.50403 -3.14988,2.13409 -0.43317,0.63006 -0.81114,1.57498 -1.12611,3.04758 -0.31497,1.4726 -0.56695,3.47268 -1.43316,5.73262 -0.86622,2.25994 -2.3466,4.77973 -3.82696,7.29949"
+                id="path74"
+                inkscape:path-effect="#path-effect76"
+                inkscape:original-d="m 136.26041,124.35417 c 0.63023,0.0475 1.26019,0.0948 1.88989,0.14174 0.64598,0.25225 1.29168,0.50423 1.93712,0.75595 0.20501,0.53574 0.40974,1.0712 0.61422,1.6064 -0.34622,0.34675 -0.6927,0.69322 -1.03944,1.03943 -0.69271,0.37825 -1.38565,0.75622 -2.07887,1.13393 -0.7242,0.77198 -1.44864,1.54367 -2.17336,2.3151 -0.51946,0.86648 -1.03917,1.73266 -1.55915,2.59859 0.016,1.16572 0.0318,2.33112 0.0472,3.49628 0.86648,0.75623 1.73266,1.51217 2.59859,2.26786 1.4492,1.13421 2.89808,2.26812 4.34673,3.40178 1.29171,2.09493 2.5831,4.1895 3.87425,6.28386 0.016,0.34675 0.0318,0.69322 0.0472,1.03943 -0.25172,0.51999 -0.5037,1.0397 -0.75595,1.55915 -0.44072,0.89798 -0.88168,1.79566 -1.32292,2.69308 -2.01565,2.40991 -4.03148,4.81946 -6.04762,7.2288 -3.96856,2.06342 -7.93723,4.1265 -11.90625,6.18936 -0.48796,0.31525 -0.97617,0.63022 -1.46466,0.94494 -0.37771,0.94522 -0.75568,1.89014 -1.13393,2.83482 -0.25172,2.00043 -0.5037,4.00051 -0.75595,6.00037 -1.48017,2.52016 -2.96055,5.03995 -4.44122,7.55953"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:none;stroke:#ffffff;stroke-width:0.565;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="m 68.602677,167.91592 c 0.236316,0.92951 0.472552,1.8587 1.189211,3.17375 0.71666,1.31505 1.913561,3.01591 2.700995,4.20498 0.787433,1.18906 1.1654,1.86625 1.488189,3.23643 0.322789,1.37017 0.590517,3.43325 0.700732,4.81127 0.110216,1.37802 0.06297,2.07095 2.165673,3.3466 2.102702,1.27564 6.354764,3.13395 13.174193,4.06309 6.819429,0.92914 16.20565,0.92913 21.11917,-0.1102 4.91352,-1.03934 5.35447,-3.11821 5.79545,-5.19727"
+                id="path102"
+                inkscape:path-effect="#path-effect104"
+                inkscape:original-d="m 68.602677,167.91592 c 0.2365,0.92946 0.472736,1.85865 0.708707,2.78757 1.197213,1.7012 2.394114,3.40206 3.590772,5.10268 0.378248,0.67749 0.756219,1.35468 1.13393,2.03163 0.268002,2.06342 0.535731,4.1265 0.803198,6.18936 -0.04698,0.69323 -0.09423,1.38616 -0.14174,2.07887 4.252582,1.85868 8.504644,3.71699 12.756697,5.57515 9.386858,2.6e-4 18.773079,2.6e-4 28.159219,-1e-5 0.44121,-2.0786 0.88215,-4.15748 1.32283,-6.2366"
+                sodipodi:nodetypes="ccccccccc"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:none;stroke:#ffffff;stroke-width:0.47625;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="m 109.96745,151.97005 c -0.008,0.54361 -0.0157,1.08695 -0.063,1.79959 -0.0473,0.71264 -0.13387,1.59456 -0.50791,2.40947 -0.37405,0.81491 -1.03549,1.56297 -1.74808,2.12203 -0.71258,0.55905 -1.4764,0.92915 -2.37013,1.22839 -0.89372,0.29924 -1.91738,0.5276 -2.75214,0.83077 -0.83476,0.30316 -1.48046,0.68114 -2.13802,1.15363 -0.657554,0.47249 -1.326873,1.03944 -1.751959,1.27969 -0.425087,0.24025 -0.606182,0.15364 -0.984186,-0.16523 -0.378003,-0.31887 -0.952833,-0.87007 -1.303354,-1.45671 -0.35052,-0.58663 -0.47651,-1.2087 -0.645745,-1.68511 -0.169236,-0.47641 -0.381846,-0.80714 -0.621961,-1.04737 -0.240115,-0.24024 -0.507844,-0.38986 -0.633998,-0.65362 -0.126154,-0.26376 -0.110405,-0.64173 0.07471,-0.91356 0.185119,-0.27182 0.539465,-0.43718 0.799241,-0.77568 0.259776,-0.3385 0.425136,-0.85033 0.606266,-1.22838 0.181129,-0.37804 0.377986,-0.62215 0.571049,-0.63383 0.193063,-0.0117 0.382047,0.2088 0.228467,-0.0707 -0.15358,-0.27954 -0.649668,-1.05911 -0.893876,-1.78359 -0.244207,-0.72448 -0.236331,-1.3938 -0.322919,-2.19305 -0.08659,-0.79925 -0.267698,-1.72842 -0.267753,-2.42147 -5.5e-5,-0.69305 0.181054,-1.14976 0.42123,-1.67343 0.240176,-0.52368 0.539398,-1.11425 0.755953,-1.71268 0.216555,-0.59842 0.35042,-1.20475 0.759937,-1.79151 0.409516,-0.58677 1.094583,-1.15372 1.779815,-1.34659 0.685233,-0.19287 1.370309,-0.0118 1.964789,0.0354 0.59449,0.0472 1.09843,-0.0394 1.59458,0.0552 0.49615,0.0946 0.98436,0.3702 1.47227,0.64563"
+                id="path118"
+                inkscape:path-effect="#path-effect120"
+                inkscape:original-d="m 109.96745,151.97005 c -0.008,0.54361 -0.0155,1.08695 -0.0236,1.63002 -0.0864,0.88223 -0.17298,1.76416 -0.25986,2.64584 -0.66121,0.74835 -1.32265,1.49642 -1.98438,2.24423 -0.76357,0.37037 -1.52739,0.74047 -2.29148,1.11031 -1.02344,0.22862 -2.0471,0.45698 -3.07105,0.68508 -0.64546,0.37824 -1.29116,0.75621 -1.93713,1.13393 -0.669083,0.56724 -1.338403,1.13419 -2.007999,1.70089 -0.180854,-0.0864 -0.361964,-0.17298 -0.543341,-0.25986 -0.574585,-0.55096 -1.149413,-1.10217 -1.724517,-1.65365 -0.12573,-0.62183 -0.251719,-1.2439 -0.377976,-1.86625 -0.212352,-0.33047 -0.424958,-0.6612 -0.637833,-0.99219 -0.267476,-0.14935 -0.535202,-0.29897 -0.803201,-0.44885 0.01601,-0.37772 0.03176,-0.75569 0.04725,-1.13393 0.354627,-0.1651 0.708973,-0.33046 1.063059,-0.49609 0.165632,-0.51159 0.330994,-1.02342 0.496094,-1.53553 0.19713,-0.24385 0.393991,-0.48795 0.590587,-0.73233 0.189256,0.22076 0.378243,0.44124 0.566965,0.66146 -0.49584,-0.77932 -0.991923,-1.55889 -1.488281,-2.33873 0.0081,-0.66908 0.01601,-1.3384 0.02363,-2.008 -0.180853,-0.92894 -0.361963,-1.85811 -0.54334,-2.78757 0.181379,-0.45647 0.362489,-0.91318 0.54334,-1.37016 0.2995,-0.59034 0.598726,-1.18091 0.897692,-1.77177 0.134135,-0.60608 0.267999,-1.21241 0.4016,-1.81901 0.685361,-0.56671 1.370428,-1.13366 2.055246,-1.70089 0.685361,0.18138 1.370435,0.36249 2.055245,0.54334 0.50425,-0.0864 1.0082,-0.17297 1.51191,-0.25986 0.48849,0.27588 0.9767,0.55148 1.46466,0.82682"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.133635"
+                d="m 114.14713,151.33597 c 0,-0.72945 1.89002,-2.81267 3.04087,-3.3517 l 0.66849,-0.3131 0.0862,-1.48814 c 0.0474,-0.81848 0.14948,-1.99929 0.2268,-2.62403 0.0773,-0.62475 0.12098,-1.64705 0.097,-2.27179 l -0.0435,-1.1359 h -0.52658 -0.52659 l -0.24057,0.80181 c -0.13232,0.44099 -0.33213,1.27867 -0.44403,1.86151 -0.1119,0.58283 -0.23605,1.09229 -0.27589,1.13214 -0.0398,0.0398 -0.37083,-0.0953 -0.73552,-0.3003 -0.80733,-0.45382 -1.20471,-0.42772 -1.34182,0.0881 -0.10736,0.40392 -0.35284,0.75986 -0.52404,0.75986 -0.0581,0 -0.55762,-0.62032 -1.11014,-1.37848 -0.55252,-0.75817 -1.23432,-1.53716 -1.51511,-1.7311 -0.56858,-0.39272 -1.83785,-0.76583 -2.60524,-0.76583 -0.80028,0 -0.87576,0.3284 -0.32037,1.39392 l 0.45758,0.87787 h -0.64032 c -0.70204,0 -2.29069,-0.69787 -2.75395,-1.20977 -0.24722,-0.27317 -0.24639,-0.29397 0.0443,-1.10453 0.39589,-1.104 0.37661,-1.32316 -0.16712,-1.89969 l -0.4633,-0.49124 -0.90645,0.0851 c -0.70769,0.0664 -1.09364,0.027 -1.76008,-0.17977 l -0.85363,-0.26487 -0.54955,0.56472 c -0.30224,0.3106 -1.004425,0.81418 -1.560415,1.11907 -0.55599,0.3049 -1.08954,0.64913 -1.18567,0.76496 -0.23156,0.27902 -0.51193,0.26758 -0.57025,-0.0233 -0.0848,-0.42299 0.15189,-1.94262 0.4352,-2.79397 0.34355,-1.03236 1.49705,-2.39656 3.860865,-4.56607 1.56142,-1.43307 1.8976,-1.65294 2.07888,-1.35963 0.13325,0.2156 1.06649,0.1537 1.69277,-0.11226 0.31846,-0.13525 0.76192,-0.28158 0.98546,-0.32518 0.3961,-0.0772 0.40508,-0.0676 0.35311,0.37753 -0.0345,0.2952 0.0403,0.61541 0.21121,0.90515 l 0.26453,0.44835 -0.32408,0.52251 c -1.25849,2.02903 -1.51651,3.06544 -0.93226,3.74467 0.41863,0.4867 0.69923,0.35788 1.04787,-0.48104 l 0.27835,-0.66978 h 1.32272 c 1.10813,0 1.33651,-0.0359 1.40769,-0.22141 0.0861,-0.22436 0.051,-0.29428 -0.73399,-1.46225 -0.2421,-0.36022 -0.41073,-0.74515 -0.37472,-0.8554 0.32195,-0.98579 0.54282,-1.56339 0.65153,-1.70384 0.0711,-0.0919 0.3775,-0.16648 0.68087,-0.16579 0.67119,0.002 1.59424,0.50267 2.61564,1.4201 l 0.72364,0.64998 -1.65961,0.0668 c -1.46631,0.059 -1.66501,0.0951 -1.70596,0.30917 -0.029,0.15142 0.14171,0.40213 0.45485,0.66817 1.0163,0.86345 1.25892,1.14558 1.25892,1.46391 0,0.62693 -0.37816,0.78283 -2.29839,0.94758 -1.75382,0.15046 -1.77799,0.15697 -1.81679,0.48932 -0.075,0.64242 1.20928,1.49712 2.90723,1.93478 0.99922,0.25756 1.43859,0.53583 1.88807,1.1958 0.17718,0.26014 0.42887,0.4734 0.55931,0.4739 0.52338,0.002 0.65582,-1.30839 0.22762,-2.25206 -0.14538,-0.3204 -0.26433,-0.60685 -0.26433,-0.63656 0,-0.10287 0.9935,0.3616 1.22865,0.5744 0.1299,0.11756 0.31438,0.49065 0.40998,0.8291 0.34139,1.20873 1.0947,0.62874 1.09868,-0.8459 0.002,-0.75815 -0.0411,-0.87426 -0.63257,-1.70361 -0.34912,-0.48951 -0.63476,-0.95441 -0.63476,-1.03311 0,-0.0787 0.19867,-0.1431 0.4415,-0.1431 0.81646,0 1.64203,1.16224 1.8982,2.67228 0.10533,0.62089 0.20969,0.88024 0.36637,0.91041 0.34332,0.0661 0.5344,-0.89957 0.53703,-2.71406 0.003,-1.81643 -0.16067,-2.575 -0.71772,-3.33379 -0.21297,-0.2901 -0.38723,-0.61375 -0.38723,-0.71922 0,-0.37056 -0.5268,-1.03837 -1.05194,-1.33351 -0.29183,-0.16402 -1.14928,-0.78308 -1.90545,-1.3757 -1.69421,-1.32777 -1.83482,-1.39984 -2.96021,-1.51744 -0.49846,-0.0521 -1.25015,-0.23426 -1.67043,-0.40483 -1.08236,-0.43927 -1.81638,-0.50936 -2.83548,-0.27074 -0.47774,0.11186 -1.55,0.29456 -2.38279,0.406 -1.86736,0.24987 -2.28202,0.45229 -3.831235,1.87021 -0.66149,0.60543 -1.83413,1.5081 -2.60587,2.00593 -1.60689,1.03656 -2.18994,1.5115 -2.6993,2.19877 -0.73538,0.99221 -1.30481,3.46579 -1.78313,7.74567 -0.2982,2.66829 -0.74379,3.87261 -1.88374,5.09131 -1.28514,1.37392 -1.81858,1.38274 -4.42541,0.0732 -3.02432,-1.51923 -4.86899,-2.01514 -8.24203,-2.21575 -1.650323,-0.0981 -2.037993,-0.1599 -2.147504,-0.34205 -0.570148,-0.94833 -1.752968,-2.04362 -2.959653,-2.74064 -0.713724,-0.41226 -2.468925,-0.92795 -3.158405,-0.92795 -0.3872,0 -0.390986,-0.007 -0.173744,-0.30068 0.480962,-0.65117 1.266068,-2.49641 1.520965,-3.57473 0.416319,-1.76119 0.523489,-2.54291 1.023998,-7.46945 0.509305,-5.01308 0.760802,-6.72677 1.155623,-7.87434 0.141904,-0.41245 0.864881,-1.6711 1.606614,-2.79699 1.551316,-2.35478 1.913186,-3.24445 2.139986,-5.2613 l 0.156,-1.38717 0.98086,-1.36543 c 1.26976,-1.7676 2.69352,-4.07443 2.93214,-4.75073 0.21865,-0.61973 0.25121,-2.53605 0.0495,-2.91297 -0.0761,-0.14216 -0.21469,-0.25848 -0.30801,-0.25848 -0.0933,0 -0.98768,0.89398 -1.98746,1.98662 -0.99978,1.09264 -2.01347,2.12596 -2.252631,2.29625 l -0.43484,0.30964 0.08481,-1.12695 c 0.04664,-0.61983 0.297489,-1.99892 0.557431,-3.06466 0.70792,-2.90241 0.8739,-5.092298 0.44821,-5.913325 -0.0837,-0.161411 -0.28111,-0.233862 -0.637256,-0.233862 -0.669875,0 -1.153012,0.531468 -1.714604,1.886123 -0.225049,0.542857 -0.611396,1.476524 -0.858551,2.074804 l -0.449371,1.0878 0.05224,-2.654477 c 0.07422,-3.770988 0.0046,-3.997866 -1.226878,-3.997866 -0.808723,0 -1.499365,0.391898 -1.936168,1.098661 -0.264083,0.427294 -0.330642,0.73437 -0.756012,3.488002 -0.172506,1.11672 -0.932064,3.41451 -1.079847,3.26673 -0.02469,-0.0247 0.01823,-0.67427 0.09538,-1.4435 0.211918,-2.11292 0.111979,-4.225228 -0.227391,-4.806277 -0.301395,-0.51602 -0.774568,-0.661972 -1.27603,-0.393597 -0.261429,0.139914 -0.283736,0.129683 -0.200575,-0.09199 0.05146,-0.137173 0.286088,-0.569211 0.521393,-0.96008 l 0.427826,-0.710676 0.751784,0.0871 c 0.604661,0.07006 0.85311,0.03543 1.269532,-0.176919 0.28476,-0.145211 1.007351,-0.452784 1.605759,-0.683498 1.559465,-0.601241 4.913598,-2.922614 5.460089,-3.778885 0.2205,-0.345487 0.49132,-0.660548 0.60184,-0.700137 0.11051,-0.03959 0.71263,-0.123844 1.33806,-0.187235 2.26601,-0.229683 2.98429,-1.136624 2.25071,-2.841871 -0.33086,-0.769118 -0.2396,-1.146583 0.37449,-1.548869 0.31707,-0.207708 0.62203,-0.236114 2.21172,-0.206004 2.35639,0.04463 2.58734,-0.04058 3.19381,-1.178438 0.50632,-0.94995 1.07638,-1.423842 2.15297,-1.789788 0.81357,-0.276539 1.17306,-0.219382 1.17306,0.186513 0,0.431115 0.55922,0.680482 1.82453,0.813594 0.65024,0.06841 1.22306,0.125444 1.27293,0.126751 0.0499,0.0013 0.18518,0.09687 0.30068,0.212371 0.33679,0.33679 0.25012,0.901536 -0.23657,1.541446 -0.67808,0.891561 -0.75614,1.100516 -0.75614,2.024108 0,1.047128 0.25384,1.930582 1.01116,3.519082 1.15761,2.42814 2.17226,3.258635 3.98436,3.261207 0.87471,0.0013 0.94075,-0.02106 1.35106,-0.456113 0.27274,-0.289181 0.57344,-0.866693 0.817585,-1.570207 l 0.3862,-1.112789 1.21711,-0.133636 c 0.66942,-0.0735 1.3129,-0.213694 1.42996,-0.311542 0.11705,-0.09785 0.39524,-0.501129 0.61819,-0.896175 0.22295,-0.395047 0.52266,-0.78104 0.66602,-0.857761 0.14335,-0.07672 0.83379,-0.139496 1.53431,-0.139496 1.2156,0 1.29384,-0.0177 1.71616,-0.38852 0.4896,-0.429873 1.03679,-1.417269 1.03679,-1.870879 0,-0.160832 -0.16538,-0.445823 -0.3675,-0.633309 -0.34899,-0.323729 -0.3652,-0.39238 -0.32196,-1.363811 0.0424,-0.952791 0.0135,-1.084429 -0.4221,-1.920089 -0.2572,-0.493443 -0.5653,-1.191204 -0.68466,-1.55058 -0.21154,-0.636868 -0.53397,-1.037357 -1.07693,-1.337662 -0.21737,-0.120221 -0.22589,-0.148579 -0.0457,-0.151884 0.61562,-0.0113 3.67038,0.461264 4.74983,0.734772 1.53887,0.389914 2.05428,0.633738 2.32348,1.09915 0.22021,0.380725 3.12732,2.215425 3.76328,2.375043 0.18848,0.04731 0.46856,0.01865 0.6224,-0.06369 0.23587,-0.126236 0.27972,-0.274646 0.27972,-0.946807 0,-0.51196 0.055,-0.797107 0.15379,-0.797107 0.53403,0 7.10791,3.679828 9.84695,5.51198 1.32428,0.885812 1.74207,1.313669 0.80269,0.822026 -0.4714,-0.246719 -2.37,-0.420119 -2.96496,-0.270796 -0.47749,0.119846 -0.62211,0.694873 -0.62269,2.475947 -5.3e-4,1.453425 -0.0255,1.600356 -0.4004,2.352077 -0.21995,0.440994 -0.40014,0.967182 -0.40041,1.169305 -0.001,0.691928 0.79983,1.198102 2.15313,1.360993 0.60105,0.07234 0.8272,0.17227 1.1359,0.501885 0.21199,0.226357 0.79534,0.679553 1.29635,1.007108 0.501,0.327554 0.94706,0.689731 0.99123,0.804841 0.11875,0.309457 -0.46828,0.74918 -1.55401,1.164057 -1.12152,0.42856 -1.41226,0.737627 -2.23505,2.375881 -0.646,1.28626 -0.61593,1.2621 -2.36588,1.90067 -0.35457,0.12938 -0.67701,0.31954 -0.71654,0.42256 -0.11054,0.28806 0.20088,0.56847 0.73984,0.66618 1.02774,0.18633 2.29178,1.1669 2.29178,1.77783 0,0.4604 -0.33365,0.5512 -2.34454,0.63805 -2.4075,0.10399 -2.46631,0.13854 -2.46631,1.44929 0,1.42278 0.73288,2.72759 1.9118,3.40373 0.57166,0.32785 0.84572,0.39828 1.55391,0.39931 1.65856,0.002 2.45781,-0.71851 3.16094,-2.85124 0.72393,-2.19582 1.16548,-2.70373 2.24113,-2.57797 0.35709,0.0418 0.97257,0.25838 1.36774,0.4814 0.39516,0.22302 0.8763,0.40549 1.06921,0.40549 0.37172,0 0.3683,0.0232 0.16531,-1.11741 -0.058,-0.32586 0.29713,-0.54689 0.71155,-0.44288 0.94889,0.23816 2.34817,1.75804 3.93112,4.26994 0.67108,1.0649 1.01986,1.49984 1.20272,1.49984 0.28823,0 0.31487,-0.33674 0.13213,-1.67043 l -0.1007,-0.735 0.4709,-0.2497 c 0.8035,-0.42608 0.86971,-0.87639 0.55276,-3.75934 l -0.0735,-0.66817 0.33741,0.62557 c 0.1856,0.34407 0.40371,0.66654 0.48472,0.71661 0.081,0.0501 0.35051,-0.10594 0.59888,-0.34667 l 0.45159,-0.4377 0.25576,0.58972 c 0.14067,0.32434 0.41334,0.94298 0.60594,1.37475 0.1926,0.43176 0.35019,0.79878 0.35019,0.8156 0,0.0168 -0.29544,0.002 -0.65653,-0.0325 -0.63474,-0.061 -0.66426,-0.0481 -0.88933,0.38711 -0.12804,0.24761 -0.35253,0.61213 -0.49885,0.81005 -0.21965,0.29709 -0.2525,0.49121 -0.18834,1.11284 0.12636,1.22431 0.42952,1.52786 1.75315,1.7554 0.61111,0.10506 0.66862,0.14935 0.8403,0.64731 0.10136,0.294 0.21982,0.87249 0.26325,1.28552 l 0.0789,0.75099 -0.66082,0.68559 c -0.93836,0.97353 -1.15913,0.94506 -2.45568,-0.31667 -0.61065,-0.59425 -1.14278,-1.00226 -1.30717,-1.00226 -0.28439,0 -0.38961,0.24707 -0.65448,1.5368 -0.20339,0.99034 -0.84281,0.78805 -3.37922,-1.06908 l -1.46012,-1.06908 -0.003,-0.89333 c -0.004,-1.05966 -0.15414,-1.52405 -0.53337,-1.64442 -0.16906,-0.0536 -0.74491,0.0731 -1.46565,0.32265 -0.65295,0.22607 -1.41809,0.41128 -1.70031,0.41157 -0.68799,8e-4 -2.87568,0.35649 -3.78718,0.61589 -0.40424,0.11504 -0.9333,0.3594 -1.17569,0.54303 -0.60285,0.45672 -1.30167,1.56081 -1.55848,2.4623 -0.2481,0.87095 -0.45476,1.08369 -1.80941,1.86265 -1.14286,0.65718 -2.54393,1.93428 -3.02925,2.76124 -0.41912,0.71413 -0.52862,1.75473 -0.32045,3.04517 l 0.16191,1.00368 -0.57209,1.23607 c -0.50751,1.09654 -0.5711,1.34167 -0.5633,2.17152 0.005,0.51449 0.0986,1.14592 0.20827,1.40316 0.56454,1.32361 3.93073,5.07812 4.55291,5.07812 0.43712,0 0.66518,-0.21401 1.88357,-1.7676 0.56068,-0.71493 1.33511,-1.55032 1.72094,-1.85641 0.96529,-0.76577 3.11632,-1.79427 4.30631,-2.05902 1.74156,-0.38746 2.15534,-0.0933 -0.0623,0.98811 -1.7165,0.83705 -2.79873,1.08589 -3.37328,1.67038 -0.83124,0.84561 -1.72836,2.36018 -2.19813,3.71101 -0.18529,0.53282 -0.58636,1.3227 -0.89126,1.7553 l -0.55435,0.78653 0.002,1.29241 c 0.001,1.06672 0.052,1.38575 0.28965,1.82694 0.39683,0.73669 1.23704,1.50942 2.59922,2.39047 l 1.15333,0.74597 -0.0588,1.50538 c -0.086,2.20111 -0.21486,2.64908 -1.01373,3.52318 -0.79641,0.8714 -2.05214,1.79551 -3.05467,2.24799 -1.147,0.51768 -6.08856,1.54733 -7.42606,1.54733 -0.59447,0 -0.70921,-0.039 -0.70921,-0.24111 z m -23.456875,-5.50702 c 0.41266,-0.41298 0.63041,-1.73552 0.92825,-5.63774 0.14567,-1.90857 0.31405,-3.1138 0.61214,-4.38141 0.35686,-1.51757 0.38847,-1.79654 0.2392,-2.11124 -0.25193,-0.53113 -0.96266,-0.8148 -2.94658,-1.17608 -2.52183,-0.45922 -2.74005,-0.56287 -4.27222,-2.02905 l -1.32414,-1.26711 -0.62538,0.10552 c -0.34396,0.058 -1.22674,0.0908 -1.96173,0.0728 -1.28383,-0.0314 -1.34908,-0.0191 -1.66032,0.31226 -0.43721,0.46555 -0.61218,0.43523 -0.90115,-0.15616 -0.36065,-0.73809 -0.73545,-0.70799 -2.583473,0.20752 -1.838209,0.91066 -1.890284,1.01494 -1.000821,2.00424 0.773163,0.85995 0.865113,1.19358 0.651854,2.36523 -0.09365,0.5145 -0.238173,1.38647 -0.321167,1.93771 -0.130363,0.86586 -0.21557,1.06906 -0.626079,1.4931 -0.378055,0.39051 -0.457869,0.55981 -0.390482,0.82829 0.198882,0.79242 2.890248,3.67288 4.624908,4.94987 0.96827,0.7128 1.73702,1.01514 3.91159,1.53841 0.8998,0.21652 1.90661,0.49541 2.23736,0.61974 1.39589,0.52475 2.45988,0.71921 3.77241,0.68947 1.19053,-0.027 1.32848,-0.0578 1.63583,-0.36538 z"
+                id="path189"
+                sodipodi:nodetypes="cscssccccsssssssssscssssccscssssssssccccssscssssscscssssssssssssscssssscsssssssssssssscssscssssscsssssscsssssscsssssssssscsssssssssssssssssscsscsssssssssssssssssssssscscssssssssssssscscssssssscsccssscssscsssssccssssscccscsssssscsccssssssssccsscssssccssssssccccsssssssssssss"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.133635"
+                d="m 62.721006,150.6791 c -0.392499,-0.18272 -1.207638,-0.65423 -1.811419,-1.04779 l -1.097786,-0.71558 -1.032195,-2.01828 c -2.026071,-3.96165 -2.154171,-6.03161 -0.612053,-9.89009 1.402501,-3.50914 4.544383,-9.99105 7.1374,-14.72491 0.42273,-0.77174 0.797841,-1.61888 0.833578,-1.88254 0.08224,-0.60673 -0.05482,-0.8704 -1.800188,-3.46285 -1.611013,-2.3929 -2.327063,-3.80558 -2.635147,-5.19882 -0.254455,-1.15071 -0.337193,-1.32815 -1.025776,-2.1999 -0.282459,-0.3576 -0.476433,-0.71025 -0.431051,-0.78367 0.13608,-0.22019 1.100169,-0.0159 1.653643,0.35033 0.284678,0.18839 0.678677,0.62952 0.875554,0.98029 0.424587,0.75647 1.408353,2.22743 1.830588,2.73716 0.178573,0.21557 0.364501,0.32228 0.459375,0.26365 0.118706,-0.0734 0.07106,-0.3875 -0.186677,-1.23078 -0.277833,-0.90904 -0.348117,-1.42209 -0.356494,-2.60226 -0.0094,-1.33127 0.05087,-1.71587 0.639215,-4.07586 0.49235,-1.97491 0.672145,-2.97798 0.74255,-4.14267 0.122804,-2.031481 0.393232,-2.535554 1.716789,-3.200071 0.713224,-0.35809 0.884153,-0.251357 1.083101,0.676307 0.190336,0.887505 0.178062,1.796354 -0.05664,4.194194 -0.213352,2.17966 -0.151862,3.67496 0.15112,3.67496 0.124462,0 0.181999,-0.17608 0.181999,-0.55699 0,-0.38604 0.201461,-0.99096 0.65646,-1.97111 0.784117,-1.68913 1.024797,-2.5943 1.139957,-4.28728 0.10531,-1.548127 0.403239,-2.269162 1.03636,-2.508139 0.362686,-0.136898 0.466077,-0.130199 0.637535,0.04131 0.403587,0.403707 0.151117,3.402769 -0.61087,7.256429 -0.449276,2.27217 -0.663861,2.64796 -1.6871,2.95453 -0.864838,0.25911 -1.041363,0.8706 -1.043546,3.61483 -0.0019,2.47326 0.124553,3.23387 0.832448,5.0046 0.295397,0.73891 0.56692,1.67367 0.603615,2.07804 0.152623,1.68194 -0.86905,4.21832 -4.413996,10.95805 -2.933565,5.57736 -4.780774,9.56686 -5.23232,11.30046 -0.412176,1.58245 -0.178324,4.21121 0.556209,6.25241 0.480624,1.33562 1.289241,3.05699 1.772127,3.77249 0.588227,0.87159 0.565938,0.88873 -0.50636,0.38955 z"
+                id="path191"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 284.09143,657.28222 c -0.41542,-0.57482 -2.14248,-2.83311 -3.83791,-5.01842 -3.72996,-4.8077 -4.9598,-7.14061 -5.68914,-10.79183 -0.6926,-3.46727 -3.09871,-22.55022 -3.09429,-24.54095 0.004,-1.90174 3.64025,-6.27076 5.21307,-6.26396 1.45679,0.006 5.72262,2.5101 7.86837,4.61832 2.4704,2.42719 4.65995,7.3892 4.97112,11.2657 0.21942,2.73348 0.02,3.86365 -1.34959,7.6487 -1.35072,3.73289 -1.68978,5.61368 -2.12571,11.79139 -0.28526,4.04255 -0.6721,8.47196 -0.85963,9.84313 -0.32419,2.37033 -0.37815,2.44159 -1.09629,1.44792 z"
+                id="path193"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 284.90864,590.68279 c -8.37245,-5.04454 -20.14849,-15.1047 -25.68425,-21.9418 -1.9118,-2.36124 -4.37325,-6.08462 -5.46988,-8.27418 -2.54089,-5.07323 -4.80827,-12.33875 -4.07838,-13.06864 0.72596,-0.72596 9.63584,2.10414 15.49058,4.92036 7.96526,3.83142 11.60327,8.48718 16.9369,21.6751 3.08159,7.61952 6.22827,17.1376 5.94507,17.98262 -0.0918,0.27386 -1.5048,-0.3082 -3.14004,-1.29346 z"
+                id="path195"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.133635"
+                d="m 83.141013,180.16056 c -0.496729,-0.59852 1.2892,-2.96261 2.741789,-3.6294 0.370023,-0.16985 1.272059,-0.40365 2.004523,-0.51956 0.732462,-0.11591 1.890155,-0.2995 2.572645,-0.40799 1.737373,-0.27617 3.204993,-0.76435 4.843989,-1.6113 1.646277,-0.8507 2.263386,-1.30052 2.064149,-1.50457 -0.09465,-0.0969 -0.360206,-0.079 -0.868627,0.0587 -1.882278,0.50984 -4.133543,0.33072 -5.831821,-0.464 -2.321576,-1.0864 -5.153216,-4.18046 -6.667823,-7.28578 -1.416759,-2.9047 -3.132934,-9.08566 -3.132934,-11.28356 0,-0.71092 0.04002,-0.83736 0.323855,-1.02334 0.268502,-0.17593 0.450271,-0.18883 1.06348,-0.0755 0.862904,0.15952 1.101669,0.27377 4.292145,2.05393 3.65344,2.03848 4.902488,2.80536 5.166439,3.17206 0.132263,0.18375 0.33378,0.78308 0.447818,1.33185 0.274595,1.3214 0.55967,1.76001 2.478304,3.81309 1.782429,1.90733 2.712133,3.07871 3.018817,3.80355 0.110016,0.26002 0.343667,1.11763 0.519223,1.9058 0.363572,1.6323 0.630217,2.24192 0.980602,2.24192 0.57745,0 0.902554,-0.76017 1.410024,-3.29693 0.52266,-2.61267 0.44616,-2.45231 1.42652,-2.99023 1.45588,-0.79884 3.52429,-1.67009 6.6688,-2.80903 2.31995,-0.84029 8.71893,-3.2701 9.70437,-3.68494 0.22312,-0.0939 0.31458,0.41657 0.31466,1.75626 1.3e-4,2.45652 -0.74193,4.71421 -2.29786,6.99112 -0.93131,1.36287 -4.3152,4.75133 -5.51619,5.52366 -2.99184,1.92397 -5.63068,2.31295 -8.64023,1.27363 -1.63427,-0.56438 -1.85011,-0.59162 -1.85011,-0.23343 0,0.35742 0.94861,1.10033 2.12466,1.66393 0.90677,0.43456 1.63655,0.63479 4.42474,1.21406 1.8616,0.38677 2.3263,0.97859 1.40413,1.78827 -1.02275,0.89799 -3.77413,1.3321 -5.71129,0.90112 -0.97836,-0.21766 -2.44545,-0.85272 -3.244491,-1.40445 -0.220498,-0.15224 -0.530968,-0.27721 -0.689935,-0.27769 -0.158967,-5.3e-4 -0.881396,0.30158 -1.605391,0.67124 -1.662745,0.84899 -3.042949,1.14613 -6.19048,1.33276 -2.800766,0.16606 -3.578998,0.28933 -5.099537,0.80777 -1.280525,0.43659 -2.382089,0.51849 -2.648963,0.19692 z"
+                id="path197"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 329.14121,703.22293 -0.97514,-2.19492 0.40539,-1.87853 c 1.90424,-8.82401 5.39651,-8.65797 14.86873,-9.94866 11.0821,-1.51006 16.74275,-2.9614 24.8214,-6.36401 l 4.61835,-1.94518 3.71541,1.27585 c 2.04348,0.70172 8.36452,2.4208 14.04676,3.82018 10.97506,2.70286 14.26172,4.00312 16.32911,6.46008 1.3725,1.63113 2.17538,4.19525 1.6034,5.12073 -0.65713,1.06325 -3.96878,-0.066 -13.02305,-4.4408 -8.51592,-4.11467 -9.21255,-4.3603 -12.87945,-4.54125 -6.32595,-0.31216 -8.23669,1.47911 -4.78998,4.4905 3.76315,3.28785 5.73833,5.55496 6.98767,8.02042 l 1.26635,2.49901 -27.09323,2.93706 c -14.84909,1.60972 -26.81981,-2.00283 -29.90172,-3.31045 z"
+                id="path199"
+                transform="scale(0.26458333)"
+                sodipodi:nodetypes="ccssscsssssssscscc"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 420.71253,682.95642 c -2.33621,-1.06132 -5.48088,-4.39053 -4.98303,-5.27547 1.15977,-2.06152 2.89996,-3.8841 3.7085,-3.8841 1.73716,0 5.37111,1.88827 6.72075,3.49222 1.37877,1.63857 2.21383,4.51024 1.70053,5.84789 -0.41423,1.07946 -4.60629,0.97356 -7.14675,-0.18054 z"
+                id="path201"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 430.69212,667.02507 c -1.93156,-0.91999 -2.65165,-1.54543 -2.65165,-2.30311 0,-0.64521 2.44506,-3.58551 6.43972,-7.74407 6.27139,-6.52869 10.34848,-11.79816 13.01729,-16.82433 l 1.31135,-2.46966 -0.2457,5.55584 c -0.13513,3.05571 -0.61346,6.91954 -1.06295,8.58629 -1.02913,3.8161 -6.64329,14.24722 -8.22629,15.28444 -2.08892,1.36871 -5.60221,1.33375 -8.58177,-0.0854 z"
+                id="path203"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.133635"
+                d="m 100.4892,151.47772 c -0.24081,-0.16904 -0.47701,-0.19615 -1.089561,-0.12505 -0.833644,0.0967 -1.106938,0.0121 -1.787054,-0.55368 -0.497615,-0.41395 -1.033897,-0.40295 -1.466938,0.0301 l -0.344331,0.34434 -0.06651,-0.44456 c -0.448379,-2.99713 -0.448075,-3.9449 0.0016,-4.98814 0.190087,-0.441 0.564507,-1.36205 0.832046,-2.04679 0.548629,-1.40417 1.119275,-2.17062 1.920354,-2.5793 0.504491,-0.25737 0.682424,-0.27185 2.295994,-0.18681 1.4043,0.074 1.88084,0.1524 2.41729,0.39768 1.06533,0.48708 1.75397,1.0577 1.84882,1.53198 0.0459,0.22944 0.235,0.6402 0.42025,0.91282 0.4355,0.64089 0.42443,0.92368 -0.0651,1.66269 -0.22103,0.33369 -0.50029,1.0055 -0.62056,1.49289 -0.12028,0.4874 -0.27995,0.88618 -0.35483,0.88618 -0.0749,0 -0.42489,-0.18529 -0.77781,-0.41176 -0.71746,-0.46039 -0.91853,-0.42601 -0.91853,0.15704 0,0.94182 -1.30398,4.0185 -1.73725,4.09897 -0.11025,0.0205 -0.33881,-0.0599 -0.50792,-0.17859 z m 0.81705,-5.02833 c 0.64785,-0.3242 0.60485,-0.5926 -0.15972,-0.99684 -0.32208,-0.17029 -0.87846,-0.58356 -1.236414,-0.91837 l -0.65081,-0.60876 -1.024665,0.039 c -0.652483,0.0249 -1.044091,0.0978 -1.078142,0.20069 -0.02941,0.0889 0.186983,0.32946 0.480877,0.53454 0.293894,0.20508 0.636487,0.59508 0.76132,0.86667 0.56837,1.23655 1.58448,1.54515 2.907554,0.88305 z"
+                id="path205"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 408.84757,560.88352 c -0.41669,-0.0903 -2.51907,-0.31059 -4.67195,-0.48958 -2.6951,-0.22407 -3.91434,-0.52873 -3.91434,-0.97811 0,-1.37772 1.49679,-1.86574 5.65542,-1.84389 3.8766,0.0204 4.28,0.12156 5.3372,1.33894 1.65543,1.90626 0.74231,2.65481 -2.40633,1.97264 z"
+                id="path207"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 465.15087,600.21691 c 1.65676,-11.04807 10.10685,-24.34711 18.16907,-28.5951 2.29795,-1.21079 7.48863,-1.44461 14.49238,-0.65282 3.58775,0.4056 3.89763,0.36487 4.40266,-0.57879 1.05758,-1.97612 0.3488,-3.4653 -7.15539,-15.03374 -14.57216,-22.46441 -18.13145,-29.70924 -18.86623,-38.40168 -0.35444,-4.19297 0.45002,-9.52058 1.90496,-12.61584 1.70863,-3.63495 4.25743,-5.71955 10.91168,-8.92438 7.26501,-3.499 9.61743,-5.18927 15.05039,-10.81411 4.40895,-4.56465 7.27073,-6.23906 10.69405,-6.25702 2.49019,-0.0131 4.86162,0.78125 4.60759,1.54333 -0.0986,0.29593 -1.64762,1.72283 -3.44217,3.17088 -3.99371,3.22259 -6.29404,6.2028 -8.95334,11.59956 -3.5708,7.24656 -4.79597,11.85952 -5.05437,19.03047 -0.32156,8.92377 0.24284,10.2767 7.50734,17.99582 9.21235,9.78885 16.24637,17.77338 18.20843,20.66893 2.2756,3.35826 4.05594,7.97054 3.85242,9.98032 -0.13848,1.36749 -0.44727,1.59421 -3.52589,2.58875 -3.26155,1.05363 -3.63001,1.35493 -11.044,9.031 -12.45922,12.89966 -17.49604,16.12113 -33.31159,21.30555 -4.86136,1.59358 -10.97441,3.89319 -13.58457,5.11024 -2.61015,1.21705 -4.85198,2.21282 -4.98184,2.21282 -0.12986,0 -0.0766,-1.06389 0.11842,-2.36419 z"
+                id="path209"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke-width:0.505076"
+                d="m 470.71942,619.77622 c 4.40288,-4.63809 18.96533,-13.15933 27.23005,-15.9337 2.16671,-0.72734 4.04474,-1.21718 4.1734,-1.08852 0.34122,0.34122 -8.23194,6.19805 -15.24101,10.41204 -6.6626,4.00568 -14.30787,7.85558 -16.66752,8.39319 l -1.51523,0.34522 z"
+                id="path211"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+        <path
+                style="fill:#ffffff;stroke:#ffffff;stroke-width:1.90717;stroke-miterlimit:4;stroke-dasharray:none"
+                d="m 300.01881,666.99661 c -1.69128,-2.03787 -1.9358,-17.82218 -0.33542,-21.65242 1.80285,-4.31483 1.80927,-4.31473 5.52485,0.0882 4.30107,5.09676 6.91723,8.99922 6.91723,10.31828 0,0.58705 -1.38378,2.51805 -3.15673,4.40509 -1.7362,1.84793 -4.0118,4.30943 -5.05689,5.47001 -2.02331,2.2469 -2.90755,2.55826 -3.89304,1.37082 z"
+                id="path1320"
+                transform="scale(0.26458333)"
+                inkscape:export-filename="C:\Users\hjo\Pictures\AtlasMainWhite.png"
+                inkscape:export-xdpi="96"
+                inkscape:export-ydpi="96"/>
+    </g>
 </svg>

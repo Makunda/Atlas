@@ -4,7 +4,7 @@ import OssRecommendation from "@interfaces/highlight/recommendations/OssRecommen
 import { logger } from "@shared/Logger";
 import ExcelUtils from "@utils/Excel/ExcelUtils";
 import Excel from "exceljs";
-import { int, QueryResult } from "neo4j-driver";
+import { QueryResult } from "neo4j-driver";
 import { getHighlightLanguage } from "../technology/HighlightLanguage";
 import PatternExtractorFactory from "../technology/pattern/PatternExtractorFactory";
 import BinderFactor from "../technology/binders/BinderFactory";
@@ -16,27 +16,6 @@ export default class HighlightOssService {
   protected static NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
   protected static PORTFOLIO_LEVEL_TAB = "Portfolio-Level Components";
   protected static APPLICATION_LEVEL_TAB = "Detected Components";
-
-  /**
-   * Sanitize the component based on the technology
-   * @param name Name of the component
-   * @param technology Technology of the component
-   * @returns [root, info] Return the root and additional information
-   */
-  private sanitizeComponentName(name: string, technology: string): [string, string] {
-    if (technology == "java") {
-      let info = "";
-      if (name.includes(":")) {
-        const tab = name.split(":");
-        name = tab[0];
-        info = tab[1];
-      }
-      return [name, info];
-    }
-
-    // Else return plain
-    return [name, ""];
-  }
 
   /**
    * Treat a portfolio level Excel sheet
@@ -220,6 +199,34 @@ export default class HighlightOssService {
   }
 
   /**
+   * Test a blocker
+   * @param {Blocker} blocker Blocker to test
+   * @returns True if the test is successful, False otherwise
+   */
+  public async testRecommendation(blocker: OssRecommendation): Promise<boolean> {
+    try {
+      const req = `MATCH (o:\`${blocker.application}\`:Object) 
+ WHERE p.FullName STARTS WITH $OssRecommendation
+  return o as node LIMIT 1;`;
+
+      // Get root
+      let root: string;
+      if (blocker.component.includes(":")) {
+        root = blocker.component.split(":")[0];
+      } else {
+        root = blocker.component;
+      }
+
+      const params: any = { file: root };
+      const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
+      if (!res || res.records.length == 0) return true;
+      else return false;
+    } catch (ignored) {
+      return false;
+    }
+  }
+
+  /**
    * Create a Document on objects
    * @param blocker Blocker to tag
    * @returns True if the document creation
@@ -252,6 +259,44 @@ export default class HighlightOssService {
   }
 
   /**
+   * Create a tag on objects
+   * @param blocker Blocker to tag
+   * @returns True if the tag creation worked
+   */
+  protected async createTagContains(blocker: OssRecommendation): Promise<boolean> {
+    const language = getHighlightLanguage(blocker.technology);
+    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+    const binderFactory = BinderFactor.getBinder(language, blocker.application);
+
+    const patterns = patternExtractor.getPatterns(blocker.component);
+
+    const tag = this.getBlockerTitle(blocker);
+
+    return binderFactory.createTag(patterns, tag);
+  }
+
+  /**
+   * Sanitize the component based on the technology
+   * @param name Name of the component
+   * @param technology Technology of the component
+   * @returns [root, info] Return the root and additional information
+   */
+  private sanitizeComponentName(name: string, technology: string): [string, string] {
+    if (technology == "java") {
+      let info = "";
+      if (name.includes(":")) {
+        const tab = name.split(":");
+        name = tab[0];
+        info = tab[1];
+      }
+      return [name, info];
+    }
+
+    // Else return plain
+    return [name, ""];
+  }
+
+  /**
    * Create a human friendly description
    * @param blocker Blocker
    * @returns
@@ -271,50 +316,5 @@ export default class HighlightOssService {
       description += `${blocker.vulnerabilityLow.length} CVEs with a low risk : ` + blocker.vulnerabilityLow.join(", ") + ".\n";
 
     return description;
-  }
-
-  /**
-   * Create a tag on objects
-   * @param blocker Blocker to tag
-   * @returns True if the tag creation worked
-   */
-  protected async createTagContains(blocker: OssRecommendation): Promise<boolean> {
-    const language = getHighlightLanguage(blocker.technology);
-    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
-    const binderFactory = BinderFactor.getBinder(language, blocker.application);
-
-    const patterns = patternExtractor.getPatterns(blocker.component);
-
-    const tag = this.getBlockerTitle(blocker);
-
-    return binderFactory.createTag(patterns, tag);
-  }
-
-  /**
-   * Test a blocker
-   * @param {Blocker} blocker Blocker to test
-   * @returns True if the test is successful, False otherwise
-   */
-  public async testRecommendation(blocker: OssRecommendation): Promise<boolean> {
-    try {
-      const req = `MATCH (o:\`${blocker.application}\`:Object) 
- WHERE p.FullName STARTS WITH $OssRecommendation
-  return o as node LIMIT 1;`;
-
-      // Get root
-      let root: string;
-      if (blocker.component.includes(":")) {
-        root = blocker.component.split(":")[0];
-      } else {
-        root = blocker.component;
-      }
-
-      const params: any = { file: root };
-      const res: QueryResult = await HighlightOssService.NEO4JAL.executeWithParameters(req, params);
-      if (!res || res.records.length == 0) return true;
-      else return false;
-    } catch (ignored) {
-      return false;
-    }
   }
 }

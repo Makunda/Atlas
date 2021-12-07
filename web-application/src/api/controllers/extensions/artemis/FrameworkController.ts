@@ -1,7 +1,7 @@
 import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { DetectionResult } from "@/api/interface/artemis/detectionResult.interface";
-import { Framework } from "@/api/interface/artemis/Framework";
+import { DetectionResult } from "@/api/interface/extensions/artemis/detectionResult.interface";
+import { Framework } from "@/api/interface/extensions/artemis/Framework";
 import ProxyAxios from "@/api/utils/ProxyAxios";
 
 export class FrameworkController {

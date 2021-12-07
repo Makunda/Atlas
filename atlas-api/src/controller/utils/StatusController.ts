@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import UtilsService from "@services/utils/UtilsService";
 import ApiResponse from "@interfaces/api/ApiResponse";
 import { HttpCode } from "@utils/HttpCode";
 

@@ -13,6 +13,7 @@ import LicenseRoute from "./license/LicenseRoute";
 import AipRouter from "./aip/AipRoute";
 import HighlightIndexRoute from "./highlight/HighlightIndexRoute";
 import CloudRouter from "./cloud/CloudRoute";
+import CaesarRoute from "./extensions/caesar/CaesarRouteIndex";
 import LoginRoute from "./login/LoginRoute";
 
 // Init router and path
@@ -32,6 +33,7 @@ router.use("/aip", AipRouter);
 router.use("/assistants", AssistantsRoute);
 router.use("/atlas", AtlasRouter);
 router.use("/artemis", ArtemisRouter);
+router.use("/caesar", CaesarRoute);
 router.use("/cloud", CloudRouter);
 router.use("/configuration", ConfigurationRouter);
 router.use("/demeter", DemeterRouter);

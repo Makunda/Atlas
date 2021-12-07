@@ -73,6 +73,48 @@ export default class HighlightContainerService {
   }
 
   /**
+   * Apply a list of blocker as recommendation in cast imaging
+   * @param {string} application Name of the application
+   * @param {CloudBlocker[]} blockers List of blockers to apply
+   * @return {Promise<CloudBlocker[]>} List of blockers not applied
+   */
+  public async applyRecommendations(blockers: CloudBlocker[], taggingType: string): Promise<[CloudBlocker[], CloudBlocker[]]> {
+    const returnList: CloudBlocker[] = [];
+    const errorList: CloudBlocker[] = [];
+
+    let res;
+    // Parse the blockers and apply the recommendations
+    for (const blocker of blockers) {
+      res = taggingType == "tag" ? await this.applyTag(blocker) : await this.applyDocument(blocker);
+
+      if (res) returnList.push(blocker);
+      else errorList.push(blocker);
+    }
+
+    return [returnList, errorList];
+  }
+
+  /**
+   * Test a blocker
+   * @param {Blocker} blocker Blocker to test
+   * @returns True if the test is successful, False otherwise
+   */
+  public async testRecommendation(blocker: CloudBlocker): Promise<boolean> {
+    try {
+      const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
+      WHERE p.Description='File' AND r.value ENDS WITH $file 
+      return o as node LIMIT 1;`;
+
+      const params: any = { file: blocker.file, tag: blocker.file };
+      const res: QueryResult = await HighlightContainerService.NEO4JAL.executeWithParameters(req, params);
+      if (!res || res.records.length == 0) return true;
+      else return false;
+    } catch (ignored) {
+      return false;
+    }
+  }
+
+  /**
    * Apply a recommendation for an application as a tag
    * @param blocker Blocker to apply
    */
@@ -123,48 +165,6 @@ export default class HighlightContainerService {
       return true;
     } catch (error) {
       logger.error("Failed to create a Document.", error);
-      return false;
-    }
-  }
-
-  /**
-   * Apply a list of blocker as recommendation in cast imaging
-   * @param {string} application Name of the application
-   * @param {CloudBlocker[]} blockers List of blockers to apply
-   * @return {Promise<CloudBlocker[]>} List of blockers not applied
-   */
-  public async applyRecommendations(blockers: CloudBlocker[], taggingType: string): Promise<[CloudBlocker[], CloudBlocker[]]> {
-    const returnList: CloudBlocker[] = [];
-    const errorList: CloudBlocker[] = [];
-
-    let res;
-    // Parse the blockers and apply the recommendations
-    for (const blocker of blockers) {
-      res = taggingType == "tag" ? await this.applyTag(blocker) : await this.applyDocument(blocker);
-
-      if (res) returnList.push(blocker);
-      else errorList.push(blocker);
-    }
-
-    return [returnList, errorList];
-  }
-
-  /**
-   * Test a blocker
-   * @param {Blocker} blocker Blocker to test
-   * @returns True if the test is successful, False otherwise
-   */
-  public async testRecommendation(blocker: CloudBlocker): Promise<boolean> {
-    try {
-      const req = `MATCH (p:ObjectProperty)<-[r]-(o:\`${blocker.application}\`:Object) 
-      WHERE p.Description='File' AND r.value ENDS WITH $file 
-      return o as node LIMIT 1;`;
-
-      const params: any = { file: blocker.file, tag: blocker.file };
-      const res: QueryResult = await HighlightContainerService.NEO4JAL.executeWithParameters(req, params);
-      if (!res || res.records.length == 0) return true;
-      else return false;
-    } catch (ignored) {
       return false;
     }
   }

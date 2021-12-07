@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="model" persistent max-width="600px">
+  <v-dialog v-model="model" max-width="600px" persistent>
     <v-card>
       <v-card-title>
         <span class="headline">Flag as a framework</span>
@@ -14,21 +14,21 @@
           <v-row class="justify-space-around">
             <v-btn
               :class="{ 'button-glow': blink }"
-              x-large
-              tile
-              @click="choice = 'custom'"
               :color="choice !== 'custom' ? 'grey' : 'persianGrey'"
               dark
+              tile
+              x-large
+              @click="choice = 'custom'"
             >
               Create a Custom rule
             </v-btn>
             <v-btn
               :class="{ 'button-glow': blink }"
-              x-large
-              tile
-              @click="choice = 'framework'"
               :color="choice !== 'framework' ? 'grey' : 'persianGrey'"
               dark
+              tile
+              x-large
+              @click="choice = 'framework'"
             >
               Flag as a Framework
             </v-btn>
@@ -83,29 +83,29 @@
           <v-row>
             <v-autocomplete
               v-if="choice === 'framework'"
-              label="Select a category"
               v-model="category"
-              :loading="categoriesLoading"
               :items="categoriesFramework"
-              item-value="id"
-              item-text="name"
+              :loading="categoriesLoading"
               :search-input.sync="searchCategories"
-              outlined
               auto-select-first
+              item-text="name"
+              item-value="id"
+              label="Select a category"
+              outlined
             ></v-autocomplete>
           </v-row>
           <v-row class="mt-5">
             <v-textarea
               v-model="description"
-              clearable
               clear-icon="mdi-close-circle"
+              clearable
               label="Description of the framework"
             ></v-textarea>
           </v-row>
           <v-row v-if="error.length !== 0" class="red--text mt-3">
-            <v-icon color="red" class="button-glow"
-              >mdi-message-alert-outline</v-icon
-            >
+            <v-icon class="button-glow" color="red"
+              >mdi-message-alert-outline
+            </v-icon>
             {{ error }}
           </v-row>
         </v-container>
@@ -126,10 +126,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Artifact } from "@/api/interface/artemis/Artifact";
+import { Artifact } from "@/api/interface/extensions/artemis/Artifact";
 import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
 import { Category } from "@/api/interface/ApiCategory.interface";
-import { Framework } from "@/api/interface/artemis/Framework";
+import { Framework } from "@/api/interface/extensions/artemis/Framework";
 import { FrameworkController } from "@/api/controllers/extensions/artemis/FrameworkController";
 
 export default Vue.extend({

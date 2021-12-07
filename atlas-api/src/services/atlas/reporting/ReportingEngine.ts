@@ -105,7 +105,7 @@ export default class ReportingEngine {
         throw new Error(
           `Parameter with name ${x.name} was not found. Please provide all the parameters : [${report.parameters
             .map((x) => x.name)
-            .join(", ")}]}]`
+            .join(", ")}]}]`,
         );
     });
 

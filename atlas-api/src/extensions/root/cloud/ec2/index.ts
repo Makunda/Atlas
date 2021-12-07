@@ -27,6 +27,10 @@ If it is not, recommendations will be provided based on the volume of code detec
 The extension will flag candidates to begin investigation on.
 `;
 
+  constructor(neo4jAccessLayer: Neo4JAccessLayer, logger: Logger) {
+    super(neo4jAccessLayer, logger);
+  }
+
   /**
    * Return the Id of the extension
    * @returns The Id of the extension
@@ -46,6 +50,7 @@ The extension will flag candidates to begin investigation on.
   getCreationDate(): string {
     return "2011-10-05T14:48:00.000Z";
   }
+
   getLastUpdate(): string {
     return "2011-10-05T14:48:00.000Z";
   }
@@ -168,11 +173,8 @@ The extension will flag candidates to begin investigation on.
 
     // Find micro services
   }
+
   afterExecution(): Promise<any> {
     return;
-  }
-
-  constructor(neo4jAccessLayer: Neo4JAccessLayer, logger: Logger) {
-    super(neo4jAccessLayer, logger);
   }
 }

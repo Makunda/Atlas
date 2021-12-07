@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { logger } from "@shared/Logger";
 import { Neo4jError } from "neo4j-driver";
 import DocumentNode, { DocumentType } from "./DocumentNode";
 
@@ -7,30 +6,8 @@ import DocumentNode, { DocumentType } from "./DocumentNode";
  * Document for objects in the application
  */
 export default class ObjectDocumentNode extends DocumentNode {
-  /**
-   * Convert Neo4j ID to AIP Id
-   * @param nodesId Node ID to convert to AIPid
-   */
-  private async convertIDNodeToAIP(nodesId: number[]): Promise<string[]> {
-    const idList = [];
-    const req = `MATCH (o:\`${this.application}\`:Object) 
-      WHERE ID(o)=$idNode 
-      RETURN o.AipId as AipId`;
-
-    let results;
-    for (const id of nodesId) {
-      try {
-        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
-          idNode: id,
-        });
-
-        if (results && results.records.length > 0) idList.push(String(results.records[0].get("AipId")));
-      } catch (ignored) {
-        // ignored
-      }
-    }
-
-    return idList;
+  constructor(application: string, title: string, description: string, nodes: number[]) {
+    super(application, title, description, nodes, DocumentType.OBJECT);
   }
 
   /**
@@ -67,11 +44,33 @@ export default class ObjectDocumentNode extends DocumentNode {
     // Create the document
     await this.createNode(
       Array.from(nodeAIPList).filter((n) => n),
-      "AipId"
+      "AipId",
     );
   }
 
-  constructor(application: string, title: string, description: string, nodes: number[]) {
-    super(application, title, description, nodes, DocumentType.OBJECT);
+  /**
+   * Convert Neo4j ID to AIP Id
+   * @param nodesId Node ID to convert to AIPid
+   */
+  private async convertIDNodeToAIP(nodesId: number[]): Promise<string[]> {
+    const idList = [];
+    const req = `MATCH (o:\`${this.application}\`:Object) 
+      WHERE ID(o)=$idNode 
+      RETURN o.AipId as AipId`;
+
+    let results;
+    for (const id of nodesId) {
+      try {
+        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
+          idNode: id,
+        });
+
+        if (results && results.records.length > 0) idList.push(String(results.records[0].get("AipId")));
+      } catch (ignored) {
+        // ignored
+      }
+    }
+
+    return idList;
   }
 }

@@ -28,7 +28,7 @@ export default class InstallationService {
       this.imagingPluginFolder = path.resolve(this.imagingBaseFolder, String(config.get("imaging.folders.plugins")));
       this.imagingTechIconFolder = path.resolve(
         this.imagingBaseFolder,
-        String(config.get("imaging.folders.tech_icon"))
+        String(config.get("imaging.folders.tech_icon")),
       );
 
       if (!fs.existsSync(this.imagingBaseFolder))
@@ -148,11 +148,11 @@ export default class InstallationService {
     if (!fs.existsSync(newPath)) throw new Error(`The path ${newPath} does not exist. Please specify a valid path.`);
     if (!fs.existsSync(newPath + InstallationService.RELATIVE_NEO4J_PLUGINS))
       throw new Error(
-        `The path ${newPath + InstallationService.RELATIVE_NEO4J_PLUGINS} does not exist. Please specify a valid path.`
+        `The path ${newPath + InstallationService.RELATIVE_NEO4J_PLUGINS} does not exist. Please specify a valid path.`,
       );
     if (!fs.existsSync(newPath + InstallationService.RELATIVE_NGINX_ICONS))
       throw new Error(
-        `The path ${newPath + InstallationService.RELATIVE_NGINX_ICONS} does not exist. Please specify a valid path.`
+        `The path ${newPath + InstallationService.RELATIVE_NGINX_ICONS} does not exist. Please specify a valid path.`,
       );
 
     this.imagingBaseFolder = newPath;

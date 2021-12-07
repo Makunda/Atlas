@@ -7,30 +7,9 @@ import DocumentNode, { DocumentType } from "./DocumentNode";
 export default class SubsetDocumentNode extends DocumentNode {
   private architectureName: string;
 
-  /**
-   * Convert Neo4j ID to Level Name
-   * @param nodesId Node ID to convert to Level 5 Name
-   */
-  private async convertIDNodeToName(nodesId: number[]): Promise<string[]> {
-    const idList = [];
-    const req = `MATCH (o:\`${this.application}\`:Subset) 
-      WHERE ID(o)=$idNode 
-      RETURN o.Name as name`;
-
-    let results;
-    for (const id of nodesId) {
-      try {
-        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
-          idNode: id,
-        });
-
-        if (results && results.records.length > 0) idList.push(String(results.records[0].get("name")));
-      } catch (ignored) {
-        // ignored errors
-      }
-    }
-
-    return idList;
+  constructor(application: string, architectureName: string, title: string, description: string, nodes: number[]) {
+    super(application, title, description, nodes, DocumentType.LEVEL);
+    this.architectureName = architectureName;
   }
 
   /**
@@ -79,11 +58,35 @@ export default class SubsetDocumentNode extends DocumentNode {
       `MATCH (a:ArchiModel:\`${this.application}\`)-[]->(l:Subset:\`${this.application}\`) WHERE a.Name=$archiName ` +
       "MERGE (l)-[:ContainsDocument]->(o)";
 
-    await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqLink, { idNode: idDoc, archiName: this.architectureName });
+    await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(reqLink, {
+      idNode: idDoc,
+      archiName: this.architectureName,
+    });
   }
 
-  constructor(application: string, architectureName: string, title: string, description: string, nodes: number[]) {
-    super(application, title, description, nodes, DocumentType.LEVEL);
-    this.architectureName = architectureName;
+  /**
+   * Convert Neo4j ID to Level Name
+   * @param nodesId Node ID to convert to Level 5 Name
+   */
+  private async convertIDNodeToName(nodesId: number[]): Promise<string[]> {
+    const idList = [];
+    const req = `MATCH (o:\`${this.application}\`:Subset) 
+      WHERE ID(o)=$idNode 
+      RETURN o.Name as name`;
+
+    let results;
+    for (const id of nodesId) {
+      try {
+        results = await DocumentNode.NEO4J_ACCESS_LAYER.executeWithParameters(req, {
+          idNode: id,
+        });
+
+        if (results && results.records.length > 0) idList.push(String(results.records[0].get("name")));
+      } catch (ignored) {
+        // ignored errors
+      }
+    }
+
+    return idList;
   }
 }

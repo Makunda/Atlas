@@ -1,6 +1,6 @@
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import { DemeterGroup } from "@interfaces/demeter/demeterGroup.interface";
-import { CandidateResults } from "@interfaces/demeter/candidateResults.interface";
+import { DemeterGroup } from "@interfaces/extensions/demeter/DemeterGroup";
+import { CandidateResults } from "@interfaces/extensions/demeter/CandidateResults";
 import { int } from "neo4j-driver";
 
 class GroupingService {

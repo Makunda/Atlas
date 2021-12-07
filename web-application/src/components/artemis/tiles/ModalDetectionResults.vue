@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="status" width="900" scrollable>
+  <v-dialog v-model="status" scrollable width="900">
     <v-container fluid>
       <v-card>
         <v-card-title>
@@ -20,9 +20,9 @@
                   <v-text-field
                     v-model="search"
                     append-icon="mdi-magnify"
+                    hide-details
                     label="Search"
                     single-line
-                    hide-details
                   ></v-text-field>
                 </v-card-title>
                 <v-card-subtitle class="d-flex justify-end">
@@ -37,8 +37,8 @@
                   :items="filteredFrameworks"
                   :items-per-page="20"
                   :search="search"
-                  item-key="name"
                   class="elevation-3"
+                  item-key="name"
                   style="width: 100%"
                 >
                 </v-data-table>
@@ -49,7 +49,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="green" @click="closeModal">
+          <v-btn color="green" text @click="closeModal">
             Close
           </v-btn>
         </v-card-actions>
@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DetectionInterface from "@/api/interface/artemis/Detection";
+import DetectionInterface from "@/api/interface/extensions/artemis/Detection";
 import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
 
 export default Vue.extend({

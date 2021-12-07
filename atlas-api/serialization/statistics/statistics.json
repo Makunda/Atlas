@@ -1,21 +1,27 @@
 [
   {
     "title": "Internal Objects",
-    "categories": ["configuration"],
+    "categories": [
+      "configuration"
+    ],
     "description": "Percentage of internal objects in the application",
     "request": "MATCH (o:Object:`%APPLICATION_NAME%`) WITH COUNT(o) as totObj MATCH (obj:Object:`%APPLICATION_NAME%`) WHERE obj.External=false WITH  COUNT(obj) as internal, totObj RETURN toFloat(internal) / totObj as percentage;",
     "inverseResult": false
   },
   {
     "title": "In Transaction",
-    "categories": ["configuration"],
+    "categories": [
+      "configuration"
+    ],
     "description": "Percentage of objects in transactions. The isolated nodes in the application are excluded from this results",
     "request": "MATCH (o:Object:`%APPLICATION_NAME%`) WHERE (o)-[]-(:Object) WITH COUNT(DISTINCT o) as totObj MATCH (obj:Object:`%APPLICATION_NAME%`) WHERE (:Transaction:`%APPLICATION_NAME%`)-[:Contains]->(obj) WITH  COUNT(DISTINCT obj) as notInTransaction, totObj RETURN toFloat(notInTransaction) / totObj as percentage;",
     "inverseResult": false
   },
   {
     "title": "Isolated Levels",
-    "categories": ["configuration"],
+    "categories": [
+      "configuration"
+    ],
     "description": "Percentage of levels with no links in the application",
     "request": "MATCH (l:Level5:`%APPLICATION_NAME%`) WITH COUNT(l) as totLevels MATCH (obj:Level5:`%APPLICATION_NAME%`) WHERE NOT (obj)-[]-(:Level5) WITH  COUNT(obj) as isolated, totLevels RETURN toFloat(isolated) / totLevels as percentage;",
     "inverseResult": true

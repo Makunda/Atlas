@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { NextFunction, Request, Response } from "express";
 import ArchitectureService from "@services/extensions/demeter/ArchitectureService";
-import { checkBody, checkParams } from "@shared/FunctionGlob";
+import { checkBody } from "@shared/FunctionGlob";
 import HttpException from "@exceptions/HttpException";
 import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";
