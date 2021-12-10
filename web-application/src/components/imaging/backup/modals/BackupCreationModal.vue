@@ -3,7 +3,9 @@
     <v-dialog v-model="dialog" max-width="800px" persistent>
       <v-card>
         <v-card-title>
-          <span class="text-h5">Backup creation</span>
+          <span class="text-h5"
+            >Backup creation: <b>{{ application }}</b></span
+          >
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -28,19 +30,49 @@
               </v-col>
             </v-row>
             <v-row class="d-flex flex-column pa-2" justify="center">
-              <h3>Pick a date for the backup:</h3>
+              <h3>Pick a date for the backup: {{ picker }}</h3>
               <v-date-picker v-model="picker" full-width></v-date-picker>
+            </v-row>
+            <v-row>
+              <v-file-input
+                v-model="file"
+                :show-size="1000"
+                accept="image/*"
+                color="deep-purple accent-4"
+                counter
+                label="File input"
+                outlined
+                placeholder="Select your files"
+                prepend-icon="mdi-paperclip"
+                @change="imageToBase64"
+              >
+              </v-file-input>
+            </v-row>
+            <v-row v-if="this.picture" class="d-flex flex-column pa-2">
+              <h5>Preview</h5>
+              <v-img
+                id="preview"
+                :src="picture"
+                alt="Upload preview"
+                max-height="300"
+              />
             </v-row>
           </v-container>
           <small>*indicates required field</small>
+          <h3 class="red--text">{{ error }}</h3>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="close()">
+          <v-btn color="red darken-1" outlined @click="close()">
             Close
           </v-btn>
-          <v-btn color="blue darken-1" text @click="createBackup()">
-            Create
+          <v-btn
+            :loading="loading"
+            color="green darken-1"
+            dark
+            @click="createBackup()"
+          >
+            Create backup
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -68,9 +100,9 @@ export default Vue.extend({
 
   methods: {
     async refresh() {
-      await this.getBackupList();
-      this.application = "";
+      this.application = this.$store.state.applicationName;
       this.name = "";
+      this.file = {};
       this.description = "";
       this.picker = "";
     },
@@ -84,16 +116,59 @@ export default Vue.extend({
       else this.$emit("close");
     },
 
+    toDataURL(src): Promise<string | ArrayBuffer> {
+      return new Promise((resolve, reject) => {
+        try {
+          const reader = new FileReader();
+          reader.onloadend = function(fileLoadedEvent) {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(src);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    },
+
+    async imageToBase64() {
+      if (!this.file || !this.file.name) return;
+      const base64 = (await this.toDataURL(this.file)) as string;
+      if (base64) {
+        this.picture = base64;
+      }
+    },
+
     /**
      * Get the list of backup in one application
      */
     async createBackup() {
+      this.loading = true;
+      this.error = "";
+
       try {
         if (!this.name) throw new Error("You must specify a name");
         if (!this.application)
           throw new Error("You must specify an application");
 
-        await BackupController.createBackup(this.application, this.name);
+        let timestamp;
+        if (!this.picker) {
+          timestamp = Date.now();
+        } else {
+          const newDate = new Date(
+            this.picker[2],
+            this.picker[1] - 1,
+            this.picker[0]
+          );
+          timestamp = newDate.getTime();
+        }
+
+        await BackupController.createBackup(
+          this.application,
+          this.name,
+          this.description,
+          timestamp,
+          this.picture
+        );
         this.close(true);
       } catch (e) {
         Logger.error(
@@ -106,6 +181,9 @@ export default Vue.extend({
           title: "Failed to create the backup.",
           body: e
         });
+        this.error = e;
+      } finally {
+        this.loading = false;
       }
     }
   },
@@ -114,19 +192,34 @@ export default Vue.extend({
     application: "",
     name: "",
     description: "",
-    picker: ""
+    picker: "",
+
+    file: {} as File,
+    picture: "" as any,
+
+    // Loading & Error
+    loading: false,
+    error: ""
   }),
 
   // Mounted operation
   async mounted() {
-    this.application = this.getApplicationName();
     await this.refresh();
   },
-
   watch: {
     async getApplicationName(newApp) {
       this.application = newApp;
       await this.refresh();
+    },
+    file: {
+      handler() {
+        this.imageToBase64();
+      }
+    },
+    dialog: {
+      handler() {
+        this.refresh();
+      }
     }
   }
 });

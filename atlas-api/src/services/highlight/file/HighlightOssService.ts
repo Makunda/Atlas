@@ -177,6 +177,7 @@ export default class HighlightOssService {
   public async applyRecommendations(blockers: OssRecommendation[], taggingType: string): Promise<[OssRecommendation[], OssRecommendation[]]> {
     const returnList: OssRecommendation[] = [];
     const errorList: OssRecommendation[] = [];
+
     for (const blocker of blockers) {
       try {
         let res: boolean;
@@ -190,10 +191,12 @@ export default class HighlightOssService {
 
         if (res) returnList.push(blocker);
         else errorList.push(blocker);
-      } catch (ignored) {
-        returnList.push(blocker);
+      } catch (e) {
+        logger.error(`Failed to apply the recommendation : ${blocker}.`, e);
+        errorList.push(blocker);
       }
     }
+    logger.info(`Applied ${returnList.length} recommendations. Produced ${errorList.length} errors.`);
 
     return [returnList, errorList];
   }
@@ -232,16 +235,21 @@ export default class HighlightOssService {
    * @returns True if the document creation
    */
   protected async createDocumentContains(blocker: OssRecommendation): Promise<boolean> {
-    const language = getHighlightLanguage(blocker.technology);
-    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
-    const binderFactory = BinderFactor.getBinder(language, blocker.application);
+    try {
+      const language = getHighlightLanguage(blocker.technology);
+      const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+      const binderFactory = BinderFactor.getBinder(language, blocker.application);
 
-    const patterns = patternExtractor.getPatterns(blocker.component);
+      const patterns = patternExtractor.getPatterns(blocker.component);
 
-    const title = this.getBlockerTitle(blocker);
-    const description = this.getDescription(blocker);
+      const title = this.getBlockerTitle(blocker);
+      const description = this.getDescription(blocker);
 
-    return binderFactory.createDocument(patterns, title, description);
+      return binderFactory.createDocument(patterns, title, description);
+    }catch (e) {
+      logger.error(`Failed to create the document for blocker: ${blocker}.`, e);
+      throw e;
+    }
   }
 
   /**
@@ -264,15 +272,20 @@ export default class HighlightOssService {
    * @returns True if the tag creation worked
    */
   protected async createTagContains(blocker: OssRecommendation): Promise<boolean> {
-    const language = getHighlightLanguage(blocker.technology);
-    const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
-    const binderFactory = BinderFactor.getBinder(language, blocker.application);
+    try {
+      const language = getHighlightLanguage(blocker.technology);
+      const patternExtractor = PatternExtractorFactory.getPatternExtractor(language);
+      const binderFactory = BinderFactor.getBinder(language, blocker.application);
 
-    const patterns = patternExtractor.getPatterns(blocker.component);
+      const patterns = patternExtractor.getPatterns(blocker.component);
 
-    const tag = this.getBlockerTitle(blocker);
+      const tag = this.getBlockerTitle(blocker);
 
-    return binderFactory.createTag(patterns, tag);
+      return binderFactory.createTag(patterns, tag);
+    } catch (e) {
+      logger.error(`Failed to create the tag for blocker: ${blocker}.`, e);
+      throw e;
+    }
   }
 
   /**

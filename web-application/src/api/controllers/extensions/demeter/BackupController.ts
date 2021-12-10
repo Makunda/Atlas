@@ -12,10 +12,11 @@ export default class BackupController {
    */
   public static async getList(application: string): Promise<Backup[]> {
     try {
-      const url = "api/demeter/backup/rollback";
-      const response = await ProxyAxios.post<Backup[]>(url);
+      const url = "api/demeter/backup/list";
+      const response = await ProxyAxios.post<Backup[]>(url, {
+        application: application
+      });
       if (response.isError()) throw response.getErrorsAsString();
-
       return response.getData();
     } catch (err) {
       const message = `Failed to get the list of backup`;
@@ -42,6 +43,7 @@ export default class BackupController {
     try {
       const url = "api/demeter/backup/create";
       const response = await ProxyAxios.post<void>(url, {
+        application: application,
         name: name,
         description: description,
         timestamp: timestamp,
@@ -57,15 +59,19 @@ export default class BackupController {
 
   /**
    * Get the list of available backup for the application
-   * @param application Name of the application
+   * @param application Name of the applicatio
+   * @param id Id of the backup
    */
   public static async deleteBackup(
     application: string,
-    name: string
+    id: number
   ): Promise<void> {
     try {
       const url = "api/demeter/backup/delete";
-      const response = await ProxyAxios.post<void>(url);
+      const response = await ProxyAxios.post<void>(url, {
+        application: application,
+        id: id
+      });
       if (response.isError()) throw response.getErrorsAsString();
     } catch (err) {
       const message = `Failed to delete the backup`;
@@ -78,13 +84,13 @@ export default class BackupController {
    * Get the list of available backup for the application
    * @param application Name of the application
    */
-  public static async rollback(
-    application: string,
-    name: string
-  ): Promise<void> {
+  public static async rollback(application: string, id: number): Promise<void> {
     try {
       const url = "api/demeter/backup/rollback";
-      const response = await ProxyAxios.post<void>(url);
+      const response = await ProxyAxios.post<void>(url, {
+        application: application,
+        id: id
+      });
       if (response.isError()) throw response.getErrorsAsString();
     } catch (err) {
       const message = `Failed to rollback the application`;

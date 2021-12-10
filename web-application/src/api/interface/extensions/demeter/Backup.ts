@@ -2,7 +2,9 @@
  * Backup node
  */
 export default interface Backup {
+  id: number;
   name: string;
   description: string;
-  timestamp: string;
+  timestamp: number;
+  picture: string;
 }

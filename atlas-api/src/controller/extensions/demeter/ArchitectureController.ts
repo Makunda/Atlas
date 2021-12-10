@@ -6,6 +6,9 @@ import HttpException from "@exceptions/HttpException";
 import Archimodel from "@interfaces/imaging/ArchiModel";
 import Subset from "@interfaces/imaging/Subset";
 import { logger } from "@shared/Logger";
+import { HttpCode } from "@utils/HttpCode";
+import ApiResponse from "@interfaces/api/ApiResponse";
+import { body, validationResult } from "express-validator";
 
 export default class ArchitectureController {
   private architectureService = new ArchitectureService();
@@ -23,9 +26,10 @@ export default class ArchitectureController {
       if (application === undefined) throw new HttpException(400, "Application parameter is undefined");
 
       const results: Archimodel[] = await this.architectureService.getAllArchitectures(application);
-      res.status(200).json({ data: results, message: "All Architectures" });
+      res.status(HttpCode.SUCCESS).send({ data: results, message: "All Architectures" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to get the list of architecture", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to get the list of architecture" } as ApiResponse);
     }
   };
 
@@ -47,9 +51,10 @@ export default class ArchitectureController {
       const application = String(req.body.application);
 
       await this.architectureService.deleteArchitectureByID(application, id);
-      res.status(200).json({ data: true, message: "Deleted architecture" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Deleted architecture" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to delete the architecture by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to delete the architecture" } as ApiResponse);
     }
   };
 
@@ -71,9 +76,10 @@ export default class ArchitectureController {
       const application = String(req.body.application);
 
       await this.architectureService.deleteSubset(application, id);
-      res.status(200).json({ data: true, message: "Deleted subset" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Deleted subset" }  as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to delete the subset by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to delete the subset" } as ApiResponse);
     }
   };
 
@@ -87,14 +93,26 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public hideArchitectureById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("id", "Must specify an ID").isInt().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to hide the architecture by ID",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
       const id = Number(req.body.id);
 
       await this.architectureService.hideArchitectureById(id);
       res.status(200).json({ data: true, message: "Hidden architecture" });
     } catch (error) {
-      next(error);
+      logger.error("Failed to hide the architecture by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to hide the architecture by ID" } as ApiResponse);
     }
   };
 
@@ -108,14 +126,26 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public displayArchitectureById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("id", "Must specify an ID").isInt().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to display the architecture by ID",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
       const id = Number(req.body.id);
 
       await this.architectureService.displayArchitectureById(id);
-      res.status(200).json({ data: true, message: "Display architecture" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Architecture displayed" } as ApiResponse );
     } catch (error) {
-      next(error);
+      logger.error("Failed to display the architecture by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to display the architecture by ID" } as ApiResponse);
     }
   };
 
@@ -129,14 +159,26 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public displayCompleteArchitectureById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("id", "Must specify an ID").isInt().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to display the architecture by ID",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
       const id = Number(req.body.id);
 
       await this.architectureService.displayCompleteArchitectureById(id);
-      res.status(200).json({ data: true, message: "Display architecture" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Display architecture" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to display the architecture by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to display the architecture by ID" } as ApiResponse);
     }
   };
 
@@ -150,14 +192,26 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public displaySubsetById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("id", "Must specify an ID").isInt().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to display the subset by ID",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
       const id = Number(req.body.id);
 
       await this.architectureService.displaySubsetById(id);
-      res.status(200).json({ data: true, message: "Display subset" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Displayed subset" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to display the subset by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to display the subset by ID" } as ApiResponse);
     }
   };
 
@@ -172,16 +226,28 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public duplicateArchitecture = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("id", "Must specify an ID").isInt().run(req);
+    await body("name", "Must specify a name for the new architecture").isString().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to duplicate the architecture",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
-      checkBody(req, "name");
       const id = Number(req.body.id);
       const name = String(req.body.name);
 
       await this.architectureService.duplicateArchitecture(id, name);
-      res.status(200).json({ data: true, message: "Architecture duplicated" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Architecture duplicated" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to duplicate the architecture", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to duplicate the architecture" } as ApiResponse);
     }
   };
 
@@ -197,16 +263,31 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public groupUnassigned = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+    await body("id", "Must specify an ID").isInt().run(req);
+    await body("application", "Must specify an application").isString().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to group unassigned objects",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
-      checkBody(req, "application");
+
       const id = Number(req.body.id);
       const application = String(req.body.application);
 
       await this.architectureService.groupUnassigned(application, id);
-      res.status(200).json({ data: true, message: "Architecture duplicated" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Unassigned object grouped" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to create unassigned layer", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to create unassigned layer" } as ApiResponse);
+
     }
   };
 
@@ -221,16 +302,29 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public duplicateCastTaxonomy = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("name", "Must specify a name").isString().run(req);
+    await body("application", "Must specify an application").isString().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to duplicate Cast Taxonomy",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "name");
-      checkBody(req, "application");
       const name = String(req.body.name);
       const application = String(req.body.application);
 
       await this.architectureService.duplicateCastTaxonomy(application, name);
-      res.status(200).json({ data: true, message: "Architecture duplicated" });
+      res.status(HttpCode.SUCCESS).json({ data: true, message: "Architecture duplicated" });
     } catch (error) {
-      next(error);
+      logger.error("Failed to duplicate CAST Taxonomy", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to duplicate CAST Taxonomy" } as ApiResponse);
+
     }
   };
 
@@ -245,14 +339,26 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public hideSubsetById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("id", "Must specify an id (as an Integer)").isInt().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to hide the subset",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
       const id = Number(req.body.id);
 
       await this.architectureService.hideSubsetById(id);
-      res.status(200).json({ data: true, message: "Hidden Subset" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Hidden Subset" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to hide a subset by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to hide a subset by ID" } as ApiResponse);
     }
   };
 
@@ -266,15 +372,27 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public updateArchitectureByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    await body("id", "Must specify an id (as an Integer)").isInt().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to update the architecture",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
       const id = Number(req.body.id);
       const data: Archimodel = req.body;
 
       await this.architectureService.updateArchitectureByID(id, data);
       res.status(200).json({ data: true, message: "Updated architecture" });
     } catch (error) {
-      next(error);
+      logger.error("Failed to update the architecture by ID", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to update the architecture by ID" } as ApiResponse);
     }
   };
 
@@ -288,15 +406,26 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public generateModuleFromArchitecture = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      checkBody(req, "id");
-      const id = Number(req.body.id);
+    await body("id", "Must specify an id (as an Integer)").isInt().run(req);
+    const errors = validationResult(req);
 
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to generate module definition from the architecture",
+      } as ApiResponse);
+      return;
+    }
+
+    try {
+      const id = Number(req.body.id);
       const results: string[] = await this.architectureService.generateModules(id);
-      res.status(200).json({ data: results, message: "Module generation" });
+
+      res.status(HttpCode.SUCCESS).json({ data: results, message: "Module generation" } as ApiResponse);
     } catch (error) {
-      logger.error("Failed to generate the module definition.", error);
-      next(error);
+      logger.error("Failed to generate modules from the architecture", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to generate modules from the architecture" } as ApiResponse);
+
     }
   };
 
@@ -310,15 +439,28 @@ export default class ArchitectureController {
    * @param next NextFunction
    */
   public updateSubsetByID = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+    await body("id", "Must specify an id (as an Integer)").isInt().run(req);
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to update subset by Id",
+      } as ApiResponse);
+      return;
+    }
+
     try {
-      checkBody(req, "id");
       const id = Number(req.body.id);
       const data: Subset = req.body;
 
       await this.architectureService.updateSubsetByID(id, data);
-      res.status(200).json({ data: true, message: "Updated susbet" });
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Updated subset" } as ApiResponse);
     } catch (error) {
-      next(error);
+      logger.error("Failed to update the subset by id", error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ error: ["Internal error"], message: "Failed to update the subset by id" } as ApiResponse);
+
     }
   };
 }

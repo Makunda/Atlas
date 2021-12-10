@@ -1,6 +1,7 @@
 import ObjectDocumentNode from "@entities/Imaging/Documents/ObjectDocumentNode";
 import { int, QueryResult } from "neo4j-driver";
 import ABinder from "./ABinder";
+import { logger } from "@shared/Logger";
 
 export default class FilepathBinder extends ABinder {
   public type: string;
@@ -22,7 +23,7 @@ export default class FilepathBinder extends ABinder {
   public async createTag(patterns: string[], tag: string): Promise<boolean> {
     // Request to create the tag
     const request = `MATCH (o:\`${this.application}\`:Object)-[r]->(p:ObjectProperty)
-    WHERE p.Description="File" AND ANY(x IN $Patterns WHERE  r.Value CONTAINS x )
+    WHERE p.Description="File" AND ANY(x IN $Patterns WHERE  r.value CONTAINS x )
     SET o.Tags = CASE WHEN o.Tags IS NULL THEN [$tag] ELSE [ x in o.Tags WHERE NOT x=$tag ] + $tag END
     return o as node;`;
 
@@ -51,24 +52,31 @@ export default class FilepathBinder extends ABinder {
   public async createDocument(patterns: string[], title: string, description: string): Promise<boolean> {
     // Request to get the list of nodes to match
     const requestID = `MATCH (o:\`${this.application}\`:Object)-[r]->(p:ObjectProperty)
-    WHERE p.Description="File" ANY(x IN $Patterns WHERE  r.Value CONTAINS x )
-    return ID(o) as idNode;`;
+    WHERE p.Description="File" AND ANY(x IN $Patterns WHERE  r.value CONTAINS x )
+    return DISTINCT ID(o) as idNode;`;
 
     // Filter by techno
     const params: any = { Patterns: patterns };
     const res: QueryResult = await this.NEO4JAL.execute(requestID, params);
 
     // Get the list of node ID or return false
-    if (!res || res.records.length == 0) return false;
+    if (!res || res.records.length == 0) {
+      logger.info(`[Document] No node has been identified.  Request: ${requestID}.`);
+      return false;
+    }
     const idNodes = res.records.map(x => int(x.get("idNode")).toNumber());
+
+    logger.info(`[Document] ${idNodes.length} identified. Request: ${requestID}`);
 
     // Create the document
     try {
       const doc = new ObjectDocumentNode(this.application, title, description, idNodes);
       await doc.create();
+
       return true;
     } catch (err) {
-      this.logError(`[Document] Failed to bind the pattern [${patterns.join(", ")}].`, err);
+      logger.error(`[Document] Failed to bind the pattern [${patterns.join(", ")}].`, err);
+      logger.error(`[Document] Request: ${requestID}`);
       return false;
     }
   }

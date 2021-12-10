@@ -12,8 +12,8 @@
       <v-container>
         <v-row class="mb-4">
           <v-btn color="primary" v-on:click="dialog = true"
-            >Create backup</v-btn
-          >
+            >Create new backup
+          </v-btn>
         </v-row>
         <v-row>
           <BackupTimeline></BackupTimeline>

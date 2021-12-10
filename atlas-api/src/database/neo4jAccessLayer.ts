@@ -55,10 +55,14 @@ export class Neo4JAccessLayer {
       return results;
     } catch (err) {
       const sanitized = request.replace("\\n", " ");
-      const wParams = parameters ? `With parameters ${String(parameters)}.` : "";
+      const params = JSON.stringify(parameters);
+      const trimmedString = params.length > 200 ? params.substring(0, 200 - 3) + "..." :
+        params;
+      const wParams = parameters ? `With parameters ${trimmedString}.` : "";
       this.logger.error(`Failed to execute query [${sanitized}]. ${wParams}`, err);
+      throw new Error("Query Failed");
     } finally {
-      session.close();
+      await session.close();
     }
   }
 
@@ -81,7 +85,7 @@ export class Neo4JAccessLayer {
       const results: QueryResult = await session.run(request, params);
       return results;
     } finally {
-      session.close();
+      await session.close();
     }
   }
 

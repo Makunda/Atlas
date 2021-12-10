@@ -1,5 +1,5 @@
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
-import { wrapLogger } from "@shared/Logger";
+import { logger, wrapLogger } from "@shared/Logger";
 import BackupNodeImpl from "@entities/extensions/demeter/BackupNodeImpl";
 import BackupNode from "@interfaces/extensions/demeter/BackupNode";
 
@@ -8,7 +8,6 @@ import BackupNode from "@interfaces/extensions/demeter/BackupNode";
  */
 export default class BackupService {
   private neo4jAl: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();
-  private logger = wrapLogger("Backup Service");
 
   /**
    * Backup an application with a specific name
@@ -36,7 +35,7 @@ export default class BackupService {
     try {
       await this.neo4jAl.execute(req, params);
     } catch (err) {
-      this.logger.error("Failed to create a backup for an application", err);
+      logger.error("Failed to create a backup for an application", err);
       throw new Error(`Failed to create a backup for application ${application}`);
     }
   }
@@ -46,15 +45,15 @@ export default class BackupService {
    * @param application Name of the application
    * @param save Name of the save
    */
-  public async rollbackApplication(application: string, save: string): Promise<void> {
-    const req = "CALL demeter.backup.rollback($appName, $save);";
-    const params = { appName: application, save: save };
+  public async rollbackApplication(application: string, id: number): Promise<void> {
+    const req = "CALL demeter.backup.rollback($appName, $id);";
+    const params = { appName: application, id: id };
 
     try {
       await this.neo4jAl.execute(req, params);
     } catch (err) {
-      this.logger.error("Failed to rollback an application", err);
-      throw new Error(`Failed to rollback an application ${application}`);
+      logger.error("Failed to rollback an application", err);
+      throw new Error(`Failed to rollback the application ${application}`);
     }
   }
 
@@ -70,7 +69,7 @@ export default class BackupService {
     try {
       await this.neo4jAl.execute(req, params);
     } catch (err) {
-      this.logger.error("Failed to rollback an application", err);
+      logger.error("Failed to rollback an application", err);
       throw new Error(`Failed to delete the backup in the application ${application}`);
     }
   }
@@ -93,7 +92,7 @@ export default class BackupService {
 
       return returnList;
     } catch (err) {
-      this.logger.error("Failed to get the list of saves", err);
+      logger.error("Failed to get the list of saves", err);
       throw new Error(`Failed to get the list of saves ${application}`);
     }
   }

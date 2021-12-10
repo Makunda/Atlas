@@ -1,6 +1,6 @@
 import ApiResponse from "@interfaces/api/ApiResponse";
 import BackupService from "@services/extensions/demeter/BackupService";
-import { wrapLogger } from "@shared/Logger";
+import { logger, wrapLogger } from "@shared/Logger";
 import { HttpCode } from "@utils/HttpCode";
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
@@ -10,7 +10,6 @@ import { body, validationResult } from "express-validator";
  */
 export default class BackupController {
   private static logger = wrapLogger("Backup Controller");
-  private static backupService = new BackupService();
 
   /**
    * POST : Create a backup in an application
@@ -23,7 +22,7 @@ export default class BackupController {
     await body("application", "Must specify an application name").isString().run(req);
     await body("name", "Must specify a name for the backup").isString().run(req);
     await body("description", "Must specify a description for the backup").isString().run(req);
-    await body("timestamp", "Must specify a timestamp for the backup").isString().run(req);
+    await body("timestamp", "Must specify a timestamp for the backup").isInt().run(req);
     await body("picture", "Must specify a picture for the backup").isString().run(req);
 
     const errors = validationResult(req);
@@ -43,12 +42,13 @@ export default class BackupController {
       const timestamp = Number(req.body.timestamp);
       const picture = String(req.body.picture);
 
-      await this.backupService.backupApplication(application, name, description, timestamp, picture);
+      const backupService = new BackupService();
+      await backupService.backupApplication(application, name, description, timestamp, picture);
 
       res.status(HttpCode.SUCCESS).json({ message: "Application backup" } as ApiResponse);
     } catch (err) {
       const message = "Failed to create a backup in the application.";
-      this.logger.error(message, err);
+      logger.error(message, err);
       res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: message } as ApiResponse);
     }
   }
@@ -76,14 +76,15 @@ export default class BackupController {
 
     try {
       const application = String(req.body.application);
-      const save = String(req.body.save);
+      const id = Number(req.body.id);
 
-      await this.backupService.rollbackApplication(application, save);
+      const backupService = new BackupService();
+      await backupService.rollbackApplication(application, id);
 
       res.status(HttpCode.SUCCESS).json({ message: "Application backup" } as ApiResponse);
     } catch (err) {
       const message = "Failed to rollback the application.";
-      this.logger.error(message, err);
+      logger.error(message, err);
       res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: message } as ApiResponse);
     }
   }
@@ -113,7 +114,8 @@ export default class BackupController {
       const application = String(req.body.application);
       const id = Number(req.body.id);
 
-      await this.backupService.deleteBackup(application, id);
+      const backupService = new BackupService();
+      await backupService.deleteBackup(application, id);
 
       res.status(HttpCode.SUCCESS).json({ message: "Save deleted" } as ApiResponse);
     } catch (err) {
@@ -146,12 +148,13 @@ export default class BackupController {
     try {
       const application = String(req.body.application);
 
-      const saves = await this.backupService.getSaveList(application);
+      const backupService = new BackupService();
+      const saves = await backupService.getSaveList(application);
 
       res.status(HttpCode.SUCCESS).json({ message: "List of saves", data: saves } as ApiResponse);
     } catch (err) {
       const message = "Failed to get the list of saves.";
-      this.logger.error(message, err);
+      logger.error(message, err);
       res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: message } as ApiResponse);
     }
   }

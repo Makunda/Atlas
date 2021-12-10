@@ -18,6 +18,8 @@ export function getHighlightLanguage(language: string): HighlightLanguage {
     case "c#":
       return HighlightLanguage.CSHARP;
     case "javascript":
+    case "rich text format":
+    case "html":
       return HighlightLanguage.JAVASCRIPT;
     case "python":
       return HighlightLanguage.PYTHON;
