@@ -20,6 +20,15 @@ const options = {
   },
 };
 
+const errorOptions = {
+  console: {
+    level: "info",
+    handleExceptions: true,
+    json: true,
+    colorize: true,
+  },
+};
+
 const logger = winston.createLogger({
   level: "info",
 
@@ -28,6 +37,7 @@ const logger = winston.createLogger({
   defaultMeta: { service: "user-service" },
   transports: [
     new winston.transports.File(options.file), new winston.transports.Console(options.console),
+    new winston.transports.Console(errorOptions.console),
     new winston.transports.File({ filename: "logs/error.log", level: "error" }),
     new winston.transports.File({ filename: "logs/combined.log" }),
   ],

@@ -2,7 +2,10 @@ import { ApiComUtils } from "@/api/utils/ApiComUtils";
 import { ApiResponse } from "@/api/interface/ApiResponse.interface";
 import Transaction from "@/api/interface/imaging/Transaction.interface";
 import TransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
+import Logger from "@/utils/Logger";
+import TransactionStatistics from "@/api/interface/imaging/TransactionStatistics";
 import ProxyAxios from "@/api/utils/ProxyAxios";
+import { NewAxiosProxy } from "@/utils/axios/ProxyAxios";
 
 export default class TransactionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -30,7 +33,7 @@ export default class TransactionController {
         );
       }
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to reach the API : ${url}.`, error);
       throw error;
     }
   }
@@ -547,7 +550,92 @@ export default class TransactionController {
         );
       }
     } catch (error) {
-      console.error(`Failed to reach the API : ${url}.`, error);
+      Logger.error(`Failed to reach the API : ${url}.`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get statistics for an application
+   * @param transactionId Id of the transaction
+   * @returns The statistics related to the transaction
+   */
+  public static async getStatistics(
+    transactionId: number
+  ): Promise<TransactionStatistics> {
+    const route = "api/imaging/transactions/statistics/single";
+    try {
+      const response = await NewAxiosProxy.post<TransactionStatistics>(route, {
+        id: transactionId
+      });
+      if (response.isError()) throw response.getErrorsAsString();
+      return response.getData();
+    } catch (error) {
+      Logger.error(
+        `Failed to get the statistics for transaction with id [${transactionId}].`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Display a hidden technology
+   * @param transactionId Id of the transaction
+   * @param objectType Object or Subobject
+   * @param technology Technology to hide
+   */
+  public static async showTechnology(
+    transactionId: number,
+    objectType: string,
+    technology: string
+  ): Promise<void> {
+    const route = "api/imaging/transactions/technology/display";
+    try {
+      const response = await NewAxiosProxy.post<void>(route, {
+        id: transactionId,
+        objectType: objectType,
+        technology: technology
+      });
+      if (response.isError()) throw response.getErrorsAsString();
+    } catch (error) {
+      Logger.error(
+        `Failed to show '${technology}' in transaction with id [${transactionId}].`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Hide a technology
+   * @param transactionId Id of the transaction
+   * @param objectType Object or SubObject
+   * @param technology Technology to hide
+   */
+  public static async hideTechnology(
+    transactionId: number,
+    objectType: string,
+    technology: string
+  ): Promise<void> {
+    const route = "api/imaging/transactions/technology/hide";
+    try {
+      console.log("Posting with ", {
+        id: transactionId,
+        objectType: objectType,
+        technology: technology
+      });
+      const response = await NewAxiosProxy.post<void>(route, {
+        id: transactionId,
+        objectType: objectType,
+        technology: technology
+      });
+      if (response.isError()) throw response.getErrorsAsString();
+    } catch (error) {
+      Logger.error(
+        `Failed to hide'${technology}' in transaction with id [${transactionId}].`,
+        error
+      );
       throw error;
     }
   }

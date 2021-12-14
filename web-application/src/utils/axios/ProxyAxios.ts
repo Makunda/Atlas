@@ -167,3 +167,5 @@ export default class ProxyAxios {
     return config;
   }
 }
+
+export class NewAxiosProxy extends ProxyAxios {}

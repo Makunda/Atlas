@@ -44,6 +44,8 @@ class TransactionRoute implements Route {
 
     // Statistics
     this.router.post(`${this.path}/statistics/single`, this.transactionController.getTransactionStatistics);
+    this.router.post(`${this.path}/technology/display`, this.transactionController.showTransactionTechnology);
+    this.router.post(`${this.path}/technology/hide`, this.transactionController.hideTransactionTechnology);
   }
 }
 

@@ -2,9 +2,13 @@ import { Cookie } from "@/enum/Cookie";
 import axios, { AxiosResponse } from "axios";
 import Vue from "vue";
 
+/**
+ * @deprecated Please see axios\ProxyAxios
+ */
 export default class ProxyAxios {
   /**
    * Get with Authentication
+   * @deprecated
    * @param url Url to query
    * @param config configuration of the request
    * @returns A promise ending when the query is completed
@@ -32,6 +36,7 @@ export default class ProxyAxios {
 
   /**
    * Post with Authentication
+   * @deprecated
    * @param url Url to query
    * @param data Data to send
    * @param config configuration of the request

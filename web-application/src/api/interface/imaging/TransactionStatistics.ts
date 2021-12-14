@@ -1,5 +1,3 @@
-//Transaction statistics
-
 export interface TransactionObjectRatio {
   type: string;
   percentage: number;
@@ -17,6 +15,6 @@ export default interface TransactionStatistics {
   startTechnology: string;
   endTechnology: string;
 
-  objects:  TransactionObjectRatio[],
-  subObjects: TransactionObjectRatio[]
-};
+  objects: TransactionObjectRatio[];
+  subObjects: TransactionObjectRatio[];
+}

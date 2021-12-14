@@ -329,7 +329,7 @@ class TransactionController {
    * @param next Next function
    */
   public async getTransactionStatistics(req: Request, res: Response, next: NextFunction): Promise<void>  {
-  await body("id", "Must specify a level to undo").isString().run(req);
+  await body("id", "Must specify a transaction id").isInt().run(req);
 
   const errors = validationResult(req);
 
@@ -344,7 +344,8 @@ class TransactionController {
     try {
       const id = Number(req.body.id);
 
-      const statistics: TransactionStatistics = await this.transactionService.getTransactionStatistics(id);
+      const transactionService = new TransactionService();
+      const statistics: TransactionStatistics = await transactionService.getTransactionStatistics(id);
       res.status(HttpCode.SUCCESS).send({ data: statistics, message: "Transaction Statistics" } as ApiResponse);
     } catch (error) {
       const message = "Failed to get the statistics of the transaction.";
@@ -352,6 +353,80 @@ class TransactionController {
       res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: message } as ApiResponse);
     }
   };
+
+  /**
+   * Get the statistics of a transaction using its ID
+   * @param req Request
+   * @param res Response
+   * @param next Next function
+   */
+  public async hideTransactionTechnology(req: Request, res: Response, next: NextFunction): Promise<void>  {
+    await body("id", "Must specify a transaction id").isInt().run(req);
+    await body("objectType", "Must specify an object type").isString().run(req);
+    await body("technology", "Must specify a technology").isString().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to get transaction statistics.",
+      } as ApiResponse);
+      return;
+    }
+
+    try {
+      const id = Number(req.body.id);
+      const objectType = String(req.body.objectType);
+      const technology = String(req.body.technology);
+
+      const transactionService = new TransactionService();
+      await transactionService.hideTechnology(id, objectType, technology);
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Technology was hide" } as ApiResponse);
+    } catch (error) {
+      const message = "Failed to hide the technology of the transaction.";
+      logger.error(message, error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: message } as ApiResponse);
+    }
+  };
+
+  /**
+   * Get the statistics of a transaction using its ID
+   * @param req Request
+   * @param res Response
+   * @param next Next function
+   */
+  public async showTransactionTechnology(req: Request, res: Response, next: NextFunction): Promise<void>  {
+    await body("id", "Must specify a transaction id").isInt().run(req);
+    await body("objectType", "Must specify an object type").isString().run(req);
+    await body("technology", "Must specify a technology").isString().run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(HttpCode.BAD_REQUEST).send({
+        errors: errors.array().map(x => x.msg),
+        message: "Failed to get transaction statistics.",
+      } as ApiResponse);
+      return;
+    }
+
+    try {
+      const id = Number(req.body.id);
+      const objectType = String(req.body.objectType);
+      const technology = String(req.body.technology);
+
+      const transactionService = new TransactionService();
+      await transactionService.displayTechnology(id, objectType, technology);
+      res.status(HttpCode.SUCCESS).send({ data: true, message: "Technology was displayed" } as ApiResponse);
+    } catch (error) {
+      const message = "Failed to display the technology of the transaction.";
+      logger.error(message, error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: message } as ApiResponse);
+    }
+  };
+
+
 
   /**
    * Mask all teh transaction not compliant with the filter

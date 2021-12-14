@@ -151,48 +151,130 @@ class TransactionService {
   }
 
   /**
+   * Hide a technology in a transaction
+   * @param transactionId Id of the transaction
+   * @param objectType Type of the object to hide
+   * @param technology Technology
+   */
+  public async hideTechnology(transactionId: number, objectType: string, technology: string ) {
+    let request = "";
+    switch (objectType) {
+      case "Object":
+        request = "MATCH (t:Transaction)-[r:Contains]->(o:Object) WHERE ID(t)=$idTrans " +
+          "AND o.Type=$technology " +
+          "DELETE r " +
+          "MERGE (t)-[:HiddenContains]->(o)";
+        break;
+      case "SubObject":
+        request = "MATCH (t:Transaction)-[r:Contains]->(o:SubObject) WHERE ID(t)=$idTrans " +
+          "AND o.Type=$technology " +
+          "DELETE r " +
+          "MERGE (t)-[:HiddenContains]->(o)";
+        break;
+      default:
+        throw new Error("The type must be Object or SubObject.");
+    }
+  
+    try {
+      await this.neo4jAl.executeWithParameters(request, {
+        idTrans: transactionId,
+        technology: technology
+      });
+    } catch (e) {
+      const message = `Failed to hide ${objectType} in the transaction with Id [${transactionId}].`;
+      logger.error(message, e);
+      throw new Error(message);
+    }
+  }
+
+  /**
+   * Diaplsy a hidden technology in a transaction
+   * @param transactionId Id of the transaction
+   * @param objectType Type of the object to hide
+   * @param technology Technology
+   */
+  public async displayTechnology(transactionId: number, objectType: string, technology: string ) {
+    let request = "";
+    switch (objectType) {
+      case "Object":
+        request = "MATCH (t:Transaction)-[r:HiddenContains]->(o:Object) WHERE ID(t)=$idTrans " +
+          "AND o.Type=$technology " +
+          "DELETE r " +
+          "MERGE (t)-[:Contains]->(o)";
+        break;
+      case "SubObject":
+        request = "MATCH (t:Transaction)-[r:HiddenContains]->(o:SubObject) WHERE ID(t)=$idTrans " +
+          "AND o.Type=$technology " +
+          "DELETE r " +
+          "MERGE (t)-[:Contains]->(o)";
+        break;
+      default:
+        throw new Error("The type must be Object or SubObject.");
+    }
+
+    try {
+      await this.neo4jAl.executeWithParameters(request, {
+        idTrans: transactionId,
+        technology: technology
+      });
+    } catch (e) {
+      const message = `Failed to display ${objectType} in the transaction with Id [${transactionId}].`;
+      logger.error(message, e);
+      throw new Error(message);
+    }
+  }
+
+  /**
    * Get the statistics on the components of the application
    * @param transactionId Id of the transaction
    */
   public async getTransactionStatistics(transactionId : number) : Promise<TransactionStatistics> {
     // Statistic request
-    const reqObjectRatio = "MATCH (t:Transaction)-[:Contains]->(o:Object) WHERE ID(t)=$idTrans  " +
+    const reqObjectRatio = "MATCH (t:Transaction)-[r]->(o:Object) WHERE ID(t)=$idTrans " +
+      "AND (r:Contains OR r:HiddenContains) " +
       "WITH t, COUNT(DISTINCT o) as totObj " +
-      "MATCH (t)-[:Contains]->(o:Object) WHERE o.Type IS NOT NULL " +
-      "RETURN  ID(t), o.Type as objectType, COUNT(DISTINCT o) as objectCount, 100 *(COUNT(DISTINCT o) / toFloat(totObj)) as objectRatio";
+      "MATCH (t)-[r]->(o:Object) WHERE o.Type IS NOT NULL " +
+      "AND (r:Contains OR r:HiddenContains) " +
+      "RETURN  ID(t), o.Type as objectType, COUNT(DISTINCT o) as objectCount, 100 *(COUNT(DISTINCT o) / toFloat(totObj)) as objectRatio, " +
+      "CASE WHEN TYPE(r) = 'Contains' THEN 'Displayed' ELSE 'Hidden' END AS status ";
 
-    const reqSubObjectRatio = "MATCH (t:Transaction)-[:Contains]->(o:Object) WHERE ID(t)=$idTrans  " +
+    const reqSubObjectRatio = "MATCH (t:Transaction)-[r]->(o:SubObject) WHERE ID(t)=$idTrans  " +
       "WITH t, COUNT(DISTINCT o) as totObj " +
-      "MATCH (t)-[:Contains]->(o:SubObject) WHERE o.Type IS NOT NULL " +
-      "RETURN  ID(t), o.Type as objectType, COUNT(DISTINCT o) as objectCount, 100 *(COUNT(DISTINCT o) / toFloat(totObj)) as objectRatio";
+      "MATCH (t)-[r]->(o:SubObject) WHERE o.Type IS NOT NULL " +
+      "AND (r:Contains OR r:HiddenContains) " +
+      "RETURN  ID(t), o.Type as objectType, COUNT(DISTINCT o) as objectCount, 100 *(COUNT(DISTINCT o) / toFloat(totObj)) as objectRatio, " +
+      "CASE WHEN TYPE(r) = 'Contains' THEN 'Displayed' ELSE 'Hidden' END AS status";
 
-    const reqSize = "MATCH (t:Transaction)-[:Contains]->(o:Object) WHERE ID(t)=$idTrans " +
+    const reqSize = "MATCH (t:Transaction)-[:Contains]->(o) WHERE ID(t)=$idTrans " +
       "RETURN COUNT(DISTINCT o) as totObj";
 
     const reqStart = "MATCH (t:Transaction)-[:StartsWith]->(n:TransactionNode)-[:IN]->(o) WHERE ID(t)=$idTrans " +
      "RETURN o.Type as objectType LIMIT 1";
 
-    const reqEnd = "MATCH (t:Transaction)-[:EndsWith]->(n:TransactionNode)-[:OUT]->(o) WHERE ID(t)=$idTrans " +
+    const reqEnd = "MATCH (t:Transaction)-[:EndsWith]->(n:TransactionNode)-[]->(o) WHERE ID(t)=$idTrans " +
       "RETURN o.Type as objectType LIMIT 1";
 
 
     try {
       const stat: TransactionStatistics = {} as TransactionStatistics;
+      stat.transactionId = transactionId;
 
       // Get Size
       let result = await this.neo4jAl.executeWithParameters(reqSize, {
-        idTran: transactionId
+        idTrans: transactionId
       });
 
       if(!result || result.records.length == 0 ) {
         stat.information = "Empty transaction";
         stat.size = 0;
         return stat;
+      } else {
+        stat.size = int(result.records[0].get("totObj")).toNumber();
       }
 
       // Get Start
       result = await this.neo4jAl.executeWithParameters(reqStart, {
-        idTran: transactionId
+        idTrans: transactionId
       });
 
       if(result && result.records.length > 0) {
@@ -202,7 +284,7 @@ class TransactionService {
 
       // Get end
       result = await this.neo4jAl.executeWithParameters(reqEnd, {
-        idTran: transactionId
+        idTrans: transactionId
       });
 
       if(result && result.records.length > 0) {
@@ -211,28 +293,30 @@ class TransactionService {
 
       // Get Object ratio
       result = await this.neo4jAl.executeWithParameters(reqObjectRatio, {
-        idTran: transactionId
+        idTrans: transactionId
       });
 
       stat.objects = [];
       for(const i of result.records) {
         stat.objects.push({
           type: i.get("objectType") as string,
-          percentage: i.get("objectRatio") as number
+          percentage: i.get("objectRatio") as number,
+          displayed: (i.get("status") as string) == "Displayed"
         });
       }
 
 
       // Get SubObject ratio
       result = await this.neo4jAl.executeWithParameters(reqSubObjectRatio, {
-        idTran: transactionId
+        idTrans: transactionId
       });
 
       stat.subObjects = [];
       for(const i of result.records) {
-        stat.objects.push({
+        stat.subObjects.push({
           type: i.get("objectType") as string,
-          percentage: i.get("objectRatio") as number
+          percentage: i.get("objectRatio") as number,
+          displayed: (i.get("status") as string) == "Displayed"
         });
       }
 

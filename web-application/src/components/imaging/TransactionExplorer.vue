@@ -6,7 +6,7 @@
         {{ application }}
       </p>
       <v-spacer></v-spacer>
-      <v-btn class="mr-5" icon color="green" @click="refresh">
+      <v-btn class="mr-5" color="green" icon @click="refresh">
         <v-icon>mdi-cached</v-icon>
       </v-btn>
     </v-card-title>
@@ -19,7 +19,7 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col md="3" class="d-flex flex-column">
+                  <v-col class="d-flex flex-column" md="3">
                     <p>
                       Specify the prefix used to pin the transactions.<br />
                       <b
@@ -28,8 +28,8 @@
                       >
                     </p>
                     <v-text-field
-                      label="Pin Prefix"
                       v-model="pinPrefix"
+                      label="Pin Prefix"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -54,18 +54,18 @@
                         inferior to a limit ( Recommended 10)
                         <v-text-field
                           v-model="maskActionLimit"
-                          type="number"
                           label="Number of objects"
+                          type="number"
                         ></v-text-field>
                       </div>
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="maskByCount"
                         :loading="maskActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="maskByCount"
                       >
                         <p>Mask the transactions .</p>
                       </v-btn>
@@ -79,18 +79,18 @@
                         technology inferior or equal to the input
                         <v-text-field
                           v-model="maskActionTechnology"
-                          type="number"
                           label="Number of objects"
+                          type="number"
                         ></v-text-field>
                       </div>
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="maskByTechnology"
                         :loading="maskActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="maskByTechnology"
                       >
                         <p>Mask the transactions .</p>
                       </v-btn>
@@ -105,19 +105,19 @@
                         their names
                         <v-combobox
                           v-model="maskActionTermsList"
+                          chips
                           label="List of terms"
                           multiple
-                          chips
                         ></v-combobox>
                       </div>
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="maskByTerms"
                         :loading="maskActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="maskByTerms"
                       >
                         <p>Mask the transactions</p>
                       </v-btn>
@@ -132,10 +132,10 @@
                     </v-card-text>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="unmaskAll"
                         :loading="unmaskAllActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="unmaskAll"
                       >
                         Unmask all
                       </v-btn>
@@ -152,7 +152,7 @@
             <v-card-title class="ma-3">
               Filter transactions
             </v-card-title>
-            <v-card-subtitle> </v-card-subtitle>
+            <v-card-subtitle></v-card-subtitle>
             <v-card-text>
               <v-row>
                 <!-- Number Object / SubObject -->
@@ -173,10 +173,10 @@
                       v-model="rangeObject"
                       :max="transactionInsights.maxObject"
                       :min="transactionInsights.minObject"
-                      hide-details
-                      persistent-hint
-                      hint="Number of object"
                       class="align-center"
+                      hide-details
+                      hint="Number of object"
+                      persistent-hint
                     >
                       <template v-slot:prepend>
                         <v-text-field
@@ -184,8 +184,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeObject, 0, $event)"
                         ></v-text-field>
                       </template>
@@ -195,8 +195,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeObject, 1, $event)"
                         ></v-text-field>
                       </template>
@@ -221,10 +221,10 @@
                       v-model="rangeTechnology"
                       :max="transactionInsights.maxTechnology"
                       :min="transactionInsights.minTechnology"
-                      hide-details
-                      persistent-hint
-                      hint="Number of object"
                       class="align-center"
+                      hide-details
+                      hint="Number of object"
+                      persistent-hint
                     >
                       <template v-slot:prepend>
                         <v-text-field
@@ -232,8 +232,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeTechnology, 0, $event)"
                         ></v-text-field>
                       </template>
@@ -243,8 +243,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeTechnology, 1, $event)"
                         ></v-text-field>
                       </template>
@@ -261,11 +261,11 @@
                       v-model="technologySearch"
                       :items="technologiesList"
                       :loading="loadingTechList"
-                      filled
-                      rounded
                       chips
+                      filled
                       label="Chips"
                       multiple
+                      rounded
                     ></v-autocomplete>
                   </v-row>
                 </v-col>
@@ -274,17 +274,17 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   class="mr-3"
-                  depressed
                   color="grey"
                   dark
+                  depressed
                   @click="transactionApiCall"
                 >
                   Apply filter
                 </v-btn>
                 <v-btn
-                  depressed
                   color="persianGrey"
                   dark
+                  depressed
                   @click="transactionApiCall()"
                 >
                   Remove all non-compliant
@@ -301,8 +301,8 @@
               <v-spacer></v-spacer>
               <v-btn
                 class="mr-5"
-                icon
                 color="green"
+                icon
                 @click="transactionApiCall()"
               >
                 <v-icon>mdi-cached</v-icon>
@@ -313,60 +313,189 @@
               <v-data-table
                 :headers="headers"
                 :items="displayedTransaction"
+                :loading="loadingTransaction"
                 :options.sync="optionsTransaction"
                 :server-items-length="numTransaction"
-                :loading="loadingTransaction"
                 class="elevation-1 pt-3"
                 fixed-header
               >
                 <template v-slot:top class="my-5">
                   <v-text-field
-                    filled
-                    rounded
-                    clearable
                     v-model="searchName"
-                    @change="transactionApiCall()"
-                    label="Search Transaction by Name"
                     class="mx-4"
+                    clearable
+                    filled
+                    label="Search Transaction by Name"
+                    rounded
+                    @change="transactionApiCall()"
                   ></v-text-field>
                 </template>
 
                 <template v-slot:item.technologies="{ item }">
                   <v-chip-group active-class="primary--text" column>
-                    <v-chip small v-for="tech in item.technologies" :key="tech">
+                    <v-chip v-for="tech in item.technologies" :key="tech" small>
                       {{ tech }}
                     </v-chip>
                   </v-chip-group>
                 </template>
                 <template v-slot:item.actions="{ item }" class="flex flex-row">
-                  <v-icon small class="mr-2" @click="maskTransaction(item)">
+                  <v-icon class="mr-2" small @click="maskTransaction(item)">
                     mdi-eye-off
                   </v-icon>
                   <v-icon
                     v-if="!containsPrefix(item)"
-                    small
                     class="mr-2"
+                    small
                     @click="pinTransaction(item)"
                   >
                     mdi-pin
                   </v-icon>
                   <v-icon
                     v-if="containsPrefix(item)"
-                    small
                     class="mr-2"
+                    small
                     @click="unpinTransaction(item)"
                   >
                     mdi-pin-off
                   </v-icon>
-                  <v-icon small class="mr-2" @click="openRenameModal(item)">
+                  <v-icon class="mr-2" small @click="openRenameModal(item)">
                     mdi-grease-pencil
                   </v-icon>
+
+                  <v-menu
+                    ref="menu"
+                    :close-on-click="false"
+                    :close-on-content-click="false"
+                    :value="menuShow == item._id"
+                    bottom
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="primary"
+                        dark
+                        icon
+                        v-bind="attrs"
+                        x-small
+                        @click="getTransactionStatistics(item)"
+                        v-on="on"
+                      >
+                        <v-icon>mdi-information</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list style="min-width: 450px">
+                      <div v-if="loadingStatistics" style="margin: auto">
+                        <v-progress-circular
+                          :size="50"
+                          color="primary"
+                          indeterminate
+                        ></v-progress-circular>
+                      </div>
+                      <div v-else>
+                        <v-container class="ma-2">
+                          <v-row class="flex" style="width: 100%">
+                            <b>General information: </b>
+                            <v-spacer></v-spacer>
+                            <v-btn color="red" icon @click="menuShow = -1">
+                              <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                          </v-row>
+                          <v-row class="flex flex-column">
+                            <p>
+                              Id: {{ statistics.transactionId }}
+                              <br />
+                              Size:
+                              <b>{{ statistics.size }}</b> Objects/SubObjects
+                              <br />
+                              <span v-if="statistics.information">
+                                Information {{ statistics.information }} <br />
+                              </span>
+                              Start point: {{ statistics.startTechnology }}
+                              <br />
+                              End point: {{ statistics.endTechnology }}
+                            </p>
+                          </v-row>
+                          <v-row class="flex flex-column">
+                            <p>
+                              <b>Object information: </b> <br />
+                              <span
+                                v-for="(it, i) in statistics.objects"
+                                :key="i"
+                                class="flex"
+                                style="margin-left: 5px"
+                              >
+                                Type: {{ it.type }}
+                                <span v-if="!it.displayed">(hidden)</span>-
+                                {{ it.percentage.toFixed(2) }}%
+                                <v-icon
+                                  v-if="it.displayed"
+                                  class="mr-2"
+                                  small
+                                  @click="
+                                    hideTechnology(item, 'Object', it.type)
+                                  "
+                                >
+                                  mdi-eye-off
+                                </v-icon>
+                                <v-icon
+                                  v-else
+                                  class="mr-2"
+                                  small
+                                  @click="
+                                    showTechnology(item, 'Object', it.type)
+                                  "
+                                >
+                                  mdi-eye
+                                </v-icon>
+                                <br />
+                              </span>
+                            </p>
+                          </v-row>
+                          <v-row class="flex flex-column">
+                            <p>
+                              <b>SubObject information: </b> <br />
+                              <span
+                                v-for="(it, i) in statistics.subObjects"
+                                :key="i"
+                                style="margin-left: 5px"
+                              >
+                                Type: {{ it.type }}
+                                <span v-if="!it.displayed">(hidden)</span> -
+                                {{ it.percentage.toFixed(2) }}%
+                                <v-icon
+                                  v-if="it.displayed"
+                                  class="mr-2"
+                                  small
+                                  @click="
+                                    hideTechnology(item, 'SubObject', it.type)
+                                  "
+                                >
+                                  mdi-eye-off
+                                </v-icon>
+                                <v-icon
+                                  v-else
+                                  class="mr-2"
+                                  small
+                                  @click="
+                                    showTechnology(item, 'SubObject', it.type)
+                                  "
+                                >
+                                  mdi-eye
+                                </v-icon>
+                                <br
+                              /></span>
+                            </p>
+                          </v-row>
+                        </v-container>
+                      </div>
+                    </v-list>
+                  </v-menu>
                 </template>
               </v-data-table>
             </v-card-text>
           </v-card>
         </v-row>
-        <v-row class="mt-5"> </v-row>
+        <v-row class="mt-5"></v-row>
         <v-row>
           <!-- Masked Transaction -->
           <v-card class="ma-4" width="100%">
@@ -375,32 +504,32 @@
               <v-spacer></v-spacer>
               <v-btn
                 class="mr-5"
-                icon
                 color="green"
+                icon
                 @click="maskedTransactionApiCall"
               >
                 <v-icon>mdi-cached</v-icon>
               </v-btn>
             </v-card-title>
-            <v-card-subtitle> </v-card-subtitle>
+            <v-card-subtitle></v-card-subtitle>
             <v-card-text>
               <v-data-table
                 :headers="headersMasked"
                 :items="displayedMaskedTransaction"
+                :loading="loadingMaskedTransaction"
                 :options.sync="optionsMaskedTransaction"
                 :server-items-length="numMaskedTransaction"
-                :loading="loadingMaskedTransaction"
                 class="elevation-1"
               >
                 <template v-slot:item.technologies="{ item }">
                   <v-chip-group active-class="primary--text" column>
-                    <v-chip small v-for="tech in item.technologies" :key="tech">
+                    <v-chip v-for="tech in item.technologies" :key="tech" small>
                       {{ tech }}
                     </v-chip>
                   </v-chip-group>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                  <v-icon small class="mr-2" @click="unMaskTransaction(item)">
+                  <v-icon class="mr-2" small @click="unMaskTransaction(item)">
                     mdi-eye
                   </v-icon>
                 </template>
@@ -427,10 +556,10 @@
             </v-row>
             <v-row>
               <v-text-field
-                label="Outlined"
                 v-model="toEditTransaction.name"
-                single-line
+                label="Outlined"
                 outlined
+                single-line
               ></v-text-field>
             </v-row>
           </v-container>
@@ -441,17 +570,17 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="red"
             :loading="loadingRename"
+            color="red"
             text
             @click="closeRenameModal"
           >
             Cancel
           </v-btn>
           <v-btn
+            :disabled="loadingRename"
             color="green"
             text
-            :disabled="loadingRename"
             @click="confirmRename"
           >
             Rename
@@ -468,6 +597,9 @@ import TransactionController from "@/api/controllers/imaging/TransactionControll
 import Transaction from "@/api/interface/imaging/Transaction.interface";
 import TransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
 import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
+import TransactionStatistics from "@/api/interface/imaging/TransactionStatistics";
+import Logger from "@/utils/Logger";
+import flash, { FlashType } from "@/modules/flash/Flash";
 
 export default Vue.extend({
   name: "TransactionExplorer",
@@ -558,7 +690,12 @@ export default Vue.extend({
     // Transaction Rename
     modalRename: false,
     loadingRename: false,
-    toEditTransaction: {} as Transaction
+    toEditTransaction: {} as Transaction,
+
+    // Misc
+    statistics: {} as TransactionStatistics,
+    loadingStatistics: false,
+    menuShow: -1
   }),
 
   methods: {
@@ -615,6 +752,88 @@ export default Vue.extend({
         console.error("Failed to un-mask all the transactions", err);
       } finally {
         this.unmaskAllActionLoading = false;
+      }
+    },
+
+    /**
+     * Get the statistics for a transaction
+     */
+    async getTransactionStatistics(transaction: Transaction) {
+      try {
+        this.loadingStatistics = true;
+        this.statistics = await TransactionController.getStatistics(
+          transaction._id
+        );
+        this.menuShow = transaction._id;
+      } catch (e) {
+        Logger.error("Failed to get transaction statistics", e);
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to get transaction statistics.",
+          body: e
+        });
+      } finally {
+        this.loadingStatistics = false;
+      }
+    },
+
+    /**
+     * Show a technology
+     * @param transaction Transaction to modify
+     * @param type Type of the modification
+     * @param technology Technolgy to show
+     */
+    async showTechnology(
+      transaction: Transaction,
+      type: string,
+      technology: string
+    ) {
+      try {
+        await TransactionController.showTechnology(
+          transaction._id,
+          type,
+          technology
+        );
+        await this.getTransactionStatistics(transaction);
+      } catch (e) {
+        Logger.error("Failed to hide the technology", e);
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to hide the technology.",
+          body: e
+        });
+      } finally {
+        this.loadingStatistics = false;
+      }
+    },
+
+    /**
+     * Hide a technology
+     * @param transaction Transaction to modify
+     * @param type Type of the modification
+     * @param technology Technolgy to show
+     */
+    async hideTechnology(
+      transaction: Transaction,
+      type: string,
+      technology: string
+    ) {
+      try {
+        await TransactionController.hideTechnology(
+          transaction._id,
+          type,
+          technology
+        );
+        await this.getTransactionStatistics(transaction);
+      } catch (e) {
+        Logger.error("Failed to hide the technology", e);
+        flash.commit("add", {
+          type: FlashType.ERROR,
+          title: "Failed to hide the technology.",
+          body: e
+        });
+      } finally {
+        this.loadingStatistics = false;
       }
     },
 
@@ -676,7 +895,7 @@ export default Vue.extend({
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to mask by terms.", err);
+        Logger.error("Failed to mask by terms.", err);
       } finally {
         this.maskActionLoading = false;
       }
