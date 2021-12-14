@@ -3,6 +3,7 @@ import { int } from "neo4j-driver";
 import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import HttpException from "@exceptions/HttpException";
 import { ITransaction, transactionFromObj } from "@interfaces/imaging/Transaction";
+import TransactionStatistics from "@interfaces/imaging/transaction/TransactionStatistics";
 
 /**
  * Manage the modification done on Transaction in an application
@@ -144,8 +145,103 @@ class TransactionService {
 
       return listTransaction;
     } catch (err) {
-      logger.error(`Failed to get catch of transaction for application ${application}.`, err);
+      logger.error(`Failed to get batch of transaction for application ${application}.`, err);
       throw new HttpException(500, "Internal error");
+    }
+  }
+
+  /**
+   * Get the statistics on the components of the application
+   * @param transactionId Id of the transaction
+   */
+  public async getTransactionStatistics(transactionId : number) : Promise<TransactionStatistics> {
+    // Statistic request
+    const reqObjectRatio = "MATCH (t:Transaction)-[:Contains]->(o:Object) WHERE ID(t)=$idTrans  " +
+      "WITH t, COUNT(DISTINCT o) as totObj " +
+      "MATCH (t)-[:Contains]->(o:Object) WHERE o.Type IS NOT NULL " +
+      "RETURN  ID(t), o.Type as objectType, COUNT(DISTINCT o) as objectCount, 100 *(COUNT(DISTINCT o) / toFloat(totObj)) as objectRatio";
+
+    const reqSubObjectRatio = "MATCH (t:Transaction)-[:Contains]->(o:Object) WHERE ID(t)=$idTrans  " +
+      "WITH t, COUNT(DISTINCT o) as totObj " +
+      "MATCH (t)-[:Contains]->(o:SubObject) WHERE o.Type IS NOT NULL " +
+      "RETURN  ID(t), o.Type as objectType, COUNT(DISTINCT o) as objectCount, 100 *(COUNT(DISTINCT o) / toFloat(totObj)) as objectRatio";
+
+    const reqSize = "MATCH (t:Transaction)-[:Contains]->(o:Object) WHERE ID(t)=$idTrans " +
+      "RETURN COUNT(DISTINCT o) as totObj";
+
+    const reqStart = "MATCH (t:Transaction)-[:StartsWith]->(n:TransactionNode)-[:IN]->(o) WHERE ID(t)=$idTrans " +
+     "RETURN o.Type as objectType LIMIT 1";
+
+    const reqEnd = "MATCH (t:Transaction)-[:EndsWith]->(n:TransactionNode)-[:OUT]->(o) WHERE ID(t)=$idTrans " +
+      "RETURN o.Type as objectType LIMIT 1";
+
+
+    try {
+      const stat: TransactionStatistics = {} as TransactionStatistics;
+
+      // Get Size
+      let result = await this.neo4jAl.executeWithParameters(reqSize, {
+        idTran: transactionId
+      });
+
+      if(!result || result.records.length == 0 ) {
+        stat.information = "Empty transaction";
+        stat.size = 0;
+        return stat;
+      }
+
+      // Get Start
+      result = await this.neo4jAl.executeWithParameters(reqStart, {
+        idTran: transactionId
+      });
+
+      if(result && result.records.length > 0) {
+        stat.startTechnology = result.records[0].get("objectType") as string;
+      }
+
+
+      // Get end
+      result = await this.neo4jAl.executeWithParameters(reqEnd, {
+        idTran: transactionId
+      });
+
+      if(result && result.records.length > 0) {
+        stat.endTechnology = result.records[0].get("objectType") as string;
+      }
+
+      // Get Object ratio
+      result = await this.neo4jAl.executeWithParameters(reqObjectRatio, {
+        idTran: transactionId
+      });
+
+      stat.objects = [];
+      for(const i of result.records) {
+        stat.objects.push({
+          type: i.get("objectType") as string,
+          percentage: i.get("objectRatio") as number
+        });
+      }
+
+
+      // Get SubObject ratio
+      result = await this.neo4jAl.executeWithParameters(reqSubObjectRatio, {
+        idTran: transactionId
+      });
+
+      stat.subObjects = [];
+      for(const i of result.records) {
+        stat.objects.push({
+          type: i.get("objectType") as string,
+          percentage: i.get("objectRatio") as number
+        });
+      }
+
+      return stat;
+
+    } catch (e) {
+      const message = `Failed to get statistics of the transaction with Id [${transactionId}].`;
+      logger.error(message, e);
+      throw new Error(message);
     }
   }
 

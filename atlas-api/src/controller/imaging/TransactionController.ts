@@ -3,6 +3,10 @@ import { NextFunction, Request, Response } from "express";
 import TransactionService from "@services/imaging/TransactionService";
 import { ITransaction } from "@interfaces/imaging/Transaction";
 import { logger } from "@shared/Logger";
+import { body, validationResult } from "express-validator";
+import { HttpCode } from "@utils/HttpCode";
+import ApiResponse from "@interfaces/api/ApiResponse";
+import TransactionStatistics from "@interfaces/imaging/transaction/TransactionStatistics";
 
 class TransactionController {
   private transactionService: TransactionService;
@@ -315,6 +319,37 @@ class TransactionController {
     } catch (error) {
       logger.error(`Failed to mask the transaction with Id:'${transactionID}' in application '${applicationName}'`);
       next(error);
+    }
+  };
+
+  /**
+   * Get the statistics of a transaction using its ID
+   * @param req Request
+   * @param res Response
+   * @param next Next function
+   */
+  public async getTransactionStatistics(req: Request, res: Response, next: NextFunction): Promise<void>  {
+  await body("id", "Must specify a level to undo").isString().run(req);
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(HttpCode.BAD_REQUEST).send({
+                errors: errors.array().map(x => x.msg),
+          message: "Failed to get transaction statistics.",
+        } as ApiResponse);
+        return;
+        }
+
+    try {
+      const id = Number(req.body.id);
+
+      const statistics: TransactionStatistics = await this.transactionService.getTransactionStatistics(id);
+      res.status(HttpCode.SUCCESS).send({ data: statistics, message: "Transaction Statistics" } as ApiResponse);
+    } catch (error) {
+      const message = "Failed to get the statistics of the transaction.";
+      logger.error(message, error);
+      res.status(HttpCode.INTERNAL_ERROR).send({ errors: ["Internal error"], message: message } as ApiResponse);
     }
   };
 
