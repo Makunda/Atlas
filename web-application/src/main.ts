@@ -1,23 +1,23 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import Default from "@/views/Default.vue";
-import Login from "./views/Login.vue";
-import License from "./views/License.vue";
-import router from "./router";
-import vuetify from "./plugins/vuetify";
-import store from "./store";
-import VueCookies from "vue-cookies";
-import { Component } from "vue-router/types/router";
-import { LicenseController } from "@/api/controllers/license/LicenseController";
-import { LicenseStatus } from "@/api/interface/license/License";
-import CookieManager from "./api/utils/CookieManager";
+import VueCookies from 'vue-cookies';
+import { Component } from 'vue-router/types/router';
+import Default from '@/views/Default.vue';
+import Login from './views/Login.vue';
+import License from './views/License.vue';
+import router from './router';
+import vuetify from './plugins/vuetify';
+import store from './store';
+import { LicenseController } from '@/api/controllers/license/LicenseController';
+import { LicenseStatus } from '@/api/interface/license/License';
+import CookieManager from './api/utils/CookieManager';
 
 Vue.config.productionTip = false;
 Vue.use(Vuex);
 Vue.use(VueCookies);
 
-console.log("Launching Atlas");
+console.log('Launching Atlas');
 
 // Declare application
 let el: Component;
@@ -32,12 +32,12 @@ async function launch() {
 
   if (license.status == LicenseStatus.NOT_VALID) {
     el = License;
-    await router.replace("/license").catch(() => {
+    await router.replace('/license').catch(() => {
       /** Ignored */
     });
   } else if (!authenticated) {
     el = Login;
-    await router.replace("/login").catch(() => {
+    await router.replace('/login').catch(() => {
       /** Ignored */
     });
   } else {
@@ -45,11 +45,11 @@ async function launch() {
   }
 
   new Vue({
-    router: router,
+    router,
     vuetify,
     store,
-    render: h => h(el)
-  }).$mount("#app");
+    render: (h) => h(el),
+  }).$mount('#app');
 }
 
 launch();

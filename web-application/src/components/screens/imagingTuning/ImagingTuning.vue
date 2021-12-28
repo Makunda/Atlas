@@ -9,7 +9,7 @@
         dark
         fixed-tabs
       >
-        <v-tab v-for="item in items" :key="item.name">
+        <v-tab v-for="item in items" :key="item.name" @click="goto(item.name)">
           <v-icon v-if="item.icon" class="mr-3">{{ item.icon }}</v-icon>
           {{ item.name }}
         </v-tab>
@@ -17,96 +17,113 @@
     </v-row>
     <v-row>
       <v-container class="mx-auto ">
-        <component :is="items[tab].view"></component>
+        <transition name="slide">
+          <router-view></router-view>
+        </transition>
       </v-container>
     </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import LevelExplorer from "@/components/imaging/levels/LevelExplorer.vue";
-import ModuleExplorer from "@/components/imaging/modules/ModulesExplorer.vue";
-import ArchitectureExplorer from "@/components/imaging/architectures/ArchitectureExplorer.vue";
-import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
-import DataCallGraphExplorer from "@/components/imaging/DataCallGraphExplorer.vue";
-import IconManager from "@/components/imaging/IconManager.vue";
-import Backup from "@/components/imaging/backup/Backup.vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "ImagingTuning",
+  name: 'ImagingTuning',
 
-  components: {
-    LevelExplorer,
-    ModuleExplorer,
-    ArchitectureExplorer,
-    TransactionExplorer,
-    DataCallGraphExplorer,
-    Backup,
-    IconManager
-  },
+  components: {},
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
+
+    getRoute() {
+      const route = this.$route.fullPath;
+      const split = route.split('/');
+      if (split.length < 4) return '';
+      return split[3];
+    },
   },
 
   mounted() {
     this.application = this.$store.state.applicationName;
+    const route = this.getRoute;
+    console.log('Route :', route);
+
+    if (route == '') this.goto('level');
+    else this.changeTab(route);
+  },
+
+  methods: {
+    changeTab(component: string) {
+      const index = this.items.findIndex((x) => x.view == component);
+      this.tab = index >= 0 ? index : 0;
+    },
+
+    goto(route: string) {
+      this.$router.replace(`/atlas/tuning/${route}`).catch(() => {
+        // Ignored
+      });
+    },
   },
 
   data: () => ({
-    application: "",
+    application: '',
+    activatedTab: '',
 
     step: 1,
     tab: 0,
 
     items: [
       {
-        view: "LevelExplorer",
-        name: "Level Manager",
-        title: "Review the configuration of the ",
-        icon: "mdi-folder-cog"
+        view: 'LevelExplorer',
+        name: 'level',
+        title: 'Review the configuration of the ',
+        icon: 'mdi-folder-cog',
       },
       {
-        view: "ModuleExplorer",
-        name: "Module Manager",
-        title: "Review the configuration of the ",
-        icon: "mdi-folder-cog"
+        view: 'ModuleExplorer',
+        name: 'module',
+        title: 'Review the configuration of the ',
+        icon: 'mdi-folder-cog',
       },
       {
-        view: "ArchitectureExplorer",
-        name: "Architecture Manager",
-        title: "Review the configuration of the ",
-        icon: "mdi-folder-cog"
+        view: 'ArchitectureExplorer',
+        name: 'architecture',
+        title: 'Review the configuration of the ',
+        icon: 'mdi-folder-cog',
       },
       {
-        view: "TransactionExplorer",
-        name: "Transaction",
-        title: "Explore the transaction ",
-        icon: "mdi-apple-safari"
+        view: 'TransactionExplorer',
+        name: 'transaction',
+        title: 'Explore the transaction ',
+        icon: 'mdi-apple-safari',
       },
       {
-        view: "DataCallGraphExplorer",
-        name: "Data Call Graph",
-        title: "Explore the DataCallGraph",
-        icon: "mdi-apple-safari"
+        view: 'DataCallGraphExplorer',
+        name: 'datacallGraph',
+        title: 'Explore the DataCallGraph',
+        icon: 'mdi-apple-safari',
       },
       {
-        view: "Backup",
-        name: "Backup",
-        title: "Backup management",
-        icon: "mdi-backup-restore"
-      }
-    ]
+        view: 'Backup',
+        name: 'backup',
+        title: 'Backup management',
+        icon: 'mdi-backup-restore',
+      },
+    ],
   }),
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+
+    getRoute(route) {
+      this.changeTab(route);
+    },
+  },
 });
 </script>
 

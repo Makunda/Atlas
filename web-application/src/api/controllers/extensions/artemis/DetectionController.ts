@@ -1,10 +1,10 @@
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { DetectionResultDTO } from "@/api/dto/ApiArtemis.dto";
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { DetectionCandidate } from "@/api/interface/extensions/artemis/DetectionCandidate";
-import { DetectionResult } from "@/api/interface/extensions/artemis/detectionResult.interface";
-import DetectionInterface from "@/api/interface/extensions/artemis/Detection";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import { DetectionResultDTO } from '@/api/dto/ApiArtemis.dto';
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { DetectionCandidate } from '@/api/interface/extensions/artemis/DetectionCandidate';
+import { DetectionResult } from '@/api/interface/extensions/artemis/detectionResult.interface';
+import DetectionInterface from '@/api/interface/extensions/artemis/Detection';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export default class DetectionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -18,17 +18,16 @@ export default class DetectionController {
   public static async launchDetection(
     application: string,
     language: string,
-    dataSources: string[]
+    dataSources: string[],
   ): Promise<boolean> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/launch";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/launch`;
 
     const data = {
-      application: application,
-      language: language,
-      onlineMode: dataSources.includes("online"),
-      repositoryMode: dataSources.includes("repository"),
-      pythiaMode: dataSources.includes("pythia")
+      application,
+      language,
+      onlineMode: dataSources.includes('online'),
+      repositoryMode: dataSources.includes('repository'),
+      pythiaMode: dataSources.includes('pythia'),
     };
     try {
       const res = await ProxyAxios.post(url, data);
@@ -36,14 +35,13 @@ export default class DetectionController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
-      } else {
-        console.warn(`Failed to launch the detection. Status (${res.status})`);
-        return false;
       }
+      console.warn(`Failed to launch the detection. Status (${res.status})`);
+      return false;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the status of the application.`,
-        error
+        error,
       );
       throw error;
     }
@@ -56,14 +54,13 @@ export default class DetectionController {
    */
   public static async cancelDetection(
     application: string,
-    language: string
+    language: string,
   ): Promise<boolean> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/stop";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/stop`;
 
     const data = {
-      application: application,
-      language: language
+      application,
+      language,
     };
     try {
       const res = await ProxyAxios.post(url, data);
@@ -71,14 +68,13 @@ export default class DetectionController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
-      } else {
-        console.warn(`Failed to stop the detection. Status (${res.status})`);
-        return false;
       }
+      console.warn(`Failed to stop the detection. Status (${res.status})`);
+      return false;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. The detection was not stopped.`,
-        error
+        error,
       );
       throw error;
     }
@@ -88,8 +84,7 @@ export default class DetectionController {
    * Get pending detection operations
    */
   public static async getPendingDetections(): Promise<DetectionResult[]> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/pending";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/pending`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -102,7 +97,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve pending operations. Status (${res.status})`
+          `Failed to retrieve pending operations. Status (${res.status})`,
         );
       }
 
@@ -110,7 +105,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve pending operations.`,
-        error
+        error,
       );
       throw error;
     }
@@ -120,8 +115,7 @@ export default class DetectionController {
    * Get successful detection operations
    */
   public static async getSuccessfulDetections(): Promise<DetectionResult[]> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/successes";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/successes`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -134,7 +128,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve successful operations. Status (${res.status})`
+          `Failed to retrieve successful operations. Status (${res.status})`,
         );
       }
 
@@ -142,7 +136,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve successful operations.`,
-        error
+        error,
       );
       throw error;
     }
@@ -152,8 +146,7 @@ export default class DetectionController {
    * Get the list of previous Detections
    */
   public static async getDetectionResults(): Promise<DetectionInterface[]> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/results";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/results`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -166,7 +159,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve successful operations. Status (${res.status})`
+          `Failed to retrieve successful operations. Status (${res.status})`,
         );
       }
 
@@ -174,7 +167,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve successful operations.`,
-        error
+        error,
       );
       throw error;
     }
@@ -184,8 +177,7 @@ export default class DetectionController {
    * Get failed detection operations
    */
   public static async getFailedDetections(): Promise<DetectionResult[]> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/failed";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/failed`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -198,7 +190,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve failed operations. Status (${res.status})`
+          `Failed to retrieve failed operations. Status (${res.status})`,
         );
       }
 
@@ -206,7 +198,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve failed operations.`,
-        error
+        error,
       );
       throw error;
     }
@@ -219,11 +211,10 @@ export default class DetectionController {
    */
   public static async getApplicationStatus(
     application: string,
-    language: string
+    language: string,
   ): Promise<DetectionResult | null> {
-    const url =
-      DetectionController.API_BASE_URL +
-      `/api/artemis/detection/status/${application}?language=${language}`;
+    const url = `${DetectionController.API_BASE_URL
+    }/api/artemis/detection/status/${application}?language=${language}`;
 
     // A language and an application need to be provided
     if (application == null || language == null) return null;
@@ -236,16 +227,15 @@ export default class DetectionController {
         if (apiResponse == null) return null; // No status
 
         return DetectionResultDTO.fromRecord(apiResponse.data);
-      } else {
-        console.warn(
-          `Failed to retrieve the status of the application. Status (${res.status})`
-        );
-        throw new Error(res.data);
       }
+      console.warn(
+        `Failed to retrieve the status of the application. Status (${res.status})`,
+      );
+      throw new Error(res.data);
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve pending operations.`,
-        error
+        error,
       );
       throw error;
     }
@@ -255,8 +245,7 @@ export default class DetectionController {
    * Get actual detection queue
    */
   public static async getDetectionQueue(): Promise<DetectionCandidate[]> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/queue/get";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/queue/get`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -269,7 +258,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the queue of detection. Status (${res.status})`
+          `Failed to retrieve the queue of detection. Status (${res.status})`,
         );
       }
 
@@ -277,7 +266,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the queue of detection..`,
-        error
+        error,
       );
       throw error;
     }
@@ -287,8 +276,7 @@ export default class DetectionController {
    * Get the on-going detection
    */
   public static async getCurrent(): Promise<DetectionCandidate> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/queue/current";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/queue/current`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -297,17 +285,16 @@ export default class DetectionController {
         const apiResponse: ApiResponse = res.data;
         if (res.data == null) return null;
         return apiResponse.data as DetectionCandidate;
-      } else {
-        console.warn(
-          `Failed to retrieve the current detection. Status (${res.status})`
-        );
       }
+      console.warn(
+        `Failed to retrieve the current detection. Status (${res.status})`,
+      );
 
       return null;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the current detection.`,
-        error
+        error,
       );
       throw error;
     }
@@ -315,8 +302,7 @@ export default class DetectionController {
 
   // Get the list of pending detection
   public static async flushDetectionQueue(): Promise<boolean> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/queue/flush";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/queue/flush`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -324,16 +310,15 @@ export default class DetectionController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
-      } else {
-        console.warn(
-          `Failed to retrieve the queue of detection. Status (${res.status})`
-        );
-        return false;
       }
+      console.warn(
+        `Failed to retrieve the queue of detection. Status (${res.status})`,
+      );
+      return false;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the queue of detection..`,
-        error
+        error,
       );
       throw error;
     }
@@ -344,37 +329,35 @@ export default class DetectionController {
    * @param candidates List of candidate to add
    */
   public static async addCandidatesToDetection(
-    candidates: DetectionCandidate[]
+    candidates: DetectionCandidate[],
   ): Promise<number> {
-    const url =
-      DetectionController.API_BASE_URL + "/api/artemis/detection/queue/add";
+    const url = `${DetectionController.API_BASE_URL}/api/artemis/detection/queue/add`;
 
     try {
-      const params = { candidates: candidates };
+      const params = { candidates };
       const res = await ProxyAxios.post(url, params);
 
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
-      } else {
-        console.warn(
-          `Failed to add the list of candidates to the detection queue. Status (${res.status})`
-        );
       }
+      console.warn(
+        `Failed to add the list of candidates to the detection queue. Status (${res.status})`,
+      );
+
       return 0;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add the list of candidates to the detection queue.`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async getDetectionCandidates(): Promise<DetectionCandidate[]> {
-    const url =
-      DetectionController.API_BASE_URL +
-      "/api/assistants/frameworks/candidates";
+    const url = `${DetectionController.API_BASE_URL
+    }/api/assistants/frameworks/candidates`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -388,7 +371,7 @@ export default class DetectionController {
         }
       } else {
         console.warn(
-          `Failed to get the list of candidates. Status (${res.status})`
+          `Failed to get the list of candidates. Status (${res.status})`,
         );
       }
 
@@ -396,7 +379,7 @@ export default class DetectionController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of candidates .`,
-        error
+        error,
       );
       throw error;
     }

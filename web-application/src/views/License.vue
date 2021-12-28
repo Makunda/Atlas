@@ -46,19 +46,19 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Vue } from 'vue-property-decorator';
 
-import { LicenseController } from "@/api/controllers/license/LicenseController";
-import { License, LicenseStatus } from "@/api/interface/license/License";
+import { LicenseController } from '@/api/controllers/license/LicenseController';
+import { License, LicenseStatus } from '@/api/interface/license/License';
 
 export default Vue.extend({
-  name: "License",
+  name: 'License',
 
   data: () => ({
-    license: "" as string,
+    license: '' as string,
 
     loadingLicense: false,
-    errorMessage: ""
+    errorMessage: '',
   }),
 
   methods: {
@@ -66,13 +66,13 @@ export default Vue.extend({
       try {
         this.loadingLicense = true;
         const results: License = await LicenseController.applyLicense(
-          this.license
+          this.license,
         );
         if (results.status == LicenseStatus.NOT_VALID) {
-          this.errorMessage = "The license entered is not valid.";
+          this.errorMessage = 'The license entered is not valid.';
         } else {
           // Redirection
-          await this.$router.replace("/atlas/");
+          await this.$router.replace('/atlas/');
           window.location.reload();
         }
       } catch (err) {
@@ -80,8 +80,8 @@ export default Vue.extend({
       } finally {
         this.loadingLicense = false;
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

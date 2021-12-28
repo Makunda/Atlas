@@ -36,7 +36,7 @@ export default class ClassifyController {
 
       const tree = this.classificationService.getTransactionClustersTree(application, minSize);
       res.status(HttpCode.SUCCESS).send({
-        message: "Transaction clusters",
+        message: "TransactionUtils clusters",
         data: tree,
       } as ApiResponse);
       return;

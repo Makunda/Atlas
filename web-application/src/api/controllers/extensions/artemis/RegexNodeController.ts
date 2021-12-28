@@ -1,13 +1,13 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiRegexNode } from '@/api/interface/ApiRegexNode.interface';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class RegexNodeController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   public static async addRegexNode(item: ApiRegexNode): Promise<ApiRegexNode> {
-    const url = RegexNodeController.API_BASE_URL + "/api/artemis/regexes/add";
+    const url = `${RegexNodeController.API_BASE_URL}/api/artemis/regexes/add`;
 
     try {
       const res = await ProxyAxios.post(url, item);
@@ -15,25 +15,23 @@ export class RegexNodeController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as ApiRegexNode;
-      } else {
-        throw new Error(
-          `Failed to add a Regex Node. Status (${res.status}) : Error : ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to add a Regex Node. Status (${res.status}) : Error : ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a Regex Node..`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async updateRegexNode(
-    item: ApiRegexNode
+    item: ApiRegexNode,
   ): Promise<ApiRegexNode> {
-    const url =
-      RegexNodeController.API_BASE_URL + "/api/artemis/regexes/update";
+    const url = `${RegexNodeController.API_BASE_URL}/api/artemis/regexes/update`;
 
     try {
       const res = await ProxyAxios.put(url, item);
@@ -41,22 +39,21 @@ export class RegexNodeController {
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return apiResponse.data as ApiRegexNode;
-      } else {
-        throw new Error(
-          `Failed to update a Regex Node. Status (${res.status}) : Error : ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to update a Regex Node. Status (${res.status}) : Error : ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a Regex Node..`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async getAllNode(): Promise<ApiRegexNode[]> {
-    const url = RegexNodeController.API_BASE_URL + "/api/artemis/regexes/all";
+    const url = `${RegexNodeController.API_BASE_URL}/api/artemis/regexes/all`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -68,15 +65,14 @@ export class RegexNodeController {
           results = apiResponse.data;
         }
         return results;
-      } else {
-        throw new Error(
-          `Failed to retrieve the list of Regex Nodes. Status (${res.status}) : Error : ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to retrieve the list of Regex Nodes. Status (${res.status}) : Error : ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the list of Regex Nodes..`,
-        error
+        error,
       );
       throw error;
     }
@@ -87,23 +83,21 @@ export class RegexNodeController {
    * @param id Id of the regex node to test
    */
   public static async testRegex(id: number): Promise<number> {
-    const url =
-      RegexNodeController.API_BASE_URL + `/api/artemis/regexes/${id}/test`;
+    const url = `${RegexNodeController.API_BASE_URL}/api/artemis/regexes/${id}/test`;
 
     try {
       const res = await ProxyAxios.get(url);
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to test the Regex Node. Status (${res.status}) : Error : ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to test the Regex Node. Status (${res.status}) : Error : ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to test the Regex Node..`,
-        error
+        error,
       );
       throw error;
     }
@@ -114,23 +108,21 @@ export class RegexNodeController {
    * @param id Id of the regex node to test
    */
   public static async getRegexRequest(id: number): Promise<string> {
-    const url =
-      RegexNodeController.API_BASE_URL + `/api/artemis/regexes/${id}/request`;
+    const url = `${RegexNodeController.API_BASE_URL}/api/artemis/regexes/${id}/request`;
 
     try {
       const res = await ProxyAxios.get(url);
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return String(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to get the request the Regex Node. Status (${res.status}) : Error : ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to get the request the Regex Node. Status (${res.status}) : Error : ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the request the Regex Node..`,
-        error
+        error,
       );
       throw error;
     }
@@ -141,22 +133,21 @@ export class RegexNodeController {
    * @param id Id of the regex node to delete
    */
   public static async deleteRegexNode(id: number): Promise<boolean> {
-    const url = RegexNodeController.API_BASE_URL + `/api/artemis/regexes/${id}`;
+    const url = `${RegexNodeController.API_BASE_URL}/api/artemis/regexes/${id}`;
 
     try {
       const res = await ProxyAxios.delete(url);
       if (res.status == 200) {
         const apiResponse: ApiResponse = res.data;
         return Boolean(apiResponse.data);
-      } else {
-        throw new Error(
-          `Failed to delete the Regex Node. Status (${res.status}) : Error : ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to delete the Regex Node. Status (${res.status}) : Error : ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete the Regex Node..`,
-        error
+        error,
       );
       throw error;
     }
@@ -164,9 +155,9 @@ export class RegexNodeController {
 
   public static async getAllNodesAsTree(): Promise<ApiRegexNode[]> {
     const nodes: ApiRegexNode[] = await RegexNodeController.getAllNode();
-    const resultTree = nodes.filter(x => x.parentId == -1); // Init the tree
+    const resultTree = nodes.filter((x) => x.parentId == -1); // Init the tree
 
-    const toVisit: ApiRegexNode[] = nodes.filter(x => x.parentId == -1);
+    const toVisit: ApiRegexNode[] = nodes.filter((x) => x.parentId == -1);
     const visited: ApiRegexNode[] = [];
 
     for (let index = 0; index < toVisit.length; index++) {

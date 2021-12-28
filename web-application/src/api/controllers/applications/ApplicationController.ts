@@ -1,6 +1,6 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export interface ApplicationRecord {
   name: string;
@@ -13,8 +13,7 @@ export class ApplicationController {
    * Get the list of application as string
    */
   public static async getListApplications(): Promise<string[]> {
-    const url =
-      ApplicationController.API_BASE_URL + "/api/imaging/applications/all";
+    const url = `${ApplicationController.API_BASE_URL}/api/imaging/applications/all`;
 
     try {
       const res = await ProxyAxios.get<string[]>(url);
@@ -28,7 +27,7 @@ export class ApplicationController {
         }
       } else {
         console.warn(
-          `Failed to retrieve application list. Status (${res.status})`
+          `Failed to retrieve application list. Status (${res.status})`,
         );
       }
 
@@ -36,18 +35,17 @@ export class ApplicationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve application list.`,
-        error
+        error,
       );
     }
   }
 
   public static async getLevelsByDepth(
     application: string,
-    depthLevel: number
+    depthLevel: number,
   ): Promise<string[]> {
-    const url =
-      ApplicationController.API_BASE_URL +
-      `/api/imaging/applications/levels/${application}/${depthLevel}/name`;
+    const url = `${ApplicationController.API_BASE_URL
+    }/api/imaging/applications/levels/${application}/${depthLevel}/name`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -59,13 +57,13 @@ export class ApplicationController {
         }
       } else {
         throw new Error(
-          `Failed to retrieve levels${depthLevel} in application with name ${application}.`
+          `Failed to retrieve levels${depthLevel} in application with name ${application}.`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve levels${depthLevel} in application with name ${application}.`,
-        error
+        error,
       );
     }
   }

@@ -118,14 +118,14 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
-import { ApplicationInsights } from "@/api/interface/imaging/ApplicationInsights";
-import flash, { FlashType } from "@/modules/flash/Flash";
-import ApplicationController from "@/api/controllers/imaging/ApplicationController";
-import { Cookie } from "@/enum/Cookie";
+import { Vue } from 'vue-property-decorator';
+import { ApplicationInsights } from '@/api/interface/imaging/ApplicationInsights';
+import flash, { FlashType } from '@/modules/flash/Flash';
+import ApplicationController from '@/api/controllers/imaging/ApplicationController';
+import { Cookie } from '@/enum/Cookie';
 
 export default Vue.extend({
-  name: "ApplicationSelection",
+  name: 'ApplicationSelection',
 
   data: () => ({
     publicPath: process.env.BASE_URL,
@@ -136,9 +136,9 @@ export default Vue.extend({
     applicationList: [] as ApplicationInsights[],
     selectedApplication: {} as ApplicationInsights,
 
-    search: "",
+    search: '',
 
-    isLoading: false
+    isLoading: false,
   }),
 
   mounted() {
@@ -157,17 +157,15 @@ export default Vue.extend({
         this.isLoading = true;
         this.applicationList = await ApplicationController.getAllApplicationsInsights();
 
-        this.applicationList = this.applicationList.sort((a, b) =>
-          a.name > b.name ? 1 : -1
-        );
+        this.applicationList = this.applicationList.sort((a, b) => (a.name > b.name ? 1 : -1));
 
         this.displayedApplicationList = this.applicationList;
-        this.search = "";
+        this.search = '';
       } catch (error) {
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to get the list of application.",
-          body: error
+          title: 'Failed to get the list of application.',
+          body: error,
         });
       } finally {
         this.isLoading = false;
@@ -178,35 +176,35 @@ export default Vue.extend({
     redirectApplication(application: string) {
       // Replace with new application
       try {
-        this.$cookies.set(Cookie.APPLICATION_COOKIE, application, "3Od");
+        this.$cookies.set(Cookie.APPLICATION_COOKIE, application, '3Od');
       } catch (error) {
         console.error(`Failed to set ${Cookie.APPLICATION_COOKIE}.`, error);
       }
 
       // Redirect
-      this.$router.replace("/atlas");
-    }
+      this.$router.replace('/atlas');
+    },
   },
 
   watch: {
     search: {
       handler() {
         // If empty search
-        if (this.search == "") {
+        if (this.search == '') {
           this.displayedApplicationList = this.applicationList;
           return;
         }
 
         // Filter the list of application
         this.displayedApplicationList = this.displayedApplicationList.filter(
-          x => {
+          (x) => {
             const toSearch = this.search.toLowerCase();
             return x.name.toLowerCase().includes(toSearch);
-          }
+          },
         );
-      }
-    }
-  }
+      },
+    },
+  },
 });
 </script>
 

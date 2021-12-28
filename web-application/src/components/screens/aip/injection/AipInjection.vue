@@ -24,35 +24,35 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import RulesInjection from "./steps/RulesInjection.vue";
+import Vue from 'vue';
+import RulesInjection from './steps/RulesInjection.vue';
 
 export default Vue.extend({
-  name: "AipInjection",
+  name: 'AipInjection',
 
   components: {
-    RulesInjection
+    RulesInjection,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
     loading: true,
-    applicationName: "" as string,
+    applicationName: '' as string,
 
     // Navigation
     tab: 0,
     items: [
       {
-        view: "RulesInjection",
-        name: "Inject Rules",
-        icon: "mdi-assistant"
-      }
-    ]
+        view: 'RulesInjection',
+        name: 'Inject Rules',
+        icon: 'mdi-assistant',
+      },
+    ],
   }),
 
   mounted() {
@@ -62,8 +62,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.applicationName = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

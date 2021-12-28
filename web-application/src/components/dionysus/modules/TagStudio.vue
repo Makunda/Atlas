@@ -376,14 +376,14 @@
 </template>
 
 <script lang="ts">
-import { Group } from "@/api/interface/extensions/paris/Group";
-import { UseCase } from "@/api/interface/extensions/paris/UseCase";
-import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
-import { GroupController } from "@/api/controllers/extensions/paris/GroupController";
-import { Vue } from "vue-property-decorator";
+import { Vue } from 'vue-property-decorator';
+import { Group } from '@/api/interface/extensions/paris/Group';
+import { UseCase } from '@/api/interface/extensions/paris/UseCase';
+import { UseCaseController } from '@/api/controllers/extensions/paris/UseCaseController';
+import { GroupController } from '@/api/controllers/extensions/paris/GroupController';
 
 export default Vue.extend({
-  name: "TagStudio",
+  name: 'TagStudio',
 
   created() {
     this.initialize();
@@ -396,11 +396,11 @@ export default Vue.extend({
     tree: [],
     activeItems: [],
 
-    //snackbarInfo
+    // snackbarInfo
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
-    //dialogDelete
+    // dialogDelete
     dialogDelete: false,
 
     // Assistant
@@ -408,24 +408,24 @@ export default Vue.extend({
     selectedTagAssist: 0,
     tagAssistsItems: [
       {
-        title: "Group by Type",
+        title: 'Group by Type',
         template:
           "MATCH (n:Object:%%APPLICATION_NAME%%) WHERE n.Type CONTAINS 'JPA' RETURN n as node",
         explanation:
-          "The request will match all the objects where the type contains the string 'JPA'. "
+          "The request will match all the objects where the type contains the string 'JPA'. ",
       },
       {
-        title: "Group by Name",
+        title: 'Group by Name',
         template:
           "MATCH (n:Object:%%APPLICATION_NAME%%) WHERE n.FullName CONTAINS 'javax.persistence' RETURN n as node",
-        explanation: ""
+        explanation: '',
       },
       {
-        title: "Group by Relationship and Type ",
+        title: 'Group by Relationship and Type ',
         template:
           "MATCH (n:Object:%%APPLICATION_NAME%%) WHERE n.InternalType='SQLScriptProcedure' AND NOT (n)-[:USE]->(:Object { InternalType : 'SQLScriptTable'}) AND NOT (n)-[:CALL]->(:Object { InternalType : 'SQLScriptProcedure'}) RETURN n as node",
-        explanation: ""
-      }
+        explanation: '',
+      },
     ],
 
     // Loaders
@@ -434,10 +434,10 @@ export default Vue.extend({
 
     selectedUseCaseId: -1 as number,
     testPassed: false,
-    items: ["Tag", "Document"] as string[],
+    items: ['Tag', 'Document'] as string[],
 
     // Form properties
-    recoType: "Tag" as string,
+    recoType: 'Tag' as string,
 
     editMode: false,
     editedIndex: -1,
@@ -446,8 +446,8 @@ export default Vue.extend({
 
     // Validation
     validRequest: false,
-    validityError: "",
-    creationError: ""
+    validityError: '',
+    creationError: '',
   }),
 
   methods: {
@@ -459,7 +459,7 @@ export default Vue.extend({
     close() {
       this.editMode = false;
       this.$nextTick(() => {
-        this.group = Object.assign({}, {} as Group);
+        this.group = { ...{} as Group };
         this.editedIndex = -1;
       });
     },
@@ -468,7 +468,7 @@ export default Vue.extend({
       this.dialogDelete = false;
       this.editMode = false;
       this.$nextTick(() => {
-        this.group = Object.assign({}, {} as Group);
+        this.group = { ...{} as Group };
         this.editedIndex = -1;
       });
     },
@@ -477,17 +477,17 @@ export default Vue.extend({
       this.dialogDelete = true;
       this.validRequest = false;
       this.editedIndex = this.items.indexOf(item);
-      this.group = Object.assign({}, item);
+      this.group = { ...item };
     },
 
     deleteItemConfirm() {
       GroupController.deleteGroup(this.group)
         .then((res: boolean) => {
-          this.textSnackBar = "Successfully deleted the group.";
+          this.textSnackBar = 'Successfully deleted the group.';
           this.snackbarInfo = true;
           this.initialize();
         })
-        .catch(err => {
+        .catch((err) => {
           this.textSnackBar = `Failed to delete the Group. Error: ${err}`;
           this.snackbarInfo = true;
         });
@@ -499,7 +499,7 @@ export default Vue.extend({
       this.validRequest = false;
       this.editMode = true;
       this.editedIndex = item.id;
-      this.group = Object.assign({}, item);
+      this.group = { ...item };
       this.dialog = true;
     },
 
@@ -517,12 +517,12 @@ export default Vue.extend({
       if (this.editedIndex > -1) {
         GroupController.editUseCase(this.group)
           .then((res: Group) => {
-            this.textSnackBar = "Successfully updated the group.";
+            this.textSnackBar = 'Successfully updated the group.';
             this.snackbarInfo = true;
             this.initialize();
             this.close();
           })
-          .catch(err => {
+          .catch((err) => {
             this.textSnackBar = `Failed to udpdate the Category. Error: ${err}`;
             this.snackbarInfo = true;
             // Do not close
@@ -533,12 +533,12 @@ export default Vue.extend({
       } else {
         GroupController.addGroup(this.group)
           .then((res: Group) => {
-            this.textSnackBar = "Successfully added the group.";
+            this.textSnackBar = 'Successfully added the group.';
             this.snackbarInfo = true;
             this.initialize();
             this.close();
           })
-          .catch(err => {
+          .catch((err) => {
             this.textSnackBar = `Failed to add the Category. Error: ${err}`;
             this.snackbarInfo = true;
             // Do not close
@@ -571,8 +571,8 @@ export default Vue.extend({
             }
           }
         })
-        .catch(err => {
-          console.error("Failed to retrieve the root use cases", err);
+        .catch((err) => {
+          console.error('Failed to retrieve the root use cases', err);
         });
     },
 
@@ -581,8 +581,8 @@ export default Vue.extend({
         .then((useCases: UseCase[]) => {
           this.usecases = useCases;
         })
-        .catch(err => {
-          console.error("Error trying to retrieve use cases tree:", err);
+        .catch((err) => {
+          console.error('Error trying to retrieve use cases tree:', err);
         });
     },
 
@@ -604,17 +604,16 @@ export default Vue.extend({
       this.loadingValidity = true;
       UseCaseController.checkValidity(
         this.group.cypherRequest,
-        this.group.cypherRequestReturn
+        this.group.cypherRequestReturn,
       )
         .then((res: boolean) => {
           this.validRequest = res;
           if (!res) {
-            this.validityError =
-              "Failed to verify the cypher query above, please follow the Cypher Guidelines.";
+            this.validityError = 'Failed to verify the cypher query above, please follow the Cypher Guidelines.';
           }
         })
-        .catch(err => {
-          console.error("Failed to add the request.");
+        .catch((err) => {
+          console.error('Failed to add the request.');
         })
         .finally(() => {
           this.loadingValidity = false;
@@ -627,9 +626,9 @@ export default Vue.extend({
     launchAlert(text: string) {
       this.creationError = text;
       setTimeout(() => {
-        this.creationError = "";
+        this.creationError = '';
       }, 5000);
-    }
-  }
+    },
+  },
 });
 </script>

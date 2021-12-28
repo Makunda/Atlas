@@ -23,20 +23,20 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import CloudExtensions from "./steps/CloudExtensions.vue";
+import Vue from 'vue';
+import CloudExtensions from './steps/CloudExtensions.vue';
 
 export default Vue.extend({
-  name: "CloudRecommendations",
+  name: 'CloudRecommendations',
 
   components: {
-    CloudExtensions
+    CloudExtensions,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -44,25 +44,25 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     step: 1,
     tab: 0,
 
     items: [
       {
-        view: "CloudExtensions",
-        name: "Cloud Extensions",
-        icon: "mdi-cloud"
-      }
-    ]
+        view: 'CloudExtensions',
+        name: 'Cloud Extensions',
+        icon: 'mdi-cloud',
+      },
+    ],
   }),
 
   watch: {
     getApplicationName(old, newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

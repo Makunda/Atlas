@@ -1,6 +1,6 @@
-import ProxyAxios from "@/utils/axios/ProxyAxios";
-import Logger from "@/utils/Logger";
-import Backup from "@/api/interface/extensions/demeter/Backup";
+import ProxyAxios from '@/utils/axios/ProxyAxios';
+import Logger from '@/utils/Logger';
+import Backup from '@/api/interface/extensions/demeter/Backup';
 
 /**
  * Backup Controller
@@ -12,14 +12,14 @@ export default class BackupController {
    */
   public static async getList(application: string): Promise<Backup[]> {
     try {
-      const url = "api/demeter/backup/list";
+      const url = 'api/demeter/backup/list';
       const response = await ProxyAxios.post<Backup[]>(url, {
-        application: application
+        application,
       });
       if (response.isError()) throw response.getErrorsAsString();
       return response.getData();
     } catch (err) {
-      const message = `Failed to get the list of backup`;
+      const message = 'Failed to get the list of backup';
       Logger.error(message, err);
       throw err;
     }
@@ -38,20 +38,20 @@ export default class BackupController {
     name: string,
     description: string,
     timestamp: string,
-    picture: string
+    picture: string,
   ): Promise<void> {
     try {
-      const url = "api/demeter/backup/create";
+      const url = 'api/demeter/backup/create';
       const response = await ProxyAxios.post<void>(url, {
-        application: application,
-        name: name,
-        description: description,
-        timestamp: timestamp,
-        picture: picture
+        application,
+        name,
+        description,
+        timestamp,
+        picture,
       });
       if (response.isError()) throw response.getErrorsAsString();
     } catch (err) {
-      const message = `Failed to create a backup`;
+      const message = 'Failed to create a backup';
       Logger.error(message, err);
       throw err;
     }
@@ -64,17 +64,17 @@ export default class BackupController {
    */
   public static async deleteBackup(
     application: string,
-    id: number
+    id: number,
   ): Promise<void> {
     try {
-      const url = "api/demeter/backup/delete";
+      const url = 'api/demeter/backup/delete';
       const response = await ProxyAxios.post<void>(url, {
-        application: application,
-        id: id
+        application,
+        id,
       });
       if (response.isError()) throw response.getErrorsAsString();
     } catch (err) {
-      const message = `Failed to delete the backup`;
+      const message = 'Failed to delete the backup';
       Logger.error(message, err);
       throw err;
     }
@@ -86,14 +86,14 @@ export default class BackupController {
    */
   public static async rollback(application: string, id: number): Promise<void> {
     try {
-      const url = "api/demeter/backup/rollback";
+      const url = 'api/demeter/backup/rollback';
       const response = await ProxyAxios.post<void>(url, {
-        application: application,
-        id: id
+        application,
+        id,
       });
       if (response.isError()) throw response.getErrorsAsString();
     } catch (err) {
-      const message = `Failed to rollback the application`;
+      const message = 'Failed to rollback the application';
       Logger.error(message, err);
       throw err;
     }

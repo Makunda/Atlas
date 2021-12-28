@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "CommunityExplorer"
+  name: 'CommunityExplorer',
 };
 </script>
 

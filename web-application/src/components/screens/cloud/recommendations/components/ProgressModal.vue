@@ -26,26 +26,26 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "ProgressModal",
+  name: 'ProgressModal',
 
   props: {
     dialog: Boolean,
-    title: String
+    title: String,
   },
 
   methods: {
     close() {
-      this.$emit("Close");
+      this.$emit('Close');
     },
 
     run() {
-      this.$emit("Run");
-    }
+      this.$emit('Run');
+    },
   },
 
-  data: () => ({})
+  data: () => ({}),
 });
 </script>

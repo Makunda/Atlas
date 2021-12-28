@@ -68,14 +68,14 @@
 </template>
 
 <script>
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "StatisticsHelper",
+  name: 'StatisticsHelper',
 
   data: () => ({
-    dialog: false
-  })
+    dialog: false,
+  }),
 });
 </script>
 

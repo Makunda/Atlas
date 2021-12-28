@@ -23,28 +23,28 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import CloudBockersUpload from "./steps/CloudBlockersUpload.vue";
-import OSSUpload from "./steps/OSSUpload.vue";
-import ObsolescenceUpload from "./steps/ObsolescenceUpload.vue";
-import ContainerBlockersUpload from "./steps/ContainerBlockersUpload.vue";
-import CloudServicesUpload from "./steps/CloudServicesUpload.vue";
+import Vue from 'vue';
+import CloudBockersUpload from './steps/CloudBlockersUpload.vue';
+import OSSUpload from './steps/OSSUpload.vue';
+import ObsolescenceUpload from './steps/ObsolescenceUpload.vue';
+import ContainerBlockersUpload from './steps/ContainerBlockersUpload.vue';
+import CloudServicesUpload from './steps/CloudServicesUpload.vue';
 
 export default Vue.extend({
-  name: "Highlight",
+  name: 'Highlight',
 
   components: {
     CloudBockersUpload,
     OSSUpload,
     ObsolescenceUpload,
     ContainerBlockersUpload,
-    CloudServicesUpload
+    CloudServicesUpload,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -52,45 +52,45 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     step: 1,
     tab: 0,
 
     items: [
       {
-        view: "CloudServicesUpload",
-        name: "Cloud Service",
-        icon: "mdi-cloud"
+        view: 'CloudServicesUpload',
+        name: 'Cloud Service',
+        icon: 'mdi-cloud',
       },
       {
-        view: "CloudBockersUpload",
-        name: "Cloud Blockers",
-        icon: "mdi-cloud-search"
+        view: 'CloudBockersUpload',
+        name: 'Cloud Blockers',
+        icon: 'mdi-cloud-search',
       },
       {
-        view: "OSSUpload",
-        name: "OSS Injection",
-        icon: "mdi-open-source-initiative"
+        view: 'OSSUpload',
+        name: 'OSS Injection',
+        icon: 'mdi-open-source-initiative',
       },
       {
-        view: "ObsolescenceUpload",
-        name: "Obsolescence Injection",
-        icon: "mdi-calendar-alert"
+        view: 'ObsolescenceUpload',
+        name: 'Obsolescence Injection',
+        icon: 'mdi-calendar-alert',
       },
       {
-        view: "ContainerBlockersUpload",
-        name: "Container Injection",
-        icon: "mdi-docker"
-      }
-    ]
+        view: 'ContainerBlockersUpload',
+        name: 'Container Injection',
+        icon: 'mdi-docker',
+      },
+    ],
   }),
 
   watch: {
     getApplicationName(old, newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

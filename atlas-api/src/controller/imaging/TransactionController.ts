@@ -15,7 +15,7 @@ class TransactionController {
     try {
       this.transactionService = new TransactionService();
     } catch (error) {
-      logger.error("Failed to initialize the Transaction Controller.", error);
+      logger.error("Failed to initialize the TransactionUtils Controller.", error);
     }
   }
 
@@ -104,7 +104,7 @@ class TransactionController {
   };
 
   /**
-   * Pin with a prefix a specific Transaction in the application
+   * Pin with a prefix a specific TransactionUtils in the application
    * POST Body: {
    *     application: string,
    *     transactionID: number,
@@ -154,7 +154,7 @@ class TransactionController {
         transactionID,
         prefix,
       );
-      res.status(200).json({ data: transaction, message: "Renamed Transaction" });
+      res.status(200).json({ data: transaction, message: "Renamed TransactionUtils" });
     } catch (error) {
       logger.error(`Failed to pin transaction with id ${transactionID} with prefix ${prefix}`);
       next(error);
@@ -162,7 +162,7 @@ class TransactionController {
   };
 
   /**
-   * Unpin with a prefix a specific Transaction in the application
+   * Unpin with a prefix a specific TransactionUtils in the application
    * POST Body: {
    *     application: string,
    *     transactionID: number,
@@ -212,7 +212,7 @@ class TransactionController {
         transactionID,
         prefix,
       );
-      res.status(200).json({ data: transaction, message: "Renamed Transaction" });
+      res.status(200).json({ data: transaction, message: "Renamed TransactionUtils" });
     } catch (error) {
       logger.error(`Failed to unpin transaction with id ${transactionID} with prefix ${prefix}`);
       next(error);
@@ -269,7 +269,7 @@ class TransactionController {
         transactionID,
         transactionName,
       );
-      res.status(200).json({ data: transaction, message: "Renamed Transaction" });
+      res.status(200).json({ data: transaction, message: "Renamed TransactionUtils" });
     } catch (error) {
       logger.error(
         `Failed to rename a transaction with name ${transactionName} in application ${applicationName}.`,
@@ -346,7 +346,7 @@ class TransactionController {
 
       const transactionService = new TransactionService();
       const statistics: TransactionStatistics = await transactionService.getTransactionStatistics(id);
-      res.status(HttpCode.SUCCESS).send({ data: statistics, message: "Transaction Statistics" } as ApiResponse);
+      res.status(HttpCode.SUCCESS).send({ data: statistics, message: "TransactionUtils Statistics" } as ApiResponse);
     } catch (error) {
       const message = "Failed to get the statistics of the transaction.";
       logger.error(message, error);
@@ -467,7 +467,7 @@ class TransactionController {
         applicationName,
         filter,
       );
-      res.status(200).json({ data: transactionMasked, message: "Transaction Masked" });
+      res.status(200).json({ data: transactionMasked, message: "TransactionUtils Masked" });
     } catch (error) {
       logger.error(`Failed to mask transaction with filter in application ${applicationName}.`, error);
       next(error);
@@ -555,7 +555,7 @@ class TransactionController {
   };
 
   /**
-   * Mask Transaction by Terms in their name
+   * Mask TransactionUtils by Terms in their name
    * POST Body {
    *     application: string
    *     terms : string[]

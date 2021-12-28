@@ -6,20 +6,20 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ActionTileViewer from "@/components/artemis/modules/ArtemisViewer.vue";
+import Vue from 'vue';
+import ActionTileViewer from '@/components/artemis/modules/ArtemisViewer.vue';
 
 export default Vue.extend({
-  name: "ExplorationStep",
+  name: 'ExplorationStep',
 
   components: {
-    ActionTileViewer
+    ActionTileViewer,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -27,7 +27,7 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: ""
+    application: '',
   }),
 
   methods: {},
@@ -35,8 +35,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

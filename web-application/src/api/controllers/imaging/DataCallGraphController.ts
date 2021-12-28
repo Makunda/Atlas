@@ -1,7 +1,7 @@
-import { DataCallGraph } from "@/api/interface/imaging/DataCallGraph";
-import DataCallGraphInsights from "../../interface/imaging/DataCallGraphInsights";
-import ProxyAxios from "@/utils/axios/ProxyAxios";
-import Logger from "@/utils/Logger";
+import { DataCallGraph } from '@/api/interface/imaging/DataCallGraph';
+import DataCallGraphInsights from '../../interface/imaging/DataCallGraphInsights';
+import ProxyAxios from '@/utils/axios/ProxyAxios';
+import Logger from '@/utils/Logger';
 
 /**
  * Data Call graph for controller
@@ -12,13 +12,13 @@ export default class DataCallGraphController {
    * @param application
    */
   public static async unMaskAllDataCallGraph(
-    application: string
+    application: string,
   ): Promise<number> {
-    const url = `/api/imaging/dataCallGraph/unmask/all`;
+    const url = '/api/imaging/dataCallGraph/unmask/all';
 
     try {
       const res = await ProxyAxios.post<number>(url, {
-        application: application
+        application,
       });
 
       if (res.isError()) throw res.getErrorsAsString();
@@ -26,7 +26,7 @@ export default class DataCallGraphController {
     } catch (error) {
       Logger.error(
         `Failed to unmask all dataCallGraph in application ${application}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -37,7 +37,7 @@ export default class DataCallGraphController {
    * @param application
    */
   public static async getNumberDataCallGraph(
-    application: string
+    application: string,
   ): Promise<number> {
     const url = `/api/imaging/dataCallGraph/number/unmasked/${application}`;
 
@@ -48,7 +48,7 @@ export default class DataCallGraphController {
     } catch (error) {
       Logger.error(
         `Failed to get the number of dataCallGraph in application ${application}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -59,7 +59,7 @@ export default class DataCallGraphController {
    * @param application Name of the dataCallGraph
    */
   public static async getInsightsUnmaskedDataCallGraph(
-    application: string
+    application: string,
   ): Promise<DataCallGraphInsights> {
     const url = `/api/imaging/dataCallGraph/insights/unmasked/${application}`;
 
@@ -71,7 +71,7 @@ export default class DataCallGraphController {
     } catch (error) {
       console.error(
         `Failed to get dataCallGraph insights in application ${application}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -82,7 +82,7 @@ export default class DataCallGraphController {
    * @param application
    */
   public static async getNumberMaskedDataCallGraph(
-    application: string
+    application: string,
   ): Promise<number> {
     const url = `/api/imaging/dataCallGraph/number/masked/${application}`;
 
@@ -93,7 +93,7 @@ export default class DataCallGraphController {
     } catch (error) {
       Logger.error(
         `Failed to get the number of masked dataCallGraph ${application}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -112,23 +112,23 @@ export default class DataCallGraphController {
     start: number,
     end: number,
     sort: string,
-    sortDesc: string
+    sortDesc: string,
   ): Promise<DataCallGraph[]> {
     const url = `/api/imaging/dataCallGraph/batch/masked/${application}`;
 
     try {
       const body = {
-        start: start,
-        end: end,
-        sort: sort,
-        sortDesc: sortDesc
+        start,
+        end,
+        sort,
+        sortDesc,
       };
 
       const res = await ProxyAxios.post<DataCallGraph[]>(url, body);
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to get the list of masked datacall graph.`, error);
+      Logger.error('Failed to get the list of masked datacall graph.', error);
       throw error;
     }
   }
@@ -148,24 +148,24 @@ export default class DataCallGraphController {
     end: number,
     sort: string,
     sortDesc: string,
-    filter?: Record<string, number>
+    filter?: Record<string, number>,
   ): Promise<DataCallGraph[]> {
     const url = `/api/imaging/dataCallGraph/batch/unmasked/${application}`;
 
     try {
       const body = {
-        start: start,
-        end: end,
-        sort: sort,
-        sortDesc: sortDesc,
-        filter: filter
+        start,
+        end,
+        sort,
+        sortDesc,
+        filter,
       };
 
       const res = await ProxyAxios.post<DataCallGraph[]>(url, body);
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      console.error(`Failed to get the batch of Datacall graph.`, error);
+      console.error('Failed to get the batch of Datacall graph.', error);
       throw error;
     }
   }
@@ -177,20 +177,20 @@ export default class DataCallGraphController {
    */
   public static async maskDataCallGraph(
     application: string,
-    dataCallGraphID: number
+    dataCallGraphID: number,
   ): Promise<DataCallGraph> {
-    const url = `/api/imaging/dataCallGraph/mask/single`;
+    const url = '/api/imaging/dataCallGraph/mask/single';
 
     try {
       const res = await ProxyAxios.post<DataCallGraph>(url, {
-        application: application,
-        dataCallGraphID: dataCallGraphID
+        application,
+        dataCallGraphID,
       });
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      console.error(`Failed to get the list of data call graph.`, error);
+      console.error('Failed to get the list of data call graph.', error);
       throw error;
     }
   }
@@ -204,22 +204,22 @@ export default class DataCallGraphController {
   public static async pinDataCallGraph(
     application: string,
     dataCallGraphID: number,
-    prefix: string
+    prefix: string,
   ): Promise<DataCallGraph> {
-    const url = `/api/imaging/dataCallGraph/pin/single`;
+    const url = '/api/imaging/dataCallGraph/pin/single';
 
     try {
       const body: any = {
-        application: application,
-        dataCallGraphID: dataCallGraphID,
-        prefix: prefix
+        application,
+        dataCallGraphID,
+        prefix,
       };
       const res = await ProxyAxios.post<DataCallGraph>(url, body);
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to pin datacall graph.`, error);
+      Logger.error('Failed to pin datacall graph.', error);
       throw error;
     }
   }
@@ -233,22 +233,22 @@ export default class DataCallGraphController {
   public static async unpinDataCallGraph(
     application: string,
     dataCallGraphID: number,
-    prefix: string
+    prefix: string,
   ): Promise<DataCallGraph> {
-    const url = `/api/imaging/dataCallGraph/unpin/single`;
+    const url = '/api/imaging/dataCallGraph/unpin/single';
 
     try {
       const body: any = {
-        application: application,
-        dataCallGraphID: dataCallGraphID,
-        prefix: prefix
+        application,
+        dataCallGraphID,
+        prefix,
       };
       const res = await ProxyAxios.post<DataCallGraph>(url, body);
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to unpin a datacall graph`, error);
+      Logger.error('Failed to unpin a datacall graph', error);
       throw error;
     }
   }
@@ -262,22 +262,22 @@ export default class DataCallGraphController {
   public static async renameDataCallGraph(
     application: string,
     dataCallGraphID: number,
-    name: string
+    name: string,
   ): Promise<DataCallGraph> {
-    const url = `/api/imaging/dataCallGraph/rename/single`;
+    const url = '/api/imaging/dataCallGraph/rename/single';
 
     try {
       const body: any = {
-        application: application,
-        dataCallGraphID: dataCallGraphID,
-        dataCallGraphName: name
+        application,
+        dataCallGraphID,
+        dataCallGraphName: name,
       };
       const res = await ProxyAxios.post<DataCallGraph>(url, body);
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to rename a datacall graph.`, error);
+      Logger.error('Failed to rename a datacall graph.', error);
       throw error;
     }
   }
@@ -289,20 +289,20 @@ export default class DataCallGraphController {
    */
   public static async maskDataCallGraphWithFilter(
     application: string,
-    filter: Record<string, unknown>
+    filter: Record<string, unknown>,
   ): Promise<DataCallGraph> {
-    const url = `/api/imaging/dataCallGraph/mask/filter`;
+    const url = '/api/imaging/dataCallGraph/mask/filter';
 
     try {
       const res = await ProxyAxios.post<DataCallGraph>(url, {
-        application: application,
-        filter: filter
+        application,
+        filter,
       });
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to mask datacall graph with filter.`, error);
+      Logger.error('Failed to mask datacall graph with filter.', error);
       throw error;
     }
   }
@@ -314,20 +314,20 @@ export default class DataCallGraphController {
    */
   public static async unmaskDataCallGraph(
     application: string,
-    dataCallGraphID: number
+    dataCallGraphID: number,
   ): Promise<DataCallGraph> {
-    const url = `/api/imaging/dataCallGraph/unmask/single`;
+    const url = '/api/imaging/dataCallGraph/unmask/single';
 
     try {
       const res = await ProxyAxios.post<DataCallGraph>(url, {
-        application: application,
-        dataCallGraphID: dataCallGraphID
+        application,
+        dataCallGraphID,
       });
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to unmask a datacall graph.`, error);
+      Logger.error('Failed to unmask a datacall graph.', error);
       throw error;
     }
   }
@@ -337,19 +337,19 @@ export default class DataCallGraphController {
    * @param application Name of the application
    */
   public static async unmaskAllDataCallGraph(
-    application: string
+    application: string,
   ): Promise<boolean> {
-    const url = `/api/imaging/dataCallGraph/unmask/all`;
+    const url = '/api/imaging/dataCallGraph/unmask/all';
 
     try {
       const res = await ProxyAxios.post<boolean>(url, {
-        application: application
+        application,
       });
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to unmask all data call graph.`, error);
+      Logger.error('Failed to unmask all data call graph.', error);
       throw error;
     }
   }
@@ -361,21 +361,21 @@ export default class DataCallGraphController {
    */
   public static async maskByCount(
     application: string,
-    limit: number
+    limit: number,
   ): Promise<number> {
-    const url = `/api/imaging/dataCallGraph/mask/byCount`;
+    const url = '/api/imaging/dataCallGraph/mask/byCount';
 
     try {
       const body = {
-        application: application,
-        limit: limit
+        application,
+        limit,
       };
       const res = await ProxyAxios.post<number>(url, body);
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to mask datacall graph using a count filter`, error);
+      Logger.error('Failed to mask datacall graph using a count filter', error);
       throw error;
     }
   }
@@ -387,14 +387,14 @@ export default class DataCallGraphController {
    */
   public static async maskByTechnology(
     application: string,
-    limit: number
+    limit: number,
   ): Promise<number> {
-    const url = `/api/imaging/dataCallGraph/mask/byTechnologies`;
+    const url = '/api/imaging/dataCallGraph/mask/byTechnologies';
 
     try {
       const body = {
-        application: application,
-        limit: limit
+        application,
+        limit,
       };
       const res = await ProxyAxios.post<number>(url, body);
 
@@ -402,8 +402,8 @@ export default class DataCallGraphController {
       return res.getData();
     } catch (error) {
       Logger.error(
-        `Failed to mask datacall graph using a technology filter`,
-        error
+        'Failed to mask datacall graph using a technology filter',
+        error,
       );
       throw error;
     }
@@ -416,21 +416,21 @@ export default class DataCallGraphController {
    */
   public static async maskByTerms(
     application: string,
-    terms: string[]
+    terms: string[],
   ): Promise<number> {
-    const url = `/api/imaging/dataCallGraph/mask/byTerms`;
+    const url = '/api/imaging/dataCallGraph/mask/byTerms';
 
     try {
       const body = {
-        application: application,
-        terms: terms
+        application,
+        terms,
       };
       const res = await ProxyAxios.post<number>(url, body);
 
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to mask datacall graph using a term filter.`, error);
+      Logger.error('Failed to mask datacall graph using a term filter.', error);
       throw error;
     }
   }

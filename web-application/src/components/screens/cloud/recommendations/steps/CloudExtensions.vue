@@ -182,19 +182,19 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import CloudRecoController from "@/api/controllers/recommendations/cloud/CloudRecoController";
-import CloudExecutionModal from "../components/CloudExecutionModal.vue";
-import ProgressModal from "../components/ProgressModal.vue";
-import Extension from "@/api/interface/cloud/recommendations/Extension";
-import flash, { FlashType } from "@/modules/flash/Flash";
+import Vue from 'vue';
+import CloudRecoController from '@/api/controllers/recommendations/cloud/CloudRecoController';
+import CloudExecutionModal from '../components/CloudExecutionModal.vue';
+import ProgressModal from '../components/ProgressModal.vue';
+import Extension from '@/api/interface/cloud/recommendations/Extension';
+import flash, { FlashType } from '@/modules/flash/Flash';
 
 export default Vue.extend({
-  name: "CloudExtensions",
+  name: 'CloudExtensions',
 
   components: {
     CloudExecutionModal,
-    ProgressModal
+    ProgressModal,
   },
 
   mounted() {
@@ -207,12 +207,12 @@ export default Vue.extend({
       return Math.ceil(this.extensions.length / this.itemsPerPage);
     },
     filteredKeys() {
-      return this.keys.filter(key => key !== "Name");
+      return this.keys.filter((key) => key !== 'Name');
     },
 
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
   methods: {
     nextPage() {
@@ -231,9 +231,8 @@ export default Vue.extend({
       try {
         this.extensions = await CloudRecoController.getExtensionList();
       } catch (error) {
-        console.error("Failed to get the list of extension");
-        this.errorExtension =
-          "Failed to get the extension list. Please retry..";
+        console.error('Failed to get the list of extension');
+        this.errorExtension = 'Failed to get the extension list. Please retry..';
       } finally {
         this.loadingExtensions = true;
       }
@@ -258,56 +257,56 @@ export default Vue.extend({
         // Run the extension using the application and its Id
         await CloudRecoController.runExtension(
           this.selectedExtension.id,
-          this.application
+          this.application,
         );
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.SUCCESS,
-          title: "Succesful operation.",
-          body: `The execution of the ${this.selectedExtension.name} is done.`
+          title: 'Succesful operation.',
+          body: `The execution of the ${this.selectedExtension.name} is done.`,
         });
       } catch (error) {
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to get cloud recommendations extensions.",
-          body: error
+          title: 'Failed to get cloud recommendations extensions.',
+          body: error,
         });
-        console.log("Failed to execute the extension.", error);
+        console.log('Failed to execute the extension.', error);
       } finally {
         this.showProgressModal = false;
       }
-    }
+    },
   },
 
   data: () => ({
     // Default
-    application: "" as string,
+    application: '' as string,
 
     // Data iterator
     itemsPerPageArray: [20, 40, 100],
-    search: "",
+    search: '',
     filter: {},
     sortDesc: false,
     page: 1,
     itemsPerPage: 20,
-    sortBy: "name",
-    keys: ["id", "name", "description", "tags", "creation", "lastUpdate"],
+    sortBy: 'name',
+    keys: ['id', 'name', 'description', 'tags', 'creation', 'lastUpdate'],
     extensions: [],
 
     loadingExtensions: false,
-    errorExtension: "",
+    errorExtension: '',
 
     // Extension modal
     showModal: false,
     selectedExtension: {} as Extension,
 
     // Progress bar modal
-    showProgressModal: false
+    showProgressModal: false,
   }),
 
   watch: {
     getApplicationName(old, newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>

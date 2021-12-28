@@ -19,14 +19,14 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import PythiaParametersViewer from "../components/PythiaParametersViewer.vue";
+import Vue from 'vue';
+import PythiaParametersViewer from '../components/PythiaParametersViewer.vue';
 
 export default Vue.extend({
-  name: "PythiaParameters",
+  name: 'PythiaParameters',
 
   components: {
-    PythiaParametersViewer
-  }
+    PythiaParametersViewer,
+  },
 });
 </script>

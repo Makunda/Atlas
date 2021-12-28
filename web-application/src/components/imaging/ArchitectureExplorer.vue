@@ -7,11 +7,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "ArchitectureExplorer",
+  name: 'ArchitectureExplorer',
 
-  data: () => ({})
+  data: () => ({}),
 });
 </script>

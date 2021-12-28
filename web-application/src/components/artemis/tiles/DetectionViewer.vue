@@ -22,17 +22,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { DetectionStatus } from "@/api/interface/extensions/artemis/detectionStatus.enum";
-import DetectionInterface from "@/api/interface/extensions/artemis/Detection";
+import Vue from 'vue';
+import { DetectionStatus } from '@/api/interface/extensions/artemis/detectionStatus.enum';
+import DetectionInterface from '@/api/interface/extensions/artemis/Detection';
 
-export default Vue.component("DetectionViewer", {
-  props: ["detection"],
+export default Vue.component('DetectionViewer', {
+  props: ['detection'],
 
   data: () => ({
     detectionObj: {} as DetectionInterface,
-    toDisplay: "",
-    numResults: ""
+    toDisplay: '',
+    numResults: '',
   }),
 
   methods: {
@@ -43,19 +43,19 @@ export default Vue.component("DetectionViewer", {
       const m = Math.floor((seconds % 3600) / 60);
       const s = Math.floor(seconds % 60);
 
-      const dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
-      const hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-      const mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-      const sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+      const dDisplay = d > 0 ? d + (d == 1 ? ' day, ' : ' days, ') : '';
+      const hDisplay = h > 0 ? h + (h == 1 ? ' hour, ' : ' hours, ') : '';
+      const mDisplay = m > 0 ? m + (m == 1 ? ' minute, ' : ' minutes, ') : '';
+      const sDisplay = s > 0 ? s + (s == 1 ? ' second' : ' seconds') : '';
       return dDisplay + hDisplay + mDisplay + sDisplay;
     },
 
     countDownTimer() {
       this.toDisplay = this.milisecondsToDhms(
-        Date.now() - this.detectionObj.timestampStart
+        Date.now() - this.detectionObj.timestampStart,
       );
       setTimeout(this.countDownTimer, 1000);
-    }
+    },
   },
 
   mounted() {
@@ -66,21 +66,18 @@ export default Vue.component("DetectionViewer", {
     this.detectionObj = this.detection as DetectionInterface;
 
     if (this.detectionObj.status == DetectionStatus.Pending) {
-      this.numResults = "Pending detection";
+      this.numResults = 'Pending detection';
       this.countDownTimer();
     } else {
-      const elapsed =
-        this.detectionObj.timestampFinish - this.detectionObj.timestampStart;
-      this.toDisplay =
-        elapsed > 0 ? this.milisecondsToDhms(elapsed) : "No information";
+      const elapsed = this.detectionObj.timestampFinish - this.detectionObj.timestampStart;
+      this.toDisplay = elapsed > 0 ? this.milisecondsToDhms(elapsed) : 'No information';
     }
 
     // Results this.numResults =
-    this.numResults =
-      this.detectionObj.data.length > 0
-        ? this.detectionObj.data.filter(x => x.type === "Framework").length +
-          " framework detected."
-        : "No framework detected";
-  }
+    this.numResults = this.detectionObj.data.length > 0
+      ? `${this.detectionObj.data.filter((x) => x.type === 'Framework').length
+      } framework detected.`
+      : 'No framework detected';
+  },
 });
 </script>

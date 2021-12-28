@@ -98,27 +98,27 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
-import ActionsTile from "@/components/actions/ActionsTile.vue";
-import StatisticsHelper from "@/components/screens/statistics/tiles/StatisticsHelper.vue";
-import StatisticsColumn from "@/components/screens/statistics/StatisticsColumn.vue";
-import CategoriesHelper from "@/components/navigation/CategoriesHelper.vue";
-import ApplicationController from "@/api/controllers/imaging/ApplicationController";
-import Logger from "@/utils/Logger";
+import { Vue } from 'vue-property-decorator';
+import ActionsTile from '@/components/actions/ActionsTile.vue';
+import StatisticsHelper from '@/components/screens/statistics/tiles/StatisticsHelper.vue';
+import StatisticsColumn from '@/components/screens/statistics/StatisticsColumn.vue';
+import CategoriesHelper from '@/components/navigation/CategoriesHelper.vue';
+import ApplicationController from '@/api/controllers/imaging/ApplicationController';
+import Logger from '@/utils/Logger';
 
 export default Vue.extend({
-  name: "Home",
+  name: 'Home',
   components: {
     ActionsTile,
     StatisticsHelper,
     StatisticsColumn,
-    CategoriesHelper
+    CategoriesHelper,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
@@ -127,8 +127,8 @@ export default Vue.extend({
     insights: {},
 
     // Default parameters
-    application: "",
-    consultantId: Math.floor(Math.random() * 1000)
+    application: '',
+    consultantId: Math.floor(Math.random() * 1000),
   }),
 
   mounted() {
@@ -138,23 +138,23 @@ export default Vue.extend({
 
   methods: {
     goTo(section: string) {
-      this.$router.replace("/atlas/" + section);
+      this.$router.replace(`/atlas/${section}`);
     },
 
     async getApplicationInsights() {
-      if (this.application == "") return;
+      if (this.application == '') return;
 
       try {
         this.loadingCandidate = true;
         this.insights = await ApplicationController.getApplicationInsights(
-          this.application
+          this.application,
         );
       } catch (e) {
-        Logger.error("Failed to get the insights of the application", e);
+        Logger.error('Failed to get the insights of the application', e);
       } finally {
         this.loadingCandidate = false;
       }
-    }
+    },
   },
 
   watch: {
@@ -162,8 +162,8 @@ export default Vue.extend({
       this.application = newApp;
       this.getApplicationInsights();
       this.getApplicationTechnologies();
-    }
-  }
+    },
+  },
 });
 </script>
 

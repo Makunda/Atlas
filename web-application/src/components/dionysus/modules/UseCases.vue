@@ -283,12 +283,12 @@
 </template>
 
 <script lang="ts">
-import { UseCaseController } from "@/api/controllers/extensions/paris/UseCaseController";
-import { UseCase } from "@/api/interface/extensions/paris/UseCase";
-import Vue from "vue";
+import Vue from 'vue';
+import { UseCaseController } from '@/api/controllers/extensions/paris/UseCaseController';
+import { UseCase } from '@/api/interface/extensions/paris/UseCase';
 
 export default Vue.extend({
-  name: "UseCases",
+  name: 'UseCases',
 
   data: () => ({
     active: null,
@@ -301,23 +301,23 @@ export default Vue.extend({
 
     editedItem: {
       id: null,
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       categories: [],
       active: false,
-      selected: false
+      selected: false,
     } as UseCase,
 
     defaultItem: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       categories: [],
       active: false,
-      selected: false
+      selected: false,
     } as UseCase,
 
-    titleEditBox: "",
-    contentDeleteBox: "",
+    titleEditBox: '',
+    contentDeleteBox: '',
 
     editParentUseCaseId: -1,
     parentUseCaseId: -1,
@@ -327,7 +327,7 @@ export default Vue.extend({
     loadingDelete: false,
 
     snackbarInfo: false,
-    textSnackBar: ""
+    textSnackBar: '',
   }),
 
   methods: {
@@ -344,10 +344,10 @@ export default Vue.extend({
 
           return item;
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
             `Failed to fetch the children for use case with id : ${item.id}`,
-            err
+            err,
           );
           return item;
         });
@@ -364,8 +364,8 @@ export default Vue.extend({
             }
           }
         })
-        .catch(err => {
-          console.error("Failed to retrieve the root use cases", err);
+        .catch((err) => {
+          console.error('Failed to retrieve the root use cases', err);
         });
     },
 
@@ -374,10 +374,10 @@ export default Vue.extend({
     },
 
     createItem() {
-      this.titleEditBox = "Create new Use case";
+      this.titleEditBox = 'Create new Use case';
       this.editedIndex = -1;
       this.parentUseCaseId = -1;
-      this.editedItem = Object.assign({}, this.defaultItem);
+      this.editedItem = { ...this.defaultItem };
       this.dialog = true;
     },
 
@@ -385,7 +385,7 @@ export default Vue.extend({
       this.titleEditBox = `Create new Use case under ${item.title}`;
       this.editedIndex = -1;
       this.parentUseCaseId = item.parentId || -1;
-      this.editedItem = Object.assign({}, this.defaultItem);
+      this.editedItem = { ...this.defaultItem };
       this.dialog = true;
     },
 
@@ -394,14 +394,14 @@ export default Vue.extend({
       this.editedIndex = this.items.indexOf(item);
       this.parentUseCaseId = -1;
       this.editParentUseCaseId = item.parentId || -1;
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = { ...item };
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.contentDeleteBox = `You're about to delete the use case with name <strong>${item.title}</strong>. Are you sure that you want to delete it ?  `;
       this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = { ...item };
       this.dialogDelete = true;
     },
 
@@ -410,14 +410,14 @@ export default Vue.extend({
       UseCaseController.deleteUseCase(this.editedItem)
         .then((res: boolean) => {
           if (res) {
-            this.textSnackBar = "Successfully deleted the use case.";
+            this.textSnackBar = 'Successfully deleted the use case.';
           } else {
-            this.textSnackBar = "Failed to delete the use case.";
+            this.textSnackBar = 'Failed to delete the use case.';
           }
           this.snackbarInfo = true;
           this.refresh();
         })
-        .catch(err => {
+        .catch((err) => {
           this.textSnackBar = `Failed to deleted the use case. Error: ${err}`;
           this.snackbarInfo = true;
         })
@@ -431,7 +431,7 @@ export default Vue.extend({
       this.dialog = false;
       this.parentUseCaseId = -1;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
       });
     },
@@ -439,7 +439,7 @@ export default Vue.extend({
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
       });
     },
@@ -448,39 +448,39 @@ export default Vue.extend({
       if (this.editedItem.id && this.editedItem.id > 0) {
         UseCaseController.editUseCase(this.editedItem, this.editParentUseCaseId)
           .then((res: UseCase) => {
-            this.textSnackBar = "Successfully updated the use case.";
+            this.textSnackBar = 'Successfully updated the use case.';
             this.snackbarInfo = true;
             this.refresh();
           })
-          .catch(err => {
+          .catch((err) => {
             this.textSnackBar = `Failed to update the use case. Error: ${err}`;
             this.snackbarInfo = true;
           });
       } else if (this.parentUseCaseId != -1 && this.editedIndex <= -1) {
         UseCaseController.addUseCaseWithParent(
           this.editedItem,
-          this.parentUseCaseId
+          this.parentUseCaseId,
         )
           .then((res: UseCase) => {
-            this.textSnackBar = "Successfully attached a new use case.";
+            this.textSnackBar = 'Successfully attached a new use case.';
             this.snackbarInfo = true;
             this.refresh();
           })
-          .catch(err => {
+          .catch((err) => {
             this.textSnackBar = `Failed to attach the new use case. Error: ${err}`;
             this.snackbarInfo = true;
           });
       } else {
         UseCaseController.addUseCaseWithParent(
           this.editedItem,
-          this.editParentUseCaseId
+          this.editParentUseCaseId,
         )
           .then((res: UseCase) => {
-            this.textSnackBar = "Successfully added the use case.";
+            this.textSnackBar = 'Successfully added the use case.';
             this.snackbarInfo = true;
             this.refresh();
           })
-          .catch(err => {
+          .catch((err) => {
             this.textSnackBar = `Failed to add the use case. Error: ${err}`;
             this.snackbarInfo = true;
           });
@@ -490,11 +490,11 @@ export default Vue.extend({
 
     refresh() {
       this.getRootUseCase();
-    }
+    },
   },
 
   mounted() {
     this.refresh();
-  }
+  },
 });
 </script>

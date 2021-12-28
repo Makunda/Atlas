@@ -1,6 +1,6 @@
-import { Cookie } from "@/enum/Cookie";
-import axios, { AxiosResponse } from "axios";
-import Vue from "vue";
+import axios, { AxiosResponse } from 'axios';
+import Vue from 'vue';
+import { Cookie } from '@/enum/Cookie';
 
 /**
  * @deprecated Please see axios\ProxyAxios
@@ -19,8 +19,7 @@ export default class ProxyAxios {
     if (!requestConfiguration.headers) requestConfiguration.headers = {};
 
     if (Vue.$cookies.isKey(Cookie.AUTH_COOKIE)) {
-      requestConfiguration.headers["Authorization"] =
-        "Bearer " + String(Vue.$cookies.get(Cookie.AUTH_COOKIE));
+      requestConfiguration.headers.Authorization = `Bearer ${String(Vue.$cookies.get(Cookie.AUTH_COOKIE))}`;
     }
 
     try {
@@ -28,9 +27,8 @@ export default class ProxyAxios {
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -48,17 +46,15 @@ export default class ProxyAxios {
     if (!requestConfiguration.headers) requestConfiguration.headers = {};
 
     if (Vue.$cookies.isKey(Cookie.AUTH_COOKIE)) {
-      requestConfiguration.headers["Authorization"] =
-        "Bearer " + String(Vue.$cookies.get(Cookie.AUTH_COOKIE));
+      requestConfiguration.headers.Authorization = `Bearer ${String(Vue.$cookies.get(Cookie.AUTH_COOKIE))}`;
     }
     try {
       return axios.post(this.getURL(url), data, requestConfiguration);
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -74,8 +70,7 @@ export default class ProxyAxios {
     if (!requestConfiguration.headers) requestConfiguration.headers = {};
 
     if (Vue.$cookies.isKey(Cookie.AUTH_COOKIE)) {
-      requestConfiguration.headers["Authorization"] =
-        "Bearer " + String(Vue.$cookies.get(Cookie.AUTH_COOKIE));
+      requestConfiguration.headers.Authorization = `Bearer ${String(Vue.$cookies.get(Cookie.AUTH_COOKIE))}`;
     }
 
     try {
@@ -83,9 +78,8 @@ export default class ProxyAxios {
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -102,8 +96,7 @@ export default class ProxyAxios {
     if (!requestConfiguration.headers) requestConfiguration.headers = {};
 
     if (Vue.$cookies.isKey(Cookie.AUTH_COOKIE)) {
-      requestConfiguration.headers["Authorization"] =
-        "Bearer " + String(Vue.$cookies.get(Cookie.AUTH_COOKIE));
+      requestConfiguration.headers.Authorization = `Bearer ${String(Vue.$cookies.get(Cookie.AUTH_COOKIE))}`;
     }
 
     try {
@@ -111,9 +104,8 @@ export default class ProxyAxios {
     } catch (error) {
       if (error.response) {
         return error.response as AxiosResponse;
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -122,6 +114,6 @@ export default class ProxyAxios {
    * @private
    */
   private static getURL(url: string): string {
-    return new URL(url, "http://localhost:3000").href;
+    return new URL(url, 'http://localhost:3000').href;
   }
 }

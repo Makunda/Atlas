@@ -1,6 +1,6 @@
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export default class AgentController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -10,8 +10,7 @@ export default class AgentController {
    * @param agent Name of the agent
    */
   public static async getStatus(agent: string): Promise<boolean> {
-    const url =
-      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/status`;
+    const url = `${AgentController.API_BASE_URL}/api/atlas/agents/${agent}/status`;
     try {
       // Build the URl ( optional type internalType)
       const res = await ProxyAxios.get(url);
@@ -28,28 +27,26 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to change the status of agent ${agent}.`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async getPrefix(agent: string): Promise<string> {
-    const url =
-      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/prefix`;
+    const url = `${AgentController.API_BASE_URL}/api/atlas/agents/${agent}/prefix`;
     try {
       // Build the URl ( optional type internalType)
       const res = await ProxyAxios.get(url);
       if (res.status == 200 || res.status == 304) {
         const apiResponse: ApiResponse = res.data;
         return String(apiResponse.data);
-      } else {
-        throw new Error(`Status (${res.status})`);
       }
+      throw new Error(`Status (${res.status})`);
     } catch (error) {
       console.error(
         `Something went wrong trying to get the prefix of agent ${agent}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -60,8 +57,7 @@ export default class AgentController {
    * @param agent Name of the agent
    */
   public static async stopAgent(agent: string) {
-    const url =
-      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/stop`;
+    const url = `${AgentController.API_BASE_URL}/api/atlas/agents/${agent}/stop`;
     try {
       // Build the URl ( optional type internalType)
       const res = await ProxyAxios.get(url);
@@ -78,7 +74,7 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to change the status of agent ${agent}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -89,8 +85,7 @@ export default class AgentController {
    * @param agent Name of the agent
    */
   public static async startAgent(agent: string) {
-    const url =
-      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/start`;
+    const url = `${AgentController.API_BASE_URL}/api/atlas/agents/${agent}/start`;
     try {
       // Build the URl ( optional type internalType)
       const res = await ProxyAxios.get(url);
@@ -107,15 +102,14 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to change the status of agent ${agent}.`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async forceAgent(agent: string) {
-    const url =
-      AgentController.API_BASE_URL + `/api/atlas/agents/${agent}/force`;
+    const url = `${AgentController.API_BASE_URL}/api/atlas/agents/${agent}/force`;
     try {
       // Build the URl ( optional type internalType)
       const res = await ProxyAxios.get(url);
@@ -132,7 +126,7 @@ export default class AgentController {
     } catch (error) {
       console.error(
         `Something went wrong trying to force the action of the agent ${agent}.`,
-        error
+        error,
       );
       throw error;
     }

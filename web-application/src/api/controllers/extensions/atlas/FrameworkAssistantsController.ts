@@ -1,15 +1,14 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { FrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import { FrameworkAssistant } from '@/api/interface/atlas/FrameworkAssistant.interface';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class FrameworkAssistants {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   public static async getPossibleActions(): Promise<string[]> {
-    const url =
-      FrameworkAssistants.API_BASE_URL +
-      "/api/assistants/frameworks/options/actions";
+    const url = `${FrameworkAssistants.API_BASE_URL
+    }/api/assistants/frameworks/options/actions`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -28,16 +27,15 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of actions .`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async getFrameworksCategories(): Promise<string[]> {
-    const url =
-      FrameworkAssistants.API_BASE_URL +
-      "/api/assistants/frameworks/options/categories";
+    const url = `${FrameworkAssistants.API_BASE_URL
+    }/api/assistants/frameworks/options/categories`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -57,7 +55,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to get the list of categories .`,
-        error
+        error,
       );
       throw error;
     }
@@ -68,8 +66,7 @@ export class FrameworkAssistants {
    * @returns List of assistant
    */
   public static async getAllAssistants(): Promise<FrameworkAssistant[]> {
-    const url =
-      FrameworkAssistants.API_BASE_URL + "/api/assistants/frameworks/all";
+    const url = `${FrameworkAssistants.API_BASE_URL}/api/assistants/frameworks/all`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -83,7 +80,7 @@ export class FrameworkAssistants {
         }
       } else {
         console.warn(
-          `Failed to get all the assistants. Status (${res.status})`
+          `Failed to get all the assistants. Status (${res.status})`,
         );
       }
 
@@ -91,7 +88,7 @@ export class FrameworkAssistants {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to all the assistants.`,
-        error
+        error,
       );
       throw error;
     }
@@ -99,51 +96,47 @@ export class FrameworkAssistants {
 
   public static async newAssistant(
     category: string,
-    actions: string[]
+    actions: string[],
   ): Promise<boolean> {
-    const url =
-      FrameworkAssistants.API_BASE_URL + "/api/assistants/frameworks/new";
+    const url = `${FrameworkAssistants.API_BASE_URL}/api/assistants/frameworks/new`;
 
     try {
-      const body = { category: category, actions: actions };
+      const body = { category, actions };
       const res = await ProxyAxios.post(url, body);
 
       if (res.status == 200) {
         return true;
-      } else {
-        console.warn(`Failed to create the assistant. Status (${res.status})`);
       }
+      console.warn(`Failed to create the assistant. Status (${res.status})`);
 
       return false;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to create the assistant.`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async removeAssistant(id: string): Promise<boolean> {
-    const url =
-      FrameworkAssistants.API_BASE_URL +
-      "/api/assistants/frameworks/remove/" +
-      id;
+    const url = `${FrameworkAssistants.API_BASE_URL
+    }/api/assistants/frameworks/remove/${
+      id}`;
 
     try {
       const res = await ProxyAxios.delete(url);
 
       if (res.status == 200) {
         return true;
-      } else {
-        console.warn(`Failed to delete the assistant. Status (${res.status})`);
       }
+      console.warn(`Failed to delete the assistant. Status (${res.status})`);
 
       return false;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete the assistant.`,
-        error
+        error,
       );
       throw error;
     }

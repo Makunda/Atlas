@@ -1,7 +1,7 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import ContainerBlocker from "@/api/interface/highlight/ContainerBlocker";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import ContainerBlocker from '@/api/interface/highlight/ContainerBlocker';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export default class ContainerBlockerController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -11,20 +11,19 @@ export default class ContainerBlockerController {
    */
   public static async uploadFile(
     file: any,
-    application: string
+    application: string,
   ): Promise<ContainerBlocker[]> {
-    const url =
-      ContainerBlockerController.API_BASE_URL +
-      `/api/highlight/recommendations/container/file/upload/${application}`;
+    const url = `${ContainerBlockerController.API_BASE_URL
+    }/api/highlight/recommendations/container/file/upload/${application}`;
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("application", application);
+      formData.append('file', file);
+      formData.append('application', application);
       const res = await ProxyAxios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       if (res.status == 200) {
@@ -34,13 +33,13 @@ export default class ContainerBlockerController {
         }
       } else {
         throw new Error(
-          `Failed to send the list of container recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to send the list of container recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -51,16 +50,15 @@ export default class ContainerBlockerController {
    */
   public static async applyBlockers(
     blockers: ContainerBlocker[],
-    type: string
+    type: string,
   ): Promise<[ContainerBlocker[], ContainerBlocker[]]> {
-    const url =
-      ContainerBlockerController.API_BASE_URL +
-      "/api/highlight/recommendations/container/apply";
+    const url = `${ContainerBlockerController.API_BASE_URL
+    }/api/highlight/recommendations/container/apply`;
 
     try {
       const body = {
-        blockers: blockers,
-        type: type
+        blockers,
+        type,
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -80,15 +78,14 @@ export default class ContainerBlockerController {
         }
 
         return [applied, notApplied];
-      } else {
-        throw new Error(
-          `Failed to apply the list of container recommendation. Status (${res.status}). Message: ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to apply the list of container recommendation. Status (${res.status}). Message: ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to apply the list of container recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -98,15 +95,14 @@ export default class ContainerBlockerController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: ContainerBlocker
+    blocker: ContainerBlocker,
   ): Promise<ContainerBlocker[]> {
-    const url =
-      ContainerBlockerController.API_BASE_URL +
-      "/api/highlight/recommendations/container/test";
+    const url = `${ContainerBlockerController.API_BASE_URL
+    }/api/highlight/recommendations/container/test`;
 
     try {
       const body = {
-        blocker: blocker
+        blocker,
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -118,13 +114,13 @@ export default class ContainerBlockerController {
         }
       } else {
         throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }

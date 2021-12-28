@@ -27,37 +27,37 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import StatisticInterface from "@/api/interface/statistics/Statistic.interface";
-import { StatisticsController } from "@/api/controllers/statistics/StatisticsController";
-import LinearStatisticTile from "@/components/screens/statistics/tiles/LinearStatisticTile.vue";
+import Vue from 'vue';
+import StatisticInterface from '@/api/interface/statistics/Statistic.interface';
+import { StatisticsController } from '@/api/controllers/statistics/StatisticsController';
+import LinearStatisticTile from '@/components/screens/statistics/tiles/LinearStatisticTile.vue';
 
 export default Vue.extend({
-  name: "StatisticsColumn",
+  name: 'StatisticsColumn',
 
   components: {
-    LinearStatisticTile
+    LinearStatisticTile,
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     loadingStatistics: false,
     statistics: [] as StatisticInterface[],
 
     loadingCategories: false,
     categories: [] as string[],
-    category: "",
+    category: '',
 
     // Snackbar
     snackbarInfoDisplay: false,
-    snackbarInfo: ""
+    snackbarInfo: '',
   }),
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -67,22 +67,22 @@ export default Vue.extend({
 
   methods: {
     async loadStatistics() {
-      if (this.application == "") return;
+      if (this.application == '') return;
       this.loadingStatistics = true;
       try {
-        if (this.category != "") {
+        if (this.category != '') {
           this.statistics = await StatisticsController.getStatisticsList(
-            this.application
+            this.application,
           );
         } else {
           this.statistics = await StatisticsController.getStatisticsList(
             this.application,
-            this.category
+            this.category,
           );
         }
       } catch (err) {
-        console.error(`Failed to load the statistics.`, err);
-        this.snackbarInfo = `Failed to load the statistics`;
+        console.error('Failed to load the statistics.', err);
+        this.snackbarInfo = 'Failed to load the statistics';
         this.snackbarInfoDisplay = false;
       } finally {
         this.loadingStatistics = false;
@@ -94,8 +94,8 @@ export default Vue.extend({
       try {
         this.statistics = await StatisticsController.getCategories();
       } catch (err) {
-        console.error(`Failed to load the statistics categories.`, err);
-        this.snackbarInfo = `Failed to load the statistics' categories.`;
+        console.error('Failed to load the statistics categories.', err);
+        this.snackbarInfo = 'Failed to load the statistics\' categories.';
         this.snackbarInfoDisplay = false;
       } finally {
         this.loadingCategories = false;
@@ -105,15 +105,15 @@ export default Vue.extend({
     async refresh() {
       await this.getCategories();
       await this.loadStatistics();
-    }
+    },
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
       this.refresh();
-    }
-  }
+    },
+  },
 });
 </script>
 

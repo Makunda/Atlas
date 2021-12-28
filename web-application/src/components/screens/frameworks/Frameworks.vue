@@ -39,80 +39,80 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { AtlasController } from "@/api/controllers/extensions/atlas/AtlasController";
-import ArtemisConsole from "@/components/artemis/modules/ArtemisConsole.vue";
-import DetectionExplorer from "@/components/artemis/modules/DetectionExplorer.vue";
-import FrameworkReviewer from "@/components/artemis/modules/FrameworkReviewer.vue";
-import CategoriesCreator from "@/components/artemis/modules/CategoriesCreator.vue";
-import CustomsCreator from "@/components/artemis/modules/CustomsCreator.vue";
+import Vue from 'vue';
+import { AtlasController } from '@/api/controllers/extensions/atlas/AtlasController';
+import ArtemisConsole from '@/components/artemis/modules/ArtemisConsole.vue';
+import DetectionExplorer from '@/components/artemis/modules/DetectionExplorer.vue';
+import FrameworkReviewer from '@/components/artemis/modules/FrameworkReviewer.vue';
+import CategoriesCreator from '@/components/artemis/modules/CategoriesCreator.vue';
+import CustomsCreator from '@/components/artemis/modules/CustomsCreator.vue';
 
 export default Vue.extend({
-  name: "Frameworks",
+  name: 'Frameworks',
 
   components: {
     ArtemisConsole,
     DetectionExplorer,
     FrameworkReviewer,
     CustomsCreator,
-    CategoriesCreator
+    CategoriesCreator,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
     loading: true,
     groupRecord: undefined as unknown,
-    applicationName: "" as string,
+    applicationName: '' as string,
     diplayNotInstalled: false as boolean,
-    version: "",
+    version: '',
 
     // Navigation
     tab: 0,
     items: [
       {
-        view: "ArtemisConsole",
-        name: "Discover",
-        icon: "mdi-assistant"
+        view: 'ArtemisConsole',
+        name: 'Discover',
+        icon: 'mdi-assistant',
       },
       {
-        view: "FrameworkReviewer",
-        name: "Review",
-        icon: "mdi-magnify"
+        view: 'FrameworkReviewer',
+        name: 'Review',
+        icon: 'mdi-magnify',
       },
       {
-        view: "CategoriesCreator",
-        name: "Categories",
-        icon: "mdi-tag-multiple"
+        view: 'CategoriesCreator',
+        name: 'Categories',
+        icon: 'mdi-tag-multiple',
       },
       {
-        view: "CustomsCreator",
-        name: "Customs",
-        icon: "mdi-fountain-pen-tip"
+        view: 'CustomsCreator',
+        name: 'Customs',
+        icon: 'mdi-fountain-pen-tip',
       },
       {
-        view: "DetectionExplorer",
-        name: "Operations",
-        icon: "mdi-assistant"
-      }
-    ]
+        view: 'DetectionExplorer',
+        name: 'Operations',
+        icon: 'mdi-assistant',
+      },
+    ],
   }),
 
   mounted() {
     this.applicationName = this.$store.state.applicationName;
-    console.log("Checking if the Artemis extension is installed..");
+    console.log('Checking if the Artemis extension is installed..');
     AtlasController.getArtemisVersion()
       .then(async (version: string) => {
         this.version = version;
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(
           "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
-          err
+          err,
         );
         this.diplayNotInstalled = true;
       });
@@ -121,8 +121,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.applicationName = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

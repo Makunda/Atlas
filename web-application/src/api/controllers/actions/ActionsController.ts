@@ -1,8 +1,8 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
 
-import ActionInterface from "@/api/interface/actions/Action.interface.fs";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import ActionInterface from '@/api/interface/actions/Action.interface.fs';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class ActionController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -11,7 +11,7 @@ export class ActionController {
    * Get action list
    */
   public static async getActionList(): Promise<ActionInterface[]> {
-    const url = ActionController.API_BASE_URL + "/api/atlas/actions/find/all";
+    const url = `${ActionController.API_BASE_URL}/api/atlas/actions/find/all`;
     try {
       const res = await ProxyAxios.get(url);
 
@@ -23,12 +23,12 @@ export class ActionController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of Actions. Status (${res.status})`
+          `Failed to retrieve the list of Actions. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
     } catch (error) {
-      console.error(`Failed to retrieve the list of actions.`, error);
+      console.error('Failed to retrieve the list of actions.', error);
       throw error;
     }
   }
@@ -40,28 +40,27 @@ export class ActionController {
    */
   public static async executeAction(
     actionId: number,
-    application: string
+    application: string,
   ): Promise<boolean> {
-    const url = ActionController.API_BASE_URL + "/api/atlas/actions/execute";
+    const url = `${ActionController.API_BASE_URL}/api/atlas/actions/execute`;
     try {
       const body = {
         id: actionId,
-        application: application
+        application,
       };
       const res = await ProxyAxios.post(url, body, {
-        responseType: "arraybuffer"
+        responseType: 'arraybuffer',
       });
 
       if (res.status == 200) {
         return true;
-      } else {
-        console.warn(
-          `Failed to retrieve the execute the action. Status (${res.status})`
-        );
-        throw new Error(res.data.error);
       }
+      console.warn(
+        `Failed to retrieve the execute the action. Status (${res.status})`,
+      );
+      throw new Error(res.data.error);
     } catch (error) {
-      console.error(`Failed to execute the action.`, error);
+      console.error('Failed to execute the action.', error);
       throw error;
     }
   }

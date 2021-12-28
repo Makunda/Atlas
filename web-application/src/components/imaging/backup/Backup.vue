@@ -31,29 +31,29 @@
 </template>
 
 <script>
-import BackupTimeline from "./tiles/BackupTimeline";
-import Vue from "vue";
-import BackupCreationModal from "@/components/imaging/backup/modals/BackupCreationModal";
+import Vue from 'vue';
+import BackupTimeline from './tiles/BackupTimeline';
+import BackupCreationModal from '@/components/imaging/backup/modals/BackupCreationModal';
 
 export default Vue.extend({
-  name: "Backup",
+  name: 'Backup',
   components: { BackupCreationModal, BackupTimeline },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
-    application: "",
-    dialog: false
+    application: '',
+    dialog: false,
   }),
 
   methods: {
     async refresh() {
       this.dialog = false;
-    }
+    },
   },
 
   // Mounted operation
@@ -66,8 +66,8 @@ export default Vue.extend({
     getApplicationName(newApp) {
       this.application = newApp;
       this.refresh();
-    }
-  }
+    },
+  },
 });
 </script>
 

@@ -14,27 +14,27 @@
       <v-container fluid>
         <v-row style="width: 100%">
           <!--  Card in charge of the management of the displayed levels  -->
-          <v-card class="pb-8 px-auto" min-width="100%" :loading="loadingRoots">
+          <v-card :loading="loadingRoots" class="pb-8 px-auto" min-width="100%">
             <v-card-title class="charcoal white--text headline">
               <v-container fluid>
                 <v-row>
-                  <v-col md="3" class="mt-2">
+                  <v-col class="mt-2" md="3">
                     <p>Architecture viewer</p>
                   </v-col>
 
                   <v-spacer></v-spacer>
-                  <v-col md="6" class="d-flex flex-row align-content-end">
+                  <v-col class="d-flex flex-row align-content-end" md="6">
                     <v-text-field
                       v-model="searchArchitecture"
-                      label="Search an architecture by name"
+                      clear-icon="mdi-close-circle-outline"
+                      clearable
                       dark
                       flat
-                      solo-inverted
                       hide-details
-                      clearable
-                      clear-icon="mdi-close-circle-outline"
+                      label="Search an architecture by name"
+                      solo-inverted
                     ></v-text-field>
-                    <v-btn class="mx-3" icon color="green" @click="refresh()">
+                    <v-btn class="mx-3" color="green" icon @click="refresh()">
                       <v-icon>mdi-cached</v-icon>
                     </v-btn>
                   </v-col>
@@ -56,20 +56,21 @@
                   v-model="tree"
                   :active.sync="active"
                   :items="architectures"
-                  item-children="subsets"
                   :open.sync="open"
                   color="warning"
+                  item-children="subsets"
                   transition
                 >
                   <template slot="label" slot-scope="{ item }">
                     <v-container
                       style="cursor: pointer;"
                       @click="focusArchitecture(item)"
-                      ><v-row>
+                    >
+                      <v-row>
                         <p class="pt-4">{{ item.name }}</p>
                         <v-chip
-                          small
                           :class="`mt-4 ml-3 ${getColor(item)}`"
+                          small
                           text-color="white"
                         >
                           <p class="mt-4 mr-3">
@@ -79,9 +80,9 @@
                                 : "Subset"
                             }}
                           </p>
-                          <v-icon x-small color="red px-2" v-if="item.hidden"
-                            >mdi-eye-off</v-icon
-                          >
+                          <v-icon v-if="item.hidden" color="red px-2" x-small
+                            >mdi-eye-off
+                          </v-icon>
                         </v-chip>
                       </v-row>
                     </v-container>
@@ -130,10 +131,10 @@
                       <div class="text-center">
                         <v-btn
                           class="ma-2"
-                          rounded
-                          small
                           color="primary"
                           dark
+                          rounded
+                          small
                           @click="editModal = true"
                         >
                           <v-icon left>
@@ -145,10 +146,10 @@
                         <v-btn
                           v-if="selected.type == 'archimodel'"
                           class="ma-2"
-                          rounded
-                          small
                           color="primary"
                           dark
+                          rounded
+                          small
                           @click="duplicateModal = true"
                         >
                           <v-icon left>
@@ -159,12 +160,12 @@
 
                         <v-btn
                           v-if="selected.type == 'archimodel'"
+                          :loading="loadingModuleDefinition"
                           class="ma-2"
+                          color="primary"
+                          dark
                           rounded
                           small
-                          color="primary"
-                          :loading="loadingModuleDefinition"
-                          dark
                           @click="downloadModuleDefinition(selected._id)"
                         >
                           <v-icon left>
@@ -176,10 +177,10 @@
                         <v-btn
                           v-if="selected.type == 'archimodel'"
                           class="ma-2"
-                          rounded
-                          small
                           color="primary"
                           dark
+                          rounded
+                          small
                           @click="unassignedModal = true"
                         >
                           <v-icon left>
@@ -190,13 +191,13 @@
 
                         <v-btn
                           v-if="!selected.hidden"
-                          class="ma-2"
-                          rounded
-                          small
-                          color="primary"
-                          dark
                           :disabled="hidingElement"
                           :loading="hidingElement"
+                          class="ma-2"
+                          color="primary"
+                          dark
+                          rounded
+                          small
                           @click="hideElement(selected)"
                         >
                           <v-icon left>
@@ -207,13 +208,13 @@
 
                         <v-btn
                           v-if="selected.hidden"
-                          class="ma-2"
-                          rounded
-                          small
-                          color="primary"
-                          dark
                           :disabled="hidingElement"
                           :loading="hidingElement"
+                          class="ma-2"
+                          color="primary"
+                          dark
+                          rounded
+                          small
                           @click="unhideElement(selected)"
                         >
                           <v-icon left>
@@ -227,13 +228,13 @@
                             selected.hidden &&
                               getSelectedName(selected) == 'Architecture'
                           "
-                          class="ma-2"
-                          rounded
-                          small
-                          color="primary"
-                          dark
                           :disabled="hidingElement"
                           :loading="hidingElement"
+                          class="ma-2"
+                          color="primary"
+                          dark
+                          rounded
+                          small
                           @click="displayCompleteArchiModel(selected)"
                         >
                           <v-icon left>
@@ -244,10 +245,10 @@
                         </v-btn>
 
                         <v-btn
-                          rounded
-                          small
                           class="ma-2"
                           color="warning"
+                          rounded
+                          small
                           @click="deleteModal = true"
                         >
                           <v-icon left>
@@ -305,15 +306,15 @@
                   </v-col>
                   <v-col cols="5">
                     <v-text-field
-                      class="pt-0"
-                      label="Architecture Name"
                       v-model="taxonomyArchitecture"
                       :disabled="taxonomyArchitectureLoading"
+                      class="pt-0"
+                      label="Architecture Name"
                     ></v-text-field>
-                    <v-row class="mx-1" v-if="taxonomyArchitectureError !== ''">
+                    <v-row v-if="taxonomyArchitectureError !== ''" class="mx-1">
                       <p class="red--text">{{ taxonomyArchitectureError }}</p>
                     </v-row>
-                    <v-row class="mx-1" v-if="taxonomyArchitectureError !== ''">
+                    <v-row v-if="taxonomyArchitectureError !== ''" class="mx-1">
                       <p class="green--text">
                         {{ taxonomyArchitectureSuccess }}
                       </p>
@@ -321,17 +322,17 @@
                   </v-col>
                   <v-col cols="3">
                     <v-btn
-                      round
+                      :loading="taxonomyArchitectureLoading"
                       color="primary"
                       dark
+                      round
                       @click="replicateTaxonomy"
-                      :loading="taxonomyArchitectureLoading"
-                      >Replicate Architecture</v-btn
-                    >
+                      >Replicate Architecture
+                    </v-btn>
                   </v-col>
                 </v-row>
-                <v-row> </v-row>
-                <v-row> </v-row>
+                <v-row></v-row>
+                <v-row></v-row>
               </v-container>
             </v-card-text>
           </v-card>
@@ -342,58 +343,58 @@
     <!--  Merge modal  -->
     <DeleteArchitectureModal
       v-bind:application="application"
-      v-bind:element="selected"
       v-bind:dialog="deleteModal"
+      v-bind:element="selected"
       @close="deleteModal = false"
     ></DeleteArchitectureModal>
 
     <!--  Modify modal  -->
     <ModifyArchitectureModal
       v-bind:application="application"
-      v-bind:element="selected"
       v-bind:dialog="editModal"
+      v-bind:element="selected"
       @close="editModal = false"
     ></ModifyArchitectureModal>
 
     <!--  Dulicate modal  -->
     <DuplicateArchitectureModal
       v-bind:application="application"
-      v-bind:element="selected"
       v-bind:dialog="duplicateModal"
+      v-bind:element="selected"
       @close="duplicateModal = false"
     ></DuplicateArchitectureModal>
 
     <!--  Dulicate modal  -->
     <CreateUnassignedModal
       v-bind:application="application"
-      v-bind:element="selected"
       v-bind:dialog="unassignedModal"
+      v-bind:element="selected"
       @close="unassignedModal = false"
     ></CreateUnassignedModal>
   </v-card>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ArchitectureController from "@/api/controllers/imaging/ArchitectureController";
-import Archimodel from "@/api/interface/imaging/ArchiModel";
-import DeleteArchitectureModal from "@/components/imaging/tiles/architectures/DeleteArchitectureModal.vue";
-import ModifyArchitectureModal from "@/components/imaging/tiles/architectures/ModifyArchitectureModal.vue";
-import DuplicateArchitectureModal from "@/components/imaging/tiles/architectures/DuplicateArchitectureModal.vue";
-import CreateUnassignedModal from "@/components/imaging/tiles/architectures/CreateUnassignedModal.vue";
+import Vue from 'vue';
+import ArchitectureController from '@/api/controllers/imaging/ArchitectureController';
+import Archimodel from '@/api/interface/imaging/ArchiModel';
+import DeleteArchitectureModal from '@/components/imaging/architectures/tiles/DeleteArchitectureModal.vue';
+import ModifyArchitectureModal from '@/components/imaging/architectures/tiles/ModifyArchitectureModal.vue';
+import DuplicateArchitectureModal from '@/components/imaging/architectures/tiles/DuplicateArchitectureModal.vue';
+import CreateUnassignedModal from '@/components/imaging/architectures/tiles/CreateUnassignedModal.vue';
 
 export default Vue.extend({
-  name: "ArchitectureExplorer",
+  name: 'ArchitectureExplorer',
 
   components: {
     DeleteArchitectureModal,
     ModifyArchitectureModal,
     DuplicateArchitectureModal,
-    CreateUnassignedModal
+    CreateUnassignedModal,
   },
 
   data: () => ({
-    application: "",
+    application: '',
     loadedArchitectures: [] as Archimodel[],
 
     tree: [] as Archimodel[],
@@ -409,21 +410,21 @@ export default Vue.extend({
     duplicateModal: false,
     unassignedModal: false,
 
-    searchArchitecture: "",
+    searchArchitecture: '',
 
     // Snackbar
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
     // Power Actions
-    taxonomyArchitecture: "",
+    taxonomyArchitecture: '',
     taxonomyArchitectureLoading: false,
-    taxonomyArchitectureError: "",
-    taxonomyArchitectureSuccess: "",
+    taxonomyArchitectureError: '',
+    taxonomyArchitectureSuccess: '',
 
     // Edit Dialog
     colorPicker: {},
-    editionType: "",
+    editionType: '',
     dialog: false,
     parentItem: null as Archimodel,
     editItem: {} as Archimodel,
@@ -432,13 +433,13 @@ export default Vue.extend({
     hidingElement: false,
 
     // Module definition
-    loadingModuleDefinition: false
+    loadingModuleDefinition: false,
   }),
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -448,13 +449,13 @@ export default Vue.extend({
 
   methods: {
     getColor(item) {
-      if (item.hidden) return "black";
-      if (item.type == "archimodel") return "blue";
-      else return "green";
+      if (item.hidden) return 'black';
+      if (item.type == 'archimodel') return 'blue';
+      return 'green';
     },
 
     getSelectedName(selected) {
-      return selected.type == "archimodel" ? "Architecture" : "Subset";
+      return selected.type == 'archimodel' ? 'Architecture' : 'Subset';
     },
 
     /**
@@ -462,9 +463,9 @@ export default Vue.extend({
      */
     async replicateTaxonomy() {
       try {
-        this.taxonomyArchitectureError = "";
-        if (this.taxonomyArchitecture == "") {
-          this.taxonomyArchitectureError = "Name cannot be empty";
+        this.taxonomyArchitectureError = '';
+        if (this.taxonomyArchitecture == '') {
+          this.taxonomyArchitectureError = 'Name cannot be empty';
           return;
         } // Ignore if no name is provided
 
@@ -472,7 +473,7 @@ export default Vue.extend({
 
         await ArchitectureController.duplicateTaxonomy(
           this.taxonomyArchitecture,
-          this.application
+          this.application,
         );
 
         await this.refresh();
@@ -480,7 +481,7 @@ export default Vue.extend({
         this.taxonomyArchitectureSuccess = `Duplication of the Levvel 5 is complete. A new Architecture with name '${this.taxonomyArchitecture} should appear in few seconds. 
         This operation being complex it can take some time on large applications.'`;
 
-        this.taxonomyArchitecture = "";
+        this.taxonomyArchitecture = '';
       } catch (err) {
         this.taxonomyArchitectureError = err;
       } finally {
@@ -495,17 +496,17 @@ export default Vue.extend({
       try {
         this.loadingRoots = true;
         this.loadedArchitectures = await ArchitectureController.getArchitectures(
-          this.application
+          this.application,
         );
 
         this.architectures = this.loadedArchitectures;
       } catch (err) {
         console.error(
-          `Failed to retrieve architecture in the application.`,
-          err
+          'Failed to retrieve architecture in the application.',
+          err,
         );
         this.displaySnackBar(
-          `Failed to retrieve architecture in the application. ${err}`
+          `Failed to retrieve architecture in the application. ${err}`,
         );
       } finally {
         this.loadingRoots = false;
@@ -516,8 +517,8 @@ export default Vue.extend({
      * Edit an Architecture
      */
     async editLevel(item: Archimodel) {
-      this.editionType = "Edit ";
-      this.editItem = Object.assign({}, item);
+      this.editionType = 'Edit ';
+      this.editItem = { ...item };
 
       this.dialog = true;
     },
@@ -535,12 +536,12 @@ export default Vue.extend({
 
         await ArchitectureController.hideArchitectureElement(
           element._id,
-          element.type
+          element.type,
         );
-        this.displaySnackBar(`Element is now hidden`);
+        this.displaySnackBar('Element is now hidden');
         this.refresh();
       } catch (err) {
-        console.error("Failed to hide the Architecture Element", err);
+        console.error('Failed to hide the Architecture Element', err);
         this.displaySnackBar(`Failed to hide the Architecture Element. ${err}`);
       } finally {
         this.hidingElement = false;
@@ -555,14 +556,14 @@ export default Vue.extend({
         this.hidingElement = true;
 
         await ArchitectureController.displayCompleteArchimodelElement(
-          element._id
+          element._id,
         );
-        this.displaySnackBar(`Architecture is now displayed`);
+        this.displaySnackBar('Architecture is now displayed');
         this.refresh();
       } catch (err) {
-        console.error("Failed to display the complete Architecture", err);
+        console.error('Failed to display the complete Architecture', err);
         this.displaySnackBar(
-          `Failed to display the complete Architecture. ${err}`
+          `Failed to display the complete Architecture. ${err}`,
         );
       } finally {
         this.hidingElement = false;
@@ -576,13 +577,13 @@ export default Vue.extend({
     async downloadModuleDefinition(architectureId: number) {
       try {
         this.loadingModuleDefinition = true;
-        this.displaySnackBar("Generating the module definition..");
+        this.displaySnackBar('Generating the module definition..');
         await ArchitectureController.generateModulesFromArchitecture(
           this.application,
-          architectureId
+          architectureId,
         );
       } catch (err) {
-        console.error("Failed to generate the module definition.", err);
+        console.error('Failed to generate the module definition.', err);
         this.displaySnackBar(`Module generation failed. Error: ${err}`);
       } finally {
         this.loadingModuleDefinition = false;
@@ -598,12 +599,12 @@ export default Vue.extend({
 
         await ArchitectureController.displayArchitectureElement(
           element._id,
-          element.type
+          element.type,
         );
-        this.displaySnackBar("Element is now displayed.");
+        this.displaySnackBar('Element is now displayed.');
         this.refresh();
       } catch (err) {
-        console.error("Failed to unhide the Element", err);
+        console.error('Failed to unhide the Element', err);
         this.displaySnackBar(`Failed to display the Element. ${err}`);
       } finally {
         this.hidingElement = false;
@@ -622,7 +623,7 @@ export default Vue.extend({
     async refresh() {
       this.selected = null;
       await this.getArchitectures();
-    }
+    },
   },
 
   watch: {
@@ -633,33 +634,32 @@ export default Vue.extend({
       this.refresh();
     },
 
-    selectedLevel: async function(newValue: string) {
+    async selectedLevel(newValue: string) {
       await this.getArchitectures();
     },
 
-    editModal: async function(newValue: string) {
+    async editModal(newValue: string) {
       await this.getArchitectures();
     },
 
-    mergeDialog: async function(newValue: string) {
+    async mergeDialog(newValue: string) {
       await this.getArchitectures();
     },
 
-    deleteModal: async function(newValue: string) {
+    async deleteModal(newValue: string) {
       await this.getArchitectures();
     },
 
-    searchArchitecture: async function(newValue: string) {
+    async searchArchitecture(newValue: string) {
       if (newValue && newValue.length > 0) {
         this.architectures = this.loadedArchitectures.filter(
-          (x: Archimodel) =>
-            x.name.toLowerCase().indexOf(newValue.toLowerCase()) >= 0
+          (x: Archimodel) => x.name.toLowerCase().indexOf(newValue.toLowerCase()) >= 0,
         );
       } else {
         // No search string
         this.architectures = this.loadedArchitectures;
       }
-    }
-  }
+    },
+  },
 });
 </script>

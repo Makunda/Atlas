@@ -1,7 +1,7 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { ReportInterface } from "@/api/interface/reports/report.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import { ReportInterface } from '@/api/interface/reports/report.interface';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class ReportController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -10,7 +10,7 @@ export class ReportController {
    * Get report list
    */
   public static async getReportList(): Promise<ReportInterface[]> {
-    const url = ReportController.API_BASE_URL + "/api/atlas/reports/find/all";
+    const url = `${ReportController.API_BASE_URL}/api/atlas/reports/find/all`;
     try {
       const res = await ProxyAxios.get(url);
 
@@ -22,12 +22,12 @@ export class ReportController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of Reports. Status (${res.status})`
+          `Failed to retrieve the list of Reports. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
     } catch (error) {
-      console.error(`Failed to retrieve the list of report.`, error);
+      console.error('Failed to retrieve the list of report.', error);
       throw error;
     }
   }
@@ -36,7 +36,7 @@ export class ReportController {
     if (window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveOrOpenBlob(blob, filename);
     } else {
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       document.body.appendChild(a);
       const url = window.URL.createObjectURL(blob);
       a.href = url;
@@ -59,35 +59,35 @@ export class ReportController {
     reportId: number,
     nickName: string,
     application: string,
-    params: any
+    params: any,
   ): Promise<void> {
-    const url = ReportController.API_BASE_URL + "/api/atlas/reports/generate";
+    const url = `${ReportController.API_BASE_URL}/api/atlas/reports/generate`;
     try {
       const body = {
         id: reportId,
-        application: application,
-        parameters: params
+        application,
+        parameters: params,
       };
       const res = await ProxyAxios.post(url, body, {
-        responseType: "arraybuffer"
+        responseType: 'arraybuffer',
       });
 
       if (res.status == 200) {
-        const a = document.createElement("a");
+        const a = document.createElement('a');
 
         const file = new Blob([res.data], {
           type:
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,',
         });
         this.saveFile(file, `${nickName}_in_${application}.xlsx`);
       } else {
         console.warn(
-          `Failed to retrieve the generate the report. Status (${res.status})`
+          `Failed to retrieve the generate the report. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
     } catch (error) {
-      console.error(`Failed to retrieve the generate the report.`, error);
+      console.error('Failed to retrieve the generate the report.', error);
       throw error;
     }
   }

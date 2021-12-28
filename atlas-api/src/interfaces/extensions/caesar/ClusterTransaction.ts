@@ -1,7 +1,7 @@
 import { Node } from "neo4j-driver";
 
 /**
- * Transaction cluster
+ * TransactionUtils cluster
  */
 export default interface ClusterTransaction {
   id: string;

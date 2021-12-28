@@ -75,23 +75,23 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import PercentageTile from "@/components/screens/recommendation/tiles/PercentageTile.vue";
-import ActionTileViewer from "@/components/screens/recommendation/components/ActionTileViewer.vue";
-import { DemeterStatisticPercentageResult } from "@/api/interface/extensions/demeter/DemeterStatistic";
+import Vue from 'vue';
+import PercentageTile from '@/components/screens/recommendation/tiles/PercentageTile.vue';
+import ActionTileViewer from '@/components/screens/recommendation/components/ActionTileViewer.vue';
+import { DemeterStatisticPercentageResult } from '@/api/interface/extensions/demeter/DemeterStatistic';
 
 export default Vue.extend({
-  name: "ConfigurationStep",
+  name: 'ConfigurationStep',
 
   components: {
     PercentageTile,
-    ActionTileViewer
+    ActionTileViewer,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -100,16 +100,16 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
     statistics: [] as DemeterStatisticPercentageResult[],
-    loadingStatistics: false
+    loadingStatistics: false,
   }),
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

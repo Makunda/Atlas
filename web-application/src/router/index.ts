@@ -19,6 +19,14 @@ import CloudRecommendations from "@/components/screens/cloud/recommendations/Clo
 import Server from "@/views/Server.vue";
 import NotFound from "@/views/NotFound.vue";
 import store from "@/store";
+import LevelExplorer from "@/components/imaging/levels/LevelExplorer.vue";
+import ModuleExplorer from "@/components/imaging/modules/ModulesExplorer.vue";
+import ArchitectureExplorer from "@/components/imaging/architectures/ArchitectureExplorer.vue";
+import TransactionExplorer from "@/components/imaging/TransactionExplorer.vue";
+import DataCallGraphExplorer from "@/components/imaging/DataCallGraphExplorer.vue";
+import Backup from "@/components/imaging/backup/Backup.vue";
+import TransactionStudio from "@/components/imaging/transaction/TransactionStudio.vue";
+import TransactionCommunities from "@/components/screens/communities/TransactionCommunities.vue";
 
 Vue.use(VueRouter);
 
@@ -63,7 +71,37 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: "tuning",
-        component: ImagingTuning
+        component: ImagingTuning,
+        children: [
+          {
+            path: "level",
+            component: LevelExplorer
+          },
+          {
+            path: "module",
+            component: ModuleExplorer
+          },
+          {
+            path: "architecture",
+            component: ArchitectureExplorer
+          },
+          {
+            path: "transaction",
+            component: TransactionExplorer
+          },
+          {
+            path: "transaction/byId/:id",
+            component: TransactionStudio
+          },
+          {
+            path: "dataCallGraph",
+            component: DataCallGraphExplorer
+          },
+          {
+            path: "backup",
+            component: Backup
+          }
+        ]
       },
       {
         path: "highlight",
@@ -76,6 +114,10 @@ const routes: Array<RouteConfig> = [
       {
         path: "cloudreco",
         component: CloudRecommendations
+      },
+      {
+        path: "communities",
+        component: TransactionCommunities
       }
     ]
   },
@@ -128,8 +170,7 @@ const routes: Array<RouteConfig> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
   {
     path: "*",
@@ -139,7 +180,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  routes: routes,
+  routes,
   mode: "history"
 });
 

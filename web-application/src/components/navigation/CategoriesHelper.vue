@@ -215,15 +215,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "CategoriesHelper",
+  name: 'CategoriesHelper',
   methods: {
     goTo(section: string) {
-      this.$router.replace("/atlas/" + section);
-    }
-  }
+      this.$router.replace(`/atlas/${section}`);
+    },
+  },
 });
 </script>
 

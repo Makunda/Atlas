@@ -30,30 +30,30 @@
 </template>
 
 <script>
-import { Vue } from "vue-property-decorator";
-import AgentController from "@/api/controllers/agents/AgentController";
+import { Vue } from 'vue-property-decorator';
+import AgentController from '@/api/controllers/agents/AgentController';
 
 export default Vue.extend({
-  name: "TinyAgent",
+  name: 'TinyAgent',
 
   /**
    * Accepted values for the prop 'type' : { level, module, architecture, framework }
    */
   props: {
     type: String,
-    color: String
+    color: String,
   },
 
   computed: {
     getName() {
-      if (this.type == null) return "Undefined";
+      if (this.type == null) return 'Undefined';
       return this.type.charAt(0).toUpperCase() + this.type.slice(1);
-    }
+    },
   },
 
   data: () => ({
     daemonLevelState: false,
-    loadingToggle: false
+    loadingToggle: false,
   }),
 
   mounted() {
@@ -69,10 +69,10 @@ export default Vue.extend({
         this.prefix = await AgentController.getPrefix(this.type);
       } catch (err) {
         console.error(
-          "Failed to retrieve the prefix of the Framework agent",
-          err
+          'Failed to retrieve the prefix of the Framework agent',
+          err,
         );
-        this.prefix = "<Failed to retrieve the tag>";
+        this.prefix = '<Failed to retrieve the tag>';
       }
     },
 
@@ -84,7 +84,7 @@ export default Vue.extend({
       try {
         this.daemonLevelState = await AgentController.getStatus(this.type);
       } catch (err) {
-        console.error("Failed to retrieve the status of the level agent", err);
+        console.error('Failed to retrieve the status of the level agent', err);
       }
     },
 
@@ -102,13 +102,13 @@ export default Vue.extend({
       } catch (err) {
         console.error(
           `Failed to change the status of the agent ${this.type}.`,
-          err
+          err,
         );
       } finally {
         this.loadingToggle = false;
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

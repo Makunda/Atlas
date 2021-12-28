@@ -223,7 +223,7 @@ class DataCallGraphService {
 
   /**
    * Get a batch of masked DataGraph
-   * @param application Application
+   * @param application Name of the application
    * @param start Start index
    * @param end End index
    * @param sort Property to sort on
@@ -262,7 +262,7 @@ class DataCallGraphService {
       return listDataCallGraph;
     } catch (err) {
       logger.error(`Failed to get the list of DataGraph for application ${application}.`, err);
-      throw new HttpException(500, "Internal error");
+      throw new Error("Failed to get the list of DataGraph");
     }
   }
 

@@ -86,56 +86,56 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { AipConfiguration } from "@/api/interface/aip/Aipconfiguration";
-import { AipConfigurationController } from "@/api/controllers/aip/AipConfigurationController";
+import Vue from 'vue';
+import { AipConfiguration } from '@/api/interface/aip/Aipconfiguration';
+import { AipConfigurationController } from '@/api/controllers/aip/AipConfigurationController';
 
 export default Vue.extend({
-  name: "AddAIPServerModal",
+  name: 'AddAIPServerModal',
 
   props: {
-    dialog: Boolean
+    dialog: Boolean,
   },
 
   methods: {
     closeModal() {
       this.dialog = false;
-      this.$emit("close", false);
+      this.$emit('close', false);
     },
 
     async save() {
       // implement
       this.loading = true;
-      this.errors = "";
+      this.errors = '';
 
       try {
         await AipConfigurationController.createConfigurationNode(
-          this.configuration
+          this.configuration,
         );
       } catch (err) {
-        console.error("Failed to create configuration.", err);
-        this.errors = "Failed to create configuration. Error: " + err;
+        console.error('Failed to create configuration.', err);
+        this.errors = `Failed to create configuration. Error: ${err}`;
       } finally {
         this.loading = false;
       }
 
       this.closeModal();
-    }
+    },
   },
 
   data: () => ({
-    errors: "",
+    errors: '',
     loading: false,
     // implement
     configuration: {
-      name: "Server Name",
-      url: "http://localhost",
+      name: 'Server Name',
+      url: 'http://localhost',
       port: 2284,
-      database: "postgres",
-      user: "operator",
-      password: "CastAIP",
-      schemas: []
-    } as AipConfiguration
-  })
+      database: 'postgres',
+      user: 'operator',
+      password: 'CastAIP',
+      schemas: [],
+    } as AipConfiguration,
+  }),
 });
 </script>

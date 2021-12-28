@@ -32,11 +32,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
-export default Vue.component("TagTile", {
-  props: ["title"],
+export default Vue.component('TagTile', {
+  props: ['title'],
 
-  data: () => ({})
+  data: () => ({}),
 });
 </script>

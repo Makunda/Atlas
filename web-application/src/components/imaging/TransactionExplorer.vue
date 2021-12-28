@@ -1,10 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      <p class="text-h3 text--primary pb-3">
-        <span class="font-weight-light pr-1">Review the transactions in</span>
-        {{ application }}
-      </p>
+      <h3 class="py-3 pb-5 text-h4">Transaction Management</h3>
       <v-spacer></v-spacer>
       <v-btn class="mr-5" color="green" icon @click="refresh">
         <v-icon>mdi-cached</v-icon>
@@ -362,6 +359,10 @@
                     mdi-grease-pencil
                   </v-icon>
 
+                  <v-icon class="mr-2" small @click="openStudio(item._id)">
+                    mdi-monitor-edit
+                  </v-icon>
+
                   <v-menu
                     ref="menu"
                     :close-on-click="false"
@@ -482,6 +483,7 @@
                                 >
                                   mdi-eye
                                 </v-icon>
+
                                 <br
                               /></span>
                             </p>
@@ -592,22 +594,22 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import TransactionController from "@/api/controllers/imaging/TransactionController";
-import Transaction from "@/api/interface/imaging/Transaction.interface";
-import TransactionsInsights from "@/api/interface/imaging/TransactionsInsights.interface";
-import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
-import TransactionStatistics from "@/api/interface/imaging/TransactionStatistics";
-import Logger from "@/utils/Logger";
-import flash, { FlashType } from "@/modules/flash/Flash";
+import Vue from 'vue';
+import TransactionController from '@/api/controllers/imaging/TransactionController';
+import Transaction from '@/api/interface/imaging/Transaction.interface';
+import TransactionsInsights from '@/api/interface/imaging/TransactionsInsights.interface';
+import { ApplicationController } from '@/api/controllers/applications/ApplicationController';
+import TransactionStatistics from '@/api/interface/imaging/TransactionStatistics';
+import Logger from '@/utils/Logger';
+import flash, { FlashType } from '@/modules/flash/Flash';
 
 export default Vue.extend({
-  name: "TransactionExplorer",
+  name: 'TransactionExplorer',
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -616,35 +618,35 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     // options
-    pinPrefix: "_",
+    pinPrefix: '_',
 
     headers: [
       {
-        text: "Name",
-        align: "start",
-        value: "name"
+        text: 'Name',
+        align: 'start',
+        value: 'name',
       },
-      //{ text: "Full Name", value: "fullName" },
-      { text: "Object Count", value: "count" },
-      { text: "Technologies", value: "technologies" },
-      { text: "Number of technologies", value: "numTechnologies" },
-      { text: "Actions", value: "actions", sortable: false }
+      // { text: "Full Name", value: "fullName" },
+      { text: 'Object Count', value: 'count' },
+      { text: 'Technologies', value: 'technologies' },
+      { text: 'Number of technologies', value: 'numTechnologies' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
 
     headersMasked: [
       {
-        text: "Name",
-        align: "start",
-        value: "name"
+        text: 'Name',
+        align: 'start',
+        value: 'name',
       },
-      //{ text: "Full Name", value: "fullName" },
-      { text: "Object Count", value: "count" },
-      { text: "Technologies", value: "technologies" },
-      { text: "Number of technologies", value: "numTechnologies" },
-      { text: "Actions", value: "actions", sortable: false }
+      // { text: "Full Name", value: "fullName" },
+      { text: 'Object Count', value: 'count' },
+      { text: 'Technologies', value: 'technologies' },
+      { text: 'Number of technologies', value: 'numTechnologies' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
 
     loadingTransaction: true,
@@ -669,7 +671,7 @@ export default Vue.extend({
     pageMaskedTransaction: 0,
 
     // Search Transaction
-    searchName: "",
+    searchName: '',
 
     // Power Actions
     maskActionLimit: 0,
@@ -695,16 +697,22 @@ export default Vue.extend({
     // Misc
     statistics: {} as TransactionStatistics,
     loadingStatistics: false,
-    menuShow: -1
+    menuShow: -1,
   }),
 
   methods: {
     /**
      *  Open the Rename modal for the transactions
-     **/
+     * */
     openRenameModal(item: Transaction) {
-      this.toEditTransaction = Object.assign({}, item);
+      this.toEditTransaction = { ...item };
       this.modalRename = true;
+    },
+
+    openStudio(id: string) {
+      this.$router.replace(`/atlas/tuning/transaction/byId/${id}`).catch(() => {
+        // Ignored
+      });
     },
 
     async confirmRename() {
@@ -713,12 +721,12 @@ export default Vue.extend({
         await TransactionController.renameTransaction(
           this.application,
           this.toEditTransaction._id,
-          this.toEditTransaction.name
+          this.toEditTransaction.name,
         );
         this.closeRenameModal();
         this.refresh();
       } catch (err) {
-        console.error("Failed to rename the transaction.", err);
+        console.error('Failed to rename the transaction.', err);
       } finally {
         this.loadingRename = false;
       }
@@ -745,11 +753,11 @@ export default Vue.extend({
       try {
         this.unmaskAllActionLoading = true;
         this.numTransaction = await TransactionController.unMaskAllTransaction(
-          this.application
+          this.application,
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to un-mask all the transactions", err);
+        console.error('Failed to un-mask all the transactions', err);
       } finally {
         this.unmaskAllActionLoading = false;
       }
@@ -762,15 +770,15 @@ export default Vue.extend({
       try {
         this.loadingStatistics = true;
         this.statistics = await TransactionController.getStatistics(
-          transaction._id
+          transaction._id,
         );
         this.menuShow = transaction._id;
       } catch (e) {
-        Logger.error("Failed to get transaction statistics", e);
-        flash.commit("add", {
+        Logger.error('Failed to get transaction statistics', e);
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to get transaction statistics.",
-          body: e
+          title: 'Failed to get transaction statistics.',
+          body: e,
         });
       } finally {
         this.loadingStatistics = false;
@@ -786,21 +794,21 @@ export default Vue.extend({
     async showTechnology(
       transaction: Transaction,
       type: string,
-      technology: string
+      technology: string,
     ) {
       try {
         await TransactionController.showTechnology(
           transaction._id,
           type,
-          technology
+          technology,
         );
         await this.getTransactionStatistics(transaction);
       } catch (e) {
-        Logger.error("Failed to hide the technology", e);
-        flash.commit("add", {
+        Logger.error('Failed to hide the technology', e);
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to hide the technology.",
-          body: e
+          title: 'Failed to hide the technology.',
+          body: e,
         });
       } finally {
         this.loadingStatistics = false;
@@ -816,21 +824,21 @@ export default Vue.extend({
     async hideTechnology(
       transaction: Transaction,
       type: string,
-      technology: string
+      technology: string,
     ) {
       try {
         await TransactionController.hideTechnology(
           transaction._id,
           type,
-          technology
+          technology,
         );
         await this.getTransactionStatistics(transaction);
       } catch (e) {
-        Logger.error("Failed to hide the technology", e);
-        flash.commit("add", {
+        Logger.error('Failed to hide the technology', e);
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to hide the technology.",
-          body: e
+          title: 'Failed to hide the technology.',
+          body: e,
         });
       } finally {
         this.loadingStatistics = false;
@@ -839,17 +847,17 @@ export default Vue.extend({
 
     async getTechnologies() {
       try {
-        if (this.application == "") return;
+        if (this.application == '') return;
         this.loadingTechList = true;
         this.technologiesList = await ApplicationController.getLevelsByDepth(
           this.application,
-          5
+          5,
         );
         this.technologiesList = this.technologiesList.sort();
       } catch (err) {
         console.error(
           `Failed to retrieve technologies in the application ${this.application}.`,
-          err
+          err,
         );
       } finally {
         this.loadingTechList = false;
@@ -861,11 +869,11 @@ export default Vue.extend({
         this.maskActionLoading = true;
         this.numTransaction = await TransactionController.maskByCount(
           this.application,
-          this.maskActionLimit
+          this.maskActionLimit,
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to mask by count.", err);
+        console.error('Failed to mask by count.', err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -876,11 +884,11 @@ export default Vue.extend({
         this.maskActionLoading = true;
         this.numTransaction = await TransactionController.maskByTechnology(
           this.application,
-          this.maskActionTechnology
+          this.maskActionTechnology,
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to mask by technology.", err);
+        console.error('Failed to mask by technology.', err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -891,11 +899,11 @@ export default Vue.extend({
         this.maskActionLoading = true;
         this.numTransaction = await TransactionController.maskByTerms(
           this.application,
-          this.maskActionTermsList
+          this.maskActionTermsList,
         );
         await this.refresh();
       } catch (err) {
-        Logger.error("Failed to mask by terms.", err);
+        Logger.error('Failed to mask by terms.', err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -904,41 +912,41 @@ export default Vue.extend({
     async getInsights() {
       try {
         this.transactionInsights = await TransactionController.getInsightsUnmaskedTransaction(
-          this.application
+          this.application,
         );
 
         this.rangeTechnology = [
           this.transactionInsights.minTechnology,
-          this.transactionInsights.maxTechnology
+          this.transactionInsights.maxTechnology,
         ];
 
         this.rangeObject = [
           this.transactionInsights.minObject,
-          this.transactionInsights.maxObject
+          this.transactionInsights.maxObject,
         ];
       } catch (err) {
-        console.error("Failed to get the insights of transactions", err);
+        console.error('Failed to get the insights of transactions', err);
       }
     },
 
     async getNumberTransaction() {
       try {
         this.numTransaction = await TransactionController.getNumberTransaction(
-          this.application
+          this.application,
         );
         return this.numTransaction;
       } catch (err) {
-        console.error("Failed to get the number of transaction", err);
+        console.error('Failed to get the number of transaction', err);
       }
     },
 
     async getNumberMaskedTransaction() {
       try {
         this.numMaskedTransaction = await TransactionController.getNumberMaskedTransaction(
-          this.application
+          this.application,
         );
       } catch (err) {
-        console.error("Failed to get the number of transaction", err);
+        console.error('Failed to get the number of transaction', err);
       }
     },
 
@@ -952,23 +960,23 @@ export default Vue.extend({
         maxTechnologies: this.rangeTechnology[1],
         minObject: this.rangeObject[0],
         maxObject: this.rangeObject[1],
-        techContained: this.technologySearch
+        techContained: this.technologySearch,
       };
 
-      if (this.searchName != "") filter.name = this.searchName;
+      if (this.searchName != '') filter.name = this.searchName;
 
       // eslint-disable-next-line prefer-const
-      let { sortBy, sortDesc, page, itemsPerPage } = this.optionsTransaction;
+      let {
+        sortBy, sortDesc, page, itemsPerPage,
+      } = this.optionsTransaction;
       if (itemsPerPage === -1) {
         itemsPerPage = this.numTransaction;
       }
 
       let sortByOption = null;
       let sortByDesccOption = null;
-      if (Array.isArray(sortBy) && sortBy.length === 1)
-        sortByOption = sortBy[0];
-      if (Array.isArray(sortDesc) && sortDesc.length === 1)
-        sortByDesccOption = sortDesc[0];
+      if (Array.isArray(sortBy) && sortBy.length === 1) { sortByOption = sortBy[0]; }
+      if (Array.isArray(sortDesc) && sortDesc.length === 1) { sortByDesccOption = sortDesc[0]; }
 
       const transactions = await TransactionController.getBatchTransaction(
         this.application,
@@ -976,7 +984,7 @@ export default Vue.extend({
         page * itemsPerPage,
         sortByOption,
         sortByDesccOption,
-        filter
+        filter,
       );
 
       this.loadingTransaction = false;
@@ -999,17 +1007,15 @@ export default Vue.extend({
 
       let sortByOption = null;
       let sortByDesccOption = null;
-      if (Array.isArray(sortBy) && sortBy.length === 1)
-        sortByOption = sortBy[0];
-      if (Array.isArray(sortDesc) && sortDesc.length === 1)
-        sortByDesccOption = sortDesc[0];
+      if (Array.isArray(sortBy) && sortBy.length === 1) { sortByOption = sortBy[0]; }
+      if (Array.isArray(sortDesc) && sortDesc.length === 1) { sortByDesccOption = sortDesc[0]; }
 
       const transactions = await TransactionController.getBatchMaskedTransaction(
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
         sortByOption,
-        sortByDesccOption
+        sortByDesccOption,
       );
 
       this.loadingMaskedTransaction = false;
@@ -1026,7 +1032,7 @@ export default Vue.extend({
       await TransactionController.pinTransaction(
         this.application,
         item._id,
-        this.pinPrefix
+        this.pinPrefix,
       );
       await this.refresh();
     },
@@ -1035,7 +1041,7 @@ export default Vue.extend({
       await TransactionController.unpinTransaction(
         this.application,
         item._id,
-        this.pinPrefix
+        this.pinPrefix,
       );
       await this.refresh();
     },
@@ -1044,7 +1050,7 @@ export default Vue.extend({
       await TransactionController.renameTransaction(
         this.application,
         item._id,
-        item.name
+        item.name,
       );
       await this.refresh();
     },
@@ -1059,7 +1065,7 @@ export default Vue.extend({
       await this.getTechnologies();
       await this.transactionApiCall();
       await this.maskedTransactionApiCall();
-    }
+    },
   },
 
   watch: {
@@ -1072,15 +1078,15 @@ export default Vue.extend({
       handler() {
         this.transactionApiCall();
       },
-      deep: true
+      deep: true,
     },
 
     optionsMaskedTransaction: {
       handler() {
         this.maskedTransactionApiCall();
       },
-      deep: true
-    }
-  }
+      deep: true,
+    },
+  },
 });
 </script>

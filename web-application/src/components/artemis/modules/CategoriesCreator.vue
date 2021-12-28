@@ -126,12 +126,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
-import { Category } from "@/api/interface/ApiCategory.interface";
+import Vue from 'vue';
+import { CategoryController } from '@/api/controllers/extensions/artemis/CategoryController';
+import { Category } from '@/api/interface/ApiCategory.interface';
 
 export default Vue.extend({
-  name: "CategoriesCreator",
+  name: 'CategoriesCreator',
 
   data: () => ({
     dialog: false,
@@ -139,39 +139,39 @@ export default Vue.extend({
 
     // Snack bar
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
     // Table
     headers: [
       {
-        text: "Name of the category",
-        align: "start",
+        text: 'Name of the category',
+        align: 'start',
         sortable: true,
-        value: "name"
+        value: 'name',
       },
       {
-        text: "Icon URL",
-        value: "iconURL"
+        text: 'Icon URL',
+        value: 'iconURL',
       },
-      { text: "Actions", value: "actions", sortable: false }
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
 
     items: [],
     editedIndex: -1,
     editedItem: {
-      name: "",
-      iconUrl: ""
+      name: '',
+      iconUrl: '',
     } as Category,
     defaultItem: {
-      name: "",
-      iconUrl: ""
-    } as Category
+      name: '',
+      iconUrl: '',
+    } as Category,
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
   },
 
   watch: {
@@ -180,7 +180,7 @@ export default Vue.extend({
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    }
+    },
   },
 
   mounted() {
@@ -193,31 +193,31 @@ export default Vue.extend({
         .then((res: Category[]) => {
           this.items = res;
         })
-        .catch(err => {
-          console.error("Failed to retrieve the list of Category", err);
+        .catch((err) => {
+          console.error('Failed to retrieve the list of Category', err);
         });
     },
 
     editItem(item) {
       this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = { ...item };
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = { ...item };
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
       CategoryController.deleteNode(this.editedItem)
         .then((res: boolean) => {
-          this.textSnackBar = "Successfully deleted the category.";
+          this.textSnackBar = 'Successfully deleted the category.';
           this.snackbarInfo = true;
           this.initialize();
         })
-        .catch(err => {
+        .catch((err) => {
           this.textSnackBar = `Failed to delete the Category. Error: ${err}`;
           this.snackbarInfo = true;
         });
@@ -228,7 +228,7 @@ export default Vue.extend({
     close() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
       });
     },
@@ -236,7 +236,7 @@ export default Vue.extend({
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
       });
     },
@@ -245,28 +245,28 @@ export default Vue.extend({
       if (this.editedIndex > -1) {
         CategoryController.updateNode(this.editedItem)
           .then((res: Category) => {
-            this.textSnackBar = "Successfully updated the category.";
+            this.textSnackBar = 'Successfully updated the category.';
             this.snackbarInfo = true;
             this.initialize();
           })
-          .catch(err => {
+          .catch((err) => {
             this.textSnackBar = `Failed to udpdate the Category. Error: ${err}`;
             this.snackbarInfo = true;
           });
       } else {
         CategoryController.addNode(this.editedItem)
           .then((res: Category) => {
-            this.textSnackBar = "Successfully added the category.";
+            this.textSnackBar = 'Successfully added the category.';
             this.snackbarInfo = true;
             this.initialize();
           })
-          .catch(err => {
+          .catch((err) => {
             this.textSnackBar = `Failed to add the Category. Error: ${err}`;
             this.snackbarInfo = true;
           });
       }
       this.close();
-    }
-  }
+    },
+  },
 });
 </script>

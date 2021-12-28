@@ -34,18 +34,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "DragAndDropTile",
+  name: 'DragAndDropTile',
   props: {
-    url: String
+    url: String,
   },
 
   data: () => ({
     // internal properties
     formUpload: false,
-    dragover: false
+    dragover: false,
   }),
 
   mounted() {
@@ -54,19 +54,19 @@ export default Vue.extend({
     // register listeners on your dropzone / v-sheet
     if (dropzone) {
       // register all drag & drop event listeners
-      dropzone.addEventListener("dragenter", e => {
+      dropzone.addEventListener('dragenter', (e) => {
         e.preventDefault();
         this.dragover = true;
       });
-      dropzone.addEventListener("dragleave", e => {
+      dropzone.addEventListener('dragleave', (e) => {
         e.preventDefault();
         this.dragover = false;
       });
-      dropzone.addEventListener("dragover", e => {
+      dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
         this.dragover = true;
       });
-      dropzone.addEventListener("drop", e => {
+      dropzone.addEventListener('drop', (e) => {
         e.preventDefault();
         const dragevent = e as DragEvent;
         if (dragevent.dataTransfer) {
@@ -74,22 +74,22 @@ export default Vue.extend({
         }
       });
       // register event listener for keyboard usage
-      dropzone.addEventListener("click", e => {
+      dropzone.addEventListener('click', (e) => {
         e.preventDefault();
         if (fileupload) {
           fileupload.click();
         }
       });
-      dropzone.addEventListener("keypress", e => {
+      dropzone.addEventListener('keypress', (e) => {
         e.preventDefault();
         const keyEvent = e as KeyboardEvent;
-        if (keyEvent.key === "Enter") {
+        if (keyEvent.key === 'Enter') {
           if (fileupload) fileupload.click();
         }
       });
       // register listeners on the file input
       if (fileupload) {
-        fileupload.addEventListener("change", e => {
+        fileupload.addEventListener('change', (e) => {
           const target = e.target as HTMLInputElement;
           if (target.files) {
             this.filesSelected(target.files);
@@ -97,6 +97,6 @@ export default Vue.extend({
         });
       }
     }
-  }
+  },
 });
 </script>

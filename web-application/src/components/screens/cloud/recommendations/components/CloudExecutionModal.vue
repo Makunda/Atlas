@@ -31,28 +31,28 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "CloudExecutionModal",
+  name: 'CloudExecutionModal',
 
   props: {
     dialog: Boolean,
     title: String,
     application: String,
-    description: String
+    description: String,
   },
 
   methods: {
     close() {
-      this.$emit("Close");
+      this.$emit('Close');
     },
 
     run() {
-      this.$emit("Run");
-    }
+      this.$emit('Run');
+    },
   },
 
-  data: () => ({})
+  data: () => ({}),
 });
 </script>

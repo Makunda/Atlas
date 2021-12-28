@@ -47,17 +47,17 @@
 
 <script lang="ts">
 export default {
-  name: "GroupTile",
+  name: 'GroupTile',
   props: {
     id: Number,
     name: String,
     application: String,
     numObjects: Number,
-    demeterGroup: Boolean
+    demeterGroup: Boolean,
   },
 
   data: () => ({
-    loading: false as boolean
-  })
+    loading: false as boolean,
+  }),
 };
 </script>

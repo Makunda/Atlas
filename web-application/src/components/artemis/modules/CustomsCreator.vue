@@ -483,15 +483,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
-import { Category } from "@/api/interface/ApiCategory.interface";
-import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";
-import { FrameworkController } from "@/api/controllers/extensions/artemis/FrameworkController";
-import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
+import Vue from 'vue';
+import { ApiRegexNode } from '@/api/interface/ApiRegexNode.interface';
+import { Category } from '@/api/interface/ApiCategory.interface';
+import { RegexNodeController } from '@/api/controllers/extensions/artemis/RegexNodeController';
+import { FrameworkController } from '@/api/controllers/extensions/artemis/FrameworkController';
+import { CategoryController } from '@/api/controllers/extensions/artemis/CategoryController';
 
 export default Vue.extend({
-  name: "CustomsCreator",
+  name: 'CustomsCreator',
 
   components: {},
 
@@ -501,43 +501,43 @@ export default Vue.extend({
     // Regex node
     focusedRegexNode: {} as ApiRegexNode,
     defaultRegexNode: {
-      name: "",
+      name: '',
       regexes: [],
       internalTypes: [],
-      framework: "",
-      category: "",
-      parentId: -1
+      framework: '',
+      category: '',
+      parentId: -1,
     } as ApiRegexNode,
 
-    currentRegexInput: "",
+    currentRegexInput: '',
     editMode: false,
     addMode: false,
 
     // Options
-    expandOptions: "",
+    expandOptions: '',
 
     // Snackbars
-    testRegexResults: "",
+    testRegexResults: '',
     snackbarTestResults: false,
 
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
     internalTypes: [],
     categories: [],
 
     tree: [],
     treeExport: [] as ApiRegexNode[],
-    fullExportRequest: "",
-    fullQuerySet: "",
+    fullExportRequest: '',
+    fullQuerySet: '',
 
     // Artifacts
     artifactItems: [],
     artifactTree: [],
     applicationItems: [] as string[],
     languageItems: [] as string[],
-    defaultApplication: "",
-    defaultLanguage: "",
+    defaultApplication: '',
+    defaultLanguage: '',
     classExternality: false,
 
     editItem: null,
@@ -548,9 +548,9 @@ export default Vue.extend({
 
     // Deletion
     dialogDeleteNode: false,
-    dialogDeleteNodeNumAffected: "",
+    dialogDeleteNodeNumAffected: '',
     toDelete: {} as ApiRegexNode,
-    deletingNode: false
+    deletingNode: false,
   }),
 
   methods: {
@@ -559,9 +559,9 @@ export default Vue.extend({
     },
 
     focusItem(regexNode: ApiRegexNode) {
-      this.testRegexResults = "";
+      this.testRegexResults = '';
       this.addMode = false;
-      this.focusedRegexNode = Object.assign({}, regexNode);
+      this.focusedRegexNode = { ...regexNode };
     },
 
     initFocusView() {
@@ -570,13 +570,13 @@ export default Vue.extend({
 
     isFocused() {
       return !(
-        Object.keys(this.focusedRegexNode).length == 0 &&
-        this.focusedRegexNode.constructor === Object
+        Object.keys(this.focusedRegexNode).length == 0
+        && this.focusedRegexNode.constructor === Object
       );
     },
 
     addRegexTemplate() {
-      this.focusedRegexNode = Object.assign({}, this.defaultRegexNode);
+      this.focusedRegexNode = { ...this.defaultRegexNode };
       this.addMode = true;
       this.editMode = true;
     },
@@ -587,14 +587,14 @@ export default Vue.extend({
     addRegex(item: ApiRegexNode) {
       RegexNodeController.addRegexNode(item)
         .then((res: ApiRegexNode) => {
-          this.focusedRegexNode = Object.assign({}, this.defaultRegexNode);
+          this.focusedRegexNode = { ...this.defaultRegexNode };
           this.addMode = false;
           this.editMode = false;
-          this.displayInfoSnackbar("Successfully added the rule.");
+          this.displayInfoSnackbar('Successfully added the rule.');
           this.refresh();
         })
-        .catch(err => {
-          console.error("Failed to add the rule", err);
+        .catch((err) => {
+          console.error('Failed to add the rule', err);
           this.displayInfoSnackbar(`Failed to add the rule. Error: ${err}`);
         });
     },
@@ -612,11 +612,11 @@ export default Vue.extend({
         .then((res: ApiRegexNode) => {
           this.addMode = false;
           this.editMode = false;
-          this.displayInfoSnackbar("Successfully updated the rule.");
+          this.displayInfoSnackbar('Successfully updated the rule.');
           this.refresh();
         })
-        .catch(err => {
-          console.error("Failed to update the rule");
+        .catch((err) => {
+          console.error('Failed to update the rule');
           this.displayInfoSnackbar(`Failed to update the rule. Error: ${err}`);
         });
     },
@@ -625,10 +625,10 @@ export default Vue.extend({
      * Add the regex string to the regex rule
      */
     appendToRegexList(regexNode: ApiRegexNode) {
-      if (this.currentRegexInput != "") {
+      if (this.currentRegexInput != '') {
         regexNode.regexes.push(this.currentRegexInput);
       }
-      this.currentRegexInput = "";
+      this.currentRegexInput = '';
       this.focusedRegexNode = regexNode;
     },
 
@@ -637,16 +637,16 @@ export default Vue.extend({
       RegexNodeController.deleteRegexNode(this.toDelete.id)
         .then((res: boolean) => {
           if (res) {
-            this.displayInfoSnackbar("Successfully deleted the rule.");
+            this.displayInfoSnackbar('Successfully deleted the rule.');
             this.refresh();
           } else {
             // Do something with the err
-            console.error("Failed to delete the node.", item);
-            this.displayInfoSnackbar("Failed to update the rule. Bad Request.");
+            console.error('Failed to delete the node.', item);
+            this.displayInfoSnackbar('Failed to update the rule. Bad Request.');
           }
         })
-        .catch(err => {
-          console.error("Failed to delete the node.", item);
+        .catch((err) => {
+          console.error('Failed to delete the node.', item);
           this.displayInfoSnackbar(`Failed to delete the rule. Error: ${err}`);
         })
         .finally(() => {
@@ -666,7 +666,7 @@ export default Vue.extend({
         .then((res: number) => {
           this.dialogDeleteNodeNumAffected = res;
         })
-        .catch(err => {
+        .catch((err) => {
           this.dialogDeleteNodeNumAffected = err;
         });
     },
@@ -677,7 +677,7 @@ export default Vue.extend({
           this.testRegexResults = `${res} objects matched this rule`;
           this.snackbarTestResults = true;
         })
-        .catch(err => {
+        .catch((err) => {
           this.testRegexResults = err;
         });
     },
@@ -695,8 +695,8 @@ export default Vue.extend({
         .then((res: string[]) => {
           this.internalTypes = res;
         })
-        .catch(err => {
-          console.error("Failed to retrieve the list of internal types", err);
+        .catch((err) => {
+          console.error('Failed to retrieve the list of internal types', err);
         });
     },
 
@@ -705,8 +705,8 @@ export default Vue.extend({
         .then((res: Category[]) => {
           this.categories = res;
         })
-        .catch(err => {
-          console.log("Failed to retrieve the list of categories");
+        .catch((err) => {
+          console.log('Failed to retrieve the list of categories');
         });
     },
 
@@ -719,7 +719,7 @@ export default Vue.extend({
             this.items = res;
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
         });
     },
@@ -728,11 +728,11 @@ export default Vue.extend({
       this.getInternalTypes();
       this.getCategories();
       this.initFocusView();
-    }
+    },
   },
 
   mounted() {
     this.refresh();
-  }
+  },
 });
 </script>

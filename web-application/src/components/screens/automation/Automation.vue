@@ -37,42 +37,42 @@
 </template>
 
 <script lang="ts">
-import GroupingTile from "@/components/screens/automation/tiles/GroupingTile.vue";
-import UseCases from "@/components/dionysus/modules/UseCases.vue";
-import TagStudio from "@/components/dionysus/modules/TagStudio.vue";
-import Vue from "vue";
-import { AtlasController } from "@/api/controllers/extensions/atlas/AtlasController";
+import Vue from 'vue';
+import GroupingTile from '@/components/screens/automation/tiles/GroupingTile.vue';
+import UseCases from '@/components/dionysus/modules/UseCases.vue';
+import TagStudio from '@/components/dionysus/modules/TagStudio.vue';
+import { AtlasController } from '@/api/controllers/extensions/atlas/AtlasController';
 
 export default Vue.extend({
-  name: "Automation",
+  name: 'Automation',
 
   components: {
     GroupingTile,
     TagStudio,
-    UseCases
+    UseCases,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
     loading: true,
     groupRecord: undefined as unknown,
-    applicationName: "" as string,
+    applicationName: '' as string,
     diplayNotInstalled: false,
 
     // Navigation
     tab: 0,
     items: [
       {
-        view: "GroupingTile",
-        name: "Assistants",
-        icon: "mdi-assistant"
-      }
-    ]
+        view: 'GroupingTile',
+        name: 'Assistants',
+        icon: 'mdi-assistant',
+      },
+    ],
   }),
 
   mounted() {
@@ -82,10 +82,10 @@ export default Vue.extend({
       .then(async (version: string) => {
         this.version = version;
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(
           "The Demeter extension wasn't detected. The functionnalities will be limited. Please install the Artemis extension",
-          err
+          err,
         );
         this.diplayNotInstalled = true;
       });
@@ -96,8 +96,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.applicationName = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

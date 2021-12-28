@@ -120,28 +120,28 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
-import InstallationController from "@/api/controllers/imaging/InstallationController";
+import { Vue } from 'vue-property-decorator';
+import InstallationController from '@/api/controllers/imaging/InstallationController';
 
 export default Vue.extend({
-  name: "GlobalParameters",
+  name: 'GlobalParameters',
 
   computed: {},
 
   data: () => ({
     publicPath: process.env.BASE_URL,
 
-    imagingPath: "",
+    imagingPath: '',
 
     // errors & success
-    pathError: "",
-    pathSuccess: "",
+    pathError: '',
+    pathSuccess: '',
 
-    demeterError: "",
-    demeterSuccess: "",
+    demeterError: '',
+    demeterSuccess: '',
 
-    artemisError: "",
-    artemisSuccess: ""
+    artemisError: '',
+    artemisSuccess: '',
   }),
 
   methods: {
@@ -157,12 +157,12 @@ export default Vue.extend({
     async setImagingPath() {
       try {
         this.imagingPath = await InstallationController.setImagingPath(
-          this.imagingPath
+          this.imagingPath,
         );
-        this.pathError = "";
-        this.pathSuccess = "The path was successfully changed.";
+        this.pathError = '';
+        this.pathSuccess = 'The path was successfully changed.';
       } catch (err) {
-        this.pathSuccess = "";
+        this.pathSuccess = '';
         this.pathError = err;
       }
     },
@@ -170,39 +170,37 @@ export default Vue.extend({
     async getImagingPath() {
       try {
         this.imagingPath = await InstallationController.getImagingPath();
-        this.pathError = "";
+        this.pathError = '';
       } catch (err) {
-        this.pathSuccess = "";
+        this.pathSuccess = '';
         this.pathError = err;
       }
     },
 
     async getDemeterVersion() {
       try {
-        this.demeterSuccess =
-          "Version : " + (await InstallationController.getDemeterStatus());
-        this.demeterError = "";
+        this.demeterSuccess = `Version : ${await InstallationController.getDemeterStatus()}`;
+        this.demeterError = '';
       } catch (err) {
-        this.demeterSuccess = "";
+        this.demeterSuccess = '';
         this.demeterError = err;
       }
     },
 
     async getArtemisVersion() {
       try {
-        this.artemisSuccess =
-          "Version : " + (await InstallationController.getArtemisStatus());
-        this.artemisError = "";
+        this.artemisSuccess = `Version : ${await InstallationController.getArtemisStatus()}`;
+        this.artemisError = '';
       } catch (err) {
-        this.artemisSuccess = "";
+        this.artemisSuccess = '';
         this.artemisError = err;
       }
-    }
+    },
   },
 
   mounted() {
     this.refresh();
     this.refreshExtension();
-  }
+  },
 });
 </script>

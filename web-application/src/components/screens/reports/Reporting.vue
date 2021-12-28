@@ -214,20 +214,20 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import GroupResult from "@/api/interface/extensions/paris/GroupResult";
-import { ReportController } from "@/api/controllers/reports/ReportController";
-import { ReportInterface } from "@/api/interface/reports/report.interface";
+import Vue from 'vue';
+import GroupResult from '@/api/interface/extensions/paris/GroupResult';
+import { ReportController } from '@/api/controllers/reports/ReportController';
+import { ReportInterface } from '@/api/interface/reports/report.interface';
 
 export default Vue.extend({
-  name: "Reporting",
+  name: 'Reporting',
 
   components: {},
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -236,10 +236,10 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     // Report list
-    errorReports: "",
+    errorReports: '',
     loadingReports: false,
     reportList: [] as ReportInterface[],
 
@@ -249,8 +249,8 @@ export default Vue.extend({
     loadingReport: -1,
 
     // Snack bar
-    snackbarInfo: "",
-    snackbarInfoDisplay: false
+    snackbarInfo: '',
+    snackbarInfoDisplay: false,
   }),
 
   methods: {
@@ -259,7 +259,7 @@ export default Vue.extend({
      */
     async loadReports() {
       try {
-        this.errorReports = "";
+        this.errorReports = '';
         this.loadingReports = true;
         this.reportList = await ReportController.getReportList();
       } catch (err) {
@@ -275,7 +275,7 @@ export default Vue.extend({
     async generateReports() {
       if (this.loadingReport !== -1) {
         this.snackbarInfoDisplay = true;
-        this.snackbarInfo = `A Report is being processed. Please wait.`;
+        this.snackbarInfo = 'A Report is being processed. Please wait.';
       } else {
         this.snackbarInfoDisplay = true;
         this.snackbarInfo = `Generating report: ${this.focusReport.name}`;
@@ -286,9 +286,9 @@ export default Vue.extend({
             this.focusReport.id,
             this.focusReport.nickname,
             this.application,
-            this.focusReportParameters
+            this.focusReportParameters,
           );
-          this.snackbarInfo = `The report has been successfully generated.`;
+          this.snackbarInfo = 'The report has been successfully generated.';
         } catch (err) {
           this.snackbarInfo = `Error, failed to process the report. ${err}`;
         } finally {
@@ -304,7 +304,7 @@ export default Vue.extend({
       this.groupResultLoading = false;
       this.groupResult = [] as GroupResult[];
       this.loadReports();
-    }
+    },
   },
 
   watch: {
@@ -313,10 +313,10 @@ export default Vue.extend({
       this.reportGenerated = false;
     },
 
-    focusReportId: function() {
+    focusReportId() {
       this.focusReportParameters = {};
-    }
-  }
+    },
+  },
 });
 </script>
 

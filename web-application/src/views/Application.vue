@@ -17,9 +17,7 @@
                 <v-icon class="mr-2" color="#438FDA">mdi-globe-model</v-icon>
                 Atlas
               </v-list-item-title>
-              <v-list-item-subtitle
-                >Intelligence for CAST Imaging
-              </v-list-item-subtitle>
+              <v-list-item-subtitle>Intelligence for CAST Imaging</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -27,11 +25,7 @@
         <v-divider></v-divider>
 
         <v-list dense nav>
-          <v-list-item-group
-            v-model="tab"
-            active-class="activeNavigationElement"
-            mandatory
-          >
+          <v-list-item-group v-model="tab" active-class="activeNavigationElement" mandatory>
             <v-list-item v-for="(v, i) in items" v-bind:key="i" link>
               <v-list-item-icon>
                 <v-icon class="pl-1" color="#ffffff">{{ v.icon }}</v-icon>
@@ -47,19 +41,10 @@
             <v-list>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-list-item
-                    link
-                    v-bind="attrs"
-                    @click="simpleHealthCheck()"
-                    v-on="on"
-                  >
+                  <v-list-item link v-bind="attrs" @click="simpleHealthCheck()" v-on="on">
                     <v-list-item-icon>
-                      <v-icon v-if="onlineDatabase" color="green"
-                        >mdi-database-check
-                      </v-icon>
-                      <v-icon v-if="!onlineDatabase" color="red"
-                        >mdi-database-remove
-                      </v-icon>
+                      <v-icon v-if="onlineDatabase" color="green">mdi-database-check</v-icon>
+                      <v-icon v-if="!onlineDatabase" color="red">mdi-database-remove</v-icon>
                     </v-list-item-icon>
 
                     <v-list-item-content>
@@ -122,11 +107,7 @@
       <v-row no-gutters style="background-color: #E0E0E0;">
         <router-view v-slot="{ Component }" style="margin-left: 50px;">
           <transition name="slide-fade">
-            <component
-              :is="Component"
-              class=""
-              style="background-color: #F7F7F7 !important"
-            />
+            <component :is="Component" class="" style="background-color: #F7F7F7 !important" />
           </transition>
         </router-view>
       </v-row>
@@ -139,9 +120,10 @@
 import Vue from "vue";
 
 import FlashMessage from "@/modules/flash/FlashMessage.vue";
+import flash, { FlashType } from "@/modules/flash/Flash";
+
 import { UtilsController } from "@/api/controllers/utils/UtilsController";
 import { Cookie } from "@/enum/Cookie";
-import flash, { FlashType } from "@/modules/flash/Flash";
 import LoginController from "@/api/controllers/login/LoginController";
 import Logger from "@/utils/Logger";
 import ApplicationController from "@/api/controllers/imaging/ApplicationController";
@@ -194,8 +176,9 @@ export default Vue.extend({
         icon: "mdi-magnify"
       },
       { name: "Imaging tuning", screen: "tuning", icon: "mdi-graphql" },
-      { name: "Highlight Injection", screen: "highlight", icon: "mdi-needle" }
-      //{ name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" },
+      { name: "Highlight Injection", screen: "highlight", icon: "mdi-needle" },
+      { name: "Communities", screen: "communities", icon: "mdi-apache-kafka" }
+      // { name: "AIP Injection", screen: "aip", icon: "mdi-chart-areaspline" },
     ],
 
     loadingApplication: true as boolean,
@@ -217,7 +200,7 @@ export default Vue.extend({
       return this.$cookies.get(Cookie.APPLICATION_COOKIE) as string;
     },
 
-    /** Change the state of the application **/
+    /** Change the state of the application * */
     changeApplication(application: string) {
       // Update store properties
       this.$store.state.applicationName = application;
@@ -273,21 +256,18 @@ export default Vue.extend({
           this.onlineDatabase = false;
         })
         .finally(() => {
-          setTimeout(
-            function() {
-              this.healthcheck();
-            }.bind(this),
-            10000
-          );
+          setTimeout(() => {
+            this.healthcheck();
+          }, 10000);
         });
     },
 
     goTo(section: string, absolute = false) {
       try {
         if (!absolute) {
-          this.$router.replace("/atlas/" + section);
+          this.$router.replace(`/atlas/${section}`);
         } else {
-          this.$router.replace("/" + section);
+          this.$router.replace(`/${section}`);
         }
       } catch (err) {
         // Ignored
@@ -325,12 +305,12 @@ export default Vue.extend({
       this.transitionName = toDepth < fromDepth ? "slide-right" : "slide-left";
     },
 
-    applicationName: function() {
+    applicationName() {
       this.changeApplication(this.applicationName);
     },
 
-    tab: function() {
-      this.$router.replace("/atlas/" + this.items[this.tab].screen);
+    tab() {
+      this.$router.replace(`/atlas/${this.items[this.tab].screen}`);
     },
 
     getCurrentView(newView) {

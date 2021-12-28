@@ -125,73 +125,73 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Artifact } from "@/api/interface/extensions/artemis/Artifact";
-import { CategoryController } from "@/api/controllers/extensions/artemis/CategoryController";
-import { Category } from "@/api/interface/ApiCategory.interface";
-import { Framework } from "@/api/interface/extensions/artemis/Framework";
-import { FrameworkController } from "@/api/controllers/extensions/artemis/FrameworkController";
+import Vue from 'vue';
+import { Artifact } from '@/api/interface/extensions/artemis/Artifact';
+import { CategoryController } from '@/api/controllers/extensions/artemis/CategoryController';
+import { Category } from '@/api/interface/ApiCategory.interface';
+import { Framework } from '@/api/interface/extensions/artemis/Framework';
+import { FrameworkController } from '@/api/controllers/extensions/artemis/FrameworkController';
 
 export default Vue.extend({
-  name: "FrameworkDispatch",
+  name: 'FrameworkDispatch',
   props: {
     model: Boolean,
-    artifact: Object
+    artifact: Object,
   },
 
   watch: {
-    artifact: function() {
+    artifact() {
       this.frameworkArtifact = this.artifact;
 
       if (
-        this.frameworkArtifact.children &&
-        this.frameworkArtifact.children > 0
+        this.frameworkArtifact.children
+        && this.frameworkArtifact.children > 0
       ) {
-        this.frameworkArtifact.fullName +=
-          this.frameworkArtifact.delimiter + "*";
+        this.frameworkArtifact.fullName
+          += `${this.frameworkArtifact.delimiter}*`;
       }
 
       this.authorizedType = this.frameworkArtifact.objectTypes;
-      this.frameworkArtifact.pattern = this.frameworkArtifact.fullName + ".*";
+      this.frameworkArtifact.pattern = `${this.frameworkArtifact.fullName}.*`;
       this.frameworkArtifact.isRegex = true;
     },
 
-    choice: function() {
-      this.error = "";
+    choice() {
+      this.error = '';
       this.blink = false;
 
       this.getCategories();
-    }
+    },
   },
 
   data: () => ({
     blink: false,
-    error: "",
+    error: '',
 
-    choice: "",
+    choice: '',
     frameworkArtifact: {} as Artifact,
     authorizedType: [],
 
     category: null,
-    description: "",
+    description: '',
 
     searchCategories: null,
     categoriesFramework: [],
-    categoriesLoading: false
+    categoriesLoading: false,
   }),
 
   methods: {
     validate() {
-      if (this.choice == "") {
-        this.error = "You must select a type of extraction for the framework.";
+      if (this.choice == '') {
+        this.error = 'You must select a type of extraction for the framework.';
         this.blink = true;
       }
 
-      if (this.choice == "framework") {
+      if (this.choice == 'framework') {
         this.sendToFramework();
       }
 
-      if (this.choice == "custom") {
+      if (this.choice == 'custom') {
         this.sendToCustom();
       }
     },
@@ -200,7 +200,7 @@ export default Vue.extend({
      * Return the list of the Categories for 'Classic' Framework
      */
     async getCategories(): Promise<Category[] | void> {
-      if (this.choice == "framework") {
+      if (this.choice == 'framework') {
         this.categoriesLoading = true;
         this.categoriesFramework = await CategoryController.getAllNode();
         this.categoriesLoading = false;
@@ -214,27 +214,27 @@ export default Vue.extend({
       const framework = {
         name: this.frameworkArtifact.name,
         description: this.description,
-        type: "Framework",
+        type: 'Framework',
         category: this.category,
         pattern: this.frameworkArtifact.pattern,
         isRegex: this.frameworkArtifact.isRegex,
         internalType: this.frameworkArtifact.objectTypes,
-        location: "Custom"
+        location: 'Custom',
       } as Framework;
 
       try {
         await FrameworkController.addFramework(framework);
-        this.$emit("close");
+        this.$emit('close');
       } catch (err) {
-        console.error("Failed to add a Framework.", err);
-        this.error = "Failed to add the framework. Reason : " + err;
+        console.error('Failed to add a Framework.', err);
+        this.error = `Failed to add the framework. Reason : ${err}`;
       }
     },
 
     async sendToCustom() {
-      console.log("Send to custom");
-    }
-  }
+      console.log('Send to custom');
+    },
+  },
 });
 </script>
 

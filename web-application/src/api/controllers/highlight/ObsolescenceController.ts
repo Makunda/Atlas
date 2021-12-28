@@ -1,36 +1,37 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import flash, { FlashType } from "@/modules/flash/Flash";
-import OssRecommendation from "@/api/interface/highlight/OssRecommendation";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import flash, { FlashType } from '@/modules/flash/Flash';
+import OssRecommendation from '@/api/interface/highlight/OssRecommendation';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 /**
  * Managing the API calls related to Open source obsolescence
  */
 export class ObsolescenceController {
-  protected static relativeUrl = "obsolescence/";
+  protected static relativeUrl = 'obsolescence/';
+
   private static apiBaseUrl =
-    ApiComUtils.getUrl() +
-    "/api/highlight/recommendations/" +
-    ObsolescenceController.relativeUrl;
+    `${ApiComUtils.getUrl()
+    }/api/highlight/recommendations/${
+      ObsolescenceController.relativeUrl}`;
 
   /**
    * Get the url to generate the Paris export
    */
   public static async uploadFile(
     file: any,
-    application: string
+    application: string,
   ): Promise<OssRecommendation[]> {
-    const url = this.apiBaseUrl + `file/upload/${application}`;
+    const url = `${this.apiBaseUrl}file/upload/${application}`;
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("application", application);
+      formData.append('file', file);
+      formData.append('application', application);
       const res = await ProxyAxios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       if (res.status == 200) {
@@ -40,18 +41,18 @@ export class ObsolescenceController {
         }
       } else {
         throw new Error(
-          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
-      flash.commit("add", {
+      flash.commit('add', {
         type: FlashType.ERROR,
-        title: "Failed to send the list of recommendation.",
-        body: error
+        title: 'Failed to send the list of recommendation.',
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -62,14 +63,14 @@ export class ObsolescenceController {
    */
   public static async applyBlockers(
     blockers: OssRecommendation[],
-    taggingType: string
+    taggingType: string,
   ): Promise<[OssRecommendation[], OssRecommendation[]]> {
-    const url = this.apiBaseUrl + "apply";
+    const url = `${this.apiBaseUrl}apply`;
 
     try {
       const body = {
-        blockers: blockers,
-        taggingType: taggingType
+        blockers,
+        taggingType,
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -89,20 +90,19 @@ export class ObsolescenceController {
         }
 
         return [applied, notApplied];
-      } else {
-        throw new Error(
-          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`,
+      );
     } catch (error) {
-      flash.commit("add", {
+      flash.commit('add', {
         type: FlashType.ERROR,
-        title: "Failed to apply the list of recommendation.",
-        body: error
+        title: 'Failed to apply the list of recommendation.',
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to apply the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -112,13 +112,13 @@ export class ObsolescenceController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: OssRecommendation
+    blocker: OssRecommendation,
   ): Promise<[OssRecommendation[], OssRecommendation[]]> {
-    const url = this.apiBaseUrl + "test";
+    const url = `${this.apiBaseUrl}test`;
 
     try {
       const body = {
-        blocker: blocker
+        blocker,
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -138,20 +138,19 @@ export class ObsolescenceController {
         }
 
         return [applied, notApplied];
-      } else {
-        throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`,
+      );
     } catch (error) {
-      flash.commit("add", {
+      flash.commit('add', {
         type: FlashType.ERROR,
-        title: "Failed to test the recommendations.",
-        body: error
+        title: 'Failed to test the recommendations.',
+        body: error,
       });
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }

@@ -106,17 +106,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { AipSchema, SchemaType } from "@/api/interface/aip/AipSchema";
-import { AipConfigurationController } from "@/api/controllers/aip/AipConfigurationController";
-import { AipSchemaController } from "@/api/controllers/aip/AipSchemaController";
+import Vue from 'vue';
+import { AipSchema, SchemaType } from '@/api/interface/aip/AipSchema';
+import { AipConfigurationController } from '@/api/controllers/aip/AipConfigurationController';
+import { AipSchemaController } from '@/api/controllers/aip/AipSchemaController';
 
 export default Vue.extend({
-  name: "AddAIPSchemaModal",
+  name: 'AddAIPSchemaModal',
 
   props: {
     serverId: Number,
-    dialog: Boolean
+    dialog: Boolean,
   },
 
   methods: {
@@ -124,12 +124,12 @@ export default Vue.extend({
       this.dialog = false;
 
       // Reset modal
-      this.selectedSchemaName = "";
+      this.selectedSchemaName = '';
       this.loadingSchemas = false;
       this.schemasList = [];
-      this.errorSchema = "";
+      this.errorSchema = '';
 
-      this.$emit("close", false);
+      this.$emit('close', false);
     },
 
     /**
@@ -142,9 +142,8 @@ export default Vue.extend({
         .then((schemaList: string[]) => {
           this.schemasList = schemaList;
         })
-        .catch(err => {
-          this.errorSchema =
-            "Failed to get the schema list. Check the connectivity to the server.";
+        .catch((err) => {
+          this.errorSchema = 'Failed to get the schema list. Check the connectivity to the server.';
         })
         .finally(() => {
           this.loadingSchemas = false;
@@ -155,11 +154,11 @@ export default Vue.extend({
     selectSchemaList(schemaName: string) {
       this.schema.schema = schemaName;
 
-      if (schemaName.indexOf("_local") >= 0) {
+      if (schemaName.indexOf('_local') >= 0) {
         this.schema.type = SchemaType.LOCAL;
-      } else if (schemaName.indexOf("_mngt") >= 0) {
+      } else if (schemaName.indexOf('_mngt') >= 0) {
         this.schema.type = SchemaType.MANAGEMENT;
-      } else if (schemaName.indexOf("_central") >= 0) {
+      } else if (schemaName.indexOf('_central') >= 0) {
         this.schema.type = SchemaType.CENTRAL;
       }
     },
@@ -167,37 +166,37 @@ export default Vue.extend({
     // Save the new schema
     async save() {
       this.loading = true;
-      this.errors = "";
+      this.errors = '';
 
       try {
         await AipSchemaController.createSchemaNode(this.serverId, this.schema);
         this.closeModal();
       } catch (err) {
-        console.error("Failed to create schema.", err);
-        this.errors = "Failed to create schema. Error: " + err;
+        console.error('Failed to create schema.', err);
+        this.errors = `Failed to create schema. Error: ${err}`;
       } finally {
         this.loading = false;
       }
-    }
+    },
   },
 
   data: () => ({
-    errors: "",
+    errors: '',
     loading: false,
 
-    itemsType: ["Local", "Management", "Central"],
+    itemsType: ['Local', 'Management', 'Central'],
 
     schema: {
-      name: "Local Database",
-      schema: "application_local",
-      type: SchemaType.LOCAL
+      name: 'Local Database',
+      schema: 'application_local',
+      type: SchemaType.LOCAL,
     } as AipSchema,
 
     // Schemas
-    selectedSchemaName: "",
+    selectedSchemaName: '',
     loadingSchemas: false,
     schemasList: [] as string[],
-    errorSchema: ""
-  })
+    errorSchema: '',
+  }),
 });
 </script>

@@ -135,15 +135,15 @@ import Vue from "vue/types/umd";
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
-import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
+import { ApplicationController } from '@/api/controllers/applications/ApplicationController';
 
-import { Configuration } from "@/Configuration";
-import { UtilsController } from "@/api/controllers/utils/UtilsController";
+import { Configuration } from '@/Configuration';
+import { UtilsController } from '@/api/controllers/utils/UtilsController';
 
 export default Vue.extend({
-  name: "Server",
+  name: 'Server',
 
   mounted() {
     this.getApplicationList();
@@ -153,44 +153,44 @@ export default Vue.extend({
   computed: {
     getCurrentView() {
       return this.$store.state.currentView;
-    }
+    },
   },
 
   data: () => ({
     tab: 0,
-    currentScreen: "Reporting",
+    currentScreen: 'Reporting',
 
     items: [
-      { name: "Server", screen: "", icon: "mdi-server" },
-      { name: "Aip Servers", screen: "aipAdministration", icon: "mdi-server" },
+      { name: 'Server', screen: '', icon: 'mdi-server' },
+      { name: 'Aip Servers', screen: 'aipAdministration', icon: 'mdi-server' },
       {
-        name: "Automation",
-        screen: "automation",
-        icon: "mdi-robot-industrial"
+        name: 'Automation',
+        screen: 'automation',
+        icon: 'mdi-robot-industrial',
       },
       {
-        name: "Frameworks",
-        screen: "frameworks",
-        icon: "mdi-package-variant-closed"
+        name: 'Frameworks',
+        screen: 'frameworks',
+        icon: 'mdi-package-variant-closed',
       },
       {
-        name: "Parameters",
-        screen: "parameters",
-        icon: "mdi-cog"
-      }
+        name: 'Parameters',
+        screen: 'parameters',
+        icon: 'mdi-cog',
+      },
     ],
 
     loadingApplication: true as boolean,
-    applicationName: "" as string,
+    applicationName: '' as string,
     applicationList: [] as string[],
 
-    transitionName: "",
+    transitionName: '',
 
-    onlineDatabase: false
+    onlineDatabase: false,
   }),
 
   methods: {
-    /** Change the state of the application **/
+    /** Change the state of the application * */
     changeApplication(application: string) {
       this.applicationName = application;
       // Update store properties
@@ -204,7 +204,7 @@ export default Vue.extend({
         if (res.length != 0) {
           this.changeApplication(res[0]);
         } else {
-          this.applicationName = "No Application found";
+          this.applicationName = 'No Application found';
         }
 
         this.loadingApplication = false;
@@ -216,7 +216,7 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.onlineDatabase = res;
         })
-        .catch(err => {
+        .catch((err) => {
           this.onlineDatabase = false;
         });
     },
@@ -231,19 +231,19 @@ export default Vue.extend({
         })
         .finally(() => {
           setTimeout(
-            function() {
+            () => {
               this.healthcheck();
-            }.bind(this),
-            10000
+            },
+            10000,
           );
         });
     },
 
     goTo(section: string, absolute = false) {
       if (!absolute) {
-        this.$router.replace("/administration/" + section);
+        this.$router.replace(`/administration/${section}`);
       } else {
-        this.$router.replace("/" + section);
+        this.$router.replace(`/${section}`);
       }
     },
 
@@ -266,26 +266,26 @@ export default Vue.extend({
     logout() {
       Configuration.deleteProperties();
       document.location.reload();
-    }
+    },
   },
 
   watch: {
     $route(to, from) {
-      const toSplit: string[] = to.path.split("/");
+      const toSplit: string[] = to.path.split('/');
       const nameView = toSplit[toSplit.length - 1];
       this.updateViewTab(nameView);
 
-      const toDepth = to.path.split("/").length;
-      const fromDepth = from.path.split("/").length;
-      this.transitionName = toDepth < fromDepth ? "slide-right" : "slide-left";
+      const toDepth = to.path.split('/').length;
+      const fromDepth = from.path.split('/').length;
+      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
     },
 
-    applicationName: function() {
+    applicationName() {
       this.changeApplication(this.applicationName);
     },
 
-    tab: function() {
-      this.$router.replace("/administration/" + this.items[this.tab].screen);
+    tab() {
+      this.$router.replace(`/administration/${this.items[this.tab].screen}`);
     },
 
     getCurrentView(newView) {
@@ -297,8 +297,8 @@ export default Vue.extend({
       }
       console.log(`Not found ${newView}`);
       // Do nothing if the view wasn't found
-    }
-  }
+    },
+  },
 });
 </script>
 

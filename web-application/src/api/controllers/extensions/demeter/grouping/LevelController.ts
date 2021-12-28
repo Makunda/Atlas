@@ -1,7 +1,7 @@
-import { CandidateResults } from "@/api/interface/extensions/demeter/CandidateResults";
-import { Level5Group } from "@/api/interface/extensions/demeter/Level";
-import ProxyAxios from "@/utils/axios/ProxyAxios";
-import Logger from "@/utils/Logger";
+import { CandidateResults } from '@/api/interface/extensions/demeter/CandidateResults';
+import { Level5Group } from '@/api/interface/extensions/demeter/Level';
+import ProxyAxios from '@/utils/axios/ProxyAxios';
+import Logger from '@/utils/Logger';
 
 export class LevelController {
   /**
@@ -9,7 +9,7 @@ export class LevelController {
    * @param applicationName Name of the application
    */
   public static async executeGrouping(
-    applicationName: string
+    applicationName: string,
   ): Promise<number> {
     const url = `/api/demeter/levels/${applicationName}/group`;
 
@@ -21,7 +21,7 @@ export class LevelController {
     } catch (error) {
       Logger.error(
         `Failed to group nodes in application ${applicationName}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -32,7 +32,7 @@ export class LevelController {
    * @param applicationName Name of the application
    */
   public static async getCandidates(
-    applicationName: string
+    applicationName: string,
   ): Promise<CandidateResults[]> {
     const url = `/api/demeter/levels/${applicationName}/candidates`;
 
@@ -44,7 +44,7 @@ export class LevelController {
     } catch (error) {
       Logger.error(
         `Failed to retrieve levels of application ${applicationName}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -55,7 +55,7 @@ export class LevelController {
    * @param applicationName Name of the application
    */
   public static async getAllLevels(
-    applicationName: string
+    applicationName: string,
   ): Promise<Level5Group[]> {
     const url = `/api/demeter/levels/${applicationName}/all`;
 
@@ -67,7 +67,7 @@ export class LevelController {
     } catch (error) {
       Logger.error(
         `Failed to retrieve levels in application ${applicationName}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -78,9 +78,9 @@ export class LevelController {
    * @param applicationName Name of the application
    */
   public static async getDemeterLevels(
-    applicationName: string
+    applicationName: string,
   ): Promise<Level5Group[]> {
-    if (applicationName == "") return;
+    if (applicationName == '') return;
 
     const url = `/api/demeter/levels/${applicationName}/grouped`;
 
@@ -92,7 +92,7 @@ export class LevelController {
     } catch (error) {
       Logger.error(
         `Failed to reach the API : ${url}. Failed to retrieve grouped levels.`,
-        error
+        error,
       );
       throw error;
     }
@@ -105,7 +105,7 @@ export class LevelController {
    */
   public static async undoGroupedLevel5(
     applicationName: string,
-    groupName: string
+    groupName: string,
   ): Promise<boolean> {
     const url = `/api/demeter/levels/${applicationName}/undo`;
 
@@ -117,7 +117,7 @@ export class LevelController {
     } catch (error) {
       Logger.error(
         `Failed to undo a grouped level in application ${applicationName}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -128,7 +128,7 @@ export class LevelController {
    * @param applicationName
    */
   public static async undoAllGroupedLevel5(
-    applicationName: string
+    applicationName: string,
   ): Promise<boolean> {
     const url = `/api/demeter/levels/${applicationName}/undo/all`;
 
@@ -140,7 +140,7 @@ export class LevelController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to undo akk grouped levels.`,
-        error
+        error,
       );
       throw error;
     }
@@ -155,14 +155,14 @@ export class LevelController {
   public static async renameLevel(
     applicationName: string,
     groupName: string,
-    newName: string
+    newName: string,
   ): Promise<boolean> {
     const url = `/api/demeter/levels/${applicationName}/rename`;
 
     try {
       const res = await ProxyAxios.post<boolean>(url, {
         level: groupName,
-        newLevel: newName
+        newLevel: newName,
       });
       if (res.isError()) throw res.getErrorsAsString();
 
@@ -170,7 +170,7 @@ export class LevelController {
     } catch (error) {
       Logger.error(
         `Failed to rename a grouped level in application ${applicationName}.`,
-        error
+        error,
       );
       throw error;
     }

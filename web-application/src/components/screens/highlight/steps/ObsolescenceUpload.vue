@@ -157,7 +157,7 @@
                       </v-row>
 
                       <!-- Fitler on latest version -->
-                      <!-- 
+                      <!--
                         minDateRelease: 0 as number,
                         maxDateRelease: 0 as number,
                         rangeRelease: [0, 0],
@@ -420,25 +420,25 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import OssRecommendation from "@/api/interface/highlight/OssRecommendation";
-import { ObsolescenceController } from "@/api/controllers/highlight/ObsolescenceController";
+import Vue from 'vue';
+import OssRecommendation from '@/api/interface/highlight/OssRecommendation';
+import { ObsolescenceController } from '@/api/controllers/highlight/ObsolescenceController';
 
 export default Vue.extend({
-  name: "ObsolescenceUpload",
+  name: 'ObsolescenceUpload',
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
-    application: "",
+    application: '',
     e1: 1,
     file: null,
 
-    search: "",
+    search: '',
 
     // filters
     valuesTechnologies: [] as string[],
@@ -450,41 +450,41 @@ export default Vue.extend({
       critical: false,
       high: false,
       medium: false,
-      low: false
+      low: false,
     },
 
     selected: [] as OssRecommendation[],
 
     snack: false,
-    snackColor: "",
-    snackText: "",
+    snackColor: '',
+    snackText: '',
     pagination: {},
 
-    defaultRegex: "(\\w+\\.\\w+)",
-    defaultReplacement: "",
+    defaultRegex: '(\\w+\\.\\w+)',
+    defaultReplacement: '',
 
     // Applying tags
-    taggingType: "tag",
+    taggingType: 'tag',
     loadingApply: false,
     percentageTagsApplied: 0,
 
     headers: [
       {
-        text: "Application",
-        align: "start",
+        text: 'Application',
+        align: 'start',
         sortable: false,
-        value: "application"
+        value: 'application',
       },
-      { text: "Component", value: "component" },
-      { text: "Patterns", value: "patterns" },
-      { text: "Origin", value: "origin" },
-      { text: "Description", value: "description" },
-      { text: "Version", value: "version" },
-      { text: "Technology", value: "technology" },
-      { text: "Version date", value: "release" },
-      { text: "Latest Release", value: "lastRelease" },
-      { text: "Integration", value: "integration" },
-      { text: "Actions", value: "actions", sortable: false }
+      { text: 'Component', value: 'component' },
+      { text: 'Patterns', value: 'patterns' },
+      { text: 'Origin', value: 'origin' },
+      { text: 'Description', value: 'description' },
+      { text: 'Version', value: 'version' },
+      { text: 'Technology', value: 'technology' },
+      { text: 'Version date', value: 'release' },
+      { text: 'Latest Release', value: 'lastRelease' },
+      { text: 'Integration', value: 'integration' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
     blockerList: [] as OssRecommendation[],
     blockerUndoTable: [] as OssRecommendation[],
@@ -502,13 +502,13 @@ export default Vue.extend({
 
     // Review results
     appliedBlockers: 0,
-    errorApplying: "",
+    errorApplying: '',
     blockerNotApplied: [] as OssRecommendation[],
 
     // Progression
     sizeToSend: 0,
     sizeSent: 0,
-    fileUploading: false
+    fileUploading: false,
   }),
 
   methods: {
@@ -525,7 +525,7 @@ export default Vue.extend({
     getYearDifference(enteredDate: number) {
       return (
         new Date(
-          new Date().getTime() - new Date(enteredDate).getTime()
+          new Date().getTime() - new Date(enteredDate).getTime(),
         ).getFullYear() - 1970
       );
     },
@@ -537,7 +537,7 @@ export default Vue.extend({
       this.e1 = 3;
       this.loadingApply = true;
       this.blockerNotApplied = [];
-      this.errorApplying = "";
+      this.errorApplying = '';
 
       try {
         this.sizeToSend = this.blockerDisplayedList.length;
@@ -547,19 +547,18 @@ export default Vue.extend({
           index < this.blockerDisplayedList.length;
           index += batchSize
         ) {
-          const upBound =
-            index + batchSize > this.blockerDisplayedList.length
-              ? this.blockerDisplayedList.length - 1
-              : index + batchSize;
+          const upBound = index + batchSize > this.blockerDisplayedList.length
+            ? this.blockerDisplayedList.length - 1
+            : index + batchSize;
           const batch = this.blockerDisplayedList.slice(index, upBound);
 
           // Send batch
           const [
             applied,
-            notApplied
+            notApplied,
           ] = await ObsolescenceController.applyBlockers(
             batch,
-            this.taggingType
+            this.taggingType,
           );
           this.blockerNotApplied = this.blockerNotApplied.concat(notApplied);
 
@@ -569,9 +568,9 @@ export default Vue.extend({
 
         this.appliedBlockers = batchSize - this.blockerNotApplied.length;
       } catch (err) {
-        console.error("Failed to apply the tags", err);
+        console.error('Failed to apply the tags', err);
         this.snack = true;
-        this.snackColor = "error";
+        this.snackColor = 'error';
         this.snackText = `Failed to apply the tags. ${err}.`;
         this.errorApplying = err;
       } finally {
@@ -581,10 +580,8 @@ export default Vue.extend({
 
     filterItems() {
       // Rearrange filter
-      if (this.rangeRelease[0] >= this.range[0])
-        this.range[0] = this.rangeRelease[0];
-      if (this.rangeRelease[1] <= this.range[1])
-        this.range[1] = this.rangeRelease[1];
+      if (this.rangeRelease[0] >= this.range[0]) { this.range[0] = this.rangeRelease[0]; }
+      if (this.rangeRelease[1] <= this.range[1]) { this.range[1] = this.rangeRelease[1]; }
 
       this.blockerDisplayedList = this.blockerList.filter(
         (x: OssRecommendation) => {
@@ -593,14 +590,14 @@ export default Vue.extend({
 
           return (
             // Filter technologies
-            this.valuesTechnologies.indexOf(x.technology) >= 0 &&
+            this.valuesTechnologies.indexOf(x.technology) >= 0
             // Filter on Date
-            date >= this.range[0] &&
-            date <= this.range[1] &&
-            releaseDate >= this.rangeRelease[0] &&
-            releaseDate <= this.rangeRelease[1]
+            && date >= this.range[0]
+            && date <= this.range[1]
+            && releaseDate >= this.rangeRelease[0]
+            && releaseDate <= this.rangeRelease[1]
           );
-        }
+        },
       );
 
       this.processTags();
@@ -618,7 +615,7 @@ export default Vue.extend({
     },
 
     deleteSelectedItems() {
-      this.selected.forEach(x => {
+      this.selected.forEach((x) => {
         const editedIndex = this.blockerList.indexOf(x);
         this.blockerList.splice(editedIndex, 1);
       });
@@ -636,19 +633,15 @@ export default Vue.extend({
 
         this.blockerList = await ObsolescenceController.uploadFile(
           this.file,
-          this.application
+          this.application,
         );
 
         for (const i in this.blockerList) this.blockerList[i].id = i;
 
         // Get information on the date
-        const dateList = this.blockerList.map((x: OssRecommendation) =>
-          new Date(x.release).getTime()
-        );
+        const dateList = this.blockerList.map((x: OssRecommendation) => new Date(x.release).getTime());
 
-        const releaseList = this.blockerList.map((x: OssRecommendation) =>
-          new Date(x.lastRelease).getTime()
-        );
+        const releaseList = this.blockerList.map((x: OssRecommendation) => new Date(x.lastRelease).getTime());
 
         // Date
         this.minDate = Math.min(...dateList);
@@ -676,7 +669,7 @@ export default Vue.extend({
 
         this.e1 = 2;
       } catch (err) {
-        console.error("Failed to process the file.", err);
+        console.error('Failed to process the file.', err);
       } finally {
         this.fileUploading = false;
       }
@@ -689,21 +682,21 @@ export default Vue.extend({
 
     save() {
       this.snack = true;
-      this.snackColor = "success";
-      this.snackText = "Data saved";
+      this.snackColor = 'success';
+      this.snackText = 'Data saved';
     },
     cancel() {
       this.snack = true;
-      this.snackColor = "error";
-      this.snackText = "Canceled";
+      this.snackColor = 'error';
+      this.snackText = 'Canceled';
     },
     open() {
       this.snack = true;
-      this.snackColor = "info";
-      this.snackText = "Editing data";
+      this.snackColor = 'info';
+      this.snackText = 'Editing data';
     },
     close() {
-      console.log("Closed.");
+      console.log('Closed.');
     },
 
     resetTable() {
@@ -715,7 +708,7 @@ export default Vue.extend({
     },
 
     processTags() {
-      this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
+      this.blockerUndoTable = { ...this.blockerDisplayedList };
       this.blockerDisplayedList.forEach((x: OssRecommendation) => {
         const regexResult = x.component.match(this.defaultRegex);
         if (regexResult && regexResult.length > 0) {
@@ -725,16 +718,16 @@ export default Vue.extend({
     },
 
     removeBeginning() {
-      const regex = new RegExp("", "gi");
+      const regex = new RegExp('', 'gi');
 
-      this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
+      this.blockerUndoTable = { ...this.blockerDisplayedList };
       this.blockerDisplayedList.forEach((x: OssRecommendation) => {
-        const regexResult = x.component.replace(regex, "");
+        const regexResult = x.component.replace(regex, '');
         if (regexResult && regexResult.length > 0) {
           x.component = regexResult[1];
         }
       });
-    }
+    },
   },
 
   mounted() {
@@ -744,8 +737,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

@@ -1,7 +1,7 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { AipConfiguration } from "@/api/interface/aip/Aipconfiguration";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import { AipConfiguration } from '@/api/interface/aip/Aipconfiguration';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export interface ApplicationRecord {
   name: string;
@@ -15,9 +15,8 @@ export class AipConfigurationController {
    * @returns A promise returning the list of AIP configuration found in the database
    */
   public static async getConfigurationList(): Promise<AipConfiguration[]> {
-    const url =
-      AipConfigurationController.API_BASE_URL +
-      "/api/aip/parameters/configuration/all";
+    const url = `${AipConfigurationController.API_BASE_URL
+    }/api/aip/parameters/configuration/all`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -31,7 +30,7 @@ export class AipConfigurationController {
         }
       } else {
         console.warn(
-          `Failed to retrieve Aip Configuration list. Status (${res.status})`
+          `Failed to retrieve Aip Configuration list. Status (${res.status})`,
         );
       }
 
@@ -39,7 +38,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Aip Configuration list.`,
-        error
+        error,
       );
     }
   }
@@ -50,19 +49,18 @@ export class AipConfigurationController {
    * @returns A promise ending when the configuration is created
    */
   public static async createConfigurationNode(
-    configuration: AipConfiguration
+    configuration: AipConfiguration,
   ): Promise<void> {
-    const url =
-      AipConfigurationController.API_BASE_URL +
-      "/api/aip/parameters/configuration";
+    const url = `${AipConfigurationController.API_BASE_URL
+    }/api/aip/parameters/configuration`;
 
     try {
-      const body = { configuration: configuration };
+      const body = { configuration };
       const res = await ProxyAxios.post(url, body);
 
       if (res.status !== 200) {
         throw new Error(
-          `Failed to create the AIP configuration node. Status : ${res.status}.`
+          `Failed to create the AIP configuration node. Status : ${res.status}.`,
         );
       }
 
@@ -70,7 +68,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Aip Configuration list.`,
-        error
+        error,
       );
     }
   }
@@ -81,19 +79,18 @@ export class AipConfigurationController {
    * @returns A promise ending when the configuration is created
    */
   public static async deleteConfigurationNode(
-    configurationId: number
+    configurationId: number,
   ): Promise<void> {
-    const url =
-      AipConfigurationController.API_BASE_URL +
-      "/api/aip/parameters/configuration/" +
-      configurationId;
+    const url = `${AipConfigurationController.API_BASE_URL
+    }/api/aip/parameters/configuration/${
+      configurationId}`;
 
     try {
       const res = await ProxyAxios.delete(url);
 
       if (res.status !== 200) {
         throw new Error(
-          `Failed to delete the AIP configuration. Status : ${res.status}.`
+          `Failed to delete the AIP configuration. Status : ${res.status}.`,
         );
       }
 
@@ -101,7 +98,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to configurationId Aip Configuration.`,
-        error
+        error,
       );
     }
   }
@@ -112,14 +109,13 @@ export class AipConfigurationController {
    * @returns
    */
   public static async testConnection(
-    configuration: AipConfiguration
+    configuration: AipConfiguration,
   ): Promise<boolean> {
-    const url =
-      AipConfigurationController.API_BASE_URL +
-      "/api/aip/parameters/test/configuration";
+    const url = `${AipConfigurationController.API_BASE_URL
+    }/api/aip/parameters/test/configuration`;
 
     try {
-      const body = { configuration: configuration };
+      const body = { configuration };
       const res = await ProxyAxios.post(url, body);
 
       if (res.status !== 200) {
@@ -138,29 +134,28 @@ export class AipConfigurationController {
    * @returns
    */
   public static async getAllSchemaList(
-    idConfiguration: number
+    idConfiguration: number,
   ): Promise<string[]> {
-    const url =
-      AipConfigurationController.API_BASE_URL +
-      `/api/aip/parameters/configuration/byId/${idConfiguration}/all/schemas`;
+    const url = `${AipConfigurationController.API_BASE_URL
+    }/api/aip/parameters/configuration/byId/${idConfiguration}/all/schemas`;
 
     try {
       const res = await ProxyAxios.get(url);
 
       if (res.status !== 200) {
         throw new Error(
-          `Failed to retrieve the schemas list. Status : ${res.status}.`
+          `Failed to retrieve the schemas list. Status : ${res.status}.`,
         );
       }
 
       const apiResponse: ApiResponse = res.data;
-      console.log("Data received ", apiResponse.data);
+      console.log('Data received ', apiResponse.data);
 
       return apiResponse.data as string[];
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve the schemas list.`,
-        error
+        error,
       );
     }
   }
@@ -171,9 +166,8 @@ export class AipConfigurationController {
    * @returns
    */
   public static async deleteSchemaById(idConfiguration: number): Promise<void> {
-    const url =
-      AipConfigurationController.API_BASE_URL +
-      `/api/aip/parameters/configuration/delete/byId/${idConfiguration}`;
+    const url = `${AipConfigurationController.API_BASE_URL
+    }/api/aip/parameters/configuration/delete/byId/${idConfiguration}`;
 
     try {
       const res = await ProxyAxios.delete(url);
@@ -184,7 +178,7 @@ export class AipConfigurationController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete the server.`,
-        error
+        error,
       );
     }
   }

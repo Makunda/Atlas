@@ -97,22 +97,22 @@
 </template>
 
 <script lang="ts">
-import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
-import Vue from "vue";
-import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
+import Vue from 'vue';
+import ConfigurationController from '@/api/controllers/configuration/ConfigurationController';
+import { ArtemisController } from '@/api/controllers/extensions/artemis/ArtemisController';
 
 export default Vue.extend({
-  name: "ArtemisParametersViewer",
+  name: 'ArtemisParametersViewer',
 
   data: () => ({
-    artemisWorkspace: "",
+    artemisWorkspace: '',
     updatingWorkspace: false,
-    updateSuccess: "",
+    updateSuccess: '',
 
     // Upload new configuration
     file: null,
     loadingConfigFiles: false,
-    loadingSuccess: []
+    loadingSuccess: [],
   }),
 
   methods: {
@@ -121,8 +121,8 @@ export default Vue.extend({
         .then((res: string) => {
           this.artemisWorkspace = res;
         })
-        .catch(err => {
-          console.error("Failed to get teh Artemis workspace", err);
+        .catch((err) => {
+          console.error('Failed to get teh Artemis workspace', err);
         });
     },
 
@@ -131,16 +131,16 @@ export default Vue.extend({
       ConfigurationController.setArtemisWorkspace(this.artemisWorkspace)
         .then(async () => {
           await this.getArtemisWorkspace();
-          this.updateSuccess = `Successfully updated the workspace`;
+          this.updateSuccess = 'Successfully updated the workspace';
           setTimeout(
-            function() {
-              this.updateSuccess = "";
-            }.bind(this),
-            4000
+            () => {
+              this.updateSuccess = '';
+            },
+            4000,
           );
         })
-        .catch(err => {
-          console.error("Failed to update teh Artemis workspace", err);
+        .catch((err) => {
+          console.error('Failed to update teh Artemis workspace', err);
         })
         .finally(() => {
           this.updatingWorkspace = false;
@@ -149,25 +149,25 @@ export default Vue.extend({
 
     async loadConfigFiles() {
       if (this.file == null) {
-        this.loadingSuccess = "Please select a file to upload.";
+        this.loadingSuccess = 'Please select a file to upload.';
       } else {
         try {
           const res = await ArtemisController.triggerImport(this.file);
 
           this.loadingSuccess = res;
         } catch (error) {
-          this.loadingSuccess = "Failed to upload the new configuration";
+          this.loadingSuccess = 'Failed to upload the new configuration';
         }
       }
     },
 
     refresh() {
       this.getArtemisWorkspace();
-    }
+    },
   },
 
   mounted() {
     this.getArtemisWorkspace();
-  }
+  },
 });
 </script>

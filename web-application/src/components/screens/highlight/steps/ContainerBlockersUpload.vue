@@ -390,27 +390,27 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ContainerBlocker from "@/api/interface/highlight/ContainerBlocker";
-import ContainerBlockerController from "@/api/controllers/highlight/ContainerBlockerController";
-import flash, { FlashType } from "@/modules/flash/Flash";
+import Vue from 'vue';
+import ContainerBlocker from '@/api/interface/highlight/ContainerBlocker';
+import ContainerBlockerController from '@/api/controllers/highlight/ContainerBlockerController';
+import flash, { FlashType } from '@/modules/flash/Flash';
 
 export default Vue.extend({
-  name: "CloudBockersUpload",
+  name: 'CloudBockersUpload',
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
-    application: "",
+    application: '',
     e1: 1,
     file: null,
 
-    search: "",
-    taggingType: "tag",
+    search: '',
+    taggingType: 'tag',
 
     // filters
     valuesTechnologies: [] as string[],
@@ -421,12 +421,12 @@ export default Vue.extend({
     selected: [] as ContainerBlocker[],
 
     snack: false,
-    snackColor: "",
-    snackText: "",
+    snackColor: '',
+    snackText: '',
     pagination: {},
 
-    defaultRegex: "(\\w+\\.\\w+)",
-    defaultReplacement: "",
+    defaultRegex: '(\\w+\\.\\w+)',
+    defaultReplacement: '',
 
     // Applying tags
     loadingApply: false,
@@ -434,16 +434,16 @@ export default Vue.extend({
 
     headers: [
       {
-        text: "Application",
-        align: "start",
+        text: 'Application',
+        align: 'start',
         sortable: false,
-        value: "application"
+        value: 'application',
       },
-      { text: "Requirement", value: "requirement" },
-      { text: "Block", value: "blocker" },
-      { text: "Technology", value: "technology" },
-      { text: "File", value: "file" },
-      { text: "Actions", value: "actions", sortable: false }
+      { text: 'Requirement', value: 'requirement' },
+      { text: 'Block', value: 'blocker' },
+      { text: 'Technology', value: 'technology' },
+      { text: 'File', value: 'file' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
     blockerList: [] as ContainerBlocker[],
     blockerUndoTable: [] as ContainerBlocker[],
@@ -451,13 +451,13 @@ export default Vue.extend({
 
     // Review results
     appliedBlockers: 0,
-    errorApplying: "",
+    errorApplying: '',
     blockerNotApplied: [] as ContainerBlocker[],
 
     // Progression
     sizeToSend: 0,
     sizeSent: 0,
-    fileUploading: false
+    fileUploading: false,
   }),
 
   methods: {
@@ -468,7 +468,7 @@ export default Vue.extend({
 
       this.loadingApply = true;
       this.blockerNotApplied = [];
-      this.errorApplying = "";
+      this.errorApplying = '';
 
       try {
         this.sizeToSend = this.blockerDisplayedList.length;
@@ -478,19 +478,18 @@ export default Vue.extend({
           index < this.blockerDisplayedList.length;
           index += batchSize
         ) {
-          const upBound =
-            index + batchSize > this.blockerDisplayedList.length
-              ? this.blockerDisplayedList.length - 1
-              : index + batchSize;
+          const upBound = index + batchSize > this.blockerDisplayedList.length
+            ? this.blockerDisplayedList.length - 1
+            : index + batchSize;
           const batch = this.blockerDisplayedList.slice(index, upBound);
 
           // Send batch
           const [
             applied,
-            notApplied
+            notApplied,
           ] = await ContainerBlockerController.applyBlockers(
             batch,
-            this.taggingType
+            this.taggingType,
           );
           this.blockerNotApplied = this.blockerNotApplied.concat(notApplied);
 
@@ -500,9 +499,9 @@ export default Vue.extend({
 
         this.appliedBlockers = batchSize - this.blockerNotApplied.length;
       } catch (err) {
-        console.error("Failed to apply the tags", err);
+        console.error('Failed to apply the tags', err);
         this.snack = true;
-        this.snackColor = "error";
+        this.snackColor = 'error';
         this.snackText = `Failed to apply the tags. ${err}.`;
         this.errorApplying = err;
       } finally {
@@ -512,12 +511,10 @@ export default Vue.extend({
 
     filterItems() {
       this.blockerDisplayedList = this.blockerList.filter(
-        (x: ContainerBlocker) => {
-          return (
-            this.valuesTechnologies.indexOf(x.technology) >= 0 &&
-            this.valuesRecommendations.indexOf(x.requirement) >= 0
-          );
-        }
+        (x: ContainerBlocker) => (
+          this.valuesTechnologies.indexOf(x.technology) >= 0
+            && this.valuesRecommendations.indexOf(x.requirement) >= 0
+        ),
       );
     },
 
@@ -539,7 +536,7 @@ export default Vue.extend({
      * Delete all selected items in the list
      */
     deleteSelectedItems() {
-      this.selected.forEach(x => {
+      this.selected.forEach((x) => {
         const editedIndex = this.blockerList.indexOf(x);
         this.blockerList.splice(editedIndex, 1);
       });
@@ -560,7 +557,7 @@ export default Vue.extend({
 
         this.blockerList = await ContainerBlockerController.uploadFile(
           this.file,
-          this.application
+          this.application,
         );
 
         for (const i in this.blockerList) this.blockerList[i].id = i;
@@ -582,11 +579,11 @@ export default Vue.extend({
 
         this.e1 = 2;
       } catch (err) {
-        console.error("Failed to process the file.", err);
-        flash.commit("add", {
+        console.error('Failed to process the file.', err);
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to process the file.",
-          body: err
+          title: 'Failed to process the file.',
+          body: err,
         });
       } finally {
         this.fileUploading = false;
@@ -600,21 +597,21 @@ export default Vue.extend({
 
     save() {
       this.snack = true;
-      this.snackColor = "success";
-      this.snackText = "Data saved";
+      this.snackColor = 'success';
+      this.snackText = 'Data saved';
     },
     cancel() {
       this.snack = true;
-      this.snackColor = "error";
-      this.snackText = "Canceled";
+      this.snackColor = 'error';
+      this.snackText = 'Canceled';
     },
     open() {
       this.snack = true;
-      this.snackColor = "info";
-      this.snackText = "Editing data";
+      this.snackColor = 'info';
+      this.snackText = 'Editing data';
     },
     close() {
-      console.log("Closed.");
+      console.log('Closed.');
     },
 
     resetTable() {
@@ -626,7 +623,7 @@ export default Vue.extend({
     },
 
     processTags() {
-      this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
+      this.blockerUndoTable = { ...this.blockerDisplayedList };
       this.blockerDisplayedList.forEach((x: ContainerBlocker) => {
         const regexResult = x.file.match(this.defaultRegex);
         if (regexResult && regexResult.length > 0) {
@@ -636,16 +633,16 @@ export default Vue.extend({
     },
 
     removeBeginning() {
-      const regex = new RegExp("", "gi");
+      const regex = new RegExp('', 'gi');
 
-      this.blockerUndoTable = Object.assign({}, this.blockerDisplayedList);
+      this.blockerUndoTable = { ...this.blockerDisplayedList };
       this.blockerDisplayedList.forEach((x: ContainerBlocker) => {
-        const regexResult = x.file.replace(regex, "");
+        const regexResult = x.file.replace(regex, '');
         if (regexResult && regexResult.length > 0) {
           x.file = regexResult[1];
         }
       });
-    }
+    },
   },
 
   mounted() {
@@ -655,8 +652,8 @@ export default Vue.extend({
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

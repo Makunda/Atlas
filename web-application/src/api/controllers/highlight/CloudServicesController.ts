@@ -1,8 +1,8 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import CloudBlocker from "@/api/interface/highlight/CloudBlocker";
-import ProxyAxios from "@/api/utils/ProxyAxios";
-import ApiResponseImpl from "@/api/utils/ApiResponse";
-import CloudServiceRecommendation from "@/api/interface/highlight/CloudServiceRecommendation";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import CloudBlocker from '@/api/interface/highlight/CloudBlocker';
+import ProxyAxios from '@/api/utils/ProxyAxios';
+import ApiResponseImpl from '@/api/utils/ApiResponse';
+import CloudServiceRecommendation from '@/api/interface/highlight/CloudServiceRecommendation';
 
 export class CloudServicesController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -12,42 +12,40 @@ export class CloudServicesController {
    */
   public static async uploadFile(
     file: any,
-    application: string
+    application: string,
   ): Promise<CloudServiceRecommendation[]> {
-    const url =
-      CloudServicesController.API_BASE_URL +
-      `/api/highlight/recommendations/cloudService/file/upload/${application}`;
+    const url = `${CloudServicesController.API_BASE_URL
+    }/api/highlight/recommendations/cloudService/file/upload/${application}`;
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("application", application);
+      formData.append('file', file);
+      formData.append('application', application);
       const config = {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       };
 
       // Post the file
       const response = await ProxyAxios.post(url, formData, config);
 
       const apiResponse = new ApiResponseImpl<CloudServiceRecommendation[]>(
-        response
+        response,
       );
 
       if (apiResponse.isSuccess()) {
         return apiResponse.getData();
-      } else {
-        throw new Error(
-          `Failed to send the list of recommendation. Status (${apiResponse.getStatus()}). Error: ${apiResponse
-            .getErrors()
-            .join(", ")}`
-        );
       }
+      throw new Error(
+        `Failed to send the list of recommendation. Status (${apiResponse.getStatus()}). Error: ${apiResponse
+          .getErrors()
+          .join(', ')}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -58,16 +56,15 @@ export class CloudServicesController {
    */
   public static async applyBlockers(
     blockers: CloudServiceRecommendation[],
-    type: string
+    type: string,
   ): Promise<[CloudServiceRecommendation[], CloudServiceRecommendation[]]> {
-    const url =
-      CloudServicesController.API_BASE_URL +
-      "/api/highlight/recommendations/cloudService/apply";
+    const url = `${CloudServicesController.API_BASE_URL
+    }/api/highlight/recommendations/cloudService/apply`;
 
     try {
       const body = {
-        blockers: blockers,
-        type: type
+        blockers,
+        type,
       };
 
       // Post the blockers to apply
@@ -77,17 +74,16 @@ export class CloudServicesController {
       if (apiResponse.isSuccess()) {
         const data: any = apiResponse.getData();
         return [data.applied, data.notApplied];
-      } else {
-        throw new Error(
-          `Failed to apply the list of recommendation. Status (${apiResponse.getStatus()}). Errors: ${apiResponse
-            .getErrors()
-            .join(", ")}`
-        );
       }
+      throw new Error(
+        `Failed to apply the list of recommendation. Status (${apiResponse.getStatus()}). Errors: ${apiResponse
+          .getErrors()
+          .join(', ')}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to apply the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -97,15 +93,14 @@ export class CloudServicesController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: CloudBlocker
+    blocker: CloudBlocker,
   ): Promise<CloudBlocker[]> {
-    const url =
-      CloudServicesController.API_BASE_URL +
-      "/api/highlight/recommendations/cloudService/test";
+    const url = `${CloudServicesController.API_BASE_URL
+    }/api/highlight/recommendations/cloudService/test`;
 
     try {
       const body = {
-        blocker: blocker
+        blocker,
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -113,15 +108,14 @@ export class CloudServicesController {
 
       if (apiResponse.isSuccess()) {
         return apiResponse.getData();
-      } else {
-        throw new Error(
-          `Failed to test the recommendations. Status (${apiResponse.getStatus()}). Message: ${apiResponse.getMessage()}`
-        );
       }
+      throw new Error(
+        `Failed to test the recommendations. Status (${apiResponse.getStatus()}). Message: ${apiResponse.getMessage()}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }

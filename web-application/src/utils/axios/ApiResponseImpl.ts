@@ -1,16 +1,22 @@
-import { AxiosResponse } from "axios";
-import { AtlasApiResponse } from "@/utils/axios/AtlasApiResponse";
+import { AxiosResponse } from 'axios';
+import { AtlasApiResponse } from '@/utils/axios/AtlasApiResponse';
 
-/***
+/** *
  * Class handling the response from the API
  */
 export default class ApiResponseImpl<T> {
-  private message = "";
+  private message = '';
+
   private status: number;
+
   private config: any;
+
   private data: T = {} as any;
+
   private response = {} as AtlasApiResponse;
+
   private errors: string[] = [];
+
   private success: boolean;
 
   /**
@@ -96,7 +102,7 @@ export default class ApiResponseImpl<T> {
    * @param joiner (Optional) The string to join the elements. By default ", "
    * @returns The list of errors joined
    */
-  public getErrorsAsString(joiner = ", "): string {
+  public getErrorsAsString(joiner = ', '): string {
     return this.errors.join(joiner);
   }
 

@@ -29,16 +29,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "LinearStatisticTile",
+  name: 'LinearStatisticTile',
 
   props: {
     title: String,
     description: String,
     percentage: Number,
-    inverted: Boolean
+    inverted: Boolean,
   },
 
   // Pick the right color on mount
@@ -50,26 +50,26 @@ export default Vue.extend({
     }
 
     if (this.displayedPercentage <= 0.25) {
-      this.indicatorColor = "#e76f51";
+      this.indicatorColor = '#e76f51';
     } else if (
-      this.displayedPercentage > 0.25 &&
-      this.displayedPercentage <= 0.5
+      this.displayedPercentage > 0.25
+      && this.displayedPercentage <= 0.5
     ) {
-      this.indicatorColor = "#f4a261";
+      this.indicatorColor = '#f4a261';
     } else if (
-      this.displayedPercentage > 0.5 &&
-      this.displayedPercentage <= 0.75
+      this.displayedPercentage > 0.5
+      && this.displayedPercentage <= 0.75
     ) {
-      this.indicatorColor = "#f4a261";
+      this.indicatorColor = '#f4a261';
     } else {
-      this.indicatorColor = "#2a9d8f";
+      this.indicatorColor = '#2a9d8f';
     }
   },
 
   data: () => ({
-    indicatorColor: "persianGrey",
-    displayedPercentage: 0.0
-  })
+    indicatorColor: 'persianGrey',
+    displayedPercentage: 0.0,
+  }),
 });
 </script>
 

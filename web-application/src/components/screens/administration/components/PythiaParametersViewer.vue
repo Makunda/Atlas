@@ -172,32 +172,32 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import PythiaUtilController from "@/api/controllers/pythia/PythiaUtilController";
+import Vue from 'vue';
+import PythiaUtilController from '@/api/controllers/pythia/PythiaUtilController';
 
 export default Vue.extend({
-  name: "PythiaParametersViewer",
+  name: 'PythiaParametersViewer',
 
   data: () => ({
     refreshing: false,
     // Url params
-    pythiaURL: "",
-    pythiaURLError: "",
+    pythiaURL: '',
+    pythiaURLError: '',
 
     // Pythia Status
-    pythiaStatus: "No Status",
-    pythiaStatusError: "",
+    pythiaStatus: 'No Status',
+    pythiaStatusError: '',
     pythiaLoadingStatus: false,
 
     // Auth Status
-    pythiaAuthStatus: "",
-    pythiaAuthStatusError: "No Status",
+    pythiaAuthStatus: '',
+    pythiaAuthStatusError: 'No Status',
     pythiaLoadingAuthStatus: false,
 
-    pythiaToken: "",
+    pythiaToken: '',
     existPythiatoken: false,
-    pythiaTokenError: "",
-    loadingToken: false
+    pythiaTokenError: '',
+    loadingToken: false,
   }),
 
   methods: {
@@ -208,9 +208,9 @@ export default Vue.extend({
       await PythiaUtilController.getURL()
         .then((res: string) => {
           this.pythiaURL = res;
-          this.pythiaURLError = "";
+          this.pythiaURLError = '';
         })
-        .catch(err => {
+        .catch((err) => {
           this.pythiaURLError = err;
         });
     },
@@ -220,17 +220,17 @@ export default Vue.extend({
      */
     async getStatus() {
       if (!this.pythiaURL) {
-        this.pythiaStatusError = "No URL Provided";
-        this.pythiaStatus = "Unreachable";
+        this.pythiaStatusError = 'No URL Provided';
+        this.pythiaStatus = 'Unreachable';
         return;
       }
       this.pythiaLoadingStatus = true;
       await PythiaUtilController.getStatus()
         .then((res: string) => {
           this.pythiaStatus = res;
-          this.pythiaStatusError = "";
+          this.pythiaStatusError = '';
         })
-        .catch(err => {
+        .catch((err) => {
           this.pythiaStatusError = err;
         })
         .finally(() => {
@@ -243,17 +243,17 @@ export default Vue.extend({
      */
     async getAuthenticationStatus() {
       if (!this.pythiaURL) {
-        this.pythiaAuthStatusError = "No URL Provided";
-        this.pythiaAuthStatus = "Unreachable";
+        this.pythiaAuthStatusError = 'No URL Provided';
+        this.pythiaAuthStatus = 'Unreachable';
         return;
       }
       this.pythiaLoadingAuthStatus = true;
       await PythiaUtilController.getAuthenticationStatus()
         .then((res: string) => {
           this.pythiaAuthStatus = res;
-          this.pythiaAuthStatusError = "";
+          this.pythiaAuthStatusError = '';
         })
-        .catch(err => {
+        .catch((err) => {
           this.pythiaAuthStatusError = err;
         })
         .finally(() => {
@@ -269,9 +269,9 @@ export default Vue.extend({
       await PythiaUtilController.getTokenPresence()
         .then((res: boolean) => {
           this.existPythiatoken = res;
-          this.pythiaTokenError = "";
+          this.pythiaTokenError = '';
         })
-        .catch(err => {
+        .catch((err) => {
           this.pythiaTokenError = err;
         })
         .finally(() => {
@@ -284,7 +284,7 @@ export default Vue.extend({
      */
     async applyToken() {
       if (!this.pythiaToken) {
-        this.pythiaTokenError = "You must specify a token.";
+        this.pythiaTokenError = 'You must specify a token.';
         return;
       }
 
@@ -292,10 +292,10 @@ export default Vue.extend({
       await PythiaUtilController.postToken(this.pythiaToken)
         .then(() => {
           this.refresh();
-          this.pythiaTokenError = "";
-          this.token = "";
+          this.pythiaTokenError = '';
+          this.token = '';
         })
-        .catch(err => {
+        .catch((err) => {
           this.pythiaTokenError = err;
         })
         .finally(() => {
@@ -320,11 +320,11 @@ export default Vue.extend({
       } finally {
         this.refreshing = false;
       }
-    }
+    },
   },
 
   mounted() {
     this.refresh();
-  }
+  },
 });
 </script>

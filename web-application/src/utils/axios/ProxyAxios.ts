@@ -1,6 +1,6 @@
-import axios from "axios";
-import ApiResponseImpl from "./ApiResponseImpl";
-import CookieManager from "../CookieManager";
+import axios from 'axios';
+import ApiResponseImpl from './ApiResponseImpl';
+import CookieManager from '../CookieManager';
 
 export default class ProxyAxios {
   /**
@@ -19,7 +19,7 @@ export default class ProxyAxios {
    */
   public static async get<T>(
     url: string,
-    config?: any
+    config?: any,
   ): Promise<ApiResponseImpl<T>> {
     config = await this.buildConfig(config); // Create configuration
     url = this.buildUrl(url); // Append base url
@@ -30,9 +30,8 @@ export default class ProxyAxios {
     } catch (error) {
       if (error.response) {
         return new ApiResponseImpl<T>(error.response);
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -44,16 +43,14 @@ export default class ProxyAxios {
    */
   public static async downloadFile(
     fileUrl: string,
-    type: string
+    type: string,
   ): Promise<Blob> {
-    const config = await this.buildConfig({ responseType: "blob" }); // Create configuration
+    const config = await this.buildConfig({ responseType: 'blob' }); // Create configuration
     const url = this.buildUrl(fileUrl); // Append base url
 
     return axios
       .get(url, config)
-      .then(response => {
-        return new Blob([response.data], { type: type });
-      })
+      .then((response) => new Blob([response.data], { type }))
       .catch((err: any) => {
         throw err;
       });
@@ -68,7 +65,7 @@ export default class ProxyAxios {
   public static async post<T>(
     url: string,
     data?: any,
-    config?: any
+    config?: any,
   ): Promise<ApiResponseImpl<T>> {
     config = await this.buildConfig(config); // Create configuration
     url = this.buildUrl(url); // Append base url
@@ -79,9 +76,8 @@ export default class ProxyAxios {
     } catch (error) {
       if (error.response) {
         return new ApiResponseImpl<T>(error.response);
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -94,7 +90,7 @@ export default class ProxyAxios {
   public static async put<T>(
     url: string,
     data: any,
-    config?: any
+    config?: any,
   ): Promise<ApiResponseImpl<T>> {
     config = await this.buildConfig(config); // Create configuration
     url = this.buildUrl(url); // Append base url
@@ -105,9 +101,8 @@ export default class ProxyAxios {
     } catch (error) {
       if (error.response) {
         return new ApiResponseImpl<T>(error.response);
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -119,7 +114,7 @@ export default class ProxyAxios {
   public static async delete<T>(
     url: string,
     body?: any,
-    config?: any
+    config?: any,
   ): Promise<ApiResponseImpl<T>> {
     config = await this.buildConfig(config); // Create configuration
     url = ProxyAxios.getURl() + url; // Append base url
@@ -131,9 +126,8 @@ export default class ProxyAxios {
     } catch (error) {
       if (error.response) {
         return new ApiResponseImpl<T>(error.response);
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -159,8 +153,8 @@ export default class ProxyAxios {
       const cookie = CookieManager.getAuthCookie();
       config = {
         headers: {
-          Authorization: `Bearer ${cookie}`
-        }
+          Authorization: `Bearer ${cookie}`,
+        },
       };
     }
 

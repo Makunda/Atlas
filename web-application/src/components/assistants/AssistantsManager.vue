@@ -27,18 +27,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import RegexAssistants from "./RegexAssistants.vue";
-import FrameworkAssistant from "./FrameworkAssistant.vue";
+import Vue from 'vue';
+import RegexAssistants from './RegexAssistants.vue';
+import FrameworkAssistant from './FrameworkAssistant.vue';
 
 export default Vue.extend({
-  name: "AssistantsManager",
+  name: 'AssistantsManager',
 
   components: {
     RegexAssistants,
-    FrameworkAssistant
+    FrameworkAssistant,
   },
 
-  data: () => ({})
+  data: () => ({}),
 });
 </script>

@@ -1,10 +1,10 @@
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
-  transpileDependencies: ["vuetify"],
+  transpileDependencies: ['vuetify'],
   parallel: 4,
   runtimeCompiler: true,
   css: {
-    extract: false
-  }
+    extract: false,
+  },
 };

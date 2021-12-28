@@ -1,7 +1,7 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import StatisticInterface from "@/api/interface/statistics/Statistic.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import StatisticInterface from '@/api/interface/statistics/Statistic.interface';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class StatisticsController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -13,13 +13,12 @@ export class StatisticsController {
    */
   public static async getStatisticsList(
     application: string,
-    category?: string
+    category?: string,
   ): Promise<StatisticInterface[]> {
-    const url =
-      StatisticsController.API_BASE_URL + "/api/atlas/statistics/find/all";
+    const url = `${StatisticsController.API_BASE_URL}/api/atlas/statistics/find/all`;
     try {
       const body: any = {
-        application: application
+        application,
       };
       if (category) body.category = category;
       const res = await ProxyAxios.post(url, body);
@@ -32,12 +31,12 @@ export class StatisticsController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the list of statistics. Status (${res.status})`
+          `Failed to retrieve the list of statistics. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
     } catch (error) {
-      console.error(`Failed to retrieve the list of statistics.`, error);
+      console.error('Failed to retrieve the list of statistics.', error);
       throw error;
     }
   }
@@ -46,8 +45,7 @@ export class StatisticsController {
    * Get the list of the categories
    */
   public static async getCategories(): Promise<string[]> {
-    const url =
-      StatisticsController.API_BASE_URL + "/api/atlas/statistics/categories";
+    const url = `${StatisticsController.API_BASE_URL}/api/atlas/statistics/categories`;
     try {
       const res = await ProxyAxios.get(url);
 
@@ -58,12 +56,12 @@ export class StatisticsController {
         }
       } else {
         console.warn(
-          `Failed to retrieve the execute the action. Status (${res.status})`
+          `Failed to retrieve the execute the action. Status (${res.status})`,
         );
         throw new Error(res.data.error);
       }
     } catch (error) {
-      console.error(`Failed to execute the action.`, error);
+      console.error('Failed to execute the action.', error);
       throw error;
     }
   }

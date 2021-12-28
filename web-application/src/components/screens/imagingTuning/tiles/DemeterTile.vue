@@ -135,32 +135,32 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
+import Vue from 'vue';
+import { LevelController } from '@/api/controllers/extensions/demeter/grouping/LevelController';
 
 export default Vue.extend({
-  name: "DemeterTile",
+  name: 'DemeterTile',
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
     levelList: [],
-    application: "",
-    errorMessage: "",
+    application: '',
+    errorMessage: '',
     loadingLevels: false,
 
     // Modal
     dialog: false,
-    toDeleteLevel: "",
+    toDeleteLevel: '',
     loadingDelete: false,
 
     // Modal All
     loadingDeleteAll: false,
-    dialogAll: false
+    dialogAll: false,
   }),
 
   mounted() {
@@ -175,26 +175,26 @@ export default Vue.extend({
     },
 
     cancelDelete() {
-      this.toDeleteLevel = "";
+      this.toDeleteLevel = '';
       this.dialog = false;
     },
 
     async confirmDelete() {
       try {
-        if (this.toDeleteLevel === "") return;
+        if (this.toDeleteLevel === '') return;
 
         this.loadingDelete = true;
         await LevelController.undoGroupedLevel5(
           this.application,
-          this.toDeleteLevel
+          this.toDeleteLevel,
         );
 
-        this.toDeleteLevel = "";
-        this.errorMessage = "";
+        this.toDeleteLevel = '';
+        this.errorMessage = '';
       } catch (err) {
         console.error(
           `Failed to delete the level with name ${this.toDeleteLevel} in application ${this.application}`,
-          err
+          err,
         );
         this.errorMessage = `Failed to delete the level with name ${this.toDeleteLevel} in application ${this.application}. Error: ${err}`;
       } finally {
@@ -209,13 +209,13 @@ export default Vue.extend({
      */
     async confirmDeleteAll() {
       try {
-        if (this.application === "") return;
+        if (this.application === '') return;
         this.loadingDeleteAll = true;
         await LevelController.undoAllGroupedLevel5(this.application);
-        this.errorMessage = "";
+        this.errorMessage = '';
       } catch (err) {
         console.error(
-          `Failed to delete all the levels in application ${this.application}.`
+          `Failed to delete all the levels in application ${this.application}.`,
         );
         this.errorMessage = `Failed to delete all the levels in application ${this.application}. Error: ${err}.`;
       } finally {
@@ -233,9 +233,9 @@ export default Vue.extend({
       try {
         this.loadingLevels = true;
         this.levelList = await LevelController.getDemeterLevels(
-          this.application
+          this.application,
         );
-        this.errorMessage = "";
+        this.errorMessage = '';
       } catch (err) {
         this.errorMessage = `Failed to retrieve demeter levels ${err}.`;
       } finally {
@@ -245,15 +245,15 @@ export default Vue.extend({
 
     refresh() {
       this.getDemeterLevel();
-    }
+    },
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
       this.refresh();
-    }
-  }
+    },
+  },
 });
 </script>
 

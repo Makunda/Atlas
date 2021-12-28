@@ -16,14 +16,14 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ServerCategoriesHelper from "@/components/navigation/ServerCategoriesHelper.vue";
+import Vue from 'vue';
+import ServerCategoriesHelper from '@/components/navigation/ServerCategoriesHelper.vue';
 
 export default Vue.extend({
-  name: "ServerHome",
+  name: 'ServerHome',
   components: {
-    ServerCategoriesHelper
-  }
+    ServerCategoriesHelper,
+  },
 });
 </script>
 

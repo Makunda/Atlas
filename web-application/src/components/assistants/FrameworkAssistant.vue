@@ -109,16 +109,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { FrameworkAssistants } from "@/api/controllers/extensions/atlas/FrameworkAssistantsController";
-import { FrameworkAssistant } from "@/api/interface/atlas/FrameworkAssistant.interface";
+import Vue from 'vue';
+import { FrameworkAssistants } from '@/api/controllers/extensions/atlas/FrameworkAssistantsController';
+import { FrameworkAssistant } from '@/api/interface/atlas/FrameworkAssistant.interface';
 
 export default Vue.extend({
-  name: "FrameworkAssistant",
+  name: 'FrameworkAssistant',
 
   data: () => ({
     // New item
-    selectedCategory: "",
+    selectedCategory: '',
     selectedActions: [],
 
     loadingActions: false,
@@ -131,7 +131,7 @@ export default Vue.extend({
     loadingAssistantCreation: false,
 
     loadingAssistants: false,
-    assistantsList: [] as FrameworkAssistant[]
+    assistantsList: [] as FrameworkAssistant[],
   }),
 
   methods: {
@@ -141,8 +141,8 @@ export default Vue.extend({
         .then((res: string[]) => {
           this.actionsList = res;
         })
-        .catch(err => {
-          console.error("Failed to retrieve the list of actions.", err);
+        .catch((err) => {
+          console.error('Failed to retrieve the list of actions.', err);
         })
         .finally(() => {
           this.loadingActions = false;
@@ -155,8 +155,8 @@ export default Vue.extend({
         .then((res: string[]) => {
           this.categoriesList = res;
         })
-        .catch(err => {
-          console.error("Failed to retrieve the list of categories.", err);
+        .catch((err) => {
+          console.error('Failed to retrieve the list of categories.', err);
         })
         .finally(() => {
           this.loadingCategories = false;
@@ -169,8 +169,8 @@ export default Vue.extend({
         .then((res: FrameworkAssistant[]) => {
           this.assistantsList = res;
         })
-        .catch(err => {
-          console.error("Failed to retrieve the list of assistants.", err);
+        .catch((err) => {
+          console.error('Failed to retrieve the list of assistants.', err);
         })
         .finally(() => {
           this.loadingAssistants = false;
@@ -179,29 +179,28 @@ export default Vue.extend({
 
     removeAssistant(assistant: FrameworkAssistant) {
       FrameworkAssistants.removeAssistant(assistant.id)
-        .then(res => {
+        .then((res) => {
           this.getListAssistants();
         })
-        .catch(err => {
-          console.error("Failed to remove the assistant.", err);
+        .catch((err) => {
+          console.error('Failed to remove the assistant.', err);
         });
     },
 
     createAssistant() {
-      if (this.selectedCategory == "" || this.selectedActions.length == 0)
-        return;
+      if (this.selectedCategory == '' || this.selectedActions.length == 0) { return; }
 
       FrameworkAssistants.newAssistant(
         this.selectedCategory,
-        this.selectedActions
+        this.selectedActions,
       )
         .then((val: boolean) => {
-          this.selectedCategory = "";
+          this.selectedCategory = '';
           this.selectedActions = [];
           this.getListAssistants();
         })
-        .catch(err => {
-          console.error("Failed to create the assistant", err);
+        .catch((err) => {
+          console.error('Failed to create the assistant', err);
         })
         .finally(() => {
           this.loadingAssistantCreation = false;
@@ -212,11 +211,11 @@ export default Vue.extend({
       this.getListActions();
       this.getListCategories();
       this.getListAssistants();
-    }
+    },
   },
 
   mounted() {
     this.refresh();
-  }
+  },
 });
 </script>

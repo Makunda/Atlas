@@ -1,11 +1,11 @@
-import { AuthToken } from "neo4j-driver/types/driver";
-import Vue from "vue";
-import VueCookies from "vue-cookies";
+import { AuthToken } from 'neo4j-driver/types/driver';
+import Vue from 'vue';
+import VueCookies from 'vue-cookies';
 
 Vue.use(VueCookies);
-Vue.$cookies.config("30d", "/");
+Vue.$cookies.config('30d', '/');
 
-const COOKIE_NAME = "olympus";
+const COOKIE_NAME = 'olympus';
 let PROPERTIES: Properties;
 
 export interface Credentials {
@@ -15,8 +15,11 @@ export interface Credentials {
 
 export class Properties {
   refreshRate = 500;
-  configurationName = "Configuration_1";
-  neo4jUri = "neo4j://localhost:7687";
+
+  configurationName = 'Configuration_1';
+
+  neo4jUri = 'neo4j://localhost:7687';
+
   token = {} as AuthToken;
 }
 
@@ -28,9 +31,9 @@ export class Configuration {
   public static setAuthToken(token: AuthToken) {
     PROPERTIES.token = token;
     // window.sessionStorage.setItem(COOKIE_NAME, JSON.stringify(PROPERTIES));
-    console.log("Token was set");
+    console.log('Token was set');
 
-    //this.saveProperties(this.properties);
+    // this.saveProperties(this.properties);
   }
 
   /**
@@ -47,9 +50,8 @@ export class Configuration {
     const val = sessionStorage.getItem(COOKIE_NAME);
     if (val != null) {
       return JSON.parse(val);
-    } else {
-      return new Properties();
     }
+    return new Properties();
   }
 
   /**

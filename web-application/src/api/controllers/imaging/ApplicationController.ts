@@ -1,6 +1,6 @@
-import ProxyAxios from "@/utils/axios/ProxyAxios";
-import Logger from "@/utils/Logger";
-import { ApplicationInsights } from "@/api/interface/imaging/ApplicationInsights";
+import ProxyAxios from '@/utils/axios/ProxyAxios';
+import Logger from '@/utils/Logger';
+import { ApplicationInsights } from '@/api/interface/imaging/ApplicationInsights';
 
 /**
  * Controller to ge the informations about the applications
@@ -11,14 +11,14 @@ export default class ApplicationController {
    */
   public static async getListApplication(): Promise<string[]> {
     try {
-      const url = "api/imaging/applications/all";
+      const url = 'api/imaging/applications/all';
       const response = await ProxyAxios.get<string[]>(url);
       if (response.isError()) throw response.getErrorsAsString();
 
       const applicationList = response.getData();
       return applicationList.sort();
     } catch (err) {
-      const message = `Failed to get the list of application`;
+      const message = 'Failed to get the list of application';
       Logger.error(message, err);
       throw err;
     }
@@ -29,7 +29,7 @@ export default class ApplicationController {
    * @param application Name of the application
    */
   public static async getApplicationInsights(
-    application: string
+    application: string,
   ): Promise<ApplicationInsights> {
     try {
       const url = `api/imaging/applications/insights/single/${application}`;
@@ -38,7 +38,7 @@ export default class ApplicationController {
 
       return response.getData();
     } catch (err) {
-      const message = `Failed to get the insights of the application`;
+      const message = 'Failed to get the insights of the application';
       Logger.error(message, err);
       throw err;
     }
@@ -49,15 +49,15 @@ export default class ApplicationController {
    */
   public static async getAllApplicationsInsights(): Promise<
     ApplicationInsights[]
-  > {
+    > {
     try {
-      const url = `api/imaging/applications/insights/all`;
+      const url = 'api/imaging/applications/insights/all';
       const response = await ProxyAxios.get<ApplicationInsights[]>(url);
       if (response.isError()) throw response.getErrorsAsString();
 
       return response.getData();
     } catch (err) {
-      const message = `Failed to get the insights of the application`;
+      const message = 'Failed to get the insights of the application';
       Logger.error(message, err);
       throw err;
     }

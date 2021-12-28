@@ -19,16 +19,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ArtemisParametersViewer from "@/components/screens/administration/components/ArtemisParametersViewer.vue";
+import Vue from 'vue';
+import ArtemisParametersViewer from '@/components/screens/administration/components/ArtemisParametersViewer.vue';
 
 export default Vue.extend({
-  name: "ArtemisParameters",
+  name: 'ArtemisParameters',
 
   components: {
-    ArtemisParametersViewer
+    ArtemisParametersViewer,
   },
 
-  data: () => ({})
+  data: () => ({}),
 });
 </script>

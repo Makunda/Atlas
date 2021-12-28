@@ -1,10 +1,10 @@
-import { AipSchema } from "./AipSchema";
+import { AipSchema } from './AipSchema';
 
 export enum ValidityServer {
-  UNKNOWN = "Unknown",
-  VALID = "Valid",
-  ERROR = "Error",
-  LOADING = "Loading"
+  UNKNOWN = 'Unknown',
+  VALID = 'Valid',
+  ERROR = 'Error',
+  LOADING = 'Loading'
 }
 
 /**

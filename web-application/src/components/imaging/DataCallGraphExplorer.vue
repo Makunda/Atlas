@@ -1,14 +1,9 @@
 <template>
   <v-card>
     <v-card-title>
-      <p class="text-h3 text--primary pb-3">
-        <span class="font-weight-light pr-1"
-          >Review the Data Call Graphs in</span
-        >
-        {{ application }}
-      </p>
+      <h3 class="py-3 pb-5 text-h4">Data Call Graphs Management</h3>
       <v-spacer></v-spacer>
-      <v-btn class="mr-5" icon color="green" @click="refresh">
+      <v-btn class="mr-5" color="green" icon @click="refresh">
         <v-icon>mdi-cached</v-icon>
       </v-btn>
     </v-card-title>
@@ -21,7 +16,7 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col md="3" class="d-flex flex-column">
+                  <v-col class="d-flex flex-column" md="3">
                     <p>
                       Specify the prefix used to pin the Data Call Graph.<br />
                       <b
@@ -30,8 +25,8 @@
                       >
                     </p>
                     <v-text-field
-                      label="Pin Prefix"
                       v-model="pinPrefix"
+                      label="Pin Prefix"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -56,18 +51,18 @@
                         inferior to a limit ( Recommended 10)
                         <v-text-field
                           v-model="maskActionLimit"
-                          type="number"
                           label="Number of objects"
+                          type="number"
                         ></v-text-field>
                       </div>
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="maskByCount"
                         :loading="maskActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="maskByCount"
                       >
                         <p>Mask the Data Call Graph .</p>
                       </v-btn>
@@ -81,18 +76,18 @@
                         technology inferior or equal to the input
                         <v-text-field
                           v-model="maskActionTechnology"
-                          type="number"
                           label="Number of objects"
+                          type="number"
                         ></v-text-field>
                       </div>
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="maskByTechnology"
                         :loading="maskActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="maskByTechnology"
                       >
                         <p>Mask the Data Call Graph .</p>
                       </v-btn>
@@ -107,19 +102,19 @@
                         their names
                         <v-combobox
                           v-model="maskActionTermsList"
+                          chips
                           label="List of terms"
                           multiple
-                          chips
                         ></v-combobox>
                       </div>
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="maskByTerms"
                         :loading="maskActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="maskByTerms"
                       >
                         <p>Mask the Data Call Graph</p>
                       </v-btn>
@@ -134,10 +129,10 @@
                     </v-card-text>
                     <v-card-actions>
                       <v-btn
-                        text
-                        color="persianGrey"
-                        @click="unmaskAll"
                         :loading="unmaskAllActionLoading"
+                        color="persianGrey"
+                        text
+                        @click="unmaskAll"
                       >
                         Unmask all
                       </v-btn>
@@ -154,7 +149,7 @@
             <v-card-title class="ma-3">
               Filter Data Call Graph
             </v-card-title>
-            <v-card-subtitle> </v-card-subtitle>
+            <v-card-subtitle></v-card-subtitle>
             <v-card-text>
               <v-row>
                 <!-- Number Object / SubObject -->
@@ -175,10 +170,10 @@
                       v-model="rangeObject"
                       :max="dataCallGraphInsights.maxObject"
                       :min="dataCallGraphInsights.minObject"
-                      hide-details
-                      persistent-hint
-                      hint="Number of object"
                       class="align-center"
+                      hide-details
+                      hint="Number of object"
+                      persistent-hint
                     >
                       <template v-slot:prepend>
                         <v-text-field
@@ -186,8 +181,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeObject, 0, $event)"
                         ></v-text-field>
                       </template>
@@ -197,8 +192,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeObject, 1, $event)"
                         ></v-text-field>
                       </template>
@@ -223,10 +218,10 @@
                       v-model="rangeTechnology"
                       :max="dataCallGraphInsights.maxTechnology"
                       :min="dataCallGraphInsights.minTechnology"
-                      hide-details
-                      persistent-hint
-                      hint="Number of object"
                       class="align-center"
+                      hide-details
+                      hint="Number of object"
+                      persistent-hint
                     >
                       <template v-slot:prepend>
                         <v-text-field
@@ -234,8 +229,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeTechnology, 0, $event)"
                         ></v-text-field>
                       </template>
@@ -245,8 +240,8 @@
                           class="mt-0 pt-0"
                           hide-details
                           single-line
-                          type="number"
                           style="width: 60px"
+                          type="number"
                           @change="$set(rangeTechnology, 1, $event)"
                         ></v-text-field>
                       </template>
@@ -263,11 +258,11 @@
                       v-model="technologySearch"
                       :items="technologiesList"
                       :loading="loadingTechList"
-                      filled
-                      rounded
                       chips
+                      filled
                       label="Chips"
                       multiple
+                      rounded
                     ></v-autocomplete>
                   </v-row>
                 </v-col>
@@ -276,17 +271,17 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   class="mr-3"
-                  depressed
                   color="grey"
                   dark
+                  depressed
                   @click="dataCallGraphApiCall"
                 >
                   Apply filter
                 </v-btn>
                 <v-btn
-                  depressed
                   color="persianGrey"
                   dark
+                  depressed
                   @click="dataCallGraphApiCall()"
                 >
                   Remove all non-compliant
@@ -303,8 +298,8 @@
               <v-spacer></v-spacer>
               <v-btn
                 class="mr-5"
-                icon
                 color="green"
+                icon
                 @click="dataCallGraphApiCall()"
               >
                 <v-icon>mdi-cached</v-icon>
@@ -315,52 +310,52 @@
               <v-data-table
                 :headers="headers"
                 :items="displayedDataCallGraph"
+                :loading="loadingDataCallGraph"
                 :options.sync="optionsDataCallGraph"
                 :server-items-length="numDataCallGraph"
-                :loading="loadingDataCallGraph"
                 class="elevation-1 pt-3"
                 fixed-header
               >
                 <template v-slot:top class="my-5">
                   <v-text-field
-                    filled
-                    rounded
-                    clearable
                     v-model="searchName"
-                    @change="dataCallGraphApiCall"
-                    label="Search DataCallGraph by Name"
                     class="mx-4"
+                    clearable
+                    filled
+                    label="Search DataCallGraph by Name"
+                    rounded
+                    @change="dataCallGraphApiCall"
                   ></v-text-field>
                 </template>
 
                 <template v-slot:item.technologies="{ item }">
                   <v-chip-group active-class="primary--text" column>
-                    <v-chip small v-for="tech in item.technologies" :key="tech">
+                    <v-chip v-for="tech in item.technologies" :key="tech" small>
                       {{ tech }}
                     </v-chip>
                   </v-chip-group>
                 </template>
                 <template v-slot:item.actions="{ item }" class="flex flex-row">
-                  <v-icon small class="mr-2" @click="maskDataCallGraph(item)">
+                  <v-icon class="mr-2" small @click="maskDataCallGraph(item)">
                     mdi-eye-off
                   </v-icon>
                   <v-icon
                     v-if="!containsPrefix(item)"
-                    small
                     class="mr-2"
+                    small
                     @click="pinDataCallGraph(item)"
                   >
                     mdi-pin
                   </v-icon>
                   <v-icon
                     v-if="containsPrefix(item)"
-                    small
                     class="mr-2"
+                    small
                     @click="unpinDataCallGraph(item)"
                   >
                     mdi-pin-off
                   </v-icon>
-                  <v-icon small class="mr-2" @click="openRenameModal(item)">
+                  <v-icon class="mr-2" small @click="openRenameModal(item)">
                     mdi-grease-pencil
                   </v-icon>
                 </template>
@@ -368,7 +363,7 @@
             </v-card-text>
           </v-card>
         </v-row>
-        <v-row class="mt-5"> </v-row>
+        <v-row class="mt-5"></v-row>
         <v-row>
           <!-- Masked DataCallGraph -->
           <v-card class="ma-4" width="100%">
@@ -377,32 +372,32 @@
               <v-spacer></v-spacer>
               <v-btn
                 class="mr-5"
-                icon
                 color="green"
+                icon
                 @click="maskedDataCallGraphApiCall"
               >
                 <v-icon>mdi-cached</v-icon>
               </v-btn>
             </v-card-title>
-            <v-card-subtitle> </v-card-subtitle>
+            <v-card-subtitle></v-card-subtitle>
             <v-card-text>
               <v-data-table
                 :headers="headersMasked"
                 :items="displayedMaskedDataCallGraph"
+                :loading="loadingMaskedDataCallGraph"
                 :options.sync="optionsMaskedDataCallGraph"
                 :server-items-length="numMaskedDataCallGraph"
-                :loading="loadingMaskedDataCallGraph"
                 class="elevation-1"
               >
                 <template v-slot:item.technologies="{ item }">
                   <v-chip-group active-class="primary--text" column>
-                    <v-chip small v-for="tech in item.technologies" :key="tech">
+                    <v-chip v-for="tech in item.technologies" :key="tech" small>
                       {{ tech }}
                     </v-chip>
                   </v-chip-group>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                  <v-icon small class="mr-2" @click="unMaskDataCallGraph(item)">
+                  <v-icon class="mr-2" small @click="unMaskDataCallGraph(item)">
                     mdi-eye
                   </v-icon>
                 </template>
@@ -429,10 +424,10 @@
             </v-row>
             <v-row>
               <v-text-field
-                label="Outlined"
                 v-model="toEditDataCallGraph.name"
-                single-line
+                label="Outlined"
                 outlined
+                single-line
               ></v-text-field>
             </v-row>
           </v-container>
@@ -443,17 +438,17 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="red"
             :loading="loadingRename"
+            color="red"
             text
             @click="closeRenameModal"
           >
             Cancel
           </v-btn>
           <v-btn
+            :disabled="loadingRename"
             color="green"
             text
-            :disabled="loadingRename"
             @click="confirmRename"
           >
             Rename
@@ -465,19 +460,19 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import DataCallGraphController from "@/api/controllers/imaging/DataCallGraphController";
-import { DataCallGraph } from "@/api/interface/imaging/DataCallGraph";
-import DataCallGraphInsights from "@/api/interface/imaging/DataCallGraphInsights";
-import { ApplicationController } from "@/api/controllers/applications/ApplicationController";
+import Vue from 'vue';
+import DataCallGraphController from '@/api/controllers/imaging/DataCallGraphController';
+import { DataCallGraph } from '@/api/interface/imaging/DataCallGraph';
+import DataCallGraphInsights from '@/api/interface/imaging/DataCallGraphInsights';
+import { ApplicationController } from '@/api/controllers/applications/ApplicationController';
 
 export default Vue.extend({
-  name: "DataCallGraphExplorer",
+  name: 'DataCallGraphExplorer',
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -486,35 +481,35 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     // options
-    pinPrefix: "#",
+    pinPrefix: '#',
 
     headers: [
       {
-        text: "Name",
-        align: "start",
-        value: "name"
+        text: 'Name',
+        align: 'start',
+        value: 'name',
       },
-      //{ text: "Full Name", value: "fullName" },
-      { text: "Object Count", value: "count" },
-      { text: "Technologies", value: "technologies" },
-      { text: "Number of technologies", value: "numTechnologies" },
-      { text: "Actions", value: "actions", sortable: false }
+      // { text: "Full Name", value: "fullName" },
+      { text: 'Object Count', value: 'count' },
+      { text: 'Technologies', value: 'technologies' },
+      { text: 'Number of technologies', value: 'numTechnologies' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
 
     headersMasked: [
       {
-        text: "Name",
-        align: "start",
-        value: "name"
+        text: 'Name',
+        align: 'start',
+        value: 'name',
       },
-      //{ text: "Full Name", value: "fullName" },
-      { text: "Object Count", value: "count" },
-      { text: "Technologies", value: "technologies" },
-      { text: "Number of technologies", value: "numTechnologies" },
-      { text: "Actions", value: "actions", sortable: false }
+      // { text: "Full Name", value: "fullName" },
+      { text: 'Object Count', value: 'count' },
+      { text: 'Technologies', value: 'technologies' },
+      { text: 'Number of technologies', value: 'numTechnologies' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
 
     loadingDataCallGraph: true,
@@ -539,7 +534,7 @@ export default Vue.extend({
     pageMaskedDataCallGraph: 0,
 
     // Search DataCallGraph
-    searchName: "",
+    searchName: '',
 
     // Power Actions
     maskActionLimit: 0,
@@ -560,15 +555,15 @@ export default Vue.extend({
     // DataCallGraph Rename
     modalRename: false,
     loadingRename: false,
-    toEditDataCallGraph: {} as DataCallGraph
+    toEditDataCallGraph: {} as DataCallGraph,
   }),
 
   methods: {
     /**
      *  Open the Rename modal for the dataCallGraphs
-     **/
+     * */
     openRenameModal(item: DataCallGraph) {
-      this.toEditDataCallGraph = Object.assign({}, item);
+      this.toEditDataCallGraph = { ...item };
       this.modalRename = true;
     },
 
@@ -578,12 +573,12 @@ export default Vue.extend({
         await DataCallGraphController.renameDataCallGraph(
           this.application,
           this.toEditDataCallGraph._id,
-          this.toEditDataCallGraph.name
+          this.toEditDataCallGraph.name,
         );
         this.closeRenameModal();
         this.refresh();
       } catch (err) {
-        console.error("Failed to rename the dataCallGraph.", err);
+        console.error('Failed to rename the dataCallGraph.', err);
       } finally {
         this.loadingRename = false;
       }
@@ -610,11 +605,11 @@ export default Vue.extend({
       try {
         this.unmaskAllActionLoading = true;
         this.numDataCallGraph = await DataCallGraphController.unMaskAllDataCallGraph(
-          this.application
+          this.application,
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to un-mask all the dataCallGraphs", err);
+        console.error('Failed to un-mask all the dataCallGraphs', err);
       } finally {
         this.unmaskAllActionLoading = false;
       }
@@ -622,17 +617,17 @@ export default Vue.extend({
 
     async getTechnologies() {
       try {
-        if (this.application == "") return;
+        if (this.application == '') return;
         this.loadingTechList = true;
         this.technologiesList = await ApplicationController.getLevelsByDepth(
           this.application,
-          5
+          5,
         );
         this.technologiesList = this.technologiesList.sort();
       } catch (err) {
         console.error(
           `Failed to retrieve technologies in the application ${this.application}.`,
-          err
+          err,
         );
       } finally {
         this.loadingTechList = false;
@@ -644,11 +639,11 @@ export default Vue.extend({
         this.maskActionLoading = true;
         this.numDataCallGraph = await DataCallGraphController.maskByCount(
           this.application,
-          this.maskActionLimit
+          this.maskActionLimit,
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to mask by count.", err);
+        console.error('Failed to mask by count.', err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -659,11 +654,11 @@ export default Vue.extend({
         this.maskActionLoading = true;
         this.numDataCallGraph = await DataCallGraphController.maskByTechnology(
           this.application,
-          this.maskActionTechnology
+          this.maskActionTechnology,
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to mask by technology.", err);
+        console.error('Failed to mask by technology.', err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -674,11 +669,11 @@ export default Vue.extend({
         this.maskActionLoading = true;
         this.numDataCallGraph = await DataCallGraphController.maskByTerms(
           this.application,
-          this.maskActionTermsList
+          this.maskActionTermsList,
         );
         await this.refresh();
       } catch (err) {
-        console.error("Failed to mask by terms.", err);
+        console.error('Failed to mask by terms.', err);
       } finally {
         this.maskActionLoading = false;
       }
@@ -687,41 +682,41 @@ export default Vue.extend({
     async getInsights() {
       try {
         this.dataCallGraphInsights = await DataCallGraphController.getInsightsUnmaskedDataCallGraph(
-          this.application
+          this.application,
         );
 
         this.rangeTechnology = [
           this.dataCallGraphInsights.minTechnology,
-          this.dataCallGraphInsights.maxTechnology
+          this.dataCallGraphInsights.maxTechnology,
         ];
 
         this.rangeObject = [
           this.dataCallGraphInsights.minObject,
-          this.dataCallGraphInsights.maxObject
+          this.dataCallGraphInsights.maxObject,
         ];
       } catch (err) {
-        console.error("Failed to get the insights of dataCallGraphs", err);
+        console.error('Failed to get the insights of dataCallGraphs', err);
       }
     },
 
     async getNumberDataCallGraph() {
       try {
         this.numDataCallGraph = await DataCallGraphController.getNumberDataCallGraph(
-          this.application
+          this.application,
         );
         return this.numDataCallGraph;
       } catch (err) {
-        console.error("Failed to get the number of dataCallGraph", err);
+        console.error('Failed to get the number of dataCallGraph', err);
       }
     },
 
     async getNumberMaskedDataCallGraph() {
       try {
         this.numMaskedDataCallGraph = await DataCallGraphController.getNumberMaskedDataCallGraph(
-          this.application
+          this.application,
         );
       } catch (err) {
-        console.error("Failed to get the number of dataCallGraph", err);
+        console.error('Failed to get the number of dataCallGraph', err);
       }
     },
 
@@ -735,23 +730,23 @@ export default Vue.extend({
         maxTechnologies: this.rangeTechnology[1],
         minObject: this.rangeObject[0],
         maxObject: this.rangeObject[1],
-        techContained: this.technologySearch
+        techContained: this.technologySearch,
       };
 
-      if (this.searchName != "") filter.name = this.searchName;
+      if (this.searchName != '') filter.name = this.searchName;
 
       // eslint-disable-next-line prefer-const
-      let { sortBy, sortDesc, page, itemsPerPage } = this.optionsDataCallGraph;
+      let {
+        sortBy, sortDesc, page, itemsPerPage,
+      } = this.optionsDataCallGraph;
       if (itemsPerPage === -1) {
         itemsPerPage = this.numDataCallGraph;
       }
 
       let sortByOption = null;
       let sortByDesccOption = null;
-      if (Array.isArray(sortBy) && sortBy.length === 1)
-        sortByOption = sortBy[0];
-      if (Array.isArray(sortDesc) && sortDesc.length === 1)
-        sortByDesccOption = sortDesc[0];
+      if (Array.isArray(sortBy) && sortBy.length === 1) { sortByOption = sortBy[0]; }
+      if (Array.isArray(sortDesc) && sortDesc.length === 1) { sortByDesccOption = sortDesc[0]; }
 
       const dataCallGraphs = await DataCallGraphController.getBatchDataCallGraph(
         this.application,
@@ -759,7 +754,7 @@ export default Vue.extend({
         page * itemsPerPage,
         sortByOption,
         sortByDesccOption,
-        filter
+        filter,
       );
 
       this.loadingDataCallGraph = false;
@@ -782,17 +777,15 @@ export default Vue.extend({
 
       let sortByOption = null;
       let sortByDesccOption = null;
-      if (Array.isArray(sortBy) && sortBy.length === 1)
-        sortByOption = sortBy[0];
-      if (Array.isArray(sortDesc) && sortDesc.length === 1)
-        sortByDesccOption = sortDesc[0];
+      if (Array.isArray(sortBy) && sortBy.length === 1) { sortByOption = sortBy[0]; }
+      if (Array.isArray(sortDesc) && sortDesc.length === 1) { sortByDesccOption = sortDesc[0]; }
 
       const dataCallGraphs = await DataCallGraphController.getBatchMaskedDataCallGraph(
         this.application,
         (page - 1) * itemsPerPage,
         page * itemsPerPage,
         sortByOption,
-        sortByDesccOption
+        sortByDesccOption,
       );
 
       this.loadingMaskedDataCallGraph = false;
@@ -803,7 +796,7 @@ export default Vue.extend({
     async maskDataCallGraph(item: DataCallGraph) {
       await DataCallGraphController.maskDataCallGraph(
         this.application,
-        item._id
+        item._id,
       );
       this.refresh();
     },
@@ -812,7 +805,7 @@ export default Vue.extend({
       await DataCallGraphController.pinDataCallGraph(
         this.application,
         item._id,
-        this.pinPrefix
+        this.pinPrefix,
       );
       await this.refresh();
     },
@@ -821,7 +814,7 @@ export default Vue.extend({
       await DataCallGraphController.unpinDataCallGraph(
         this.application,
         item._id,
-        this.pinPrefix
+        this.pinPrefix,
       );
       await this.refresh();
     },
@@ -830,7 +823,7 @@ export default Vue.extend({
       await DataCallGraphController.renameDataCallGraph(
         this.application,
         item._id,
-        item.name
+        item.name,
       );
       await this.refresh();
     },
@@ -838,7 +831,7 @@ export default Vue.extend({
     async unMaskDataCallGraph(item: DataCallGraph) {
       await DataCallGraphController.unmaskDataCallGraph(
         this.application,
-        item._id
+        item._id,
       );
       this.refresh();
     },
@@ -848,7 +841,7 @@ export default Vue.extend({
       await this.getTechnologies();
       await this.dataCallGraphApiCall();
       await this.maskedDataCallGraphApiCall();
-    }
+    },
   },
 
   watch: {
@@ -861,15 +854,15 @@ export default Vue.extend({
       handler() {
         this.dataCallGraphApiCall();
       },
-      deep: true
+      deep: true,
     },
 
     optionsMaskedDataCallGraph: {
       handler() {
         this.maskedDataCallGraphApiCall();
       },
-      deep: true
-    }
-  }
+      deep: true,
+    },
+  },
 });
 </script>

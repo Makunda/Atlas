@@ -1,5 +1,5 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
@@ -23,19 +23,19 @@ export interface Flash {
 
 const flash = new Vuex.Store({
   state: {
-    notifications: [] as Flash[]
+    notifications: [] as Flash[],
   },
   getters: {
     pop(state): Flash | undefined {
       return state.notifications.pop();
-    }
+    },
   },
   mutations: {
     // Change authentication
     add(state, message: Flash) {
       state.notifications.push(message);
-    }
-  }
+    },
+  },
 });
 
 export default flash;

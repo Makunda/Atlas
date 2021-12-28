@@ -73,17 +73,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import LevelController from "@/api/controllers/imaging/LevelController";
-import Level from "@/api/interface/imaging/Level.interface";
+import Vue from 'vue';
+import LevelController from '@/api/controllers/imaging/LevelController';
+import Level from '@/api/interface/imaging/Level.interface';
 
 export default Vue.extend({
-  name: "LevelMergeModal",
+  name: 'LevelMergeModal',
 
   props: {
     application: String,
     level: Object,
-    dialog: Boolean
+    dialog: Boolean,
   },
 
   mounted() {
@@ -101,32 +101,32 @@ export default Vue.extend({
 
       // errors & loading merge
       loadingMerge: false,
-      errorMerge: "",
+      errorMerge: '',
 
       // errors & loading levels
-      errorDestinationLevels: "",
-      loadingDestinationLevels: false
+      errorDestinationLevels: '',
+      loadingDestinationLevels: false,
     };
   },
 
   methods: {
     async refresh() {
-      this.errorMerge = "";
-      this.errorDestinationLevels = "";
+      this.errorMerge = '';
+      this.errorDestinationLevels = '';
       await this.getDestinationLevel5();
     },
     /**
      * Get the list of destination levels in the application
      */
     async getDestinationLevel5() {
-      if (this.application == "") return;
+      if (this.application == '') return;
       try {
         this.loadingDestinationLevels = true;
         this.destinationLevels = await LevelController.findLevelByDepth(
           this.application,
-          5
+          5,
         );
-        this.errorDestinationLevels = "";
+        this.errorDestinationLevels = '';
         this.item = this.destinationLevels;
       } catch (err) {
         this.errorDestinationLevels = err;
@@ -136,15 +136,13 @@ export default Vue.extend({
     },
 
     querySelections(v) {
-      this.items = this.destinationLevels.filter(e => {
-        return (
-          (e.name || "").toLowerCase().indexOf((v || "").toLowerCase()) > -1
-        );
-      });
+      this.items = this.destinationLevels.filter((e) => (
+        (e.name || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+      ));
     },
 
     async mergeLevel() {
-      if (this.application == "") return;
+      if (this.application == '') return;
       if (this.select == null) return;
       if (this.level == null) return;
 
@@ -153,12 +151,12 @@ export default Vue.extend({
         await LevelController.mergeLevel(
           this.application,
           this.level._id,
-          this.select._id
+          this.select._id,
         );
-        this.errorMerge = "";
-        this.$emit("close");
+        this.errorMerge = '';
+        this.$emit('close');
       } catch (err) {
-        console.error(`Failed to merge the level`, err);
+        console.error('Failed to merge the level', err);
         this.errorMerge = err;
       } finally {
         this.loadingMerge = false;
@@ -169,8 +167,8 @@ export default Vue.extend({
      * Close the modal
      */
     closeModal() {
-      this.$emit("close");
-    }
+      this.$emit('close');
+    },
   },
 
   watch: {
@@ -178,14 +176,14 @@ export default Vue.extend({
       val && val !== this.select && this.querySelections(val);
     },
 
-    application: function() {
+    application() {
       this.refresh();
     },
 
-    level: function() {
+    level() {
       this.refresh();
-    }
-  }
+    },
+  },
 });
 </script>
 

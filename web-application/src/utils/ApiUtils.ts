@@ -1,6 +1,8 @@
 export default class APIUtils {
-  private static port = "3000";
-  private static url = "localhost";
+  private static port = '3000';
+
+  private static url = 'localhost';
+
   /**
    * Get the default url of the API
    * @returns {string} Return the url of the api

@@ -85,19 +85,19 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Backup from "@/api/interface/extensions/demeter/Backup";
-import BackupController from "@/api/controllers/extensions/demeter/BackupController";
-import Logger from "@/utils/Logger";
-import flash, { FlashType } from "@/modules/flash/Flash";
+import Vue from 'vue';
+import Backup from '@/api/interface/extensions/demeter/Backup';
+import BackupController from '@/api/controllers/extensions/demeter/BackupController';
+import Logger from '@/utils/Logger';
+import flash, { FlashType } from '@/modules/flash/Flash';
 
 export default Vue.extend({
-  name: "BackupTimeline",
+  name: 'BackupTimeline',
 
   computed: {
     getApplicationName(): string {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   methods: {
@@ -111,14 +111,14 @@ export default Vue.extend({
         this.items = items;
       } catch (e) {
         Logger.error(
-          "Failed to get the list of backup",
-          "Controller thrown an error",
-          e
+          'Failed to get the list of backup',
+          'Controller thrown an error',
+          e,
         );
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to get the list of backup.",
-          body: e
+          title: 'Failed to get the list of backup.',
+          body: e,
         });
       }
     },
@@ -132,21 +132,21 @@ export default Vue.extend({
         await BackupController.deleteBackup(this.application, item.id);
 
         // Splice the list
-        const index = this.items.findIndex(x => x.id == item.id);
+        const index = this.items.findIndex((x) => x.id == item.id);
         this.items.splice(index, 1);
       } catch (e) {
         Logger.error(
-          "Failed to delete the backup",
-          "Controller thrown an error",
-          e
+          'Failed to delete the backup',
+          'Controller thrown an error',
+          e,
         );
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to delete the backup.",
-          body: e
+          title: 'Failed to delete the backup.',
+          body: e,
         });
       } finally {
-        this.deleteListId.filter(x => x != item.id);
+        this.deleteListId.filter((x) => x != item.id);
       }
     },
 
@@ -159,14 +159,14 @@ export default Vue.extend({
         await BackupController.rollback(this.application, item.id);
       } catch (e) {
         Logger.error(
-          "Failed to rollback the application",
-          "Controller thrown an error",
-          e
+          'Failed to rollback the application',
+          'Controller thrown an error',
+          e,
         );
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to rollback the application.",
-          body: e
+          title: 'Failed to rollback the application.',
+          body: e,
         });
       } finally {
         this.rollbackProcedure = false;
@@ -180,12 +180,11 @@ export default Vue.extend({
     convertTimestampToDate(timestamp: number) {
       const date = new Date(timestamp);
       const hours = date.getHours();
-      const minutes = "0" + date.getMinutes();
-      const seconds = "0" + date.getSeconds();
-      const formattedTime =
-        hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+      const minutes = `0${date.getMinutes()}`;
+      const seconds = `0${date.getSeconds()}`;
+      const formattedTime = `${hours}:${minutes.substr(-2)}:${seconds.substr(-2)}`;
 
-      return date.toDateString() + " - " + formattedTime;
+      return `${date.toDateString()} - ${formattedTime}`;
     },
 
     async refresh() {
@@ -194,25 +193,25 @@ export default Vue.extend({
         this.refreshing = true;
         await this.getBackupList();
       } catch (e) {
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to refresh the list of backup.",
-          body: e
+          title: 'Failed to refresh the list of backup.',
+          body: e,
         });
       } finally {
         this.refreshing = false;
       }
-    }
+    },
   },
 
   data: () => ({
-    application: "",
+    application: '',
     items: [] as Backup[],
 
     // Loading
     refreshing: false,
     deleteListId: [] as number[], // List of items being deleted
-    rollbackProcedure: false
+    rollbackProcedure: false,
   }),
 
   // Mounted operation
@@ -225,8 +224,8 @@ export default Vue.extend({
     async getApplicationName(newApp) {
       this.application = newApp;
       await this.refresh();
-    }
-  }
+    },
+  },
 });
 </script>
 

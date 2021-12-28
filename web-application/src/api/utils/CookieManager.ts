@@ -1,6 +1,6 @@
-import { Cookie } from "@/enum/Cookie";
-import Vue from "vue";
-import store from "@/store";
+import Vue from 'vue';
+import { Cookie } from '@/enum/Cookie';
+import store from '@/store';
 
 export default class CookieManager {
   private static verified = false;
@@ -21,17 +21,16 @@ export default class CookieManager {
   public static async isAuthenticated(): Promise<boolean> {
     // No token
     if (!Vue.$cookies.isKey(Cookie.AUTH_COOKIE)) {
-      store.commit("setAuthentication", false);
+      store.commit('setAuthentication', false);
       return false; // Cookie not set
     }
 
     // If token verified
     if (this.verified) {
       return true;
-    } else {
-      // Else verify the token
-      return this.verifyCookie();
     }
+    // Else verify the token
+    return this.verifyCookie();
   }
 
   /**
@@ -39,7 +38,7 @@ export default class CookieManager {
    */
   public static deleteAuthCookie(): void {
     this.verified = false;
-    store.commit("setAuthentication", false);
+    store.commit('setAuthentication', false);
     Vue.$cookies.remove(Cookie.AUTH_COOKIE);
   }
 
@@ -49,7 +48,7 @@ export default class CookieManager {
    */
   public static verifyCookie(): boolean {
     // Check the validity of the cookie
-    store.commit("setAuthentication", true);
+    store.commit('setAuthentication', true);
     this.verified = true;
     return this.verified;
   }

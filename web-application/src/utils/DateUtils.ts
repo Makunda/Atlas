@@ -4,10 +4,10 @@
  */
 export function dateToString(date: number): string {
   const options: any = {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   };
   const toConvert = new Date(date);
-  return toConvert.toLocaleDateString("en-US", options);
+  return toConvert.toLocaleDateString('en-US', options);
 }

@@ -69,17 +69,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { ActionController } from "@/api/controllers/actions/ActionsController";
-import ActionInterface from "@/api/interface/actions/Action.interface.fs";
+import Vue from 'vue';
+import { ActionController } from '@/api/controllers/actions/ActionsController';
+import ActionInterface from '@/api/interface/actions/Action.interface.fs';
 
 export default Vue.extend({
-  name: "ActionsTile",
+  name: 'ActionsTile',
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -91,13 +91,13 @@ export default Vue.extend({
     // Loadings
     loadActions: false,
     actionList: [] as ActionInterface[],
-    application: "",
+    application: '',
 
     // Snackbar
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
-    loadingActions: new Map()
+    loadingActions: new Map(),
   }),
 
   methods: {
@@ -106,14 +106,14 @@ export default Vue.extend({
       try {
         this.actionList = await ActionController.getActionList();
       } catch (err) {
-        console.error("Failed to retrieve the list of actions.", err);
+        console.error('Failed to retrieve the list of actions.', err);
       } finally {
         this.loadActions = false;
       }
     },
 
     async executeAction(action: ActionInterface) {
-      if (this.application == "") return;
+      if (this.application == '') return;
 
       if (this.loadingActions.has(action.id)) return;
       this.loadingActions.set(action.id, true);
@@ -123,7 +123,7 @@ export default Vue.extend({
         this.textSnackBar = `${action.title}: Done.`;
         this.snackbarInfo = true;
       } catch (err) {
-        console.error("Failed to execute the action.", err);
+        console.error('Failed to execute the action.', err);
         this.textSnackBar = `Failed to execute action. ${err}`;
         this.snackbarInfo = true;
       } finally {
@@ -137,13 +137,13 @@ export default Vue.extend({
 
     refresh() {
       this.getActions();
-    }
+    },
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>

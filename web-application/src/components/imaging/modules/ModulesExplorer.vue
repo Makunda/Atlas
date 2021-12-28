@@ -14,27 +14,27 @@
       <v-container fluid>
         <v-row style="width: 100%">
           <!--  Card in charge of the management of the displayed levels  -->
-          <v-card class="pb-8 px-auto" min-width="100%" :loading="loadingRoots">
+          <v-card :loading="loadingRoots" class="pb-8 px-auto" min-width="100%">
             <v-card-title class="charcoal white--text headline">
               <v-container fluid>
                 <v-row>
-                  <v-col md="3" class="mt-2">
+                  <v-col class="mt-2" md="3">
                     <p>Modules viewer</p>
                   </v-col>
 
                   <v-spacer></v-spacer>
-                  <v-col md="6" class="d-flex flex-row align-content-end">
+                  <v-col class="d-flex flex-row align-content-end" md="6">
                     <v-text-field
                       v-model="searchModule"
-                      label="Search a module by name"
+                      clear-icon="mdi-close-circle-outline"
+                      clearable
                       dark
                       flat
-                      solo-inverted
                       hide-details
-                      clearable
-                      clear-icon="mdi-close-circle-outline"
+                      label="Search a module by name"
+                      solo-inverted
                     ></v-text-field>
-                    <v-btn class="mx-3" icon color="green" @click="refresh()">
+                    <v-btn class="mx-3" color="green" icon @click="refresh()">
                       <v-icon>mdi-cached</v-icon>
                     </v-btn>
                   </v-col>
@@ -64,22 +64,23 @@
                     <v-container
                       style="cursor: pointer;"
                       @click="focusModule(item)"
-                      ><v-row>
+                    >
+                      <v-row>
                         <p class="pt-4">{{ item.name }}</p>
                         <v-chip
-                          small
                           :class="
                             'mt-4 ml-3 ' + (item.hidden ? 'black' : 'blue')
                           "
+                          small
                           text-color="white"
                         >
                           <p class="mt-4 mr-3">Module</p>
-                          <v-icon x-small color="red px-2" v-if="item.hidden"
-                            >mdi-eye-off</v-icon
-                          >
+                          <v-icon v-if="item.hidden" color="red px-2" x-small
+                            >mdi-eye-off
+                          </v-icon>
                         </v-chip>
-                      </v-row></v-container
-                    >
+                      </v-row>
+                    </v-container>
                   </template>
                 </v-treeview>
               </v-col>
@@ -123,10 +124,10 @@
                       <div class="text-center">
                         <v-btn
                           class="ma-2"
-                          rounded
-                          small
                           color="primary"
                           dark
+                          rounded
+                          small
                           @click="editModule()"
                         >
                           <v-icon left>
@@ -136,10 +137,10 @@
                         </v-btn>
                         <v-btn
                           class="ma-2"
-                          rounded
-                          small
                           color="primary"
                           dark
+                          rounded
+                          small
                           @click="openMergeModal()"
                         >
                           <v-icon left>
@@ -149,13 +150,13 @@
                         </v-btn>
                         <v-btn
                           v-if="!selected.hidden"
-                          class="mx-3"
-                          rounded
-                          small
-                          color="primary"
-                          dark
                           :disabled="hidingModule"
                           :loading="hidingModule"
+                          class="mx-3"
+                          color="primary"
+                          dark
+                          rounded
+                          small
                           @click="hideModule(selected)"
                         >
                           <v-icon left>
@@ -166,13 +167,13 @@
 
                         <v-btn
                           v-if="selected.hidden"
-                          class="mx-3"
-                          rounded
-                          small
-                          color="primary"
-                          dark
                           :disabled="hidingModule"
                           :loading="hidingModule"
+                          class="mx-3"
+                          color="primary"
+                          dark
+                          rounded
+                          small
                           @click="unhideModule(selected)"
                         >
                           <v-icon left>
@@ -182,10 +183,10 @@
                         </v-btn>
 
                         <v-btn
-                          rounded
-                          small
                           class="mx-3"
                           color="warning"
+                          rounded
+                          small
                           @click="deleteModal = true"
                         >
                           <v-icon left>
@@ -203,15 +204,15 @@
             <!--  Merge modal  -->
             <ModuleMergeModal
               v-bind:application="application"
-              v-bind:module="selected"
               v-bind:dialog="mergeDialog"
+              v-bind:module="selected"
               @close="mergeDialog = false"
             ></ModuleMergeModal>
 
             <!-- Delete Modal -->
             <DeleteModuleModal
-              v-bind:module="selected"
               v-bind:dialog="deleteModal"
+              v-bind:module="selected"
               @close="deleteModal = false"
             >
             </DeleteModuleModal>
@@ -219,8 +220,8 @@
             <!--  Modify modal  -->
             <ModifyModuleModal
               v-bind:application="application"
-              v-bind:module="selected"
               v-bind:dialog="editModal"
+              v-bind:module="selected"
               @close="editModal = false"
             ></ModifyModuleModal>
 
@@ -247,24 +248,24 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ModuleController from "@/api/controllers/imaging/ModuleController";
-import ModuleMergeModal from "../tiles/modules/ModuleMergeModal.vue";
-import DeleteModuleModal from "../tiles/modules/DeleteModuleModal.vue";
-import ModifyModuleModal from "../tiles/modules/ModifyModuleModal.vue";
-import Module from "@/api/interface/imaging/Module";
+import Vue from 'vue';
+import ModuleController from '@/api/controllers/imaging/ModuleController';
+import ModuleMergeModal from './tiles/ModuleMergeModal.vue';
+import DeleteModuleModal from './tiles/DeleteModuleModal.vue';
+import ModifyModuleModal from './tiles/ModifyModuleModal.vue';
+import Module from '@/api/interface/imaging/Module';
 
 export default Vue.extend({
-  name: "ModuleExplorer",
+  name: 'ModuleExplorer',
 
   components: {
     ModuleMergeModal,
     ModifyModuleModal,
-    DeleteModuleModal
+    DeleteModuleModal,
   },
 
   data: () => ({
-    application: "",
+    application: '',
     loadedModules: [] as Module[],
 
     tree: [] as Module[],
@@ -278,30 +279,30 @@ export default Vue.extend({
     editModal: false,
     deleteModal: false,
 
-    searchModule: "",
+    searchModule: '',
 
     // Hidden levels
     hiddenModule: [],
 
     // Snackbar
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
     // Edit Dialog
     colorPicker: {},
-    editionType: "",
+    editionType: '',
     dialog: false,
     parentItem: null as Module,
     editItem: {} as Module,
 
     // Hiding level
-    hidingModule: false
+    hidingModule: false,
   }),
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -314,39 +315,38 @@ export default Vue.extend({
       try {
         this.loadingRoots = true;
         this.loadedModules = await ModuleController.getModules(
-          this.application
+          this.application,
         );
         const hidden = await ModuleController.getHiddenModules(
-          this.application
+          this.application,
         );
 
         this.loadedModules = this.loadedModules.concat(hidden);
         this.modules = this.loadedModules;
       } catch (err) {
-        console.error(`Failed to retrieve modules in the application.`, err);
+        console.error('Failed to retrieve modules in the application.', err);
       } finally {
         this.loadingRoots = false;
       }
     },
 
     openMergeModal() {
-      if (this.application == "") return;
+      if (this.application == '') return;
       this.mergeDialog = true;
     },
 
     onCloseMergeDialog(args) {
       if (args) {
         this.snackbarInfo = true;
-        this.textSnackBar =
-          "Module merged successfully. Refresh Imaging in few seconds (Make sure the module agent is running)";
+        this.textSnackBar = 'Module merged successfully. Refresh Imaging in few seconds (Make sure the module agent is running)';
       }
 
       this.mergeDialog = false;
     },
 
     async editLevel(item: Module) {
-      this.editionType = "Edit ";
-      this.editItem = Object.assign({}, item);
+      this.editionType = 'Edit ';
+      this.editItem = { ...item };
 
       this.dialog = true;
     },
@@ -359,10 +359,10 @@ export default Vue.extend({
       try {
         this.hidingModule = true;
         await ModuleController.hideById(module._id);
-        this.displaySnackBar(`Module is now hidden`);
+        this.displaySnackBar('Module is now hidden');
         this.refresh();
       } catch (err) {
-        console.error("Failed to hide the module");
+        console.error('Failed to hide the module');
         this.displaySnackBar(`Failed to hide the module. ${err}`);
       } finally {
         this.hidingModule = false;
@@ -373,10 +373,10 @@ export default Vue.extend({
       try {
         this.hidingModule = true;
         await ModuleController.unHideById(module._id);
-        this.displaySnackBar("Module is now displayed.");
+        this.displaySnackBar('Module is now displayed.');
         this.refresh();
       } catch (err) {
-        console.error("Failed to unhide the module");
+        console.error('Failed to unhide the module');
         this.displaySnackBar(`Failed to display the module. ${err}`);
       } finally {
         this.hidingModule = false;
@@ -395,7 +395,7 @@ export default Vue.extend({
     refresh() {
       this.selected = null;
       this.getModules();
-    }
+    },
   },
 
   watch: {
@@ -404,33 +404,32 @@ export default Vue.extend({
       this.refresh();
     },
 
-    selectedLevel: async function(newValue: string) {
+    async selectedLevel(newValue: string) {
       await this.getModules();
     },
 
-    editModal: async function(newValue: string) {
+    async editModal(newValue: string) {
       await this.getModules();
     },
 
-    mergeDialog: async function(newValue: string) {
+    async mergeDialog(newValue: string) {
       await this.getModules();
     },
 
-    deleteModal: async function(newValue: string) {
+    async deleteModal(newValue: string) {
       await this.getModules();
     },
 
-    searchModule: async function(newValue: string) {
+    async searchModule(newValue: string) {
       if (newValue && newValue.length > 0) {
         this.modules = this.loadedModules.filter(
-          (x: Module) =>
-            x.name.toLowerCase().indexOf(newValue.toLowerCase()) >= 0
+          (x: Module) => x.name.toLowerCase().indexOf(newValue.toLowerCase()) >= 0,
         );
       } else {
         // No search string
         this.modules = this.loadedModules;
       }
-    }
-  }
+    },
+  },
 });
 </script>

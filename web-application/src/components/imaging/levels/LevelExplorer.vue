@@ -359,22 +359,22 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import LevelController from "@/api/controllers/imaging/LevelController";
-import Level from "@/api/interface/imaging/Level.interface";
-import DemeterTile from "../../screens/imagingTuning/tiles/DemeterTile.vue";
-import LevelMergeModal from "@/components/imaging/tiles/LevelMergeModal.vue";
+import Vue from 'vue';
+import LevelController from '@/api/controllers/imaging/LevelController';
+import Level from '@/api/interface/imaging/Level.interface';
+import DemeterTile from '../../screens/imagingTuning/tiles/DemeterTile.vue';
+import LevelMergeModal from '@/components/imaging/tiles/LevelMergeModal.vue';
 
 export default Vue.extend({
-  name: "LevelExplorer",
+  name: 'LevelExplorer',
 
   components: {
     DemeterTile,
-    LevelMergeModal
+    LevelMergeModal,
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     tree: [],
     active: [],
@@ -385,15 +385,15 @@ export default Vue.extend({
 
     mergeDialog: false,
 
-    searchLevel: "",
+    searchLevel: '',
 
     // Levels Selection
     levelItems: [
-      { text: "Level 1", value: 1 },
-      { text: "Level 2", value: 2 },
-      { text: "Level 3", value: 3 },
-      { text: "Level 4", value: 4 },
-      { text: "Level 5", value: 5 }
+      { text: 'Level 1', value: 1 },
+      { text: 'Level 2', value: 2 },
+      { text: 'Level 3', value: 3 },
+      { text: 'Level 4', value: 4 },
+      { text: 'Level 5', value: 5 },
     ],
 
     selectedLevel: 5,
@@ -403,23 +403,23 @@ export default Vue.extend({
 
     // Snackbar
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
     // Edit Dialog
     colorPicker: {},
-    editionType: "",
+    editionType: '',
     dialog: false,
     parentItem: null as Level,
     editItem: {} as Level,
 
     // Hiding level
-    hidingLevel: false
+    hidingLevel: false,
   }),
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -429,15 +429,14 @@ export default Vue.extend({
 
   methods: {
     openMergeModal() {
-      if (this.application == "") return;
+      if (this.application == '') return;
       this.mergeDialog = true;
     },
 
     onCloseMergeDialog(args) {
       if (args) {
         this.snackbarInfo = true;
-        this.textSnackBar =
-          "Level merged successfully. Refresh Imaging in few seconds (Make sure the level agent is running)";
+        this.textSnackBar = 'Level merged successfully. Refresh Imaging in few seconds (Make sure the level agent is running)';
       }
 
       this.mergeDialog = false;
@@ -446,17 +445,17 @@ export default Vue.extend({
     async editLevel(item: Level) {
       this.parentItem = await LevelController.fetchParent(
         this.application,
-        item
+        item,
       );
 
-      this.editionType = "Edit ";
-      this.editItem = Object.assign({}, item);
+      this.editionType = 'Edit ';
+      this.editItem = { ...item };
 
       this.dialog = true;
     },
 
     createLevel(parentItem: Level) {
-      this.editionType = "Create ";
+      this.editionType = 'Create ';
       this.parentItem = parentItem;
       this.editItem = {};
       // remove name from fullName
@@ -468,23 +467,21 @@ export default Vue.extend({
 
     saveLevel() {
       // treat level
-      this.editItem.fullName =
-        (this.parentItem ? this.parentItem.fullName + "##" : "") +
-        this.editItem.name;
-      this.editItem.shade =
-        (this.parentItem ? this.parentItem.shade + "##" : "") +
-        this.editItem.color;
+      this.editItem.fullName = (this.parentItem ? `${this.parentItem.fullName}##` : '')
+        + this.editItem.name;
+      this.editItem.shade = (this.parentItem ? `${this.parentItem.shade}##` : '')
+        + this.editItem.color;
 
       if (this.editItem._id != -1) {
         LevelController.updateLevel(this.application, this.editItem)
           .then((res: Level) => {
             this.snackbarInfo = true;
-            this.textSnackBar = "Successfully updated level.";
+            this.textSnackBar = 'Successfully updated level.';
           })
-          .catch(err => {
-            console.error("Failed to update the level : ", err);
+          .catch((err) => {
+            console.error('Failed to update the level : ', err);
             this.snackbarInfo = true;
-            this.textSnackBar = "Failed to update the level : " + err;
+            this.textSnackBar = `Failed to update the level : ${err}`;
           })
           .finally(() => {
             this.editItem = {};
@@ -496,16 +493,16 @@ export default Vue.extend({
         LevelController.createLevel(
           this.application,
           this.parentItem._id,
-          this.editItem
+          this.editItem,
         )
           .then((res: Level) => {
             this.snackbarInfo = true;
-            this.textSnackBar = "Creation of level is a success.";
+            this.textSnackBar = 'Creation of level is a success.';
           })
-          .catch(err => {
-            console.error("Failed to create the level : ", err);
+          .catch((err) => {
+            console.error('Failed to create the level : ', err);
             this.snackbarInfo = true;
-            this.textSnackBar = "Failed to create the level : " + err;
+            this.textSnackBar = `Failed to create the level : ${err}`;
           })
           .finally(() => {
             this.editItem = {};
@@ -520,7 +517,7 @@ export default Vue.extend({
       this.hidingLevel = true;
       try {
         await LevelController.hideLevel(this.application, level);
-        this.textSnackBar = "Level has been hidden successfully";
+        this.textSnackBar = 'Level has been hidden successfully';
         this.refresh();
       } catch (err) {
         this.textSnackBar = err;
@@ -534,7 +531,7 @@ export default Vue.extend({
       this.hidingLevel = true;
       try {
         await LevelController.unhideLevel(this.application, level);
-        this.textSnackBar = "Level has been recovered successfully";
+        this.textSnackBar = 'Level has been recovered successfully';
         this.refresh();
       } catch (err) {
         this.textSnackBar = err;
@@ -555,23 +552,23 @@ export default Vue.extend({
 
     getLevelColor(level: Level) {
       // If hidden return grey
-      if (level.hidden) return "grey";
+      if (level.hidden) return 'grey';
 
       // Else return a color based on the depth
       const depth = level.level;
       switch (depth) {
         case 1:
-          return "red";
+          return 'red';
         case 2:
-          return "orange";
+          return 'orange';
         case 3:
-          return "yellow";
+          return 'yellow';
         case 4:
-          return "green";
+          return 'green';
         case 5:
-          return "blue";
+          return 'blue';
         default:
-          return "black";
+          return 'black';
       }
     },
 
@@ -579,16 +576,16 @@ export default Vue.extend({
      * Get levels
      */
     async getLevels() {
-      if (this.application == "") return;
+      if (this.application == '') return;
 
       try {
         this.loadingRoots = true;
         this.levels = await LevelController.findLevelByDepth(
           this.application,
-          this.selectedLevel
+          this.selectedLevel,
         );
       } catch (error) {
-        console.error("Failed to retrieve levels of the application.", error);
+        console.error('Failed to retrieve levels of the application.', error);
         this.snackbarInfo = true;
         this.textSnackBar = error;
       } finally {
@@ -599,7 +596,7 @@ export default Vue.extend({
     refresh() {
       this.selected = null;
       this.getLevels();
-    }
+    },
   },
 
   watch: {
@@ -608,21 +605,21 @@ export default Vue.extend({
       this.refresh();
     },
 
-    selectedLevel: async function(newValue: string) {
+    async selectedLevel(newValue: string) {
       this.getLevels();
     },
 
-    searchLevel: async function(newValue: string) {
+    async searchLevel(newValue: string) {
       if (newValue && newValue.length > 0) {
         this.levels = await LevelController.findLevelByName(
           this.application,
-          newValue
+          newValue,
         );
       } else {
         // No search string
         this.getLevels();
       }
-    }
-  }
+    },
+  },
 });
 </script>

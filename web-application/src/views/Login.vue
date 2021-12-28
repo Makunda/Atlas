@@ -93,13 +93,13 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
-import { Configuration } from "@/Configuration";
-import { UtilsController } from "@/api/controllers/utils/UtilsController";
-import LoginController from "@/api/controllers/login/LoginController";
+import { Vue } from 'vue-property-decorator';
+import { Configuration } from '@/Configuration';
+import { UtilsController } from '@/api/controllers/utils/UtilsController';
+import LoginController from '@/api/controllers/login/LoginController';
 
 export default Vue.extend({
-  name: "Login",
+  name: 'Login',
 
   data: () => ({
     // Path for the Images
@@ -108,14 +108,14 @@ export default Vue.extend({
     showLogin: true,
     show1: false,
     uri: Configuration.getProperties().neo4jUri,
-    username: "",
-    password: "",
+    username: '',
+    password: '',
     loginError: [] as string[],
 
     onlineDatabase: true,
     healthcheckGoingon: false,
 
-    switchInternalUse: false
+    switchInternalUse: false,
   }),
 
   mounted() {
@@ -123,7 +123,7 @@ export default Vue.extend({
   },
 
   methods: {
-    onEnter: function() {
+    onEnter() {
       this.save();
     },
 
@@ -136,14 +136,14 @@ export default Vue.extend({
 
       const res: boolean = await LoginController.postLogin(
         this.username,
-        this.password
+        this.password,
       );
       if (res) {
-        this.$router.replace("/applications");
+        this.$router.replace('/applications');
         window.location.reload();
       } else {
         // Ignore & unvalidate the login form
-        this.loginError = ["Wrong Username/Password"];
+        this.loginError = ['Wrong Username/Password'];
       }
     },
 
@@ -157,8 +157,8 @@ export default Vue.extend({
         this.onlineDatabase = false;
         setTimeout(this.simpleHealthCheck, 3000);
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

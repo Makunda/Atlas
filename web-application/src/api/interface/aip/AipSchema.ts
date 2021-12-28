@@ -2,9 +2,9 @@
  * Different types of schema that can be
  */
 export enum SchemaType {
-  LOCAL = "Local",
-  MANAGEMENT = "Management",
-  CENTRAL = "Central"
+  LOCAL = 'Local',
+  MANAGEMENT = 'Management',
+  CENTRAL = 'Central'
 }
 
 /**
@@ -12,11 +12,11 @@ export enum SchemaType {
  */
 export function schemaTypeFromString(type: string): SchemaType {
   switch (type) {
-    case "Local":
+    case 'Local':
       return SchemaType.LOCAL;
-    case "Management":
+    case 'Management':
       return SchemaType.MANAGEMENT;
-    case "Central":
+    case 'Central':
       return SchemaType.CENTRAL;
     default:
       throw new Error(`${type} doesn't exist in the SchemaType.`);

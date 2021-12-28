@@ -114,15 +114,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "ServerCategoriesHelper",
+  name: 'ServerCategoriesHelper',
   methods: {
     goTo(section: string) {
-      this.$router.replace("/administration/" + section);
-    }
-  }
+      this.$router.replace(`/administration/${section}`);
+    },
+  },
 });
 </script>
 

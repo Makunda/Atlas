@@ -81,30 +81,30 @@
 </template>
 
 <script lang="ts">
-import BackupController from "@/api/controllers/extensions/demeter/BackupController";
-import Logger from "@/utils/Logger";
-import flash, { FlashType } from "@/modules/flash/Flash";
-import Vue from "vue";
+import Vue from 'vue';
+import BackupController from '@/api/controllers/extensions/demeter/BackupController';
+import Logger from '@/utils/Logger';
+import flash, { FlashType } from '@/modules/flash/Flash';
 
 export default Vue.extend({
-  name: "BackupCreationModal",
+  name: 'BackupCreationModal',
   computed: {
     getApplicationName(): string {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   props: {
-    dialog: Boolean
+    dialog: Boolean,
   },
 
   methods: {
     async refresh() {
       this.application = this.$store.state.applicationName;
-      this.name = "";
+      this.name = '';
       this.file = {};
-      this.description = "";
-      this.picker = "";
+      this.description = '';
+      this.picker = '';
     },
 
     /**
@@ -112,15 +112,15 @@ export default Vue.extend({
      * @param update if true return 'close'
      */
     close(update = false) {
-      if (update) this.$emit("create");
-      else this.$emit("close");
+      if (update) this.$emit('create');
+      else this.$emit('close');
     },
 
     toDataURL(src): Promise<string | ArrayBuffer> {
       return new Promise((resolve, reject) => {
         try {
           const reader = new FileReader();
-          reader.onloadend = function(fileLoadedEvent) {
+          reader.onloadend = function (fileLoadedEvent) {
             resolve(reader.result);
           };
           reader.readAsDataURL(src);
@@ -143,12 +143,11 @@ export default Vue.extend({
      */
     async createBackup() {
       this.loading = true;
-      this.error = "";
+      this.error = '';
 
       try {
-        if (!this.name) throw new Error("You must specify a name");
-        if (!this.application)
-          throw new Error("You must specify an application");
+        if (!this.name) throw new Error('You must specify a name');
+        if (!this.application) { throw new Error('You must specify an application'); }
 
         let timestamp;
         if (!this.picker) {
@@ -157,7 +156,7 @@ export default Vue.extend({
           const newDate = new Date(
             this.picker[2],
             this.picker[1] - 1,
-            this.picker[0]
+            this.picker[0],
           );
           timestamp = newDate.getTime();
         }
@@ -167,39 +166,39 @@ export default Vue.extend({
           this.name,
           this.description,
           timestamp,
-          this.picture
+          this.picture,
         );
         this.close(true);
       } catch (e) {
         Logger.error(
-          "Failed to create the backup",
-          "Controller thrown an error",
-          e
+          'Failed to create the backup',
+          'Controller thrown an error',
+          e,
         );
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to create the backup.",
-          body: e
+          title: 'Failed to create the backup.',
+          body: e,
         });
         this.error = e;
       } finally {
         this.loading = false;
       }
-    }
+    },
   },
 
   data: () => ({
-    application: "",
-    name: "",
-    description: "",
-    picker: "",
+    application: '',
+    name: '',
+    description: '',
+    picker: '',
 
     file: {} as File,
-    picture: "" as any,
+    picture: '' as any,
 
     // Loading & Error
     loading: false,
-    error: ""
+    error: '',
   }),
 
   // Mounted operation
@@ -214,14 +213,14 @@ export default Vue.extend({
     file: {
       handler() {
         this.imageToBase64();
-      }
+      },
     },
     dialog: {
       handler() {
         this.refresh();
-      }
-    }
-  }
+      },
+    },
+  },
 });
 </script>
 

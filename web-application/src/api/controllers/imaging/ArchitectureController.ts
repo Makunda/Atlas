@@ -1,7 +1,7 @@
-import Archimodel from "@/api/interface/imaging/ArchiModel";
-import ProxyAxios from "@/utils/axios/ProxyAxios";
-import Logger from "@/utils/Logger";
-import { error } from "neo4j-driver";
+import { error } from 'neo4j-driver';
+import Archimodel from '@/api/interface/imaging/ArchiModel';
+import ProxyAxios from '@/utils/axios/ProxyAxios';
+import Logger from '@/utils/Logger';
 
 export default class ArchitectureController {
   /**
@@ -9,7 +9,7 @@ export default class ArchitectureController {
    * @param application Name of the application
    */
   public static async getArchitectures(
-    application: string
+    application: string,
   ): Promise<Archimodel[]> {
     const url = `/api/imaging/architectures/all/${application}`;
 
@@ -19,7 +19,7 @@ export default class ArchitectureController {
       if (res.isError()) throw res.getErrorsAsString();
       return res.getData();
     } catch (error) {
-      Logger.error(`Failed to retrieve architecture elements.`, error);
+      Logger.error('Failed to retrieve architecture elements.', error);
       throw error;
     }
   }
@@ -31,17 +31,17 @@ export default class ArchitectureController {
    */
   public static async hideArchitectureElement(
     id: number,
-    type: string
+    type: string,
   ): Promise<void> {
     const url = `/api/imaging/architectures/${type}/hide`;
 
     try {
-      const res = await ProxyAxios.post(url, { id: id });
+      const res = await ProxyAxios.post(url, { id });
       if (res.isError()) throw res.getErrorsAsString();
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to hide architecture element.`,
-        error
+        error,
       );
       throw error;
     }
@@ -56,21 +56,21 @@ export default class ArchitectureController {
   public static async deleteArchitectureElement(
     application: string,
     id: number,
-    type: string
+    type: string,
   ): Promise<void> {
     const url = `/api/imaging/architectures/${type}/delete`;
 
     try {
       const res = await ProxyAxios.post(url, {
-        id: id,
-        application: application
+        id,
+        application,
       });
 
       if (res.isError()) throw res.getErrorsAsString();
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete architecture element.`,
-        error
+        error,
       );
       throw error;
     }
@@ -83,12 +83,12 @@ export default class ArchitectureController {
    */
   public static async generateModulesFromArchitecture(
     application: string,
-    id: number
+    id: number,
   ): Promise<void> {
-    const url = `/api/imaging/architectures/archimodel/generate/modules`;
+    const url = '/api/imaging/architectures/archimodel/generate/modules';
 
     try {
-      const res = await ProxyAxios.post<string[]>(url, { id: id });
+      const res = await ProxyAxios.post<string[]>(url, { id });
 
       if (res.isError()) {
         throw res.getErrorsAsString();
@@ -96,17 +96,17 @@ export default class ArchitectureController {
         // Save as text file the result
         const queries = res.getData();
 
-        const pom = document.createElement("a");
+        const pom = document.createElement('a');
         pom.setAttribute(
-          "href",
-          "data:text/plain;charset=utf-8," +
-            encodeURIComponent(queries.join("\n"))
+          'href',
+          `data:text/plain;charset=utf-8,${
+            encodeURIComponent(queries.join('\n'))}`,
         );
-        pom.setAttribute("download", `Module_definition_${application}.txt`);
+        pom.setAttribute('download', `Module_definition_${application}.txt`);
 
         if (document.createEvent) {
-          const event = document.createEvent("MouseEvents");
-          event.initEvent("click", true, true);
+          const event = document.createEvent('MouseEvents');
+          event.initEvent('click', true, true);
           pom.dispatchEvent(event);
         } else {
           pom.click();
@@ -115,7 +115,7 @@ export default class ArchitectureController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to generate module from architecture views.`,
-        error
+        error,
       );
       throw error;
     }
@@ -128,15 +128,15 @@ export default class ArchitectureController {
    */
   public static async displayArchitectureElement(
     id: number,
-    type: string
+    type: string,
   ): Promise<void> {
     const url = `/api/imaging/architectures/${type}/display`;
 
     try {
-      const res = await ProxyAxios.post(url, { id: id });
+      const res = await ProxyAxios.post(url, { id });
       if (res.isError()) throw res.getErrorsAsString();
     } catch (error) {
-      Logger.error(`Failed to display architecture element.`, error);
+      Logger.error('Failed to display architecture element.', error);
       throw error;
     }
   }
@@ -150,7 +150,7 @@ export default class ArchitectureController {
   public static async updateArchitectureElement(
     id: number,
     type: string,
-    data: any
+    data: any,
   ): Promise<void> {
     const url = `/api/imaging/architectures/${type}/update`;
 
@@ -163,7 +163,7 @@ export default class ArchitectureController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update architecture element.`,
-        error
+        error,
       );
       throw error;
     }
@@ -174,15 +174,15 @@ export default class ArchitectureController {
    * @param id Id of the architecture element
    */
   public static async displayCompleteArchimodelElement(
-    id: number
+    id: number,
   ): Promise<void> {
-    const url = `/api/imaging/architectures/archimodel/display/complete`;
+    const url = '/api/imaging/architectures/archimodel/display/complete';
 
     try {
-      const res = await ProxyAxios.post(url, { id: id });
+      const res = await ProxyAxios.post(url, { id });
       if (res.isError()) throw res.getErrorsAsString();
     } catch (error) {
-      Logger.error(`Failed to display architectures.`, error);
+      Logger.error('Failed to display architectures.', error);
       throw error;
     }
   }
@@ -194,17 +194,17 @@ export default class ArchitectureController {
    */
   public static async duplicateArchiModel(
     id: number,
-    name: string
+    name: string,
   ): Promise<void> {
-    const url = `/api/imaging/architectures/archimodel/duplicate/byId`;
+    const url = '/api/imaging/architectures/archimodel/duplicate/byId';
 
     try {
-      const res = await ProxyAxios.post(url, { id: id, name: name });
+      const res = await ProxyAxios.post(url, { id, name });
       if (res.getErrorsAsString()) throw error;
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to duplicate architecture element.`,
-        error
+        error,
       );
       throw error;
     }
@@ -217,21 +217,21 @@ export default class ArchitectureController {
    */
   public static async groupUnassigned(
     id: number,
-    application: string
+    application: string,
   ): Promise<void> {
-    const url = `/api/imaging/architectures/archimodel/group/unassigned`;
+    const url = '/api/imaging/architectures/archimodel/group/unassigned';
 
     try {
       const res = await ProxyAxios.post(url, {
-        id: id,
-        application: application
+        id,
+        application,
       });
 
       if (res.getErrorsAsString()) throw error;
     } catch (error) {
       Logger.error(
         `Failed to reach the API : ${url}. Failed to duplicate architecture element.`,
-        error
+        error,
       );
       throw error;
     }
@@ -244,18 +244,18 @@ export default class ArchitectureController {
    */
   public static async duplicateTaxonomy(
     name: string,
-    application: string
+    application: string,
   ): Promise<void> {
-    const url = `/api/imaging/architectures/archimodel/duplicate/taxonomy`;
+    const url = '/api/imaging/architectures/archimodel/duplicate/taxonomy';
 
     try {
       const res = await ProxyAxios.post(url, {
-        name: name,
-        application: application
+        name,
+        application,
       });
       if (res.getErrorsAsString()) throw error;
     } catch (error) {
-      Logger.error(`Failed to duplicate CAST Taxonomy.`, error);
+      Logger.error('Failed to duplicate CAST Taxonomy.', error);
       throw error;
     }
   }

@@ -30,15 +30,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { AipConfiguration } from "@/api/interface/aip/Aipconfiguration";
-import { AipSchema } from "@/api/interface/aip/AipSchema";
+import Vue from 'vue';
+import { AipConfiguration } from '@/api/interface/aip/Aipconfiguration';
+import { AipSchema } from '@/api/interface/aip/AipSchema';
 
 export default Vue.extend({
-  name: "RulesInjection",
+  name: 'RulesInjection',
 
   data: () => ({
-    schemaNames: undefined as [AipSchema, AipConfiguration]
-  })
+    schemaNames: undefined as [AipSchema, AipConfiguration],
+  }),
 });
 </script>

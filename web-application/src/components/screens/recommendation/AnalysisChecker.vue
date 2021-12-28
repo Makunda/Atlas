@@ -24,22 +24,22 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ExplorationStep from "./steps/ExplorationStep.vue";
-import BreakdownStep from "@/components/screens/recommendation/steps/BreakdownStep.vue";
+import Vue from 'vue';
+import ExplorationStep from './steps/ExplorationStep.vue';
+import BreakdownStep from '@/components/screens/recommendation/steps/BreakdownStep.vue';
 
 export default Vue.extend({
-  name: "AnalysisChecker",
+  name: 'AnalysisChecker',
 
   components: {
     BreakdownStep,
-    ExplorationStep
+    ExplorationStep,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -47,32 +47,32 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     step: 1,
     tab: 0,
 
     items: [
       {
-        view: "ExplorationStep",
-        name: "Frameworks",
-        title: "Explore the ",
-        icon: "mdi-apple-safari"
+        view: 'ExplorationStep',
+        name: 'Frameworks',
+        title: 'Explore the ',
+        icon: 'mdi-apple-safari',
       },
       {
-        view: "BreakdownStep",
-        name: "Breakdown",
-        title: "Review the breakdown of the ",
-        icon: "mdi-pickaxe"
-      }
-    ]
+        view: 'BreakdownStep',
+        name: 'Breakdown',
+        title: 'Review the breakdown of the ',
+        icon: 'mdi-pickaxe',
+      },
+    ],
   }),
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

@@ -46,43 +46,43 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import LevelViewer from "@/components/screens/grouping/components/LevelViewer.vue";
-import GroupAction from "@/api/interface/extensions/demeter/GroupAction";
+import Vue from 'vue';
+import LevelViewer from '@/components/screens/grouping/components/LevelViewer.vue';
+import GroupAction from '@/api/interface/extensions/demeter/GroupAction';
 
 export default Vue.extend({
-  name: "GroupingApplication",
+  name: 'GroupingApplication',
 
   components: {
-    LevelViewer
+    LevelViewer,
   },
 
   data: () => ({
     // Loadings
     loadingActions: false,
 
-    searchActions: "",
-    searchLevels: "",
+    searchActions: '',
+    searchLevels: '',
 
-    application: "" as string,
+    application: '' as string,
     popularOperations: [] as GroupAction[],
     filteredPopularOperations: [] as GroupAction[],
 
     getActionList() {
       this.popularOperations = [];
-    }
+    },
   }),
 
   methods: {
     getLevelList() {
-      console.log("Not implemented.");
-    }
+      console.log('Not implemented.');
+    },
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -96,20 +96,18 @@ export default Vue.extend({
       this.getActionList();
     },
 
-    searchActions: function(val: string) {
+    searchActions(val: string) {
       if (!val || val.length == 0) {
         this.filteredPopularOperations = this.popularOperations;
       } else {
         // Filter the array  of application
         val = val.toLowerCase();
-        this.filteredPopularOperations = this.popularOperations.filter(x => {
-          return (
-            x.title.toLowerCase().includes(val) ||
-            x.description.toLowerCase().includes(val)
-          );
-        });
+        this.filteredPopularOperations = this.popularOperations.filter((x) => (
+          x.title.toLowerCase().includes(val)
+            || x.description.toLowerCase().includes(val)
+        ));
       }
-    }
-  }
+    },
+  },
 });
 </script>

@@ -39,41 +39,41 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "SpeedDial",
+  name: 'SpeedDial',
 
   computed: {
     activeFab() {
       switch (this.tabs) {
-        case "one":
-          return { class: "purple", icon: "account_circle" };
-        case "two":
-          return { class: "red", icon: "edit" };
-        case "three":
-          return { class: "green", icon: "keyboard_arrow_up" };
+        case 'one':
+          return { class: 'purple', icon: 'account_circle' };
+        case 'two':
+          return { class: 'red', icon: 'edit' };
+        case 'three':
+          return { class: 'green', icon: 'keyboard_arrow_up' };
         default:
           return {};
       }
-    }
+    },
   },
 
   data: () => ({
     // Speed Dial
-    fabChoice: "",
-    direction: "top",
+    fabChoice: '',
+    direction: 'top',
     fab: false,
     fling: true,
     hover: true,
     tabs: null,
-    transition: "slide-y-reverse-transition"
+    transition: 'slide-y-reverse-transition',
   }),
 
   methods: {
     fabChange(to: string) {
-      if (to == "") {
-        this.fabChoice = "";
+      if (to == '') {
+        this.fabChoice = '';
         return;
       }
 
@@ -83,8 +83,8 @@ export default Vue.extend({
       setTimeout(() => {
         this.fab = true;
       }, 300);
-    }
-  }
+    },
+  },
 });
 </script>
 

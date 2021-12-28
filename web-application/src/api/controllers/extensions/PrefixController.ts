@@ -1,13 +1,12 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export default class PrefixController {
   private static API_BASE_URL = ApiComUtils.getUrl();
 
   private static async getTag(name: string): Promise<string> {
-    const url =
-      PrefixController.API_BASE_URL + `/api/configuration/tags/${name}`;
+    const url = `${PrefixController.API_BASE_URL}/api/configuration/tags/${name}`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -24,7 +23,7 @@ export default class PrefixController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve tag ${name}.`,
-        error
+        error,
       );
       throw error;
     }
@@ -34,20 +33,20 @@ export default class PrefixController {
    * Get the tag related to the Framework grouping
    */
   public static async getFrameworkTag(): Promise<string> {
-    return this.getTag("framework");
+    return this.getTag('framework');
   }
 
   /**
    * Get the tag related to the Level grouping
    */
   public static async getLevelTag(): Promise<string> {
-    return this.getTag("level");
+    return this.getTag('level');
   }
 
   /**
    * Get the tag related to the module grouping
    */
   public static async getModuleTag(): Promise<string> {
-    return this.getTag("module");
+    return this.getTag('module');
   }
 }

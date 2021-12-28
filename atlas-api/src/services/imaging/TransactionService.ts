@@ -249,7 +249,7 @@ class TransactionService {
       "RETURN COUNT(DISTINCT o) as totObj";
 
     const reqStart = "MATCH (t:Transaction)-[:StartsWith]->(n:TransactionNode)-[:IN]->(o) WHERE ID(t)=$idTrans " +
-     "RETURN o.Type as objectType LIMIT 1";
+      "RETURN o.Type as objectType LIMIT 1";
 
     const reqEnd = "MATCH (t:Transaction)-[:EndsWith]->(n:TransactionNode)-[]->(o) WHERE ID(t)=$idTrans " +
       "RETURN o.Type as objectType LIMIT 1";

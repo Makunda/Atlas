@@ -23,11 +23,11 @@
 
 <script lang="ts">
 export default {
-  name: "ErrorDialog",
-  props: ["title", "text"],
+  name: 'ErrorDialog',
+  props: ['title', 'text'],
 
   data: () => ({
-    dialog: false as boolean
-  })
+    dialog: false as boolean,
+  }),
 };
 </script>

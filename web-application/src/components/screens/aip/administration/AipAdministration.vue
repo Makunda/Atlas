@@ -24,19 +24,20 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import AipParameters from "./AipParameters.vue";
+import Vue from 'vue';
+import AipParameters from './AipParameters.vue';
+
 export default Vue.extend({
-  name: "AipAdministration",
+  name: 'AipAdministration',
 
   components: {
-    AipParameters
+    AipParameters,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -44,25 +45,25 @@ export default Vue.extend({
   },
 
   data: () => ({
-    application: "",
+    application: '',
 
     step: 1,
     tab: 0,
 
     items: [
       {
-        view: "AipParameters",
-        name: "AIP Parameters",
-        icon: "mdi-folder-cog"
-      }
-    ]
+        view: 'AipParameters',
+        name: 'AIP Parameters',
+        icon: 'mdi-folder-cog',
+      },
+    ],
   }),
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>
 

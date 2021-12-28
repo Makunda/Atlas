@@ -104,27 +104,27 @@
 </template>
 <script>
 export default Vue.extend({
-  name: "FrameworkDispatch",
+  name: 'FrameworkDispatch',
   props: {
     model: Boolean,
-    artifacts: Object
+    artifacts: Object,
   },
 
   watch: {
-    artifacts: function() {
+    artifacts() {
       this.frameworkArtifact = this.artifact;
     },
 
     data: () => ({
-      error: ""
+      error: '',
     }),
 
     methods: {
       validate() {
-        console.log("The selection was validated");
-      }
-    }
-  }
+        console.log('The selection was validated');
+      },
+    },
+  },
 });
 </script>
 

@@ -2927,9 +2927,9 @@
                     request: "MATCH (o:Object:".concat(t, ") WITH COUNT(o) as totObj MATCH (obj:Object:").concat(t, ") WHERE obj.External=false\n        WITH  COUNT(obj) as internal, totObj RETURN toFloat(internal) / totObj as percentage;"),
                     inverseResult: !1,
                   }, {
-                    title: "In Transaction",
+                    title: "In TransactionUtils",
                     description: "Percentage of objects in transactions",
-                    request: "MATCH (o:Object:".concat(t, ") WITH COUNT(o) as totObj\n        MATCH (obj:Object:").concat(t, ") WHERE NOT (:Transaction:").concat(t, ")-[:Contains]->(obj) WITH  COUNT(DISTINCT obj) as notInTransaction, totObj \n        RETURN toFloat(notInTransaction) / totObj as percentage;"),
+                    request: "MATCH (o:Object:".concat(t, ") WITH COUNT(o) as totObj\n        MATCH (obj:Object:").concat(t, ") WHERE NOT (:TransactionUtils:").concat(t, ")-[:Contains]->(obj) WITH  COUNT(DISTINCT obj) as notInTransaction, totObj \n        RETURN toFloat(notInTransaction) / totObj as percentage;"),
                     inverseResult: !1,
                   }, {
                     title: "Isolated Levels",
@@ -3191,7 +3191,7 @@
                     title: "Split not in transaction objects",
                     category: "Configuration",
                     description: "Split all the objects not in transactions and regroup them under they own Level5 nodes",
-                    request: "MATCH (n:ObjectProperty) \n          WITH MAX(n.Id)+1 as maxId \n          MERGE (oc:ObjectProperty { Description: \"Prefix_List of transactions going through the object:\", Id: maxId }) \n          WITH oc \n          MATCH (o:Object:%%CONTEXT_LABEL%%)<-[:Contains]-(tx:Transaction) \n          WITH oc, o, COLLECT(DISTINCT tx.Name) as transactionList \n          WITH oc, o, REDUCE(s = \"\", n IN transactionList | s + ', ' + n) as stringTransactions \n          MERGE (o)-[:Property { value: RIGHT(stringTransactions,SIZE(stringTransactions)-2) }]->(oc)",
+                    request: "MATCH (n:ObjectProperty) \n          WITH MAX(n.Id)+1 as maxId \n          MERGE (oc:ObjectProperty { Description: \"Prefix_List of transactions going through the object:\", Id: maxId }) \n          WITH oc \n          MATCH (o:Object:%%CONTEXT_LABEL%%)<-[:Contains]-(tx:TransactionUtils) \n          WITH oc, o, COLLECT(DISTINCT tx.Name) as transactionList \n          WITH oc, o, REDUCE(s = \"\", n IN transactionList | s + ', ' + n) as stringTransactions \n          MERGE (o)-[:Property { value: RIGHT(stringTransactions,SIZE(stringTransactions)-2) }]->(oc)",
                     tag: "",
                   }], e.abrupt("return", r.map((function(e) {
                     return e.request = e.request.replaceAll(n.contextAnchor, t), e;
@@ -16088,7 +16088,7 @@
           key: "top", fn: function() {
             return [a("v-text-field", {
               staticClass: "mx-4",
-              attrs: { filled: "", rounded: "", clearable: "", label: "Search Transaction by Name" },
+              attrs: { filled: "", rounded: "", clearable: "", label: "Search TransactionUtils by Name" },
               on: {
                 change: function(t) {
                   return e.transactionApiCall();
@@ -17489,7 +17489,7 @@
           key: "top", fn: function() {
             return [a("v-text-field", {
               staticClass: "mx-4",
-              attrs: { filled: "", rounded: "", clearable: "", label: "Search DataCallGraph by Name" },
+              attrs: { filled: "", rounded: "", clearable: "", label: "Search DataCallGraphUtils by Name" },
               on: { change: e.dataCallGraphApiCall },
               model: {
                 value: e.searchName, callback: function(t) {
@@ -18706,7 +18706,7 @@
           }, {
             view: "DataCallGraphExplorer",
             name: "Data Call Graph",
-            title: "Explore the DataCallGraph",
+            title: "Explore the DataCallGraphUtils",
             icon: "mdi-apple-safari",
           }],
         };

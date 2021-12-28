@@ -48,30 +48,30 @@
 </template>
 
 <script lang="ts">
-import LevelAgent from "@/components/agents/LevelAgent.vue";
-import ModuleAgent from "@/components/agents/ModuleAgent.vue";
-import FrameworkAgent from "@/components/agents/FrameworkAgent.vue";
-import ViewAgent from "@/components/agents/ViewAgent.vue";
-import ArchitectureAgent from "@/components/agents/ArchitectureAgent.vue";
-import AssistantsManager from "@/components/assistants/AssistantsManager.vue";
+import Vue from 'vue';
+import LevelAgent from '@/components/agents/LevelAgent.vue';
+import ModuleAgent from '@/components/agents/ModuleAgent.vue';
+import FrameworkAgent from '@/components/agents/FrameworkAgent.vue';
+import ViewAgent from '@/components/agents/ViewAgent.vue';
+import ArchitectureAgent from '@/components/agents/ArchitectureAgent.vue';
+import AssistantsManager from '@/components/assistants/AssistantsManager.vue';
 
-import Vue from "vue";
-import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
+import { LevelController } from '@/api/controllers/extensions/demeter/grouping/LevelController';
 
-export default Vue.component("GroupingTile", {
+export default Vue.component('GroupingTile', {
   components: {
     FrameworkAgent,
     ViewAgent,
     ArchitectureAgent,
     AssistantsManager,
     LevelAgent,
-    ModuleAgent
+    ModuleAgent,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   mounted() {
@@ -81,7 +81,7 @@ export default Vue.component("GroupingTile", {
   },
 
   data: () => ({
-    application: "",
+    application: '',
     levelTags: [] as string[],
     moduleTags: [] as string[],
 
@@ -91,7 +91,7 @@ export default Vue.component("GroupingTile", {
     loading: false,
 
     daemonLevelState: true,
-    daemonModuleState: true
+    daemonModuleState: true,
   }),
 
   methods: {
@@ -99,8 +99,8 @@ export default Vue.component("GroupingTile", {
       this.daemonLevelState = this.$store.state.daemonLevelState = !this.$store
         .state.daemonLevelState;
       console.log(
-        "New Level Daemon state is ",
-        this.$store.state.daemonLevelState
+        'New Level Daemon state is ',
+        this.$store.state.daemonLevelState,
       );
     },
 
@@ -108,13 +108,13 @@ export default Vue.component("GroupingTile", {
       this.daemonModuleState = this.$store.state.daemonModuleState = !this
         .$store.state.daemonModuleState;
       console.log(
-        "New Module Daemon state is ",
-        this.$store.state.daemonModuleState
+        'New Module Daemon state is ',
+        this.$store.state.daemonModuleState,
       );
     },
 
     toggleViewDaemon() {
-      console.log("Not implemented yet !");
+      console.log('Not implemented yet !');
     },
 
     groupApplication(appName: string) {
@@ -124,21 +124,21 @@ export default Vue.component("GroupingTile", {
     },
 
     groupToList(groups: string[]) {
-      if (groups == null) return "";
+      if (groups == null) return '';
 
       const uniqueNames = [] as string[];
-      groups.forEach(x => {
+      groups.forEach((x) => {
         const groupName: string = x.substring(6);
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
       return uniqueNames;
-    }
+    },
   },
 
   watch: {
     getApplicationName(newApp) {
       this.application = newApp;
-    }
-  }
+    },
+  },
 });
 </script>

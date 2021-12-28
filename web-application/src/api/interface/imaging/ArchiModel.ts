@@ -15,7 +15,7 @@
     }
  */
 
-import Subset from "./Subset";
+import Subset from './Subset';
 
 export default interface Archimodel {
   _id: number;

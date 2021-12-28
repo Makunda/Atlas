@@ -24,18 +24,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ArtemisParameters from "@/components/screens/administration/steps/ArtemisParameters.vue";
-import GlobalParameters from "@/components/screens/administration/steps/GlobalParameters.vue";
-import PythiaParameters from "@/components/screens/administration/steps/PythiaParameters.vue";
+import Vue from 'vue';
+import ArtemisParameters from '@/components/screens/administration/steps/ArtemisParameters.vue';
+import GlobalParameters from '@/components/screens/administration/steps/GlobalParameters.vue';
+import PythiaParameters from '@/components/screens/administration/steps/PythiaParameters.vue';
 
 export default Vue.extend({
-  name: "Administration",
+  name: 'Administration',
 
   components: {
     GlobalParameters,
     ArtemisParameters,
-    PythiaParameters
+    PythiaParameters,
   },
 
   data: () => ({
@@ -45,21 +45,21 @@ export default Vue.extend({
 
     items: [
       {
-        view: "GlobalParameters",
-        name: "Global Parameters",
-        icon: "mdi-cogs"
+        view: 'GlobalParameters',
+        name: 'Global Parameters',
+        icon: 'mdi-cogs',
       },
       {
-        view: "ArtemisParameters",
-        name: "Artemis Parameters",
-        icon: "mdi-cogs"
+        view: 'ArtemisParameters',
+        name: 'Artemis Parameters',
+        icon: 'mdi-cogs',
       },
       {
-        view: "PythiaParameters",
-        name: "Pythia Parameters",
-        icon: "mdi-cogs"
-      }
-    ]
-  })
+        view: 'PythiaParameters',
+        name: 'Pythia Parameters',
+        icon: 'mdi-cogs',
+      },
+    ],
+  }),
 });
 </script>

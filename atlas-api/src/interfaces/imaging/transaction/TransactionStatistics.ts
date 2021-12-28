@@ -1,4 +1,4 @@
-//Transaction statistics
+//TransactionUtils statistics
 
 export interface TransactionObjectRatio {
   type: string;

@@ -7,12 +7,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import BreakdownApplication from "@/components/artemis/tiles/BreakdownApplication.vue";
+import Vue from 'vue';
+import BreakdownApplication from '@/components/artemis/tiles/BreakdownApplication.vue';
 
 export default Vue.extend({
-  name: "BreakdownStep",
+  name: 'BreakdownStep',
   components: { BreakdownApplication },
-  data: () => ({})
+  data: () => ({}),
 });
 </script>

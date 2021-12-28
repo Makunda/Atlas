@@ -1,9 +1,9 @@
-import flash, { FlashType } from "@/modules/flash/Flash";
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import CookieManager from "@/utils/CookieManager";
-import ProxyAxios from "@/api/utils/ProxyAxios";
-import ApiResponseImpl from "@/api/utils/ApiResponse";
-import store from "@/store";
+import flash, { FlashType } from '@/modules/flash/Flash';
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import CookieManager from '@/utils/CookieManager';
+import ProxyAxios from '@/api/utils/ProxyAxios';
+import ApiResponseImpl from '@/api/utils/ApiResponse';
+import store from '@/store';
 
 /**
  * Controller handling the login on the platform
@@ -16,13 +16,13 @@ export default class LoginController {
    */
   public static async postLogin(
     username: string,
-    password: string
+    password: string,
   ): Promise<boolean> {
-    const url = LoginController.API_BASE_URL + "/api/login";
+    const url = `${LoginController.API_BASE_URL}/api/login`;
     try {
       const body = {
-        username: username,
-        password: password
+        username,
+        password,
       };
 
       const response = await ProxyAxios.post(url, body);
@@ -34,22 +34,21 @@ export default class LoginController {
         store.state.isAuthenticated = true;
 
         return true;
-      } else {
-        // The request failed, popup + log
-        console.error("Failed to login", apiResponse.getErrors());
-        flash.commit("add", {
-          type: FlashType.ERROR,
-          title: "Failed to login.",
-          body: "Bad username/password"
-        });
-        return false;
       }
-    } catch (error) {
-      console.error(`Failed to login.`, error);
-      flash.commit("add", {
+      // The request failed, popup + log
+      console.error('Failed to login', apiResponse.getErrors());
+      flash.commit('add', {
         type: FlashType.ERROR,
-        title: "Failed to login.",
-        body: error
+        title: 'Failed to login.',
+        body: 'Bad username/password',
+      });
+      return false;
+    } catch (error) {
+      console.error('Failed to login.', error);
+      flash.commit('add', {
+        type: FlashType.ERROR,
+        title: 'Failed to login.',
+        body: error,
       });
       return false;
     }
@@ -62,11 +61,11 @@ export default class LoginController {
     try {
       CookieManager.deleteAuthCookie();
     } catch (err) {
-      console.error("Failed to destroy the authentication cookie", err);
-      flash.commit("add", {
+      console.error('Failed to destroy the authentication cookie', err);
+      flash.commit('add', {
         type: FlashType.ERROR,
-        title: "Failed to logout.",
-        body: err
+        title: 'Failed to logout.',
+        body: err,
       });
       throw err;
     }

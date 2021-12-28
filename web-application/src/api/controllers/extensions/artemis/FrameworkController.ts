@@ -1,8 +1,8 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import { DetectionResult } from "@/api/interface/extensions/artemis/detectionResult.interface";
-import { Framework } from "@/api/interface/extensions/artemis/Framework";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import { DetectionResult } from '@/api/interface/extensions/artemis/detectionResult.interface';
+import { Framework } from '@/api/interface/extensions/artemis/Framework';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class FrameworkController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -10,19 +10,18 @@ export class FrameworkController {
   // Find frameworks by name
   public static async findFramework(
     name: string,
-    internalType?: string
+    internalType?: string,
   ): Promise<DetectionResult[]> {
-    let url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/find/";
+    let url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/find/`;
 
     try {
       // Build the URl ( optional type internalType)
-      const sanitizedName = name.replace(" ", "+");
+      const sanitizedName = name.replace(' ', '+');
       url += sanitizedName;
 
-      if (internalType && internalType != "") {
-        const sanitizedInternal = internalType.replace(" ", "+");
-        url += "?internalType=" + sanitizedInternal;
+      if (internalType && internalType != '') {
+        const sanitizedInternal = internalType.replace(' ', '+');
+        url += `?internalType=${sanitizedInternal}`;
       }
 
       const res = await ProxyAxios.get(url);
@@ -35,7 +34,7 @@ export class FrameworkController {
         }
       } else {
         console.warn(
-          `Failed to retrieve frameworks by its name. Status (${res.status})`
+          `Failed to retrieve frameworks by its name. Status (${res.status})`,
         );
       }
 
@@ -43,7 +42,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve frameworks by its name.`,
-        error
+        error,
       );
       throw error;
     }
@@ -51,16 +50,15 @@ export class FrameworkController {
 
   // Get the number of Frameworks
   public static async getTotalFramework(
-    internalType?: string
+    internalType?: string,
   ): Promise<number> {
-    let url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/total";
+    let url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/total`;
 
     try {
       // Build the URl ( optional type internalType)
-      if (internalType && internalType != "") {
-        const sanitizedInternal = internalType.replace(" ", "+");
-        url += "?internalType=" + sanitizedInternal;
+      if (internalType && internalType != '') {
+        const sanitizedInternal = internalType.replace(' ', '+');
+        url += `?internalType=${sanitizedInternal}`;
       }
 
       const res = await ProxyAxios.get(url);
@@ -70,7 +68,7 @@ export class FrameworkController {
         num = Number(apiResponse.data);
       } else {
         console.warn(
-          `Failed to retrieve number of frameworks by internalType. Status (${res.status})`
+          `Failed to retrieve number of frameworks by internalType. Status (${res.status})`,
         );
       }
 
@@ -78,7 +76,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve frameworks by internalType.`,
-        error
+        error,
       );
       throw error;
     }
@@ -89,8 +87,7 @@ export class FrameworkController {
    * @param toSearch String to search
    */
   public static async searchFramework(toSearch: string) {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/search/";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/search/`;
     try {
       // Build the URl ( optional type internalType)
       const res = await ProxyAxios.get(url + toSearch);
@@ -109,7 +106,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to search the frameworks.`,
-        error
+        error,
       );
       throw error;
     }
@@ -119,9 +116,8 @@ export class FrameworkController {
    * Get the list of internal type for the frameworks
    */
   public static async getInternalTypes() {
-    const url =
-      FrameworkController.API_BASE_URL +
-      "/api/artemis/frameworks/internalTypes";
+    const url = `${FrameworkController.API_BASE_URL
+    }/api/artemis/frameworks/internalTypes`;
     try {
       // Build the URl ( optional type internalType)
       const res = await ProxyAxios.get(url);
@@ -134,7 +130,7 @@ export class FrameworkController {
         }
       } else {
         console.warn(
-          `Failed to retrieve list of internal type. Status (${res.status})`
+          `Failed to retrieve list of internal type. Status (${res.status})`,
         );
       }
 
@@ -142,7 +138,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve list of internal type.`,
-        error
+        error,
       );
       throw error;
     }
@@ -150,8 +146,7 @@ export class FrameworkController {
 
   // Get the list of Framework to validate
   public static async getToValidateFrameworks(): Promise<Framework[]> {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/toValidate";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/toValidate`;
     try {
       const res = await ProxyAxios.get(url);
 
@@ -162,13 +157,13 @@ export class FrameworkController {
         }
       } else {
         throw new Error(
-          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
+          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`,
         );
       }
     } catch (err) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a the list of frameworks to validate.`,
-        err
+        err,
       );
       throw err;
     }
@@ -176,8 +171,7 @@ export class FrameworkController {
 
   // Get the list of Framework to validate
   public static async getDuplicatesFrameworks(): Promise<Framework[]> {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/duplicates";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/duplicates`;
     try {
       const res = await ProxyAxios.get(url);
 
@@ -188,13 +182,13 @@ export class FrameworkController {
         }
       } else {
         throw new Error(
-          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
+          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`,
         );
       }
     } catch (err) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a the list of duplicates frameworks.`,
-        err
+        err,
       );
       throw err;
     }
@@ -202,23 +196,21 @@ export class FrameworkController {
 
   // Get the list of Framework to validate
   public static async launchAutoCleaning(): Promise<number> {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/autoClean";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/autoClean`;
     try {
       const res = await ProxyAxios.get(url);
 
       if (res.status == 200 || res.status == 304) {
         const apiResponse: ApiResponse = res.data;
         return Number(apiResponse.data);
-      } else {
-        throw new Error(
-          ` Bad status. Status (${res.status}). Query-Content : ${res.data}`
-        );
       }
+      throw new Error(
+        ` Bad status. Status (${res.status}). Query-Content : ${res.data}`,
+      );
     } catch (err) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve execute the auto cleaning on the server.`,
-        err
+        err,
       );
       throw err;
     }
@@ -228,19 +220,18 @@ export class FrameworkController {
   public static async getFrameworkBatch(
     start: number,
     stop: number,
-    internalType?: string
+    internalType?: string,
   ): Promise<Framework[]> {
-    let url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/batch";
+    let url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/batch`;
 
     try {
       // Build the URl ( optional type internalType)
-      url += "?start=" + start;
-      url += "&stop=" + stop;
+      url += `?start=${start}`;
+      url += `&stop=${stop}`;
 
-      if (internalType && internalType != "") {
-        const sanitizedInternal = internalType.replace(" ", "+");
-        url += "&internalType=" + sanitizedInternal;
+      if (internalType && internalType != '') {
+        const sanitizedInternal = internalType.replace(' ', '+');
+        url += `&internalType=${sanitizedInternal}`;
       }
 
       const res = await ProxyAxios.get(url);
@@ -254,7 +245,7 @@ export class FrameworkController {
         }
       } else {
         console.warn(
-          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`
+          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`,
         );
       }
 
@@ -262,7 +253,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a batch frameworks by internalType.`,
-        error
+        error,
       );
       throw error;
     }
@@ -277,10 +268,9 @@ export class FrameworkController {
   public static async updateFrameworks(
     oldName: string,
     oldInternalType: string,
-    framework: Framework
+    framework: Framework,
   ): Promise<boolean> {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/update";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/update`;
 
     try {
       const body: any = {};
@@ -296,7 +286,7 @@ export class FrameworkController {
         updateResutls = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`
+          `Failed to retrieve a batch of frameworks by internalType. Status (${res.status})`,
         );
       }
 
@@ -304,17 +294,16 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve a batch frameworks by internalType.`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async updateFrameworksById(
-    framework: Framework
+    framework: Framework,
   ): Promise<boolean> {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/updateByID";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/updateByID`;
 
     try {
       const body: any = {};
@@ -328,7 +317,7 @@ export class FrameworkController {
         updateResutls = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to update a framework by its Id. Status (${res.status})`
+          `Failed to update a framework by its Id. Status (${res.status})`,
         );
       }
 
@@ -336,15 +325,14 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to update a framework by its Id.`,
-        error
+        error,
       );
       throw error;
     }
   }
 
   public static async addFramework(framework: Framework): Promise<boolean> {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/add";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/add`;
 
     try {
       const body: any = {};
@@ -358,7 +346,7 @@ export class FrameworkController {
         updateResutls = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to add a framework by its Id. Status (${res.status})`
+          `Failed to add a framework by its Id. Status (${res.status})`,
         );
       }
 
@@ -366,7 +354,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to add a framework.`,
-        error
+        error,
       );
       throw error;
     }
@@ -377,11 +365,10 @@ export class FrameworkController {
    * @param id Id of the Framework to delete
    */
   public static async deleteFramework(id: number): Promise<boolean> {
-    const url =
-      FrameworkController.API_BASE_URL + "/api/artemis/frameworks/delete";
+    const url = `${FrameworkController.API_BASE_URL}/api/artemis/frameworks/delete`;
 
     try {
-      const body: any = { id: id };
+      const body: any = { id };
 
       const res = await ProxyAxios.post(url, body);
       let result = false;
@@ -391,7 +378,7 @@ export class FrameworkController {
         result = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to delete a framework by its Id. Status (${res.status})`
+          `Failed to delete a framework by its Id. Status (${res.status})`,
         );
       }
 
@@ -399,7 +386,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to delete a framework.`,
-        error
+        error,
       );
       throw error;
     }
@@ -410,12 +397,11 @@ export class FrameworkController {
    * @param id Id of the Framework to toggle
    */
   public static async toggleFramework(id: number): Promise<boolean> {
-    const url =
-      FrameworkController.API_BASE_URL +
-      "/api/artemis/frameworks/toggle/validation";
+    const url = `${FrameworkController.API_BASE_URL
+    }/api/artemis/frameworks/toggle/validation`;
 
     try {
-      const body: any = { id: id };
+      const body: any = { id };
 
       const res = await ProxyAxios.post(url, body);
       let result = false;
@@ -425,7 +411,7 @@ export class FrameworkController {
         result = Boolean(apiResponse.data);
       } else {
         console.warn(
-          `Failed to toggle the type of a framework by its Id. Status (${res.status})`
+          `Failed to toggle the type of a framework by its Id. Status (${res.status})`,
         );
       }
 
@@ -433,7 +419,7 @@ export class FrameworkController {
     } catch (error) {
       console.error(
         `Failed to toggle the type of the API : ${url}. Failed to toggle a framework.`,
-        error
+        error,
       );
       throw error;
     }

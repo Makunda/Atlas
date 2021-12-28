@@ -62,17 +62,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import AgentController from "@/api/controllers/agents/AgentController";
+import Vue from 'vue';
+import AgentController from '@/api/controllers/agents/AgentController';
 
 export default Vue.extend({
-  name: "ViewAgent",
+  name: 'ViewAgent',
 
   data: () => ({
-    nameAgent: "view",
+    nameAgent: 'view',
     daemonLevelState: false,
 
-    loadingToggle: false
+    loadingToggle: false,
   }),
 
   methods: {
@@ -81,10 +81,10 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.daemonLevelState = res;
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
-            "Failed to retrieve the status of the Framework agent",
-            err
+            'Failed to retrieve the status of the Framework agent',
+            err,
           );
         });
     },
@@ -96,8 +96,8 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = !res;
           })
-          .catch(err => {
-            console.error("Failed to stop the Framework agent", err);
+          .catch((err) => {
+            console.error('Failed to stop the Framework agent', err);
           })
           .finally(() => {
             this.loadingToggle = false;
@@ -107,8 +107,8 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = res;
           })
-          .catch(err => {
-            console.error("Failed to start the Framework agent", err);
+          .catch((err) => {
+            console.error('Failed to start the Framework agent', err);
           })
           .finally(() => {
             this.loadingToggle = false;
@@ -117,13 +117,13 @@ export default Vue.extend({
     },
 
     forceAction() {
-      console.log("Extract");
-    }
+      console.log('Extract');
+    },
   },
 
   mounted() {
     this.getStatus();
-  }
+  },
 });
 </script>
 

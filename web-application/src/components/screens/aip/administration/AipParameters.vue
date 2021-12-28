@@ -190,21 +190,21 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import AddAIPServerModal from "@/components/aip/AddAIPServerModal.vue";
-import AddAIPSchemaModal from "@/components/aip/AddAIPSchemaModal.vue";
-import { AipConfigurationController } from "@/api/controllers/aip/AipConfigurationController";
+import Vue from 'vue';
+import AddAIPServerModal from '@/components/aip/AddAIPServerModal.vue';
+import AddAIPSchemaModal from '@/components/aip/AddAIPSchemaModal.vue';
+import { AipConfigurationController } from '@/api/controllers/aip/AipConfigurationController';
 import {
   AipConfiguration,
-  ValidityServer
-} from "@/api/interface/aip/Aipconfiguration";
+  ValidityServer,
+} from '@/api/interface/aip/Aipconfiguration';
 
 export default Vue.extend({
-  name: "AipParameters",
+  name: 'AipParameters',
 
   components: {
     AddAIPServerModal,
-    AddAIPSchemaModal
+    AddAIPSchemaModal,
   },
 
   mounted() {
@@ -216,7 +216,7 @@ export default Vue.extend({
       return this.caseSensitive
         ? (item, search, textKey) => item[textKey].indexOf(search) > -1
         : undefined;
-    }
+    },
   },
 
   methods: {
@@ -236,13 +236,13 @@ export default Vue.extend({
 
       try {
         const items = await AipConfigurationController.getConfigurationList();
-        items.forEach(x => {
+        items.forEach((x) => {
           x.valid = ValidityServer.UNKNOWN;
           if (!x.schemas) x.schemas = [];
         });
         this.items = items;
       } catch (err) {
-        console.error("Failed to retrieve server list.", err);
+        console.error('Failed to retrieve server list.', err);
         this.errors = err;
       } finally {
         this.loading = false;
@@ -277,7 +277,7 @@ export default Vue.extend({
               : ValidityServer.ERROR;
           })
           .catch(() => {
-            console.error("Failed to to check configuration.");
+            console.error('Failed to to check configuration.');
           });
       }
     },
@@ -286,11 +286,11 @@ export default Vue.extend({
     openDialogSchema(id: number) {
       this.dialogAddSchema = true;
       this.selectedServerId = id;
-    }
+    },
   },
 
   data: () => ({
-    errors: "",
+    errors: '',
     items: [] as AipConfiguration[],
     open: [],
     search: null,
@@ -301,18 +301,18 @@ export default Vue.extend({
     loading: false,
     headers: [
       {
-        text: "Name",
-        align: "start",
-        value: "name"
+        text: 'Name',
+        align: 'start',
+        value: 'name',
       },
 
-      { text: "Url", value: "url" },
-      { text: "Port", value: "port" },
-      { text: "Database", value: "database" },
-      { text: "Schemas", value: "schemas" },
-      { text: "Valid", value: "valid" },
-      { text: "Actions", value: "actions", sortable: false },
-      { text: "", value: "data-table-expand" }
+      { text: 'Url', value: 'url' },
+      { text: 'Port', value: 'port' },
+      { text: 'Database', value: 'database' },
+      { text: 'Schemas', value: 'schemas' },
+      { text: 'Valid', value: 'valid' },
+      { text: 'Actions', value: 'actions', sortable: false },
+      { text: '', value: 'data-table-expand' },
     ],
 
     // Dialog server
@@ -320,7 +320,7 @@ export default Vue.extend({
 
     // Dialog schema
     dialogAddSchema: false,
-    selectedServerId: 0
-  })
+    selectedServerId: 0,
+  }),
 });
 </script>

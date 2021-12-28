@@ -1,7 +1,7 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/interface/ApiResponse.interface";
-import CloudBlocker from "@/api/interface/highlight/CloudBlocker";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/interface/ApiResponse.interface';
+import CloudBlocker from '@/api/interface/highlight/CloudBlocker';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class CloudBlockersController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -11,20 +11,19 @@ export class CloudBlockersController {
    */
   public static async uploadFile(
     file: any,
-    application: string
+    application: string,
   ): Promise<CloudBlocker[]> {
-    const url =
-      CloudBlockersController.API_BASE_URL +
-      `/api/highlight/recommendations/cloud/file/upload/${application}`;
+    const url = `${CloudBlockersController.API_BASE_URL
+    }/api/highlight/recommendations/cloud/file/upload/${application}`;
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("application", application);
+      formData.append('file', file);
+      formData.append('application', application);
       const res = await ProxyAxios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       if (res.status == 200) {
@@ -34,13 +33,13 @@ export class CloudBlockersController {
         }
       } else {
         throw new Error(
-          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`
+          `Failed to send the list of recommendation. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to send the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -51,16 +50,15 @@ export class CloudBlockersController {
    */
   public static async applyBlockers(
     blockers: CloudBlocker[],
-    type: string
+    type: string,
   ): Promise<[CloudBlocker[], CloudBlocker[]]> {
-    const url =
-      CloudBlockersController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/apply";
+    const url = `${CloudBlockersController.API_BASE_URL
+    }/api/highlight/recommendations/cloud/apply`;
 
     try {
       const body = {
-        blockers: blockers,
-        type: type
+        blockers,
+        type,
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -80,15 +78,14 @@ export class CloudBlockersController {
         }
 
         return [applied, notApplied];
-      } else {
-        throw new Error(
-          `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`
-        );
       }
+      throw new Error(
+        `Failed to apply the list of recommendation. Status (${res.status}). Message: ${res.data}`,
+      );
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to apply the list of recommendation .`,
-        error
+        error,
       );
       throw error;
     }
@@ -98,15 +95,14 @@ export class CloudBlockersController {
    * Apply a list of recommendation on the application
    */
   public static async testBlocker(
-    blocker: CloudBlocker
+    blocker: CloudBlocker,
   ): Promise<CloudBlocker[]> {
-    const url =
-      CloudBlockersController.API_BASE_URL +
-      "/api/highlight/recommendations/cloud/test";
+    const url = `${CloudBlockersController.API_BASE_URL
+    }/api/highlight/recommendations/cloud/test`;
 
     try {
       const body = {
-        blocker: blocker
+        blocker,
       };
 
       const res = await ProxyAxios.post(url, body);
@@ -118,13 +114,13 @@ export class CloudBlockersController {
         }
       } else {
         throw new Error(
-          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`
+          `Failed to test the recommendations. Status (${res.status}). Message: ${res.data}`,
         );
       }
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to test the recommendations.`,
-        error
+        error,
       );
       throw error;
     }

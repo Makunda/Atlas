@@ -32,20 +32,20 @@
 </template>
 
 <script lang="ts">
-import { LevelController } from "@/api/controllers/extensions/demeter/grouping/LevelController";
-import GroupTile from "@/components/screens/grouping/tiles/GroupTile.vue";
-import Vue from "vue";
-import { Level5Group } from "@/api/interface/extensions/demeter/Level";
+import Vue from 'vue';
+import { LevelController } from '@/api/controllers/extensions/demeter/grouping/LevelController';
+import GroupTile from '@/components/screens/grouping/tiles/GroupTile.vue';
+import { Level5Group } from '@/api/interface/extensions/demeter/Level';
 
-export default Vue.component("LevelViewer", {
+export default Vue.component('LevelViewer', {
   components: {
-    GroupTile
+    GroupTile,
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
@@ -54,10 +54,10 @@ export default Vue.component("LevelViewer", {
     loadingUndoGroup: false,
 
     // Filter
-    searchLevels: "" as string,
+    searchLevels: '' as string,
 
     // Application
-    applicationName: "" as string,
+    applicationName: '' as string,
 
     levels: [] as Level5Group[],
     selectedGroupId: null,
@@ -72,14 +72,14 @@ export default Vue.component("LevelViewer", {
           this.loadingGroups = true;
           this.levels = res;
           console.log(
-            `${this.levels.length} levels were loaded in application ${this.applicationName}.`
+            `${this.levels.length} levels were loaded in application ${this.applicationName}.`,
           );
         })
-        .catch(err => {
+        .catch((err) => {
           this.loadingGroups = false;
-          console.error("An error happened while querying Demeter groups", err);
+          console.error('An error happened while querying Demeter groups', err);
         });
-    }
+    },
   }),
 
   methods: {
@@ -97,14 +97,14 @@ export default Vue.component("LevelViewer", {
             this.getLevelGroups();
           } else {
             console.error(
-              `Failed to undo the grouping undone for level ${group} on application ${appName}.`
+              `Failed to undo the grouping undone for level ${group} on application ${appName}.`,
             );
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
             `Failed to undo group with name ${group} on application ${appName}.`,
-            err
+            err,
           );
         })
         .finally(() => {
@@ -116,10 +116,10 @@ export default Vue.component("LevelViewer", {
      * Split the groups in a list of string
      */
     groupToList(groups: string[]) {
-      if (groups == null) return "";
+      if (groups == null) return '';
 
       const uniqueNames = [] as string[];
-      groups.forEach(x => {
+      groups.forEach((x) => {
         const groupName: string = x.substring(6);
         if (uniqueNames.indexOf(groupName) == -1) uniqueNames.push(groupName);
       });
@@ -128,7 +128,7 @@ export default Vue.component("LevelViewer", {
 
     refresh() {
       this.getLevelGroups();
-    }
+    },
   },
 
   mounted() {
@@ -140,7 +140,7 @@ export default Vue.component("LevelViewer", {
     getApplicationName(newApp) {
       this.applicationName = newApp;
       this.refresh();
-    }
-  }
+    },
+  },
 });
 </script>

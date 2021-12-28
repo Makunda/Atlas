@@ -293,39 +293,36 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
-import { AtlasController } from "@/api/controllers/extensions/atlas/AtlasController";
+import Vue from 'vue';
+import { ArtemisController } from '@/api/controllers/extensions/artemis/ArtemisController';
+import { AtlasController } from '@/api/controllers/extensions/atlas/AtlasController';
 
-import DetectionController from "@/api/controllers/extensions/artemis/DetectionController";
+import DetectionController from '@/api/controllers/extensions/artemis/DetectionController';
 
-import ConfigurationController from "@/api/controllers/configuration/ConfigurationController";
-import { DetectionStatus } from "@/api/interface/extensions/artemis/detectionStatus.enum";
-import { DetectionResult } from "@/api/interface/extensions/artemis/detectionResult.interface";
-import { Framework } from "@/api/interface/extensions/artemis/Framework";
-import { Cookie } from "@/enum/Cookie";
-import PythiaController from "@/api/controllers/pythia/PythiaUtilController";
-import { ApplicationInsights } from "@/api/interface/imaging/ApplicationInsights";
-import ApplicationController from "@/api/controllers/imaging/ApplicationController";
-import flash, { FlashType } from "@/modules/flash/Flash";
+import ConfigurationController from '@/api/controllers/configuration/ConfigurationController';
+import { DetectionStatus } from '@/api/interface/extensions/artemis/detectionStatus.enum';
+import { DetectionResult } from '@/api/interface/extensions/artemis/detectionResult.interface';
+import { Framework } from '@/api/interface/extensions/artemis/Framework';
+import { Cookie } from '@/enum/Cookie';
+import PythiaController from '@/api/controllers/pythia/PythiaUtilController';
+import { ApplicationInsights } from '@/api/interface/imaging/ApplicationInsights';
+import ApplicationController from '@/api/controllers/imaging/ApplicationController';
+import flash, { FlashType } from '@/modules/flash/Flash';
 
 export default Vue.extend({
-  name: "ActionTileViewer",
+  name: 'ActionTileViewer',
 
   computed: {
     filteredFrameworks() {
       if (this.showOnlyFrameworks) {
-        return this.resultDetection.filter(d => {
-          return d.type == "Framework";
-        });
-      } else {
-        return this.resultDetection;
+        return this.resultDetection.filter((d) => d.type == 'Framework');
       }
+      return this.resultDetection;
     },
 
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
@@ -333,24 +330,24 @@ export default Vue.extend({
     // Application
     applicationsInsights: {} as ApplicationInsights,
     loadingApplication: false,
-    analysisStatus: "",
+    analysisStatus: '',
 
     // Table
     headers: [
       {
-        text: "Framework",
-        align: "start",
+        text: 'Framework',
+        align: 'start',
         sortable: true,
-        value: "name"
+        value: 'name',
       },
-      { text: "Description", value: "description" },
-      { text: "Category", value: "category" },
-      { text: "Detected as ", value: "type" }
+      { text: 'Description', value: 'description' },
+      { text: 'Category', value: 'category' },
+      { text: 'Detected as ', value: 'type' },
     ],
     showOnlyFrameworks: true as boolean,
 
     disabledTile: false as boolean,
-    version: "Unknown" as string,
+    version: 'Unknown' as string,
     diplayNotInstalled: false as boolean,
 
     // Loadings
@@ -362,36 +359,36 @@ export default Vue.extend({
     // Errors
     errorOnlineMode: false as boolean,
     errorRepositoryMode: false as boolean,
-    errorDetection: "",
+    errorDetection: '',
 
     // Message
-    message: "",
+    message: '',
 
     // Detection
     filterValidFramework: true,
-    search: "",
-    ongoingDetection: "",
+    search: '',
+    ongoingDetection: '',
     resultDetection: [] as Framework[],
-    selectedLanguage: "",
+    selectedLanguage: '',
     availableLanguages: [] as string[],
     checkingStatus: false,
-    toDisplay: "",
+    toDisplay: '',
     detection: null,
 
-    application: "" as string,
+    application: '' as string,
 
     // Parameters
     dataSources: [] as string[],
     onlineMode: true as boolean,
     repositoryMode: true as boolean,
-    workspacePath: "" as string,
+    workspacePath: '' as string,
 
     // Pythia
-    pythiaStatus: "Unknown",
+    pythiaStatus: 'Unknown',
     pythiaLoadingStatus: false,
 
     // On destroy
-    flaggedAsToDestroy: false
+    flaggedAsToDestroy: false,
   }),
 
   methods: {
@@ -410,8 +407,8 @@ export default Vue.extend({
           this.availableLanguages = res;
           this.selectedLanguage = res[0];
         })
-        .catch(err => {
-          console.error("Failed to retrieve languages.", err);
+        .catch((err) => {
+          console.error('Failed to retrieve languages.', err);
         });
 
       this.loadingConfiguration = false;
@@ -424,16 +421,16 @@ export default Vue.extend({
       const m = Math.floor((seconds % 3600) / 60);
       const s = Math.floor(seconds % 60);
 
-      const dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
-      const hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-      const mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-      const sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+      const dDisplay = d > 0 ? d + (d == 1 ? ' day, ' : ' days, ') : '';
+      const hDisplay = h > 0 ? h + (h == 1 ? ' hour, ' : ' hours, ') : '';
+      const mDisplay = m > 0 ? m + (m == 1 ? ' minute, ' : ' minutes, ') : '';
+      const sDisplay = s > 0 ? s + (s == 1 ? ' second' : ' seconds') : '';
       return dDisplay + hDisplay + mDisplay + sDisplay;
     },
 
     countDownTimer() {
       this.toDisplay = this.milisecondsToDhms(
-        Date.now() - this.detection.timestampStart
+        Date.now() - this.detection.timestampStart,
       );
       setTimeout(this.countDownTimer, 1000);
     },
@@ -444,20 +441,20 @@ export default Vue.extend({
     checkStatus(): boolean {
       // Skip if already checking status or if no language was selected
       if (this.checkingStatus || this.selectedLanguage == null) return;
-      if (this.application == "") return;
+      if (this.application == '') return;
 
       this.checkingStatus = true;
       DetectionController.getApplicationStatus(
         this.application,
-        this.selectedLanguage
+        this.selectedLanguage,
       )
         .then((res: DetectionResult) => {
           // If res is null, the application has no status
           if (res == null) {
-            this.analysisStatus = "No detection launched";
+            this.analysisStatus = 'No detection launched';
             this.message = `No detection was launched for ${this.application}`;
-            this.ongoingDetection = "";
-            this.errorDetection = "";
+            this.ongoingDetection = '';
+            this.errorDetection = '';
             return true;
           }
 
@@ -466,24 +463,23 @@ export default Vue.extend({
           // If the detection is successfully launched, set a timeout and wait for the response
           switch (res.status) {
             case DetectionStatus.Pending:
-              this.analysisStatus = "On-going detection";
+              this.analysisStatus = 'On-going detection';
               this.ongoingDetection = `On-going detection for the ${this.application} application.`;
               this.runningArtemis = true;
-              this.errorDetection = "";
+              this.errorDetection = '';
               this.countDownTimer();
               break;
             case DetectionStatus.Success:
-              this.analysisStatus = "Analyzed";
+              this.analysisStatus = 'Analyzed';
               this.resultDetection = res.data;
               this.runningArtemis = false;
-              this.errorDetection = "";
-              this.ongoingDetection = "";
+              this.errorDetection = '';
+              this.ongoingDetection = '';
               break;
             case DetectionStatus.Failure:
-              this.analysisStatus = "Detection failed";
-              this.errorDetection =
-                "An error occurred during the detection. Please check the logs";
-              this.ongoingDetection = "";
+              this.analysisStatus = 'Detection failed';
+              this.errorDetection = 'An error occurred during the detection. Please check the logs';
+              this.ongoingDetection = '';
               this.runningArtemis = false;
               break;
 
@@ -491,10 +487,10 @@ export default Vue.extend({
               break;
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
             `Failed to retrieve the status of the application ${this.application}.`,
-            err
+            err,
           );
           this.errorDetection = `Failed to retrieve the status of the application ${this.application}.`;
           return true;
@@ -512,7 +508,7 @@ export default Vue.extend({
       DetectionController.launchDetection(
         this.application,
         this.selectedLanguage,
-        this.dataSources
+        this.dataSources,
       )
         .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
@@ -520,14 +516,14 @@ export default Vue.extend({
             this.runningArtemis = true;
           } else {
             throw new Error(
-              "The server refused to launch the detection. Check the logs."
+              'The server refused to launch the detection. Check the logs.',
             );
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
             `The analysis of the application ${this.application} failed to launch.`,
-            err
+            err,
           );
           this.errorDetection = err;
         });
@@ -540,7 +536,7 @@ export default Vue.extend({
       this.displayErrorDetection = false;
       DetectionController.cancelDetection(
         this.application,
-        this.selectedLanguage
+        this.selectedLanguage,
       )
         .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
@@ -548,12 +544,12 @@ export default Vue.extend({
             this.runningArtemis = false;
           } else {
             throw new Error(
-              "The server refused to stopped the detection. Check the logs."
+              'The server refused to stopped the detection. Check the logs.',
             );
           }
         })
-        .catch(err => {
-          console.error(`Failed to stop the on-going analysis.`, err);
+        .catch((err) => {
+          console.error('Failed to stop the on-going analysis.', err);
           this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`;
         });
     },
@@ -580,7 +576,7 @@ export default Vue.extend({
       try {
         this.pythiaStatus = await PythiaController.getAuthenticationStatus();
       } catch (err) {
-        this.pythiaStatus = "Unreachable";
+        this.pythiaStatus = 'Unreachable';
       } finally {
         this.pythiaLoadingStatus = false;
       }
@@ -593,18 +589,18 @@ export default Vue.extend({
       try {
         this.loadingApplication = true;
         this.applicationsInsights = await ApplicationController.getApplicationInsights(
-          this.application
+          this.application,
         );
       } catch (error) {
-        flash.commit("add", {
+        flash.commit('add', {
           type: FlashType.ERROR,
-          title: "Failed to get the application insights.",
-          body: error
+          title: 'Failed to get the application insights.',
+          body: error,
         });
       } finally {
         this.loadingApplication = false;
       }
-    }
+    },
   },
 
   async mounted() {
@@ -614,10 +610,10 @@ export default Vue.extend({
     // Check for preference cookies stored as a string
     if (Vue.$cookies.isKey(Cookie.DETECTION_PREFERENCES)) {
       const arrAsString = String(
-        Vue.$cookies.get(Cookie.DETECTION_PREFERENCES)
+        Vue.$cookies.get(Cookie.DETECTION_PREFERENCES),
       );
-      this.dataSources = arrAsString.split(",");
-      this.dataSources = this.dataSources.filter(x => x != "null");
+      this.dataSources = arrAsString.split(',');
+      this.dataSources = this.dataSources.filter((x) => x != 'null');
     }
 
     // Get status
@@ -633,7 +629,7 @@ export default Vue.extend({
     } catch (e) {
       console.error(
         "The Artemis extension wasn't detected. The  function will be limited. Please install the Artemis extension",
-        e
+        e,
       );
       this.diplayNotInstalled = true;
     }
@@ -655,14 +651,14 @@ export default Vue.extend({
       this.checkStatus();
     },
 
-    dataSources: function() {
+    dataSources() {
       // Save in cookies the selection to be reused
       Vue.$cookies.set(
         Cookie.DETECTION_PREFERENCES,
-        this.dataSources.join(",")
+        this.dataSources.join(','),
       );
-    }
-  }
+    },
+  },
 });
 </script>
 

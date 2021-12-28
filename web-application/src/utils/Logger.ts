@@ -3,11 +3,11 @@ export default class Logger {
     type: string,
     title: string,
     text: string,
-    data?: any
+    data?: any,
   ): void {
     let display = `[${type}] ${title} - ${text}`;
 
-    console.log(`%c ${display}`, "background: #222; color: #bada55");
+    console.log(`%c ${display}`, 'background: #222; color: #bada55');
     if (data) {
       display += `Data: ${data}`;
       console.log(display);
@@ -20,7 +20,7 @@ export default class Logger {
    * @param text Text of the message
    */
   public static error(title: string, text: string, error?: any): void {
-    this.log("danger", title, text, error);
+    this.log('danger', title, text, error);
   }
 
   /**
@@ -29,6 +29,6 @@ export default class Logger {
    * @param text Text of the message
    */
   public static success(title: string, text: string): void {
-    this.log("success", title, text);
+    this.log('success', title, text);
   }
 }

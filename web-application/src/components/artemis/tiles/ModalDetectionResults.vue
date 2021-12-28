@@ -59,41 +59,41 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import DetectionInterface from "@/api/interface/extensions/artemis/Detection";
-import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
+import Vue from 'vue';
+import DetectionInterface from '@/api/interface/extensions/artemis/Detection';
+import DetectionViewer from '@/components/artemis/tiles/DetectionViewer.vue';
 
 export default Vue.extend({
   props: {
     detection: Object,
-    status: Boolean
+    status: Boolean,
   },
 
   components: {
-    DetectionViewer
+    DetectionViewer,
   },
 
-  name: "ModalDetectionResults",
+  name: 'ModalDetectionResults',
 
   data: () => ({
     // Result table
     headers: [
       {
-        text: "Framework",
-        align: "start",
+        text: 'Framework',
+        align: 'start',
         sortable: true,
-        value: "name"
+        value: 'name',
       },
-      { text: "Description", value: "description" },
-      { text: "Category", value: "category" },
-      { text: "Detected as ", value: "type" }
+      { text: 'Description', value: 'description' },
+      { text: 'Category', value: 'category' },
+      { text: 'Detected as ', value: 'type' },
     ],
     showOnlyFrameworks: true as boolean,
     filterValidFramework: true,
-    search: "",
+    search: '',
 
     dialog: false,
-    detectionObj: {} as DetectionInterface
+    detectionObj: {} as DetectionInterface,
   }),
 
   computed: {
@@ -101,25 +101,22 @@ export default Vue.extend({
       if (!this.detection) return [];
 
       if (this.showOnlyFrameworks) {
-        return this.detection.data.filter(d => {
-          return d.type == "Framework";
-        });
-      } else {
-        return this.detection.data;
+        return this.detection.data.filter((d) => d.type == 'Framework');
       }
-    }
+      return this.detection.data;
+    },
   },
 
   methods: {
     closeModal() {
       this.status = false;
-      this.$emit("close", false);
-    }
+      this.$emit('close', false);
+    },
   },
 
   mounted() {
     this.detectionObj = this.detection as DetectionInterface;
-  }
+  },
 });
 </script>
 

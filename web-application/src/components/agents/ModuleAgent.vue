@@ -61,19 +61,19 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import AgentController from "@/api/controllers/agents/AgentController";
+import Vue from 'vue';
+import AgentController from '@/api/controllers/agents/AgentController';
 
 export default Vue.extend({
-  name: "ModuleAgent",
+  name: 'ModuleAgent',
 
   data: () => ({
-    nameAgent: "module",
-    prefix: "<Failed to retrieve the tag>",
+    nameAgent: 'module',
+    prefix: '<Failed to retrieve the tag>',
     daemonLevelState: false,
 
     loadingToggle: false,
-    loadingAction: false
+    loadingAction: false,
   }),
 
   methods: {
@@ -82,10 +82,10 @@ export default Vue.extend({
         .then((res: string) => {
           this.prefix = res;
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
-            "Failed to retrieve the prefix of the Framework agent",
-            err
+            'Failed to retrieve the prefix of the Framework agent',
+            err,
           );
         });
     },
@@ -95,10 +95,10 @@ export default Vue.extend({
         .then((res: boolean) => {
           this.daemonLevelState = res;
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
-            "Failed to retrieve the status of the Module agent",
-            err
+            'Failed to retrieve the status of the Module agent',
+            err,
           );
         });
     },
@@ -110,8 +110,8 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = !res;
           })
-          .catch(err => {
-            console.error("Failed to stop the Module agent", err);
+          .catch((err) => {
+            console.error('Failed to stop the Module agent', err);
             this.daemonLevelState = true;
           })
           .finally(() => {
@@ -122,8 +122,8 @@ export default Vue.extend({
           .then((res: boolean) => {
             this.daemonLevelState = res;
           })
-          .catch(err => {
-            console.error("Failed to start the Module agent", err);
+          .catch((err) => {
+            console.error('Failed to start the Module agent', err);
             this.daemonLevelState = false;
           })
           .finally(() => {
@@ -135,19 +135,19 @@ export default Vue.extend({
     forceAction() {
       this.loadingAction = true;
       AgentController.forceAgent(this.nameAgent)
-        .catch(err => {
-          console.error("Failed to force the action of the agent.", err);
+        .catch((err) => {
+          console.error('Failed to force the action of the agent.', err);
         })
         .finally(() => {
           this.loadingAction = false;
         });
-    }
+    },
   },
 
   mounted() {
     this.getStatus();
     this.getPrefix();
-  }
+  },
 });
 </script>
 

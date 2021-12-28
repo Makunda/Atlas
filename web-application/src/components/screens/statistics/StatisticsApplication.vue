@@ -92,19 +92,19 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { ApplicationRecord } from "@/api/controllers/applications/ApplicationController";
-import ErrorDialog from "@/components/error/ErrorDialog.vue";
-import StatisticTile from "@/components/screens/statistics/tiles/StatisticTile.vue";
-import { DemeterStatisticResult } from "@/api/interface/extensions/demeter/DemeterStatistic";
+import Vue from 'vue';
+import { ApplicationRecord } from '@/api/controllers/applications/ApplicationController';
+import ErrorDialog from '@/components/error/ErrorDialog.vue';
+import StatisticTile from '@/components/screens/statistics/tiles/StatisticTile.vue';
+import { DemeterStatisticResult } from '@/api/interface/extensions/demeter/DemeterStatistic';
 
 export default Vue.extend({
-  name: "StatisticsApplication",
-  props: ["value"],
+  name: 'StatisticsApplication',
+  props: ['value'],
 
   components: {
     ErrorDialog,
-    StatisticTile
+    StatisticTile,
   },
 
   data: () => ({
@@ -115,7 +115,7 @@ export default Vue.extend({
     statisticsList: [] as DemeterStatisticResult[],
     leftStats: [] as DemeterStatisticResult[],
     rightStats: [] as DemeterStatisticResult[],
-    errorState: null as unknown
+    errorState: null as unknown,
   }),
 
   methods: {
@@ -129,9 +129,9 @@ export default Vue.extend({
       // Todo implement statistics
     },
 
-    launchGenerate: function() {
+    launchGenerate() {
       this.getReportResult();
-    }
-  }
+    },
+  },
 });
 </script>

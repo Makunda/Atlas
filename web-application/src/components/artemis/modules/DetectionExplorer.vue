@@ -140,34 +140,34 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import DetectionViewer from "@/components/artemis/tiles/DetectionViewer.vue";
-import ModalDetectionResults from "@/components/artemis/tiles/ModalDetectionResults.vue";
-import { DetectionResult } from "@/api/interface/extensions/artemis/detectionResult.interface";
-import DetectionInterface from "@/api/interface/extensions/artemis/Detection";
-import DetectionController from "@/api/controllers/extensions/artemis/DetectionController";
+import Vue from 'vue';
+import DetectionViewer from '@/components/artemis/tiles/DetectionViewer.vue';
+import ModalDetectionResults from '@/components/artemis/tiles/ModalDetectionResults.vue';
+import { DetectionResult } from '@/api/interface/extensions/artemis/detectionResult.interface';
+import DetectionInterface from '@/api/interface/extensions/artemis/Detection';
+import DetectionController from '@/api/controllers/extensions/artemis/DetectionController';
 
 export default Vue.extend({
-  name: "DetectionExplorer",
+  name: 'DetectionExplorer',
 
   components: {
     DetectionViewer,
-    ModalDetectionResults
+    ModalDetectionResults,
   },
 
   data: () => ({
     pendingOperations: [] as DetectionResult[],
     previousOperations: [] as DetectionInterface[],
 
-    getOperationErrors: "",
+    getOperationErrors: '',
 
     loadingPending: false,
 
     loadPrevious: false,
-    errorPrevious: "",
+    errorPrevious: '',
 
     selectedDetection: {} as DetectionInterface,
-    modalDetection: false
+    modalDetection: false,
   }),
 
   methods: {
@@ -176,8 +176,8 @@ export default Vue.extend({
         .then((res: DetectionResult[]) => {
           this.pendingOperations = res;
         })
-        .catch(err => {
-          console.error("Failed to retrieve pending operations.", err);
+        .catch((err) => {
+          console.error('Failed to retrieve pending operations.', err);
           this.getOperationErrors = `Failed to retrieve pending operations : ${err}`;
         })
         .finally(() => {
@@ -192,9 +192,9 @@ export default Vue.extend({
       try {
         this.loadPrevious = true;
         this.previousOperations = await DetectionController.getDetectionResults();
-        this.errorPrevious = "";
+        this.errorPrevious = '';
       } catch (error) {
-        console.error("Failed to load previous operations.", error);
+        console.error('Failed to load previous operations.', error);
         this.errorPrevious = `Error: ${error}`;
       } finally {
         this.loadPrevious = true;
@@ -202,7 +202,7 @@ export default Vue.extend({
     },
 
     openResultModal(detection: DetectionInterface) {
-      this.selectedDetection = Object.assign({}, detection);
+      this.selectedDetection = { ...detection };
       this.modalDetection = true;
     },
 
@@ -210,7 +210,7 @@ export default Vue.extend({
       this.displayErrorDetection = false;
       DetectionController.cancelDetection(
         detection.application,
-        detection.language
+        detection.language,
       )
         .then((res: boolean) => {
           // If the detection is successfully launched, set a timeout and wait for the response
@@ -218,25 +218,25 @@ export default Vue.extend({
             this.runningArtemis = false;
           } else {
             throw new Error(
-              "The server refused to stopped the detection. Check the logs."
+              'The server refused to stopped the detection. Check the logs.',
             );
           }
         })
-        .catch(err => {
-          console.error(`Failed to stop the on-going analysis.`, err);
+        .catch((err) => {
+          console.error('Failed to stop the on-going analysis.', err);
           this.errorDetection = `Failed to stop the on-going analysis. Error : ${err}`;
         });
     },
 
     reload() {
-      this.getOperationErrors = "";
+      this.getOperationErrors = '';
       this.getPendingOperations();
       this.getPreviousOperation();
-    }
+    },
   },
 
   mounted() {
     this.reload();
-  }
+  },
 });
 </script>

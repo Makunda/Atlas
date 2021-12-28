@@ -23,10 +23,10 @@
 
 <script lang="ts">
 export default {
-  name: "StatisticTile",
-  props: ["title", "description", "results"],
+  name: 'StatisticTile',
+  props: ['title', 'description', 'results'],
 
-  data: () => ({})
+  data: () => ({}),
 };
 </script>
 

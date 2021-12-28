@@ -1,6 +1,6 @@
-import { ApiComUtils } from "@/api/utils/ApiComUtils";
-import { ApiResponse } from "@/api/utils/ApiResponse";
-import ProxyAxios from "@/api/utils/ProxyAxios";
+import { ApiComUtils } from '@/api/utils/ApiComUtils';
+import { ApiResponse } from '@/api/utils/ApiResponse';
+import ProxyAxios from '@/api/utils/ProxyAxios';
 
 export class DemeterController {
   private static API_BASE_URL = ApiComUtils.getUrl();
@@ -10,7 +10,7 @@ export class DemeterController {
    * Throw an error if the extension is not installed
    */
   public static async getDemeterVersion(): Promise<string> {
-    const url = DemeterController.API_BASE_URL + "/api/demeter/utils/version";
+    const url = `${DemeterController.API_BASE_URL}/api/demeter/utils/version`;
 
     try {
       const res = await ProxyAxios.get(url);
@@ -27,7 +27,7 @@ export class DemeterController {
     } catch (error) {
       console.error(
         `Failed to reach the API : ${url}. Failed to retrieve Artemis version.`,
-        error
+        error,
       );
       throw error;
     }

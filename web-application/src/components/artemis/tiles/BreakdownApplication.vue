@@ -412,59 +412,59 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { ApiRegexNode } from "@/api/interface/ApiRegexNode.interface";
-import { Artifact } from "@/api/interface/extensions/artemis/Artifact";
-import { ApplicationInsights } from "@/api/interface/imaging/ApplicationInsights";
-import FrameworkDispatch from "@/components/framework/FrameworkDispatch.vue";
-import { RegexNodeController } from "@/api/controllers/extensions/artemis/RegexNodeController";
-import { ArtemisController } from "@/api/controllers/extensions/artemis/ArtemisController";
-import { ArtifactController } from "@/api/controllers/extensions/artemis/ArtifactController";
-import AgentController from "@/api/controllers/agents/AgentController";
-import ApplicationController from "@/api/controllers/imaging/ApplicationController";
-import Logger from "@/utils/Logger";
+import Vue from 'vue';
+import { ApiRegexNode } from '@/api/interface/ApiRegexNode.interface';
+import { Artifact } from '@/api/interface/extensions/artemis/Artifact';
+import { ApplicationInsights } from '@/api/interface/imaging/ApplicationInsights';
+import FrameworkDispatch from '@/components/framework/FrameworkDispatch.vue';
+import { RegexNodeController } from '@/api/controllers/extensions/artemis/RegexNodeController';
+import { ArtemisController } from '@/api/controllers/extensions/artemis/ArtemisController';
+import { ArtifactController } from '@/api/controllers/extensions/artemis/ArtifactController';
+import AgentController from '@/api/controllers/agents/AgentController';
+import ApplicationController from '@/api/controllers/imaging/ApplicationController';
+import Logger from '@/utils/Logger';
 
 export default Vue.extend({
-  name: "BreakdownApplication",
+  name: 'BreakdownApplication',
 
   components: {
-    FrameworkDispatch
+    FrameworkDispatch,
   },
 
   watch: {
-    classExternality: function() {
+    classExternality() {
       this.getArtifactTree();
     },
 
-    textSnackBar: function() {
+    textSnackBar() {
       this.snackbarInfo = true;
     },
 
     getApplicationName(newApp) {
       this.applicationName = newApp;
       this.refresh();
-    }
+    },
   },
 
   computed: {
     getApplicationName() {
       return this.$store.state.applicationName;
-    }
+    },
   },
 
   data: () => ({
     // Application information
-    applicationName: "" as string,
+    applicationName: '' as string,
     applicationInformation: null,
     insights: {} as ApplicationInsights,
 
     // Group Name
-    primaryGroupName: "",
-    secondaryGroupName: "",
+    primaryGroupName: '',
+    secondaryGroupName: '',
 
     // Snackbar
     snackbarInfo: false,
-    textSnackBar: "",
+    textSnackBar: '',
 
     // Modal
     showFrameworkModal: false,
@@ -477,42 +477,42 @@ export default Vue.extend({
     artifactTree: [],
     applicationItems: [] as string[],
     languageItems: [] as string[],
-    defaultApplication: "",
-    defaultLanguage: "",
+    defaultApplication: '',
+    defaultLanguage: '',
     classExternality: true,
 
     locationList: [
-      { value: "separated", text: "I want them separated" },
-      { value: "together", text: "I want them grouped together" }
+      { value: 'separated', text: 'I want them separated' },
+      { value: 'together', text: 'I want them grouped together' },
     ],
     selectedLocation: null,
 
     tree: [],
     treeExport: [] as ApiRegexNode[],
-    fullExportRequest: "",
-    fullQuerySet: "",
+    fullExportRequest: '',
+    fullQuerySet: '',
 
     targetList: [
       {
-        value: "level",
-        text: "Level creation"
+        value: 'level',
+        text: 'Level creation',
       },
       {
-        value: "architecture",
-        text: "Architecture creation"
+        value: 'architecture',
+        text: 'Architecture creation',
       },
       {
-        value: "module",
-        text: "Module creation"
-      }
+        value: 'module',
+        text: 'Module creation',
+      },
     ],
-    selectedTarget: "level",
+    selectedTarget: 'level',
 
     editItem: null,
 
     parentIdList: [],
 
-    items: [] as ApiRegexNode[]
+    items: [] as ApiRegexNode[],
   }),
 
   methods: {
@@ -524,27 +524,26 @@ export default Vue.extend({
       let arrayToDisplay: string[];
 
       switch (this.selectedTarget) {
-        case "level":
+        case 'level':
           arrayToDisplay = item.levels;
           break;
-        case "module":
+        case 'module':
           arrayToDisplay = item.modules;
           break;
-        case "architecture":
+        case 'architecture':
           arrayToDisplay = item.subsets;
           break;
         default:
-          return "";
+          return '';
       }
 
       if (arrayToDisplay.length > 1) {
-        const text = arrayToDisplay.join(", ");
+        const text = arrayToDisplay.join(', ');
         return `(Mixed) In ${this.selectedTarget}s : ${text}`;
-      } else if (arrayToDisplay.length == 0) {
+      } if (arrayToDisplay.length == 0) {
         return `In no ${this.selectedTarget}s`;
-      } else {
-        return `In ${this.selectedTarget}s : ${arrayToDisplay}`;
       }
+      return `In ${this.selectedTarget}s : ${arrayToDisplay}`;
     },
 
     selectFramework(artifact: Artifact) {
@@ -557,12 +556,12 @@ export default Vue.extend({
         this.artifactTree,
         this.defaultApplication,
         this.defaultLanguage,
-        this.classExternality
+        this.classExternality,
       )
         .then((res: string) => {
           this.fullQuerySet = res;
         })
-        .catch(err => {
+        .catch((err) => {
           this.fullQuerySet = err;
         });
     },
@@ -577,9 +576,9 @@ export default Vue.extend({
               this.parentIdList.push(toPush);
             }
           }
-          this.parentIdList.push({ id: -1, name: "No parent" });
+          this.parentIdList.push({ id: -1, name: 'No parent' });
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
         });
     },
@@ -592,14 +591,14 @@ export default Vue.extend({
         this.applicationItems = await ApplicationController.getListApplication();
         this.defaultApplication = this.applicationItems[0];
       } catch (err) {
-        console.error("Failed to get the list of the application", err);
+        console.error('Failed to get the list of the application', err);
       }
 
       try {
         this.languageItems = await ArtemisController.getSupportedLanguages();
         this.defaultLanguage = this.languageItems[0];
       } catch (err) {
-        console.error("Failed to retrieve languages.", err);
+        console.error('Failed to retrieve languages.', err);
       }
     },
 
@@ -611,12 +610,12 @@ export default Vue.extend({
         this.artifactItems = await ArtifactController.getArtifactAsTree(
           this.applicationName,
           this.defaultLanguage,
-          this.classExternality
+          this.classExternality,
         );
       } catch (err) {
         console.error(
           `Error trying to retrieve the breakdown of ${this.defaultApplication}`,
-          err
+          err,
         );
       } finally {
         this.loadingArtifacts = false;
@@ -629,10 +628,10 @@ export default Vue.extend({
         .then((res: string) => {
           this.prefix = res;
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(
-            "Failed to retrieve the prefix of the Framework agent",
-            err
+            'Failed to retrieve the prefix of the Framework agent',
+            err,
           );
         });
     },
@@ -643,10 +642,10 @@ export default Vue.extend({
       try {
         this.loadingCandidate = true;
         this.insights = await ApplicationController.getApplicationInsights(
-          this.applicationName
+          this.applicationName,
         );
       } catch (e) {
-        Logger.error("Failed to get the insights of the application", e);
+        Logger.error('Failed to get the insights of the application', e);
       } finally {
         this.loadingCandidate = false;
       }
@@ -655,23 +654,23 @@ export default Vue.extend({
     // Build the list this.treeExport
     async getRequests(tree: ApiRegexNode[]) {
       if (tree.length == 0) return;
-      let fullResults = "";
+      let fullResults = '';
       try {
         for (const item in tree) {
-          fullResults +=
-            "<span style='color: #66B245'>// " +
-            tree[item].name +
-            "</span><br />";
-          fullResults +=
-            (await RegexNodeController.getRegexRequest(tree[item].id)) +
-            ";<br /><br />";
+          fullResults
+            += `<span style='color: #66B245'>// ${
+              tree[item].name
+            }</span><br />`;
+          fullResults
+            += `${await RegexNodeController.getRegexRequest(tree[item].id)
+            };<br /><br />`;
 
           if (tree[item].children) {
             fullResults += await this.getRequests(tree[item].id);
           }
         }
       } catch (err) {
-        console.error("Failed to get the request", err);
+        console.error('Failed to get the request', err);
       }
 
       return fullResults;
@@ -691,16 +690,15 @@ export default Vue.extend({
         this.selectedTarget,
         this.classExternality,
         this.primaryGroupName,
-        this.secondaryGroupName
+        this.secondaryGroupName,
       )
         .then((res: any) => {
           this.textSnackBar = `Tags for ${extractionType} extraction were applied. Make sure the ${extractionType} agent is running.`;
           this.refresh();
         })
-        .catch(err => {
-          this.textSnackBar =
-            "Failed to perform the extraction. Error : " + err;
-          console.error("Failed to perform the extraction", err);
+        .catch((err) => {
+          this.textSnackBar = `Failed to perform the extraction. Error : ${err}`;
+          console.error('Failed to perform the extraction', err);
         });
     },
 
@@ -708,13 +706,13 @@ export default Vue.extend({
       await this.getApplicationInsights();
       await this.getApplicationAndLanguages();
       await this.getArtifactTree();
-    }
+    },
   },
 
   mounted() {
     this.applicationName = this.$store.state.applicationName;
     this.refresh();
-  }
+  },
 });
 </script>
 
