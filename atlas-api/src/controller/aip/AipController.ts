@@ -1,21 +1,22 @@
 /* eslint-disable max-len */
-import { AipSchema } from "@interfaces/aip/AipSchema";
-import AipConfigurationNeo4jService from "@services/aip/AipConfigurationNeo4jService";
-import AipConfigurationPgService from "@services/aip/AipConfigurationPgService";
-import SchemaPgService from "@services/aip/SchemaPgService";
+import { AipSchema } from "@modules/aip/interfaces/AipSchema";
+import AipConfigurationNeo4jService from "@modules/aip/persistence/ConfigurationPersistence";
+import CommunicationUtil from "@modules/aip/services/CommunicationUtil";
+import SchemaManager from "@modules/aip/services/SchemaManager";
 import { checkBody, checkParams, checkQuery } from "@shared/FunctionGlob";
 import { logger } from "@shared/Logger";
 import { NextFunction, Request, Response } from "express";
 import { HttpCode } from "@utils/HttpCode";
-import { AipConfiguration } from "@interfaces/aip/AipConfiguration";
+import { AipConfiguration } from "@modules/aip/interfaces/AipConfiguration";
+import ConfigurationPersistence from "@modules/aip/persistence/ConfigurationPersistence";
 
 /**
  * Controller for the AIP service
  */
 export default class AipController {
-  private aipConfigurationNeo4jService = AipConfigurationNeo4jService.getInstance();
-  private aipConfigurationPgService = new AipConfigurationPgService();
-  private schemaPgService = new SchemaPgService();
+  private aipConfigurationNeo4jService = new ConfigurationPersistence();
+  private aipConfigurationPgService = new CommunicationUtil();
+  private schemaPgService = new SchemaManager();
 
   /**
    * Get all the configuration

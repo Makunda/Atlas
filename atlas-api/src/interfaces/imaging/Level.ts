@@ -58,7 +58,7 @@ class LevelNode {
   }
 
   /**
-   * Get a level interface from a node
+   * Get a level interfaces from a node
    * @param node Node to convert
    * @param hidden Choose if the node is hidden or not
    */

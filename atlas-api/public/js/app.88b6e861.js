@@ -20020,7 +20020,7 @@
       }), a("v-divider", { staticClass: "mx-2" }), a("div", { staticClass: "my-4 subtitle-1" }, [e._v(" Neo4j Database ")]), a("v-text-field", {
         ref: "neo4jUri",
         attrs: {
-          label: "URI of the Neo4j bolt interface",
+          label: "URI of the Neo4j bolt interfaces",
           placeholder: "http://localhost:7687/",
           value: "http://localhost:7687/",
           required: "",

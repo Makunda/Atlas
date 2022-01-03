@@ -1,4 +1,3 @@
-import { int, Node } from "neo4j-driver";
 
 /**
  * Different types of schema that can be
@@ -30,26 +29,7 @@ export function schemaTypeFromString(type: string): SchemaType {
  */
 export interface AipSchema {
   id?: number;
-  name: string;
   schema: string;
   type: SchemaType;
 }
 
-/**
- * AipSchema from a Node
- * @param {Node} n Node to transform in object
- * @returns {AipSchema} The AipSchema Object
- * @throws {Exception} When the node is not formatted correctly
- */
-export function aipSchemaFromNode(n: Node): AipSchema {
-  const properties: any = n.properties;
-
-  const type = schemaTypeFromString(properties["Type"]);
-
-  return {
-    id: int(n.identity).toNumber(),
-    name: String(properties["Name"]),
-    schema: String(properties["Schema"]),
-    type: type,
-  } as AipSchema;
-}

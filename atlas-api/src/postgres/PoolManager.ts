@@ -1,4 +1,4 @@
-import { AipConfiguration } from "@interfaces/aip/AipConfiguration";
+import { AipConfiguration } from "@modules/aip/interfaces/AipConfiguration";
 import config from "config";
 
 import pg from "pg";

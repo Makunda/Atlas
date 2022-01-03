@@ -1,5 +1,5 @@
 /**
- * User interface
+ * User interfaces
  */
 export default interface User {
   username: string;

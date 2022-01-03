@@ -1,5 +1,5 @@
 /**
- * Open source safety interface
+ * Open source safety interfaces
  */
 export default interface OssRecommendation {
   application: string;

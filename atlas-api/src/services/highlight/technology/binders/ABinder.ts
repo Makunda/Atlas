@@ -2,7 +2,7 @@ import { Neo4JAccessLayer } from "@database/Neo4JAccessLayer";
 import { logger } from "@shared/Logger";
 
 /**
- * Abstract class defining the interface for binders
+ * Abstract class defining the interfaces for binders
  */
 export default abstract class ABinder {
   protected NEO4JAL: Neo4JAccessLayer = Neo4JAccessLayer.getInstance();

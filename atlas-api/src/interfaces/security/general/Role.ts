@@ -1,5 +1,5 @@
 /**
- * Role interface
+ * Role interfaces
  */
 export default interface Role {
   name: string;
